@@ -1,6 +1,6 @@
 # Fragen vor der Freigabe von Etappe 1
 
-09 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · beantwortet
+09 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 Gefragt wird nur, was weder Regel noch Quelle entscheidet, zu
@@ -41,4 +41,6 @@ Ich habe die Korrekturen kommentiert.
 
 **Stellungnahme.** F1 A, F10 B, F12 A stehen in [Etappe 1](../../domaene/etappen/01-aufstellen.md),
 F13 A in Etappe 4 (Schießen, nach 12). Für den Anforderungsautor: Ausgangslage und Zonen
-als Daten und Kriterien.
+als Daten und Kriterien. Zurückgestellt: F4 (Würfe eingeben) gehört zu Etappe 3 (erster
+Wurf beim Advance), F11 (Befehlspunkte) zu Etappe 4; wer sie ausformuliert, findet beide mit
+`git log -p -S'Etappe 3'` bzw. `-S'Etappe 4'` in diesem Anliegen.

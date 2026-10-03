@@ -1,56 +1,51 @@
-# Plan · Zyklus 1
+# Plan · Zyklus 2
 
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
-## Item
-1. *Reihenfolge der Aufstellung*, abgenommen: alle
-   Kriterien von [AUF-1](../domaene/anforderungen/phasen/aufstellen.md).
+## Items
+1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md)
+2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md), nach Item 1
 
-Mehr ist nicht bereit: AUF-1 ist die einzige Anforderung. Vor der Freigabe arbeitet der
-Anforderungsautor Anliegen 15,
-[17](anliegen/17-auf1-reihe-nach-dem-beenden.md) und
-[18](anliegen/18-auf1-begriffe-und-grund-der-sperre.md) in AUF-1 ein; das Item folgt dieser
-Fassung, auch einem Kriterium für die Wahl des Gewinners des Roll-offs (15 F3).
+Noch keins ist bereit: [AUF-1](../domaene/anforderungen/phasen/aufstellen.md) ist gebaut, für
+den nächsten Schnitt fehlen Kriterien. Was sie abdecken sollen, steht in
+[94](anliegen/94-kriterienFuerPlan2.md) an den Anforderungsautor; danach trage ich die
+Kriterien-IDs in die Items ein.
 
 ## Empfehlung
-Freigeben mit diesem einen Item, sobald AUF-1 nach 15, 17 und 18 steht. Es baut das Gerüst,
-an dem jede weitere Sperre der Etappe hängt: wer an der Reihe ist, welche Einheit in
-Aufstellung ist, wann die Aufstellung endet. Das Item ist reine Fachlogik
-([19](anliegen/19-plan1-fachlogik-oder-karte.md)): Danach belegen Akzeptanztests die
-Reihenfolge; spielbar wird sie mit Spielfeld und Ablage in den nächsten Items. Nach Zyklus 1
-ist nichts klickbar.
+Freigeben mit beiden Items, sobald die Kriterien aus 94 stehen und der Architekt sie geprüft
+hat; vorher nicht. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim Setzen sind der
+Kern von Etappe 1 und das erste Stück Geometrie (Bases, Zonen, Abstände), auf dem Bewegen,
+Schießen und Charge aufbauen; prüfen lassen sie sich erst mit den Bases und Zonen der
+Ausgangslage. Reicht der Zyklus nur für eins, kommt Item 1 allein. Beide Items sind reine
+Fachlogik wie Item 1 in Zyklus 1: Nach Zyklus 2 ist noch nichts klickbar.
 
-Grenzen des Items, damit Testautor und Implementierer nichts erfinden:
-- Den Gewinner des Roll-offs wählen die Spieler; Arbiter nimmt keine Würfel entgegen (15 F3).
-- Die zwei Aufstellungszonen sind nur unterscheidbar; ihre Form (09 F10) kommt mit dem
-  Spielfeld.
-- Die Stelle eines gesetzten Modells wird nicht geprüft (Zone, Überdecken, Engagement Range);
-  Ablage, Umsetzen und Zurücklegen kommen später (16 F1, F2).
-- Akzeptanztests beenden eine Einheit erst, wenn alle ihre Modelle gesetzt sind; die Sperren
-  beim Beenden (fehlende Modelle, Kohärenz) kommen später (16 F3).
-- Die Sperre aus AUF-1.4 nennt ihren Grund (18). Die Tests prüfen Sperre und Grund, nicht, wo
-  das Modell danach steht; Zurück, Übergehen und Protokoll kommen später (16 F4).
-- Die Armeen der Tests sind Testdaten; die Ausgangslage (09 F1) kommt mit dem Spielfeld.
+Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
+- Gesetzt wird in Tests nur aus der Ausgangslage; die Ablage als Ort neben der Karte, Umsetzen
+  und Zurücklegen kommen später (Etappe 1, Anliegen 16 F1, F2, git).
+- Die Tests prüfen Sperre und Grund, nicht, wo das gesperrte Modell danach steht; Stehenbleiben,
+  „zurück“, „gemeinsam übergehen“ und Protokoll kommen später (16 F4).
+- Akzeptanztests beenden eine Einheit erst, wenn alle ihre Modelle gesetzt sind und die Einheit
+  in Kohärenz steht; die Sperren beim Beenden kommen später (16 F3).
+- Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
 
 ## Danach, nach Abhängigkeit
-Ausgangslage und Spielfeld mit Aufstellungszonen (09 F1, F10) · Ablage, Setzen, Umsetzen und
-die Sperren beim Loslassen (09 F12, 16 F1, F2) · Beenden mit fehlenden Modellen und Kohärenz
-(16 F3) · Zurück, Übergehen und Protokoll (16 F4). Die Anforderungen dazu schreibt der
-Anforderungsautor; die erste Oberfläche braucht ein Mockup.
+Ablage, Umsetzen, Zurücklegen und die erste Oberfläche: Karte mit Spielfeld und Zonen,
+Ziehen mit Maus und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll
+(16 F4) · Beenden mit fehlenden Modellen und Kohärenz (16 F3). Mit diesen drei ist Etappe 1
+erreichbar.
 
 ## Offene Anliegen
-An dich: keine offene Frage. Eingearbeitet sind
-[09](anliegen/09-fragen-freigabe-etappen.md) (F4 und F11 bleiben zurückgestellt),
-[16](anliegen/16-aufstellen-ablage-beenden-uebergehen.md) aus
-[11](anliegen/11-etappe1-ablage-umsetzen-uebergehen.md) und 15 F3.
-
-Zur Kenntnis, angenommen und umgesetzt:
-- [12](anliegen/12-reihenfolge-baseformen-nach-nahkampf.md): Schießen (4) und Charge und
-  Nahkampf (5) kommen vor Jede Baseform (6); das erste Probespiel kommt so früher, mit der
-  Ausgangslage aus runden Bases. Brauchst du die Formen früher, widersprich in 12.
-- [19](anliegen/19-plan1-fachlogik-oder-karte.md): Item 1 ohne Oberfläche, Grenzen oben.
+An dich:
+- [21](anliegen/21-auf1-neue-begriffe.md), Vorschlag des Anforderungsautors: neue Begriffe
+  zu AUF-1, deine Antwort steht.
+- [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
+- [90](anliegen/90-dashboardWannUndWo.md): Dashboard, wann und wo.
 
 Zwischen Rollen:
-- 15, 17, 18 an den Anforderungsautor: vor der Freigabe.
-- [14](anliegen/14-planer-liest-git-vor-dem-ausformulieren.md) und
-  Anliegen 20 an den Organisationsentwickler: Prozessphase.
+- [94](anliegen/94-kriterienFuerPlan2.md) an den Anforderungsautor: blockiert die Freigabe.
+- [95](anliegen/95-standNenntAnforderungsautorNichtMehr.md) an den Organisationsentwickler: Der
+  Stand kennt ab Zyklus 2 den Schritt des Anforderungsautors nicht; wartet bis zur
+  Prozessphase.
+- [13](anliegen/13-kuerzen-ohne-entscheidungsverlust.md) angenommen, Nachprüfung durch den
+  Architekten. 09 und 16 sind erledigt: Ihre Entscheidungen stehen in Etappe 1 und, für
+  später zurückgestellt, in git.

@@ -1,6 +1,6 @@
 # Etappen 2 bis 7 kürzen, ohne Entscheidungen zu verlieren
 
-13 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+13 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach E53 schrumpfen die Etappen 2 bis 7 auf je eine Zeile (200 Zeichen,
@@ -27,4 +27,4 @@ Entscheidungen stehen nicht nur in den Etappen, sondern auch in Anliegen (F4 und
 [Anliegen 09](09-fragen-freigabe-etappen.md) zurückgestellt). Wer eine Etappe ausformuliert,
 liest daher `git log -p --follow` ihrer Datei und `git log -p -- handoff/anliegen/`, gefiltert
 nach der Etappe. Die Arbeitsanweisung für die Definition des Planers steht in
-[Anliegen 14](14-planer-liest-git-vor-dem-ausformulieren.md).
+Anliegen 14, dort erledigt; sie steht in der [Definition des Planers](../../.claude/agents/planer.md).

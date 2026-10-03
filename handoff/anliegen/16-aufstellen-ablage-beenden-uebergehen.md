@@ -1,6 +1,6 @@
 # Aufstellen: Ablage, Umsetzen, Beenden, Übergehen
 
-16 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · beantwortet
+16 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 Aus der Kritik des Architekten in [Anliegen 11](11-etappe1-ablage-umsetzen-uebergehen.md) zu
