@@ -76,8 +76,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Sammel- neben Einzeldatei derselben Anforderung), `benennung.py`, `hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen. Spur:
-  `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (auch Testname oder `pfad:zeile`).
-  VS-Code-Versuch `prozess/pruefungen/sprung/`, Klick unerprobt:
+  `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4` (auch Testname oder `pfad:zeile`);
+  in VS Code Strg+T `auf1_4` (Tests), Strg+Umschalt+F `AUF-1.4` (Kriterium):
   [Anliegen 83](../handoff/anliegen/83-sprungErproben.md).
 - `tests/einheit/` spiegelt `arbiter/`: `tests/einheit/domaene/phasen/aufstellenTest.py`
   zu `arbiter/domaene/phasen/aufstellen.py` (Name offen:
