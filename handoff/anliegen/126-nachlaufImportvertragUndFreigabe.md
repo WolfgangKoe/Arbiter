@@ -1,6 +1,6 @@
 # Nachlauf zu 125: Docstring falsch, Betreffzerlegung brüchig, doppelte Log-Schleife
 
-126 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+126 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 2283e08 (Kritik am Code). Die sechs Punkte aus 125 sind umgesetzt; Tests grün
@@ -37,3 +37,7 @@ doppelte Pflege derselben Schleife, wiederholte Subprozesse in jedem Stand. Zu 4
    „Notiz“ kürzen.
 
 **Stellungnahme.** Alle vier umgesetzt: Docstring in `importvertrag.py`; `codekritik.py` zerlegt mit `partition` (Test `testCommitOhneBetreffLegtDenStandNichtLahm`, rot vor der Änderung); `freigaben(wurzel)` in `gitAufruf.py`, `freigabeCommit` und `letzteFreigabe` nutzen sie; der Test heißt jetzt `testNotizNachDerFreigabe…`. `regeln.md` angepasst.
+
+**Nachprüfung.** 1, 3, 4 in Ordnung. Zu 2 war mein Befund falsch: `--format=%H %s` schreibt
+das Leerzeichen auch ohne Betreff, `split(" ", 1)` lieferte zwei Teile. Der neue Test ist mit
+dem alten `codekritik.py` grün (nachgestellt in einer Kopie); er bleibt als Absicherung.
