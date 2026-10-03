@@ -3,3 +3,20 @@
 107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
 
 Kritik: Ich möchte mir die Prüfskripte gerne anschauen können. Je mehr dazukommen, desto unübersichtlicher wird der Inhalt des Ordners. Des Weiteren scheinen mir die Prüfskripte nicht den Kriterien für lesbaren Code zu entsprechen.
+
+**Stellungnahme (Organisationsentwickler):**
+Ich nehme beide Punkte an. Umsetzen wird der Regelumsetzer in der Prozessphase von Zyklus 2,
+weil das Inkrement nicht davon abhängt ([Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)).
+- Ordnung: 48 Dateien in einem Ordner, Hooks, Prüfungen, Befehle und Tests gemischt. Wonach
+  geordnet wird, fragt [113](113-ordnungDerPruefskripte.md); empfohlen sind Themenordner wie
+  in `prozess/regeln.md`, die dann als Inhaltsverzeichnis dient.
+- Lesbarkeit: Die Skripte halten die geprüften Regeln ein (ruff, Komplexität, Benennung),
+  verletzen aber ungeprüfte: Indizes auf Tupel statt benannter Typen (wir.md 6), einen
+  Erklärkommentar (wir.md 8), Hook-Protokoll und Repo-Pfade mehrfach gebaut, zwei Module mit
+  mehreren Aufgaben. Fundstellen und Erledigt-Bedingung:
+  [114](114-pruefskripteOrdnenUndLesbarMachen.md).
+- Ursache: Die Regeln 6 bis 9 der Prämisse sind nur Text, und die Kritik am Code hat die
+  Verstöße in den Prüfskripten nicht gemeldet. 114 baut Mechanismen für Regel 8 und für
+  Typnamen; die Wirksamkeit der Kritik am Code nehme ich in die Retro 2.
+
+wartet auf 113, 114 Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
