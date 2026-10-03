@@ -1,6 +1,6 @@
 # Kriterien für Plan 2: Ausgangslage und Sperren beim Setzen
 
-94 · Kritik · von Planer (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
+94 · Kritik · von Planer (Domäne) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [AUF-1](../../domaene/anforderungen/phasen/aufstellen.md) ist gebaut und

@@ -3,21 +3,22 @@
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
 ## Items
-1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md)
-2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md), nach Item 1
-
-Noch keins ist bereit: [AUF-1](../domaene/anforderungen/phasen/aufstellen.md) ist gebaut, für
-den nächsten Schnitt fehlen Kriterien. Was sie abdecken sollen, steht in
-[94](anliegen/94-kriterienFuerPlan2.md) an den Anforderungsautor; danach trage ich die
-Kriterien-IDs in die Items ein.
+1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md): AUF-2.1 bis AUF-2.5
+2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): AUF-3.1 bis AUF-3.3, nach Item 1
 
 ## Empfehlung
-Freigeben mit beiden Items, sobald die Kriterien aus 94 stehen und der Architekt sie geprüft
-hat; vorher nicht. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim Setzen sind der
-Kern von Etappe 1 und das erste Stück Geometrie (Bases, Zonen, Abstände), auf dem Bewegen,
-Schießen und Charge aufbauen; prüfen lassen sie sich erst mit den Bases und Zonen der
-Ausgangslage. Reicht der Zyklus nur für eins, kommt Item 1 allein. Beide Items sind reine
-Fachlogik wie Item 1 in Zyklus 1: Nach Zyklus 2 ist noch nichts klickbar.
+Freigeben mit beiden Items. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim Setzen
+sind der Kern von Etappe 1 und das erste Stück Geometrie (Bases, Zonen, Abstände), auf dem
+Bewegen, Schießen und Charge aufbauen; prüfen lassen sie sich erst mit Bases und Zonen der
+Ausgangslage. Reicht der Zyklus nur für eins, kommt Item 1 allein. Beide sind reine Fachlogik
+wie in Zyklus 1: Nach Zyklus 2 ist noch nichts klickbar.
+
+AUF-3.4 (Nahkampfreichweite) ist nicht dabei: Mit den 9″-Bändern liegt jede solche Stelle auch
+außerhalb der eigenen Zone, prüfbar ist sie erst mit dem Kriterium zu mehreren Gründen, das der
+Anforderungsautor nach deiner Antwort in [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md)
+schreibt, dazu dein Begriff Nahkampfreichweite. Steht beides vor der Freigabe, nehme ich das
+Item `nahkampfreichweite-beim-setzen` als drittes auf; sonst führt es Zyklus 3 an. Den Begriff
+habe ich in Etappe 1 übernommen.
 
 Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
 - Gesetzt wird in Tests nur aus der Ausgangslage; die Ablage als Ort neben der Karte, Umsetzen
@@ -29,23 +30,20 @@ Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
 - Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
 
 ## Danach, nach Abhängigkeit
-Ablage, Umsetzen, Zurücklegen und die erste Oberfläche: Karte mit Spielfeld und Zonen,
-Ziehen mit Maus und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll
-(16 F4) · Beenden mit fehlenden Modellen und Kohärenz (16 F3). Mit diesen drei ist Etappe 1
-erreichbar.
+Nahkampfreichweite beim Setzen (siehe oben) · Ablage, Umsetzen, Zurücklegen und die erste
+Oberfläche: Karte mit Spielfeld und Zonen, Ziehen mit Maus und Touch, dafür UX und Mockup ·
+Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden mit fehlenden Modellen und
+Kohärenz (16 F3). Mit diesen vier ist Etappe 1 erreichbar.
 
 ## Offene Anliegen
 An dich:
-- [21](anliegen/21-auf1-neue-begriffe.md), Vorschlag des Anforderungsautors: neue Begriffe
-  zu AUF-1, deine Antwort steht.
 - [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben.
-- [90](anliegen/90-dashboardWannUndWo.md): Dashboard, wann und wo.
 
 Zwischen Rollen:
-- [94](anliegen/94-kriterienFuerPlan2.md) an den Anforderungsautor: blockiert die Freigabe.
-- [95](anliegen/95-standNenntAnforderungsautorNichtMehr.md) an den Organisationsentwickler: Der
-  Stand kennt ab Zyklus 2 den Schritt des Anforderungsautors nicht; wartet bis zur
-  Prozessphase.
-- [13](anliegen/13-kuerzen-ohne-entscheidungsverlust.md) angenommen, Nachprüfung durch den
-  Architekten. 09 und 16 sind erledigt: Ihre Entscheidungen stehen in Etappe 1 und, für
-  später zurückgestellt, in git.
+- [100](anliegen/100-auf2auf3BegriffeUndGrenzfaelle.md): deine Antworten stehen, der
+  Anforderungsautor arbeitet sie ein (Glossar, AUF-3.4, Kriterium zu F3); Plan 2 hängt nicht
+  daran.
+- [97](anliegen/97-kritikAmZweckDerAufstellung.md): deine Kritik am Zweck der Aufstellung,
+  angenommen, deine Nachprüfung.
+- [92](anliegen/92-lesbarkeitZuD20da0b.md), [96](anliegen/96-kritikAmCodeZu79c397c.md) an den
+  Regelumsetzer, angenommen, Nachprüfung durch den Reviewer.
