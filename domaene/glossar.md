@@ -2,6 +2,7 @@
 
 Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 ---|---|---|---
+Ablage | – | Ablage | Ort neben der *Karte*, an dem die nicht *gesetzten* *Modelle* eines *Spielers* liegen; jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A).
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
 Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
@@ -18,6 +19,7 @@ Einheit in Aufstellung | – | einheitInAufstellung | Die eine *Einheit*, deren 
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
+Karte | – | Karte | Abbild des *Spielfelds* mit seinen *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich in *Zoll*; sie bildet den Spielstand ab, nicht den exakten Tisch (`domaene/ziel.md`).
 Mission | mission | Mission | Anleitung für eine Schlacht: Armeen, *Spielfeld*, *Aufstellung*, erster Zug, Ende und Sieg; die Grundregeln enthalten nur Only War (`core_rules.txt:301`, `:2166`).
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
