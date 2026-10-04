@@ -17,7 +17,7 @@ der [Retro](retro.md). Köpfe stehen auf `offen`, bis die Absender nach der Frei
   `domaene/CLAUDE.md`); Optionen mit Folgen zu [139](anliegen/139-bashSandboxStattHeuristik.md),
   [159](anliegen/159-zweiteTechnikdatei.md) und Leitplanken zu
   [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md); außerdem
-  [134](anliegen/134-praemisseUndDodHinkenDenPruefungenNach.md),
+  Anliegen 134,
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md),
   [155](anliegen/155-technikBrauchtPlatzUndErstesMockup.md); 138 wartet auf 139.
 - Architekt: [152](anliegen/152-solidUndVieleIf.md), Rückfrage zu einem Tag in
