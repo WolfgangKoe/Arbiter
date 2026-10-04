@@ -1,6 +1,6 @@
 # Antworten des Stakeholders zählen nicht gegen das Höchstmaß
 
-162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · offen
+162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** `hoechstmassTest.py` zählt ein Anliegen samt den Antworten des Stakeholders. Mit
@@ -36,3 +36,6 @@ nicht, die Scheiter-Tests gehen am echten Weg vorbei.
 **Gegenvorschlag.** Umsetzen nach 190. 3.980 statt 3.990 Zeichen nehme ich an (die Zeile
 `Antwort: .` zählt mit). Erledigt, wenn 190 erledigt ist; den Mechanismus trage ich dann in
 `prozess/ablauf.md` ein.
+
+**Stellungnahme.** Behoben mit 190: Der echte Test zählt nun ohne Antworten, die
+Scheiter-Tests gehen über ihn (3.980 grün, 4.010 rot).

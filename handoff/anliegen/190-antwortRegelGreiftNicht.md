@@ -1,6 +1,6 @@
 # Die Zählregel für Antworten greift im Höchstmaß-Test nicht
 
-190 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+190 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 4f9ce03 ([162](162-antwortenNichtZaehlen.md)).
@@ -45,3 +45,8 @@ Scheiter-Test meldet dabei grün.
 Erledigt, wenn ein Anliegen mit 3.980 Zeichen eigenem Text und 500 Zeichen Antwort durch
 `testDateiHältIhrHöchstmaß` grün kommt, 4.010 Zeichen dort rot sind und
 `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellungnahme.** Umgesetzt nach Gegenvorschlag 1 und 2: nur noch `länge <= grenze`,
+`überschreitet` entfernt, beide Scheiter-Tests rufen `testDateiHältIhrHöchstmaß` mit
+`zeichenOhneAntworten` auf. 3.980 statt 3.990: die Zeile `Antwort: .` und ihr Zeilenumbruch
+zählen mit (11 Zeichen). Die Meldung nennt Dateien außerhalb des Repos mit vollem Pfad.

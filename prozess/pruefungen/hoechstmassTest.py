@@ -30,10 +30,6 @@ def zeichenOhneAntworten(datei: Path) -> int:
     return sum(len(ersatz if antwortZeile.match(zeile) else zeile) + 1 for zeile in zeilen) - 1
 
 
-def überschreitet(datei: Path, grenze: int) -> bool:
-    return zeichen(datei) > grenze
-
-
 def fälle():
     etappen = sorted((wurzel / etappenOrdner).glob("*.md"))
     for nummer, datei in enumerate(etappen):
@@ -62,8 +58,8 @@ def fälle():
     [pytest.param(*fall, id=str(fall[0].relative_to(wurzel))) for fall in fälle()],
 )
 def testDateiHältIhrHöchstmaß(datei, länge, grenze):
-    assert länge <= grenze, f"{datei.relative_to(wurzel)}: {länge} Zeichen, höchstens {grenze}"
-    assert not überschreitet(datei, grenze)
+    name = datei.relative_to(wurzel) if datei.is_relative_to(wurzel) else datei
+    assert länge <= grenze, f"{name}: {länge} Zeichen, höchstens {grenze}"
 
 
 @pytest.mark.stand
@@ -81,19 +77,19 @@ def testBeschreibungEinerRolleIstKurz(datei):
 def testZuLangesAnliegenWärRot(tmp_path):
     zuLang = tmp_path / "99-zuLang.md"
     zuLang.write_text("x" * (anliegen + 1), encoding="utf-8")
-    assert überschreitet(zuLang, anliegen)
+    assert zeichen(zuLang) > anliegen
 
 
 def testZuLangeModerationWärRot(tmp_path):
     zuLang = tmp_path / "moderation.md"
     zuLang.write_text("x" * (moderation + 1), encoding="utf-8")
-    assert überschreitet(zuLang, moderation)
+    assert zeichen(zuLang) > moderation
 
 
 def testZuLangerAkzeptanztestWärRot(tmp_path):
     zuLang = tmp_path / "aufstellenTest.py"
     zuLang.write_text("x" * (akzeptanztest + 1), encoding="utf-8")
-    assert überschreitet(zuLang, akzeptanztest)
+    assert zeichen(zuLang) > akzeptanztest
 
 
 def anliegenMitAntwort(tmp_path, eigener: int, antwort: int) -> Path:
@@ -102,12 +98,13 @@ def anliegenMitAntwort(tmp_path, eigener: int, antwort: int) -> Path:
     return datei
 
 
-def testLangeAntwortZähltNichtGegenDasHöchstmaß(tmp_path):
+def testLangeAntwortLässtDenEchtenTestGrünDurch(tmp_path):
     datei = anliegenMitAntwort(tmp_path, 3980, 500)
-    assert zeichenOhneAntworten(datei) <= anliegen
-    assert überschreitet(datei, anliegen)
+    testDateiHältIhrHöchstmaß(datei, zeichenOhneAntworten(datei), anliegen)
 
 
-def testZuLangerEigenerTextBleibtRotTrotzAntwort(tmp_path):
+def testZuLangerEigenerTextMachtDenEchtenTestRotTrotzAntwort(tmp_path):
     datei = anliegenMitAntwort(tmp_path, 4010, 500)
-    assert zeichenOhneAntworten(datei) > anliegen
+    gezählt = zeichenOhneAntworten(datei)
+    with pytest.raises(AssertionError):
+        testDateiHältIhrHöchstmaß(datei, gezählt, anliegen)
