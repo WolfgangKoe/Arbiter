@@ -20,6 +20,9 @@ randOben = 20
 randUnten = 70
 achsenschritt = 50_000
 minute = 60
+histogrammBreite = 290
+histogrammRand = 30
+histogrammMarken = 4
 achsenhöhe = 1.1 * sperrschwelle
 ohneSitzung = "ohne Sitzung"
 fehlt = "–"  # Warum: Wert fehlt im Eintrag
@@ -199,7 +202,7 @@ def sitzungsTitel(sitzung: str, läufe: list[dict]) -> str:
         name = f"Zyklus {zyklusVon} {phaseVon} bis {phaseBis}"
     else:
         name = f"Zyklus {zyklusVon} {phaseVon} bis Zyklus {zyklusBis} {phaseBis}"
-    return f"{name} · Sitzung {sitzung}"
+    return name
 
 
 def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
@@ -234,22 +237,39 @@ def histogramm(läufe: list[dict]) -> str:
     anzahl = [0] * klassen
     for wert in werte:
         anzahl[min(wert // klassenbreite, klassen - 1)] += 1
-    breite, höchste, spalte = 260, max(anzahl), 260 / klassen
+    höchste = max(anzahl)
+    spalte = (histogrammBreite - histogrammRand) / klassen
+
+    def oben(menge: float) -> float:
+        return 100 - 90 * menge / höchste
+
+    achse = "".join(
+        f'<line class="gitter" x1="{histogrammRand - 4}" x2="{histogrammRand}" '
+        f'y1="{oben(marke):.1f}" y2="{oben(marke):.1f}"/>'
+        f'<text class="achse-text" text-anchor="end" x="{histogrammRand - 6}" '
+        f'y="{oben(marke) + 3:.1f}">{marke}</text>'
+        for marke in range(0, höchste + 1, max(1, höchste // histogrammMarken))
+    )
     säulen = "".join(
-        f'<rect class="saeule" x="{nummer * spalte + 2:.1f}" y="{100 - 90 * wert / höchste:.1f}" '
-        f'width="{spalte - 4:.1f}" height="{90 * wert / höchste:.1f}"/>'
+        f'<rect class="saeule" x="{histogrammRand + nummer * spalte + 2:.1f}" '
+        f'y="{oben(wert):.1f}" width="{spalte - 4:.1f}" height="{100 - oben(wert):.1f}"/>'
+        f'<text class="wert-text" text-anchor="middle" '
+        f'x="{histogrammRand + nummer * spalte + spalte / 2:.1f}" y="{oben(wert) - 3:.1f}">'
+        f"{wert}</text>"
         f'<text class="achse-text" text-anchor="middle" '
-        f'x="{nummer * spalte + spalte / 2:.1f}" y="112">'
+        f'x="{histogrammRand + nummer * spalte + spalte / 2:.1f}" y="112">'
         f"{nummer * klassenbreite // 1000}k</text>"
         for nummer, wert in enumerate(anzahl)
     )
     median = statistics.median(werte)
-    mitteMedian = min(median, achsenhöhe) / klassenbreite * spalte
+    mitteMedian = histogrammRand + min(median, achsenhöhe) / klassenbreite * spalte
     return (
-        f'<svg viewBox="0 0 {breite} 120" width="{breite}" height="120">{säulen}'
+        f'<svg viewBox="0 0 {histogrammBreite} 120" width="{histogrammBreite}" height="120">'
+        f'<line class="gitter" x1="{histogrammRand}" x2="{histogrammRand}" y1="0" y2="100"/>'
+        f"{achse}{säulen}"
         f'<line class="vert-median" x1="{mitteMedian:.1f}" x2="{mitteMedian:.1f}" y1="0" y2="100"/>'
         f'</svg><p class="muted">Median {kilo(median)}, '
-        f"je Klasse {klassenbreite // 1000}k</p>"
+        f"je Klasse {klassenbreite // 1000}k, Zahl über dem Balken: Läufe</p>"
     )
 
 

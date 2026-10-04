@@ -38,6 +38,10 @@ Anliegennummer allein, wie der Koordinator ihn formuliert), Ende, Kontextfenster
 Die Seite mit Sonarlint- und Prüfkennzahlen sowie Anliegen im Dashboard gehören in spätere
 Zyklen und brauchen eigene Items.
 
+**Zweite Runde eingearbeitet.** Sitzung aus dem Titel entfernt; Verteilung mit y-Achse
+(Anzahl Läufe) und der Zahl über jedem Balken. Test: `testVerteilungHatYAchseUndZahlJeBalken`.
+Der Stakeholder nimmt das Dashboard ab.
+
 Antwort: Drei noch fehlende Punkte:
 - die Angabe der Sitzung im Titel kann entfallen. 
 - Bei der Verteilung der Tokenstände rechts fehlt die y-Achse 

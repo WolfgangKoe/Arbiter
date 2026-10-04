@@ -228,7 +228,7 @@ def testTitelNenntZyklusUndPhase(tmp_path):
         | {"zyklus": 3, "phase": "Prozessphase"},
     )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
-    assert "<h3>Zyklus 3 Prozessphase · Sitzung f8ebd61f</h3>" in seite
+    assert "<h3>Zyklus 3 Prozessphase</h3>" in seite
     assert "<th>Ende</th>" not in seite and "<th>Dauer</th>" in seite
 
 
@@ -312,7 +312,7 @@ def testTitelNenntAllePhasenDerSitzung(tmp_path):
             | {"zyklus": zyklus, "phase": phase},
         )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
-    assert "Zyklus 3 Domänenphase bis Zyklus 4 Domänenphase · Sitzung f8ebd61f" in seite
+    assert "Zyklus 3 Domänenphase bis Zyklus 4 Domänenphase</h3>" in seite
     läufe = [{"zyklus": 3, "phase": "Domänenphase"}, {"zyklus": 3, "phase": "Technikphase"}]
     assert "Zyklus 3 Domänenphase bis Technikphase" in sitzungsTitel("f8ebd61f", läufe)
 
@@ -368,3 +368,11 @@ def testFehlerBeimSchreibenIstMitStillStill(monkeypatch):
     assert dashboard.hauptlauf(["--still"]) == 0
     with pytest.raises(OSError):
         dashboard.hauptlauf([])
+
+
+def testVerteilungHatYAchseUndZahlJeBalken():
+    läufe = [{"zeit": "a", "rolle": "r", "belegung": wert} for wert in (10_000, 12_000, 60_000)]
+    verteilung = seiteErzeugen(läufe).split("Verteilung der Tokenstände")[1]
+    assert 'y1="10.0" y2="10.0"' in verteilung
+    assert ">2</text>" in verteilung and ">1</text>" in verteilung
+    assert "Zahl über dem Balken" in verteilung
