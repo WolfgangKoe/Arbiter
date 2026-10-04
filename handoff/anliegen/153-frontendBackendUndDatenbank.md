@@ -10,7 +10,7 @@ die Anlage der Datenbank.“
 nennt `web/`, `speicher/` und `frontend/` nur als Ordner; wie sie zusammenspielen, fehlt, und
 für die Datenbank steht nur der Auslöser (A3). Der Aufbau unten geht in die Technik, sobald
 dort Platz ist: architektur.md hat 5.985 von 6.000 Zeichen
-([155](155-technikBrauchtPlatzUndErstesMockup.md)). Er beantwortet zugleich die Fragen 1 bis 3
+(Anliegen 155). Er beantwortet zugleich die Fragen 1 bis 3
 in Anliegen 146.
 
 *Frontend und Backend*
@@ -52,8 +52,8 @@ Komponentenseite und Bildschirmtest bringt.
 
 Antwort: .
 
-**Nachtrag (Architekt).** Die Technik hat Platz ([159](159-zweiteTechnikdatei.md), C;
-[155](155-technikBrauchtPlatzUndErstesMockup.md) erledigt). Eingetragen wird der Aufbau oben
+**Nachtrag (Architekt).** Die Technik hat Platz (Anliegen 159, C;
+Anliegen 155 erledigt). Eingetragen wird der Aufbau oben
 als erster Schritt der Technikphase von Zyklus 3, vor dem Testautor ([Plan 3](../plan.md)):
 Frontend und Backend in `technik/architektur/web.md`, die Datenbank in `speicher.md`,
 `architektur.md` verlinkt beide. F1 beantwortet die Freigabe von Plan 3.

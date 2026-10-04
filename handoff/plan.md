@@ -47,7 +47,7 @@ Deine Antwort zu 145 F1 als Vorgabe für die Mockups; Einzelheiten schlägt UX v
 
 Dein „SOLID und lesbar“ für den Unterbau trägt die Technik: Aufbau 153, Regel D4
 (Anliegen 152); beide warten auf Platz in der Technik
-([159](anliegen/159-zweiteTechnikdatei.md)).
+(Anliegen 159).
 
 ## Danach, nach Abhängigkeit
 Wählen per Klick (Gewinner, Zone, Einheit) mit Speicher · Setzen, Umsetzen und Zurücklegen
@@ -60,10 +60,10 @@ An dich, wirken auf Plan 3:
   und *Ablage*, Namen der Spieler.
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1 (Architekt): Datenbank erst mit der
   ersten Handlung.
-- [159](anliegen/159-zweiteTechnikdatei.md), [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md):
+- Anliegen 159, [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md):
   beantwortet, der Organisationsentwickler liefert Optionen und Leitplanken nach.
 
-Zwischen Rollen: [155](anliegen/155-technikBrauchtPlatzUndErstesMockup.md) und 152 warten
+Zwischen Rollen: Anliegen 155 und 152 warten
 auf 159.
 
 ## Freigabe

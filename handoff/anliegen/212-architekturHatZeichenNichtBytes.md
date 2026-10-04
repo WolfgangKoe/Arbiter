@@ -1,6 +1,6 @@
 # Die Architektur ist nicht über dem Höchstmaß
 
-212 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+212 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [211](211-hoechstmassDerArchitektur.md) sagt, `technik/architektur.md` habe 6.104

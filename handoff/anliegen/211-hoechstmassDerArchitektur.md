@@ -3,7 +3,7 @@
 211 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Der Stakeholder hat in [159](159-zweiteTechnikdatei.md) (F2: C) entschieden: Die
+**Befund.** Der Stakeholder hat in Anliegen 159 (F2: C) entschieden: Die
 Architektur ist die Übersicht `technik/architektur.md` und je Thema eine Datei in
 `technik/architektur/`, je Datei 6.000 Zeichen, zusammen 24.000. Den Schreibpfad trägt
 [architekt.md](../../.claude/agents/architekt.md), die Maße stehen in
