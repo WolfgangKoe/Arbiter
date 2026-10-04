@@ -35,10 +35,14 @@ def nachrichten(transkript: Path) -> list[dict]:
     gefunden = []
     for zeile in transkript.read_text(encoding="utf-8").splitlines():
         eintrag = eintragAusZeile(zeile, ())
-        nachricht = eintrag.get("message") if eintrag and not eintrag.get("isMeta") else None
-        if isinstance(nachricht, dict):
+        nachricht = eintrag.get("message") if eintrag else None
+        if isinstance(nachricht, dict) and (not eintrag.get("isMeta") or vonKoordinator(nachricht)):
             gefunden.append(nachricht)
     return gefunden
+
+
+def vonKoordinator(nachricht: dict) -> bool:
+    return koordinatorVorspann in textDerNachricht(nachricht.get("content"))
 
 
 def gekürzt(text: str) -> str:

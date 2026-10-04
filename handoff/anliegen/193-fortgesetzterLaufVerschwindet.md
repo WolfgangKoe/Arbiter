@@ -1,6 +1,6 @@
 # Lauf-Log: Ein fortgesetzter Lauf verschluckt seine früheren Aufträge
 
-193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 3/3 · offen
+193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 3/3 · angenommen
 
 ## Runde 1
 Kritik am Code von Commit d8f68f7. `python3 -m pytest prozess/pruefungen` ist grün (534),
@@ -61,3 +61,5 @@ Test lässt das Feld weg. `zielUndModell` auf das Transkript dieses Reviewer-Lau
 liefert c11c3b0. Gegenvorschlag: `isMeta` nur verwerfen ohne Vorspann; Test mit `isMeta`.
 
 **Stellungnahme.**
+B5 umgesetzt: `isMeta`-Zeilen mit Vorspann bleiben, nur Hinweise fallen weg. Test
+`testHinweiseUndVorspannSindKeinAuftrag` trägt `isMeta` am Folgeauftrag.

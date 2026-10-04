@@ -148,10 +148,11 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
         {"message": {"role": "user", "content": f"{hinweis}\nZiel: erster"}},
         {"isMeta": True, "message": {"role": "user", "content": hinweis}},
         {
+            "isMeta": True,
             "message": {
                 "role": "user",
                 "content": f"{vorspann}\nNeuer Auftrag: zweiter",
-            }
+            },
         },
         {"isMeta": True, "message": {"role": "user", "content": hinweis}},
         {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
