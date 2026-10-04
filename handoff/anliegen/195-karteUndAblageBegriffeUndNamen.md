@@ -1,6 +1,6 @@
 # QUE-2, AUF-4: Begriffe Karte und Ablage, Namen der Spieler
 
-195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
+195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Für die erste Oberfläche (Plan 2, „Danach“; Anliegen 145,
@@ -36,3 +36,26 @@ Absicht fraktionsneutral (`Arbiter-old/docs/spec/architecture_invariants.md:68`)
 brauchen Daten oder eine Eingabe, die Etappe 1 nicht verlangt.
 
 Antwort: Rückfrage: Beim Rolloff wird ja über "Angreifer" und "Verteidiger" entschieden. Könnten dies nicht die Namen der Spieler sein? Das wäre regelkonform und damit würde sich auch alles weitere ergeben. 
+
+## Runde 2
+**Stellungnahme zu F1.** Umgesetzt: *Karte* und *Ablage* stehen ohne Regelbegriff im Glossar.
+
+**Stellungnahme zur Rückfrage in F2.** Angreifer und Verteidiger passen nicht:
+1. Only War kennt sie nicht. Dort wählt der *Gewinner* des *Roll-offs* seine
+   *Aufstellungszone*, und der andere beginnt (`core_rules.txt:2322`). Angreifer und Verteidiger
+   bestimmen nur Missionen aus Matched, Narrative und Open Play (`matched_play.txt:533`,
+   `narrative_play.txt:1994`, `open_play.txt:220`); in Matched Play wählt der Verteidiger die
+   Zone und stellt zuerst auf (`matched_play.txt:540`, `:563`), also anders als Etappe 1.
+2. Die Rolle steht erst nach dem *Roll-off* fest. Schon davor muss Arbiter die *Spieler*
+   unterscheiden: bei der Eingabe des *Gewinners* (AUF-1.1) und an den *Ablagen* (AUF-4.3).
+
+Aus demselben Grund taugen „Gewinner“ und „Anderer“ nicht als Namen: Only War würfelt dreimal
+mit je eigenem *Gewinner* (Missionsziele, Aufstellung, erster Zug; `core_rules.txt:2318`,
+`:2322`, `:2329`). Bringt eine spätere Etappe eine Mission mit Angreifer und Verteidiger, kann
+Arbiter die Rolle neben dem Namen zeigen; das wird dann eine eigene Anforderung.
+
+**F3 · Wie heißen die Spieler?** Optionen A, B, C wie in F2.
+Empfehlung A, Begründung wie in F2. AUF-4.2 steht schon so; wählst du B oder C, ersetzt sie ein
+neues Kriterium.
+
+Antwort: .
