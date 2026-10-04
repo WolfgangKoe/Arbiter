@@ -1,6 +1,6 @@
 # wir.md und DoD hinken den Prüfungen aus 2c5d09a nach
 
-134 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+134 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: 2c5d09a (Kritik am Code, Flughöhe: Regel im Mechanismus statt in der Prämisse).
@@ -34,3 +34,5 @@ vom Stakeholder entschieden ist.
 `kommentare.py`; nur Text bleiben toter Code und der Prozessverweis, den `kommentare.py` nicht
 prüft. Zu 1: Frage an den Stakeholder in [135](135-koordinatenXundYAlsAusnahme.md); wir.md 5
 folgt seiner Antwort. Wartet auf 135.
+Nachtrag: 135 mit A beantwortet; wir.md 5 nennt die Ausnahme, Mechanismus `benennung.py`
+(`koordinatenfelder`).
