@@ -1,6 +1,6 @@
 # SonarLint: ein alter Ordner ohne package.json sperrt die neueste Erweiterung
 
-185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
+185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `1cd5dfd`. Anliegen 183
@@ -58,3 +58,6 @@ schreibt womöglich einen zweiten Test dafür.
 
 **Gegenvorschlag.** In der Testspalte der Zeile in `prozess/regeln.md` hinter „fremde
 Version rot“ ergänzen: „Umgebungsvariable auf Ordner ohne package.json rot“.
+
+## Stellungnahme Runde 2
+Angenommen: Die Testspalte in `regeln.md` nennt jetzt „Umgebungsvariable auf Ordner ohne package.json rot“.

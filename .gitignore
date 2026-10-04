@@ -7,3 +7,6 @@ __pycache__/
 .venv/
 .claude/settings.local.json
 .pytest_cache/
+
+.coverage
+.coverage.*

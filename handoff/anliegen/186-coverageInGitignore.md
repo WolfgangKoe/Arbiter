@@ -1,6 +1,6 @@
 # `.coverage` in `.gitignore` eintragen und die liegende Datei löschen
 
-186 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+186 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Weitergereicht aus [Anliegen 177](177-coverageDateiNichtIgnoriert.md); der Stakeholder hat
@@ -18,3 +18,6 @@ uncommittete Datei. Jede Wegwerf-Messung erzeugt sie neu.
 liegende `.coverage`. Den Altbestand (`/Arbiter-old/`, `/ArbiterMap/`) entfernst du nur auf
 Anweisung des Stakeholders. Erledigt-Bedingung: `git status --short` nennt keine
 `.coverage`, `git check-ignore .coverage .coverage.x` nennt beide.
+
+## Stellungnahme
+Angenommen. `.coverage` und `.coverage.*` stehen in `.gitignore`, die liegende Datei ist gelöscht; Scheiter-Test `gitignoreTest.py`.
