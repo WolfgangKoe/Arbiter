@@ -1,6 +1,6 @@
 # SonarLint meldet S5778 in den Einheitstests
 
-179 · Anliegen · von Regelumsetzer (Prozess) → Implementierer (Technik) · Runde 1/3 · offen
+179 · Anliegen · von Regelumsetzer (Prozess) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Wegwerf-Versuch aus P2 (Retro 2, [150](150-sonarlintAbdeckungUndToterCode.md))
@@ -20,3 +20,6 @@ vor den Block `with pytest.raises(...)` ziehen; im Block bleibt nur der eine wer
 **Folge.** Bis dahin prüft die Sperre `technik/tests/einheit` nicht
 (`geprüfteOrdner` in `prozess/pruefungen/sonarlint.py`). Sind die Funde weg, nimmt der
 Regelumsetzer den Ordner auf; die Prüfung ist dann dort rot, nicht mehr nur die Meldung.
+
+**Stellungnahme (Implementierer).** Angenommen und umgesetzt. In allen acht Tests steht der
+nicht werfende Aufbau vor `pytest.raises`. `sonarlint.py`: keine Funde; `pytest technik/tests`: 153 grün.

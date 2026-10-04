@@ -15,15 +15,19 @@ def onlyWarMitKante(kante: int) -> dict:
 
 
 def testEineSpielfeldkanteAußerhalbDerZweitenSeitenlängeIstEinFehlerBeimLaden():
+    onlyWar = onlyWarMitKante(44)
+
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWarMitKante(44))
+        ausgangslageAus({"Armee": armeen}, onlyWar)
 
 
 def testEinDurchmesserMitKommaIstEinFehlerBeimLaden():
     kaputt = [[{"Einheit": "Boyz", "durchmesser": [28.5]}], [einheitMitDurchmesser]]
 
+    onlyWar = onlyWarMitKante(60)
+
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWarMitKante(60))
+        ausgangslageAus({"Armee": kaputt}, onlyWar)
 
 
 def testDieDatenVonOnlyWarLaden():
@@ -34,8 +38,10 @@ def testDieDatenVonOnlyWarLaden():
 def testEinDurchmesserKeinePositiveGanzeZahlIstEinFehlerBeimLaden(durchmesser):
     kaputt = [[{"Einheit": "Boyz", "durchmesser": [durchmesser]}], [einheitMitDurchmesser]]
 
+    onlyWar = onlyWarMitKante(60)
+
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWarMitKante(60))
+        ausgangslageAus({"Armee": kaputt}, onlyWar)
 
 
 def testEineFehlendeAufstellungszoneIstEinFehlerBeimLaden():

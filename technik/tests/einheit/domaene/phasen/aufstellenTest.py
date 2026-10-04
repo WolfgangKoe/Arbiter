@@ -33,8 +33,10 @@ def testDerselbeSpielerAlsBeideSpielerIstEineVorbedingungsverletzung():
 def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
     aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
 
+    fremder = spielerMitEinerEinheit()
+
     with pytest.raises(ValueError):
-        aufstellung.gewinnerWählen(spielerMitEinerEinheit())
+        aufstellung.gewinnerWählen(fremder)
 
     assert aufstellung.gewinner is None
 
@@ -42,8 +44,10 @@ def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
 def testDieAufstellungszoneEinesFremdenSpielersIstEineVorbedingungsverletzung():
     aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
 
+    fremder = spielerMitEinerEinheit()
+
     with pytest.raises(ValueError):
-        aufstellung.aufstellungszone(spielerMitEinerEinheit())
+        aufstellung.aufstellungszone(fremder)
 
 
 def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
@@ -60,19 +64,22 @@ def testWerKeineEinheitAufzustellenHatWirdNachDerZonenwahlÜbersprungen():
 def testZweiSpielerMitDerselbenArmeeSindEineVorbedingungsverletzung():
     armee = spielerMitEinerEinheit().armee
 
+    ersterSpieler = Spieler(armee=armee)
+    zweiterSpieler = Spieler(armee=armee)
+
     with pytest.raises(ValueError):
-        aufstellungVon(Spieler(armee=armee), Spieler(armee=armee))
+        aufstellungVon(ersterSpieler, zweiterSpieler)
 
 
 def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
     gemeinsam = spielerMitEinerEinheit().armee.einheiten
     eigene, *_ = spielerMitEinerEinheit().armee.einheiten
 
+    ersterSpieler = Spieler(armee=Armee(einheiten=gemeinsam))
+    zweiterSpieler = Spieler(armee=Armee(einheiten=(*gemeinsam, eigene)))
+
     with pytest.raises(ValueError):
-        aufstellungVon(
-            Spieler(armee=Armee(einheiten=gemeinsam)),
-            Spieler(armee=Armee(einheiten=(*gemeinsam, eigene))),
-        )
+        aufstellungVon(ersterSpieler, zweiterSpieler)
 
 
 def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
@@ -81,5 +88,8 @@ def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
     ersteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
     zweiteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
 
+    ersterSpieler = Spieler(armee=ersteArmee)
+    zweiterSpieler = Spieler(armee=zweiteArmee)
+
     with pytest.raises(ValueError):
-        aufstellungVon(Spieler(armee=ersteArmee), Spieler(armee=zweiteArmee))
+        aufstellungVon(ersterSpieler, zweiterSpieler)
