@@ -8,7 +8,7 @@ kommentiert überall darin; das Review bekommt `## Nächstes Vorgehen` und eine 
 Freigabe vor der Retro. Regeln: [Ablauf, Freigabe und
 Kommentare](../../prozess/ablauf.md#freigabe-und-kommentare), Technikphase 6 und 7,
 Auslöser der Prozessphase, [Kennzahlen](../../prozess/kennzahlen.md) (Höchstmaße). Alle nur
-Text; Rückfragen an den Stakeholder in [169](169-freigabeUndKommentareInDenHandoffs.md).
+Text; Rückfragen an den Stakeholder in Anliegen 169.
 
 **Kosten.** Ohne Mechanismus meldet der Stand nach Review 3 gleich die Prozessphase und
 überspringt die neue Freigabe. Ein Kommentar ohne Stellungnahme sieht niemand; die

@@ -23,7 +23,7 @@ erzeugt sie neu. Ohne Besitzer von `.gitignore` bleibt das liegen.
 2. Er trägt `.coverage` und `.coverage.*` ein und löscht die liegende Datei.
 
 **Stellungnahme.** Einverstanden. Ein neuer Schreibpfad ist ein geändertes Recht; das
-entscheidet der Stakeholder: [Anliegen 178](178-gitignoreBesitzer.md). Nach seiner Antwort
+entscheidet der Stakeholder: Anliegen 178. Nach seiner Antwort
 trage ich den Schreibpfad ein und gebe Eintrag und Löschen an den Regelumsetzer. Der
 Stakeholder hat 178 angenommen, der Schreibpfad steht in der
 [Definition](../../.claude/agents/regelumsetzer.md); Eintrag und Löschen:

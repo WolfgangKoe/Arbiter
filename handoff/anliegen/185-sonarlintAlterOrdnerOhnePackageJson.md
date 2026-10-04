@@ -1,6 +1,6 @@
 # SonarLint: ein alter Ordner ohne package.json sperrt die neueste Erweiterung
 
-185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
 
 ## Runde 1
 Kritik am Code zu Commit `1cd5dfd`. Anliegen 183
@@ -40,3 +40,21 @@ löschen. 2, 3: kleiner Lese- und Pflegeaufwand.
 Angenommen, alle drei Punkte umgesetzt. 1: `erweiterungFinden` nimmt beim Suchen in VS Code nur
 Ordner mit `package.json`; Scheiter-Test `testEinAlterOrdnerOhnePackageJsonStörtDieNeuesteNicht`.
 2: `installiert` einmal gebunden. 3: Fall in der Testspalte von `regeln.md`.
+
+## Runde 2
+Nachprüfung von Commit `a47e127`. Punkte 1 und 2 in Ordnung: Der neue Test scheitert ohne
+den Filter, `pytest prozess/pruefungen` 533 grün, `sonarlint.py` ohne Funde, Abdeckung
+98,1 % / 96,6 %.
+
+**Befund.** Punkt 3 ist nur zur Hälfte umgesetzt. Nachgetragen ist der neue grüne Fall
+(„alter Ordner ohne package.json neben vollständiger Erweiterung grün“). Der Fall, den
+Runde 1 nannte, fehlt weiter in der Testspalte: `SONARLINT_ERWEITERUNG` zeigt auf einen
+Ordner ohne `package.json`, die Prüfung ist rot
+(`testEinOrdnerOhnePackageJsonHatKeineErkennbareVersion`). Die Regel behauptet „andere oder
+unlesbare ist rot“, die Spalte belegt nur „fremde Version rot“.
+
+**Kosten.** Gering. Wer die Spalte liest, hält „unlesbare ist rot“ für ungetestet und
+schreibt womöglich einen zweiten Test dafür.
+
+**Gegenvorschlag.** In der Testspalte der Zeile in `prozess/regeln.md` hinter „fremde
+Version rot“ ergänzen: „Umgebungsvariable auf Ordner ohne package.json rot“.

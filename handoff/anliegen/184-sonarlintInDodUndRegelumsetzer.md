@@ -1,6 +1,6 @@
 # SonarLint: Aufruf in DoD 2, Werkzeuge und beim Regelumsetzer nachtragen
 
-184 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+184 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik bei der Nachprüfung von Commit `f8c5bd1` (P2 der [Retro 2](../retro.md)). Laut

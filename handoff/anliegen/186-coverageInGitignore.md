@@ -4,7 +4,7 @@
 
 ## Runde 1
 Weitergereicht aus [Anliegen 177](177-coverageDateiNichtIgnoriert.md); der Stakeholder hat
-dir `.gitignore` mit [Anliegen 178](178-gitignoreBesitzer.md) zugewiesen, der Schreibpfad
+dir `.gitignore` mit Anliegen 178 zugewiesen, der Schreibpfad
 steht in deiner [Definition](../../.claude/agents/regelumsetzer.md).
 
 **Befund.** Im Wurzelordner liegt die Messdatei `.coverage` (SQLite, von einem Lauf von
