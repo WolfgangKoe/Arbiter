@@ -1,6 +1,6 @@
 # Prüfung der Mockups
 
-200 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+200 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Rolle [UX](../../.claude/agents/ux.md) schreibt vor der Freigabe von Plan 3
@@ -24,4 +24,7 @@ Erledigt, wenn die vier Punkte grün laufen, `prozess/regeln.md` die Prüfung ne
 ux.md und kennzahlen.md „nur Text“ ersetzt habe. Ob ein Mockup nur Komponenten der
 Komponentenseite nutzt, kommt erst mit der Komponentenseite (Architektur, Oberfläche).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: `mockups.py` mit `mockupsTest.py` (Punkte 1, 2, 4,
+je Scheiter-Fall) und Höchstmaß 8.000 in `hoechstmassTest.py` (Punkt 3, `testZuLangesMockupWärRot`);
+Ordner in `pfade.py`. Geprüft wird jede Datei unter `domaene/mockups/` rekursiv, `style=` auch
+mit Leerzeichen oder Großschreibung. Offen für dich: ux.md, kennzahlen.md.

@@ -8,7 +8,14 @@ import pytest
 from agenten import kopfzeilen
 from anliegen import antwortZeile
 from freigabeKommentare import artefakte, kommentarZeile
-from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, perspektiven, wurzel
+from pfade import (
+    akzeptanzOrdner,
+    anliegenOrdner,
+    etappenOrdner,
+    mockupOrdner,
+    perspektiven,
+    wurzel,
+)
 
 aktuelleEtappe = 1000
 spätereEtappe = 200
@@ -20,6 +27,7 @@ anliegen = 4000
 freigabeDatei = 4000
 moderation = 4000
 akzeptanztest = 20000
+mockup = 8000
 rollenordner = wurzel / ".claude" / "agents"
 
 
@@ -40,6 +48,12 @@ def zeichenOhneKommentare(datei: Path) -> int:
     return zeichenMitErsatz(datei, re.compile(f"^{kommentarZeile}"), f"{kommentarZeile} .")
 
 
+def mockupFälle():
+    for datei in sorted((wurzel / mockupOrdner).rglob("*")):
+        if datei.is_file():
+            yield datei, zeichen(datei), mockup
+
+
 def fälle():
     etappen = sorted((wurzel / etappenOrdner).glob("*.md"))
     for nummer, datei in enumerate(etappen):
@@ -58,6 +72,7 @@ def fälle():
         yield moderationsdatei, zeichen(moderationsdatei), moderation
     for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
         yield datei, zeichen(datei), akzeptanztest
+    yield from mockupFälle()
     for ordner in perspektiven:
         datei = wurzel / ordner / "CLAUDE.md"
         if datei.is_file():
@@ -104,6 +119,14 @@ def testZuLangerAkzeptanztestWärRot(tmp_path):
     zuLang = tmp_path / "aufstellenTest.py"
     zuLang.write_text("x" * (akzeptanztest + 1), encoding="utf-8")
     assert zeichen(zuLang) > akzeptanztest
+
+
+def testZuLangesMockupWärRot(tmp_path):
+    zuLang = tmp_path / "QUE-2.html"
+    zuLang.write_text("x" * (mockup + 1), encoding="utf-8")
+    länge = zeichen(zuLang)
+    with pytest.raises(AssertionError):
+        testDateiHältIhrHöchstmaß(zuLang, länge, mockup)
 
 
 def anliegenMitAntwort(tmp_path, eigener: int, antwort: int) -> Path:
