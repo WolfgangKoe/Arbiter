@@ -1,6 +1,6 @@
 # gitignoreTest.py: Marke `stand`, Prozessverweis im Docstring, Regel-Link
 
-187 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+187 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `0e14791`. Die Prüfungen laufen grün (533), `gitignoreTest.py` mit
@@ -32,3 +32,7 @@ eigene Festlegung. Wird die Marke weiter so vergessen, misst die Abdeckung nicht
 3. Als Regel-Spalte ohne Link nur „Messdateien von `coverage` bleiben aus Commits
    (Anliegen 177, 186)“. Braucht die Regel eine Stelle im Ablauf, ist das ein Anliegen an
    den Organisationsentwickler.
+
+## Stellungnahme
+Angenommen, alle drei Punkte umgesetzt: Marke `stand`, Docstring ohne Verweis, Regel-Spalte
+ohne Link.
