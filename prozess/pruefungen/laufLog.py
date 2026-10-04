@@ -42,10 +42,6 @@ def transkriptEinträge(transkript: Path) -> list[dict]:
     return gefunden
 
 
-def nachrichten(transkript: Path) -> list[dict]:
-    return [eintrag["message"] for eintrag in transkriptEinträge(transkript)]
-
-
 def vonKoordinator(nachricht: dict) -> bool:
     return koordinatorVorspann in textDerNachricht(nachricht.get("content"))
 
@@ -65,9 +61,9 @@ def auftragsZeile(text: str) -> str:
     return gekürzt(erste.removeprefix("Ziel:").strip())
 
 
-def zielUndModell(transkript: Path) -> tuple[str, str]:
+def zielUndModell(einträge: list[dict]) -> tuple[str, str]:
     """Erste Zeile des jüngsten Auftrags und Modell; leer, wenn das Transkript sie nicht hat."""
-    alle = nachrichten(transkript)
+    alle = [eintrag["message"] for eintrag in einträge]
     texte = [
         textDerNachricht(nachricht.get("content")).strip()
         for nachricht in alle
@@ -90,9 +86,8 @@ def zeitstempel(eintrag: dict) -> datetime | None:
         return None
 
 
-def dauerSekunden(transkript: Path) -> int | None:
+def dauerSekunden(alle: list[dict]) -> int | None:
     """Sekunden vom jüngsten Auftrag bis zur letzten Zeile; `None`, wenn Zeitstempel fehlen."""
-    alle = transkriptEinträge(transkript)
     beginne = [
         zeitstempel(eintrag)
         for eintrag in alle
@@ -104,10 +99,14 @@ def dauerSekunden(transkript: Path) -> int | None:
     return round((max(ende) - beginn).total_seconds()) if beginn and ende else None
 
 
-def zyklusUndPhase(ordner: Path) -> tuple[int, str]:
+def zyklusUndPhase(ordner: Path) -> tuple[int | None, str | None]:
+    """Zyklus und Phase; leer, wenn die Lage nicht zu lesen ist (der Titel ist nur Zugabe)."""
     from phasenfolge import lage  # Warum: lädt git und die Plandateien nur beim Eintragen
 
-    gefunden = lage(ordner)
+    try:
+        gefunden = lage(ordner)
+    except Exception:  # Warum: halb geschriebene Dateien dürfen den Eintrag nicht kosten
+        return None, None
     return gefunden.zyklus, str(gefunden.phase)
 
 
@@ -116,15 +115,16 @@ def koordinatorStand(eingabe: dict) -> int | None:
     return belegungAusTranskript(Path(haupt)) if eingabe.get("agent_id") and haupt else None
 
 
-def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path | None = None) -> dict | None:
+def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path) -> dict | None:
     """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
     rolle = eingabe.get("agent_type")
     transkript = eigenesTranskript(eingabe)
     belegung = belegungAusTranskript(transkript) if transkript else None
     if not rolle or belegung is None:
         return None
-    ziel, modell = zielUndModell(transkript)
-    zyklus, phase = zyklusUndPhase(ordner) if ordner else (None, None)
+    einträge = transkriptEinträge(transkript)
+    ziel, modell = zielUndModell(einträge)
+    zyklus, phase = zyklusUndPhase(ordner)
     return {
         "zeit": zeit.isoformat(timespec="seconds"),
         "rolle": rolle,
@@ -134,7 +134,7 @@ def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path | None = None) -> di
         "ziel": ziel,
         "modell": modell,
         "koordinator": koordinatorStand(eingabe),
-        "dauer": dauerSekunden(transkript),
+        "dauer": dauerSekunden(einträge),
         "zyklus": zyklus,
         "phase": phase,
         "stopp_wiederholt": bool(eingabe.get("stop_hook_active")),
@@ -159,6 +159,12 @@ def eintragAusZeile(zeile: str, pflicht: tuple = pflichtfelder) -> dict | None:
     return eintrag
 
 
+def dauerSumme(spät: dict, früh: dict) -> int | None:
+    """Beide Teile des Laufs zusammen; die Rückmeldung des Hooks zählt ab ihrem Beginn."""
+    teile = (spät.get("dauer"), früh.get("dauer"))
+    return sum(teile) if all(teil is not None for teil in teile) else spät.get("dauer")
+
+
 def läufeLesen(wurzel: Path) -> list[dict]:
     datei = logPfad(wurzel)
     if not datei.is_file():
@@ -178,6 +184,7 @@ def läufeLesen(wurzel: Path) -> list[dict]:
             späterer[laufId] = eintrag
         if spät and spät.get("stopp_wiederholt"):
             behalten[laufId]["ziel"] = eintrag.get("ziel")  # Warum: gilt dem Auftrag davor
+            behalten[laufId]["dauer"] = dauerSumme(behalten[laufId], eintrag)
             continue
         eintrag = dict(eintrag)
         ergebnis.append(eintrag)
@@ -186,14 +193,18 @@ def läufeLesen(wurzel: Path) -> list[dict]:
     return ergebnis[::-1]
 
 
+def protokollieren(eingabe: dict, ordner: Path) -> None:
+    """Trägt den Lauf ein und schreibt das Dashboard neu."""
+    from dashboard import dashboardSchreiben
+
+    gefunden = laufEintrag(eingabe, jetzt(), ordner)
+    if gefunden:
+        eintragAnhängen(ordner, gefunden)
+        dashboardSchreiben(ordner)
+
+
 if __name__ == "__main__":
     try:
-        from dashboard import dashboardSchreiben
-
-        ordner = projektordner()
-        gefunden = laufEintrag(eingabeLesen(), jetzt(), ordner)
-        if gefunden:
-            eintragAnhängen(ordner, gefunden)
-            dashboardSchreiben(ordner)
+        protokollieren(eingabeLesen(), projektordner())
     except Exception:  # Warum: eine Messung, die scheitert, darf keinen Rollenlauf beenden
         pass

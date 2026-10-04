@@ -22,7 +22,7 @@ achsenschritt = 50_000
 minute = 60
 achsenhöhe = 1.1 * sperrschwelle
 ohneSitzung = "ohne Sitzung"
-fehltAlt = "–"  # Warum: Lauf aus der Zeit vor dem Feld, Wert nicht nachholbar
+fehlt = "–"  # Warum: Wert fehlt im Eintrag
 legende = (
     ("var(--c-orchestrator)", "Gold: Koordinator", False),
     ("var(--c-subagent)", "Grau: Rolle", False),
@@ -81,7 +81,7 @@ def kilo(zahl: float) -> str:
 
 def dauerText(sekunden: int | None) -> str:
     if sekunden is None:
-        return fehltAlt
+        return fehlt
     return f"{sekunden} s" if sekunden < minute else f"{round(sekunden / minute)} min"
 
 
@@ -165,8 +165,8 @@ def säulendiagramm(läufe: list[dict]) -> str:
 def tabelle(läufe: list[dict]) -> str:
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(lauf["rolle"])}</td>'
-        f"<td>{html.escape(modellName(lauf.get('modell') or fehltAlt))}</td>"
-        f"<td>{html.escape(lauf.get('ziel') or fehltAlt)}</td>"
+        f"<td>{html.escape(modellName(lauf.get('modell') or fehlt))}</td>"
+        f"<td>{html.escape(lauf.get('ziel') or fehlt)}</td>"
         f'<td class="stand">{dauerText(lauf.get("dauer"))}</td>'
         f'<td class="stand">{kilo(lauf["belegung"])}</td></tr>'
         for lauf in läufe
@@ -186,13 +186,20 @@ def nachSitzung(läufe: list[dict]) -> dict[str, list[dict]]:
 
 
 def sitzungsTitel(sitzung: str, läufe: list[dict]) -> str:
-    """„Zyklus 3 Prozessphase“ aus dem jüngsten Lauf, der beides trägt; sonst Altbestand."""
-    benannt = [lauf for lauf in läufe if lauf.get("zyklus") and lauf.get("phase")]
-    if benannt:
-        return f"Zyklus {benannt[-1]['zyklus']} {benannt[-1]['phase']} · Sitzung {sitzung[:8]}"
+    """„Zyklus 3 Prozessphase“; wechselt die Sitzung die Phase, „Zyklus 3 Domänenphase bis …“."""
     if sitzung == ohneSitzung:
         return f"Altbestand, {ohneSitzung}"
-    return f"Sitzung {sitzung} (vor Zyklus und Phase im Log)"
+    benannt = [(lauf["zyklus"], lauf["phase"]) for lauf in läufe if lauf.get("zyklus")]
+    if not benannt:
+        return f"Sitzung {sitzung} (vor Zyklus und Phase im Log)"
+    (zyklusVon, phaseVon), (zyklusBis, phaseBis) = benannt[0], benannt[-1]
+    if (zyklusVon, phaseVon) == (zyklusBis, phaseBis):
+        name = f"Zyklus {zyklusVon} {phaseVon}"
+    elif zyklusVon == zyklusBis:
+        name = f"Zyklus {zyklusVon} {phaseVon} bis {phaseBis}"
+    else:
+        name = f"Zyklus {zyklusVon} {phaseVon} bis Zyklus {zyklusBis} {phaseBis}"
+    return f"{name} · Sitzung {sitzung}"
 
 
 def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
@@ -280,8 +287,15 @@ def dashboardSchreiben(ordner: Path) -> Path:
     return ziel
 
 
-if __name__ == "__main__":
-    ziel = dashboardSchreiben(wurzel)
-    if "--still" not in sys.argv:  # Warum: Hook-Ausgabe bei SubagentStart ginge in den Kontext
+def hauptlauf(argumente: list[str]) -> int:
+    try:
+        ziel = dashboardSchreiben(wurzel)
+    except Exception:  # Warum: als Hook bei SubagentStart darf ein Fehler keinen Start stören
+        return 0 if "--still" in argumente else 1
+    if "--still" not in argumente:  # Warum: Hook-Ausgabe ginge in den Kontext des Agenten
         print(ziel)
-    sys.exit(0)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(hauptlauf(sys.argv[1:]))

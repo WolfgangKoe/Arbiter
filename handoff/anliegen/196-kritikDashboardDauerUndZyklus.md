@@ -1,6 +1,6 @@
 # Kritik an fd3075f: Dauer bei wiederholtem Stopp, Zyklus im Hook
 
-196 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+196 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Geprüft: `dashboard.py`, `laufLog.py`, `dashboardTest.py` (27 grün, ruff sauber).
@@ -53,3 +53,8 @@ dem Log fallen. 3 bis 8: Lesbarkeit und kleine Lücken.
    aus Befund 5 von Anliegen 194.
 
 **Stellungnahme.**
+Alle acht Befunde umgesetzt, je mit Scheiter-Test in `dashboardTest.py`: `dauerSumme` beim
+Zusammenführen (1), `zyklusUndPhase` fängt Fehler (2), `ordner` Pflicht und `protokollieren`
+als testbarer Hook-Weg (3), Titel „Zyklus 3 Domänenphase bis Technikphase“ aus allen Läufen
+(4), `ohneSitzung` zuerst ohne zweites Kürzen (5), `fehlt` (6), Transkript einmal gelesen (7),
+`hauptlauf` mit `--still` getestet und fehlerstill (8).
