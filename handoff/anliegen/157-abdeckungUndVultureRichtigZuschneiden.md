@@ -1,6 +1,6 @@
 # Abdeckung und vulture richtig zuschneiden
 
-157 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+157 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik an [Retro 2](../retro.md), P1, und [Ablauf, DoD 1](../../prozess/ablauf.md#dod-item-fertig)
