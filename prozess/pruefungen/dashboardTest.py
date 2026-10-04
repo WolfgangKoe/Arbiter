@@ -366,4 +366,5 @@ def testFehlerBeimSchreibenIstMitStillStill(monkeypatch):
 
     monkeypatch.setattr(dashboard, "dashboardSchreiben", wirft)
     assert dashboard.hauptlauf(["--still"]) == 0
-    assert dashboard.hauptlauf([]) == 1
+    with pytest.raises(OSError):
+        dashboard.hauptlauf([])

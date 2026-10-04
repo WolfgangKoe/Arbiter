@@ -290,8 +290,10 @@ def dashboardSchreiben(ordner: Path) -> Path:
 def hauptlauf(argumente: list[str]) -> int:
     try:
         ziel = dashboardSchreiben(wurzel)
-    except Exception:  # Warum: als Hook bei SubagentStart darf ein Fehler keinen Start stören
-        return 0 if "--still" in argumente else 1
+    except Exception:
+        if "--still" in argumente:  # Warum: als Hook bei SubagentStart darf ein Fehler nicht stören
+            return 0
+        raise  # Warum: von Hand will man den Traceback sehen
     if "--still" not in argumente:  # Warum: Hook-Ausgabe ginge in den Kontext des Agenten
         print(ziel)
     return 0
