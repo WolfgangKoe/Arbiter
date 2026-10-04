@@ -2,7 +2,6 @@
 
 import json
 import os
-import re
 import subprocess
 import sys
 import threading
@@ -34,9 +33,17 @@ abgeschalteteRegeln = (
 )
 
 
+def version(ordner: Path) -> str:
+    """Feld `version` aus `package.json` der Erweiterung."""
+    paket = ordner / "package.json"
+    assert paket.is_file(), (
+        f"SonarLint-Erweiterung {ordner}: Version nicht erkennbar, kein package.json"
+    )
+    return json.loads(paket.read_text(encoding="utf-8"))["version"]
+
+
 def versionszahlen(ordner: Path) -> tuple[int, ...]:
-    treffer = re.search(r"sonarlint-vscode-(\d+(?:\.\d+)*)", ordner.name)
-    return tuple(int(teil) for teil in treffer.group(1).split(".")) if treffer else ()
+    return tuple(int(teil) for teil in version(ordner).split("."))
 
 
 def erweiterungFinden() -> Path:
@@ -48,10 +55,9 @@ def erweiterungFinden() -> Path:
     gefunden = sorted(gefunden, key=versionszahlen)
     assert gefunden, f"SonarLint-Erweiterung fehlt in {erweiterungenOrdner}; {umgebungsvariable}"
     neueste = gefunden[-1]
-    zahlen = ".".join(str(teil) for teil in versionszahlen(neueste)) + "."
-    assert zahlen.startswith(erwarteteVersion), (
-        f"SonarLint-Erweiterung {neueste.name} statt Version {erwarteteVersion}x: "
-        "`erwarteteVersion` in sonarlint.py bewusst heben"
+    assert (version(neueste) + ".").startswith(erwarteteVersion), (
+        f"SonarLint-Erweiterung {neueste.name} hat Version {version(neueste)} "
+        f"statt {erwarteteVersion}x: `erwarteteVersion` in sonarlint.py bewusst heben"
     )
     return neueste
 

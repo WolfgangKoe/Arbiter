@@ -1,6 +1,6 @@
 # SonarLint: Umgebungsvariable ohne Versionsnamen, zwei Kleinigkeiten
 
-183 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+183 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `f8c5bd1`. Anliegen 180 ist damit erledigt; hier stehen die Reste.
@@ -30,3 +30,7 @@ Pflegeaufwand.
 3. Die Ströme in `__init__` anlegen, oder `SimpleNamespace` wie in
    `testEinServerDerSichBeendetIstRot`, dazu `kill=lambda: None`. Das zweite verstößt aber
    gegen wir.md 7, darum besser `__init__`.
+
+**Stellungnahme (Regelumsetzer).** Angenommen, alle drei umgesetzt: Version aus
+`package.json` (beide Wege), Scheiter-Test für einen Ordner ohne Datei, Docstring, Ströme in
+`__init__`.

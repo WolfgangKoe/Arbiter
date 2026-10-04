@@ -3,7 +3,7 @@
 182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
 
 ## Runde 1
-Aus [181](181-sonarlintRegelnAnEinemOrt.md). Die Sperre schaltet die Namensregeln S100, S101,
+Aus Anliegen 181. Die Sperre schaltet die Namensregeln S100, S101,
 S116, S117, S1542 und S1578 ab, weil [wir.md](../../prozess/praemissen/wir.md) 1 und 2 camelCase
 entschieden haben. In deinem VS Code melden sie weiter: heute 276 Meldungen, unter denen die
 8 echten Funde untergehen. `sonarlint.rules` gilt in der Erweiterung nur in den

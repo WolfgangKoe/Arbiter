@@ -1,4 +1,4 @@
-"""Scheiter-Test und Stand: SonarLint ohne VS Code ohne VS Code."""
+"""Scheiter-Test und Stand: SonarLint ohne VS Code."""
 
 import io
 import json
@@ -29,11 +29,18 @@ saubererCode = "def zähle():\n    return 2\n"
 
 
 class ServerAttrappe:
-    stdin = io.BytesIO()
-    stdout = io.BytesIO()
+    def __init__(self):
+        self.stdin = io.BytesIO()
+        self.stdout = io.BytesIO()
 
     def kill(self) -> None:
         pass
+
+
+def erweiterungAnlegen(ordner: Path, version: str) -> Path:
+    ordner.mkdir()
+    (ordner / "package.json").write_text(json.dumps({"version": version}), encoding="utf-8")
+    return ordner
 
 
 def probeAnlegen(tmp_path: Path) -> list[Path]:
@@ -108,7 +115,7 @@ def testGesammeltWerdenPythonDateienOhnePycache(tmp_path):
 
 
 def testDieErweiterungKommtAusDerUmgebungsvariable(monkeypatch, tmp_path):
-    ordner = tmp_path / "sonarsource.sonarlint-vscode-6.0.3-linux-x64"
+    ordner = erweiterungAnlegen(tmp_path / "sonarlint", "6.0.3")
     monkeypatch.setenv(sonarlint.umgebungsvariable, str(ordner))
     assert erweiterungFinden() == ordner
 
@@ -117,7 +124,7 @@ def testDieNeuesteErweiterungAusVsCodeGewinnt(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
     for version in ("6.0.1", "6.0.2"):
-        (tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64").mkdir()
+        erweiterungAnlegen(tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64", version)
     assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.2-linux-x64"
 
 
@@ -151,14 +158,14 @@ def testDieVersionsordnerWerdenNachZahlSortiert(monkeypatch, tmp_path):
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
     monkeypatch.setattr(sonarlint, "erwarteteVersion", "6.")
     for version in ("6.9.0", "6.10.0"):
-        (tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64").mkdir()
+        erweiterungAnlegen(tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64", version)
     assert "6.10.0" in erweiterungFinden().name
 
 
 def testEineAndereVersionAlsErwartetIstRotUndNenntBeide(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
-    (tmp_path / "sonarsource.sonarlint-vscode-7.0.0-linux-x64").mkdir()
+    erweiterungAnlegen(tmp_path / "sonarsource.sonarlint-vscode-7.0.0-linux-x64", "7.0.0")
     with pytest.raises(AssertionError, match=r"7\.0\.0.*6\.0\."):
         erweiterungFinden()
 
@@ -181,3 +188,11 @@ def testDieEinstellungNenntGenauDieAbgeschaltetenRegeln():
 def testPreCommitPrüftSonarLintBeiPythonDateien():
     konfiguration = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "python3 prozess/pruefungen/sonarlint.py" in konfiguration
+
+
+def testEinOrdnerOhnePackageJsonHatKeineErkennbareVersion(monkeypatch, tmp_path):
+    ordner = tmp_path / "sonarlint"
+    ordner.mkdir()
+    monkeypatch.setenv(sonarlint.umgebungsvariable, str(ordner))
+    with pytest.raises(AssertionError, match=r"sonarlint: Version nicht erkennbar"):
+        erweiterungFinden()
