@@ -1,6 +1,6 @@
 # QUE-2, AUF-4: Begriffe Karte und Ablage, Namen der Spieler
 
-195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · offen
+195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · beantwortet
 
 ## Runde 1
 **Befund.** Für die erste Oberfläche (Plan 2, „Danach“; Anliegen 145,
@@ -58,4 +58,4 @@ Arbiter die Rolle neben dem Namen zeigen; das wird dann eine eigene Anforderung.
 Empfehlung A, Begründung wie in F2. AUF-4.2 steht schon so; wählst du B oder C, ersetzt sie ein
 neues Kriterium.
 
-Antwort: .
+Antwort: A

@@ -55,4 +55,4 @@ Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 - b) Je Skript eine `sys.path`-Zeile, gegen den Gegenvorschlag.
 - c) A entfällt, alles bleibt flach.
 Empfehlung: a.
-Antwort: .
+Antwort: Wir nehmen a. Das ist eine Ausnahmeerlaubnis. Nachdem alles erledigt und abgenommen ist, wird die Erlaubnis wieder entzogen.
