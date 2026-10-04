@@ -18,8 +18,8 @@ erst gebaut.
   JS-Logik, nur Inhalte aus Kriterien oder Katalogdaten; gelöscht nach dem Einbau.
 - Nur Komponenten der Komponentenseite ([Architektur, Oberfläche](../../technik/architektur.md));
   eine neue Komponente ist ein Anliegen an die Technik. Für die erste Oberfläche gibt es
-  noch keine; wie das erste Mockup zu seinem CSS kommt, klärt der Architekt in
-  [146](146-schnittDerErstenOberflaeche.md).
+  noch keine; wie das erste Mockup zu seinem CSS kommt, regelt
+  [DoR 5](../../prozess/ablauf.md#dor-item-bereit).
 - ArbiterMap ist Vorbild für das Bild, nicht Vorlage für Code (145, F1).
 - Schreibpfade: `domaene/mockups/` und `handoff/anliegen/`.
 - Im Ablauf: Domänenphase zwischen Anforderungen (4) und Plan (5); du siehst das Mockup vor

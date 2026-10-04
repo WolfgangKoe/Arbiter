@@ -11,7 +11,7 @@ nennt `web/`, `speicher/` und `frontend/` nur als Ordner; wie sie zusammenspiele
 für die Datenbank steht nur der Auslöser (A3). Der Aufbau unten geht in die Technik, sobald
 dort Platz ist: architektur.md hat 5.985 von 6.000 Zeichen
 ([155](155-technikBrauchtPlatzUndErstesMockup.md)). Er beantwortet zugleich die Fragen 1 bis 3
-in [146](146-schnittDerErstenOberflaeche.md).
+in Anliegen 146.
 
 *Frontend und Backend*
 - Ein Befehl startet Flask (`web/`) und nennt die Adresse. `web/` liefert die Dateien aus

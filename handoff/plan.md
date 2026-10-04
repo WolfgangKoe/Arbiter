@@ -42,7 +42,7 @@ Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
 
 ## Danach, nach Abhängigkeit
 Ablage, Zurücklegen und die erste Oberfläche im Browser, Wunsch des Stakeholders
-([145](anliegen/145-ersteOberflaecheImBrowser.md), Schnitt [146](anliegen/146-schnittDerErstenOberflaeche.md)):
+([145](anliegen/145-ersteOberflaecheImBrowser.md), Schnitt Anliegen 146):
 Karte mit Spielfeld und Zonen, Ziehen mit Maus und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden
 mit fehlenden Modellen und Kohärenz (16 F3). Mit diesen drei ist Etappe 1 erreichbar.
 
@@ -53,7 +53,7 @@ An dich:
   als Vorbild, Reihenfolge für Plan 3.
 
 Zwischen Rollen:
-- [146](anliegen/146-schnittDerErstenOberflaeche.md): Schnitt der ersten Oberfläche, an den
+- Anliegen 146: Schnitt der ersten Oberfläche, an den
   Architekten, vor Plan 3.
 - Anliegen 108,
   Anliegen 109,

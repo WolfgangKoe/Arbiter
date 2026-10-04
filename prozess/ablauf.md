@@ -29,7 +29,9 @@ nur Rollen, die ausschließlich Anliegen schreiben.
 2. Keine vagen Wörter; kursive Fachbegriffe stehen im Glossar (Wortanfang).
 3. Regelbasierte Kriterien nennen ihre Fundstelle.
 4. Abhängigkeiten erledigt, kein offenes Anliegen zum Item.
-5. Bei einer Oberfläche: Mockup aus vorhandenen Komponenten.
+5. Bei einer Oberfläche: Mockup aus vorhandenen Komponenten. Gibt es noch keine
+   Komponentenseite, bringt das Mockup sein CSS als Vorschlag mit; die Technikphase baut
+   daraus die Komponentenseite.
 
 Mechanismus für 1 bis 5: nur Text. Fachliche Vollständigkeit ist Urteil (Schritt 6) und
 zeigt sich spätestens an den roten Tests.
@@ -59,17 +61,18 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 
 ### DoD (Item fertig)
 1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`;
-   Zweigabdeckung mindestens 95 % für `technik/arbiter` und `prozess/pruefungen`.
-   Mechanismus: nur Text.
+   Zweigabdeckung mindestens 95 % für `technik/arbiter` (Prüfskripte: Regelumsetzer, eigene
+   Meldung). Mechanismus: nur Text.
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`benennung.py`), Kriterium ↔
    Test (`rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
    Stand), Höchstmaße (`hoechstmassTest.py`), Komplexität (`komplexitaetTest.py`), Code →
    Glossar (`glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
    (`kommentare.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
-   über `konfigurationTest.py`. Nur Text: toter Code (vulture über den Produktcode; Zeilen,
-   die nur Einheitstests erreichen, beurteilt der Reviewer: Vorbedingung, fehlendes Kriterium
-   oder tot). Glossar → Code ist Urteil.
+   über `konfigurationTest.py`. Nur Text: toter Code (vulture über `technik/arbiter` und
+   `technik/tests/akzeptanz`, ohne Einheitstests; Zeilen, die nur Einheitstests erreichen,
+   beurteilt der Reviewer: Vorbedingung, fehlendes Kriterium oder tot). Glossar → Code ist
+   Urteil.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.
@@ -79,7 +82,7 @@ geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 
 Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert): mypy oder
 pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR2004, PLR0913,
-FBT, ERA, `PLR0912` mit 12), vulture nur über den Produktcode,
+FBT, ERA, `PLR0912` mit 12), vulture wie in DoD 2,
 Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
 Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
 wie SonarLint, die Sicht des Stakeholders; Mechanismus: nur Text. Nicht verwendet: radon-Wartbarkeitsindex,
@@ -96,7 +99,9 @@ Auslöser: Review n liegt vor.
    darauf; grafisch und kurz, nur Seltenes (Perspektiven, Rollen, Ordner), Rollentabelle und
    Ordnerbaum per Skript. Mechanismus: nur Text.
 2. Regelumsetzer: Mechanismen zu den Prozess-Items, je mit Scheiter-Test; ein Item je Lauf,
-   damit die Belegung unter 120.000 Token bleibt. Mechanismus: nur Text.
+   damit die Belegung unter 120.000 Token bleibt. Vor der Freigabe laufen nur Items, die auf
+   den nächsten Zyklus wirken oder die der Stakeholder vorher will; die übrigen stehen im
+   [Backlog](backlog.md) bis zur nächsten Prozessphase. Mechanismus: nur Text.
 3. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
 4. Freigabe: Der Stakeholder schreibt „.“, der Koordinator committet `Freigabe Retro <n>`.
    Danach meldet der Stand die Domänenphase mit Plan n+1.
@@ -111,8 +116,8 @@ Mechanismus der Übergänge: Stand-Hook (`prozess/pruefungen/stand.py`).
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
 Mechanismus: nur Text.
 - UX: erstes Item mit Oberfläche. Schreibt einbaufähige Mockups: statisches HTML mit dem
-  echten CSS, ohne JS-Logik, nur Inhalte aus Kriterien oder Katalogdaten, ein Mockup je
-  Anforderung, gelöscht nach dem Einbau.
+  echten CSS (DoR 5), ohne JS-Logik, nur Inhalte aus Kriterien oder Katalogdaten, ein
+  Mockup je Anforderung, gelöscht nach dem Einbau.
 - Prozesskritiker: Prozesskritik fehlt, oder der Organisationsentwickler verteidigt
   wiederholt eigene Regeln.
 - Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der

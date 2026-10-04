@@ -21,7 +21,7 @@ und Touch, Mockup (neue Rolle UX), Komponentenseite und Bildschirmtest
 ([Architektur, Oberfläche](../../technik/architektur.md)). In ArbiterMap hat allein das
 Ziehen 85.402 Zeichen JavaScript (`frontend/static/js/model_drag.js`). Vermutlich werden es
 zwei Items, erst Anzeige, dann Ziehen; den Schnitt prüft der Architekt in
-[146](146-schnittDerErstenOberflaeche.md). Was „ähnlich wie ArbiterMap“ heißt, bestimmt das
+Anliegen 146. Was „ähnlich wie ArbiterMap“ heißt, bestimmt das
 Mockup.
 
 **F1 · Was übernehmen wir von ArbiterMap?**

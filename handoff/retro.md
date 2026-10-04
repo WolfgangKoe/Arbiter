@@ -30,28 +30,27 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
    Auslöser der Rolle UX ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)).
 
 ## Geändert
-- [Ablauf](../prozess/ablauf.md): DoD 1 mit Abdeckung 95 %, DoD 2 mit totem Code, SonarLint
-  als nur Text; Prozessphase: ein Item je Lauf des Regelumsetzers (Befund 3).
-- [Regelumsetzer](../.claude/agents/regelumsetzer.md): ein Item je Lauf; Schreibpfade
-  `dashboard.html` und `prozess/dashboard/` (deine Antwort in Anliegen 90).
+- [Ablauf](../prozess/ablauf.md): DoD 1 mit Abdeckung 95 % für das Produkt, DoD 2 mit
+  totem Code (157), SonarLint als nur Text; DoR 5 für das erste Mockup (155); Prozessphase:
+  ein Item je Lauf (Befund 3), vor der Freigabe nur, was auf den nächsten Zyklus wirkt (156).
+- [Regelumsetzer](../.claude/agents/regelumsetzer.md): ein Item je Lauf, Abdeckung der
+  Prüfskripte 95 %; Schreibpfade `dashboard.html`, `prozess/dashboard/` (Anliegen 90).
 - [Kennzahlen](../prozess/kennzahlen.md): Prozesslast. [Backlog](../prozess/backlog.md):
-  Dashboard und Last je Rolle sind P5, Abdeckung und vulture P1.
+  zurückgestellte Items, darunter das Dashboard (Last je Rolle).
 
-## Prozess-Items (Regelumsetzer, je Lauf eins, in dieser Reihenfolge)
-- P1 Abdeckung (150): Zweige ≥ 95 % für `technik/arbiter` und `prozess/pruefungen` im Lauf
-  der Prüfungen; vulture über `technik/arbiter`; Liste der Zeilen, die nur Einheitstests
-  erreichen, für den Reviewer.
-- P2 SonarLint (150): Wegwerf-Versuch mit dem Analysator der installierten Erweiterung ohne
-  VS Code; gelingt er nicht, „Sonar way“ (Python) auf ruff abgebildet. Architekt kritisiert.
-- P3 Höchstmaße in `hoechstmassTest.py`: Code-Modul 12.000, Einheitstest-Datei 8.000, Plan,
-  Review, Retro 4.000; vorher die drei Dateien aus Befund 4 teilen (`rueckverfolgung.py`:
-  114 B 7).
-- P4 `pfadeTest.py` löschen, `pfade.py` bleibt: Der Test prüft nur Prüfskripte, hat eine
-  bekannte Lücke und kostete drei Anliegen. Das ist die Löschung, die die Kennzahl verlangt.
-- P5 Dashboard nach Anliegen 90 (git): Lauf-Log mit Rolle und Belegung, Seite `dashboard.html`.
-- P6 `kennzahlen.py` rechnet die Prozesslast.
-Danach 114 und, nach deiner Antwort, 139.
+## Prozess-Items (Regelumsetzer, vor der Freigabe, je Lauf eins)
+Nur, was auf Plan 3 wirkt ([Ablauf, Prozessphase](../prozess/ablauf.md#prozessphase) 2); der
+Rest steht im [Backlog](../prozess/backlog.md).
+- P1 Abdeckung (150, [157](anliegen/157-abdeckungUndVultureRichtigZuschneiden.md)): Zweige
+  ≥ 95 % für `technik/arbiter` und, als eigene Meldung, `prozess/pruefungen`; Liste der
+  Zeilen, die nur Einheitstests erreichen; vulture nach DoD 2, zuerst Wegwerf-Versuch, ob
+  es bei 60 % Konfidenz ohne Ausnahmeliste leer bleibt.
+- P2 SonarLint (150): Wegwerf-Versuch mit dem Analysator der Erweiterung ohne VS Code, sonst
+  „Sonar way“ (Python) auf ruff. Wirkt auf die DoD von Plan 3.
+- P3 `pfadeTest.py` löschen, `pfade.py` bleibt: prüft nur Prüfskripte, bekannte Lücke, drei
+  Anliegen. Die Löschung, die die Kennzahl verlangt.
 
 ## Empfehlung
-Zur Freigabe: [135](anliegen/135-koordinatenXundYAlsAusnahme.md) und 139 je A, 145, 151 A.
-134 und 138 warten auf 135 und 139.
+Zur Freigabe: [135](anliegen/135-koordinatenXundYAlsAusnahme.md) und 139 je A, 145, 151,
+[158](anliegen/158-dashboardVorOderNachPlan3.md) und [159](anliegen/159-zweiteTechnikdatei.md)
+A. 134 und 138 warten auf 135 und 139.

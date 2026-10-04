@@ -2,6 +2,15 @@
 
 Zurückgestellt, bis ein Befund es auslöst. Was ausgelöst ist, wird ein Prozess-Item der Retro.
 
+Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zyklus 3.
+- Höchstmaße in `hoechstmassTest.py`: Code-Modul 12.000, Einheitstest-Datei 8.000, Plan,
+  Review, Retro 4.000; vorher `rueckverfolgung.py` (114 B 7), `rueckverfolgungTest.py` und
+  `standTest.py` teilen (Retro 2, Befund 4).
+- `kennzahlen.py` rechnet die Prozesslast.
+- Dashboard nach Anliegen 90: Lauf-Log mit Rolle und Belegung, Seite `dashboard.html`
+  (Zeitpunkt: Anliegen 158).
+- Anliegen 114 (Prüfskripte ordnen) und 139 (Sandbox, nach der Antwort in der Freigabe).
+
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Retro 3, oder eine Regel
   steht im Verdacht, nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item

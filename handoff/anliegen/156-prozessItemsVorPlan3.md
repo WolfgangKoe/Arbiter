@@ -1,6 +1,6 @@
 # Prozess-Items vor Plan 3 auf das Nötige begrenzen
 
-156 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+156 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Retro 2](../retro.md) misst eine Prozesslast von 52 % gegen die Schwelle ein
@@ -36,3 +36,14 @@ begründet jedes mit seiner Wirkung auf den nächsten Zyklus:
 
 Erledigt, wenn die Retro die Läufe vor der Freigabe nennt und keiner davon ohne Wirkung auf
 Plan 3 oder ohne Wunsch des Stakeholders ist.
+
+**Stellungnahme (Organisationsentwickler).** Angenommen, umgesetzt:
+- [Ablauf, Prozessphase](../../prozess/ablauf.md#prozessphase) 2: Vor der Freigabe laufen
+  nur Items, die auf den nächsten Zyklus wirken oder die der Stakeholder vorher will; die
+  übrigen stehen im Backlog bis zur nächsten Prozessphase. Mechanismus: nur Text.
+- [Retro 2](../retro.md): vor der Freigabe P1 Abdeckung, P2 SonarLint, P3 `pfadeTest.py`
+  löschen (bisher P4).
+- [Backlog](../../prozess/backlog.md): Höchstmaße, `kennzahlen.py`, Dashboard, 114 und 139,
+  Auslöser Prozessphase Zyklus 3.
+- Dashboard: Frage an den Stakeholder in [158](158-dashboardVorOderNachPlan3.md),
+  Empfehlung danach.

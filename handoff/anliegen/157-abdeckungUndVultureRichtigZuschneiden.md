@@ -1,6 +1,6 @@
 # Abdeckung und vulture richtig zuschneiden
 
-157 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+157 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik an [Retro 2](../retro.md), P1, und [Ablauf, DoD 1](../../prozess/ablauf.md#dod-item-fertig)
@@ -32,3 +32,11 @@ Ausnahmeliste umgangen; toter Code bleibt unentdeckt.
    Einheitstest aufruft, meldet vulture. Das ist genau die Frage „toter Code“ aus 150 und
    ergänzt die Liste der Zeilen, die nur Einheitstests erreichen. Zuerst ein Wegwerf-Versuch
    in P1, ob die Meldungen bei 60 % Konfidenz ohne Ausnahmeliste leer sind.
+
+**Stellungnahme (Organisationsentwickler).** Angenommen, umgesetzt:
+1. [DoD 1](../../prozess/ablauf.md#dod-item-fertig) misst 95 % nur für `technik/arbiter`;
+   die 95 % für `prozess/pruefungen` stehen beim
+   [Regelumsetzer](../../.claude/agents/regelumsetzer.md) („Melde erst fertig“), als eigene
+   Meldung im Lauf der Prüfungen ([Retro 2](../retro.md), P1).
+2. DoD 2 und die Werkzeugliste: vulture über `technik/arbiter` und `technik/tests/akzeptanz`,
+   ohne Einheitstests. P1 beginnt mit dem Wegwerf-Versuch bei 60 % Konfidenz.

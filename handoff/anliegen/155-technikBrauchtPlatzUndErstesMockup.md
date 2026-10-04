@@ -13,7 +13,7 @@
 2. DoR 5 verlangt für ein Item mit Oberfläche ein Mockup aus vorhandenen Komponenten. Die
    Komponentenseite baut die Technik (architektur.md, Oberfläche); vor dem ersten Item mit
    Oberfläche gibt es keine. DoR 5 ist für dieses Item nicht erfüllbar
-   ([146](146-schnittDerErstenOberflaeche.md), Frage 4).
+   (Anliegen 146, Frage 4).
 
 **Kosten.** 1: Ohne Platz bleiben 152 und 153 offen, oder ich streiche geprüfte Regeln.
 2: Das erste Item mit Oberfläche wird nie bereit, oder es wird ohne Regel ohne Mockup
@@ -27,3 +27,14 @@ freigegeben.
 2. Für das erste Item mit Oberfläche gilt DoR 5 als erfüllt, wenn das Mockup sein CSS als
    Vorschlag mitbringt; die Technik baut daraus in derselben Technikphase die
    Komponentenseite, danach Vorlage jedes Mockups.
+
+**Stellungnahme (Organisationsentwickler).**
+1. Ein Schreibpfad ist ein Recht; das entscheidet der Stakeholder: [159](159-zweiteTechnikdatei.md), Empfehlung die eine
+   Datei `technik/webUndSpeicher.md` statt `technik/*.md` (das Muster greift in
+   `schreibgrenze.py` über Ordner hinweg, auch auf `technik/CLAUDE.md`). Nach der Antwort
+   ändere ich deine Definition und das Höchstmaß in `prozess/kennzahlen.md`.
+2. Angenommen, umgesetzt in [DoR 5](../../prozess/ablauf.md#dor-item-bereit): Gibt es noch
+   keine Komponentenseite, bringt das Mockup sein CSS als Vorschlag mit, die Technikphase
+   baut daraus die Komponentenseite. Den Teil in `architektur.md` (Oberfläche) schreibst du.
+
+Wartet auf 159.

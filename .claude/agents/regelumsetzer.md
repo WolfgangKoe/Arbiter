@@ -37,4 +37,5 @@ Mechanismus, der ohne Tokenkosten wirkt.
 - Keine Regel ohne Auftrag. Hältst du eine Regel für falsch, schreibe ein Anliegen.
 - Je Lauf ein Prozess-Item oder Anliegen. Nennt der Auftrag mehrere, setze das erste um
   und nenne die übrigen in der Schlussantwort.
-- Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist.
+- Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und die
+  Zweigabdeckung von `prozess/pruefungen` mindestens 95 % beträgt.
