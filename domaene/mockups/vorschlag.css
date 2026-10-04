@@ -1,26 +1,26 @@
 :root {
-  --arb-bg: #0f0e0c;
-  --arb-surface: #1c1a14;
-  --arb-border: #2e2618;
-  --arb-accent: #d4a017;
-  --arb-accent-lt: #fbbf24;
-  --arb-muted: #6b5f44;
-  --arb-text: #e7e5e4;
-  --spieler-1: #3b82f6;
-  --spieler-2: #f43f5e;
-  --ohne-spieler: #a3a3a3;
+  --hintergrund: #0f0e0c;
+  --fläche: #1c1a14;
+  --rand: #2e2618;
+  --akzent: #d4a017;
+  --akzentHell: #fbbf24;
+  --gedämpft: #6b5f44;
+  --text: #e7e5e4;
+  --spieler1: #3b82f6;
+  --spieler2: #f43f5e;
+  --ohneSpieler: #a3a3a3;
 }
 
 .spieler1 {
-  --spielerFarbe: var(--spieler-1);
+  --spielerFarbe: var(--spieler1);
 }
 
 .spieler2 {
-  --spielerFarbe: var(--spieler-2);
+  --spielerFarbe: var(--spieler2);
 }
 
 .ohneSpieler {
-  --spielerFarbe: var(--ohne-spieler);
+  --spielerFarbe: var(--ohneSpieler);
 }
 
 * {
@@ -32,27 +32,27 @@ body {
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
-  background: var(--arb-bg);
-  color: var(--arb-text);
+  background: var(--hintergrund);
+  color: var(--text);
   font-family: system-ui, sans-serif;
 }
 
-.gameHeader {
+.kopfzeile {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1.5rem;
-  background: var(--arb-surface);
-  border-bottom: 1px solid var(--arb-border);
+  background: var(--fläche);
+  border-bottom: 1px solid var(--rand);
 }
 
-.gameHeaderTitel {
-  color: var(--arb-accent);
+.kopfzeileTitel {
+  color: var(--akzent);
   font-weight: 700;
   letter-spacing: 0.1em;
 }
 
-.gameHeaderSpieler {
+.kopfzeileSpieler {
   min-width: 10rem;
   padding: 0.25rem 0.75rem;
   border-bottom: 3px solid transparent;
@@ -60,17 +60,17 @@ body {
   font-weight: 700;
 }
 
-.gameHeaderSpieler.spieler2 {
+.kopfzeileSpieler.spieler2 {
   text-align: right;
 }
 
-.gameHeaderSpieler.anDerReihe {
-  border-bottom-color: var(--arb-accent-lt);
+.kopfzeileSpieler.anDerReihe {
+  border-bottom-color: var(--akzentHell);
 }
 
-.gameHeaderAnDerReihe {
+.kopfzeileAnDerReihe {
   display: block;
-  color: var(--arb-accent-lt);
+  color: var(--akzentHell);
   font-size: 0.75rem;
   font-weight: 400;
 }
@@ -93,62 +93,53 @@ body {
   align-items: flex-start;
 }
 
-.armyCard {
+.armeeKarte {
   padding: 0.75rem;
-  background: var(--arb-surface);
-  border: 1px solid var(--arb-border);
+  background: var(--fläche);
+  border: 1px solid var(--rand);
   border-radius: 0.5rem;
 }
 
-.armyCardName {
+.armeeKartenName {
   margin: 0 0 0.75rem;
   color: var(--spielerFarbe);
   font-size: 1.1rem;
 }
 
-.unitCard {
+.einheitenKarte {
   margin-bottom: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: var(--arb-bg);
-  border: 1px solid var(--arb-border);
+  background: var(--hintergrund);
+  border: 1px solid var(--rand);
   border-radius: 0.375rem;
 }
 
-.unitCard.inAufstellung {
-  border-color: var(--arb-accent-lt);
-  box-shadow: 0 0 0 1px var(--arb-accent-lt);
+.einheitenKarte.inAufstellung {
+  border-color: var(--akzentHell);
+  box-shadow: 0 0 0 1px var(--akzentHell);
 }
 
-.unitCardName {
+.einheitenKartenName {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
 }
 
-.unitCardAbzeichen {
+.einheitenKartenAbzeichen {
   padding: 0.0625rem 0.5rem;
-  background: var(--arb-accent-lt);
+  background: var(--akzentHell);
   border-radius: 0.25rem;
-  color: var(--arb-bg);
+  color: var(--hintergrund);
   font-size: 0.75rem;
   font-weight: 700;
 }
 
-.unitCardModelle {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin: 0.5rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.unitCardModell {
+.einheitenKartenModelle {
   padding: 0.125rem 0.5rem;
-  border: 1px solid var(--arb-muted);
+  border: 1px solid var(--gedämpft);
   border-radius: 999px;
-  color: var(--arb-muted);
+  color: var(--gedämpft);
   font-size: 0.75rem;
 }
 
@@ -156,12 +147,12 @@ body {
   width: 100%;
   max-width: 34rem;
   max-height: 100%;
-  background: var(--arb-surface);
-  border: 1px solid var(--arb-border);
+  background: var(--fläche);
+  border: 1px solid var(--rand);
 }
 
 .spielfeld {
-  fill: var(--arb-bg);
+  fill: var(--hintergrund);
 }
 
 .aufstellungszone {
