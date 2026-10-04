@@ -1,6 +1,6 @@
 # Dashboard: Welche Daten sollen für die Vorlage hinzukommen
 
-191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · beantwortet
+191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Du hast zu P4 bemängelt, `dashboard.html` sehe anders aus als
@@ -37,3 +37,8 @@ y-Achse mit Marken alle 50k; Tabelle Agent, Modell, Auftrag (erste Zeile des Auf
 Anliegennummer allein, wie der Koordinator ihn formuliert), Ende, Kontextfenster in k.
 Die Seite mit Sonarlint- und Prüfkennzahlen sowie Anliegen im Dashboard gehören in spätere
 Zyklen und brauchen eigene Items.
+
+Antwort: Drei noch fehlende Punkte:
+- die Angabe der Sitzung im Titel kann entfallen. 
+- Bei der Verteilung der Tokenstände rechts fehlt die y-Achse 
+- eine Angabe der Anzahl pro Balken in der Verteilung der Tokenstände fehlt auch noch. 
