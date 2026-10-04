@@ -19,7 +19,7 @@
   Anliegen; höchstens 400 Zeichen.
 
 Quellen: Regeltexte in `referenz/rules/` (Fundstelle `<datei>:<zeile>`). Alte
-Spezifikationen (`referenz/domainRules.md`, `Arbiter/Arbiter_Specs/*.pdf`) zeigen die
+Spezifikationen (`referenz/domainRules.md`, `Arbiter-old/Arbiter_Specs/`) zeigen die
 Absicht des Stakeholders. Das Ziel geht vor; Widerspruch oder Lücke wird eine Frage.
 
 Mechanismus: nur Text, Höchstmaß der Etappen `hoechstmassTest.py`.

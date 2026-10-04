@@ -1,6 +1,6 @@
 # SonarLint scharf, Abdeckung 95 % ohne toten Code
 
-150 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+150 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund** (übermittelt vom Koordinator). „Kritik an den Organisationsentwickler: Haben wir
@@ -47,4 +47,5 @@ Prozess-Items P1 und P2 der [Retro 2](../retro.md).
    Prozesslast ([Kennzahlen](../../prozess/kennzahlen.md)) achtet darauf, dass die Prüfungen
    nicht schneller wachsen als das Produkt (heute 183.000 zu 12.700 Zeichen).
 
-Wartet auf P1 und P2 der Retro 2.
+Umgesetzt: P1 (`abdeckung.py`, 6753eed) und P2 (`sonarlint.py`, 1cd5dfd); beide nennt
+[DoD 1 und 2](../../prozess/ablauf.md#dod-item-fertig).

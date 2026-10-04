@@ -1,6 +1,6 @@
 # Koordinaten x und y als Ausnahme von der Namenslänge
 
-135 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+135 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [wir.md](../../prozess/praemissen/wir.md) 5 verlangt Namen mit mindestens 3

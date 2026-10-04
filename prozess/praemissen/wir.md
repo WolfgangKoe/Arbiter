@@ -20,7 +20,8 @@ Bezeichner sind deutsch mit Umlauten, Dateinamen ASCII.
    `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`. Mechanismus: `benennung.py`,
    `rueckverfolgung.py`.
 5. Selbst definierte Namen haben mindestens 3 Zeichen; keine einbuchstabigen Namen.
-   Mechanismus: `benennung.py`.
+   Ausnahme: die Achsen `x` und `y` als Felder von `Stelle` (Architektur S1, Anliegen 135).
+   Mechanismus: `benennung.py` (`koordinatenfelder`).
 6. Keine Indizes auf Fachobjekte (`einheiten[0]`): benennen oder entpacken.
    Mechanismus: nur Text.
 7. Keine lambda-Tricks: kein lambda als Hülle um einen Aufruf, keine Bindung per

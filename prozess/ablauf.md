@@ -8,7 +8,9 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 4. Anforderungsautor, in jedem Zyklus: Anforderungen zum nächsten Schnitt, in Zyklus 1 zur
    Etappe, danach zum Zyklusziel des freigegebenen Reviews samt Kommentaren (ohne dieses zum
    Abschnitt „Danach“ des vorigen Plans); Begriffe ins Glossar. Eine genügt. Auslöser:
-   kein Kriterium ohne Akzeptanztest.
+   kein Kriterium ohne Akzeptanztest. Bei einer Oberfläche danach
+   [UX](../.claude/agents/ux.md): ein Mockup je Anforderung (DoR 5); das Item verlinkt es.
+   Mechanismus: nur Text (der Stand nennt UX nicht).
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
    eins genügt, höchstens drei; weicht er vom Zyklusziel des Reviews ab, begründet er es.
    Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](#freigabe-und-kommentare)).
@@ -19,7 +21,8 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
    oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
    den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
    Mechanismus für 4 und diesen Satz: `stand.py` (`domänenphase`, `planOhneFreigabe`).
-6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
+6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests. Am
+   Mockup: Fachkritiker (gegen die Kriterien), Architekt (nur vorhandene Komponenten).
 7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
    `Freigabe Plan <n>`. Danach Technikphase.
 
@@ -165,9 +168,8 @@ Kommentar: .
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
 Mechanismus: nur Text.
-- UX: erstes Item mit Oberfläche. Schreibt einbaufähige Mockups: statisches HTML mit dem
-  echten CSS (DoR 5), ohne JS-Logik, nur Inhalte aus Kriterien oder Katalogdaten, ein
-  Mockup je Anforderung, gelöscht nach dem Einbau.
+- Frontend-Implementierer: Der Reviewer findet wiederholt, dass ein Mockup beim Einbau
+  umgeschrieben wurde (Anliegen 151).
 - Prozesskritiker: Prozesskritik fehlt, oder der Organisationsentwickler verteidigt
   wiederholt eigene Regeln.
 - Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der

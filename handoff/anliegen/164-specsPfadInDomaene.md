@@ -1,6 +1,6 @@
 # Pfad der alten Spezifikationen in domaene/CLAUDE.md
 
-164 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+164 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit 6a64835.
@@ -21,4 +21,5 @@ eine einzelne Zeile lohnt sich ein solcher Test nicht.
 
 Erledigt, wenn `git grep -n "Arbiter/" -- domaene` nichts mehr findet.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `domaene/CLAUDE.md` nennt `Arbiter-old/Arbiter_Specs/`, ohne
+`*.pdf`, weil die Datei sonst über ihrem Höchstmaß von 1.500 Zeichen läge.

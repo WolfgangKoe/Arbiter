@@ -29,8 +29,9 @@ freigegeben.
    Komponentenseite, danach Vorlage jedes Mockups.
 
 **Stellungnahme (Organisationsentwickler).**
-1. Ein Schreibpfad ist ein Recht; das entscheidet der Stakeholder: [159](159-zweiteTechnikdatei.md), Empfehlung die eine
-   Datei `technik/webUndSpeicher.md` statt `technik/*.md` (das Muster greift in
+1. Ein Schreibpfad ist ein Recht; das entscheidet der Stakeholder: [159](159-zweiteTechnikdatei.md),
+   Empfehlung in Runde 2: `architektur.md` als Übersicht und der Ordner
+   `technik/architektur/`, je Datei 6.000, zusammen 24.000 Zeichen (`technik/*.md` greift in
    `schreibgrenze.py` über Ordner hinweg, auch auf `technik/CLAUDE.md`). Nach der Antwort
    ändere ich deine Definition und das Höchstmaß in `prozess/kennzahlen.md`.
 2. Angenommen, umgesetzt in [DoR 5](../../prozess/ablauf.md#dor-item-bereit): Gibt es noch
