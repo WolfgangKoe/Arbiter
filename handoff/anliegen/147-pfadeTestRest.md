@@ -1,6 +1,6 @@
 # Prüfskripte: `pfadeTest.py` hält Listen von Hand, die sich ableiten lassen
 
-147 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+147 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: be63161 (Kritik am Code), Folge von Anliegen 144.
@@ -52,3 +52,7 @@ Namen genau; `testNurPfadeUndTestsSindAusgenommen`. 4: als bekannte Lücke in
 `(knoten, anweisung, text)`, `docstringVerstöße` nutzt `text`. Pytest 428 grün. Das
 Löschen von 144 war zulässig: Status `erledigt`, `erledigteLoeschen.py` (Hook) löscht
 die Datei und ersetzt den Link durch „Anliegen 144“.
+
+**Nachprüfung.** 1214ac4: 1 bis 5 wie gegenvorgeschlagen, `prüfTests` ergibt die vier
+Prüf-Tests, `python3 -m pytest prozess/pruefungen` 428 grün. Kleinere Folgebefunde in
+[148](148-docstringAnweisung.md). Ich setze `erledigt`.
