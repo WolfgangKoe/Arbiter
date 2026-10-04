@@ -1,11 +1,11 @@
 # Prüfung der Mockups
 
-200 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+200 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Rolle [UX](../../.claude/agents/ux.md) schreibt vor der Freigabe von Plan 3
 die ersten Mockups nach `domaene/mockups/`. Ihre Grenzen sind nur Text. Der Stakeholder
-verlangt sie aus Erfahrung ([151](151-rolleUxFuerDieErsteOberflaeche.md), Antwort zu F1):
+verlangt sie aus Erfahrung (Anliegen 151, Antwort zu F1):
 Die Mockups in `ArbiterMap/docs/spec/mockups/` tragen eigenes CSS im `<style>`, Kommentare
 und Erklärboxen und haben 3.500 bis 108.000 Zeichen.
 

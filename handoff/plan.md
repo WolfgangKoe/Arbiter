@@ -25,7 +25,7 @@ füllen allein einen Zyklus (146); mehr als die reine Anzeige passt nicht.
 Noch nicht bereit:
 - DoR 5: Die Mockups fehlen. UX schreibt je Anforderung eins mit CSS-Vorschlag, du siehst sie
   vor der Freigabe (145 F1). Die Rolle wartet auf die Leitplanken des Organisationsentwicklers
-  ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)).
+  (Anliegen 151).
 - DoR 4: Anliegen 195 ist offen; die Freigabe
   beantwortet F1 und F2. Mit F2 B oder C ändert sich AUF-4.2.
 
@@ -60,7 +60,7 @@ An dich, wirken auf Plan 3:
   und *Ablage*, Namen der Spieler.
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1 (Architekt): Datenbank erst mit der
   ersten Handlung.
-- Anliegen 159, [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md):
+- Anliegen 159, Anliegen 151:
   beantwortet, der Organisationsentwickler liefert Optionen und Leitplanken nach.
 
 Zwischen Rollen: Anliegen 155 und 152 warten

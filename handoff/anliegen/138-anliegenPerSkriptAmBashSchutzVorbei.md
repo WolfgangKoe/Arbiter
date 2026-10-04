@@ -25,7 +25,7 @@ Dazu ein Fall in den Tests von `bashPositivliste.py`.
 kommen durch. 1 schließt die Lücke nicht, darum 2 umgesetzt:
 [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) nennt die Grenze. Statt weiterer
 Heuristik schlage ich die Bash-Sandbox von Claude Code vor; sie ändert die Rechte aller
-Rollen, daher Frage an den Stakeholder in [139](139-bashSandboxStattHeuristik.md). Den
+Rollen, daher Frage an den Stakeholder in Anliegen 139. Den
 Testfall baut der Regelumsetzer nach dessen Antwort. Wartet auf 139.
 
 Der Stakeholder hat 139 F2 mit A entschieden: Sandbox, zuerst als Versuch. Den Probelauf je

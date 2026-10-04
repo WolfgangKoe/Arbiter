@@ -15,14 +15,14 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
    14.621/12.000, zwei Testdateien über 8.000.
 5. Der Bash-Schutz für Anliegen wurde zum zweiten Mal umgangen
    ([138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md)); Bordmittel: Sandbox
-   ([139](anliegen/139-bashSandboxStattHeuristik.md)).
+   (Anliegen 139).
 6. Kritik am Code lief für jeden Code-Commit; die Lesbarkeit der Prüfskripte meldete sie erst
    nach [107](anliegen/107-kritikAnDenPruefungen.md), den Rest führt
    [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Ein Mechanismus bräuchte Urteil.
 7. Dein Anliegen [150](anliegen/150-sonarlintAbdeckungUndToterCode.md): SonarLint ist nicht
    scharf, Abdeckung ungemessen (Zweige: Produkt 100 %, Prüfskripte 93 %).
 8. Plan 3 bringt die erste Oberfläche (Anliegen 145):
-   Auslöser der Rolle UX ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)); du willst
+   Auslöser der Rolle UX (Anliegen 151); du willst
    ihre Leitplanken sehen, ArbiterMaps Mockups als Gegenbeispiel.
 9. Deine Antworten brachten 145 über das Höchstmaß; nach
    Anliegen 161 A zählen sie nicht mit.

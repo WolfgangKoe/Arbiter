@@ -3,7 +3,7 @@
 215 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Der Stakeholder hat in [139](139-bashSandboxStattHeuristik.md) F2 mit A
+**Befund.** Der Stakeholder hat in Anliegen 139 F2 mit A
 entschieden: Bash-Sandbox von Claude Code, zuerst als Versuch. Anlass: Ein Skript im
 Heredoc, `python3 -c` oder `cd <pfad> && …` kommt an der Heuristik von
 `bashPositivliste.py` für Anliegen und nur lesbare Pfade vorbei

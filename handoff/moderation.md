@@ -4,7 +4,7 @@ Stand: Zyklus 3, Domänenphase; [Plan 3](plan.md) wartet auf Mockups, Kritik des
 
 ## Dran
 Blockiert Plan 3 (DoR in [Ablauf](../prozess/ablauf.md#dor-item-bereit)):
-- DoR 5, beide Items: Mockups zu QUE-2 und AUF-4 fehlen; Platz laut [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md) F2 (offen).
+- DoR 5, beide Items: Mockups zu QUE-2 und AUF-4 fehlen; Platz laut Anliegen 151 F2 (offen).
 - DoR 4, beide Items: 195 ist beantwortet (F3: A); der Anforderungsautor schließt es.
 - Vor dem Testautor: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) und Anliegen 212 (Architekt, Technikphase).
 
@@ -33,6 +33,6 @@ Je Rolle:
 ## Fragen an dich
 Die Freigabe von Plan 3 beantwortet jede mit der Empfehlung.
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1: Datenbank erst mit der ersten Handlung (A); Aufbau prüfst du vor der Technik.
-- [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md) F2: UX schreibt einbaufähig nach `domaene/mockups/` (A).
-- [139](anliegen/139-bashSandboxStattHeuristik.md) F2: Sandbox als Versuch (A); 138 wartet darauf.
+- Anliegen 151 F2: UX schreibt einbaufähig nach `domaene/mockups/` (A).
+- Anliegen 139 F2: Sandbox als Versuch (A); 138 wartet darauf.
 - Hinweis zu [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) F1: Deine Ausnahmeerlaubnis (a) soll nach der Abnahme entfallen; der Regelumsetzer schreibt das nicht von selbst.

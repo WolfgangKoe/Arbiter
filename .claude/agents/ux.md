@@ -37,4 +37,5 @@ einbaut.
   eigenes CSS im `<style>`, Kommentare, Erklärboxen, meist über 20.000 Zeichen.
 - Erfinde keine Inhalte und keine Regeln; fehlt etwas, wird es ein Anliegen.
 
-Mechanismus: Schreibgrenze; die Grenzen oben nur Text bis Anliegen 200.
+Mechanismus: Schreibgrenze; Kommentar, `<script>`, `<style>`, `style=` und Höchstmaß:
+`mockups.py`, `hoechstmassTest.py`. Erklärbox, Inhalte und Komponenten: nur Text.
