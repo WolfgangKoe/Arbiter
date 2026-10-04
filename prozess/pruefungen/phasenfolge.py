@@ -83,7 +83,7 @@ def prozessItems(retro: Path) -> list[str]:
 
 def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
     """Das erste Prozess-Item der Retro ohne Commit `P<k>: …` seit der Freigabe, sonst `None`."""
-    # Warum: Der Betreff darf `Retro <n> ` voranstellen; so heißen die Commits von P4 und P5.
+    # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` (Prozessphase, Schritt 5).
     betreffe = betreffeSeit(wurzel, freigabe)
     for kennung in prozessItems(wurzel / "handoff" / "retro.md"):
         muster = rf"(Retro {retro} )?{kennung}:"

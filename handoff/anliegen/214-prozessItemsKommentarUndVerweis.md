@@ -1,6 +1,6 @@
 # Prozess-Items: Kommentar ohne Historie, Verweis auf die richtige Funktion
 
-214 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+214 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 4792298 (Anliegen 173). Korrekt: `python3 -m pytest
@@ -33,4 +33,4 @@ Kein Scheiter-Test nötig, das Verhalten bleibt gleich.
 Erledigt, wenn die drei Punkte umgesetzt sind, `python3 -m pytest prozess/pruefungen` grün ist
 und der Reviewer den Commit geprüft hat.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, drei Punkte.

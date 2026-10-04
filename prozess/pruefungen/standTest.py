@@ -441,14 +441,13 @@ def testFreigabeJaInDerRetroOhneCommitMachtDenKoordinatorDran(repo):
     assert "Koordinator: Freigabe" not in stand(repo.wurzel)
 
 
-def retroMitProzessItems(repo):
+def retroMitProzessItems(
+    repo, retro="# Retro · Zyklus 1\n\n## Prozess-Items (je Lauf eins)\n- P1 Eins\n- P2 Zwei\n"
+):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.freigabe("Review", 1)
-    repo.datei(
-        "handoff/retro.md",
-        "# Retro · Zyklus 1\n\n## Prozess-Items (je Lauf eins)\n- P1 Eins\n- P2 Zwei\n",
-    )
+    repo.datei("handoff/retro.md", retro)
 
 
 def commit(repo, betreff):
@@ -492,10 +491,7 @@ def testProzessItemVorDerFreigabeZähltNicht(repo):
 
 
 def testRetroOhneProzessItemsBeginntGleichDenNächstenZyklus(repo):
-    bisZurFreigabeVonPlan1(repo)
-    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
-    repo.freigabe("Review", 1)
-    repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n\n- P1 steht außerhalb des Abschnitts\n")
+    retroMitProzessItems(repo, "# Retro · Zyklus 1\n\n- P1 steht außerhalb des Abschnitts\n")
     repo.freigabe("Retro", 1)
     assert lage(repo.wurzel).phase == "Domänenphase"
 
