@@ -1,6 +1,6 @@
 # Abdeckung: Kommentarform, Auslöser des Hooks, doppelter Test
 
-175 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+175 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `f87a822`. Anliegen 170 und

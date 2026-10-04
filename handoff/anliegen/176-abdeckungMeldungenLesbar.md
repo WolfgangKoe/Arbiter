@@ -1,6 +1,6 @@
 # Meldungen der Abdeckung lesbar
 
-176 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+176 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `f87a822`, `prozess/pruefungen/abdeckung.py`. Was
