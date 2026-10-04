@@ -1,6 +1,6 @@
 # Mockups: Ausgangslage, leere Einheit und Kreisgröße
 
-222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 2/3 · angenommen
+222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik an `domaene/mockups/que-2.html`, `auf-4.html`, `vorschlag.css` gegen
