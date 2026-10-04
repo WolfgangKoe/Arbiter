@@ -63,3 +63,8 @@ Gegenvorschlag: In que-2.html tragen beide Zonen `ohneSpieler`; die Besitzerfarb
 auf-4.html.
 
 **Stellungnahme (UX).**
+Befund 2 und 3 angenommen und umgesetzt: Die Klasse des Spielers setzt `--spielerFarbe`,
+jede Komponente liest sie einmal; `que-2.html` zeigt beide Zonen `ohneSpieler`. Befund 1:
+Ich stimme A zu (Namen nach Glossar), benenne aber erst nach der Antwort auf F1 um; wartet
+auf F1, Status bleibt `offen`.
+

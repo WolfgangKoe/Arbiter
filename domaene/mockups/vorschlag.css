@@ -11,6 +11,18 @@
   --ohne-spieler: #a3a3a3;
 }
 
+.spieler1 {
+  --spielerFarbe: var(--spieler-1);
+}
+
+.spieler2 {
+  --spielerFarbe: var(--spieler-2);
+}
+
+.ohneSpieler {
+  --spielerFarbe: var(--ohne-spieler);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -44,15 +56,11 @@ body {
   min-width: 10rem;
   padding: 0.25rem 0.75rem;
   border-bottom: 3px solid transparent;
+  color: var(--spielerFarbe);
   font-weight: 700;
 }
 
-.gameHeaderSpieler.spieler1 {
-  color: var(--spieler-1);
-}
-
 .gameHeaderSpieler.spieler2 {
-  color: var(--spieler-2);
   text-align: right;
 }
 
@@ -93,15 +101,8 @@ body {
 
 .armyCardName {
   margin: 0 0 0.75rem;
+  color: var(--spielerFarbe);
   font-size: 1.1rem;
-}
-
-.armyCard.spieler1 .armyCardName {
-  color: var(--spieler-1);
-}
-
-.armyCard.spieler2 .armyCardName {
-  color: var(--spieler-2);
 }
 
 .unitCard {
@@ -160,42 +161,14 @@ body {
 
 .spielfeld {
   fill: var(--arb-bg);
-  stroke: var(--arb-muted);
-  stroke-width: 0.15;
 }
 
 .aufstellungszone {
-  fill-opacity: 0.12;
-  stroke-width: 0.15;
-  stroke-dasharray: 0.6 0.4;
-}
-
-.aufstellungszone.spieler1 {
-  fill: var(--spieler-1);
-  stroke: var(--spieler-1);
-}
-
-.aufstellungszone.spieler2 {
-  fill: var(--spieler-2);
-  stroke: var(--spieler-2);
-}
-
-.aufstellungszone.ohneSpieler {
-  fill: var(--ohne-spieler);
-  stroke: var(--ohne-spieler);
+  fill: var(--spielerFarbe);
+  fill-opacity: 0.18;
 }
 
 .modell {
+  fill: var(--spielerFarbe);
   fill-opacity: 0.85;
-  stroke-width: 0.08;
-}
-
-.modell.spieler1 {
-  fill: var(--spieler-1);
-  stroke: var(--spieler-1);
-}
-
-.modell.spieler2 {
-  fill: var(--spieler-2);
-  stroke: var(--spieler-2);
 }

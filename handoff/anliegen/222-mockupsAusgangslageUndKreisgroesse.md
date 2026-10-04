@@ -1,46 +1,36 @@
 # Mockups: Ausgangslage, leere Einheit und Kreisgröße
 
-222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 1/3 · offen
+222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Kritik an `domaene/mockups/que-2.html`, `auf-4.html`, `vorschlag.css` gegen
-QUE-2 und AUF-4 (Plan 3). Was gezeigt wird, stimmt: Zonen, Farben (QUE-2.6, AUF-4.6, AUF-4.7
-nach `design_colors.md:51`, `:53`, `:72` bis `:74`), Kreise mit r 0,63″ = 32 mm, alle Bases
-*ganz in* ihrer Zone, ohne Überdecken, und der Zustand ist nach AUF-1 erreichbar (Spieler 2
-nicht *Gewinner*, hat Necron Warriors *aufgestellt*, Spieler 1 setzt Boyz, 3 + 7 = 10).
-Es fehlen Fälle, die die Kriterien ausdrücklich regeln:
-1. Ausgangslage. AUF-4.4 „keinen, solange es keiner ist“ und AUF-4.6 „vor der Wahl … in
-   keiner der beiden“ zeigt kein Mockup. `.aufstellungszone.ohneSpieler` steht nur im CSS,
-   in keinem Markup; ein Kopf ohne *an der Reihe* auch nicht. Gerade diesen Zustand sieht
-   der Stakeholder am Ende des Zyklus (Plan, Empfehlung: „Zonen ohne Farbe, … keinen an der
-   Reihe, kein Modell auf der Karte“), und der Implementierer übernimmt Markup ohne
-   Umschreiben (Ablauf, Technikphase 3, Anliegen 151): Für den einzigen Zustand, den der
-   Bau erreicht, hat er keine Vorlage.
-2. AUF-4.3 „auch wenn keines mehr fehlt“: Eine *Einheit in Aufstellung*, deren *Modelle*
-   alle *gesetzt* sind, bleibt bis *Aufstellen der Einheit beenden* in der *Ablage*. Wie sie
-   aussieht (Name und Abzeichen, keine Modelle), zeigt kein Mockup.
-3. QUE-2.4 „Kreis mit dem *Durchmesser* seiner *Base*“: Der Rand (`.modell`,
-   `stroke-width: 0.08`) liegt in SVG mittig auf dem Kreis; sichtbar ist der Kreis 1,34″
-   statt 1,26″ (rund 34 statt 32 mm). Zwei *Bases* mit *Abstand* unter 0,08″ sehen
-   überdeckt aus, obwohl sie es nicht sind. Ebenso ragt der Zonenrand (`stroke-width: 0.15`)
-   0,075″ über die *Tiefe* hinaus (QUE-2.5); wer nach Augenmaß „ganz in“ beurteilt, wird
-   getäuscht. Ziel: „Abstände zieht man auf der Karte“.
+QUE-2 und AUF-4 (Plan 3): 1. Die Ausgangslage (AUF-4.4 „keinen, solange es keiner ist“,
+AUF-4.6 „vor der Wahl … in keiner der beiden“) zeigt kein Mockup. 2. Die *Einheit in
+Aufstellung* ohne fehlende *Modelle* (AUF-4.3 „auch wenn keines mehr fehlt“) zeigt kein
+Mockup. 3. Die Ränder von `.modell` und Zone vergrößern die sichtbare Fläche über
+*Durchmesser* und *Tiefe* hinaus (QUE-2.4, QUE-2.5).
 
-**Kosten.** Ohne 1 baut der Implementierer die Ausgangslage aus eigener Hand, oder er
-schreibt das Mockup um, was 151 ausschließt; der Stakeholder gibt ein Bild frei, das er in
-diesem Zyklus nicht zu sehen bekommt. Ohne 2 bleibt offen, ob eine leere Einheit erscheint
-(Testautor und Implementierer raten). Ohne 3 prüft der Test `r` und ist grün, während das
-Bild abweicht. Umsetzung: eine Datei mehr, ein Beispielinhalt geändert, zwei CSS-Zeilen.
+**Kosten.** Ohne 1 und 2 baut der Implementierer ohne Vorlage; ohne 3 ist der Test grün,
+während das Bild abweicht.
 
-**Gegenvorschlag.**
-1. Zusätzlich `domaene/mockups/auf-4-ausgangslage.html`: beide Zonen `ohneSpieler`, Kopf
-   ohne `anDerReihe` und ohne `gameHeaderAnDerReihe`, kein Modell auf der Karte, beide
-   *Ablagen* vollständig nach `ausgangslage.yaml`. Den Link im Item und im Plan zieht der
-   Planer nach.
-2. In `auf-4.html` sind alle zehn Boyz *gesetzt*: Ihre unitCard behält Name und Abzeichen,
-   ohne Modelle; der Warboss zeigt weiter die Liste. Damit sind beide Formen einer unitCard
-   im selben, nach AUF-1 erreichbaren Zustand zu sehen.
-3. `.modell` ohne Rand (nur `fill`), Zonenrand ebenso oder innen liegend, sodass die
-   sichtbare Fläche genau Kreis und Band ist.
+**Gegenvorschlag.** 1. `auf-4-ausgangslage.html`. 2. In `auf-4.html` alle Boyz *gesetzt*,
+ihre unitCard ohne Modelle. 3. Kreis und Zone ohne Rand.
+
+**Stellungnahme.**
+Angenommen, alle drei Punkte umgesetzt: `auf-4-ausgangslage.html` neu; in `auf-4.html` zehn
+Boyz gesetzt; `.modell`, `.aufstellungszone`, `.spielfeld` nur `fill`.
+
+## Runde 2
+**Befund.** Punkte 1 bis 3 sind in Ordnung umgesetzt (`auf-4-ausgangslage.html` gegen
+`ausgangslage.yaml` geprüft). Neu: Die zwei Boyz bei `cx="8.6"` in `auf-4.html` und
+`que-2.html` reichen bis 8,6 + 0,63 = 9,23″, die *Tiefe* ist 9″ (`onlyWar.yaml`). Ihre
+*Base* liegt nicht *ganz in* der *Aufstellungszone*; nach AUF-3.2 ist das gesperrt, der
+Zustand ist ohne Übergehen nicht erreichbar.
+
+**Kosten.** Der Stakeholder gibt ein Bild frei, das die Regel verletzt, die der Bau
+durchsetzen soll; der Implementierer übernimmt die Lage. Umsetzung: zwei Zahlen je Datei.
+
+**Gegenvorschlag.** Die fünf Boyz je Reihe bei `cx` höchstens 8,37, etwa 2,0 / 3,4 / 4,8 /
+6,2 / 7,6, in beiden Dateien gleich.
 
 **Stellungnahme.**
