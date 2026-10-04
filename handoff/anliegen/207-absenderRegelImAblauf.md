@@ -1,6 +1,6 @@
 # Die Regel „Absender bleibt fest“ steht nur in regeln.md
 
-207 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
+207 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Mit ec566dc (Anliegen 166) sperrt `statusrecht.py` (`absenderVerstoß`) jeden
