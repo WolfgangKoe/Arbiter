@@ -46,7 +46,7 @@ Nur, was auf Plan 3 wirkt oder du vorher willst
 - P2 SonarLint (150): Wegwerf-Versuch mit dem Analysator ohne VS Code, sonst „Sonar way“
   auf ruff. Wirkt auf die DoD von Plan 3.
 - P3 `pfadeTest.py` löschen: bekannte Lücke, drei Anliegen; die Löschung der Kennzahl.
-- P4 Dashboard ([158](anliegen/158-dashboardVorOderNachPlan3.md), dein Wunsch): Lauf-Log
+- P4 Dashboard (Anliegen 158, dein Wunsch): Lauf-Log
   mit Rolle und Belegung, `dashboard.html` im Wurzelordner, Daten und Skripte in
   `prozess/dashboard/` (90); verschlankt aus `ArbiterMap/steering/metrics/process_dashboard.html`:
   Tokenstände, daneben ihre Verteilung, Legende mit höchstens fünf Wörtern je Eintrag.

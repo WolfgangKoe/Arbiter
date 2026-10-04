@@ -45,5 +45,5 @@ Plan 3 oder ohne Wunsch des Stakeholders ist.
   löschen (bisher P4).
 - [Backlog](../../prozess/backlog.md): Höchstmaße, `kennzahlen.py`, Dashboard, 114 und 139,
   Auslöser Prozessphase Zyklus 3.
-- Dashboard: Frage an den Stakeholder in [158](158-dashboardVorOderNachPlan3.md),
+- Dashboard: Frage an den Stakeholder in Anliegen 158,
   Empfehlung danach.
