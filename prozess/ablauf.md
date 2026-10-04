@@ -133,7 +133,7 @@ Code | schreibt | prüft
 ---|---|---
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
 `technik/arbiter/`, `technik/tests/einheit/` | Implementierer | Reviewer
-`prozess/pruefungen/`, `.claude/settings.json` | Regelumsetzer | Reviewer
+`prozess/pruefungen/`, `prozess/dashboard/`, `dashboard.html`, `.claude/settings.json` | Regelumsetzer | Reviewer
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt, Reviewer
 
 Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf, der
@@ -143,7 +143,9 @@ geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ers
 letzten Freigabe ohne Kritik. Mechanismus: `codekritik.py` im Stand.
 
 ## Anliegen
-Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen.
+Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen; jede
+Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161). Mechanismus für diesen Halbsatz:
+nur Text (Anliegen 162).
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Typ> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`.
 Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.claude/agents/`
