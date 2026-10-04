@@ -1,6 +1,6 @@
 # Mockups: Ausgangslage, leere Einheit und Kreisgröße
 
-222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 2/3 · offen
+222 · Kritik · von Fachkritiker (Domäne) → UX · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik an `domaene/mockups/que-2.html`, `auf-4.html`, `vorschlag.css` gegen
@@ -34,3 +34,6 @@ durchsetzen soll; der Implementierer übernimmt die Lage. Umsetzung: zwei Zahlen
 6,2 / 7,6, in beiden Dateien gleich.
 
 **Stellungnahme.**
+Angenommen und umgesetzt: Die fünf Boyz je Reihe stehen in `auf-4.html` und `que-2.html`
+bei `cx` 2,0 / 3,4 / 4,8 / 6,2 / 7,6; der rechteste reicht bis 8,23″, die *Base* liegt
+*ganz in* der *Aufstellungszone* (Tiefe 9″).
