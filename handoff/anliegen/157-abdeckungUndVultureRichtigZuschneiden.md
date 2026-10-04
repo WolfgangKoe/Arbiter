@@ -40,3 +40,14 @@ Ausnahmeliste umgangen; toter Code bleibt unentdeckt.
    Meldung im Lauf der Prüfungen ([Retro 2](../retro.md), P1).
 2. DoD 2 und die Werkzeugliste: vulture über `technik/arbiter` und `technik/tests/akzeptanz`,
    ohne Einheitstests. P1 beginnt mit dem Wegwerf-Versuch bei 60 % Konfidenz.
+
+**Umsetzung (Regelumsetzer, P1 der Retro 2).** `abdeckung.py` mit `abdeckungTest.py`, im Lauf
+von `python3 -m pytest prozess/pruefungen`, zwei getrennte Meldungen:
+1. Zweigabdeckung mindestens 95 % für `technik/arbiter` (mit `technik/tests`; 100 %) und für
+   `prozess/pruefungen` (96 %); die Einstiege `if __name__ == "__main__":` zählen nicht
+   (`pyproject.toml`, `tool.coverage.report`), sonst 93 %.
+2. vulture über `technik/arbiter` und `technik/tests/akzeptanz`, 60 % Konfidenz. Wegwerf-Versuch
+   ohne Ausnahmen: alle Meldungen sind `test…` (pytest ruft sie auf) und `Aufstellungszone.zweite`
+   (Mitglied, das `katalog/ausgangslage.py` aus den Daten liest). Beide stehen als `ignore_names`
+   in `pyproject.toml`; sonst leer. Die Liste der Zeilen, die nur Einheitstests erreichen,
+   ist nicht gebaut (Rest aus [150](150-sonarlintAbdeckungUndToterCode.md)).

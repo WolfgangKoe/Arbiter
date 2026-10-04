@@ -40,6 +40,16 @@ requires-python = ">=3.12"
 dependencies = ["PyYAML==6.0.*"]
 
 [dependency-groups]
-# Warum: ruff und complexipy mit fester Minor-Version, damit ein Update nicht still neue Regeln
+# Warum: ruff, complexipy, coverage und vulture mit fester Minor-Version, damit ein Update nicht still neue Regeln
 # oder eine andere Zählweise bringt.
-entwicklung = ["pytest", "ruff==0.16.*", "complexipy==8.0.*"]
+entwicklung = ["pytest", "ruff==0.16.*", "complexipy==8.0.*", "coverage==7.16.*", "vulture==2.16.*"]
+
+[tool.coverage.report]
+# Warum: Der Einstieg `if __name__ == "__main__":` ist nur Verdrahtung des Hooks (stdin, stdout);
+# die Entscheidung davor prüfen die Einheiten.
+exclude_also = ['if __name__ == "__main__":']
+
+[tool.vulture]
+# Warum: pytest ruft `test…` auf, kein Code; `zweite` ist ein Mitglied von `Aufstellungszone`,
+# das `katalog/ausgangslage.py` aus den Daten liest (`Aufstellungszone[name]`).
+ignore_names = ["test*", "zweite"]
