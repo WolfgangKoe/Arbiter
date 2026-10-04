@@ -1,6 +1,6 @@
 # Domäne: QUE-1.2 liegt in der Aufstellung statt in `querschnitt.py`
 
-149 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+149 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: Review 2, Änderungen seit `Freigabe Plan 2` (`1553538`) unter `technik/`.
@@ -34,3 +34,7 @@ stellen)` in `technik/arbiter/domaene/querschnitt.py`, `_gründeGegenDieStelle` 
 behält in der Schleife nur die Nahkampfreichweite. Einheitstest:
 `technik/tests/einheit/domaene/querschnittTest.py`. Akzeptanztests unverändert grün,
 `pytest technik/tests` und `pytest prozess/pruefungen` grün.
+
+**Nachprüfung.** 68a2797: wie gegenvorgeschlagen; QUE-1.2 in `querschnitt.py`, Akzeptanztests
+unverändert, `python3 -m pytest technik/tests` 153 grün (3 neue Einheitstests),
+`prozess/pruefungen` 427 grün, ruff grün. Ich setze `erledigt`.

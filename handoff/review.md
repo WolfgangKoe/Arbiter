@@ -24,14 +24,13 @@ Daten beim Laden (A3, S2: ganze mm, beide Zonen, Kante der zweiten Seitenlänge)
 wird nur in `messen.py` mit `Fraction`, Abstände als Quadrate (M1, S2). `modellSetzen`
 sammelt alle Gründe, bevor es den Zustand ändert (D2, AUF-3.5), und prüft die Stelle nicht,
 wenn AUF-1.4 sperrt (AUF-3.6). Spielobjekte `frozen`, Tiefen als `MappingProxyType` (D3).
-Nichts nachgebaut, nichts ineffizient. Ein Befund zum Ort der Regel: QUE-1.2 steht in der
-Aufstellung, die Architektur sieht `querschnitt.py` vor.
+Nichts nachgebaut, nichts ineffizient. Der einzige Befund (QUE-1.2 in der Aufstellung statt
+in `querschnitt.py`) ist in `68a2797` behoben und erledigt (Anliegen 149); danach
+`technik/tests` 153 grün.
 Kritik am Code ist für jeden Code-Commit seit der Freigabe gelaufen; aus den Prüfskripten
 sind 147 und 148 erledigt.
 
 ## Offene Anliegen zur Technik
-- [149](anliegen/149-ueberdeckenImQuerschnitt.md): QUE-1.2 nach `querschnitt.py`, an den
-  Implementierer.
 - [146](anliegen/146-schnittDerErstenOberflaeche.md): Schnitt der ersten Oberfläche, an den
   Architekten, vor Plan 3.
 - [124](anliegen/124-sprungPerKlickErproben.md): Sprung per Klick, Nachprüfung durch den
@@ -40,6 +39,5 @@ sind 147 und 148 erledigt.
   Regelumsetzer.
 
 ## Empfehlung
-Die DoD ist für alle drei Items erfüllt, Plan 2 ist abgenommen. 149 hält nichts auf: Es
-ändert kein Verhalten und sollte erledigt sein, bevor die nächste Phase *setzt*, also vor
-Ablage und Zurücklegen in Plan 3.
+Die DoD ist für alle drei Items erfüllt, Plan 2 ist abgenommen. Aus diesem Review ist am
+Code nichts offen.
