@@ -1,6 +1,6 @@
 # QUE-2, AUF-4: Begriffe Karte und Ablage, Namen der Spieler
 
-195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Für die erste Oberfläche (Plan 2, „Danach“; Anliegen 145,

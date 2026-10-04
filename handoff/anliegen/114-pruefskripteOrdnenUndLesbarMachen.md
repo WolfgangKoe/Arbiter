@@ -48,3 +48,5 @@ Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und d
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
 **Stellungnahme.** D, C erledigt; B bis auf 7: Hook-Protokoll (4), `pfade.py` (5), `Phase`, `Lage`, `Etappe` (1, 6), `Fundstelle` (3), Typaliase in PascalCase (2), `Commit` und `FälligeKritik` in `codekritik.py` (1). B 7 erledigt (`kriterium.py`, `spur.py`). Offen: A. A braucht eine Entscheidung: Importe zwischen Ordnern gehen nur über `PYTHONPATH`, `python3 -m` oder `sys.path`; die ersten beiden ändern Hook-Befehle und Erlaubnisliste. Status offen.
+
+Antwort: Okay, hier ist eine Entscheidung vom Stakeholder erforderlich? Falls ja, muss mir das klar gesagt werden. Was muss ich hier ggf. tun?
