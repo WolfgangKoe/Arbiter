@@ -140,6 +140,37 @@ def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
     assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
+def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
+    datei = tmp_path / "agent-a1.jsonl"
+    vorspann = "The coordinator sent a message while you were working:"
+    hinweis = "<system-reminder>\nviel Text\n</system-reminder>"
+    zeilen = [
+        {"message": {"role": "user", "content": f"{hinweis}\nZiel: erster"}},
+        {"isMeta": True, "message": {"role": "user", "content": hinweis}},
+        {
+            "message": {
+                "role": "user",
+                "content": f"{vorspann}\nNeuer Auftrag: zweiter",
+            }
+        },
+        {"isMeta": True, "message": {"role": "user", "content": hinweis}},
+        {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
+    ]
+    datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
+    assert laufEintrag(stopp(datei), zeitpunkt)["ziel"] == "Neuer Auftrag: zweiter"
+
+
+def testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter(tmp_path):
+    folge = [("erst", False), ("Rück1", True), ("Rück2", True)]
+    for ziel, wiederholt in folge:
+        eintragAnhängen(
+            tmp_path,
+            {"zeit": "a", "rolle": "r", "agent_id": "a1", "belegung": 1, "ziel": ziel}
+            | {"stopp_wiederholt": wiederholt},
+        )
+    assert [lauf["ziel"] for lauf in läufeLesen(tmp_path)] == ["erst"]
+
+
 def testKaputteZeileWirdÜbersprungen(tmp_path):
     eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
     with logPfad(tmp_path).open("a", encoding="utf-8") as ziel:

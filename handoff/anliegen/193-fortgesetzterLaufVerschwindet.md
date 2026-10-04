@@ -27,14 +27,9 @@ Kosten: Der Stakeholder liest einen verstümmelten Auftrag.
 Gegenvorschlag: am letzten Leerzeichen vor der Grenze kürzen und „…“ anhängen.
 
 **Stellungnahme.**
-B1 und B2 umgesetzt wie vorgeschlagen. `laufLog.py` schreibt `stopp_wiederholt` (aus
-`stop_hook_active`) in den Eintrag; `läufeLesen` verwirft einen Eintrag nur, wenn der nächste
-desselben Laufs ein wiederholter Stopp ist, und gibt diesem den Auftrag des Vorgängers
-(die Rückmeldung des geblockten Stopps ist sonst die jüngste Nachricht). Der Auftrag ist die
-jüngste Nachricht im Transkript, gekürzt am letzten Leerzeichen mit „…“. Scheiter-Tests in
-`dashboardTest.py`: `testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt`,
-`testJüngsterAuftragImTranskriptGiltUndKürztAmWort`. Alte Log-Einträge ohne das Feld zählen
-als nicht wiederholt, die Altlast des Laufs c11c3b0 bleibt im Log, wie sie ist.
+B1 und B2 umgesetzt wie vorgeschlagen: `stopp_wiederholt` im Eintrag, Auftrag aus der jüngsten
+Nachricht, Kürzen am Wort. Tests `testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt`,
+`testJüngsterAuftragImTranskriptGiltUndKürztAmWort`. Altlast im Log bleibt.
 
 ## Runde 2
 Nachprüfung an 83f884b: B2 und das Verwerfen aus B1 erledigt. Offen:
@@ -56,3 +51,6 @@ Gegenvorschlag: ein Durchlauf von hinten, der sich je `agent_id` merkt, ob der s
 Eintrag wiederholt war.
 
 **Stellungnahme.**
+B3 und B4 umgesetzt: `isMeta`, Hinweisblöcke und Vorspann fallen weg; `läufeLesen` läuft einmal
+von hinten, auch Ketten wiederholter Stopps geben den Auftrag weiter. Tests
+`testHinweiseUndVorspannSindKeinAuftrag`, `testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter`.

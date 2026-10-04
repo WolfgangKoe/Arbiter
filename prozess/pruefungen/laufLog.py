@@ -1,6 +1,7 @@
 """Hook SubagentStop: trägt Rolle, Auftrag, Modell und Belegung des Laufs ins Lauf-Log ein."""
 
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -10,6 +11,8 @@ from hookProtokoll import eingabeLesen
 
 pflichtfelder = ("zeit", "rolle", "belegung")
 zielLänge = 80
+koordinatorVorspann = "The coordinator sent a message while you were working:"
+hinweisBlock = re.compile(r"<system-reminder>.*?</system-reminder>", re.DOTALL)
 logOrdner = "prozess/dashboard"
 logDatei = "laeufe.jsonl"
 
@@ -32,7 +35,7 @@ def nachrichten(transkript: Path) -> list[dict]:
     gefunden = []
     for zeile in transkript.read_text(encoding="utf-8").splitlines():
         eintrag = eintragAusZeile(zeile, ())
-        nachricht = eintrag.get("message") if eintrag else None
+        nachricht = eintrag.get("message") if eintrag and not eintrag.get("isMeta") else None
         if isinstance(nachricht, dict):
             gefunden.append(nachricht)
     return gefunden
@@ -46,6 +49,13 @@ def gekürzt(text: str) -> str:
     return text[: wortGrenze if wortGrenze > 0 else zielLänge].rstrip() + "…"
 
 
+def auftragsZeile(text: str) -> str:
+    """Erste Zeile des Auftrags ohne Hinweise des Harness, Vorspann und „Ziel:“."""
+    zeilen = hinweisBlock.sub("", text).replace(koordinatorVorspann, "").splitlines()
+    erste = next((zeile.strip() for zeile in zeilen if zeile.strip()), "")
+    return gekürzt(erste.removeprefix("Ziel:").strip())
+
+
 def zielUndModell(transkript: Path) -> tuple[str, str]:
     """Erste Zeile des jüngsten Auftrags und Modell; leer, wenn das Transkript sie nicht hat."""
     alle = nachrichten(transkript)
@@ -54,8 +64,8 @@ def zielUndModell(transkript: Path) -> tuple[str, str]:
         for nachricht in alle
         if nachricht.get("role") == "user"
     ]
-    jüngster = next((text for text in reversed(texte) if text), "")
-    ziel = gekürzt(jüngster.splitlines()[0].removeprefix("Ziel:").strip()) if jüngster else ""
+    jüngster = next((text for text in reversed(texte) if auftragsZeile(text)), "")
+    ziel = auftragsZeile(jüngster)
     modelle = [
         nachricht.get("model")
         for nachricht in alle
@@ -117,28 +127,22 @@ def läufeLesen(wurzel: Path) -> list[dict]:
         for zeile in datei.read_text(encoding="utf-8").splitlines()
         if (eintrag := eintragAusZeile(zeile)) is not None
     ]
-    ziele: dict = {}
-    behalten = []
-    for nummer, eintrag in enumerate(gelesen):
+    späterer: dict = {}
+    behalten: dict = {}
+    ergebnis = []
+    for eintrag in reversed(gelesen):
         laufId = eintrag.get("agent_id")
-        if eintrag.get("stopp_wiederholt") and laufId in ziele:
-            # Warum: die Wiederholung gilt dem Auftrag davor
-            eintrag = eintrag | {"ziel": ziele[laufId]}
+        spät = späterer.get(laufId) if laufId else None
         if laufId:
-            ziele[laufId] = eintrag.get("ziel")
-        if not wiederholtDanach(gelesen, nummer):
-            behalten.append(eintrag)
-    return behalten
-
-
-def wiederholtDanach(gelesen: list[dict], nummer: int) -> bool:
-    """Wahr, wenn der nächste Eintrag desselben Laufs ein wiederholter Stopp ist."""
-    laufId = gelesen[nummer].get("agent_id")
-    nächster = next(
-        (spät for spät in gelesen[nummer + 1 :] if laufId and spät.get("agent_id") == laufId),
-        None,
-    )
-    return bool(nächster and nächster.get("stopp_wiederholt"))
+            späterer[laufId] = eintrag
+        if spät and spät.get("stopp_wiederholt"):
+            behalten[laufId]["ziel"] = eintrag.get("ziel")  # Warum: gilt dem Auftrag davor
+            continue
+        eintrag = dict(eintrag)
+        ergebnis.append(eintrag)
+        if laufId:
+            behalten[laufId] = eintrag
+    return ergebnis[::-1]
 
 
 if __name__ == "__main__":
