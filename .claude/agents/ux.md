@@ -38,4 +38,4 @@ einbaut.
 - Erfinde keine Inhalte und keine Regeln; fehlt etwas, wird es ein Anliegen.
 
 Mechanismus: Schreibgrenze; Kommentar, `<script>`, `<style>`, `style=` und Höchstmaß:
-`mockups.py`, `hoechstmassTest.py`. Erklärbox, Inhalte und Komponenten: nur Text.
+`formregeln/mockups.py`, `formregeln/hoechstmassTest.py`. Erklärbox, Inhalte und Komponenten: nur Text.

@@ -192,7 +192,7 @@ getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anlie
 Code | schreibt | prüft
 ---|---|---
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
-`technik/arbiter/`, `technik/tests/einheit/` | Implementierer | Reviewer
+`technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Reviewer
 `prozess/pruefungen/`, `prozess/dashboard/`, `dashboard.html`, `.claude/settings.json` | Regelumsetzer | Reviewer
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt, Reviewer
 
@@ -200,7 +200,8 @@ Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritikl
 Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
 (`Kritik <a> <b>`, notfalls `--allow-empty`). Jeder andere Commit, der Code ändert, wird
 geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ersten seit der
-letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand.
+letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand; für
+`technik/frontend/` nur Text (Anliegen 240).
 
 ## Anliegen
 Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen; jede

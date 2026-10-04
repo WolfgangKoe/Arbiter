@@ -1,6 +1,6 @@
 # Aufrufpfade der Prüfskripte in Dokumenten nachziehen
 
-226 · Anliegen · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · offen
+226 · Anliegen · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit dem Umzug ([114](114-pruefskripteOrdnenUndLesbarMachen.md) A) liegen die
@@ -23,5 +23,10 @@ file“.
 `prozess/praemissen/wir.md`, `prozess/backlog.md`, `.claude/agents/regelumsetzer.md` und
 `CLAUDE.md`. In `prozess/regeln.md` standen noch drei alte Aufrufe (`abdeckung.py`,
 `sonarlint.py`, auch `--einstellung`, und `dashboard.py`); nachgezogen. Die Prüfungen sind
-grün. `technik/architektur.md` schreibt der Architekt: wartet auf
-[227](227-pruefskriptPfadeInDerArchitektur.md).
+grün. `technik/architektur.md` hat der Architekt nachgezogen
+([227](227-pruefskriptPfadeInDerArchitektur.md), erledigt); die Spur
+`lauf.py kriterienregeln.rueckverfolgung AUF-1.4` läuft mit Rückgabe 0. Nachgezogen sind
+auch die letzten Mechanismen ohne Ordner: `formregeln/hoechstmassTest.py` in
+`prozess/kennzahlen.md` und `domaene/CLAUDE.md`, `formregeln/mockups.py` in
+`.claude/agents/ux.md`. Ein grep nach Skriptnamen ohne Ordner in `prozess/`, `technik/`,
+`.claude/` und den CLAUDE.md findet keine mehr; `formregeln.hoechstmassTest` ist grün.

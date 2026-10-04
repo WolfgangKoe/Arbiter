@@ -1,6 +1,6 @@
 # Der Implementierer schreibt auch technik/frontend/
 
-238 · Anliegen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+238 · Anliegen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Architekt meldet in [233](233-frontendOhneAutor.md): Keine Rolle darf
