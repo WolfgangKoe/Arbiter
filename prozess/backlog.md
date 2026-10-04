@@ -3,9 +3,9 @@
 Zurückgestellt, bis ein Befund es auslöst. Was ausgelöst ist, wird ein Prozess-Item der Retro.
 
 Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zyklus 3.
-- Höchstmaße in `hoechstmassTest.py`: Code-Modul 12.000, Einheitstest-Datei 8.000; vorher `rueckverfolgung.py` (114 B 7), `rueckverfolgungTest.py` und
-  `standTest.py` teilen (Retro 2, Befund 4).
-- `kennzahlen.py` rechnet die Prozesslast.
+- Höchstmaße in `formregeln/hoechstmassTest.py`: Code-Modul 12.000, Einheitstest-Datei 8.000; vorher `kriterienregeln/rueckverfolgung.py` (114 B 7), `kriterienregeln/rueckverfolgungTest.py` und
+  `standregeln/standTest.py` teilen (Retro 2, Befund 4).
+- `standregeln/kennzahlen.py` rechnet die Prozesslast.
 - Anliegen 114 (Prüfskripte ordnen) und 139 (Sandbox, nach der Entscheidung des Stakeholders).
 
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Retro 3, oder eine Regel
@@ -17,5 +17,10 @@ Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zykl
   das Werkzeug meldet.
 - Skills `anforderung-schreiben`, `regel-nachschlagen`, `improve` (E19, E30). Auslöser: dieselbe
   Kritik an derselben Art Artefakt zweimal.
+- Update der SonarLint-Erweiterung (heute 6.0.1): VS Code meldet wiederholt, JSON-Dateien
+  analysiere SonarQube erst ab einer neueren Version (Befund des Stakeholders). Ein Update
+  ändert `erwarteteVersion` in `formregeln/sonarlint.py` (6.0.), sonst ist die Sperre rot.
+  Auslöser: ein Befund in JSON-Dateien, den die Prüfungen nicht finden, oder ein Grund
+  für die neue Version jenseits von JSON.
 
 Mechanismus: nur Text, Höchstmaß `prozess/kennzahlen.md` (Backlog je Perspektive).

@@ -17,7 +17,7 @@ und Retro gibt er frei und kommentiert ([Ablauf](prozess/ablauf.md#freigabe-und-
   nicht in der Schlussantwort. Die Schlussantwort einer Rolle nennt nur Pfade und Status; der
   Koordinator reicht Pfade weiter, keine Inhalte; er liest Dateien bis 4.000 Zeichen,
   `git show` nur mit `--stat`. Mechanismus:
-  `prozess/pruefungen/schlussantwort.py`, `lesegrenze.py`.
+  `prozess/pruefungen/rollenregeln/schlussantwort.py`, `rollenregeln/lesegrenze.py`.
 - Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
 - Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
   Code und im Glossar (`domaene/glossar.md`, per grep). Benennung und Lesbarkeit von Code:
@@ -31,6 +31,6 @@ Datenbank. Akzeptanztests entstehen vor dem Code.
 
 ## Nur lesbar
 `VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter-old/` und `ArbiterMap/` sind für alle
-Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `schreibgrenze.py`,
-`bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
+Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `rollenregeln/schreibgrenze.py`,
+`rollenregeln/bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
 [`prozess/backlog.md`](prozess/backlog.md).

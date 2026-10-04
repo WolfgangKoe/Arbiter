@@ -6,7 +6,7 @@
 Geprüft: [que-2.html](../../domaene/mockups/que-2.html), [auf-4.html](../../domaene/mockups/auf-4.html)
 und [vorschlag.css](../../domaene/mockups/vorschlag.css) als Komponenten, die die Technikphase
 ohne Umschreiben übernimmt ([Plan 3](../plan.md), Anliegen 151 F2). Das Bild prüft
-[222](222-mockupsAusgangslageUndKreisgroesse.md).
+Anliegen 222.
 
 **Befund 1 · Benennung.** Die Klassen `gameHeader…`, `armyCard…`, `unitCard…` und die
 Variablen `--arb-bg`, `--arb-surface`, `--arb-accent-lt` sind englisch, `--spieler-1` ist

@@ -18,4 +18,10 @@ file“.
 **Gegenvorschlag.** Aufrufe wie oben ersetzen; Mechanismus-Namen mit Ordner nennen
 (`prozess/regeln.md` führt sie schon so).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt für meine Dateien: Aufrufe über
+`gemeinsam/lauf.py <ordner>.<modul>`, Mechanismen mit Ordner in `prozess/ablauf.md`,
+`prozess/praemissen/wir.md`, `prozess/backlog.md`, `.claude/agents/regelumsetzer.md` und
+`CLAUDE.md`. In `prozess/regeln.md` standen noch drei alte Aufrufe (`abdeckung.py`,
+`sonarlint.py`, auch `--einstellung`, und `dashboard.py`); nachgezogen. Die Prüfungen sind
+grün. `technik/architektur.md` schreibt der Architekt: wartet auf
+[227](227-pruefskriptPfadeInDerArchitektur.md).
