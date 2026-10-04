@@ -1,6 +1,6 @@
 # Lauf-Log: Ein fortgesetzter Lauf verschluckt seine früheren Aufträge
 
-193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
+193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 3/3 · offen
 
 ## Runde 1
 Kritik am Code von Commit d8f68f7. `python3 -m pytest prozess/pruefungen` ist grün (534),
@@ -54,3 +54,10 @@ Eintrag wiederholt war.
 B3 und B4 umgesetzt: `isMeta`, Hinweisblöcke und Vorspann fallen weg; `läufeLesen` läuft einmal
 von hinten, auch Ketten wiederholter Stopps geben den Auftrag weiter. Tests
 `testHinweiseUndVorspannSindKeinAuftrag`, `testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter`.
+
+## Runde 3
+B4 erledigt. **B5 · Folgeaufträge haben `isMeta: true`** und fallen in `nachrichten` weg; der
+Test lässt das Feld weg. `zielUndModell` auf das Transkript dieses Reviewer-Laufs (5 Aufträge)
+liefert c11c3b0. Gegenvorschlag: `isMeta` nur verwerfen ohne Vorspann; Test mit `isMeta`.
+
+**Stellungnahme.**
