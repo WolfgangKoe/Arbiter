@@ -6,11 +6,10 @@ from collections.abc import Callable
 from pathlib import Path
 
 from agenten import istNurLesbar, nurLesbar, projektordner
-from freigabeKommentare import artefakte, freigabeJa, zeilenDer
+from freigabeKommentare import artefakte, artefaktVon, freigabeJa, freigegebenerZyklus
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from lesegrenze import gitShowZulässig
 from pfade import anliegenOrdner
-from plan import zyklus
 
 geprüfteRolle = "koordinator"
 
@@ -131,12 +130,13 @@ def commitBetreff(teile: list[str]) -> str:
     """Erste Zeile der Nachricht nach `-m` oder `--message`, `""` ohne Nachricht."""
     for stelle, wort in enumerate(teile):
         nachricht = None
+        kurz = re.fullmatch(r"-[a-zA-Z]*?m(.*)", wort, re.DOTALL)
         if wort.startswith("--message="):
             nachricht = wort.removeprefix("--message=")
-        elif wort == "--message" or re.fullmatch(r"-[a-zA-Z]*m", wort):
+        elif wort == "--message":
             nachricht = teile[stelle + 1] if stelle + 1 < len(teile) else ""
-        elif re.match(r"-m.", wort):
-            nachricht = wort[2:]
+        elif kurz:
+            nachricht = kurz[1] or (teile[stelle + 1] if stelle + 1 < len(teile) else "")
         if nachricht is not None:
             return nachricht.partition("\n")[0]
     return ""
@@ -151,9 +151,8 @@ def freigabeCommitVerstoß(befehl: str, wurzel: Path) -> str | None:
     if treffer is None:
         return None
     gegenstand, nummer = treffer[1], int(treffer[2])
-    artefakt = next(kandidat for kandidat in artefakte if kandidat.gegenstand == gegenstand)
-    datei = wurzel / "handoff" / artefakt.datei
-    if freigabeJa in zeilenDer(wurzel, artefakt) and zyklus(datei) == nummer:
+    artefakt = artefaktVon(gegenstand)
+    if freigegebenerZyklus(wurzel, artefakt) == nummer:
         return None
     return (
         f"Freigabe {gegenstand} {nummer} nur, wenn handoff/{artefakt.datei} `{freigabeJa}` trägt "
@@ -188,6 +187,10 @@ def gitUnterbefehle(befehl: str) -> list[str]:
 
 def istAnliegen(relativerPfad: str) -> bool:
     return relativerPfad.startswith(f"{anliegenOrdner}/")
+
+
+def istFreigabeArtefakt(relativerPfad: str) -> bool:
+    return relativerPfad in {f"handoff/{artefakt.datei}" for artefakt in artefakte}
 
 
 def meintPfad(wort: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
@@ -263,6 +266,11 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
         return verweigerung(
             "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
             "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen)."
+        )
+    if ändertPfad(befehl, wurzel, istFreigabeArtefakt):
+        return verweigerung(
+            "Plan, Review und Retro ändern Rollen nur mit Write und Edit, nie per Bash: Daran "
+            "vorbei greift die Freigabesperre nicht (prozess/ablauf.md, Freigabe und Kommentare)."
         )
     schreibend = [name for name in gitUnterbefehle(befehl) if name not in gitLesend]
     if not schreibend:

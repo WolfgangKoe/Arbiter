@@ -7,7 +7,7 @@ import pytest
 
 from agenten import kopfzeilen
 from anliegen import antwortZeile
-from freigabeKommentare import artefakte, kommentarZeile
+from freigabeKommentare import artefakte, kommentarZeile, pfadDer
 from pfade import (
     akzeptanzOrdner,
     anliegenOrdner,
@@ -64,7 +64,7 @@ def fälle():
     for datei in sorted((wurzel / anliegenOrdner).glob("*.md")):
         yield datei, zeichenOhneAntworten(datei), anliegen
     for artefakt in artefakte:
-        datei = wurzel / "handoff" / artefakt.datei
+        datei = pfadDer(wurzel, artefakt)
         if datei.is_file():
             yield datei, zeichenOhneKommentare(datei), freigabeDatei
     moderationsdatei = wurzel / "handoff" / "moderation.md"

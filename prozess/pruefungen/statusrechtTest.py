@@ -228,3 +228,45 @@ def testDerStakeholderÄndertFreigabeUndKommentareFrei(tmp_path):
 def testEinEditOhneNeuenTextAmPlanIstFrei(tmp_path):
     datei = planAnlegen(tmp_path)
     assert entscheide(schreibung(datei, "planer", old_string="Text"), tmp_path) is None
+
+
+def testZyklusnummerEntfernenLöstNichtAb(tmp_path):
+    datei = planAnlegen(tmp_path)
+    angaben = ändere(
+        datei, "planer", "Zyklus 3\n\nText\nKommentar: warum so?\n", "Zyklus\n\nText\n"
+    )
+    assert "Kommentar: warum so?" in sperre(entscheide(angaben, tmp_path))
+
+
+def testZyklusnummerSenkenLöstNichtAb(tmp_path):
+    datei = planAnlegen(tmp_path)
+    angaben = ändere(
+        datei, "planer", "Zyklus 3\n\nText\nKommentar: warum so?\n", "Zyklus 2\n\nText\n"
+    )
+    assert "Kommentar: warum so?" in sperre(entscheide(angaben, tmp_path))
+
+
+def testNeuerKommentarEinerRolleIstGesperrt(tmp_path):
+    datei = planAnlegen(tmp_path)
+    angaben = ändere(datei, "planer", "Text\n", "Text\nKommentar: Rolle schreibt\n")
+    assert "Kommentar: Rolle schreibt" in sperre(entscheide(angaben, tmp_path))
+
+
+def testFreigabeJaWiederEntfernenIstGesperrt(tmp_path):
+    datei = planAnlegen(tmp_path, vorlage.replace("offen", "ja"))
+    angaben = ändere(datei, "planer", "Freigabe: ja", "Freigabe: offen")
+    assert "Freigabe: ja" in sperre(entscheide(angaben, tmp_path))
+
+
+def testDateiOhneUtf8IstFreiUndBrichtNichtAb(tmp_path):
+    datei = tmp_path / "handoff" / "plan.md"
+    datei.parent.mkdir(parents=True)
+    datei.write_bytes(b"\xff\xfe\x00")
+    assert entscheide(schreibung(datei, "planer", old_string="a", new_string="b"), tmp_path) is None
+
+
+def testEineFremdeDateiWirdNichtGelesen(tmp_path):
+    datei = tmp_path / "technik" / "bild.bin"
+    datei.parent.mkdir(parents=True)
+    datei.write_bytes(b"\xff\xfe\x00")
+    assert entscheide(schreibung(datei, "planer", old_string="a", new_string="b"), tmp_path) is None

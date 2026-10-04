@@ -67,3 +67,15 @@ def testReviewMitVorliegenderRetroBleibtUngeprüft(tmp_path):
     schreiben(tmp_path, "review.md", "# Review · Zyklus 2\n")
     schreiben(tmp_path, "retro.md", "# Retro · Zyklus 2\n\n## Freigabe\nFreigabe: offen\n")
     assert verstöße(tmp_path) == []
+
+
+def testWiederholteFreigabeÜberschriftAmEndeIstGrün(tmp_path):
+    text = "# Plan · Zyklus 3\n\n## Freigabe\n\n## Danach\n\n## Freigabe\nFreigabe: offen\n"
+    schreiben(tmp_path, "plan.md", text)
+    assert verstöße(tmp_path) == []
+
+
+def testFreigabeFeldAußerhalbDesAbschnittsZähltNicht(tmp_path):
+    text = "# Plan · Zyklus 3\n\nFreigabe: ja\n\n## Freigabe\nKommentar: .\n"
+    schreiben(tmp_path, "plan.md", text)
+    assert len(verstöße(tmp_path)) == 1

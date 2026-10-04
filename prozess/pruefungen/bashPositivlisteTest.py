@@ -198,3 +198,38 @@ def testFreigabeEtappeUndAndereCommitsBleibenFrei(tmp_path):
     assert not gesperrt("git commit", ordner=ordner)
     assert not gesperrt("git commit -m", ordner=ordner)
     assert not gesperrt("git status", ordner=ordner)
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param('git commit -qm"Freigabe Plan 3"', id="-qm ohne Leerzeichen"),
+        pytest.param('git commit -am"Freigabe Plan 3"', id="-am ohne Leerzeichen"),
+        pytest.param('git commit -am "Freigabe Plan 3"', id="-am"),
+    ],
+)
+def testFreigabeCommitMitVerbundenerOptionBeiOffenIstGesperrt(tmp_path, befehl):
+    assert gesperrt(befehl, ordner=freigabeRepo(tmp_path, "offen"))
+
+
+def testFreigabeJaAußerhalbDesAbschnittsErlaubtKeinenCommit(tmp_path):
+    datei = tmp_path / "handoff" / "plan.md"
+    datei.parent.mkdir(parents=True)
+    datei.write_text("# Plan · Zyklus 3\n\nFreigabe: ja\n\n## Freigabe\nFreigabe: offen\n")
+    assert gesperrt('git commit -m "Freigabe Plan 3"', ordner=tmp_path)
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param("sed -i s/offen/ja/ handoff/plan.md", id="sed -i"),
+        pytest.param("echo x > handoff/review.md", id="Umleitung"),
+        pytest.param("rm handoff/retro.md", id="rm"),
+    ],
+)
+def testKeineRolleÄndertFreigabeArtefakteMitBash(befehl):
+    assert gesperrt(befehl, rolle="planer")
+
+
+def testFreigabeArtefaktePerBashLesenBleibtErlaubt():
+    assert not gesperrt("cat handoff/plan.md", rolle="planer")

@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from freigabeKommentare import freigabeZuCommitten
 from phasenfolge import aktuelleEtappe, lage
 from stand import stand
 
@@ -497,3 +498,17 @@ def testRetroOhneProzessItemsBeginntGleichDenNächstenZyklus(repo):
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n\n- P1 steht außerhalb des Abschnitts\n")
     repo.freigabe("Retro", 1)
     assert lage(repo.wurzel).phase == "Domänenphase"
+
+
+def testFreigabeJaAußerhalbDesAbschnittsMeldetKeinenCommit(tmp_path):
+    text = "# Plan · Zyklus 3\n\n## Teil\nFreigabe: ja\n\n## Freigabe\nFreigabe: offen\n"
+    (tmp_path / "handoff").mkdir()
+    (tmp_path / "handoff" / "plan.md").write_text(text, encoding="utf-8")
+    assert freigabeZuCommitten(tmp_path) is None
+
+
+def testFreigabeJaImAbschnittMeldetDenCommit(tmp_path):
+    text = "# Plan · Zyklus 3\n\n## Freigabe\nFreigabe: ja\n"
+    (tmp_path / "handoff").mkdir()
+    (tmp_path / "handoff" / "plan.md").write_text(text, encoding="utf-8")
+    assert freigabeZuCommitten(tmp_path) == "Freigabe Plan 3"

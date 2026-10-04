@@ -1,6 +1,6 @@
 # Freigabefeld nur im Abschnitt `## Freigabe` lesen
 
-210 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+210 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von b232332 (Anliegen 167, Teil 3). `freigabeFormat.verstöße`
@@ -37,3 +37,5 @@ Stand nennt den Koordinator nicht.
 
 Erledigt, wenn der Scheiter-Test grün ist, kein Zweig von `freigabeFormat.py` ungedeckt bleibt,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Commit geprüft hat.
+
+**Stellungnahme.** Umgesetzt: `freigabeKommentare.py` liest das Feld nur unter `## Freigabe` (`abschnitte`, `freigegebenerZyklus`, `pfadDer`); die tote Reihenfolgeprüfung ist entfallen. Scheiter-Tests in `standTest.py` und `freigabeFormatTest.py`.

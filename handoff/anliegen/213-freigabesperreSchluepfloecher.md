@@ -1,6 +1,6 @@
 # Freigabesperre: Schlupflöcher und Leseort
 
-213 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+213 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von b2a5221 (Anliegen 168). `python3 -m pytest prozess/pruefungen`

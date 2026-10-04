@@ -5,7 +5,7 @@ from pathlib import Path
 
 from agenten import projektordner
 from anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
-from freigabeKommentare import artefakte, freigabeVerstoß
+from freigabeKommentare import artefakte, freigabeVerstoß, pfadDer
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from pfade import anliegenOrdner
 
@@ -34,12 +34,17 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     ziel = Path(angaben["file_path"])
     ziel = ziel if ziel.is_absolute() else wurzel / ziel
     ziel = ziel.resolve()
-    bisher = ziel.read_text(encoding="utf-8") if ziel.is_file() else ""
-    danach = neuerInhalt(werkzeug, angaben, bisher)
-    if ziel in {(wurzel / "handoff" / artefakt.datei).resolve() for artefakt in artefakte}:
-        return freigabeAntwort(ziel, bisher, danach)
-    if ziel.parent != (wurzel / anliegenOrdner).resolve() or ziel.suffix != ".md":
+    istArtefakt = ziel in {pfadDer(wurzel, artefakt).resolve() for artefakt in artefakte}
+    istAnliegen = ziel.parent == (wurzel / anliegenOrdner).resolve() and ziel.suffix == ".md"
+    if not (istArtefakt or istAnliegen):
         return None
+    try:
+        bisher = ziel.read_text(encoding="utf-8") if ziel.is_file() else ""
+    except UnicodeDecodeError:
+        return None
+    danach = neuerInhalt(werkzeug, angaben, bisher)
+    if istArtefakt:
+        return freigabeAntwort(ziel, bisher, danach)
     neu = kopfAusText(danach, ziel) if danach is not None else None
     alt = kopfAusText(bisher, ziel)
     if neu is None:
