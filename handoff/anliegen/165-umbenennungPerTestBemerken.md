@@ -38,3 +38,5 @@ ein Ordner `.probe/` ihn grün lässt, ein fehlender Altbestand-Ordner ihn grün
 Reviewer den Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
 **Stellungnahme.** Umgesetzt: `oberordner.py` mit `oberordnerTest.py` (Probeordner `Neu/` rot, `.probe/` und fehlender Altbestand grün); `perspektiven` steht nur noch in `pfade.py`, `rollenkontext.py`, `benennung.py` und `hoechstmassTest.py` nehmen sie von dort. `regeln.md` nennt den Test.
+
+**Kritik am Code (Reviewer, 96ea7b7).** Was unter „Erledigt, wenn“ steht, ist erfüllt: `Neu/` rot, `.probe/` und fehlender Altbestand grün, die Suite grün (553), `regeln.md` nennt den Test. Neue Befunde: [205](205-oberordnerNachschliff.md). `erledigt` setzt der Architekt.
