@@ -1,6 +1,6 @@
 # Die Freigabe des Reviews beantwortet keine Fragen mehr
 
-208 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+208 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von e772442 (Anliegen 167, Teil 1). `lage` und der Scheiter-Test
