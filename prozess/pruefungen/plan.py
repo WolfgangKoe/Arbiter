@@ -9,12 +9,15 @@ from pfade import itemsOrdner
 planDatei = Path("handoff") / "plan.md"
 
 
+def zyklusAusText(text: str) -> int | None:
+    treffer = re.search(r"Zyklus\s+(\d+)", text.partition("\n")[0])
+    return int(treffer.group(1)) if treffer else None
+
+
 def zyklus(datei: Path) -> int | None:
     if not datei.is_file():
         return None
-    ersteZeile = datei.read_text(encoding="utf-8").partition("\n")[0]
-    treffer = re.search(r"Zyklus\s+(\d+)", ersteZeile)
-    return int(treffer.group(1)) if treffer else None
+    return zyklusAusText(datei.read_text(encoding="utf-8"))
 
 
 def offeneItems(wurzel: Path) -> list[str]:

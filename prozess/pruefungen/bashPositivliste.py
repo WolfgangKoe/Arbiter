@@ -6,9 +6,11 @@ from collections.abc import Callable
 from pathlib import Path
 
 from agenten import istNurLesbar, nurLesbar, projektordner
+from freigabeKommentare import artefakte, freigabeJa, zeilenDer
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from lesegrenze import gitShowZulässig
 from pfade import anliegenOrdner
+from plan import zyklus
 
 geprüfteRolle = "koordinator"
 
@@ -122,6 +124,43 @@ def istErlaubt(befehl: str, wurzel: Path) -> bool:
     return passt
 
 
+freigabeBetreff = re.compile(r"^Freigabe (Plan|Review|Retro) (\d+)\b")
+
+
+def commitBetreff(teile: list[str]) -> str:
+    """Erste Zeile der Nachricht nach `-m` oder `--message`, `""` ohne Nachricht."""
+    for stelle, wort in enumerate(teile):
+        nachricht = None
+        if wort.startswith("--message="):
+            nachricht = wort.removeprefix("--message=")
+        elif wort == "--message" or re.fullmatch(r"-[a-zA-Z]*m", wort):
+            nachricht = teile[stelle + 1] if stelle + 1 < len(teile) else ""
+        elif re.match(r"-m.", wort):
+            nachricht = wort[2:]
+        if nachricht is not None:
+            return nachricht.partition("\n")[0]
+    return ""
+
+
+def freigabeCommitVerstoß(befehl: str, wurzel: Path) -> str | None:
+    """Der Betreff `Freigabe <Plan|Review|Retro> <n>` braucht `Freigabe: ja` und Zyklus n."""
+    teile = wörter(befehl)
+    if not teile or Path(teile[0]).name != "git" or unterbefehlNach(teile, 0) != "commit":
+        return None
+    treffer = freigabeBetreff.match(commitBetreff(teile))
+    if treffer is None:
+        return None
+    gegenstand, nummer = treffer[1], int(treffer[2])
+    artefakt = next(kandidat for kandidat in artefakte if kandidat.gegenstand == gegenstand)
+    datei = wurzel / "handoff" / artefakt.datei
+    if freigabeJa in zeilenDer(wurzel, artefakt) and zyklus(datei) == nummer:
+        return None
+    return (
+        f"Freigabe {gegenstand} {nummer} nur, wenn handoff/{artefakt.datei} `{freigabeJa}` trägt "
+        f"und in der ersten Zeile Zyklus {nummer} nennt; beides setzt der Stakeholder."
+    )
+
+
 def beginntBefehl(teile: list[str], stelle: int) -> bool:
     """Ob das Wort an `stelle` ein Befehlsname ist: am Anfang oder nach einem Operator."""
     return stelle == 0 or set(teile[stelle - 1]) <= operatorZeichen
@@ -206,7 +245,8 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     befehl = werkzeugAngaben(eingabe).get("command", "")
     if rolle == geprüfteRolle:
         if istErlaubt(befehl, wurzel):
-            return None
+            grund = freigabeCommitVerstoß(befehl, wurzel)
+            return verweigerung(f"Freigabe-Commit: {grund}") if grund else None
         return verweigerung(
             "Bash-Positivliste des Koordinators: nur "
             + ", ".join(erlaubt)

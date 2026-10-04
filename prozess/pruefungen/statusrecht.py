@@ -5,6 +5,7 @@ from pathlib import Path
 
 from agenten import projektordner
 from anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
+from freigabeKommentare import artefakte, freigabeVerstoß
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from pfade import anliegenOrdner
 
@@ -33,10 +34,12 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     ziel = Path(angaben["file_path"])
     ziel = ziel if ziel.is_absolute() else wurzel / ziel
     ziel = ziel.resolve()
-    if ziel.parent != (wurzel / anliegenOrdner).resolve() or ziel.suffix != ".md":
-        return None
     bisher = ziel.read_text(encoding="utf-8") if ziel.is_file() else ""
     danach = neuerInhalt(werkzeug, angaben, bisher)
+    if ziel in {(wurzel / "handoff" / artefakt.datei).resolve() for artefakt in artefakte}:
+        return freigabeAntwort(ziel, bisher, danach)
+    if ziel.parent != (wurzel / anliegenOrdner).resolve() or ziel.suffix != ".md":
+        return None
     neu = kopfAusText(danach, ziel) if danach is not None else None
     alt = kopfAusText(bisher, ziel)
     if neu is None:
@@ -49,6 +52,11 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     if grund is None:
         return None
     return verweigerung(f"Statusrecht: {ziel.name} {grund}")
+
+
+def freigabeAntwort(ziel: Path, bisher: str, danach: str | None) -> dict | None:
+    grund = freigabeVerstoß(bisher, danach) if danach is not None else None
+    return verweigerung(f"Freigabe und Kommentare: {ziel.name} {grund}") if grund else None
 
 
 def absenderVerstoß(alt: Anliegen | None, neu: Anliegen, freieNummer: int) -> str | None:

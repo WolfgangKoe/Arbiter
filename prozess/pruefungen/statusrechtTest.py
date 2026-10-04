@@ -154,3 +154,77 @@ def testWriteMitGleichemAbsenderNeueRundeIstFrei(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
     inhalt = datei.read_text(encoding="utf-8").replace("Runde 1/3", "Runde 2/3")
     assert entscheide(schreibung(datei, "architekt", "Write", content=inhalt), tmp_path) is None
+
+
+vorlage = (
+    "# Plan · Zyklus 3\n\nText\nKommentar: warum so?\nStellungnahme: erledigt\n\n"
+    "## Freigabe\nFreigabe: offen\nKommentar: .\n"
+)
+
+
+def planAnlegen(tmp_path, inhalt=vorlage):
+    datei = tmp_path / "handoff" / "plan.md"
+    datei.parent.mkdir(parents=True, exist_ok=True)
+    datei.write_text(inhalt, encoding="utf-8")
+    return datei
+
+
+def testRolleDarfFreigabeNichtAufJaSetzen(tmp_path):
+    datei = planAnlegen(tmp_path)
+    antwort = entscheide(ändere(datei, "planer", "Freigabe: offen", "Freigabe: ja"), tmp_path)
+    assert "Freigabe: ja" in sperre(antwort)
+
+
+def testRolleDarfEinenKommentarNichtEntfernen(tmp_path):
+    datei = planAnlegen(tmp_path)
+    antwort = entscheide(ändere(datei, "planer", "Kommentar: warum so?\n", ""), tmp_path)
+    assert "Kommentar: warum so?" in sperre(antwort)
+
+
+def testRolleDarfEinenKommentarNichtUmschreiben(tmp_path):
+    datei = planAnlegen(tmp_path)
+    angaben = ändere(datei, "planer", "Kommentar: warum so?", "Kommentar: .")
+    assert "Kommentar: warum so?" in sperre(entscheide(angaben, tmp_path))
+
+
+def testRolleDarfFreigabeOffenNichtLöschen(tmp_path):
+    datei = planAnlegen(tmp_path)
+    antwort = entscheide(ändere(datei, "planer", "Freigabe: offen\n", ""), tmp_path)
+    assert "Freigabe: offen" in sperre(antwort)
+
+
+def testEineStellungnahmeIstFrei(tmp_path):
+    datei = planAnlegen(tmp_path)
+    angaben = ändere(datei, "planer", "Text\n", "Text\nStellungnahme: geändert in Item 2\n")
+    assert entscheide(angaben, tmp_path) is None
+
+
+def testDerPunktKommentarIstFrei(tmp_path):
+    datei = planAnlegen(tmp_path)
+    assert entscheide(ändere(datei, "planer", "Kommentar: .", "Kommentar: ."), tmp_path) is None
+
+
+def testDerNächsteZyklusDarfKommentareAblösen(tmp_path):
+    datei = planAnlegen(tmp_path)
+    inhalt = vorlage.replace("Zyklus 3", "Zyklus 4").replace("Kommentar: warum so?\n", "")
+    angaben = schreibung(datei, "planer", "Write", content=inhalt)
+    assert entscheide(angaben, tmp_path) is None
+
+
+def testDerNächsteZyklusBeginntNichtMitJa(tmp_path):
+    datei = planAnlegen(tmp_path)
+    inhalt = vorlage.replace("Zyklus 3", "Zyklus 4").replace("offen", "ja")
+    antwort = entscheide(schreibung(datei, "planer", "Write", content=inhalt), tmp_path)
+    assert "beginnt mit" in sperre(antwort)
+
+
+def testDerStakeholderÄndertFreigabeUndKommentareFrei(tmp_path):
+    datei = planAnlegen(tmp_path)
+    eingabe = ändere(datei, "planer", "Freigabe: offen", "Freigabe: ja")
+    del eingabe["agent_type"]
+    assert entscheide(eingabe, tmp_path) is None
+
+
+def testEinEditOhneNeuenTextAmPlanIstFrei(tmp_path):
+    datei = planAnlegen(tmp_path)
+    assert entscheide(schreibung(datei, "planer", old_string="Text"), tmp_path) is None

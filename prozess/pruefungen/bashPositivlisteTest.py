@@ -155,3 +155,46 @@ def testKeineRolleSchreibtAnliegenPerBash(befehl):
 def testAnliegenLesenPerBashBleibtErlaubt():
     assert not gesperrt("cat handoff/anliegen/12-probe.md", rolle="regelumsetzer")
     assert not gesperrt("grep -l offen handoff/anliegen/12-probe.md", rolle="regelumsetzer")
+
+
+def freigabeRepo(tmp_path, freigabe, zyklus=3):
+    datei = tmp_path / "handoff" / "plan.md"
+    datei.parent.mkdir(parents=True)
+    inhalt = f"# Plan · Zyklus {zyklus}\n\n## Freigabe\nFreigabe: {freigabe}\n"
+    datei.write_text(inhalt, encoding="utf-8")
+    return tmp_path
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param('git commit -m "Freigabe Plan 3"', id="-m"),
+        pytest.param('git commit -qm "Freigabe Plan 3"', id="-qm"),
+        pytest.param('git commit -m"Freigabe Plan 3"', id="-m ohne Leerzeichen"),
+        pytest.param('git commit --message="Freigabe Plan 3"', id="--message="),
+        pytest.param('git commit --message "Freigabe Plan 3"', id="--message"),
+    ],
+)
+def testFreigabeCommitBeiOffenIstGesperrt(tmp_path, befehl):
+    assert gesperrt(befehl, ordner=freigabeRepo(tmp_path, "offen"))
+
+
+def testFreigabeCommitBeiJaIstErlaubt(tmp_path):
+    assert not gesperrt('git commit -m "Freigabe Plan 3"', ordner=freigabeRepo(tmp_path, "ja"))
+
+
+def testFreigabeCommitMitFalscherZyklusnummerIstGesperrt(tmp_path):
+    assert gesperrt('git commit -m "Freigabe Plan 4"', ordner=freigabeRepo(tmp_path, "ja"))
+
+
+def testFreigabeCommitOhneDateiIstGesperrt(tmp_path):
+    assert gesperrt('git commit -m "Freigabe Review 2"', ordner=tmp_path)
+
+
+def testFreigabeEtappeUndAndereCommitsBleibenFrei(tmp_path):
+    ordner = freigabeRepo(tmp_path, "offen")
+    assert not gesperrt('git commit -m "Freigabe Etappe 1"', ordner=ordner)
+    assert not gesperrt('git commit -m "Plan 3"', ordner=ordner)
+    assert not gesperrt("git commit", ordner=ordner)
+    assert not gesperrt("git commit -m", ordner=ordner)
+    assert not gesperrt("git status", ordner=ordner)

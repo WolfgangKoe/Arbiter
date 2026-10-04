@@ -1,6 +1,6 @@
 # Freigabefeld und Kommentare ändert nur der Stakeholder
 
-168 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+168 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach [Ablauf, Freigabe und
@@ -28,10 +28,20 @@ Scheiter-Tests: Edit `Freigabe: offen` → `Freigabe: ja` rot; Kommentartext ent
 neue Zeile `Stellungnahme:` grün; Write von Plan 4 über Plan 3 mit Kommentaren grün; Commit
 `Freigabe Plan 3` bei `Freigabe: offen` rot, bei `Freigabe: ja` grün.
 
-Reihenfolge: nach [167](167-freigabefeldKommentareImStand.md); wirkt nicht auf Plan 3,
+Reihenfolge: nach Anliegen 167; wirkt nicht auf Plan 3,
 deshalb nicht vor dessen Freigabe ([Prozessphase](../../prozess/ablauf.md#prozessphase) 1).
 
 Erledigt, wenn beide Teile gebaut sind, die Scheiter-Tests so ausgehen,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Code geprüft hat.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Teile gebaut, wie vorgeschlagen.
+1. `statusrecht.py` ruft `freigabeKommentare.freigabeVerstoß` für `handoff/plan.md`,
+   `review.md`, `retro.md` (Write, Edit): gesperrt sind `Freigabe: ja` neu, `Freigabe: offen`
+   entfernt, ein Kommentar mit anderem Text als `.` geändert oder entfernt. Bei neuer
+   Zyklusnummer in der ersten Zeile sind Kommentare frei; die neue Datei darf aber nicht
+   `Freigabe: ja` tragen (Zusatz zum Vorschlag, sonst wäre das ein Schlupfloch).
+2. `bashPositivliste.py` (`freigabeCommitVerstoß`): Betreff `Freigabe Plan|Review|Retro <n>`
+   (`-m`, `-qm`, `-m<text>`, `--message`) nur mit `Freigabe: ja` und Zyklus n.
+Scheiter-Tests wie gefordert in `statusrechtTest.py` und `bashPositivlisteTest.py`.
+Grenzen: Bash-Änderungen an Plan, Review, Retro (`sed -i`) und `git commit -F` sperrt
+nichts; Reviewer prüft den Code.
