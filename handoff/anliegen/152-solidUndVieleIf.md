@@ -1,6 +1,6 @@
 # Ist der Domänencode SOLID? Viele if
 
-152 · Kritik · von Stakeholder → Architekt · Runde 1/3 · angenommen
+152 · Kritik · von Stakeholder → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund (Stakeholder).** „Eine potentielle Kritik meinerseits an den Architekten bzw.

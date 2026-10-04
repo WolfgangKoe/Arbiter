@@ -1,6 +1,6 @@
 # Die Prüfskripte sind nicht ordentlich strukturiert abgelegt
 
-107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
 
 Kritik: Ich möchte mir die Prüfskripte gerne anschauen können. Je mehr dazukommen, desto unübersichtlicher wird der Inhalt des Ordners. Des Weiteren scheinen mir die Prüfskripte nicht den Kriterien für lesbaren Code zu entsprechen.
 
@@ -32,3 +32,5 @@ die Kritik an: Der Regelumsetzer löscht die Datei samt Code, Tests und Ausnahme
 wartet auf 113, 114
 
 Nachprüfung: Der Koordinator hat mich gebeten, dieses Anliegen nachzuprüfen. Die Datei "benennungRueckstand.txt" finde ich nicht mehr und ist daher wohl gelöscht. Der Teil des Anliegens ist erledigt. 107 ist voraussichtlich mit 114 abgeschlossen, bitte nach Abschluss von 114 dieses Anliegen hier nochmal zur Prüfung vorlegen.
+
+Antwort: Hier scheint noch keine Reaktion vom @organisationsentwickler gekommen zu sein. 

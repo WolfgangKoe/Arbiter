@@ -1,6 +1,6 @@
 # Rolle UX für die erste Oberfläche
 
-151 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · offen
+151 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Plan 3 bringt voraussichtlich das erste Item mit Oberfläche

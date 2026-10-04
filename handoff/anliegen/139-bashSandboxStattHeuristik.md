@@ -1,6 +1,6 @@
 # Bash-Sandbox statt Heuristik für Anliegen und nur lesbare Pfade
 
-139 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · offen
+139 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Rollen dürfen Anliegen nur mit Write und Edit ändern, nur lesbare Pfade gar

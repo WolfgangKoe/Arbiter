@@ -1,6 +1,6 @@
 # Zweite Technikdatei für den Architekten
 
-159 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · offen
+159 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** `technik/architektur.md` ist mit 5.985 Zeichen am Höchstmaß 6.000
@@ -59,4 +59,4 @@ Ein Schreibpfad für eine Datei reicht also für ein Thema, nicht für den Scope
   zusammen 24.000 Zeichen.
 Empfehlung: C.
 
-Antwort: .
+Antwort: C

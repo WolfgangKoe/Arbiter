@@ -35,4 +35,4 @@ Architecture.pdf`, S. 1) und in Arbiter-old (`Arbiter-old/docs/spec/setup.md:136
 Absicht fraktionsneutral (`Arbiter-old/docs/spec/architecture_invariants.md:68`). B und C
 brauchen Daten oder eine Eingabe, die Etappe 1 nicht verlangt.
 
-Antwort: .
+Antwort: Rückfrage: Beim Rolloff wird ja über "Angreifer" und "Verteidiger" entschieden. Könnten dies nicht die Namen der Spieler sein? Das wäre regelkonform und damit würde sich auch alles weitere ergeben. 

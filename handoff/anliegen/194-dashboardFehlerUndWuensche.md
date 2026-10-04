@@ -1,6 +1,6 @@
 # Dashboard: Lücken in den Sitzungen, Titel, Dauer, Aktualisierung
 
-194 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · offen
+194 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Notiz des Stakeholders, vom Koordinator festgehalten; noch nicht umgesetzt.
@@ -49,3 +49,5 @@ Umgesetzt in `laufLog.py` und `dashboard.py`, getestet in `dashboardTest.py`:
 - Befund 5, Hook bei `SubagentStart`: offen. Der Eintrag in `.claude/settings.json`
   (`dashboard.py --still`, schreibt nur die Seite) wurde vom Berechtigungssystem
   abgelehnt; `--still` ist umgesetzt. Der Stakeholder setzt den Eintrag oder gibt ihn frei.
+
+  Antwort: Wir lassen es so wie es ist. Ich bin damit einverstanden, dass das Skript bei jedem "SubagentStop" läuft.

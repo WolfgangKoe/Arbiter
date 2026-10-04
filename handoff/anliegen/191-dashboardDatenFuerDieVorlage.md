@@ -1,6 +1,6 @@
 # Dashboard: Welche Daten sollen für die Vorlage hinzukommen
 
-191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Du hast zu P4 bemängelt, `dashboard.html` sehe anders aus als
