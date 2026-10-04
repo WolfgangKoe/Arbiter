@@ -1,6 +1,6 @@
 # Antworten des Stakeholders zählen nicht gegen das Höchstmaß
 
-162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `hoechstmassTest.py` zählt ein Anliegen samt den Antworten des Stakeholders. Mit
@@ -23,4 +23,5 @@ Erledigt, wenn beide Fälle des Scheiter-Tests so ausgehen, `python3 -m pytest
 prozess/pruefungen` grün ist und der Reviewer den Code geprüft hat
 ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `zeichenOhneAntworten` in `hoechstmassTest.py`, Scheiter-Test mit 3.980 und 4.010 Zeichen
+eigenem Text; Eintrag in `prozess/regeln.md`. Reviewer-Prüfung steht aus.

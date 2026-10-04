@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from agenten import kopfzeilen
+from anliegen import antwortZeile
 from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, wurzel
 
 aktuelleEtappe = 1000
@@ -23,6 +24,12 @@ def zeichen(datei: Path) -> int:
     return len(datei.read_text(encoding="utf-8"))
 
 
+def zeichenOhneAntworten(datei: Path) -> int:
+    ersatz = "Antwort: ."
+    zeilen = datei.read_text(encoding="utf-8").split("\n")
+    return sum(len(ersatz if antwortZeile.match(zeile) else zeile) + 1 for zeile in zeilen) - 1
+
+
 def überschreitet(datei: Path, grenze: int) -> bool:
     return zeichen(datei) > grenze
 
@@ -35,7 +42,7 @@ def fälle():
     for datei in sorted((wurzel / ".claude" / "agents").glob("*.md")):
         yield datei, zeichen(datei), agentendefinition
     for datei in sorted((wurzel / anliegenOrdner).glob("*.md")):
-        yield datei, zeichen(datei), anliegen
+        yield datei, zeichenOhneAntworten(datei), anliegen
     moderationsdatei = wurzel / "handoff" / "moderation.md"
     if moderationsdatei.is_file():
         yield moderationsdatei, zeichen(moderationsdatei), moderation
@@ -87,3 +94,20 @@ def testZuLangerAkzeptanztestWärRot(tmp_path):
     zuLang = tmp_path / "aufstellenTest.py"
     zuLang.write_text("x" * (akzeptanztest + 1), encoding="utf-8")
     assert überschreitet(zuLang, akzeptanztest)
+
+
+def anliegenMitAntwort(tmp_path, eigener: int, antwort: int) -> Path:
+    datei = tmp_path / "99-mitAntwort.md"
+    datei.write_text("x" * eigener + "\nAntwort: " + "y" * antwort, encoding="utf-8")
+    return datei
+
+
+def testLangeAntwortZähltNichtGegenDasHöchstmaß(tmp_path):
+    datei = anliegenMitAntwort(tmp_path, 3980, 500)
+    assert zeichenOhneAntworten(datei) <= anliegen
+    assert überschreitet(datei, anliegen)
+
+
+def testZuLangerEigenerTextBleibtRotTrotzAntwort(tmp_path):
+    datei = anliegenMitAntwort(tmp_path, 4010, 500)
+    assert zeichenOhneAntworten(datei) > anliegen
