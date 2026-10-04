@@ -1,0 +1,28 @@
+# Ablage zeigt den Durchmesser, kein Kriterium verlangt ihn
+
+237 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+
+## Runde 1
+**Befund.** Die Mockups [Ausgangslage](../../domaene/mockups/auf-4-ausgangslage.html) und
+[Spieler 1 an der Reihe](../../domaene/mockups/auf-4.html) zeigen jedes nicht *gesetzte*
+*Modell* der *Ablage* mit dem *Durchmesser* seiner *Base*: „32 mm“, beim Warboss „40 mm“.
+AUF-4.3 verlangt nur, dass die *Ablage* die *Modelle* zeigt, nicht womit. Der Testautor prüft
+also die Zahl der Einträge je *Einheit*; welcher Text darin steht, prüft kein Test. Der
+Implementierer übernimmt das Markup und setzt den Wert aus den Daten ein (Anliegen 151).
+Dieselbe Lage hatte 223 Befund 3: sichtbares Verhalten ohne Kriterium seines Items.
+
+**Kosten.** Heute eine Zeile im Frontend ohne Test: Zeigt sie Zoll statt mm oder den
+*Durchmesser* eines anderen *Modells*, bleibt alles grün, auch die Rückverfolgung. Mit
+gemischten *Einheiten* und dem Ziehen aus der *Ablage* (Etappe 1, „Danach“ in
+[Plan 3](../plan.md)) wird der Wert der Anhalt, welches *Modell* der Spieler greift; dann
+fehlt das Kriterium an einer Stelle, auf die sich Spieler verlassen.
+
+**Gegenvorschlag.** Ein neues Kriterium, AUF-4.3 bleibt wie es ist (Kennungen, domaene/CLAUDE.md):
+- A: AUF-4.8 „Die *Ablage* nennt jedes *Modell* mit dem *Durchmesser* seiner *Base* in mm.“
+  Ins Item Anzeige der Aufstellung, ein Test mehr.
+- B: Kein Kriterium; UX zeigt jedes *Modell* als Eintrag ohne Text.
+
+Empfehlung: A, die Mockups zeigen es schon, und es kostet nur einen Test. Ob der Stakeholder
+den Wert sehen will, fragst du ihn, falls es keine Entscheidung dazu gibt.
+
+**Stellungnahme.**
