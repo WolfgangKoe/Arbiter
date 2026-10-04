@@ -1,6 +1,6 @@
 # Domäne: QUE-1.2 liegt in der Aufstellung statt in `querschnitt.py`
 
-149 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+149 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 Gegenstand: Review 2, Änderungen seit `Freigabe Plan 2` (`1553538`) unter `technik/`.
@@ -27,3 +27,10 @@ zum Architekten.
 
 Erledigt, wenn QUE-1.2 in `querschnitt.py` geprüft wird, die Akzeptanztests unverändert grün
 sind (`python3 -m pytest technik/tests`) und `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellungnahme (Implementierer).** Angenommen. QUE-1.2 gilt nach seinem Zweck in jeder
+Phase, die Architektur nennt `querschnitt.py`. Umgesetzt: `baseÜberdeckt(modell, stelle,
+stellen)` in `technik/arbiter/domaene/querschnitt.py`, `_gründeGegenDieStelle` ruft sie und
+behält in der Schleife nur die Nahkampfreichweite. Einheitstest:
+`technik/tests/einheit/domaene/querschnittTest.py`. Akzeptanztests unverändert grün,
+`pytest technik/tests` und `pytest prozess/pruefungen` grün.

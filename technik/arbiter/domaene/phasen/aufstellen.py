@@ -4,6 +4,7 @@ from enum import Enum
 from fractions import Fraction
 
 from arbiter.domaene import messen
+from arbiter.domaene.querschnitt import baseÜberdeckt
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Spielfeld, Stelle
 
@@ -136,12 +137,12 @@ class Aufstellung:
         grenzenInY = (Fraction(0), länge)
         if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), grenzenInY):
             gründe.add(Grund.nichtGanzInDerZone)
+        if baseÜberdeckt(modell, stelle, self._stellen):
+            gründe.add(Grund.baseÜberdeckt)
         eigene = _modelleVon(spieler)
         for anderes, andereStelle in self._stellen.items():
             if anderes is modell:
                 continue
-            if messen.überdecken(modell.base, stelle, anderes.base, andereStelle):
-                gründe.add(Grund.baseÜberdeckt)
             if anderes not in eigene and messen.abstandHöchstens(
                 modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
             ):
