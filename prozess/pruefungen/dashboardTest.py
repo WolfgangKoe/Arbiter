@@ -3,8 +3,16 @@ from datetime import UTC, datetime
 
 import pytest
 
-from dashboard import dashboardSchreiben, kilo, legende, modellName, seiteErzeugen, zeitText
-from laufLog import eintragAnhängen, jetzt, laufEintrag, logPfad, läufeLesen, zielLänge
+from dashboard import dashboardSchreiben, kilo, legende, modellName, seiteErzeugen
+from laufLog import (
+    dauerSekunden,
+    eintragAnhängen,
+    jetzt,
+    laufEintrag,
+    logPfad,
+    läufeLesen,
+    zielLänge,
+)
 
 höchstwörter = 5
 zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
@@ -42,6 +50,9 @@ def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
         "ziel": "Erstellung des Dashboards",
         "modell": "claude-opus-5-5",
         "koordinator": None,
+        "dauer": None,
+        "zyklus": None,
+        "phase": None,
         "stopp_wiederholt": False,
     }
 
@@ -83,7 +94,6 @@ def testDashboardNenntRolleBelegungUndStufen(tmp_path):
     assert "planer (2)" in seite and "architekt (1)" in seite
     assert "130k" in seite and "90k" in seite and "38.000" not in seite and "--bg:#0f0e0c" in seite
     assert "saeule warnung" in seite and "Sperrschwelle 150k" in seite and "Median" in seite
-    assert zeitText("2026-10-04T12:30:00") in seite
 
 
 def testLeeresLogZeigtHinweis():
@@ -196,9 +206,54 @@ def testEintragOhnePflichtfeldWirdÜbersprungen(tmp_path):
 def testAltbestandOhneSitzungHatLesbarenTitel(tmp_path):
     eintragAnhängen(tmp_path, {"zeit": "2026-10-04T12:17:11+00:00", "rolle": "a", "belegung": 1})
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
-    assert "<h3>ohne Sitzung</h3>" in seite
-    assert zeitText("2026-10-04T12:17:11+00:00") in seite
-    assert zeitText("unlesbar") == "unlesbar"
+    assert "<h3>Altbestand, ohne Sitzung</h3>" in seite
+    assert '<td>–</td><td>–</td><td class="stand">–</td>' in seite
+
+
+def testTitelNenntZyklusUndPhase(tmp_path):
+    eintragAnhängen(
+        tmp_path,
+        {"zeit": "a", "rolle": "r", "belegung": 1, "sitzung": "f8ebd61f-0000"}
+        | {"zyklus": 3, "phase": "Prozessphase"},
+    )
+    seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
+    assert "<h3>Zyklus 3 Prozessphase · Sitzung f8ebd61f</h3>" in seite
+    assert "<th>Ende</th>" not in seite and "<th>Dauer</th>" in seite
+
+
+def testDauerReichtVomJüngstenAuftragBisZurLetztenZeile(tmp_path):
+    datei = tmp_path / "agent-a1.jsonl"
+    zeilen = [
+        {"timestamp": "2026-10-04T12:00:00Z", "message": {"role": "user", "content": "Ziel: eins"}},
+        {"timestamp": "2026-10-04T12:10:00Z", "message": {"role": "user", "content": "Ziel: zwei"}},
+        {"timestamp": "2026-10-04T12:12:30Z", "message": {"role": "assistant"}},
+    ]
+    datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
+    assert dauerSekunden(datei) == 150  # noqa: PLR2004
+    assert "3 min" in seiteErzeugen([{"zeit": "a", "rolle": "r", "belegung": 1, "dauer": 180}])
+    assert "45 s" in seiteErzeugen([{"zeit": "a", "rolle": "r", "belegung": 1, "dauer": 45}])
+
+
+def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
+    import laufLog
+
+    monkeypatch.setattr(laufLog, "zyklusUndPhase", lambda _ordner: (3, "Prozessphase"))
+    eintrag = laufEintrag(stopp(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
+    assert (eintrag["zyklus"], eintrag["phase"]) == (3, "Prozessphase")
+
+
+def testZyklusUndPhaseLiestPhasenfolge(monkeypatch):
+    import laufLog
+    import phasenfolge
+
+    monkeypatch.setattr(
+        phasenfolge, "lage", lambda _ordner: phasenfolge.Lage(3, phasenfolge.Phase.prozessphase, "")
+    )
+    assert laufLog.zyklusUndPhase(None) == (3, "Prozessphase")
+
+
+def testDauerOhneZeitstempelIstLeer(tmp_path):
+    assert dauerSekunden(transkript(tmp_path, 1)) is None
 
 
 def testTabelleNenntModellAuftragUndRundetAufKilo(tmp_path):
@@ -215,7 +270,7 @@ def testTabelleNenntModellAuftragUndRundetAufKilo(tmp_path):
     )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "Sonnet" in seite and "Erstellung des Dashboards" in seite and "38k" in seite
-    assert "<th>Ende</th>" in seite and "<th>Kontextfenster</th>" in seite
+    assert "<th>Dauer</th>" in seite and "<th>Kontextfenster</th>" in seite
     assert "saeule orchestrator" in seite and "61k" in seite
     assert "50k</text>" in seite
 

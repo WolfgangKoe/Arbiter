@@ -40,3 +40,12 @@ Ende. Beides zugleich ist billig (Hook ohne Tokenkosten); Start und Stopp wären
 **Kosten.** Mehr Felder im Log, ein weiterer Hook; Altbestand bleibt lückenhaft.
 
 **Stellungnahme.**
+Umgesetzt in `laufLog.py` und `dashboard.py`, getestet in `dashboardTest.py`:
+- Befund 1 und 2: Die Transkripte der alten Läufe sind nicht mehr zu lesen, Nachtragen ist
+  unmöglich. Fehlendes zeigt die Tabelle als „–“, die Karte heißt „Altbestand, ohne Sitzung“.
+- Befund 3: Der Eintrag trägt `zyklus` und `phase` aus `phasenfolge.lage`; Titel „Zyklus 3
+  Prozessphase · Sitzung f8ebd61f“ (die Phase heißt dort „Prozessphase“).
+- Befund 4: Spalte „Ende“ entfällt, „Dauer“ = jüngster Auftrag bis letzte Transkriptzeile.
+- Befund 5, Hook bei `SubagentStart`: offen. Der Eintrag in `.claude/settings.json`
+  (`dashboard.py --still`, schreibt nur die Seite) wurde vom Berechtigungssystem
+  abgelehnt; `--still` ist umgesetzt. Der Stakeholder setzt den Eintrag oder gibt ihn frei.

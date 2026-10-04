@@ -3,7 +3,6 @@
 import html
 import statistics
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from belegung import sperrschwelle, warnschwelle
@@ -20,8 +19,10 @@ randLinks = 44
 randOben = 20
 randUnten = 70
 achsenschritt = 50_000
+minute = 60
 achsenhöhe = 1.1 * sperrschwelle
 ohneSitzung = "ohne Sitzung"
+fehltAlt = "–"  # Warum: Lauf aus der Zeit vor dem Feld, Wert nicht nachholbar
 legende = (
     ("var(--c-orchestrator)", "Gold: Koordinator", False),
     ("var(--c-subagent)", "Grau: Rolle", False),
@@ -78,11 +79,10 @@ def kilo(zahl: float) -> str:
     return f"{round(zahl / 1000)}k"
 
 
-def zeitText(zeit: str) -> str:
-    try:
-        return datetime.fromisoformat(zeit).astimezone().strftime("%m-%d %H:%M")
-    except ValueError:
-        return zeit
+def dauerText(sekunden: int | None) -> str:
+    if sekunden is None:
+        return fehltAlt
+    return f"{sekunden} s" if sekunden < minute else f"{round(sekunden / minute)} min"
 
 
 def modellName(modell: str) -> str:
@@ -165,15 +165,15 @@ def säulendiagramm(läufe: list[dict]) -> str:
 def tabelle(läufe: list[dict]) -> str:
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(lauf["rolle"])}</td>'
-        f"<td>{html.escape(modellName(lauf.get('modell') or ''))}</td>"
-        f"<td>{html.escape(lauf.get('ziel') or '')}</td>"
-        f"<td>{html.escape(zeitText(lauf['zeit']))}</td>"
+        f"<td>{html.escape(modellName(lauf.get('modell') or fehltAlt))}</td>"
+        f"<td>{html.escape(lauf.get('ziel') or fehltAlt)}</td>"
+        f'<td class="stand">{dauerText(lauf.get("dauer"))}</td>'
         f'<td class="stand">{kilo(lauf["belegung"])}</td></tr>'
         for lauf in läufe
     )
     return (
         '<table class="auftraege"><tr><th>Agent</th><th>Modell</th><th>Auftrag</th>'
-        f"<th>Ende</th><th>Kontextfenster</th></tr>{zeilen}</table>"
+        f"<th>Dauer</th><th>Kontextfenster</th></tr>{zeilen}</table>"
     )
 
 
@@ -185,9 +185,19 @@ def nachSitzung(läufe: list[dict]) -> dict[str, list[dict]]:
     return gruppen
 
 
+def sitzungsTitel(sitzung: str, läufe: list[dict]) -> str:
+    """„Zyklus 3 Prozessphase“ aus dem jüngsten Lauf, der beides trägt; sonst Altbestand."""
+    benannt = [lauf for lauf in läufe if lauf.get("zyklus") and lauf.get("phase")]
+    if benannt:
+        return f"Zyklus {benannt[-1]['zyklus']} {benannt[-1]['phase']} · Sitzung {sitzung[:8]}"
+    if sitzung == ohneSitzung:
+        return f"Altbestand, {ohneSitzung}"
+    return f"Sitzung {sitzung} (vor Zyklus und Phase im Log)"
+
+
 def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
     kopf = f"{len(läufe)} Läufe · Höchststand {kilo(max(lauf['belegung'] for lauf in läufe))}"
-    titel = sitzung if sitzung == ohneSitzung else f"Sitzung {sitzung}"
+    titel = sitzungsTitel(sitzung, läufe)
     return (
         f'<div class="sitzungs-karte"><h3>{html.escape(titel)}</h3>'
         f'<p class="karten-kopf">{kopf}</p>'
@@ -271,5 +281,7 @@ def dashboardSchreiben(ordner: Path) -> Path:
 
 
 if __name__ == "__main__":
-    print(dashboardSchreiben(wurzel))
+    ziel = dashboardSchreiben(wurzel)
+    if "--still" not in sys.argv:  # Warum: Hook-Ausgabe bei SubagentStart ginge in den Kontext
+        print(ziel)
     sys.exit(0)

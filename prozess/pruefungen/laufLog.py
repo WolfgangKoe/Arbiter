@@ -1,4 +1,4 @@
-"""Hook SubagentStop: trägt Rolle, Auftrag, Modell und Belegung des Laufs ins Lauf-Log ein."""
+"""Hook SubagentStop: trägt Rolle, Auftrag, Modell, Belegung, Dauer und Zyklus ins Lauf-Log ein."""
 
 import json
 import re
@@ -31,14 +31,19 @@ def textDerNachricht(inhalt) -> str:
     return " ".join(block.get("text", "") for block in inhalt or [] if isinstance(block, dict))
 
 
-def nachrichten(transkript: Path) -> list[dict]:
+def transkriptEinträge(transkript: Path) -> list[dict]:
+    """Die Einträge mit Nachricht, ohne Meta-Einträge außer Nachrichten des Koordinators."""
     gefunden = []
     for zeile in transkript.read_text(encoding="utf-8").splitlines():
         eintrag = eintragAusZeile(zeile, ())
         nachricht = eintrag.get("message") if eintrag else None
         if isinstance(nachricht, dict) and (not eintrag.get("isMeta") or vonKoordinator(nachricht)):
-            gefunden.append(nachricht)
+            gefunden.append(eintrag)
     return gefunden
+
+
+def nachrichten(transkript: Path) -> list[dict]:
+    return [eintrag["message"] for eintrag in transkriptEinträge(transkript)]
 
 
 def vonKoordinator(nachricht: dict) -> bool:
@@ -78,12 +83,40 @@ def zielUndModell(transkript: Path) -> tuple[str, str]:
     return ziel, next((modell for modell in reversed(modelle) if modell != "<synthetic>"), "")
 
 
+def zeitstempel(eintrag: dict) -> datetime | None:
+    try:
+        return datetime.fromisoformat(eintrag["timestamp"])
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def dauerSekunden(transkript: Path) -> int | None:
+    """Sekunden vom jüngsten Auftrag bis zur letzten Zeile; `None`, wenn Zeitstempel fehlen."""
+    alle = transkriptEinträge(transkript)
+    beginne = [
+        zeitstempel(eintrag)
+        for eintrag in alle
+        if eintrag["message"].get("role") == "user"
+        and auftragsZeile(textDerNachricht(eintrag["message"].get("content")))
+    ]
+    ende = [zeit for eintrag in alle if (zeit := zeitstempel(eintrag))]
+    beginn = next((zeit for zeit in reversed(beginne) if zeit), None)
+    return round((max(ende) - beginn).total_seconds()) if beginn and ende else None
+
+
+def zyklusUndPhase(ordner: Path) -> tuple[int, str]:
+    from phasenfolge import lage  # Warum: lädt git und die Plandateien nur beim Eintragen
+
+    gefunden = lage(ordner)
+    return gefunden.zyklus, str(gefunden.phase)
+
+
 def koordinatorStand(eingabe: dict) -> int | None:
     haupt = eingabe.get("transcript_path")
     return belegungAusTranskript(Path(haupt)) if eingabe.get("agent_id") and haupt else None
 
 
-def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
+def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path | None = None) -> dict | None:
     """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
     rolle = eingabe.get("agent_type")
     transkript = eigenesTranskript(eingabe)
@@ -91,6 +124,7 @@ def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
     if not rolle or belegung is None:
         return None
     ziel, modell = zielUndModell(transkript)
+    zyklus, phase = zyklusUndPhase(ordner) if ordner else (None, None)
     return {
         "zeit": zeit.isoformat(timespec="seconds"),
         "rolle": rolle,
@@ -100,6 +134,9 @@ def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
         "ziel": ziel,
         "modell": modell,
         "koordinator": koordinatorStand(eingabe),
+        "dauer": dauerSekunden(transkript),
+        "zyklus": zyklus,
+        "phase": phase,
         "stopp_wiederholt": bool(eingabe.get("stop_hook_active")),
     }
 
@@ -154,7 +191,7 @@ if __name__ == "__main__":
         from dashboard import dashboardSchreiben
 
         ordner = projektordner()
-        gefunden = laufEintrag(eingabeLesen(), jetzt())
+        gefunden = laufEintrag(eingabeLesen(), jetzt(), ordner)
         if gefunden:
             eintragAnhängen(ordner, gefunden)
             dashboardSchreiben(ordner)
