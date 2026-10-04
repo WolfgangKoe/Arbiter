@@ -37,3 +37,5 @@ Die Freigabe von Plan 3 beantwortet jede mit der Empfehlung.
 - [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) F1: deutsche Namen nach Glossar auch für die Komponenten aus Arbiter-old (A); blockiert die Mockups.
 - [225](anliegen/225-pythonpathErlaubnisEntfaellt.md) F1: Ausnahme aus 114 ist erledigt, die Erlaubnis wird nie angelegt (a).
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1: Datenbank erst mit der ersten Handlung (A); Aufbau prüfst du vor der Technik.
+- [Moderation](moderation.md) F1: Kommen 228 bis 232 hinter 221, in der Reihenfolge 229, 232, 231, 228, 230 (nach Abhängigkeit)? Empfehlung: ja.
+- [Moderation](moderation.md) F2: Laufen 114 und 202 bis 206 nach 215 bis 221? Empfehlung: ja.
