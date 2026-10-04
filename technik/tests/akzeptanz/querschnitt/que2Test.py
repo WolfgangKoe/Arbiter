@@ -1,0 +1,222 @@
+"""QUE-2 · Karte."""
+
+import os
+import select
+import subprocess
+import sys
+from pathlib import Path
+from urllib.parse import urlparse
+
+import pytest
+
+from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+
+_technik = Path(__file__).parents[3]
+_sekundenBisZurAdresse = 15
+_anzahlGesetzterModelle = 3
+
+
+def _ersteZeile(prozess: subprocess.Popen) -> str:
+    bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
+    return prozess.stdout.readline().strip() if bereit else ""
+
+
+@pytest.fixture
+def adresseDesBefehls():
+    # Warum: Ungepuffert wie an einem Terminal, sonst käme die Adresse in der Pipe zu spät
+    umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
+    prozess = subprocess.Popen(
+        [sys.executable, "-m", "arbiter"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        env=umgebung,
+    )
+    yield _ersteZeile(prozess)
+    prozess.terminate()
+    prozess.wait(timeout=10)
+
+
+@pytest.fixture(params=[(1400, 500), (500, 1400)], ids=["breitesFenster", "hohesFenster"])
+def fenster(request) -> dict[str, int]:
+    breite, höhe = request.param
+    return {"width": breite, "height": höhe}
+
+
+def testQue2_1DerBefehlNenntInDerErstenZeileEineAdresseNurFürDasEigeneGerät(adresseDesBefehls):
+    # Warum: Zwei Spieler an einem Gerät, darum nur 127.0.0.1 (Architektur, W5)
+    adresse = urlparse(adresseDesBefehls)
+
+    assert (adresse.scheme, adresse.hostname) == ("http", "127.0.0.1")
+    assert adresse.port is not None
+
+
+def testQue2_1UnterDerAdresseÖffnetDerBrowserDieKarteMitDemSpielfeld(adresseDesBefehls, seiteBei):
+    seite = seiteBei(adresseDesBefehls)
+
+    assert seite.locator(".karte .spielfeld").count() == 1
+
+
+def testQue2_2DieKarteZeigtDasSpielfeldAlsRechteckMitDenSeitenlängenDerAusgangslage(
+    bildschirm, ausgangsaufstellung, ausgangslage
+):
+    breite, länge = ausgangslage.spielfeld.seitenlängen
+
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    assert spielfeld.art == "rect"
+    assert spielfeld.zahl("x") == 0
+    assert spielfeld.zahl("y") == 0
+    assert spielfeld.zahl("width") == float(breite)
+    assert spielfeld.zahl("height") == float(länge)
+
+
+def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
+    bildschirm, ausgangsaufstellung, ausgangslage
+):
+    breite, länge = ausgangslage.spielfeld.seitenlängen
+    tiefeErste = ausgangslage.tiefen[Aufstellungszone.erste]
+    tiefeZweite = ausgangslage.tiefen[Aufstellungszone.zweite]
+
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    gezeigt = sorted(
+        (zone.zahl("x"), zone.zahl("y"), zone.zahl("width"), zone.zahl("height")) for zone in zonen
+    )
+    assert gezeigt == [
+        (0, 0, float(tiefeErste), float(länge)),
+        (float(breite - tiefeZweite), 0, float(tiefeZweite), float(länge)),
+    ]
+
+
+def testQue2_4OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    assert bildschirm.elementeDerSeite(seite, ".karte .modell") == ()
+
+
+def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
+    bildschirm, aufstellungMitModellenBeiderSpieler, einheitenAufstellen, radiusInZoll, ausgangslage
+):
+    einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
+    aufstellung = aufstellungMitModellenBeiderSpieler
+    gesetzte = [
+        modell
+        for modell in ausgangslage.ersterSpieler.armee.modelle
+        | ausgangslage.zweiterSpieler.armee.modelle
+        if aufstellung.gesetzt(modell)
+    ]
+    erwartet = sorted(
+        (
+            float(aufstellung.stelle(modell).x),
+            float(aufstellung.stelle(modell).y),
+            float(radiusInZoll(modell)),
+        )
+        for modell in gesetzte
+    )
+
+    seite = bildschirm.seiteZu(aufstellung)
+
+    kreise = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
+    assert len(gezeigt) == len(gesetzte)
+    assert gezeigt == erwartet
+
+
+def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, radiusInZoll
+):
+    gesetzte = boyzSetzen(_anzahlGesetzterModelle)
+    erwartet = sorted(
+        (float(stelle.x), float(stelle.y), float(radiusInZoll(modell)))
+        for modell, stelle in gesetzte
+    )
+
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    kreise = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
+    assert gezeigt == erwartet
+    assert len(gezeigt) == _anzahlGesetzterModelle
+
+
+def testQue2_5EinZollIstInBeidenAchsenDerKarteGleichLang(bildschirm, ausgangsaufstellung, fenster):
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    seite.set_viewport_size(fenster)
+
+    matrix = seite.locator(".karte").evaluate(
+        "karte => { const m = karte.getScreenCTM(); return {a: m.a, b: m.b, c: m.c, d: m.d} }"
+    )
+    assert matrix["a"] == matrix["d"]
+    assert matrix["b"] == 0
+    assert matrix["c"] == 0
+
+
+def testQue2_5DieSeitenlängenDesSpielfeldsHabenAufDerKarteDenselbenMaßstab(
+    bildschirm, ausgangsaufstellung, ausgangslage, fenster
+):
+    breite, länge = ausgangslage.spielfeld.seitenlängen
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    seite.set_viewport_size(fenster)
+
+    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
+    assert spielfeld.höheInPixeln / float(länge) == pytest.approx(pixelJeZoll, rel=1e-4)
+
+
+def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
+    bildschirm, ausgangsaufstellung, ausgangslage, fenster
+):
+    breite, _ = ausgangslage.spielfeld.seitenlängen
+    tiefe = ausgangslage.tiefen[Aufstellungszone.erste]
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    seite.set_viewport_size(fenster)
+
+    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    zone, _ = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
+    assert zone.breiteInPixeln / float(tiefe) == pytest.approx(pixelJeZoll, rel=1e-4)
+
+
+def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
+    bildschirm, einGesetztesModell, ausgangslage, radiusInZoll, fenster
+):
+    aufstellung, modell = einGesetztesModell
+    breite, _ = ausgangslage.spielfeld.seitenlängen
+    seite = bildschirm.seiteZu(aufstellung)
+
+    seite.set_viewport_size(fenster)
+
+    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    (kreis,) = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
+    durchmesser = float(2 * radiusInZoll(modell))
+    assert kreis.breiteInPixeln / durchmesser == pytest.approx(pixelJeZoll, rel=1e-4)
+
+
+def testQue2_6DieModelleEinesSpielersHabenAufDerKarteEineFarbe(
+    bildschirm, aufstellungMitModellenBeiderSpieler, spielerEins, spielerZwei
+):
+    seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
+
+    farbenEins = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
+    farbenZwei = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
+
+    assert len(farbenEins) == 1
+    assert len(farbenZwei) == 1
+
+
+def testQue2_6DieModelleDerZweiSpielerHabenAufDerKarteVerschiedeneFarben(
+    bildschirm, aufstellungMitModellenBeiderSpieler, spielerEins, spielerZwei
+):
+    seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
+
+    farbenEins = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
+    farbenZwei = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
+
+    assert farbenEins.isdisjoint(farbenZwei)

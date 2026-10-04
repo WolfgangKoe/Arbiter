@@ -1,9 +1,10 @@
 """Testdaten der Akzeptanztests: kleine Armeen auf dem Spielfeld von Only War."""
 
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from fractions import Fraction
 
 import pytest
+from playwright.sync_api import Locator, Page, sync_playwright
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
 from arbiter.domaene.sperre import Grund, Sperre
@@ -209,3 +210,236 @@ def einheitNachDemAnderenSpieler(
     _einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
     aufstellung.einheitInAufstellungWählen(zweiteEinheit)
     return zweiteEinheit
+
+
+@pytest.fixture
+def radiusInZoll():
+    return _radiusInZoll
+
+
+@pytest.fixture
+def spielerEins(ausgangslage: Ausgangslage) -> Spieler:
+    return ausgangslage.ersterSpieler
+
+
+@pytest.fixture
+def spielerZwei(ausgangslage: Ausgangslage) -> Spieler:
+    return ausgangslage.zweiterSpieler
+
+
+@pytest.fixture
+def boyz(spielerEins: Spieler) -> Einheit:
+    einheit, _ = spielerEins.armee.einheiten
+    return einheit
+
+
+@pytest.fixture
+def warboss(spielerEins: Spieler) -> Einheit:
+    _, einheit = spielerEins.armee.einheiten
+    return einheit
+
+
+@pytest.fixture
+def necronWarriors(spielerZwei: Spieler) -> Einheit:
+    einheit, _ = spielerZwei.armee.einheiten
+    return einheit
+
+
+@pytest.fixture
+def ausgangsaufstellung(ausgangslage: Ausgangslage) -> Aufstellung:
+    return Aufstellung(ausgangslage)
+
+
+@pytest.fixture
+def aufstellungNachDerZonenwahl(
+    ausgangsaufstellung: Aufstellung, spielerZwei: Spieler
+) -> Aufstellung:
+    """Spieler 2 hat gewonnen und die erste Zone gewählt; Spieler 1 ist an der Reihe."""
+    ausgangsaufstellung.gewinnerWählen(spielerZwei)
+    ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    return ausgangsaufstellung
+
+
+def _modelleSetzen(
+    aufstellung: Aufstellung, einheit: Einheit, anzahl: int
+) -> list[tuple[Modell, Stelle]]:
+    """Wählt die Einheit und setzt die ersten Modelle ihrer Reihe, ohne sie zu beenden."""
+    spieler = aufstellung.anDerReihe
+    aufstellung.einheitInAufstellungWählen(einheit)
+    gesetzt = _stellenDerEinheit(aufstellung, spieler, einheit)[:anzahl]
+    for modell, stelle in gesetzt:
+        aufstellung.modellSetzen(modell, stelle)
+    return gesetzt
+
+
+@pytest.fixture
+def modelleSetzen():
+    return _modelleSetzen
+
+
+@pytest.fixture
+def aufstellungMitModellenBeiderSpieler(
+    aufstellungNachDerZonenwahl: Aufstellung, boyz: Einheit, necronWarriors: Einheit
+) -> Aufstellung:
+    _einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
+    _einheitAufstellen(aufstellungNachDerZonenwahl, necronWarriors)
+    return aufstellungNachDerZonenwahl
+
+
+def _einheitenAufstellen(aufstellung: Aufstellung, anzahl: int) -> None:
+    """Der jeweils an der Reihe ist, stellt seine nächste Einheit auf, so oft wie verlangt."""
+    for _ in range(anzahl):
+        spieler = aufstellung.anDerReihe
+        nächste = next(
+            einheit for einheit in spieler.armee.einheiten if not aufstellung.aufgestellt(einheit)
+        )
+        _einheitAufstellen(aufstellung, nächste)
+
+
+@pytest.fixture
+def einheitenAufstellen():
+    return _einheitenAufstellen
+
+
+@dataclass(frozen=True)
+class Element:
+    """Ein Element der Seite, wie der Browser es zeigt."""
+
+    art: str
+    attribute: dict[str, str]
+    fill: str
+    farbe: str
+    text: str
+    breiteInPixeln: float
+    höheInPixeln: float
+
+    def zahl(self, name: str) -> float:
+        return float(self.attribute[name])
+
+
+_elementeLesen = """elemente => elemente.map(element => {
+    const stil = getComputedStyle(element)
+    const rahmen = element.getBoundingClientRect()
+    return {
+        art: element.tagName.toLowerCase(),
+        attribute: Object.fromEntries([...element.attributes].map(att => [att.name, att.value])),
+        fill: stil.fill,
+        farbe: stil.color,
+        text: element.textContent.trim(),
+        breiteInPixeln: rahmen.width,
+        höheInPixeln: rahmen.height,
+    }
+})"""
+
+
+def _elementeDerSeite(seite: Page, auswahl: str) -> tuple[Element, ...]:
+    gelesen = seite.locator(auswahl).evaluate_all(_elementeLesen)
+    return tuple(Element(**eintrag) for eintrag in gelesen)
+
+
+def _modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> frozenset[str]:
+    """Die Füllfarben der Kreise, die an den Stellen der gesetzten Modelle des Spielers liegen."""
+    farbeJeStelle = {
+        (kreis.zahl("cx"), kreis.zahl("cy")): kreis.fill
+        for kreis in _elementeDerSeite(seite, ".karte .modell")
+    }
+    return frozenset(
+        farbeJeStelle[float(stelle.x), float(stelle.y)]
+        for modell in spieler.armee.modelle
+        if (stelle := aufstellung.stelle(modell)) is not None
+    )
+
+
+def _ablageVon(seite: Page, spielername: str) -> Locator:
+    name = seite.locator(".armeeKartenName", has_text=spielername)
+    return seite.locator(".armeeKarte").filter(has=name)
+
+
+@pytest.fixture
+def elementeDerSeite():
+    return _elementeDerSeite
+
+
+@pytest.fixture
+def modellfarben():
+    return _modellfarben
+
+
+@pytest.fixture
+def ablageVon():
+    return _ablageVon
+
+
+@pytest.fixture(scope="session")
+def browser():
+    with sync_playwright() as playwright:
+        chromium = playwright.chromium.launch()
+        yield chromium
+        chromium.close()
+
+
+@pytest.fixture
+def seiteBei(browser):
+    """Öffnet die Adresse und wartet auf das Spielfeld, erst dann gilt, was die Seite zeigt."""
+    seiten = []
+
+    def öffnen(adresse: str) -> Page:
+        seite = browser.new_page()
+        seiten.append(seite)
+        seite.set_default_timeout(5000)
+        seite.goto(adresse)
+        seite.wait_for_selector(".karte .spielfeld")
+        return seite
+
+    yield öffnen
+    for seite in seiten:
+        seite.close()
+
+
+@pytest.fixture
+def seiteZu(seiteBei):
+    """Startet den Server mit dem Spielstand im selben Prozess und öffnet seine Seite."""
+    gestartete = []
+
+    def öffnen(aufstellung: Aufstellung) -> Page:
+        # Warum: web/ gibt es erst mit dem Code; ein Import oben bräche die Sammlung aller Tests
+        from arbiter.web.server import serverStarten
+
+        server = serverStarten(aufstellung)
+        gestartete.append(server)
+        return seiteBei(server.adresse)
+
+    yield öffnen
+    for server in gestartete:
+        server.beenden()
+
+
+@dataclass(frozen=True)
+class Bildschirm:
+    """Die Handgriffe der Bildschirmtests, als ein Fixture gebündelt."""
+
+    seiteZu: object
+    elementeDerSeite: object
+    modellfarben: object
+    ablageVon: object
+
+
+@pytest.fixture
+def bildschirm(seiteZu, elementeDerSeite, modellfarben, ablageVon) -> Bildschirm:
+    return Bildschirm(seiteZu, elementeDerSeite, modellfarben, ablageVon)
+
+
+@pytest.fixture
+def boyzSetzen(aufstellungNachDerZonenwahl, boyz, modelleSetzen):
+    """Spieler 1 wählt die Boyz und setzt so viele ihrer Modelle, wie verlangt."""
+
+    def setzen(anzahl: int) -> list[tuple[Modell, Stelle]]:
+        return modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahl)
+
+    return setzen
+
+
+@pytest.fixture
+def einGesetztesModell(aufstellungNachDerZonenwahl, boyzSetzen) -> tuple[Aufstellung, Modell]:
+    [(modell, _)] = boyzSetzen(1)
+    return aufstellungNachDerZonenwahl, modell
