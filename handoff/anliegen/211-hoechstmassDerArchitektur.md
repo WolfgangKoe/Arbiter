@@ -20,7 +20,7 @@ Zeichen); das Gesamtmaß war im Anliegen der Grund, C statt `technik/*.md` zu w�
 3. Fehlender Ordner ist grün.
 
 Die Prüfung ist sofort grün und wird sofort scharf; sie wartet nicht auf die Aufteilung
-([212](212-architekturHatZeichenNichtBytes.md)).
+(Anliegen 212).
 
 Erledigt, wenn die drei Punkte grün laufen, `prozess/regeln.md` die Prüfung nennt und ich in
 kennzahlen.md „nur Text“ ersetzt habe.

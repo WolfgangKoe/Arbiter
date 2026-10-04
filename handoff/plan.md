@@ -26,7 +26,7 @@ Noch nicht bereit:
 - DoR 5: Die Mockups fehlen. UX schreibt je Anforderung eins mit CSS-Vorschlag, du siehst sie
   vor der Freigabe (145 F1). Die Rolle wartet auf die Leitplanken des Organisationsentwicklers
   ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)).
-- DoR 4: [195](anliegen/195-karteUndAblageBegriffeUndNamen.md) ist offen; die Freigabe
+- DoR 4: Anliegen 195 ist offen; die Freigabe
   beantwortet F1 und F2. Mit F2 B oder C ändert sich AUF-4.2.
 
 Vor dem Testautor (Technik, 146 Punkt 4): der Aufbau aus
@@ -56,7 +56,7 @@ durch Ziehen mit Maus und Touch, Sperre mit Grund · Zurück, gemeinsam übergeh
 
 ## Offene Anliegen
 An dich, wirken auf Plan 3:
-- [195](anliegen/195-karteUndAblageBegriffeUndNamen.md) (Anforderungsautor): Begriffe *Karte*
+- Anliegen 195 (Anforderungsautor): Begriffe *Karte*
   und *Ablage*, Namen der Spieler.
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1 (Architekt): Datenbank erst mit der
   ersten Handlung.

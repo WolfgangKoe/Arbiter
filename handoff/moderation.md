@@ -5,8 +5,8 @@ Stand: Zyklus 3, Domänenphase; [Plan 3](plan.md) wartet auf Mockups, Kritik des
 ## Dran
 Abhängigkeiten, die Plan 3 betreffen (DoR in [Ablauf](../prozess/ablauf.md#dor-item-bereit)):
 - DoR 5, blockiert beide Items: Mockups zu QUE-2 und AUF-4 fehlen (`domaene/mockups/` gibt es nicht). UX schreibt sie; ihr Platz ist festgelegt durch [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md) F2 (offen) und das CSS-Angebot aus DoR 5, denn eine Komponentenseite gibt es erst in der Technikphase.
-- DoR 4, blockiert beide Items: [195](anliegen/195-karteUndAblageBegriffeUndNamen.md) ist beantwortet (F3: A, AUF-4.2 gilt unverändert); der Anforderungsautor schließt es.
-- Vor dem Testautor, nicht vor der Freigabe: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) und Aufteilung der Architektur ([212](anliegen/212-architekturHatZeichenNichtBytes.md)); beides macht der Architekt in der Technikphase.
+- DoR 4, blockiert beide Items: Anliegen 195 ist beantwortet (F3: A, AUF-4.2 gilt unverändert); der Anforderungsautor schließt es.
+- Vor dem Testautor, nicht vor der Freigabe: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) und Aufteilung der Architektur (Anliegen 212); beides macht der Architekt in der Technikphase.
 
 Je Rolle:
 - UX: Mockups zu QUE-2 und AUF-4, höchstens 8.000 Zeichen je Datei. Ohne [200](anliegen/200-pruefungDerMockups.md) sind die Grenzen nur Text.

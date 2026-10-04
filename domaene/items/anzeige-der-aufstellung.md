@@ -6,4 +6,4 @@ Warum jetzt: Ohne Ablage und „an der Reihe“ sehen die Spieler nicht, was auf
 und wer wählt; Wählen und Setzen bauen darauf auf.
 
 Abhängigkeit: Item Karte im Browser, Mockup (151), Antworten zu
-[195](../../handoff/anliegen/195-karteUndAblageBegriffeUndNamen.md).
+Anliegen 195.
