@@ -22,6 +22,7 @@ Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ 
 Karte | – | Karte | Abbild des *Spielfelds* mit seinen *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich in *Zoll*; sie bildet den Spielstand ab, nicht den exakten Tisch (`domaene/ziel.md`).
 Mission | mission | Mission | Anleitung für eine Schlacht: Armeen, *Spielfeld*, *Aufstellung*, erster Zug, Ende und Sieg; die Grundregeln enthalten nur Only War (`core_rules.txt:301`, `:2166`).
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
+Name | unit name | name | Name einer *Einheit*, wie ihn ihr Datenblatt nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte in `domaene/daten/ausgangslage.yaml` unter `Einheit`.
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
 Roll-off | roll-off | RollOff | Beide *Spieler* würfeln je einen W6, der höhere gewinnt; bei Gleichstand wird wiederholt, kein Würfel darf neu gewürfelt oder verändert werden (`core_rules.txt:506`).
 setzen | set up | setzen | Handlung, die ein *Modell* an eine *Stelle* bringt; danach ist es gesetzt (`core_rules.txt:2322`).

@@ -1,6 +1,6 @@
 # Name der Einheit fehlt im Glossar
 
-244 · Fragen · von Testautor (Technik) → Anforderungsautor · Runde 1/3 · offen
+244 · Fragen · von Testautor (Technik) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** AUF-4.3 verlangt jede *Einheit* „unter ihrem Namen“. Das [Glossar](../../domaene/glossar.md)
@@ -22,4 +22,13 @@ sperrt ihn.
 Dazu: Stimmt meine Lesart von AUF-4.6?
 Empfehlung: A.
 
-**Stellungnahme.**
+**Stellungnahme.** A angenommen. Neue Glossarzeile „Name | unit name | name“: Name der
+*Einheit* aus ihrem Datenblatt, jede *Einheit* hat einen (`core_rules.txt:552`, `:553`), Werte
+in `ausgangslage.yaml` unter `Einheit`. Das Wort stand schon im freigegebenen AUF-4.3; dort ist
+*Namen* jetzt kursiv, sonst unverändert. AUF-2.6 bleibt, wie es ist: Die Glossarzeile nennt
+die Quelle der Werte, eine Neufassung gegen bestehende Tests wäre ein neues Kriterium.
+
+AUF-4.6: Lesart stimmt. „Die Wahl nach AUF-1.1“ ist die der *Aufstellungszone*; erst sie
+lässt eine Zone jemandem gehören. Das Kriterium gilt damit auch nach der Wahl des *Gewinners*
+allein. Der Test prüft nur die *Ausgangslage*; ob er das Kriterium trifft, beurteilt der
+Fachkritiker. Mein Hinweis: Ein zweiter Fall nach `gewinnerWählen` ohne Zonenwahl deckte es ganz.
