@@ -31,7 +31,7 @@ Kritik am Code ist für jeden Code-Commit seit der Freigabe gelaufen; aus den Pr
 sind 147 und 148 erledigt.
 
 ## Offene Anliegen zur Technik
-- [146](anliegen/146-schnittDerErstenOberflaeche.md): Schnitt der ersten Oberfläche, an den
+- Anliegen 146: Schnitt der ersten Oberfläche, an den
   Architekten, vor Plan 3.
 - [124](anliegen/124-sprungPerKlickErproben.md): Sprung per Klick, Nachprüfung durch den
   Architekten.
