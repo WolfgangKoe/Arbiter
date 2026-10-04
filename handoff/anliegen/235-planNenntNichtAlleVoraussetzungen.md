@@ -1,6 +1,6 @@
 # Plan 3 nennt nicht alle Voraussetzungen vor dem Testautor
 
-235 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+235 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 Geprüft: [Plan 3](../plan.md), beide Items, die drei Mockups. Prüfbar sind QUE-2.1 bis

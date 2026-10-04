@@ -1,6 +1,6 @@
 # que-2.html: Die Karte steht allein in der linken Spalte
 
-236 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · angenommen
+236 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** In [que-2.html](../../domaene/mockups/que-2.html) hat `main.spielbereich` ein
