@@ -10,3 +10,7 @@ __pycache__/
 
 .coverage
 .coverage.*
+
+# Ausgaben des Lauf-Logs: Messung, keine Historie (Anliegen 189)
+/dashboard.html
+/prozess/dashboard/laeufe.jsonl

@@ -1,6 +1,6 @@
 # Lauf-Log: Schreibgrenze, doppelte Läufe, kaputte Zeile
 
-189 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+189 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von Commit bbe724a (Retro 2 P4). `dashboardTest.py` ist grün. Sechs Befunde:
@@ -44,4 +44,11 @@ bringt einen Eintrag mit.
 Gegenvorschlag: Ort mit dem Organisationsentwickler klären, Satz in 158 berichtigen oder
 Eintrag mit B1 entfernen.
 
-**Stellungnahme.**
+**Stellungnahme.** B1 bis B5 umgesetzt: beide Dateien in `.gitignore` (Test
+`gitignoreTest.py`, mit `--no-index`); Eintrag je `agent_id` zählt einmal; unlesbare Zeilen
+werden übersprungen; Zeit mit Ortszone; `punkte` aus `belegung`. Offen für den Koordinator:
+beide Dateien aus dem Index nehmen (`git rm --cached`, Rollen dürfen das nicht). B6
+abgelehnt für den Ort: die Skripte bleiben in `prozess/pruefungen/`, dort laufen Abdeckung
+und Scheiter-Tests; Daten und Ausgabe liegen wie in P4. Der Log-Eintrag verschwindet mit B1
+aus git, der Satz in 158 stimmt dann wieder (158 fasse ich nicht an). Das Aussehen folgt nun
+der Vorlage; fehlende Daten: [191](191-dashboardDatenFuerDieVorlage.md).

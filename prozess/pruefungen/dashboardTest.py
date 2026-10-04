@@ -1,5 +1,6 @@
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 
@@ -23,7 +24,13 @@ def stopp(datei, rolle="planer"):
 
 def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
     eintrag = laufEintrag(stopp(transkript(tmp_path, 80_000)), zeitpunkt)
-    assert eintrag == {"zeit": "2026-10-04T12:30:00+00:00", "rolle": "planer", "belegung": 80_000}
+    assert eintrag == {
+        "zeit": "2026-10-04T12:30:00+00:00",
+        "rolle": "planer",
+        "agent_id": "a1",
+        "sitzung": None,
+        "belegung": 80_000,
+    }
 
 
 @pytest.mark.parametrize(
@@ -50,9 +57,9 @@ def testDashboardNenntRolleBelegungUndStufen(tmp_path):
         )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "planer (2)" in seite and "architekt (1)" in seite
-    assert "130.000" in seite and "90.000" in seite
-    assert "balken warnung" in seite and "balken sperre" in seite
-    assert "10-04 12:30 planer" in seite
+    assert "130.000" in seite and "90.000" in seite and "--bg:#0f0e0c" in seite
+    assert "saeule warnung" in seite and "Sperrschwelle 150k" in seite and "Median" in seite
+    assert "10-04 12:30" in seite
 
 
 def testLeeresLogZeigtHinweis():
@@ -61,9 +68,48 @@ def testLeeresLogZeigtHinweis():
 
 def testRolleWirdMaskiert():
     seite = seiteErzeugen([{"zeit": "2026-10-04T12:30:00", "rolle": "<b>", "belegung": 1}])
-    assert "<b>" not in seite.split("<main>")[1]
+    assert "<b>" not in seite.split("bericht-zeile")[1]
 
 
 def testJedeLegendeNenntHöchstensFünfWörter():
-    zuLang = [eintrag for eintrag in legende if len(eintrag.split()) > höchstwörter]
+    zuLang = [
+        eintrag for eintrag in [text for _, text in legende] if len(eintrag.split()) > höchstwörter
+    ]
     assert not zuLang
+
+
+def testZweiterEintragDesselbenLaufsZähltEinmal(tmp_path):
+    for belegung in (10, 20):
+        eintragAnhängen(
+            tmp_path, {"zeit": "a", "rolle": "planer", "agent_id": "a1", "belegung": belegung}
+        )
+    eintragAnhängen(tmp_path, {"zeit": "b", "rolle": "planer", "agent_id": None, "belegung": 5})
+    eintragAnhängen(tmp_path, {"zeit": "c", "rolle": "planer", "agent_id": None, "belegung": 6})
+    assert [lauf["belegung"] for lauf in läufeLesen(tmp_path)] == [20, 5, 6]
+
+
+def testKaputteZeileWirdÜbersprungen(tmp_path):
+    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
+    with logPfad(tmp_path).open("a", encoding="utf-8") as ziel:
+        ziel.write('{"zeit": "b", "rol\n[1]\n')
+    eintragAnhängen(tmp_path, {"zeit": "c", "rolle": "architekt", "belegung": 2})
+    assert [lauf["rolle"] for lauf in läufeLesen(tmp_path)] == ["planer", "architekt"]
+    assert dashboardSchreiben(tmp_path).is_file()
+
+
+def testHookTrägtOrtszoneEin():
+    quelle = (Path(__file__).parent / "laufLog.py").read_text(encoding="utf-8")
+    assert "astimezone()" in quelle and "UTC" not in quelle
+
+
+def testJedeSitzungBekommtEineKarteMitTabelle(tmp_path):
+    sitzungen = ("aaaaaaaa-1", "bbbbbbbb-2")
+    for sitzung in sitzungen:
+        eintragAnhängen(
+            tmp_path,
+            {"zeit": "2026-10-04T12:30:00", "rolle": "planer", "sitzung": sitzung, "belegung": 5},
+        )
+    seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
+    assert seite.count('class="sitzungs-karte"') == len(sitzungen)
+    assert "Sitzung aaaaaaaa" in seite and "Sitzung bbbbbbbb" in seite
+    assert "<th>Agent</th>" in seite and "<svg" in seite

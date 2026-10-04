@@ -1,7 +1,7 @@
 """Hook SubagentStop: trägt Rolle und Belegung des Laufs ins Lauf-Log ein."""
 
 import json
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 
 from agenten import projektordner
@@ -23,7 +23,13 @@ def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
     belegung = belegungAusTranskript(transkript) if transkript else None
     if not rolle or belegung is None:
         return None
-    return {"zeit": zeit.isoformat(timespec="seconds"), "rolle": rolle, "belegung": belegung}
+    return {
+        "zeit": zeit.isoformat(timespec="seconds"),
+        "rolle": rolle,
+        "agent_id": eingabe.get("agent_id"),
+        "sitzung": eingabe.get("session_id"),
+        "belegung": belegung,
+    }
 
 
 def eintragAnhängen(wurzel: Path, eintrag: dict) -> None:
@@ -33,12 +39,34 @@ def eintragAnhängen(wurzel: Path, eintrag: dict) -> None:
         ziel.write(json.dumps(eintrag, ensure_ascii=False) + "\n")
 
 
+def eintragAusZeile(zeile: str) -> dict | None:
+    """Der Eintrag einer Zeile; `None` bei leerer oder unlesbarer Zeile."""
+    try:
+        eintrag = json.loads(zeile)
+    except json.JSONDecodeError:
+        return None
+    return eintrag if isinstance(eintrag, dict) else None
+
+
 def läufeLesen(wurzel: Path) -> list[dict]:
     datei = logPfad(wurzel)
     if not datei.is_file():
         return []
-    zeilen = datei.read_text(encoding="utf-8").splitlines()
-    return [json.loads(zeile) for zeile in zeilen if zeile.strip()]
+    gelesen = [
+        eintrag
+        for zeile in datei.read_text(encoding="utf-8").splitlines()
+        if (eintrag := eintragAusZeile(zeile)) is not None
+    ]
+    letzte = {
+        eintrag["agent_id"]: nummer
+        for nummer, eintrag in enumerate(gelesen)
+        if eintrag.get("agent_id")
+    }
+    return [
+        eintrag
+        for nummer, eintrag in enumerate(gelesen)
+        if letzte.get(eintrag.get("agent_id"), nummer) == nummer
+    ]
 
 
 if __name__ == "__main__":
@@ -46,7 +74,7 @@ if __name__ == "__main__":
         from dashboard import dashboardSchreiben
 
         ordner = projektordner()
-        gefunden = laufEintrag(eingabeLesen(), datetime.now(UTC))
+        gefunden = laufEintrag(eingabeLesen(), datetime.now().astimezone())
         if gefunden:
             eintragAnhängen(ordner, gefunden)
             dashboardSchreiben(ordner)
