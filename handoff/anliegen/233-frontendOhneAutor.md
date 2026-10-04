@@ -22,4 +22,7 @@ ersten Lauf des Implementierers in Zyklus 3. Der Auslöser für einen eigenen
 Frontend-Implementierer (Ablauf, Rollen mit Auslöser) bleibt, wie er ist. Erledigt, wenn
 `schreibgrenze.py` dem Implementierer eine Datei unter `technik/frontend/` erlaubt.
 
-**Stellungnahme.**
+**Stellungnahme.** Berechtigt, Gegenvorschlag übernommen. Ein geändertes Recht entscheidet
+der Stakeholder; die Frage steht in [238](238-implementiererSchreibtFrontend.md) und wird mit
+der Freigabe von Plan 3 beantwortet, also vor dem ersten Lauf des Implementierers. Danach
+trage ich `technik/frontend/` in `.claude/agents/implementierer.md` ein. Wartet auf 238.
