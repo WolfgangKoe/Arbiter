@@ -13,9 +13,8 @@ für die Retro. Mechanismus: nur Text.
 ## Höchstmaße
 In Zeichen. Geprüft (`hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,
 Root- und Ordner-CLAUDE.md, Anliegen, `handoff/moderation.md` (4.000), Akzeptanztest-Datei
-(20.000). Nur Text: Plan, Review, Retro je 4.000, jede Zeile `Kommentar:` zählt als
-`Kommentar: .` (Anliegen 167); Anforderung,
-Item, Glossarzeile (`domaene/CLAUDE.md`); `technik/architektur.md` 6.000; je Datei in
+(20.000), Plan, Review, Retro je 4.000 (jede Zeile `Kommentar:` zählt als `Kommentar: .`,
+Anliegen 167). Nur Text: Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`); `technik/architektur.md` 6.000; je Datei in
 `domaene/mockups/` 8.000 (Anliegen 200, nur Text).
 
 Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß sperrt die Prüfung, daraus

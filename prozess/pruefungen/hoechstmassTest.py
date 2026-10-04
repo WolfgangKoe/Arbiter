@@ -1,11 +1,13 @@
 """Höchstmaße in Zeichen für die Dateien im Repo; ein Verstoß sperrt den Commit."""
 
+import re
 from pathlib import Path
 
 import pytest
 
 from agenten import kopfzeilen
 from anliegen import antwortZeile
+from freigabeKommentare import artefakte, kommentarZeile
 from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, perspektiven, wurzel
 
 aktuelleEtappe = 1000
@@ -15,6 +17,7 @@ beschreibung = 150
 rootClaudeMitZiel = 4000
 ordnerClaude = 1500
 anliegen = 4000
+freigabeDatei = 4000
 moderation = 4000
 akzeptanztest = 20000
 rollenordner = wurzel / ".claude" / "agents"
@@ -24,10 +27,17 @@ def zeichen(datei: Path) -> int:
     return len(datei.read_text(encoding="utf-8"))
 
 
-def zeichenOhneAntworten(datei: Path) -> int:
-    ersatz = "Antwort: ."
+def zeichenMitErsatz(datei: Path, zeile: re.Pattern, ersatz: str) -> int:
     zeilen = datei.read_text(encoding="utf-8").split("\n")
-    return sum(len(ersatz if antwortZeile.match(zeile) else zeile) + 1 for zeile in zeilen) - 1
+    return sum(len(ersatz if zeile.match(text) else text) + 1 for text in zeilen) - 1
+
+
+def zeichenOhneAntworten(datei: Path) -> int:
+    return zeichenMitErsatz(datei, antwortZeile, "Antwort: .")
+
+
+def zeichenOhneKommentare(datei: Path) -> int:
+    return zeichenMitErsatz(datei, re.compile(f"^{kommentarZeile}"), f"{kommentarZeile} .")
 
 
 def fälle():
@@ -39,6 +49,10 @@ def fälle():
         yield datei, zeichen(datei), agentendefinition
     for datei in sorted((wurzel / anliegenOrdner).glob("*.md")):
         yield datei, zeichenOhneAntworten(datei), anliegen
+    for artefakt in artefakte:
+        datei = wurzel / "handoff" / artefakt.datei
+        if datei.is_file():
+            yield datei, zeichenOhneKommentare(datei), freigabeDatei
     moderationsdatei = wurzel / "handoff" / "moderation.md"
     if moderationsdatei.is_file():
         yield moderationsdatei, zeichen(moderationsdatei), moderation
@@ -108,3 +122,21 @@ def testZuLangerEigenerTextMachtDenEchtenTestRotTrotzAntwort(tmp_path):
     gezählt = zeichenOhneAntworten(datei)
     with pytest.raises(AssertionError):
         testDateiHältIhrHöchstmaß(datei, gezählt, anliegen)
+
+
+def freigabeDateiMitKommentar(tmp_path, eigener: int, kommentar: int) -> Path:
+    datei = tmp_path / "retro.md"
+    datei.write_text("x" * eigener + "\nKommentar: " + "y" * kommentar, encoding="utf-8")
+    return datei
+
+
+def testLangerKommentarLässtDenEchtenTestGrünDurch(tmp_path):
+    datei = freigabeDateiMitKommentar(tmp_path, 3980, 500)
+    testDateiHältIhrHöchstmaß(datei, zeichenOhneKommentare(datei), freigabeDatei)
+
+
+def testZuLangerEigenerTextMachtDenEchtenTestRotTrotzKommentar(tmp_path):
+    datei = freigabeDateiMitKommentar(tmp_path, 4010, 500)
+    gezählt = zeichenOhneKommentare(datei)
+    with pytest.raises(AssertionError):
+        testDateiHältIhrHöchstmaß(datei, gezählt, freigabeDatei)

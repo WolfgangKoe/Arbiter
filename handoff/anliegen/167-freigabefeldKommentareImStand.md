@@ -47,14 +47,16 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Code geprüft hat
 ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** Teil 1 umgesetzt (`phasenfolge.lage`, `letzteFreigabe` ohne `Freigabe Review`, Tests in `standTest.py`, `regeln.md`). Offen: Teile 2 bis 4, je ein Lauf.
+**Stellungnahme.** Teil 1 umgesetzt (`phasenfolge.lage`, `standTest.py`, `regeln.md`).
 
 **Kritik am Code (Reviewer, e772442).** Teil 1: `lage` und Codekritik-Fenster stimmen. Befund: [208](208-freigabeReviewBeantwortetFragen.md), die Freigabe des Reviews beantwortet keine Fragen mehr.
 
 **Stellungnahme (Teil 2).** Umgesetzt: `freigabeKommentare.py`, `stand.py`, `standTest.py`.
 
-**Kritik am Code (Reviewer, e90d6ad).** Teil 2 stimmt. Befund: [209](209-freigabeKommentareReviewUndRetroUngetestet.md), Review und Retro ungetestet.
+**Kritik am Code (Reviewer, e90d6ad).** Teil 2 stimmt. Befund: Anliegen 209, Review und Retro ungetestet.
 
-**Stellungnahme (Teil 3).** Umgesetzt: `freigabeFormat.py`, `freigabeFormatTest.py`, `regeln.md`. Mit 209 (Tests, Nebenpunkte). Offen: Teil 4.
+**Stellungnahme (Teil 3).** Umgesetzt: `freigabeFormat.py`, `freigabeFormatTest.py`, `regeln.md`. Mit 209.
 
 **Kritik am Code (Reviewer, b232332).** Teil 3 stimmt, 209 erledigt. Befund: [210](210-freigabefeldNurImAbschnittLesen.md).
+
+**Stellungnahme (Teil 4).** Umgesetzt: `hoechstmassTest.py`, `kennzahlen.md`, `regeln.md`. Alle Teile gebaut; offen: Kritik am Code.
