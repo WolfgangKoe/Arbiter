@@ -122,13 +122,18 @@ class Aufstellung:
 
     def aufstellenDerEinheitBeenden(self) -> None:
         einheit = self._einheitInAufstellung
-        spieler = self._anDerReihe
         if einheit is None:
             raise Sperre(Grund.nichtInAufstellung)
-        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        spieler = self._spielerAnDerReihe
         self._aufgestellt.add(einheit)
         self._einheitInAufstellung = None
         self._anDerReihe = self._nächsterAnDerReihe(spieler)
+
+    @property
+    def _spielerAnDerReihe(self) -> Spieler:
+        spieler = self._anDerReihe
+        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        return spieler
 
     def _gründeGegenDieStelle(self, modell: Modell, stelle: Stelle) -> set[Grund]:
         return {
@@ -136,8 +141,7 @@ class Aufstellung:
         }
 
     def _nichtGanzInDerZone(self, modell: Modell, stelle: Stelle) -> bool:
-        spieler = self._anDerReihe
-        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        spieler = self._spielerAnDerReihe
         breite, länge = self._ausgangslage.spielfeld.seitenlängen
         zone = self._zonen[spieler]
         grenzenInX = grenzenInXDerZone(zone, breite, self._ausgangslage.tiefen[zone])
@@ -147,10 +151,10 @@ class Aufstellung:
         return baseÜberdeckt(modell, stelle, self._stellen)
 
     def _inNahkampfreichweiteVonGegnern(self, modell: Modell, stelle: Stelle) -> bool:
-        spieler = self._anDerReihe
-        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        spieler = self._spielerAnDerReihe
+        eigene = spieler.armee.modelle
         return any(
-            anderes not in spieler.armee.modelle
+            anderes not in eigene
             and messen.abstandHöchstens(
                 modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
             )

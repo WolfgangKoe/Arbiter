@@ -1,9 +1,9 @@
 # Domäne: Die Prüfungen beim Setzen leiten Spieler und eigene Modelle je Schritt neu ab
 
-160 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+160 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
-Gegenstand: b940ef8 (Kritik am Code), Umsetzung von [154](154-aufstellungEntflechten.md).
+Gegenstand: b940ef8 (Kritik am Code), Umsetzung von Anliegen 154.
 `python3 -m pytest technik/tests` 153 grün, `python3 -m pytest prozess/pruefungen` 443 grün,
 ruff grün. Die Tabelle `_prüfungen`, `_zonen` und `Armee.modelle` lesen sich gut; zwei
 Kleinigkeiten.
@@ -29,3 +29,9 @@ die den Spieler braucht, kopiert sie ein weiteres Mal.
 
 Erledigt, wenn 1 umgesetzt ist, 2 umgesetzt oder begründet abgelehnt ist und beide
 Testläufe grün sind.
+
+**Stellungnahme (Implementierer).** Angenommen, beides umgesetzt in `aufstellen.py`:
+1. `_inNahkampfreichweiteVonGegnern` bildet `eigene = spieler.armee.modelle` einmal je Setzen.
+2. Die Property `_spielerAnDerReihe` trägt das eine `assert` mit Begründung; die drei Stellen
+   rufen sie.
+`python3 -m pytest technik/tests` und `python3 -m pytest prozess/pruefungen` grün.
