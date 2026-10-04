@@ -140,3 +140,17 @@ def testEinSchonErledigtesAnliegenDarfJederWeiterschreiben(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("· offen", "· erledigt"))
     angaben = schreibung(datei, "planer", old_string="## Runde 1", new_string="## Runde 1\nx")
     assert entscheide(angaben, tmp_path) is None
+
+
+def testWriteEinesAnderenAbsendersAufEinBestehendesAnliegenIstGesperrt(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    inhalt = datei.read_text(encoding="utf-8").replace("von Architekt", "von Reviewer")
+    antwort = entscheide(schreibung(datei, "reviewer", "Write", content=inhalt), tmp_path)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert "nächste freie Nummer 13" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
+
+
+def testWriteMitGleichemAbsenderNeueRundeIstFrei(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    inhalt = datei.read_text(encoding="utf-8").replace("Runde 1/3", "Runde 2/3")
+    assert entscheide(schreibung(datei, "architekt", "Write", content=inhalt), tmp_path) is None

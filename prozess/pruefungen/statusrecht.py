@@ -1,10 +1,10 @@
-"""Hook (PreToolUse, Write und Edit): `erledigt` setzt nur der Absender des Anliegens."""
+"""Hook (PreToolUse, Write und Edit): Statusrecht und Absender eines Anliegens."""
 
 import sys
 from pathlib import Path
 
 from agenten import projektordner
-from anliegen import Anliegen, höchstRunde, kopfAusText
+from anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from pfade import anliegenOrdner
 
@@ -41,10 +41,24 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     alt = kopfAusText(bisher, ziel)
     if neu is None:
         return None
-    grund = erledigtVerstoß(alt, neu, rolle) or rundenVerstoß(alt, neu)
+    grund = (
+        absenderVerstoß(alt, neu, nächsteFreieNummer(wurzel))
+        or erledigtVerstoß(alt, neu, rolle)
+        or rundenVerstoß(alt, neu)
+    )
     if grund is None:
         return None
     return verweigerung(f"Statusrecht: {ziel.name} {grund}")
+
+
+def absenderVerstoß(alt: Anliegen | None, neu: Anliegen, freieNummer: int) -> str | None:
+    """Der Absender eines Anliegens ändert sich nie, sonst ersetzt ein Lauf ein fremdes."""
+    if alt is None or alt.absender.lower() == neu.absender.lower():
+        return None
+    return (
+        f"gehört {alt.absender}, nicht {neu.absender}. Das ist ein anderes Anliegen: "
+        f"nächste freie Nummer {freieNummer}, Kopf und Dateiname ändern, neu schreiben."
+    )
 
 
 def erledigtVerstoß(alt: Anliegen | None, neu: Anliegen, rolle: str) -> str | None:

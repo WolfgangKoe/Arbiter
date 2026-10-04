@@ -1,6 +1,6 @@
 # Paralleler Lauf überschreibt ein fremdes neues Anliegen
 
-166 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+166 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Reviewer und Architekt liefen gleichzeitig mit der Kritik zu 6a64835. Das erlaubt
@@ -31,4 +31,4 @@ Erledigt, wenn im Scheiter-Test ein Write von „von Reviewer“ auf ein bestehe
 durchgeht, `python3 -m pytest prozess/pruefungen` grün ist, `prozess/regeln.md` die Regel
 nennt und der Reviewer den Code geprüft hat.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `statusrecht.py` (`absenderVerstoß`): Ein Write oder Edit, der den Absender im Kopf eines bestehenden Anliegens ändert, wird gesperrt; die Meldung nennt die nächste freie Nummer. Scheiter-Test in `statusrechtTest.py`, Eintrag in `regeln.md`.
