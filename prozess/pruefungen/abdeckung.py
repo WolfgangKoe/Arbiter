@@ -12,7 +12,7 @@ from typing import NamedTuple
 from pfade import wurzel
 
 schwelle = 95
-# Regel: vulture meldet 0 für nichts gefunden und 3 für toten Code; alles andere ist ein Fehler
+# Warum: vulture endet mit 0 ohne Fund und mit 3 bei totem Code; alles andere ist ein Fehler
 vultureGültig = (0, 3)
 
 
@@ -26,14 +26,18 @@ def prozentText(prozent: float) -> str:
     return f"{math.floor(prozent * 10) / 10:.1f} %"
 
 
+def abdeckungText(name: str, abdeckung: Abdeckung) -> str:
+    return (
+        f"Abdeckung von {name}: Zeilen {prozentText(abdeckung.zeilen)}, "
+        f"Zweige {prozentText(abdeckung.zweige)}"
+    )
+
+
 def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
     """Meldung, wenn Zeilen oder Zweige von `name` unter der Schwelle liegen."""
     if min(abdeckung) >= schwelle:
         return None
-    return (
-        f"Abdeckung von {name}: Zeilen {prozentText(abdeckung.zeilen)}, "
-        f"Zweige {prozentText(abdeckung.zweige)}, verlangt {schwelle} %"
-    )
+    return f"{abdeckungText(name, abdeckung)}, verlangt {schwelle} %"
 
 
 def quote(gedeckt: int, gesamt: int) -> float:
@@ -54,12 +58,16 @@ def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None =
         )
         assert messdatei.exists(), f"coverage ist nicht installiert (pyproject.toml): {lauf.stderr}"
         bericht = Path(ablage) / "bericht.json"
-        subprocess.run(
+        auswertung = subprocess.run(
             [sys.executable, "-m", "coverage", "json", "-q", "-o", str(bericht)],
             cwd=wurzel,
             env=umgebung,
             capture_output=True,
-            check=True,
+            text=True,
+            check=False,
+        )
+        assert auswertung.returncode == 0, (
+            f"coverage hat zu {quelle} nichts gemessen: {auswertung.stdout}{auswertung.stderr}"
         )
         summen = json.loads(bericht.read_text())["totals"]
         return Abdeckung(
@@ -84,5 +92,5 @@ def unbenutzterCode(wurzel: Path, *pfade: str) -> list[str]:
 if __name__ == "__main__":
     gemessen = abdeckungMessen(wurzel, "prozess/pruefungen", "prozess/pruefungen", "not stand")
     meldung = verstoß("prozess/pruefungen", gemessen)
-    print(meldung or f"Abdeckung von prozess/pruefungen: ausreichend ({gemessen})")
+    print(meldung or f"{abdeckungText('prozess/pruefungen', gemessen)}, ausreichend")
     sys.exit(1 if meldung else 0)

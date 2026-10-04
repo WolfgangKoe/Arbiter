@@ -24,4 +24,4 @@ repos:
         entry: python3 prozess/pruefungen/abdeckung.py
         language: system
         pass_filenames: false
-        files: ^prozess/pruefungen/
+        files: ^(prozess/pruefungen/|pyproject\.toml$)

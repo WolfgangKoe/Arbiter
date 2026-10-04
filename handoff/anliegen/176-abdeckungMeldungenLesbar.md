@@ -1,6 +1,6 @@
 # Meldungen der Abdeckung lesbar
 
-176 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+176 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `f87a822`, `prozess/pruefungen/abdeckung.py`. Was
@@ -25,3 +25,5 @@ Werkzeug statt im Pfad. Je wenige Minuten.
 2. Den Lauf von `coverage json` mit `check=False` und, wenn er scheitert, eine Meldung mit
    seinem stderr, wie `unbenutzterCode` es für vulture tut. Scheiter-Test: ein falscher
    `quelle`-Pfad nennt den Pfad oder die Ausgabe von coverage.
+
+**Stellungnahme (Regelumsetzer).** Umgesetzt wie vorgeschlagen; Scheiter-Tests in `abdeckungTest.py`.

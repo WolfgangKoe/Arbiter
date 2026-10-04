@@ -1,10 +1,10 @@
 # Abdeckung: Kommentarform, Auslöser des Hooks, doppelter Test
 
-175 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+175 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
-Kritik am Code zu Commit `f87a822`. [170](170-abdeckungMeldetFalschGruen.md) und
-[171](171-abdeckungLaufzeitUndZuschnitt.md) sind damit erledigt; übrig sind drei kleine
+Kritik am Code zu Commit `f87a822`. Anliegen 170 und
+Anliegen 171 sind damit erledigt; übrig sind drei kleine
 Befunde.
 
 **Befund.**
@@ -31,3 +31,5 @@ ohne zusätzliche Aussage. Je wenige Minuten.
    Fehler.`
 2. `files: ^(prozess/pruefungen/|pyproject\.toml$)`.
 3. `testVultureNenntNurTestfunktionenAlsAusnahme` streichen.
+
+**Stellungnahme (Regelumsetzer).** Umgesetzt wie vorgeschlagen; Scheiter-Tests in `abdeckungTest.py`.

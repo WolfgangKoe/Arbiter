@@ -1,10 +1,16 @@
 """Scheiter-Test und Messung: Zweigabdeckung (DoD 1) und toter Code (DoD 2)."""
 
-import tomllib
-
 import pytest
 
-from abdeckung import Abdeckung, abdeckungMessen, prozentText, schwelle, unbenutzterCode, verstoß
+from abdeckung import (
+    Abdeckung,
+    abdeckungMessen,
+    abdeckungText,
+    prozentText,
+    schwelle,
+    unbenutzterCode,
+    verstoß,
+)
 from pfade import akzeptanzOrdner, wurzel
 
 vollständig = 100
@@ -74,6 +80,18 @@ def testEineMeldungRundetNichtAuf():
     assert "94.9 %" in verstoß("probe", Abdeckung(vollständig, 94.96))
 
 
+def testGrünUndRotNennenDieZahlenGleich():
+    text = abdeckungText("probe", Abdeckung(98.26, 96.69))
+    assert text == "Abdeckung von probe: Zeilen 98.2 %, Zweige 96.6 %"
+    assert verstoß("probe", Abdeckung(98.26, 90)).startswith("Abdeckung von probe: Zeilen 98.2 %")
+
+
+def testEinFalscherQuellpfadNenntDenPfad(tmp_path):
+    probeAnlegen(tmp_path, modulMitZweig, testDerBeidesProbt)
+    with pytest.raises(AssertionError, match="quelleFalsch"):
+        abdeckungMessen(tmp_path, "quelleFalsch", "tests")
+
+
 def testDieSchwelleGiltAuchFürDieZeilen():
     assert verstoß("probe", Abdeckung(90, 100)) is not None
 
@@ -97,15 +115,6 @@ def testDasProduktErreichtDieSchwelleMitSeinenTests():
 def testPreCommitMisstDieAbdeckungDerPrüfskripte():
     konfiguration = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "python3 prozess/pruefungen/abdeckung.py" in konfiguration
-
-
-@pytest.mark.stand
-def testVultureNenntNurTestfunktionenAlsAusnahme():
-    ausnahmen = tomllib.loads((wurzel / "pyproject.toml").read_text(encoding="utf-8"))["tool"][
-        "vulture"
-    ]["ignore_names"]
-    assert "test*" not in ausnahmen
-    assert "test[A-Z]*" in ausnahmen
 
 
 def vultureProbe(tmp_path, quelle: str, akzeptanz: str, einheit: str) -> list[str]:
