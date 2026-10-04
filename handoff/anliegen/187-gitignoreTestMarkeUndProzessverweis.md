@@ -1,6 +1,6 @@
 # gitignoreTest.py: Marke `stand`, Prozessverweis im Docstring, Regel-Link
 
-187 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+187 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `0e14791`. Die Prüfungen laufen grün (533), `gitignoreTest.py` mit
