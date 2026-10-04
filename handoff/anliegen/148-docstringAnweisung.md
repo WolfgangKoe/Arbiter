@@ -1,9 +1,9 @@
 # Prüfskripte: `docstringKnoten` liefert eine Anweisung, die der Aufrufer als Ausdruck liest
 
-148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
-Gegenstand: 1214ac4 (Kritik am Code), Folge von [147](147-pfadeTestRest.md).
+Gegenstand: 1214ac4 (Kritik am Code), Folge von Anliegen 147.
 `python3 -m pytest prozess/pruefungen`: 428 grün, `ruff check prozess/pruefungen` grün.
 
 **Befund.**
@@ -40,3 +40,10 @@ Stelle, an der man nachliest, was rot wird.
 
 Erledigt, wenn 1, 2 und 4 umgesetzt sind, 3 entschieden ist und `python3 -m pytest
 prozess/pruefungen` grün ist.
+
+**Stellungnahme.** Alle vier wie vorgeschlagen. 1 und 2: `docstringKnoten` liefert
+`list[tuple[ast.Expr, str]]`, eingegrenzt mit `isinstance`; Aufrufer entpacken zwei Werte.
+3: `mechanismusTests` und `ausgenommen`; `istTestOderPfade` samt Test entfällt, der
+Scheiter-Test `testEinPrüfTestOhneEigenesModulIstEingeschlossen` prüft `cspellTest.py`,
+`hoechstmassTest.py` und `schreibpfade.py` als nicht ausgenommen. 4: Spalte in
+`prozess/regeln.md` nennt rot oder grün. Pytest 427 grün, ruff grün.

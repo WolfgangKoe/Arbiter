@@ -19,11 +19,12 @@ def pfadeAus(modul: object) -> list[str]:
 
 
 alleOrdner = pfadeAus(pfade)
-prüfTests = {
+mechanismusTests = {
     datei.name
     for datei in ordner.glob("*Test.py")
-    if not datei.with_name(datei.name.removesuffix("Test.py") + ".py").exists()
+    if datei.with_name(datei.name.removesuffix("Test.py") + ".py").exists()
 }
+ausgenommen = mechanismusTests | {"pfade.py"}
 
 
 def pfadSegmente(baum: ast.AST) -> set[ast.AST]:
@@ -38,7 +39,7 @@ def pfadSegmente(baum: ast.AST) -> set[ast.AST]:
 
 def ordnerLiterale(quelltext: str) -> list[str]:
     baum = ast.parse(quelltext)
-    docstrings = {docstring.value for _, docstring, _ in docstringKnoten(baum)}
+    docstrings = {docstring.value for docstring, _ in docstringKnoten(baum)}
     segmente = pfadSegmente(baum)
     letzteTeile = [ordnerName.split("/")[-1] for ordnerName in alleOrdner]
     return [
@@ -54,15 +55,11 @@ def ordnerLiterale(quelltext: str) -> list[str]:
     ]
 
 
-def istTestOderPfade(dateiname: str) -> bool:
-    return dateiname.endswith("Test.py") or dateiname == "pfade.py"
-
-
 def testKeinOrdnerLiteralStehtAußerhalbVonPfade():
     funde = {
         datei.name: treffer
         for datei in ordner.glob("*.py")
-        if datei.name in prüfTests or not istTestOderPfade(datei.name)
+        if datei.name not in ausgenommen
         if (treffer := ordnerLiterale(datei.read_text(encoding="utf-8")))
     }
     assert funde == {}
@@ -105,12 +102,6 @@ def testNurÖffentlicheZeichenkettenDesModulsZählen():
     assert pfadeAus(modul) == ["handoff/plan.md"]
 
 
-def testNurPfadeUndTestsSindAusgenommen():
-    assert istTestOderPfade("pfade.py")
-    assert istTestOderPfade("pfadeTest.py")
-    assert not istTestOderPfade("schreibpfade.py")
-
-
 def testEinPrüfTestOhneEigenesModulIstEingeschlossen():
-    assert {"cspellTest.py", "hoechstmassTest.py"} <= prüfTests
-    assert "pfadeTest.py" not in prüfTests
+    assert not {"cspellTest.py", "hoechstmassTest.py", "schreibpfade.py"} & ausgenommen
+    assert {"pfadeTest.py", "pfade.py"} <= ausgenommen

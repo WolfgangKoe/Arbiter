@@ -27,22 +27,25 @@ def kommentarVerstöße(quelltext: str) -> list[str]:
     return verstöße
 
 
-def docstringKnoten(baum: ast.AST) -> list[tuple[ast.AST, ast.stmt, str]]:
-    """Alle Knoten mit Docstring, je mit der Anweisung, die ihn trägt, und seinem Text."""
+def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
+    """Alle Knoten mit Docstring, je mit dem Ausdruck, der ihn trägt, und seinem Text."""
     knoten = []
     for teil in ast.walk(baum):
         if not isinstance(
             teil, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
         ):
             continue
-        if text := ast.get_docstring(teil, clean=False):
-            knoten.append((teil, teil.body[0], text))
+        anweisung = teil.body[0] if teil.body else None
+        if isinstance(anweisung, ast.Expr) and (
+            text := ast.get_docstring(teil, clean=False)
+        ):
+            knoten.append((anweisung, text))
     return knoten
 
 
 def docstringVerstöße(quelltext: str) -> list[str]:
     verstöße = []
-    for _, docstring, text in docstringKnoten(ast.parse(quelltext)):
+    for docstring, text in docstringKnoten(ast.parse(quelltext)):
         if docstring.end_lineno != docstring.lineno:
             verstöße.append(f"Zeile {docstring.lineno}: Docstring länger als eine Zeile")
         if offenerPunkt.search(text):
