@@ -21,7 +21,7 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
    [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Ein Mechanismus bräuchte Urteil.
 7. Dein Anliegen [150](anliegen/150-sonarlintAbdeckungUndToterCode.md): SonarLint ist nicht
    scharf, Abdeckung ungemessen (Zweige: Produkt 100 %, Prüfskripte 93 %).
-8. Plan 3 bringt die erste Oberfläche ([145](anliegen/145-ersteOberflaecheImBrowser.md)):
+8. Plan 3 bringt die erste Oberfläche (Anliegen 145):
    Auslöser der Rolle UX ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)); du willst
    ihre Leitplanken sehen, ArbiterMaps Mockups als Gegenbeispiel.
 9. Deine Antworten brachten 145 über das Höchstmaß; nach

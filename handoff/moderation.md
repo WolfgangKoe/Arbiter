@@ -21,8 +21,8 @@ der [Retro](retro.md). Köpfe stehen auf `offen`, bis die Absender nach der Frei
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md),
   [155](anliegen/155-technikBrauchtPlatzUndErstesMockup.md); 138 wartet auf 139.
 - Architekt: [152](anliegen/152-solidUndVieleIf.md), Rückfrage zu einem Tag in
-  [83](anliegen/83-sprungErproben.md), Nachprüfung 124 und 157.
-- Planer: [145](anliegen/145-ersteOberflaecheImBrowser.md) einarbeiten, 156 nachprüfen.
+  Anliegen 83, Nachprüfung 124 und 157.
+- Planer: Anliegen 145 einarbeiten, 156 nachprüfen.
 - Stakeholder: Nachprüfung 107 und 153.
 
 ## Vorschläge

@@ -18,7 +18,7 @@ einem Befehl und siehst die Ausgangslage: Spielfeld, Zonen ohne Farbe, beide Abl
 an der Reihe, kein Modell auf der Karte; handeln kannst du noch nicht. Die Zustände mit
 Spieler an der Reihe, gesetzten Modellen und farbigen Zonen zeigen die Bilder des
 Bildschirmtests im Review; die Tests stellen sie mit den Handlungen der Domäne her (Anliegen
-[198](anliegen/198-plan3SichtbarGeprueftUndAbhaengigkeiten.md) A). Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt
+Anliegen 198 A). Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt
 ihre Zonen. Reicht der Zyklus nicht, fällt Item 2. Start, Komponentenseite und Bildschirmtest
 füllen allein einen Zyklus (146); mehr als die reine Anzeige passt nicht.
 

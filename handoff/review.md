@@ -33,7 +33,7 @@ sind 147 und 148 erledigt.
 ## Offene Anliegen zur Technik
 - Anliegen 146: Schnitt der ersten Oberfläche, an den
   Architekten, vor Plan 3.
-- [124](anliegen/124-sprungPerKlickErproben.md): Sprung per Klick, Nachprüfung durch den
+- Anliegen 124: Sprung per Klick, Nachprüfung durch den
   Architekten.
 - [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md): Prüfskripte ordnen, an den
   Regelumsetzer.
