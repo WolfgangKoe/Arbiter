@@ -1,9 +1,9 @@
 # SonarLint: ein alter Ordner ohne package.json sperrt die neueste Erweiterung
 
-185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
-Kritik am Code zu Commit `1cd5dfd`. [183](183-sonarlintUmgebungsvariableUndKleinigkeiten.md)
+Kritik am Code zu Commit `1cd5dfd`. Anliegen 183
 ist erledigt; Tests grün, `sonarlint.py` ohne Funde, Abdeckung `prozess/pruefungen` 98,1 % /
 96,6 %.
 
@@ -35,3 +35,8 @@ löschen. 2, 3: kleiner Lese- und Pflegeaufwand.
    vollständige zurück.
 2. `installiert = version(neueste)` einmal binden, dann prüfen und melden.
 3. Den Fall in die Testspalte der Zeile in `regeln.md` aufnehmen.
+
+## Stellungnahme
+Angenommen, alle drei Punkte umgesetzt. 1: `erweiterungFinden` nimmt beim Suchen in VS Code nur
+Ordner mit `package.json`; Scheiter-Test `testEinAlterOrdnerOhnePackageJsonStörtDieNeuesteNicht`.
+2: `installiert` einmal gebunden. 3: Fall in der Testspalte von `regeln.md`.

@@ -49,14 +49,22 @@ def versionszahlen(ordner: Path) -> tuple[int, ...]:
 def erweiterungFinden() -> Path:
     """Ordner der SonarLint-Erweiterung: `SONARLINT_ERWEITERUNG` oder die neueste in VS Code."""
     vorgabe = os.environ.get(umgebungsvariable)
+    # Warum: VS Code lässt alte, auch halb gelöschte Versionsordner liegen; sie zählen nicht.
     gefunden = (
-        [Path(vorgabe)] if vorgabe else erweiterungenOrdner.glob("sonarsource.sonarlint-vscode-*")
+        [Path(vorgabe)]
+        if vorgabe
+        else [
+            ordner
+            for ordner in erweiterungenOrdner.glob("sonarsource.sonarlint-vscode-*")
+            if (ordner / "package.json").is_file()
+        ]
     )
     gefunden = sorted(gefunden, key=versionszahlen)
     assert gefunden, f"SonarLint-Erweiterung fehlt in {erweiterungenOrdner}; {umgebungsvariable}"
     neueste = gefunden[-1]
-    assert (version(neueste) + ".").startswith(erwarteteVersion), (
-        f"SonarLint-Erweiterung {neueste.name} hat Version {version(neueste)} "
+    installiert = version(neueste)
+    assert (installiert + ".").startswith(erwarteteVersion), (
+        f"SonarLint-Erweiterung {neueste.name} hat Version {installiert} "
         f"statt {erwarteteVersion}x: `erwarteteVersion` in sonarlint.py bewusst heben"
     )
     return neueste

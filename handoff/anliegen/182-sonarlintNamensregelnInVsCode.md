@@ -1,6 +1,6 @@
 # SonarLint-Namensregeln auch in VS Code abschalten?
 
-182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
+182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · beantwortet
 
 ## Runde 1
 Aus Anliegen 181. Die Sperre schaltet die Namensregeln S100, S101,
@@ -18,3 +18,18 @@ Liste wie die Sperre.
 
 Empfehlung: A, sonst geht jeder echte Fund unter.
 Antwort: A, gib mir hier bitte genau an, was ich machen muss. 
+
+## Anleitung zu A
+Ich kann deine Benutzereinstellungen nicht ändern (liegen außerhalb des Projekts). Du:
+1. In VS Code `Strg+Umschalt+P`, dann „Preferences: Open User Settings (JSON)“. Geöffnet wird
+   `~/.config/Code/User/settings.json`.
+2. Im Terminal im Projekt `python3 prozess/pruefungen/sonarlint.py --einstellung` ausführen
+   und die Ausgabe ab `"sonarlint.rules"` bis zur schließenden Klammer des Eintrags kopieren,
+   ohne die äußeren geschweiften Klammern.
+3. In die Datei einfügen, direkt hinter die `{` oder hinter einen vorhandenen Eintrag (dort
+   mit Komma trennen). Gibt es schon `"sonarlint.rules"`, deren Einträge zusammenführen.
+4. Speichern. SonarLint neu laden: „Developer: Reload Window“.
+5. Prüfen: In einer `.py`-Datei des Projekts zeigt das Problemfenster keine S100, S101,
+   S116, S117, S1542, S1578 mehr (vorher 276 Meldungen).
+
+Danach setze ich `erledigt`, wenn du es bestätigst.

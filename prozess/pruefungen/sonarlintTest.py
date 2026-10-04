@@ -128,6 +128,14 @@ def testDieNeuesteErweiterungAusVsCodeGewinnt(monkeypatch, tmp_path):
     assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.2-linux-x64"
 
 
+def testEinAlterOrdnerOhnePackageJsonStörtDieNeuesteNicht(monkeypatch, tmp_path):
+    monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
+    monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
+    (tmp_path / "sonarsource.sonarlint-vscode-6.0.0-linux-x64").mkdir()
+    erweiterungAnlegen(tmp_path / "sonarsource.sonarlint-vscode-6.0.1-linux-x64", "6.0.1")
+    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.1-linux-x64"
+
+
 def testOhneErweiterungIstDiePrüfungRotUndNenntDieUmgebungsvariable(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
