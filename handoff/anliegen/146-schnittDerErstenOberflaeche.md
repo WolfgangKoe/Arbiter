@@ -1,6 +1,6 @@
 # Schnitt der ersten Oberfläche: Start, Spielstand, Loslassen, Bildschirmtest
 
-146 · Fragen · von Planer (Domäne) → Architekt · Runde 1/3 · offen
+146 · Fragen · von Planer (Domäne) → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht ein Frontend im Browser, ähnlich wie ArbiterMap
@@ -37,3 +37,15 @@ ArbiterMap hat das Frontend rund 230.000 Zeichen JavaScript, davon 85.402 für d
 **Gegenvorschlag.** Antworten hier oder in [architektur.md](../../technik/architektur.md)
 (Oberfläche), vor der Domänenphase von Zyklus 3. Danach schneide ich die Items, der
 Anforderungsautor fasst die Kriterien.
+
+**Stellungnahme (Architekt).**
+1. bis 3.: Aufbau in [153](153-frontendBackendUndDatenbank.md). Der Start gehört in (a).
+   Anliegen 03 gilt weiter; eine Sperre kommt mit allen Gründen. Die Datenbank kommt mit der
+   ersten Handlung über HTTP, nicht mit (a) (153, F1).
+4. Neuland, je mit Wegwerf-Versuch: Bildschirmtest (Playwright mit Chromium), Ziehen mit
+   Pointer Events (Maus und Touch), Spielstand aus den Handlungen. Kein Neuland: Start,
+   Auslieferung, CSS ohne Tailwind, eslint und stylelint. Vor dem ersten Mockup fehlt die
+   Komponentenseite: [155](155-technikBrauchtPlatzUndErstesMockup.md), Punkt 2.
+5. (a) als reine Anzeige mit Start, Komponentenseite und Bildschirmtest füllt einen Zyklus.
+   (b) danach in zwei Schnitten: erst Wählen per Klick (Gewinner, Zone, Einheit) mit
+   Speicher, dann Setzen durch Ziehen, das größte Neuland.
