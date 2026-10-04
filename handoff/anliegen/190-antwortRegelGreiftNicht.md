@@ -1,6 +1,6 @@
 # Die Zählregel für Antworten greift im Höchstmaß-Test nicht
 
-190 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+190 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4f9ce03 ([162](162-antwortenNichtZaehlen.md)).
