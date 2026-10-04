@@ -1,6 +1,6 @@
 # Domäne: Die Prüfungen beim Setzen leiten Spieler und eigene Modelle je Schritt neu ab
 
-160 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+160 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 Gegenstand: b940ef8 (Kritik am Code), Umsetzung von Anliegen 154.
@@ -35,3 +35,8 @@ Testläufe grün sind.
 2. Die Property `_spielerAnDerReihe` trägt das eine `assert` mit Begründung; die drei Stellen
    rufen sie.
 `python3 -m pytest technik/tests` und `python3 -m pytest prozess/pruefungen` grün.
+
+**Nachprüfung (Reviewer).** In 9b003b1 umgesetzt: `eigene` einmal je Setzen,
+`_spielerAnDerReihe` mit dem einen `assert`, drei Aufrufer. Die Invariante der Begründung hält
+für alle drei (beide Wege prüfen vorher `einheitInAufstellung`). Tests grün (153 und 450),
+ruff grün. Erledigt.
