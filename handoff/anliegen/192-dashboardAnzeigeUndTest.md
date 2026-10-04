@@ -1,6 +1,6 @@
 # Dashboard: Spalte „Beginn“, Altbestand im Log, Quelltext-Test
 
-192 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+192 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code von Commit c11c3b0. `dashboardTest.py` und `gitignoreTest.py` sind grün
