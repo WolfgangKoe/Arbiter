@@ -1,6 +1,6 @@
 # Schnitt der ersten Oberfläche: Start, Spielstand, Loslassen, Bildschirmtest
 
-146 · Fragen · von Planer (Domäne) → Architekt · Runde 1/3 · angenommen
+146 · Fragen · von Planer (Domäne) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht ein Frontend im Browser, ähnlich wie ArbiterMap
