@@ -29,6 +29,8 @@ freigabeDatei = 4000
 moderation = 4000
 akzeptanztest = 20000
 mockup = 8000
+architekturDatei = 6000
+architekturGesamt = 24000
 rollenordner = wurzel / ".claude" / "agents"
 
 
@@ -55,6 +57,17 @@ def mockupFälle():
             yield datei, zeichen(datei), mockup
 
 
+def architekturDateien(ordner: Path = wurzel) -> list[Path]:
+    übersicht = ordner / "technik" / "architektur.md"
+    themen = sorted((ordner / "technik" / "architektur").glob("*.md"))
+    return ([übersicht] if übersicht.is_file() else []) + themen
+
+
+def architekturFälle():
+    for datei in architekturDateien():
+        yield datei, zeichen(datei), architekturDatei
+
+
 def fälle():
     etappen = sorted((wurzel / etappenOrdner).glob("*.md"))
     for nummer, datei in enumerate(etappen):
@@ -74,6 +87,7 @@ def fälle():
     for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
         yield datei, zeichen(datei), akzeptanztest
     yield from mockupFälle()
+    yield from architekturFälle()
     for ordner in perspektiven:
         datei = wurzel / ordner / "CLAUDE.md"
         if datei.is_file():
@@ -120,6 +134,49 @@ def testZuLangerAkzeptanztestWärRot(tmp_path):
     zuLang = tmp_path / "aufstellenTest.py"
     zuLang.write_text("x" * (akzeptanztest + 1), encoding="utf-8")
     assert zeichen(zuLang) > akzeptanztest
+
+
+def architekturSumme(ordner: Path = wurzel) -> int:
+    return sum(zeichen(datei) for datei in architekturDateien(ordner))
+
+
+@pytest.mark.stand
+def testDieArchitekturHältIhrGesamtmaß():
+    summe = architekturSumme()
+    assert summe <= architekturGesamt, (
+        f"technik/architektur: {summe} Zeichen, höchstens {architekturGesamt}"
+    )
+
+
+def architekturOrdner(tmp_path, größen: list[int]) -> Path:
+    thema = tmp_path / "technik" / "architektur"
+    thema.mkdir(parents=True)
+    for nummer, größe in enumerate(größen):
+        (thema / f"thema{nummer}.md").write_text("x" * größe, encoding="utf-8")
+    return tmp_path
+
+
+def testZuLangeArchitekturdateiWärRot(tmp_path):
+    ordner = architekturOrdner(tmp_path, [architekturDatei + 1])
+    (datei,) = architekturDateien(ordner)
+    länge = zeichen(datei)
+    with pytest.raises(AssertionError):
+        testDateiHältIhrHöchstmaß(datei, länge, architekturDatei)
+
+
+def testArchitekturdateienÜberDemGesamtmaßWärenRot(tmp_path):
+    ordner = architekturOrdner(tmp_path, [architekturDatei] * 4 + [1])
+    assert architekturSumme(ordner) > architekturGesamt
+
+
+def testArchitekturdateienImGesamtmaßSindGrün(tmp_path):
+    ordner = architekturOrdner(tmp_path, [architekturDatei] * 4)
+    assert architekturSumme(ordner) <= architekturGesamt
+
+
+def testFehlenderArchitekturordnerIstGrün(tmp_path):
+    assert architekturDateien(tmp_path) == []
+    assert architekturSumme(tmp_path) == 0
 
 
 def testZuLangesMockupWärRot(tmp_path):

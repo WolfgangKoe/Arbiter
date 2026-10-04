@@ -1,6 +1,6 @@
 # Höchstmaß der Architektur
 
-211 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+211 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 159 (F2: C) entschieden: Die
@@ -25,4 +25,4 @@ Die Prüfung ist sofort grün und wird sofort scharf; sie wartet nicht auf die A
 Erledigt, wenn die drei Punkte grün laufen, `prozess/regeln.md` die Prüfung nennt und ich in
 kennzahlen.md „nur Text“ ersetzt habe.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, drei Punkte.

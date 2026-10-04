@@ -15,7 +15,7 @@ Je Rolle:
 - Regelumsetzer, nichts davon blockiert ein Item, Reihenfolge:
   1. Anliegen 200, vor den Mockups.
   2. Anliegen 210 mit Anliegen 213: `freigegebenerZyklus` aus 213 Punkt 6 ist die Funktion aus 210; 213 danach, denn 168 wartet darauf.
-  3. [208](anliegen/208-freigabeReviewBeantwortetFragen.md) (`freigabeKommentare.py`, `gitAufruf.py` wie 210).
+  3. Anliegen 208 (`freigabeKommentare.py`, `gitAufruf.py` wie 210).
   4. [211](anliegen/211-hoechstmassDerArchitektur.md) (`hoechstmassTest.py` wie 200).
   5. [214](anliegen/214-prozessItemsKommentarUndVerweis.md): klein, schließt 173 ab; vor 205 (beide `phasenfolge.py`).
   6. [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) Teil A (a); nach 213, beide ändern `bashPositivliste.py`.
