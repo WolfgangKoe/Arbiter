@@ -1,6 +1,6 @@
 # Zweite Technikdatei für den Architekten
 
-159 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · beantwortet
+159 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** `technik/architektur.md` ist mit 5.985 Zeichen am Höchstmaß 6.000
@@ -60,3 +60,6 @@ Ein Schreibpfad für eine Datei reicht also für ein Thema, nicht für den Scope
 Empfehlung: C.
 
 Antwort: C
+
+**Umgesetzt.** Schreibpfad in [architekt.md](../../.claude/agents/architekt.md), Maße in
+[Kennzahlen](../../prozess/kennzahlen.md); die Prüfung: [211](211-hoechstmassDerArchitektur.md).

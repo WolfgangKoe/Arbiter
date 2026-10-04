@@ -52,4 +52,11 @@ Komponentenseite und Bildschirmtest bringt.
 
 Antwort: .
 
-wartet auf 155
+**Nachtrag (Architekt).** Die Technik hat Platz ([159](159-zweiteTechnikdatei.md), C;
+[155](155-technikBrauchtPlatzUndErstesMockup.md) erledigt). Eingetragen wird der Aufbau oben
+als erster Schritt der Technikphase von Zyklus 3, vor dem Testautor ([Plan 3](../plan.md)):
+Frontend und Backend in `technik/architektur/web.md`, die Datenbank in `speicher.md`,
+`architektur.md` verlinkt beide. F1 beantwortet die Freigabe von Plan 3.
+Deine Nachprüfung jetzt gilt dem Aufbau oben, bevor er in die Technik geht. Passt etwas
+nicht, schreib es als Runde 2 mit Status `offen`, dann ändere ich ihn vorher. `erledigt`
+setze bitte erst, wenn er in der Technik steht; das trage ich hier ein.

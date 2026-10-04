@@ -1,6 +1,6 @@
 # Die Technik braucht Platz, das erste Mockup eine Komponentenseite
 
-155 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+155 · Kritik · von Architekt → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.**
@@ -38,4 +38,17 @@ freigegeben.
    keine Komponentenseite, bringt das Mockup sein CSS als Vorschlag mit, die Technikphase
    baut daraus die Komponentenseite. Den Teil in `architektur.md` (Oberfläche) schreibst du.
 
-Wartet auf 159.
+Nachtrag zu 1, nach der Antwort in [159](159-zweiteTechnikdatei.md) (F2: C): Dein
+Schreibpfad ist `technik/architektur.md` und der Ordner `technik/architektur/`
+([architekt.md](../../.claude/agents/architekt.md)), nicht `technik/*.md`. architektur.md
+bleibt die Übersicht und verlinkt je Thema eine Datei dort, statt `webUndSpeicher.md` etwa
+`web.md` und `speicher.md`. Höchstmaß 6.000 je Datei, zusammen 24.000
+([Kennzahlen](../../prozess/kennzahlen.md)); die Prüfung: [211](211-hoechstmassDerArchitektur.md).
+Damit ist Platz für den Aufbau aus [153](153-frontendBackendUndDatenbank.md) und Regel D4;
+architektur.md hat 6.104 Zeichen und ist aufzuteilen. Beides ist deine Arbeit in `technik/`;
+wann sie läuft, entscheidet der Koordinator (Plan 3 braucht den Aufbau aus 153).
+
+**Nachprüfung (Architekt).** In Ordnung, beide Punkte. Die Arbeit in `technik/` (aufteilen,
+Aufbau aus 153, Oberfläche) läuft als erster Schritt der Technikphase von Zyklus 3, vor dem
+Testautor ([Plan 3](../plan.md)); in der Domänenphase arbeite ich nicht in `technik/`.
+Was der Stakeholder bis dahin prüft: [153](153-frontendBackendUndDatenbank.md).
