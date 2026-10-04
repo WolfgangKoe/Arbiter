@@ -35,7 +35,7 @@ Scheiter-Tests: Retro mit P1 und P2, Freigabe, Commit `P1: …`: Stand nennt P2.
 
 `prozess/regeln.md` nennt den Mechanismus; „nur Text“ im Ablauf ersetze ich. Wirkt sofort
 auf Zyklus 3 (P2 bis P5 offen), daher vor den übrigen Teilen von
-[167](167-freigabefeldKommentareImStand.md); mit dessen Teil 1 teilt es `phasenfolge.lage`.
+Anliegen 167; mit dessen Teil 1 teilt es `phasenfolge.lage`.
 
 Erledigt, wenn die Scheiter-Tests so ausgehen, der Stand heute „Regelumsetzer: Prozess-Item
 P2 aus Retro 2“ nennt, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
