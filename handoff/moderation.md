@@ -9,18 +9,18 @@ Blockiert Plan 3 (DoR in [Ablauf](../prozess/ablauf.md#dor-item-bereit)):
 - Vor dem Testautor: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) und Anliegen 212 (Architekt, Technikphase).
 
 Je Rolle:
-- UX: Mockups zu QUE-2 und AUF-4, höchstens 8.000 Zeichen je Datei; Prüfung dazu in [200](anliegen/200-pruefungDerMockups.md).
+- UX: Mockups zu QUE-2 und AUF-4, höchstens 8.000 Zeichen je Datei; Prüfung dazu in Anliegen 200.
 - Anforderungsautor: 195 abschließen.
 - Architekt: Kritik an Plan 3 und den Mockups; 212 nachprüfen.
 - Regelumsetzer, nichts davon blockiert ein Item, Reihenfolge:
-  1. [200](anliegen/200-pruefungDerMockups.md), vor den Mockups.
+  1. Anliegen 200, vor den Mockups.
   2. [210](anliegen/210-freigabefeldNurImAbschnittLesen.md) mit [213](anliegen/213-freigabesperreSchluepfloecher.md): `freigegebenerZyklus` aus 213 Punkt 6 ist die Funktion aus 210; 213 danach, denn 168 wartet darauf.
   3. [208](anliegen/208-freigabeReviewBeantwortetFragen.md) (`freigabeKommentare.py`, `gitAufruf.py` wie 210).
   4. [211](anliegen/211-hoechstmassDerArchitektur.md) (`hoechstmassTest.py` wie 200).
   5. [214](anliegen/214-prozessItemsKommentarUndVerweis.md): klein, schließt 173 ab; vor 205 (beide `phasenfolge.py`).
   6. [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) Teil A (a); nach 213, beide ändern `bashPositivliste.py`.
   7. [202](anliegen/202-histogrammTestUndAchsenmarke.md) bis [206](anliegen/206-absenderpruefungNachschliff.md); 206 nach 213 und 207 (`statusrecht.py`, Absenderregel).
-- Organisationsentwickler: [207](anliegen/207-absenderRegelImAblauf.md), [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (wartet auf 139), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md); Nachprüfung 139, 151, 173, [168](anliegen/168-freigabefeldAendertNurDerStakeholder.md) (erst nach 213).
+- Organisationsentwickler: Anliegen 207, [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (wartet auf 139), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md); Nachprüfung 139, 151, 173, [168](anliegen/168-freigabefeldAendertNurDerStakeholder.md) (erst nach 213).
 - Reviewer: Code zu b2a5221 ist geprüft (213); Code zu 4792298 ebenso (214); als Nächstes die Commits zu 210/213.
 - Testautor: wartet (AUF-4, QUE-2).
 

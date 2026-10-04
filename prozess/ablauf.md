@@ -155,7 +155,8 @@ Kommentar: .
 - Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
   unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Zu anderen Dateien
   kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:`. Er gibt frei mit
-  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: nur Text (Anliegen 168).
+  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: `statusrecht.py` (Write, Edit),
+  `bashPositivliste.py` (`istFreigabeArtefakt`, Heuristik wie bei Anliegen).
 - Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
   wo>`. Betrifft der Kommentar ein fremdes Artefakt oder braucht er eine Entscheidung, wird
@@ -166,7 +167,8 @@ Kommentar: .
   Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
   Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
   Datei danach wieder vor. Mechanismus: `stand.py` nennt den Commit als nächsten Schritt;
-  nur bei `Freigabe: ja` committen ist nur Text (Anliegen 168).
+  nur bei `Freigabe: ja` committen: `bashPositivliste.py` (`freigabeCommitVerstoß`), ohne
+  `-C`, `--reuse-message` und `-F` ([regeln.md](regeln.md)).
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
 - Die Etappe gibt der Stakeholder mit „.“ im Chat frei.

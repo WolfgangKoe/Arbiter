@@ -1,6 +1,6 @@
 # Freigabefeld und Kommentare ändert nur der Stakeholder
 
-168 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+168 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach [Ablauf, Freigabe und
