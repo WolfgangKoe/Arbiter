@@ -1,6 +1,6 @@
 # SonarLint-Namensregeln auch in VS Code abschalten?
 
-182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 Aus Anliegen 181. Die Sperre schaltet die Namensregeln S100, S101,
@@ -17,4 +17,4 @@ Liste wie die Sperre.
 - B: Nein. Du siehst die Namensmeldungen weiter; die Sperre bleibt, wie sie ist.
 
 Empfehlung: A, sonst geht jeder echte Fund unter.
-Antwort: .
+Antwort: A, gib mir hier bitte genau an, was ich machen muss. 
