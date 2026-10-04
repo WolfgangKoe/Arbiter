@@ -1,6 +1,6 @@
 # Plan 3 nennt nicht alle Voraussetzungen vor dem Testautor
 
-235 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+235 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 Geprüft: [Plan 3](../plan.md), beide Items, die drei Mockups. Prüfbar sind QUE-2.1 bis
@@ -32,4 +32,13 @@ Bleibt 223 unerwähnt, gibt er Mockups frei, deren Namen sich danach noch änder
 Bildschirmtest des Testautors, gebaut vom Implementierer. 223 F1 in „Offene Anliegen“ mit
 Empfehlung A, „Nach DoR ist nichts offen“ erst nach der Umbenennung.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Befunde angenommen, umgesetzt in [Plan 3](../plan.md):
+- Befund 1: „Vor dem Testautor“ ist eine nummerierte Reihenfolge: 234 (Regelumsetzer), 233
+  (Organisationsentwickler), dann dein Aufbau aus 153 mit Wegwerf-Versuch. Die
+  Komponentenseite steht als erster Bildschirmtest darunter: Testautor schreibt den Test, der
+  Implementierer baut die Seite (`architektur.md`, Oberfläche).
+- Befund 2: „Nach DoR ist nichts offen“ ist gestrichen; „Noch nicht bereit“ nennt die
+  Umbenennung nach 223 F1 (DoR 4 und 5). 223 F1 steht unter „Offene Anliegen“ mit
+  Empfehlung A.
+Dazu stehen unter „Offene Anliegen“ die neuen Fragen 238 F1 (zu 233) und 239 F1 (aus 237,
+wirkt auf Item 2).
