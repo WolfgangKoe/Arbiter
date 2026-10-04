@@ -1,11 +1,10 @@
 import json
 from datetime import UTC, datetime
-from pathlib import Path
 
 import pytest
 
-from dashboard import dashboardSchreiben, legende, seiteErzeugen
-from laufLog import eintragAnhängen, laufEintrag, logPfad, läufeLesen
+from dashboard import dashboardSchreiben, kilo, legende, modellName, seiteErzeugen, zeitText
+from laufLog import eintragAnhängen, jetzt, laufEintrag, logPfad, läufeLesen
 
 höchstwörter = 5
 zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
@@ -13,8 +12,18 @@ zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
 
 def transkript(ordner, belegung):
     datei = ordner / "agent-a1.jsonl"
-    zeile = {"message": {"usage": {"cache_read_input_tokens": belegung}}}
-    datei.write_text(json.dumps(zeile) + "\n", encoding="utf-8")
+    auftrag = {
+        "message": {"role": "user", "content": "Ziel: Erstellung des Dashboards\nEingang: x"}
+    }
+    antwort = {
+        "message": {
+            "role": "assistant",
+            "model": "claude-opus-5-5",
+            "usage": {"cache_read_input_tokens": belegung},
+        }
+    }
+    zeilen = [json.dumps(auftrag), "kaputt", json.dumps(antwort)]
+    datei.write_text("\n".join(zeilen) + "\n", encoding="utf-8")
     return datei
 
 
@@ -30,7 +39,21 @@ def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
         "agent_id": "a1",
         "sitzung": None,
         "belegung": 80_000,
+        "ziel": "Erstellung des Dashboards",
+        "modell": "claude-opus-5-5",
+        "koordinator": None,
     }
+
+
+def testKoordinatorStandKommtAusDemHauptTranskript(tmp_path):
+    hauptstand = 61_000
+    haupt = tmp_path / "haupt.jsonl"
+    haupt.write_text(
+        json.dumps({"message": {"usage": {"cache_read_input_tokens": hauptstand}}}),
+        encoding="utf-8",
+    )
+    eingabe = stopp(transkript(tmp_path, 80_000)) | {"transcript_path": str(haupt)}
+    assert laufEintrag(eingabe, zeitpunkt)["koordinator"] == hauptstand
 
 
 @pytest.mark.parametrize(
@@ -57,9 +80,9 @@ def testDashboardNenntRolleBelegungUndStufen(tmp_path):
         )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "planer (2)" in seite and "architekt (1)" in seite
-    assert "130.000" in seite and "90.000" in seite and "--bg:#0f0e0c" in seite
+    assert "130k" in seite and "90k" in seite and "38.000" not in seite and "--bg:#0f0e0c" in seite
     assert "saeule warnung" in seite and "Sperrschwelle 150k" in seite and "Median" in seite
-    assert "10-04 12:30" in seite
+    assert zeitText("2026-10-04T12:30:00") in seite
 
 
 def testLeeresLogZeigtHinweis():
@@ -73,7 +96,9 @@ def testRolleWirdMaskiert():
 
 def testJedeLegendeNenntHöchstensFünfWörter():
     zuLang = [
-        eintrag for eintrag in [text for _, text in legende] if len(eintrag.split()) > höchstwörter
+        eintrag
+        for eintrag in [text for _, text, _ in legende]
+        if len(eintrag.split()) > höchstwörter
     ]
     assert not zuLang
 
@@ -97,9 +122,48 @@ def testKaputteZeileWirdÜbersprungen(tmp_path):
     assert dashboardSchreiben(tmp_path).is_file()
 
 
-def testHookTrägtOrtszoneEin():
-    quelle = (Path(__file__).parent / "laufLog.py").read_text(encoding="utf-8")
-    assert "astimezone()" in quelle and "UTC" not in quelle
+def testJetztHatDieOrtszone():
+    assert jetzt().tzinfo == datetime.now().astimezone().tzinfo
+
+
+def testEintragOhnePflichtfeldWirdÜbersprungen(tmp_path):
+    eintragAnhängen(tmp_path, {"rolle": "planer", "belegung": 1})
+    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer"})
+    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
+    assert len(läufeLesen(tmp_path)) == 1
+    assert dashboardSchreiben(tmp_path).is_file()
+
+
+def testAltbestandOhneSitzungHatLesbarenTitel(tmp_path):
+    eintragAnhängen(tmp_path, {"zeit": "2026-10-04T12:17:11+00:00", "rolle": "a", "belegung": 1})
+    seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
+    assert "<h3>ohne Sitzung</h3>" in seite
+    assert zeitText("2026-10-04T12:17:11+00:00") in seite
+    assert zeitText("unlesbar") == "unlesbar"
+
+
+def testTabelleNenntModellAuftragUndRundetAufKilo(tmp_path):
+    eintragAnhängen(
+        tmp_path,
+        {
+            "zeit": "2026-10-04T12:30:00+00:00",
+            "rolle": "planer",
+            "belegung": 38_247,
+            "ziel": "Erstellung des Dashboards",
+            "modell": "claude-sonnet-5-5",
+            "koordinator": 61_000,
+        },
+    )
+    seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
+    assert "Sonnet" in seite and "Erstellung des Dashboards" in seite and "38k" in seite
+    assert "<th>Ende</th>" in seite and "<th>Kontextfenster</th>" in seite
+    assert "saeule orchestrator" in seite and "61k" in seite
+    assert "50k</text>" in seite
+
+
+def testKiloUndModellName():
+    assert kilo(38_247) == "38k" and kilo(150_000) == "150k"
+    assert modellName("claude-opus-5-5") == "Opus" and modellName("") == ""
 
 
 def testJedeSitzungBekommtEineKarteMitTabelle(tmp_path):

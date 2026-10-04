@@ -1,4 +1,4 @@
-"""Hook SubagentStop: trägt Rolle und Belegung des Laufs ins Lauf-Log ein."""
+"""Hook SubagentStop: trägt Rolle, Auftrag, Modell und Belegung des Laufs ins Lauf-Log ein."""
 
 import json
 from datetime import datetime
@@ -8,12 +8,57 @@ from agenten import projektordner
 from belegung import belegungAusTranskript, eigenesTranskript
 from hookProtokoll import eingabeLesen
 
+pflichtfelder = ("zeit", "rolle", "belegung")
+zielLänge = 80
 logOrdner = "prozess/dashboard"
 logDatei = "laeufe.jsonl"
 
 
 def logPfad(wurzel: Path) -> Path:
     return wurzel / logOrdner / logDatei
+
+
+def jetzt() -> datetime:
+    return datetime.now().astimezone()
+
+
+def textDerNachricht(inhalt) -> str:
+    if isinstance(inhalt, str):
+        return inhalt
+    return " ".join(block.get("text", "") for block in inhalt or [] if isinstance(block, dict))
+
+
+def nachrichten(transkript: Path) -> list[dict]:
+    gefunden = []
+    for zeile in transkript.read_text(encoding="utf-8").splitlines():
+        eintrag = eintragAusZeile(zeile, ())
+        nachricht = eintrag.get("message") if eintrag else None
+        if isinstance(nachricht, dict):
+            gefunden.append(nachricht)
+    return gefunden
+
+
+def zielUndModell(transkript: Path) -> tuple[str, str]:
+    """Erste Zeile des Auftrags und Modell des Laufs; leer, wenn das Transkript sie nicht hat."""
+    alle = nachrichten(transkript)
+    texte = [
+        textDerNachricht(nachricht.get("content")).strip()
+        for nachricht in alle
+        if nachricht.get("role") == "user"
+    ]
+    erste = next((text for text in texte if text), "")
+    ziel = erste.splitlines()[0].removeprefix("Ziel:").strip()[:zielLänge] if erste else ""
+    modelle = [
+        nachricht.get("model")
+        for nachricht in alle
+        if nachricht.get("role") == "assistant" and nachricht.get("model")
+    ]
+    return ziel, next((modell for modell in reversed(modelle) if modell != "<synthetic>"), "")
+
+
+def koordinatorStand(eingabe: dict) -> int | None:
+    haupt = eingabe.get("transcript_path")
+    return belegungAusTranskript(Path(haupt)) if eingabe.get("agent_id") and haupt else None
 
 
 def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
@@ -23,12 +68,16 @@ def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
     belegung = belegungAusTranskript(transkript) if transkript else None
     if not rolle or belegung is None:
         return None
+    ziel, modell = zielUndModell(transkript)
     return {
         "zeit": zeit.isoformat(timespec="seconds"),
         "rolle": rolle,
         "agent_id": eingabe.get("agent_id"),
         "sitzung": eingabe.get("session_id"),
         "belegung": belegung,
+        "ziel": ziel,
+        "modell": modell,
+        "koordinator": koordinatorStand(eingabe),
     }
 
 
@@ -39,13 +88,15 @@ def eintragAnhängen(wurzel: Path, eintrag: dict) -> None:
         ziel.write(json.dumps(eintrag, ensure_ascii=False) + "\n")
 
 
-def eintragAusZeile(zeile: str) -> dict | None:
-    """Der Eintrag einer Zeile; `None` bei leerer oder unlesbarer Zeile."""
+def eintragAusZeile(zeile: str, pflicht: tuple = pflichtfelder) -> dict | None:
+    """Der Eintrag einer Zeile; `None` bei leerer, unlesbarer oder unvollständiger Zeile."""
     try:
         eintrag = json.loads(zeile)
     except json.JSONDecodeError:
         return None
-    return eintrag if isinstance(eintrag, dict) else None
+    if not isinstance(eintrag, dict) or not all(feld in eintrag for feld in pflicht):
+        return None
+    return eintrag
 
 
 def läufeLesen(wurzel: Path) -> list[dict]:
@@ -74,7 +125,7 @@ if __name__ == "__main__":
         from dashboard import dashboardSchreiben
 
         ordner = projektordner()
-        gefunden = laufEintrag(eingabeLesen(), datetime.now().astimezone())
+        gefunden = laufEintrag(eingabeLesen(), jetzt())
         if gefunden:
             eintragAnhängen(ordner, gefunden)
             dashboardSchreiben(ordner)

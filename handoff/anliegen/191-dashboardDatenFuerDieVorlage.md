@@ -1,6 +1,6 @@
 # Dashboard: Welche Daten sollen für die Vorlage hinzukommen
 
-191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+191 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · beantwortet
 
 ## Runde 1
 **Befund.** Du hast zu P4 bemängelt, `dashboard.html` sehe anders aus als
@@ -31,3 +31,9 @@ Nach Umsetzung dieser Punkte, nehme ich das Dashboard ab.
 
 **Stellungnahme.** Für den nächsten Zyklus: Was mir Dashboard noch fehlt sind die Daten z.B. aus Sonarlint oder den Metriken unserer Prüfungen. Ich hätte gerne sinnvolle Kennzahlen, die den aktuellen Stand darstellen. Das wäre aus meiner Sicht auf einer neuen Seite. Das kann im nächsten Zyklus umgesetzt werden.
 Im übernächsten Zyklus könnten wir die Anliegen dort hineinbringen. Da kann ich dann kommentieren und nach "Enter" wird mein Text hier in die Anliegen geschrieben. Wenn Anliegen meine Aufmerksamkeit brauchen und ich etwas "annehmen" möchte, steht da nur ein Schalter und der überschreibt hier den Status. Entsprechend auch für "erledigt". Auf diese Weise überschreibe ich nicht aus Versehen Status und Inhalt anderer Anliegen. 
+
+**Eingearbeitet.** Koordinator als goldene erste Säule (Stand aus dem Haupttranskript);
+y-Achse mit Marken alle 50k; Tabelle Agent, Modell, Auftrag (erste Zeile des Auftrags, ohne
+Anliegennummer allein, wie der Koordinator ihn formuliert), Ende, Kontextfenster in k.
+Die Seite mit Sonarlint- und Prüfkennzahlen sowie Anliegen im Dashboard gehören in spätere
+Zyklen und brauchen eigene Items.

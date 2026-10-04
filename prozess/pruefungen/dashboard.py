@@ -3,9 +3,10 @@
 import html
 import statistics
 import sys
+from datetime import datetime
 from pathlib import Path
 
-from belegung import punkte, sperrschwelle, warnschwelle
+from belegung import sperrschwelle, warnschwelle
 from laufLog import läufeLesen
 from pfade import wurzel
 
@@ -18,19 +19,21 @@ diagrammhöhe = 200
 randLinks = 44
 randOben = 20
 randUnten = 70
+achsenschritt = 50_000
 achsenhöhe = 1.1 * sperrschwelle
 ohneSitzung = "ohne Sitzung"
 legende = (
-    ("var(--c-subagent)", "Säule: Belegung je Lauf"),
-    ("var(--c-warnung)", "Rot: ab Warnschwelle"),
-    ("var(--c-winddown)", "Gestrichelt: Warnschwelle"),
-    ("var(--c-korridor)", "Gestrichelt: Sperrschwelle"),
-    ("var(--c-peak)", "Gestrichelt: Median"),
+    ("var(--c-orchestrator)", "Gold: Koordinator", False),
+    ("var(--c-subagent)", "Grau: Rolle", False),
+    ("var(--c-warnung)", "Rot: ab Warnschwelle", False),
+    ("var(--c-winddown)", "Gestrichelt: Warnschwelle", True),
+    ("var(--c-korridor)", "Gestrichelt: Sperrschwelle", True),
+    ("var(--c-peak)", "Gestrichelt: Median", True),
 )
 
 stil = """
 :root{--bg:#0f0e0c;--panel:#1c1a14;--panel-2:#23201a;--text:#e6dcc4;--text-muted:#a89a72;
---border:#3a3526;--accent-text:#c9a869;--c-subagent:#7c8ba1;--c-warnung:#f43f5e;
+--border:#3a3526;--accent-text:#c9a869;--c-subagent:#7c8ba1;--c-orchestrator:#c9a869;--c-warnung:#f43f5e;
 --c-peak:#fbbf24;--c-winddown:#d946ef;--c-korridor:#f97316}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--text);
@@ -54,7 +57,7 @@ svg{display:block;max-width:100%;height:auto;background:var(--panel-2);border-ra
 .schwelle-korridor{stroke:var(--c-korridor);stroke-width:1.5;stroke-dasharray:5 4}
 .schwelle-text{font-size:9px}
 .schwelle-text.winddown{fill:var(--c-winddown)}.schwelle-text.korridor{fill:var(--c-korridor)}
-.saeule{fill:var(--c-subagent)}.saeule.warnung{fill:var(--c-warnung)}
+.saeule{fill:var(--c-subagent)}.saeule.warnung{fill:var(--c-warnung)}.saeule.orchestrator{fill:var(--c-orchestrator)}
 .vert-median{stroke:var(--c-peak);stroke-width:1.5;stroke-dasharray:4 3}
 .wert-text{fill:var(--text);font-size:9px;font-weight:600}
 .rollen-text{fill:var(--text-muted);font-size:8.5px}
@@ -71,6 +74,22 @@ table.auftraege td.stand{text-align:right;font-variant-numeric:tabular-nums}
 """
 
 
+def kilo(zahl: float) -> str:
+    return f"{round(zahl / 1000)}k"
+
+
+def zeitText(zeit: str) -> str:
+    try:
+        return datetime.fromisoformat(zeit).astimezone().strftime("%m-%d %H:%M")
+    except ValueError:
+        return zeit
+
+
+def modellName(modell: str) -> str:
+    teile = modell.split("-")
+    return teile[1].capitalize() if teile[0] == "claude" and len(teile) > 1 else modell
+
+
 def stufe(belegung: float) -> str:
     return "warnung" if belegung >= warnschwelle else ""
 
@@ -79,7 +98,7 @@ def höhe(belegung: float) -> float:
     return diagrammhöhe * min(belegung, achsenhöhe) / achsenhöhe
 
 
-def schwellenlinie(wert: int, klasse: str, text: str, breite: float) -> str:
+def linieMitText(wert: int, klasse: str, text: str, breite: float) -> str:
     höhenlage = randOben + diagrammhöhe - höhe(wert)
     return (
         f'<line class="schwelle-{klasse}" x1="{randLinks}" x2="{breite}" '
@@ -89,63 +108,88 @@ def schwellenlinie(wert: int, klasse: str, text: str, breite: float) -> str:
     )
 
 
-def säule(nummer: int, lauf: dict) -> str:
+def achsenmarke(wert: int) -> str:
+    lage = randOben + diagrammhöhe - höhe(wert)
+    return (
+        f'<line class="gitter" x1="{randLinks - 4}" x2="{randLinks}" y1="{lage}" y2="{lage}"/>'
+        f'<text class="achse-text" text-anchor="end" x="{randLinks - 6}" '
+        f'y="{lage + 3}">{kilo(wert)}</text>'
+    )
+
+
+def achse() -> str:
+    linie = (
+        f'<line class="gitter" x1="{randLinks}" x2="{randLinks}" '
+        f'y1="{randOben}" y2="{randOben + diagrammhöhe}"/>'
+    )
+    return linie + "".join(achsenmarke(wert) for wert in range(0, int(achsenhöhe), achsenschritt))
+
+
+def säule(nummer: int, beschriftung: str, belegung: int, klasse: str) -> str:
     links = randLinks + säulenabstand + nummer * (säulenbreite + säulenabstand)
-    belegung = lauf["belegung"]
     oben = randOben + diagrammhöhe - höhe(belegung)
     mitte = links + säulenbreite / 2
     unten = randOben + diagrammhöhe + 10
     return (
-        f'<rect class="saeule {stufe(belegung)}" x="{links}" y="{oben:.1f}" '
+        f'<rect class="saeule {klasse}" x="{links}" y="{oben:.1f}" '
         f'width="{säulenbreite}" height="{höhe(belegung):.1f}"/>'
         f'<text class="wert-text" text-anchor="middle" x="{mitte}" y="{oben - 3:.1f}">'
-        f"{belegung // 1000}k</text>"
+        f"{kilo(belegung)}</text>"
         f'<text class="rollen-text" text-anchor="end" x="{mitte}" y="{unten}" '
-        f'transform="rotate(-40 {mitte} {unten})">{html.escape(lauf["rolle"])}</text>'
+        f'transform="rotate(-40 {mitte} {unten})">{html.escape(beschriftung)}</text>'
     )
+
+
+def säulenListe(läufe: list[dict]) -> list[tuple[str, int, str]]:
+    stände = [lauf["koordinator"] for lauf in läufe if lauf.get("koordinator")]
+    liste = [("Koordinator", stände[-1], "orchestrator")] if stände else []
+    return liste + [(lauf["rolle"], lauf["belegung"], stufe(lauf["belegung"])) for lauf in läufe]
 
 
 def säulendiagramm(läufe: list[dict]) -> str:
-    breite = randLinks + säulenabstand + len(läufe) * (säulenbreite + säulenabstand)
+    säulen = säulenListe(läufe)
+    breite = randLinks + säulenabstand + len(säulen) * (säulenbreite + säulenabstand)
     gesamt = randOben + diagrammhöhe + randUnten
-    inhalt = "".join(säule(nummer, lauf) for nummer, lauf in enumerate(läufe))
-    inhalt += schwellenlinie(
-        warnschwelle, "winddown", f"Warnschwelle {warnschwelle // 1000}k", breite
-    )
-    inhalt += schwellenlinie(
-        sperrschwelle, "korridor", f"Sperrschwelle {sperrschwelle // 1000}k", breite
+    inhalt = "".join(säule(nummer, *angaben) for nummer, angaben in enumerate(säulen))
+    inhalt += linieMitText(warnschwelle, "winddown", f"Warnschwelle {kilo(warnschwelle)}", breite)
+    inhalt += linieMitText(
+        sperrschwelle, "korridor", f"Sperrschwelle {kilo(sperrschwelle)}", breite
     )
     return (
         f'<svg viewBox="0 0 {breite} {gesamt}" width="{breite}" height="{gesamt}">'
         f'<line class="gitter" x1="{randLinks}" x2="{breite}" y1="{randOben + diagrammhöhe}" '
-        f'y2="{randOben + diagrammhöhe}"/>{inhalt}</svg>'
+        f'y2="{randOben + diagrammhöhe}"/>{achse()}{inhalt}</svg>'
     )
 
 
 def tabelle(läufe: list[dict]) -> str:
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(lauf["rolle"])}</td>'
-        f"<td>{html.escape(lauf['zeit'][5:16].replace('T', ' '))}</td>"
-        f'<td class="stand">{punkte(lauf["belegung"])}</td></tr>'
+        f"<td>{html.escape(modellName(lauf.get('modell') or ''))}</td>"
+        f"<td>{html.escape(lauf.get('ziel') or '')}</td>"
+        f"<td>{html.escape(zeitText(lauf['zeit']))}</td>"
+        f'<td class="stand">{kilo(lauf["belegung"])}</td></tr>'
         for lauf in läufe
     )
     return (
-        '<table class="auftraege"><tr><th>Agent</th><th>Beginn</th><th>Belegung</th></tr>'
-        f"{zeilen}</table>"
+        '<table class="auftraege"><tr><th>Agent</th><th>Modell</th><th>Auftrag</th>'
+        f"<th>Ende</th><th>Kontextfenster</th></tr>{zeilen}</table>"
     )
 
 
 def nachSitzung(läufe: list[dict]) -> dict[str, list[dict]]:
     gruppen: dict[str, list[dict]] = {}
     for lauf in läufe:
-        gruppen.setdefault(lauf.get("sitzung") or ohneSitzung, []).append(lauf)
+        kennung = lauf.get("sitzung")
+        gruppen.setdefault(kennung[:8] if kennung else ohneSitzung, []).append(lauf)
     return gruppen
 
 
 def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
-    kopf = f"{len(läufe)} Läufe · Höchststand {punkte(max(lauf['belegung'] for lauf in läufe))}"
+    kopf = f"{len(läufe)} Läufe · Höchststand {kilo(max(lauf['belegung'] for lauf in läufe))}"
+    titel = sitzung if sitzung == ohneSitzung else f"Sitzung {sitzung}"
     return (
-        f'<div class="sitzungs-karte"><h3>Sitzung {html.escape(sitzung[:8])}</h3>'
+        f'<div class="sitzungs-karte"><h3>{html.escape(titel)}</h3>'
         f'<p class="karten-kopf">{kopf}</p>'
         f'<div class="karten-diagramm">{säulendiagramm(läufe)}</div>{tabelle(läufe)}</div>'
     )
@@ -157,8 +201,8 @@ def rollenZeilen(läufe: list[dict]) -> str:
         nachRolle.setdefault(lauf["rolle"], []).append(lauf["belegung"])
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(rolle)} ({len(werte)})</td>'
-        f'<td class="stand">{punkte(sum(werte) // len(werte))}</td>'
-        f'<td class="stand">{punkte(max(werte))}</td></tr>'
+        f'<td class="stand">{kilo(sum(werte) / len(werte))}</td>'
+        f'<td class="stand">{kilo(max(werte))}</td></tr>'
         for rolle, werte in sorted(nachRolle.items())
     )
     return (
@@ -187,17 +231,17 @@ def histogramm(läufe: list[dict]) -> str:
     return (
         f'<svg viewBox="0 0 {breite} 120" width="{breite}" height="120">{säulen}'
         f'<line class="vert-median" x1="{mitteMedian:.1f}" x2="{mitteMedian:.1f}" y1="0" y2="100"/>'
-        f'</svg><p class="muted">Median {punkte(int(median))}, '
+        f'</svg><p class="muted">Median {kilo(median)}, '
         f"je Klasse {klassenbreite // 1000}k</p>"
     )
 
 
 def legendeErzeugen() -> str:
     punktListe = "".join(
-        f'<li style="color:{farbe}"><span class="marke{" linie" if "Gestrichelt" in text else ""}" '
-        f'style="background:{"none" if "Gestrichelt" in text else farbe}"></span>'
+        f'<li style="color:{farbe}"><span class="marke{" linie" if linie else ""}" '
+        f'style="background:{"none" if linie else farbe}"></span>'
         f'<span style="color:var(--text)">{html.escape(text)}</span></li>'
-        for farbe, text in legende
+        for farbe, text, linie in legende
     )
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 

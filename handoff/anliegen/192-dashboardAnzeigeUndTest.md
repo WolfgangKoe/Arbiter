@@ -1,6 +1,6 @@
 # Dashboard: Spalte „Beginn“, Altbestand im Log, Quelltext-Test
 
-192 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+192 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von Commit c11c3b0. `dashboardTest.py` und `gitignoreTest.py` sind grün
@@ -40,4 +40,8 @@ Gegenvorschlag: `# Warum: Messung, keine Historie`.
 Nebenbei, ohne Anliegen-Pflicht: `legendeErzeugen` erkennt Linien am Wort „Gestrichelt“ im
 Text; eine dritte Spalte im Tupel `legende` (Feld oder Linie) trennt Form und Wortlaut.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle fünf umgesetzt: B1 Spalte „Ende“; B2 nur echte Sitzungskennungen
+gekürzt, Zeit über `fromisoformat(...).astimezone()`; B3 Einträge ohne `zeit`, `rolle`,
+`belegung` werden übersprungen; B4 `laufLog.jetzt()` mit Verhaltenstest; B5 Kommentar in
+`.gitignore` nur noch `# Warum:`. Die Legende hat die dritte Spalte (Linie ja oder nein).
+Die Spalten nach Antwort 191 stehen dort.
