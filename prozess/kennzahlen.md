@@ -4,6 +4,12 @@
 Jede Kennzahl nennt Bedeutung, Schwelle und Reaktion. Über der Schwelle ist sie ein Befund
 für die Retro. Mechanismus: nur Text.
 
+- Prozesslast: Anteil der seit der letzten `Freigabe Retro` angelegten Anliegen, die an den
+  Regelumsetzer oder den Organisationsentwickler gehen. Bedeutung: Der Prozess bindet die
+  Arbeit, die das Produkt bräuchte. Schwelle: ein Drittel. Reaktion: Die Retro löscht
+  mindestens einen Mechanismus, bevor sie einen neuen beauftragt, der nicht auf ein Anliegen
+  des Stakeholders zurückgeht. Mechanismus: nur Text.
+
 ## Höchstmaße
 In Zeichen. Geprüft (`hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,
 Root- und Ordner-CLAUDE.md, Anliegen, `handoff/moderation.md` (4.000), Akzeptanztest-Datei

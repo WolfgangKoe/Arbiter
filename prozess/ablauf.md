@@ -58,7 +58,8 @@ Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest dana
 technisches Neuland (Wegwerf-Versuch, dann Test).
 
 ### DoD (Item fertig)
-1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`.
+1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`;
+   Zweigabdeckung mindestens 95 % für `technik/arbiter` und `prozess/pruefungen`.
    Mechanismus: nur Text.
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`benennung.py`), Kriterium ↔
    Test (`rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
@@ -66,7 +67,9 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    Stand), Höchstmaße (`hoechstmassTest.py`), Komplexität (`komplexitaetTest.py`), Code →
    Glossar (`glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
    (`kommentare.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
-   über `konfigurationTest.py`. Nur Text: toter Code. Glossar → Code ist Urteil.
+   über `konfigurationTest.py`. Nur Text: toter Code (vulture über den Produktcode; Zeilen,
+   die nur Einheitstests erreichen, beurteilt der Reviewer: Vorbedingung, fehlendes Kriterium
+   oder tot). Glossar → Code ist Urteil.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.
@@ -79,7 +82,7 @@ pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR200
 FBT, ERA, `PLR0912` mit 12), vulture nur über den Produktcode,
 Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
 Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
-wie SonarLint, die Sicht des Stakeholders. Nicht verwendet: radon-Wartbarkeitsindex,
+wie SonarLint, die Sicht des Stakeholders; Mechanismus: nur Text. Nicht verwendet: radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
@@ -92,7 +95,8 @@ Auslöser: Review n liegt vor.
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
    darauf; grafisch und kurz, nur Seltenes (Perspektiven, Rollen, Ordner), Rollentabelle und
    Ordnerbaum per Skript. Mechanismus: nur Text.
-2. Regelumsetzer: Mechanismen zu den Prozess-Items, je mit Scheiter-Test.
+2. Regelumsetzer: Mechanismen zu den Prozess-Items, je mit Scheiter-Test; ein Item je Lauf,
+   damit die Belegung unter 120.000 Token bleibt. Mechanismus: nur Text.
 3. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
 4. Freigabe: Der Stakeholder schreibt „.“, der Koordinator committet `Freigabe Retro <n>`.
    Danach meldet der Stand die Domänenphase mit Plan n+1.
