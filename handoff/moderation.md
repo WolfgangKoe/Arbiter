@@ -1,38 +1,39 @@
 # Moderation
 
-Stand: Zyklus 3, Domänenphase; [Plan 3](plan.md) wartet auf Mockups, Kritik des Architekten und Freigabe. 21 Anliegen offen.
+Stand: Zyklus 3, Domänenphase; [Plan 3](plan.md) wartet auf Kritik des Architekten und Freigabe. 25 Anliegen offen.
 
 ## Dran
 Blockiert Plan 3 (DoR in [Ablauf](../prozess/ablauf.md#dor-item-bereit)):
-- DoR 5, beide Items: Mockups zu QUE-2 und AUF-4 fehlen; Platz laut Anliegen 151 F2 (offen).
-- DoR 4, beide Items: 195 ist beantwortet (F3: A); der Anforderungsautor schließt es.
-- Vor dem Testautor: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) und Anliegen 212 (Architekt, Technikphase).
+- DoR 5, beide Items: [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) wartet auf deine Antwort F1; UX benennt die Mockups erst danach um (Befund 2 und 3 sind umgesetzt).
+- Vor dem Testautor: Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) (Architekt, Technikphase).
 
 Je Rolle:
-- UX: Mockups zu QUE-2 und AUF-4, höchstens 8.000 Zeichen je Datei; Prüfung dazu in Anliegen 200.
-- Anforderungsautor: 195 abschließen.
-- Architekt: Kritik an Plan 3 und den Mockups; 212 nachprüfen.
-- Regelumsetzer, nichts davon blockiert ein Item, Reihenfolge:
-  1. Anliegen 200, vor den Mockups.
-  2. Anliegen 210 mit Anliegen 213: `freigegebenerZyklus` aus 213 Punkt 6 ist die Funktion aus 210; 213 danach, denn 168 wartet darauf.
-  3. Anliegen 208 (`freigabeKommentare.py`, `gitAufruf.py` wie 210).
-  4. Anliegen 211 (`hoechstmassTest.py` wie 200).
-  5. Anliegen 214: klein, schließt 173 ab; vor 205 (beide `phasenfolge.py`).
-  6. [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) Teil A (a); nach 213, beide ändern `bashPositivliste.py`.
-  7. [202](anliegen/202-histogrammTestUndAchsenmarke.md) bis [206](anliegen/206-absenderpruefungNachschliff.md); 206 nach 213 und 207 (`statusrecht.py`, Absenderregel).
-- Organisationsentwickler: Anliegen 207, [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (wartet auf 139), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md); Nachprüfung 139, 151, 173, Anliegen 168 (erst nach 213).
-- Reviewer: Code zu b2a5221 ist geprüft (213); Code zu 4792298 ebenso (214); als Nächstes die Commits zu 210/213.
+- UX: [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) nach F1 umbenennen.
+- Architekt: Kritik an Plan 3; [227](anliegen/227-pruefskriptPfadeInDerArchitektur.md) (Pfade in `architektur.md`); 153.
+- Stakeholder: [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) F1, [225](anliegen/225-pythonpathErlaubnisEntfaellt.md) F1.
+- Regelumsetzer, nichts davon blockiert ein Item. Reihenfolge, 215 bis 221 wie von dir vorgegeben, die neuen danach:
+  1. [215](anliegen/215-bashSandboxAlsVersuch.md) Sandbox.
+  2. [216](anliegen/216-commitHooksWirksamMachen.md) Commit-Hooks.
+  3. [218](anliegen/218-freigabesperreInZweiSchritten.md) Freigabesperre.
+  4. [220](anliegen/220-stellungnahmePruefen.md) Stellungnahme prüfen; 219 wartet darauf.
+  5. [221](anliegen/221-architekturmassZaehltNurOberste.md) Höchstmaß Architektur.
+  6. [229](anliegen/229-starterNurFuerPruefskripte.md) Starter prüft Eingabe; Punkt 3 ändert `bashPositivliste.py` nach 215, Punkt 1 liefert die Funktion für 232.
+  7. [232](anliegen/232-wurzelEinmalHerleiten.md) Wurzel einmal; nach 229, vor 231.
+  8. [231](anliegen/231-pruefungenSehenUnterordnerNicht.md) Prüfungen sehen Unterordner nicht; nutzt `prüfskripteOrdner` aus 232.
+  9. [228](anliegen/228-suchpfadPytestGleichStarter.md) Suchpfad pytest gleich Starter.
+  10. [230](anliegen/230-hooktestUebersiehtModuleNotFound.md) Hook-Test; nach 216 und 228 (beide Hook-Prüfung und Import).
+  11. [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md), danach [202](anliegen/202-histogrammTestUndAchsenmarke.md) bis [206](anliegen/206-absenderpruefungNachschliff.md), wie zuvor.
+- Organisationsentwickler: [219](anliegen/219-angenommenOhneStellungnahme.md) (nach 220), [226](anliegen/226-pruefskriptPfadeInDenDokumenten.md) (nach 227), [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (nach 215), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md).
+- Reviewer: Code zu den Commits der Regelumsetzer-Läufe.
 - Testautor: wartet (AUF-4, QUE-2).
 
 ## Vorschläge
-- Planer: [Plan 3](plan.md) nachziehen (195 und 151 F2 stimmen nicht mehr; 155, 159 sind erledigt), erst nach den Mockups.
-- Zusammen (Regelumsetzer): 210 mit 213; 208 mit 210; 204 mit 205 (`agenten.py`, `pfade.py`); 200 mit 211. Je Lauf ein Anliegen bleibt (Belegung).
-- 207 (Ablauf) vor 206.
-- Schließen: 195 (Anforderungsautor), 212 (Architekt nach Nachprüfung), 173 nach 214 (Organisationsentwickler setzt `erledigt`). 107 folgt 114; 150 erledigt der Organisationsentwickler nach P1 und P2.
+- Planer: [Plan 3](plan.md) nachziehen; 195 und 151 sind nicht mehr offen, der Verweis auf 151 F2 stimmt nicht mehr. Erst nach 223.
+- Zusammen (Regelumsetzer): 229 mit 232 (`lauf.py`); 228 mit 230 (Import und Hook-Test); 231 mit 232 (`konfigurationTest.py`). 204 mit 205 (`agenten.py`, `pfade.py`). Je Lauf ein Anliegen bleibt (Belegung).
+- Schließen: 225 erledigt, wenn du F1 a wählst (Stakeholder); 226 nach 227 (Organisationsentwickler); 138 und 215 sind dasselbe Thema, 138 folgt 215; 107 folgt 114.
 
 ## Fragen an dich
 Die Freigabe von Plan 3 beantwortet jede mit der Empfehlung.
+- [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) F1: deutsche Namen nach Glossar auch für die Komponenten aus Arbiter-old (A); blockiert die Mockups.
+- [225](anliegen/225-pythonpathErlaubnisEntfaellt.md) F1: Ausnahme aus 114 ist erledigt, die Erlaubnis wird nie angelegt (a).
 - [153](anliegen/153-frontendBackendUndDatenbank.md) F1: Datenbank erst mit der ersten Handlung (A); Aufbau prüfst du vor der Technik.
-- Anliegen 151 F2: UX schreibt einbaufähig nach `domaene/mockups/` (A).
-- Anliegen 139 F2: Sandbox als Versuch (A); 138 wartet darauf.
-- Hinweis zu [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) F1: Deine Ausnahmeerlaubnis (a) soll nach der Abnahme entfallen; der Regelumsetzer schreibt das nicht von selbst.
