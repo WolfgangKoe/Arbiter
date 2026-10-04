@@ -1,35 +1,45 @@
-# Review · Zyklus 1
+# Review · Zyklus 2
 
-Inkrement: Änderungen seit `Freigabe Plan 1` (`424afec`) unter `technik/`, Domäne für
-[AUF-1](../domaene/anforderungen/phasen/aufstellen.md) und ihre Akzeptanz- und Einheitstests,
-Stand `dc321c1`. Item: *Reihenfolge der Aufstellung* (abgenommen, gelöscht in `dc321c1`).
+Inkrement: Änderungen seit `Freigabe Plan 2` (`1553538`) unter `technik/`, Stand `ef7ef88`.
+Items aus [Plan 2](plan.md): *Ausgangslage von Only War*, *Sperren beim Setzen*,
+*Nahkampfreichweite beim Setzen*; abgenommen in `1e725cd`, gelöscht in `52eedbd`.
 
 ## DoD
-1. **Erfüllt.** `python3 -m pytest technik/tests`: 46 bestanden.
-2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 282 bestanden
-   (Benennung, Rückverfolgung, Höchstmaße, ruff). Nur Text: ein Kommentar nach `wir.md`
-   (`# Warum:`), Komplexität gering, Spiegel `arbiter/domaene/phasen/` ↔
-   `tests/einheit/domaene/phasen/` mit Tests, Glossar → Code stimmt für alle kursiven Begriffe.
-   Code → Glossar ebenso, mit `Aufstellungszone (erste, zweite)` (Anliegen 74).
-3. **Erfüllt.** Das Item ist gelöscht. AUF-1.3 regelt den Zwischenzustand, der Akzeptanztest
-   `testAuf1_3SolangeDieAufstellungszoneOffenIstIstKeinerAnDerReihe` ist grün (Anliegen 25).
-   Die Zonen tragen keine erfundenen Namen mehr: `Aufstellungszone.erste`, `.zweite`
-   (Anliegen 63).
-4. **Erfüllt.** Dieses Review steht; der Fachkritiker hat ohne Befund abgenommen. Den Schritt
-   nennt jetzt der Stand (Anliegen 50); offen ist nur ein Plan ohne Item-Link
-   (Anliegen 76).
+1. **Erfüllt.** `python3 -m pytest technik/tests`: 150 bestanden. Die Grenzfälle aus S2
+   (Berühren, ein Millionstel Zoll zu nah oder zu weit, Rand der Zone) laufen exakt.
+2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 427 bestanden (Benennung, Spiegel,
+   Rückverfolgung, Höchstmaße, Komplexität, Glossar, Kommentare, Importvertrag, ruff). Zur
+   Probe auch ruff mit ARG, PLR2004, PLR0913, FBT, ERA, C901 über `technik/arbiter`: ohne
+   Fund. Toter Code (nur Text): keiner gefunden, jede Funktion und jeder `Grund` hat einen
+   Aufrufer. Glossar → Code (Urteil): *überdecken*, *ganz in*, *Abstand*,
+   *Nahkampfreichweite*, *Stelle*, *Tiefe*, *Ausgangslage* stehen wörtlich im Code.
+3. **Erfüllt.** `domaene/items/` ist leer; AUF-2, AUF-3, QUE-1 und OBJ-1 beschreiben das
+   gebaute Verhalten.
+4. **Erfüllt.** Der Fachkritiker hat die drei Items in `1e725cd` abgenommen, sein Anliegen
+   dazu ist erledigt; dieses Review steht.
 
 ## Code
-Klein, lesbar, nur Standardbibliothek (A1), Identität per `eq=False` (D1), jede Handlung
-sperrt vor der ersten Änderung (D2), Spielobjekte `frozen`, Zustand der Aufstellung in
-`_`-Feldern (D3), fremde Spieler als Vorbedingung (`ValueError`).
-Sperrtests prüfen den unveränderten Zustand. Nichts nachgebaut, nichts ineffizient.
-Seit der Retro geprüft, ohne Befund: `8ac70b7` und `265dac7` (Zonenwerte), `a969610`
-(`pyproject.toml` nur noch `*Test.py`; keine Datei `test_*.py` übrig).
+Domäne nur mit Standardbibliothek (A1), Katalog liest über `yaml.safe_load` und prüft die
+Daten beim Laden (A3, S2: ganze mm, beide Zonen, Kante der zweiten Seitenlänge). Gemessen
+wird nur in `messen.py` mit `Fraction`, Abstände als Quadrate (M1, S2). `modellSetzen`
+sammelt alle Gründe, bevor es den Zustand ändert (D2, AUF-3.5), und prüft die Stelle nicht,
+wenn AUF-1.4 sperrt (AUF-3.6). Spielobjekte `frozen`, Tiefen als `MappingProxyType` (D3).
+Nichts nachgebaut, nichts ineffizient. Ein Befund zum Ort der Regel: QUE-1.2 steht in der
+Aufstellung, die Architektur sieht `querschnitt.py` vor.
+Kritik am Code ist für jeden Code-Commit seit der Freigabe gelaufen; aus den Prüfskripten
+sind 147 und 148 erledigt.
 
 ## Offene Anliegen zur Technik
-- Anliegen 79: Kritik-Commits seit Retro 1, an den
-  Organisationsentwickler.
+- [149](anliegen/149-ueberdeckenImQuerschnitt.md): QUE-1.2 nach `querschnitt.py`, an den
+  Implementierer.
+- [146](anliegen/146-schnittDerErstenOberflaeche.md): Schnitt der ersten Oberfläche, an den
+  Architekten, vor Plan 3.
+- [124](anliegen/124-sprungPerKlickErproben.md): Sprung per Klick, Nachprüfung durch den
+  Architekten.
+- [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md): Prüfskripte ordnen, an den
+  Regelumsetzer.
 
 ## Empfehlung
-DoD für das Item erfüllt, AUF-1 ist abgenommen. Aus diesem Review ist am Code nichts offen.
+Die DoD ist für alle drei Items erfüllt, Plan 2 ist abgenommen. 149 hält nichts auf: Es
+ändert kein Verhalten und sollte erledigt sein, bevor die nächste Phase *setzt*, also vor
+Ablage und Zurücklegen in Plan 3.
