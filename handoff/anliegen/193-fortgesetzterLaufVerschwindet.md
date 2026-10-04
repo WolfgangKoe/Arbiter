@@ -1,6 +1,6 @@
 # Lauf-Log: Ein fortgesetzter Lauf verschluckt seine früheren Aufträge
 
-193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von Commit d8f68f7. `python3 -m pytest prozess/pruefungen` ist grün (534),
@@ -27,3 +27,11 @@ Kosten: Der Stakeholder liest einen verstümmelten Auftrag.
 Gegenvorschlag: am letzten Leerzeichen vor der Grenze kürzen und „…“ anhängen.
 
 **Stellungnahme.**
+B1 und B2 umgesetzt wie vorgeschlagen. `laufLog.py` schreibt `stopp_wiederholt` (aus
+`stop_hook_active`) in den Eintrag; `läufeLesen` verwirft einen Eintrag nur, wenn der nächste
+desselben Laufs ein wiederholter Stopp ist, und gibt diesem den Auftrag des Vorgängers
+(die Rückmeldung des geblockten Stopps ist sonst die jüngste Nachricht). Der Auftrag ist die
+jüngste Nachricht im Transkript, gekürzt am letzten Leerzeichen mit „…“. Scheiter-Tests in
+`dashboardTest.py`: `testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt`,
+`testJüngsterAuftragImTranskriptGiltUndKürztAmWort`. Alte Log-Einträge ohne das Feld zählen
+als nicht wiederholt, die Altlast des Laufs c11c3b0 bleibt im Log, wie sie ist.

@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 import pytest
 
 from dashboard import dashboardSchreiben, kilo, legende, modellName, seiteErzeugen, zeitText
-from laufLog import eintragAnhängen, jetzt, laufEintrag, logPfad, läufeLesen
+from laufLog import eintragAnhängen, jetzt, laufEintrag, logPfad, läufeLesen, zielLänge
 
 höchstwörter = 5
 zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
@@ -42,6 +42,7 @@ def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
         "ziel": "Erstellung des Dashboards",
         "modell": "claude-opus-5-5",
         "koordinator": None,
+        "stopp_wiederholt": False,
     }
 
 
@@ -103,14 +104,40 @@ def testJedeLegendeNenntHöchstensFünfWörter():
     assert not zuLang
 
 
-def testZweiterEintragDesselbenLaufsZähltEinmal(tmp_path):
-    for belegung in (10, 20):
+def testWiederholterStoppDesselbenLaufsZähltEinmal(tmp_path):
+    for belegung, wiederholt in ((10, False), (20, True)):
         eintragAnhängen(
-            tmp_path, {"zeit": "a", "rolle": "planer", "agent_id": "a1", "belegung": belegung}
+            tmp_path,
+            {"zeit": "a", "rolle": "planer", "agent_id": "a1", "belegung": belegung}
+            | {"stopp_wiederholt": wiederholt},
         )
     eintragAnhängen(tmp_path, {"zeit": "b", "rolle": "planer", "agent_id": None, "belegung": 5})
     eintragAnhängen(tmp_path, {"zeit": "c", "rolle": "planer", "agent_id": None, "belegung": 6})
     assert [lauf["belegung"] for lauf in läufeLesen(tmp_path)] == [20, 5, 6]
+
+
+def testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt(tmp_path):
+    folge = [("a1", "erst", False), ("a1", "zweiter Auftrag", False), ("a1", "Rückmeldung", True)]
+    for laufId, ziel, wiederholt in folge:
+        eintragAnhängen(
+            tmp_path,
+            {"zeit": "a", "rolle": "r", "agent_id": laufId, "belegung": 1, "ziel": ziel}
+            | {"stopp_wiederholt": wiederholt},
+        )
+    assert [lauf["ziel"] for lauf in läufeLesen(tmp_path)] == ["erst", "zweiter Auftrag"]
+
+
+def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
+    datei = tmp_path / "agent-a1.jsonl"
+    langer = "Ziel: " + "wort " * 30
+    zeilen = [
+        {"message": {"role": "user", "content": "Ziel: erster"}},
+        {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
+        {"message": {"role": "user", "content": langer}},
+    ]
+    datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
+    ziel = laufEintrag(stopp(datei), zeitpunkt)["ziel"]
+    assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
 def testKaputteZeileWirdÜbersprungen(tmp_path):

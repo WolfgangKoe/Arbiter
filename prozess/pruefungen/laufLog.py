@@ -38,16 +38,24 @@ def nachrichten(transkript: Path) -> list[dict]:
     return gefunden
 
 
+def gekürzt(text: str) -> str:
+    """Kürzt am letzten Leerzeichen vor `zielLänge` und hängt „…“ an."""
+    if len(text) <= zielLänge:
+        return text
+    wortGrenze = text.rfind(" ", 0, zielLänge)
+    return text[: wortGrenze if wortGrenze > 0 else zielLänge].rstrip() + "…"
+
+
 def zielUndModell(transkript: Path) -> tuple[str, str]:
-    """Erste Zeile des Auftrags und Modell des Laufs; leer, wenn das Transkript sie nicht hat."""
+    """Erste Zeile des jüngsten Auftrags und Modell; leer, wenn das Transkript sie nicht hat."""
     alle = nachrichten(transkript)
     texte = [
         textDerNachricht(nachricht.get("content")).strip()
         for nachricht in alle
         if nachricht.get("role") == "user"
     ]
-    erste = next((text for text in texte if text), "")
-    ziel = erste.splitlines()[0].removeprefix("Ziel:").strip()[:zielLänge] if erste else ""
+    jüngster = next((text for text in reversed(texte) if text), "")
+    ziel = gekürzt(jüngster.splitlines()[0].removeprefix("Ziel:").strip()) if jüngster else ""
     modelle = [
         nachricht.get("model")
         for nachricht in alle
@@ -78,6 +86,7 @@ def laufEintrag(eingabe: dict, zeit: datetime) -> dict | None:
         "ziel": ziel,
         "modell": modell,
         "koordinator": koordinatorStand(eingabe),
+        "stopp_wiederholt": bool(eingabe.get("stop_hook_active")),
     }
 
 
@@ -108,16 +117,28 @@ def läufeLesen(wurzel: Path) -> list[dict]:
         for zeile in datei.read_text(encoding="utf-8").splitlines()
         if (eintrag := eintragAusZeile(zeile)) is not None
     ]
-    letzte = {
-        eintrag["agent_id"]: nummer
-        for nummer, eintrag in enumerate(gelesen)
-        if eintrag.get("agent_id")
-    }
-    return [
-        eintrag
-        for nummer, eintrag in enumerate(gelesen)
-        if letzte.get(eintrag.get("agent_id"), nummer) == nummer
-    ]
+    ziele: dict = {}
+    behalten = []
+    for nummer, eintrag in enumerate(gelesen):
+        laufId = eintrag.get("agent_id")
+        if eintrag.get("stopp_wiederholt") and laufId in ziele:
+            # Warum: die Wiederholung gilt dem Auftrag davor
+            eintrag = eintrag | {"ziel": ziele[laufId]}
+        if laufId:
+            ziele[laufId] = eintrag.get("ziel")
+        if not wiederholtDanach(gelesen, nummer):
+            behalten.append(eintrag)
+    return behalten
+
+
+def wiederholtDanach(gelesen: list[dict], nummer: int) -> bool:
+    """Wahr, wenn der nächste Eintrag desselben Laufs ein wiederholter Stopp ist."""
+    laufId = gelesen[nummer].get("agent_id")
+    nächster = next(
+        (spät for spät in gelesen[nummer + 1 :] if laufId and spät.get("agent_id") == laufId),
+        None,
+    )
+    return bool(nächster and nächster.get("stopp_wiederholt"))
 
 
 if __name__ == "__main__":
