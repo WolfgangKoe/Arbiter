@@ -52,3 +52,5 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 **Kritik am Code (Reviewer, e772442).** Teil 1: `lage` und Codekritik-Fenster stimmen. Befund: [208](208-freigabeReviewBeantwortetFragen.md), die Freigabe des Reviews beantwortet keine Fragen mehr.
 
 **Stellungnahme (Teil 2).** Umgesetzt: `freigabeKommentare.py`, Anzeige in `stand.py`; Tests in `standTest.py`, `regeln.md`. Offen: Teile 3 und 4.
+
+**Kritik am Code (Reviewer, e90d6ad).** Teil 2 stimmt. Befund: [209](209-freigabeKommentareReviewUndRetroUngetestet.md), Review und Retro ungetestet.
