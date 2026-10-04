@@ -9,8 +9,8 @@ der [Retro](retro.md). Köpfe stehen auf `offen`, bis die Absender nach der Frei
 - Regelumsetzer, ein Item je Lauf: P1 bis P5 der Retro (P4 Dashboard 158, P5
   Anliegen 162; 161 ist angenommen, 162 gilt). Danach die
   Kritik am Code zu 6a64835: Anliegen 163,
-  [165](anliegen/165-umbenennungPerTestBemerken.md),
-  [166](anliegen/166-anliegenUeberschreibenBeiParallelenLaeufen.md), ferner
+  Anliegen 165,
+  Anliegen 166, ferner
   [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Nicht in der Retro; Vorschlag:
   nach P1 bis P5 oder im Backlog.
 - Organisationsentwickler: Anliegen 164 (eine Zeile in
