@@ -56,3 +56,7 @@ Nur, was auf Plan 3 wirkt oder du vorher willst
 Zur Freigabe: P1 bis P5. 135 und 161 sind mit A entschieden, 145 und 158 beantwortet. Zu
 139, 151 und 159 liefere ich Optionen mit Folgen nach; 151 und 159 entscheidest du vor
 Plan 3, 139 wirkt nicht darauf und wartet mit 138.
+
+## Freigabe
+Freigabe: ja
+Kommentar: .

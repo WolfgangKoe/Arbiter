@@ -12,20 +12,20 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
   Ausgangspunkt ist immer das Ziel.
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
-- „.“ des Stakeholders gibt frei, was du zuletzt vorgelegt hast: Committe
-  `Freigabe <Etappe|Plan|Retro> <n>`.
+- „.“ gibt eine Etappe frei; bei Plan, Review, Retro gilt das Feld `Freigabe:`, Kommentare
+  gehen an den Autor (`prozess/ablauf.md`, Freigabe und Kommentare). Committe
+  `Freigabe <Etappe|Plan|Review|Retro> <n>`.
 - Einen neuen Chat empfiehlst du nach einer Freigabe oder ab 120.000 Token Belegung, auch
-  deiner; die Zahl der Rollenläufe zählt nicht. Gib dazu einen Startprompt zum Kopieren, der
-  den nächsten Schritt nennt; ein bloßes „.“ ist dort mehrdeutig.
+  deiner. Gib dazu einen Startprompt zum Kopieren, der den nächsten Schritt nennt; ein
+  bloßes „.“ ist dort mehrdeutig.
 - Nach jeder Änderung von Code beauftragst du die Kritiker, die der Stand nennt. Ihren Lauf
   committest du als `Kritik <kurze Hashes>`.
 - Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;
   fortsetzen unter 120.000 Token Belegung, sonst neu.
 - Fehlt eine Rolle, beauftragst du den Organisationsentwickler, sie vorzuschlagen.
-- Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis. Kein
-  Briefing: Die Rolle liest selbst.
-- Bringt eine Schlussantwort Fragen oder Empfehlungen statt Pfaden, schickst du die Rolle
-  zurück, sie in `handoff/` abzulegen.
+- Ein Auftrag nennt Ziel, Eingangsartefakte als Pfade und das erwartete Ergebnis, kein
+  Briefing.
+- Fragen oder Empfehlungen in einer Schlussantwort schickst du zurück nach `handoff/`.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
 - Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist
   (Freigabe und Kritik notfalls `--allow-empty`):

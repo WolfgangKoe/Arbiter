@@ -23,7 +23,8 @@ und Schulden eindämmt.
   Definition sagt, wer die Rolle ist und was sie darf.
 - Wiederkehrende Arbeit wird ein Skill mit einem echten Beispiel und einem kurzen
   Gegenbeispiel. Was sich berechnen lässt, wird ein Skript.
-- Abläufe, DoR und DoD in `prozess/ablauf.md`, die Retro in `handoff/retro.md`.
+- Abläufe, DoR und DoD in `prozess/ablauf.md`, die Retro in `handoff/retro.md`, samt
+  Nachkorrektur aus Kommentaren und Antworten des Stakeholders (Freigabe und Kommentare).
 - Prozess-Items entstehen nur aus einem Befund: Kennzahl über der Schwelle, Anliegen oder
   Auslösezähler. Löschen zählt wie Hinzufügen.
 - Jede Regel nennt ihren Mechanismus. Den baut der Regelumsetzer; der Koordinator

@@ -27,7 +27,9 @@ und die Schulden klein: Was in den Zyklus eingeht, ist korrekt, einfach und am r
   an den Anforderungsautor, Regel oder Prüfung an den Organisationsentwickler. Der Besitzer
   nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf.md`, Anliegen).
 - Schritt 6: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Je DoD-Punkt erfüllt
-  oder nicht, mit Beleg; Links auf die offenen Anliegen; deine Empfehlung an den Stakeholder.
+  oder nicht, mit Beleg; Links auf die offenen Anliegen; deine Empfehlung an den Stakeholder;
+  dann `## Nächstes Vorgehen` und `## Freigabe` nach `prozess/ablauf.md`.
+- Kommentare des Stakeholders im Review arbeitest du ein (Freigabe und Kommentare).
 
 ## Grenzen
 - Du änderst weder Code noch Tests; Befunde werden Anliegen.

@@ -6,18 +6,22 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 2. Architekt: Kritik an der aktuellen Etappe und der Reihenfolge, als Anliegen.
 3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
 4. Anforderungsautor, in jedem Zyklus: Anforderungen zum nächsten Schnitt, in Zyklus 1 zur
-   Etappe, danach zum Abschnitt „Danach“ des vorigen Plans; Begriffe ins Glossar. Eine
-   genügt. Auslöser: kein Kriterium ohne Akzeptanztest.
+   Etappe, danach zum Zyklusziel des freigegebenen Reviews samt Kommentaren (ohne dieses zum
+   Abschnitt „Danach“ des vorigen Plans); Begriffe ins Glossar. Eine genügt. Auslöser:
+   kein Kriterium ohne Akzeptanztest.
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
-   eins genügt, höchstens drei. Weitere Anforderungen kommen in späteren Zyklen. Jedes
-   Item steht als Link `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme
-   (Technikphase, Schritt 5). Mechanismus: `plan.py` (`itemsOhneLink`), `stand.py` nennt
+   eins genügt, höchstens drei; weicht er vom Zyklusziel des Reviews ab, begründet er es.
+   Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](#freigabe-und-kommentare)).
+   Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
+   `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme (Technikphase,
+   Schritt 5). Mechanismus: `plan.py` (`itemsOhneLink`), `stand.py` nennt
    den Planer, solange der Link fehlt. Jedes Item nennt Kriterien ohne Test (`AUF-1.4`)
    oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
    den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
    Mechanismus für 4 und diesen Satz: `stand.py` (`domänenphase`, `planOhneFreigabe`).
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests.
-7. Freigabe: „.“ → Koordinator committet `Freigabe Plan <n>`. Danach Technikphase.
+7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
+   `Freigabe Plan <n>`. Danach Technikphase.
 
 Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage, sortiert vom
 Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Gleichzeitig laufen
@@ -53,8 +57,18 @@ Organisationsentwickler sie vor.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
    die abgenommenen Items. Mechanismus: `stand.py` nennt den Schritt, solange ein Item des
    Plans in `domaene/items/` liegt, auch wenn `review.md` schon Zyklus n trägt.
-6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Danach meldet der
-   Stand die Prozessphase; eine Freigabe ist nicht nötig.
+6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, vor dem Abschnitt
+   `## Freigabe` der Abschnitt `## Nächstes Vorgehen` mit drei Punkten, je mit Beleg:
+   - Produktziel: welche Etappen erreicht sind, was dem Ziel am meisten fehlt.
+   - Etappenziel: was zur aktuellen Etappe fehlt, nach der Abnahme des Fachkritikers und dem
+     Abschnitt „Danach“ des Plans; in wie vielen Zyklen sie erreichbar ist.
+   - Zyklusziel: Empfehlung für Plan n+1, mit den technischen Voraussetzungen und Schulden,
+     die vorher weg müssen.
+   Der Reviewer fasst zusammen und empfiehlt; der Stakeholder entscheidet mit Freigabe und
+   Kommentaren, der Planer schneidet die Items. Mechanismus: nur Text (Anliegen 167).
+7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
+   `Freigabe Review <n>`. Danach meldet der Stand die Prozessphase. Mechanismus: nur Text
+   (Anliegen 167).
 
 Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest danach),
 technisches Neuland (Wegwerf-Versuch, dann Test).
@@ -89,7 +103,7 @@ wie SonarLint, die Sicht des Stakeholders; Mechanismus: nur Text. Nicht verwende
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
-Auslöser: Review n liegt vor.
+Auslöser: `Freigabe Review <n>`.
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
    Prozess-Items nur aus einem Befund. Dazu: Neuerungen von Claude Code, die einen eigenen
@@ -103,14 +117,41 @@ Auslöser: Review n liegt vor.
    den nächsten Zyklus wirken oder die der Stakeholder vorher will; die übrigen stehen im
    [Backlog](backlog.md) bis zur nächsten Prozessphase. Mechanismus: nur Text.
 3. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
-4. Freigabe: Der Stakeholder schreibt „.“, der Koordinator committet `Freigabe Retro <n>`.
-   Danach meldet der Stand die Domänenphase mit Plan n+1.
+4. Nachkorrektur: Kommentare in der Retro und Antworten in den Anliegen, auf die sie verweist,
+   arbeitet der Organisationsentwickler ein, bis Befunde, Prozess-Items und Empfehlung zu
+   ihnen passen; auch nach der Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)).
+5. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
+   `Freigabe Retro <n>`. Danach meldet der Stand die Domänenphase mit Plan n+1.
 
 Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
 ([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.
 Mechanismus: nur Text.
 
 Mechanismus der Übergänge: Stand-Hook (`prozess/pruefungen/stand.py`).
+
+## Freigabe und Kommentare
+Plan, Review und Retro enden mit diesem Abschnitt; der Autor legt ihn so an:
+```
+## Freigabe
+Freigabe: offen
+Kommentar: .
+```
+- Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
+  unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Er gibt frei mit
+  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: nur Text (Anliegen 168).
+- Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
+  ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
+  wo>`. Betrifft der Kommentar ein fremdes Artefakt oder braucht er eine Entscheidung, wird
+  daraus ein Anliegen; die Stellungnahme nennt dessen Nummer. Solange ein Kommentar ohne
+  Stellungnahme steht, ist der Autor dran, auch nach der Freigabe. Mechanismus: nur Text
+  (Anliegen 167).
+- „.“ im Chat heißt: Die Datei ist durchgesehen. Steht `Freigabe: ja`, committet der
+  Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
+  Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
+  Datei danach wieder vor. Mechanismus: nur Text (Anliegen 167, 168).
+- Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
+  schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
+- Die Etappe gibt der Stakeholder mit „.“ im Chat frei.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.

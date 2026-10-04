@@ -6,7 +6,8 @@
 Domäne (`domaene/`: was das Produkt kann) · Technik (`technik/`: wie es gebaut ist) ·
 Prozess (`prozess/`, `.claude/`: wie wir arbeiten). Ein Zyklus hat drei Phasen in dieser
 Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
-`handoff/` richtet sich an den Stakeholder: Plan, Review, Retro, Anliegen.
+`handoff/` richtet sich an den Stakeholder: Plan, Review, Retro, Anliegen. In Plan, Review
+und Retro gibt er frei und kommentiert ([Ablauf](prozess/ablauf.md#freigabe-und-kommentare)).
 
 ## Arbeitsweise
 - Schreibe nur im Ordner deiner Perspektive, lies alles.
