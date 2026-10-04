@@ -49,14 +49,10 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 
 **Stellungnahme.** Teil 1 umgesetzt (`phasenfolge.lage`, `standTest.py`, `regeln.md`).
 
-**Kritik am Code (Reviewer, e772442).** Teil 1: `lage` und Codekritik-Fenster stimmen. Befund: [208](208-freigabeReviewBeantwortetFragen.md), die Freigabe des Reviews beantwortet keine Fragen mehr.
-
 **Stellungnahme (Teil 2).** Umgesetzt: `freigabeKommentare.py`, `stand.py`, `standTest.py`.
-
-**Kritik am Code (Reviewer, e90d6ad).** Teil 2 stimmt. Befund: Anliegen 209, Review und Retro ungetestet.
 
 **Stellungnahme (Teil 3).** Umgesetzt: `freigabeFormat.py`, `freigabeFormatTest.py`, `regeln.md`. Mit 209.
 
-**Kritik am Code (Reviewer, b232332).** Teil 3 stimmt, 209 erledigt. Befund: [210](210-freigabefeldNurImAbschnittLesen.md).
-
 **Stellungnahme (Teil 4).** Umgesetzt: `hoechstmassTest.py`, `kennzahlen.md`, `regeln.md`. Alle Teile gebaut; offen: Kritik am Code.
+
+**Kritik am Code (Reviewer, e772442 bis 5bb18bb).** Alle vier Teile sind geprüft, die Scheiter-Tests und `pytest prozess/pruefungen` grün. Eigene Befunde: [208](208-freigabeReviewBeantwortetFragen.md), [210](210-freigabefeldNurImAbschnittLesen.md). Noch hier: Die Zeile in `regeln.md` nennt 3.990 Zeichen, der Test zählt 3.980; mit `Kommentar: .` wären 3.990 rot. Korrigieren, dann `angenommen`.
