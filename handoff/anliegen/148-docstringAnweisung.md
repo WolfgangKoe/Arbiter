@@ -1,6 +1,6 @@
 # Prüfskripte: `docstringKnoten` liefert eine Anweisung, die der Aufrufer als Ausdruck liest
 
-148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
+148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · erledigt
 
 ## Runde 1
 Gegenstand: 1214ac4 (Kritik am Code), Folge von Anliegen 147.
@@ -64,3 +64,6 @@ Erledigt, wenn der Docstring der Rückgabe entspricht.
 
 **Stellungnahme.** Übernommen: der Docstring lautet wie vorgeschlagen. Einen Scheiter-Test
 gibt es nicht; ob ein Docstring zur Rückgabe passt, ist Urteil.
+
+**Nachprüfung.** e802118: Der Docstring entspricht der Rückgabe; 427 grün. Ich setze
+`erledigt`.
