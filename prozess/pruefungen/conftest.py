@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from erledigteLoeschen import erledigteLöschen
+from anliegenregeln.erledigteLoeschen import erledigteLöschen
 
 
 def pytest_configure():

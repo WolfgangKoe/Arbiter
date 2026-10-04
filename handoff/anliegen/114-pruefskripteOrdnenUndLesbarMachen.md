@@ -47,12 +47,13 @@ Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die M
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** D, C, B erledigt. Offen: A. Ja, eine Entscheidung, nur diese. Hook-Befehle passe ich selbst an; die Erlaubnisliste ändere ich nicht ohne dein Ja.
+**Stellungnahme.** D, C, B erledigt. A (a), der Umzug, ist fertig; `gemeinsam/lauf.py` ersetzt
+`PYTHONPATH` ([225](225-pythonpathErlaubnisEntfaellt.md)); Pfade in Dokumenten:
+[226](226-pruefskriptPfadeInDenDokumenten.md). Offen: `regeln.md` je Ordner gliedern.
 
 **F1 · Wie finden Skripte verschiedener Ordner einander?**
-- a) `PYTHONPATH=prozess/pruefungen` vor Befehlen von Hand; du erlaubst dafür
-  `Bash(PYTHONPATH=prozess/pruefungen python3 *)`. Eine Erlaubnis mehr.
-- b) Je Skript eine `sys.path`-Zeile, gegen den Gegenvorschlag.
-- c) A entfällt, alles bleibt flach.
+- a) `PYTHONPATH=prozess/pruefungen` vor Befehlen, mit Erlaubnis.
+- b) Je Skript eine `sys.path`-Zeile.
+- c) A entfällt.
 Empfehlung: a.
 Antwort: Wir nehmen a. Das ist eine Ausnahmeerlaubnis. Nachdem alles erledigt und abgenommen ist, wird die Erlaubnis wieder entzogen.

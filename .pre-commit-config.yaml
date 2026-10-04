@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: erledigteLoeschen
         name: Erledigte Anliegen löschen
-        entry: python3 prozess/pruefungen/erledigteLoeschen.py
+        entry: python3 prozess/pruefungen/gemeinsam/lauf.py anliegenregeln.erledigteLoeschen
         language: system
         pass_filenames: false
         always_run: true
@@ -15,19 +15,19 @@ repos:
         always_run: true
       - id: benennung
         name: Benennung nach prozess/praemissen/wir.md
-        entry: python3 prozess/pruefungen/benennung.py
+        entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.benennung
         language: system
         pass_filenames: false
         always_run: true
       - id: abdeckungPruefskripte
         name: Abdeckung der Prüfskripte ohne Prüfungen über das Repo
-        entry: python3 prozess/pruefungen/abdeckung.py
+        entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung
         language: system
         pass_filenames: false
         files: ^(prozess/pruefungen/|pyproject\.toml$)
       - id: sonarlint
         name: SonarLint (Standardprofil ohne Namensregeln)
-        entry: python3 prozess/pruefungen/sonarlint.py
+        entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint
         language: system
         pass_filenames: false
         files: \.py$
