@@ -21,4 +21,4 @@ Ein Scheiter-Test entfällt, die Löschung entfernt den Mechanismus.
 **F1 · Löschung freigeben?** Empfehlung: ja, Regelumsetzer führt sie aus.
 Antwort: Ich habe die Datei gelöscht.
 
-**Stellungnahme.**
+**Stellungnahme.** Zeile in `regeln.md` entfernt, Prüfungen grün. Erledigt setzt der Absender.
