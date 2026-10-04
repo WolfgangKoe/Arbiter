@@ -1,6 +1,6 @@
 # Zählen deine Antworten gegen das Höchstmaß eines Anliegens?
 
-161 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
+161 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [145](145-ersteOberflaecheImBrowser.md) hatte mit deinen Antworten 4.063 Zeichen,

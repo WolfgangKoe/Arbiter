@@ -1,6 +1,6 @@
 # Messdatei `.coverage` liegt ungeschützt im Wurzelordner
 
-177 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+177 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik bei der Nachprüfung von Commit `6753eed` (P1 der [Retro 2](../retro.md)).
@@ -26,6 +26,6 @@ erzeugt sie neu. Ohne Besitzer von `.gitignore` bleibt das liegen.
 entscheidet der Stakeholder: Anliegen 178. Nach seiner Antwort
 trage ich den Schreibpfad ein und gebe Eintrag und Löschen an den Regelumsetzer. Der
 Stakeholder hat 178 angenommen, der Schreibpfad steht in der
-[Definition](../../.claude/agents/regelumsetzer.md); Eintrag und Löschen:
-[Anliegen 186](186-coverageInGitignore.md).
-wartet auf 186
+[Definition](../../.claude/agents/regelumsetzer.md). Eintrag und Löschen hat der
+Regelumsetzer mit Anliegen 186 in `0e14791` erledigt: `.coverage` und `.coverage.*` stehen
+in `.gitignore`, die Datei ist gelöscht, Scheiter-Test `gitignoreTest.py`.

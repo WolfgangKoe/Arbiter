@@ -1,6 +1,6 @@
 # `.coverage` in `.gitignore` eintragen und die liegende Datei löschen
 
-186 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+186 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Weitergereicht aus [Anliegen 177](177-coverageDateiNichtIgnoriert.md); der Stakeholder hat
