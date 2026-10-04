@@ -7,6 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from agenten import altbestandOrdner
+from benennung import ausgeschlosseneOrdner
+from gitAufruf import gitAusgabe
 from pfade import wurzel
 
 ordner = Path(__file__).resolve().parent
@@ -52,13 +55,15 @@ def testPreCommitRuftDiePrüfungenAuf():
     assert "prozess/pruefungen/benennung.py" in text
 
 
-def ruffAufrufen(*argumente: str) -> subprocess.CompletedProcess:
+def ruffAufrufen(
+    *argumente: str, cwd: Path = wurzel, config: Path = wurzel / "pyproject.toml"
+) -> subprocess.CompletedProcess:
     """Rot, wenn ruff fehlt: `pyproject.toml` nennt es unter `dependency-groups`."""
     ruff = shutil.which("ruff") or shutil.which("ruff", path=str(wurzel / ".venv" / "bin"))
     assert ruff, "ruff ist nicht installiert (pyproject.toml, dependency-groups, entwicklung)"
     return subprocess.run(
-        [ruff, "check", "--no-cache", "--config", str(wurzel / "pyproject.toml"), *argumente],
-        cwd=wurzel,
+        [ruff, "check", "--no-cache", "--config", str(config), *argumente],
+        cwd=cwd,
         capture_output=True,
         text=True,
         check=False,
@@ -87,31 +92,44 @@ def testArbiterGiltAuchFürNochFehlendeModuleAlsEigenesPaket(tmp_path):
     assert ruffAufrufen(str(probe)).returncode == 0
 
 
-def testRuffPrüftDenAltbestandNicht(tmp_path):
-    (tmp_path / "pyproject.toml").write_text((wurzel / "pyproject.toml").read_text("utf-8"))
-    (tmp_path / "Arbiter-old").mkdir()
-    quelltext = "def rechnen(a, b, c, d, e, f):\n    return 7\n"
-    (tmp_path / "Arbiter-old" / "probe.py").write_text(quelltext)
-    ergebnis = subprocess.run(
-        [shutil.which("ruff") or str(wurzel / ".venv" / "bin" / "ruff"), "check", "--no-cache"],
-        cwd=tmp_path,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+@pytest.mark.parametrize("ordner", altbestandOrdner)
+def testRuffPrüftDenAltbestandNicht(tmp_path, ordner):
+    (tmp_path / ordner).mkdir()
+    (tmp_path / ordner / "probe.py").write_text("def rechnen(a, b, c, d, e, f):\n    return 7\n")
+    ergebnis = ruffAufrufen(cwd=tmp_path, config=wurzel / "pyproject.toml")
     assert ergebnis.returncode == 0, ergebnis.stdout
 
 
+@pytest.mark.parametrize("ordner", altbestandOrdner)
+def testRuffSchließtDenAltbestandAus(ordner):
+    assert ordner in pyproject()["tool"]["ruff"]["extend-exclude"]
+
+
 @pytest.mark.stand
-def testGitIgnoriertDenAltbestand():
-    ergebnis = subprocess.run(
-        ["git", "check-ignore", "Arbiter-old/alt.py"],
+@pytest.mark.parametrize("ordner", altbestandOrdner)
+def testGitIgnoriertDenAltbestand(ordner):
+    assert gitAusgabe(wurzel, "check-ignore", f"{ordner}/alt.py").strip() == f"{ordner}/alt.py"
+
+
+@pytest.mark.parametrize("ordner", altbestandOrdner)
+def testDieBenennungÜbergehtDenAltbestand(ordner):
+    assert ordner in ausgeschlosseneOrdner
+
+
+@pytest.mark.stand
+def testPytestOhnePfadSammeltNurDieEigenenTests():
+    ausgabe = subprocess.run(
+        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
         cwd=wurzel,
         capture_output=True,
         text=True,
         check=False,
     )
-    assert ergebnis.returncode == 0
+    assert ausgabe.returncode == 0, ausgabe.stdout[-500:]
+    zeilen = ausgabe.stdout.splitlines()
+    assert not any(
+        zeile.startswith(f"{ordner}/") for zeile in zeilen for ordner in altbestandOrdner
+    )
 
 
 @pytest.mark.stand

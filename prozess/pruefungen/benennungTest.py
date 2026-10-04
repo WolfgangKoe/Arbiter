@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from agenten import altbestandOrdner
 from benennung import (
     dateinamenVerstoß,
     geprüfteDateien,
@@ -22,7 +23,7 @@ def testDasRepoHältDieBenennung():
 
 
 def testAltbestandOrdnerWerdenNichtGeprüft(tmp_path):
-    for ordner in ("Arbiter-old", "ArbiterMap", "technik"):
+    for ordner in (*altbestandOrdner, "technik"):
         (tmp_path / ordner).mkdir()
         (tmp_path / ordner / "schlechterName.py").write_text("x = 1\n")
     geprüft = {pfad.relative_to(tmp_path).parts[0] for pfad in geprüfteDateien(tmp_path)}

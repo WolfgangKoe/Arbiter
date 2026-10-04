@@ -5,7 +5,7 @@ import shlex
 from collections.abc import Callable
 from pathlib import Path
 
-from agenten import istNurLesbar, projektordner
+from agenten import istNurLesbar, nurLesbar, projektordner
 from hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
 from lesegrenze import gitShowZulässig
 from pfade import anliegenOrdner
@@ -216,8 +216,7 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     befehl = ohneHeredocText(befehl)
     if ändertPfad(befehl, wurzel, istNurLesbar):
         return verweigerung(
-            "Dieser Pfad ist nur lesbar, für alle Rollen: VORGEHEN.md, "
-            "handoff/kritik-entwickler.md, Arbiter-old/, ArbiterMap/. "
+            f"Dieser Pfad ist nur lesbar, für alle Rollen: {', '.join(nurLesbar)}. "
             "Löschen tut nur der Stakeholder."
         )
     if ändertPfad(befehl, wurzel, istAnliegen):

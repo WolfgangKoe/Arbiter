@@ -1,12 +1,13 @@
 """Prüft die Benennung nach `prozess/praemissen/wir.md`."""
 
 import ast
+import os
 import re
 import sys
 from collections.abc import Iterator
 from pathlib import Path
 
-from agenten import projektordner
+from agenten import altbestandOrdner, projektordner
 from pfade import akzeptanzOrdner, anforderungsOrdner, anliegenOrdner, etappenOrdner, itemsOrdner
 
 camelCase = re.compile(r"^[a-zäöü][a-zA-Z0-9äöüÄÖÜß]*$")
@@ -26,8 +27,7 @@ werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 ausgeschlosseneOrdner = {
-    "Arbiter-old",
-    "ArbiterMap",
+    *altbestandOrdner,
     ".git",
     "__pycache__",
     ".venv",
@@ -192,11 +192,15 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
 
 
 def geprüfteDateien(wurzel: Path) -> Iterator[Path]:
-    for endung in ("*.py", "*.md"):
-        for pfad in sorted(wurzel.rglob(endung)):
+    gefunden = []
+    for ordner, unterordner, dateien in os.walk(wurzel):
+        unterordner[:] = [name for name in unterordner if name not in ausgeschlosseneOrdner]
+        gefunden += [Path(ordner) / name for name in dateien]
+    for endung in (".py", ".md"):
+        for pfad in sorted(gefunden):
             relativ = pfad.relative_to(wurzel)
-            if ausgeschlosseneOrdner.isdisjoint(relativ.parts) and (
-                endung == "*.py" or relativ.parts[0] in ("domaene", "technik", "prozess", "handoff")
+            if pfad.suffix == endung and (
+                endung == ".py" or relativ.parts[0] in ("domaene", "technik", "prozess", "handoff")
             ):
                 yield pfad
 

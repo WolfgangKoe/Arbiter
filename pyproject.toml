@@ -1,4 +1,6 @@
 [tool.pytest.ini_options]
+# Warum: Ein Lauf ohne Pfad (Wurzel, IDE) sammelt nur unsere Tests, nicht die des Altbestands.
+testpaths = ["prozess/pruefungen", "technik/tests"]
 # Warum: Testdateien heißen `<name>Test.py` (prozess/praemissen/wir.md).
 python_files = ["*Test.py"]
 # Warum: Das Produkt `arbiter` liegt in technik/. Die Prüfskripte stehen nicht im Suchpfad:

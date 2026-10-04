@@ -53,6 +53,8 @@ def darfSchreiben(relativerPfad: str, muster: tuple[str, ...]) -> bool:
 
 
 nurLesbar = ("VORGEHEN.md", "handoff/kritik-entwickler.md", "Arbiter-old/", "ArbiterMap/")
+# Warum: Ordner unter `nurLesbar` (Eintrag mit `/` am Ende) sind der Altbestand; ihn prüft nichts.
+altbestandOrdner = tuple(eintrag.rstrip("/") for eintrag in nurLesbar if eintrag.endswith("/"))
 
 
 def istNurLesbar(relativerPfad: str) -> bool:

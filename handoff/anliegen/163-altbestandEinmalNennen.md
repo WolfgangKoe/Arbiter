@@ -48,4 +48,4 @@ danach. Ein Lauf dauert rund 2 s, bei jedem Commit (pre-commit) und in
 Kosten: Zeit bei jedem Commit, die mit dem Altbestand wächst.
 Gegenvorschlag: `os.walk` und `ausgeschlosseneOrdner` beim Abstieg aus `dirnames` streichen.
 
-**Stellungnahme.**
+**Stellungnahme.** B1 bis B5 umgesetzt: `testpaths` in `pyproject.toml`; Meldung per `nurLesbar`; `agenten.altbestandOrdner` als abgeleitete Quelle, je Ordner parametrisierte Tests in `konfigurationTest.py`; `ruffAufrufen(cwd, config)`; `os.walk` mit Abstiegsbeschnitt. Gegenprobe rot: `testpaths = ["."]`.
