@@ -22,4 +22,4 @@ liest, hält `x` für einen Verstoß.
   Regelumsetzer entfernt die Ausnahme.
 Empfehlung: A.
 
-Antwort: .
+Antwort: A, die Ausnahme ist akzeptabel. Danke die Regel funktioniert. 

@@ -31,4 +31,4 @@ Entscheidung.
 - B: Nein, die Lücke bleibt dokumentiert (Ablauf, Anliegen), die Heuristik bleibt.
 Empfehlung: A.
 
-Antwort: .
+Antwort: Sandbox klingt grundsätzlich gut, aber das ist noch keine Entscheidung für A. Bitte erläutere mir die Optionen und vor allem die Konsequenzen im Blick auf potentielle technische Schuld, Umgehung von Regeln, die ungesehen bleiben, Bruch mit SOLID und Prinzipien aus diesem Projekt und Tokenkosten. Dagegen bitte auch die Vorteile. Also was lösen wir mit deinen Vorschlägen und welchen Beifang holen damit ein. Das muss ich für eine Entscheidung abwägen können.

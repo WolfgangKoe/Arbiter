@@ -21,4 +21,4 @@ in der Prozessphase von Zyklus 3.
 Empfehlung: A. Prozesslast 52 % gegen die Schwelle ein Drittel ([Retro 2](../retro.md));
 Plan 3 bringt das, was du sehen willst.
 
-Antwort: .
+Antwort: Bitte vor Plan 3 Nach Retro 2. Ich möchte den Tokenverbrauch in dem Dashboard sehen können. Du kannst die HTML aus ArbiterMap sehr verschlanken, Die Übersicht des Tokenstands ist wichtig, Eine Statistik nebendran wie dargestellt und eine Legende mit einer sehr knappen Beschreibung, die nicht mehr als 5 Worte braucht.

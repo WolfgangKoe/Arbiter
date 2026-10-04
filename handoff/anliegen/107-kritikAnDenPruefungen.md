@@ -30,3 +30,5 @@ die Kritik an: Der Regelumsetzer löscht die Datei samt Code, Tests und Ausnahme
 ([114](114-pruefskripteOrdnenUndLesbarMachen.md), Punkt D).
 
 wartet auf 113, 114
+
+Nachprüfung: Der Koordinator hat mich gebeten, dieses Anliegen nachzuprüfen. Die Datei "benennungRueckstand.txt" finde ich nicht mehr und ist daher wohl gelöscht. Der Teil des Anliegens ist erledigt. 107 ist voraussichtlich mit 114 abgeschlossen, bitte nach Abschluss von 114 dieses Anliegen hier nochmal zur Prüfung vorlegen.

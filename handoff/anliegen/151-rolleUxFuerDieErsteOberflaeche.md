@@ -34,4 +34,4 @@ Rolle in seine Liste.
 Empfehlung: A. Gestaltung ist eine eigene Sicht; der Anforderungsautor schreibt Kriterien,
 kein HTML.
 
-Antwort: .
+Antwort: Ja, gehe ich mit. Ergänzung, weil ich es hier nicht sehe, bitte die konkreten Leitplanken für die UX-Rolle vorlegen. Schau dir die Mockups in ArbiterMap als Negativbeispiel an. Ich finde es grundsätzlich gut, wenn ich mehrere Optionen sehen kann, es wäre mir aber wichtig, dass das erstellte Mockup idealerweise direkt in das Software-INkrement eingebaut werden könnte. Außerdem standen in den Mockups ganz viele Komentare und unnötige Boxen, die mich Token kosten und eine redundante Wiederholung von Anforderungen oder Anliegen waren. Der Mehrwart war faktisch Zero und der Verlust war mir zu hoch. Wir haben Anforderungen, die auf die UX-Funktionalität irgendwie verlinken sollten und die Anliegen entsprechend auf das Mockup. In diesen Textdateien sollte schon alles wesentliche stehen. Also muss es in dem Mockup nicht nochmal stehen. Ggf. sollte das der Implementiere in der Technik bauen oder es braucht da auch noch eine weitere Rolle. Bitte meinen Vorschlag kritsch prüfen. 
