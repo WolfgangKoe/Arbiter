@@ -1,6 +1,6 @@
 # Sprung zwischen Kriterium und Test: Klick erproben, behalten oder löschen
 
-83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · beantwortet
+83 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus Anliegen 53: Befehl `rueckverfolgung.py AUF-1.3` (Weg B) oder eine
@@ -67,3 +67,11 @@ Antwort: B, es funktioniert in VS Code mit den angegebenen Shortcuts nicht.
 Wegwerf-Versuch, installiert ohne zweites Fenster. Die Erweiterung sucht ihr Ziel selbst und
 hängt nicht an Pylance, über das Strg+T bei dir nichts zeigte. Liegt der Versuch, frage ich
 dich hier, ob der Klick gelingt. Wartet auf 124.
+
+Antwort: Ja, das funktioniert. Kommt man darüber auch zu den python-Dateien? Und kann man von dort über einen ähnlichen Mechanismus wieder in eine Md-Datei oder eine andere Python-Datei springen? Das wäre perfekt.
+
+## Abschluss
+Deine Frage beantwortet deine Entscheidung in [124](124-sprungPerKlickErproben.md): Zum
+Produktivcode und zurück bräuchte die Erweiterung mehr Code, das lohnt sich nicht; sie ist
+gelöscht. Von Python zu Python springt VS Code selbst (Strg+Klick auf einen Namen, mit der
+Python-Erweiterung). Spur Kriterium ↔ Test: [T2](../../technik/architektur.md). Erledigt.

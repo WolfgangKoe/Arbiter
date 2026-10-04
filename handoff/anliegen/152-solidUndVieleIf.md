@@ -1,6 +1,6 @@
 # Ist der Domänencode SOLID? Viele if
 
-152 · Kritik · von Stakeholder → Architekt · Runde 1/3 · offen
+152 · Kritik · von Stakeholder → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund (Stakeholder).** „Eine potentielle Kritik meinerseits an den Architekten bzw.
@@ -53,6 +53,6 @@ Zyklus 3, bevor die Oberfläche `Aufstellung` aufruft; Erledigt-Bedingung in Anl
 
 Stand: Der Umbau ist erledigt (Commit `b940ef8`, Anliegen 154). Die Sperren beim Setzen
 stehen als Tabelle Grund → Prüfung, die Zone schlägt eine Zuordnung nach, `Armee.modelle`
-steht in `spielobjekte.py`. Offen ist Regel D4 in der Architektur.
-
-wartet auf 155
+steht in `spielobjekte.py`. Regel D4 steht in [architektur.md](../../technik/architektur.md),
+mit `rule_checks.py` als Vorbild; Platz durch Kürzen, ohne geprüfte Regeln zu streichen. Der
+Aufbau aus 153 wartet weiter auf 155.

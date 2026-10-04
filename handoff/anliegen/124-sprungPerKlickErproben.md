@@ -1,6 +1,6 @@
 # Sprung per Strg+Klick: installierte Erweiterung, zuerst ein Wegwerf-Versuch
 
-124 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+124 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [83](83-sprungErproben.md) F2 mit B beantwortet: Der

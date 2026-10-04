@@ -18,7 +18,7 @@ Ein Ordner entsteht mit dem ersten Item, das ihn braucht.
 
 ## Abhängigkeiten zeigen nach innen
 - **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft:
-  `importvertrag.py`, relative Importe erst nach Anliegen 125.
+  `importvertrag.py`, auch relative Importe.
 - **A2** `web`, `speicher` und `katalog` kennen die Domäne, nie umgekehrt. Braucht die
   Domäne Speicherung, beschreibt sie eine Schnittstelle (`typing.Protocol`) in
   `arbiter/domaene/`; `speicher/` setzt sie um, `web/` verdrahtet beides. Prüft: wie A1.
@@ -26,15 +26,13 @@ Ein Ordner entsteht mit dem ersten Item, das ihn braucht.
   (`yaml.safe_load`). Der Spielstand liegt nur in der Datenbank. Prüft: nur Text; Auslöser:
   erster Spielstand, der eine Sitzung überlebt; dann importiert `katalog/` in die Datenbank.
 
-Altbestand: `ArbiterMap/backend/app/domain/rule_checks.py` importiert nur die eigene Geometrie.
-
 ## Grundschnitt der Domäne
 `arbiter/domaene/` gliedert sich wie `domaene/anforderungen/`:
 - `spielobjekte.py`: `Spieler`, `Armee`, `Einheit`, `Modell`, `Base`, `Spielfeld`, `Stelle`
   und was mehr als eine Phase braucht.
 - `phasen/<phase>.py` heißt wie die Anforderungsdatei. Was eine Phase einführt, liegt dort,
-  bis eine zweite Phase es braucht; dann zieht es nach `spielobjekte.py`. Darum liegen
-  `Ausgangslage`, `Aufstellungszone`, *aufgestellt* und *gesetzt* in `phasen/aufstellen.py`.
+  bis eine zweite Phase es braucht; dann zieht es nach `spielobjekte.py`. Darum liegt
+  `Ausgangslage` in `phasen/aufstellen.py`.
 - `querschnitt.py`: was nach `querschnitt.md` in jeder Phase gilt, zuerst QUE-1.2.
 - `sperre.py`: `Sperre` und `Grund`; Übergehen und Protokoll gelten für alle Phasen.
 - `messen.py`: die Messungen (M1).
@@ -51,8 +49,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **S2** Gerechnet wird exakt mit `fractions.Fraction`, ohne Toleranz und ohne Wurzel:
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
   übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz, das Raster in
-  `ArbiterMap/backend/app/domain/geometry.py` rundet 16 mm auf 0,63″. Wegwerf-Versuch: alle
-  Grenzfälle exakt, 9 µs je Vergleich. Prüft: die Grenzfälle der Akzeptanztests.
+  `ArbiterMap/backend/app/domain/geometry.py` rundet 16 mm auf 0,63″.
+  Prüft: die Grenzfälle der Akzeptanztests.
 
 ## Regeln im Domänencode
 - **D1** Spielobjekte haben Identität: Vergleich mit `is`, `@dataclass(eq=False)`. Werte
@@ -62,10 +60,14 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Akzeptanztest auf den unveränderten Zustand.
 - **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel oder
   `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
-  Properties ohne Setter (`aufstellung.anDerReihe`) oder Abfragen
-  (`aufstellung.gesetzt(modell)`); sonst umginge `modell.gesetzt = True` jede Sperre. Prüft:
-  Python wirft bei der Zuweisung; der Rest nur Text; Auslöser: `web/`, dann eine Prüfung
-  „nur `_`-Felder zuweisen, Dataclasses `frozen`“.
+  Properties ohne Setter oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
+  `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung; der Rest nur
+  Text; Auslöser: `web/`, dann eine Prüfung „nur `_`-Felder zuweisen, Dataclasses `frozen`“.
+- **D4** Gründe, die zusammen gelten (AUF-3.5), stehen in einer Tabelle Grund → benannte
+  Prüfung (`Aufstellung._prüfungen`); die Handlung sammelt ein, ein neuer Grund ist eine
+  Zeile, keine geänderte Funktion; ein ausschließender Grund (AUF-3.6) bleibt Wächter.
+  Vorbild: `check_rules` in `ArbiterMap/backend/app/domain/rule_checks.py`. Prüft: nur
+  Text; Auslöser: zweite Tabelle.
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
   einer Fläche. Die Baseform kennt nur `messen.py`. Prüft: nur Text; Auslöser: zweite
@@ -81,8 +83,7 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   `hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-1.4`,
-  `testAuf1_4…`). Spur: `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4`; Strg+Klick
-  in VS Code: [Anliegen 124](../handoff/anliegen/124-sprungPerKlickErproben.md).
+  `testAuf1_4…`). Spur: `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4`.
 - `tests/einheit/` spiegelt `arbiter/`, etwa `tests/einheit/domaene/phasen/aufstellenTest.py`.
   Jeder Ordner dort hat eine `__init__.py`; sonst kollidiert der Dateiname mit dem
   Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.
@@ -92,5 +93,5 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 ## Oberfläche
 Auslöser: erstes Item mit Oberfläche. Das Design-System gehört der Technik: eine lebende
 Komponentenseite (HTML, echtes CSS) als Doku, Vorlage der Mockups und Ziel eines
-Bildschirmtests. Mockups nutzen nur vorhandene Komponenten, Neues ist ein Anliegen an die
-Technik. Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
+Bildschirmtests. Eine neue Komponente ist ein Anliegen an die Technik. Tot ist eine
+Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
