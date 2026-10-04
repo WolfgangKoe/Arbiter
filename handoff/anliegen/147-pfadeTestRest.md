@@ -1,9 +1,9 @@
 # Prüfskripte: `pfadeTest.py` hält Listen von Hand, die sich ableiten lassen
 
-147 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+147 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
-Gegenstand: be63161 (Kritik am Code), Folge von [144](144-pfadeTestDeckt.md).
+Gegenstand: be63161 (Kritik am Code), Folge von Anliegen 144.
 `python3 -m pytest prozess/pruefungen`: 424 grün.
 
 **Befund.**
@@ -42,3 +42,13 @@ nutzen. 5: klein; rot, sobald mypy kommt.
 Erledigt, wenn 1 bis 3 umgesetzt sind, ein Scheiter-Test die leere oder unvollständige
 Liste aus 2 rot zeigt, 4 und 5 entschieden sind und `python3 -m pytest prozess/pruefungen`
 grün ist.
+
+**Stellungnahme.** 1: `prüfTests` wird abgeleitet (`*Test.py` ohne eigenes Modul);
+Scheiter-Test `testEinPrüfTestOhneEigenesModulIstEingeschlossen`. 2: `pfadeAus` nimmt
+alle öffentlichen Zeichenketten; Scheiter-Tests `testDieListeDerPfadeIstNichtLeer` und
+`testNurÖffentlicheZeichenkettenDesModulsZählen`. 3: `istTestOderPfade` vergleicht den
+Namen genau; `testNurPfadeUndTestsSindAusgenommen`. 4: als bekannte Lücke in
+`prozess/regeln.md` genannt, keine Form im Gebrauch. 5: `docstringKnoten` liefert
+`(knoten, anweisung, text)`, `docstringVerstöße` nutzt `text`. Pytest 428 grün. Das
+Löschen von 144 war zulässig: Status `erledigt`, `erledigteLoeschen.py` (Hook) löscht
+die Datei und ersetzt den Link durch „Anliegen 144“.

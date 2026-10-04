@@ -1,5 +1,6 @@
 import ast
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -7,8 +8,22 @@ import pfade
 from kommentare import docstringKnoten
 
 ordner = Path(__file__).resolve().parent
-alleOrdner = [wert for name, wert in vars(pfade).items() if name.endswith("Ordner")]
-prüfTests = {"hoechstmassTest.py", "komplexitaetTest.py", "konfigurationTest.py"}
+
+
+def pfadeAus(modul: object) -> list[str]:
+    return [
+        wert
+        for name, wert in vars(modul).items()
+        if not name.startswith("_") and isinstance(wert, str)
+    ]
+
+
+alleOrdner = pfadeAus(pfade)
+prüfTests = {
+    datei.name
+    for datei in ordner.glob("*Test.py")
+    if not datei.with_name(datei.name.removesuffix("Test.py") + ".py").exists()
+}
 
 
 def pfadSegmente(baum: ast.AST) -> set[ast.AST]:
@@ -23,7 +38,7 @@ def pfadSegmente(baum: ast.AST) -> set[ast.AST]:
 
 def ordnerLiterale(quelltext: str) -> list[str]:
     baum = ast.parse(quelltext)
-    docstrings = {docstring.value for _, docstring in docstringKnoten(baum)}
+    docstrings = {docstring.value for _, docstring, _ in docstringKnoten(baum)}
     segmente = pfadSegmente(baum)
     letzteTeile = [ordnerName.split("/")[-1] for ordnerName in alleOrdner]
     return [
@@ -39,11 +54,15 @@ def ordnerLiterale(quelltext: str) -> list[str]:
     ]
 
 
+def istTestOderPfade(dateiname: str) -> bool:
+    return dateiname.endswith("Test.py") or dateiname == "pfade.py"
+
+
 def testKeinOrdnerLiteralStehtAußerhalbVonPfade():
     funde = {
         datei.name: treffer
         for datei in ordner.glob("*.py")
-        if datei.name in prüfTests or not datei.name.endswith(("Test.py", "pfade.py"))
+        if datei.name in prüfTests or not istTestOderPfade(datei.name)
         if (treffer := ordnerLiterale(datei.read_text(encoding="utf-8")))
     }
     assert funde == {}
@@ -75,3 +94,23 @@ def testEinSchlüsselMitDemNamenDesOrdnersIstErlaubt():
 
 def testAlleOrdnerAusPfadeWerdenGeprüft():
     assert all(ordnerLiterale(f'x = "{ordnerName}"\n') for ordnerName in alleOrdner)
+
+
+def testDieListeDerPfadeIstNichtLeer():
+    assert alleOrdner
+
+
+def testNurÖffentlicheZeichenkettenDesModulsZählen():
+    modul = SimpleNamespace(planDatei="handoff/plan.md", __doc__="Text", _x="y", zahl=3)
+    assert pfadeAus(modul) == ["handoff/plan.md"]
+
+
+def testNurPfadeUndTestsSindAusgenommen():
+    assert istTestOderPfade("pfade.py")
+    assert istTestOderPfade("pfadeTest.py")
+    assert not istTestOderPfade("schreibpfade.py")
+
+
+def testEinPrüfTestOhneEigenesModulIstEingeschlossen():
+    assert {"cspellTest.py", "hoechstmassTest.py"} <= prüfTests
+    assert "pfadeTest.py" not in prüfTests
