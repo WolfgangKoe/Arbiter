@@ -25,3 +25,9 @@ repos:
         language: system
         pass_filenames: false
         files: ^(prozess/pruefungen/|pyproject\.toml$)
+      - id: sonarlint
+        name: SonarLint (Standardprofil ohne Namensregeln)
+        entry: python3 prozess/pruefungen/sonarlint.py
+        language: system
+        pass_filenames: false
+        files: \.py$

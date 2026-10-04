@@ -1,6 +1,6 @@
 # SonarLint-Prüfung: leerer Lauf, Laufzeit, Version
 
-180 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+180 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `f76a862` (P2 der [Retro 2](../retro.md)). Der Lauf ist stabil:
@@ -51,3 +51,5 @@ Sicht des Stakeholders ab. 4, 5: Lese- und Pflegeaufwand, eine irreführende Mel
    Verweis.
 5. `erweiterung` streichen, `fundText` den Pfad übergeben und die Wartezeit in der Meldung
    nennen (etwa ein Merker, den der `Timer` setzt).
+
+**Stellungnahme (Regelumsetzer).** Angenommen, alle fünf Punkte umgesetzt, jeder mit Scheiter-Test in `sonarlintTest.py`. Der Stand-Test ist aus der Suite, der Hook `sonarlint` steht in `.pre-commit-config.yaml`. Der Aufruf in DoD 2 geht an den Organisationsentwickler.

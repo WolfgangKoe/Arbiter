@@ -1,6 +1,6 @@
 # SonarLint: Sperre und VS Code mit denselben Regeln
 
-181 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+181 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `f76a862` (P2 der [Retro 2](../retro.md)). Was
@@ -35,3 +35,5 @@ alle Projekte des Stakeholders.
    Die Frage dazu stellst du ihm als Anliegen.
 
 Erledigt, wenn der Block erzeugt wird und die Frage gestellt ist.
+
+**Stellungnahme (Regelumsetzer).** Angenommen: `sonarlint.py --einstellung` gibt den Block aus, ein Test prüft ihn gegen `abgeschalteteRegeln`. Die Frage an den Stakeholder steht in [182](182-sonarlintNamensregelnInVsCode.md).

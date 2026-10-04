@@ -1,6 +1,7 @@
-"""Scheiter-Test und Stand: SonarLint ohne VS Code (Anliegen 150)."""
+"""Scheiter-Test und Stand: SonarLint ohne VS Code ohne VS Code."""
 
 import io
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -13,10 +14,10 @@ from sonarlint import (
     abgeschalteteRegeln,
     antwortAuf,
     dateienSammeln,
+    einstellung,
     erweiterungFinden,
     funde,
     fundText,
-    geprüfteOrdner,
     nachrichtLesen,
     nachrichtSchreiben,
     öffnen,
@@ -25,6 +26,14 @@ from sonarlint import (
 ungenutzteVariable = "def zähle():\n    ergebnis = 1\n    return 2\n"
 camelCaseFunktion = "def meineFunktion(eingabeWert):\n    return eingabeWert\n"
 saubererCode = "def zähle():\n    return 2\n"
+
+
+class ServerAttrappe:
+    stdin = io.BytesIO()
+    stdout = io.BytesIO()
+
+    def kill(self) -> None:
+        pass
 
 
 def probeAnlegen(tmp_path: Path) -> list[Path]:
@@ -53,7 +62,7 @@ def testDieNamensregelnDesProfilsSindAus():
 def testDerFundNenntPfadZeileRegelUndMeldung(tmp_path):
     datei = tmp_path / "a.py"
     diagnose = {"range": {"start": {"line": 6}}, "code": "python:S1", "message": "Text"}
-    assert fundText(tmp_path, datei.as_uri(), diagnose) == "a.py:7: python:S1 Text"
+    assert fundText(tmp_path, datei, diagnose) == "a.py:7: python:S1 Text"
 
 
 def testNachrichtenRundlaufMitLängenkopf():
@@ -99,16 +108,17 @@ def testGesammeltWerdenPythonDateienOhnePycache(tmp_path):
 
 
 def testDieErweiterungKommtAusDerUmgebungsvariable(monkeypatch, tmp_path):
-    monkeypatch.setenv(sonarlint.umgebungsvariable, str(tmp_path))
-    assert erweiterungFinden() == tmp_path
+    ordner = tmp_path / "sonarsource.sonarlint-vscode-6.0.3-linux-x64"
+    monkeypatch.setenv(sonarlint.umgebungsvariable, str(ordner))
+    assert erweiterungFinden() == ordner
 
 
 def testDieNeuesteErweiterungAusVsCodeGewinnt(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
-    for version in ("6.0.1", "6.1.0"):
+    for version in ("6.0.1", "6.0.2"):
         (tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64").mkdir()
-    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.1.0-linux-x64"
+    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.2-linux-x64"
 
 
 def testOhneErweiterungIstDiePrüfungRotUndNenntDieUmgebungsvariable(monkeypatch, tmp_path):
@@ -125,7 +135,49 @@ def testEinServerDerSichBeendetIstRot(tmp_path):
         sitzung.lauf()
 
 
+def testEinFehlenderOrdnerIstRotUndNenntSeinenNamen(tmp_path):
+    with pytest.raises(AssertionError, match="gibtsNicht"):
+        dateienSammeln(tmp_path, ("gibtsNicht",))
+
+
+def testEinOrdnerOhnePythonDateienIstRot(tmp_path):
+    (tmp_path / "leer").mkdir()
+    with pytest.raises(AssertionError, match="leer"):
+        dateienSammeln(tmp_path, ("leer",))
+
+
+def testDieVersionsordnerWerdenNachZahlSortiert(monkeypatch, tmp_path):
+    monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
+    monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
+    monkeypatch.setattr(sonarlint, "erwarteteVersion", "6.")
+    for version in ("6.9.0", "6.10.0"):
+        (tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64").mkdir()
+    assert "6.10.0" in erweiterungFinden().name
+
+
+def testEineAndereVersionAlsErwartetIstRotUndNenntBeide(monkeypatch, tmp_path):
+    monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
+    monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
+    (tmp_path / "sonarsource.sonarlint-vscode-7.0.0-linux-x64").mkdir()
+    with pytest.raises(AssertionError, match=r"7\.0\.0.*6\.0\."):
+        erweiterungFinden()
+
+
+def testNachDerWartezeitMeldetDiePrüfungDieWartezeit(tmp_path):
+    server = ServerAttrappe()
+    sitzung = Sitzung(server, tmp_path, [])
+    sitzung.abbrechen()
+    with pytest.raises(AssertionError, match="abgebrochen"):
+        sitzung.lauf()
+
+
+def testDieEinstellungNenntGenauDieAbgeschaltetenRegeln():
+    regeln = json.loads(einstellung())["sonarlint.rules"]
+    assert set(regeln) == set(abgeschalteteRegeln)
+    assert all(wert == {"level": "off"} for wert in regeln.values())
+
+
 @pytest.mark.stand
-def testSonarLintMeldetNichtsZuProduktUndPrüfskripten():
-    # Regel: ablauf.md, Technikphase, Werkzeuge: Die Sperre ist mindestens so streng wie SonarLint
-    assert funde(wurzel, dateienSammeln(wurzel, geprüfteOrdner)) == []
+def testPreCommitPrüftSonarLintBeiPythonDateien():
+    konfiguration = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
+    assert "python3 prozess/pruefungen/sonarlint.py" in konfiguration

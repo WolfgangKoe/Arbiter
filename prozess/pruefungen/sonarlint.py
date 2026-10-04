@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -10,11 +11,13 @@ from typing import BinaryIO
 
 from pfade import akzeptanzOrdner, wurzel
 
-# Warum: `technik/tests/einheit` meldet S5778 achtmal (Anliegen 179); bis dahin ungeprüft
+# Warum: `technik/tests/einheit` hat noch Funde zu S5778; bis dahin ungeprüft
 geprüfteOrdner = ("technik/arbiter", akzeptanzOrdner, "prozess/pruefungen")
 erweiterungenOrdner = Path.home() / ".vscode" / "extensions"
 umgebungsvariable = "SONARLINT_ERWEITERUNG"
 wartezeitSekunden = 120
+# Warum: Ein Update der Erweiterung brächte still neue Regeln; die Version hebt man bewusst.
+erwarteteVersion = "6.0."
 dateiAnfrage = "sonarlint/listFilesInFolder"
 offenAnfrage = "sonarlint/isOpenInEditor"
 konfigurationAnfrage = "workspace/configuration"
@@ -31,14 +34,26 @@ abgeschalteteRegeln = (
 )
 
 
+def versionszahlen(ordner: Path) -> tuple[int, ...]:
+    treffer = re.search(r"sonarlint-vscode-(\d+(?:\.\d+)*)", ordner.name)
+    return tuple(int(teil) for teil in treffer.group(1).split(".")) if treffer else ()
+
+
 def erweiterungFinden() -> Path:
     """Ordner der SonarLint-Erweiterung: `SONARLINT_ERWEITERUNG` oder die neueste in VS Code."""
     vorgabe = os.environ.get(umgebungsvariable)
-    if vorgabe:
-        return Path(vorgabe)
-    gefunden = sorted(erweiterungenOrdner.glob("sonarsource.sonarlint-vscode-*"))
+    gefunden = (
+        [Path(vorgabe)] if vorgabe else erweiterungenOrdner.glob("sonarsource.sonarlint-vscode-*")
+    )
+    gefunden = sorted(gefunden, key=versionszahlen)
     assert gefunden, f"SonarLint-Erweiterung fehlt in {erweiterungenOrdner}; {umgebungsvariable}"
-    return gefunden[-1]
+    neueste = gefunden[-1]
+    zahlen = ".".join(str(teil) for teil in versionszahlen(neueste)) + "."
+    assert zahlen.startswith(erwarteteVersion), (
+        f"SonarLint-Erweiterung {neueste.name} statt Version {erwarteteVersion}x: "
+        "`erwarteteVersion` in sonarlint.py bewusst heben"
+    )
+    return neueste
 
 
 def serverAufruf(erweiterung: Path) -> list[str]:
@@ -123,29 +138,37 @@ def öffnen(datei: Path) -> dict:
     return {"jsonrpc": "2.0", "method": "textDocument/didOpen", "params": {"textDocument": text}}
 
 
-def fundText(ordner: Path, uri: str, diagnose: dict) -> str:
-    datei = Path(uri.removeprefix("file://"))
+def fundText(ordner: Path, datei: Path, diagnose: dict) -> str:
     zeile = diagnose["range"]["start"]["line"] + 1
     return f"{datei.relative_to(ordner)}:{zeile}: {diagnose['code']} {diagnose['message']}"
 
 
 def dateienSammeln(ordner: Path, unterordner: tuple[str, ...]) -> list[Path]:
-    gefunden = [datei for name in unterordner for datei in sorted((ordner / name).rglob("*.py"))]
-    return [datei for datei in gefunden if "__pycache__" not in datei.parts]
+    dateien: list[Path] = []
+    for name in unterordner:
+        gefunden = [
+            datei
+            for datei in sorted((ordner / name).rglob("*.py"))
+            if "__pycache__" not in datei.parts
+        ]
+        assert gefunden, f"{name}: Ordner fehlt oder hat keine .py-Datei, SonarLint prüfte nichts"
+        dateien += gefunden
+    return dateien
 
 
-def funde(ordner: Path, dateien: list[Path], erweiterung: Path | None = None) -> list[str]:
+def funde(ordner: Path, dateien: list[Path]) -> list[str]:
     """Funde des Standardprofils zu `dateien`, je Zeile `pfad:zeile: regel meldung`."""
     server = subprocess.Popen(
-        serverAufruf(erweiterung or erweiterungFinden()),
+        serverAufruf(erweiterungFinden()),
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
-    abbruch = threading.Timer(wartezeitSekunden, server.kill)
+    sitzung = Sitzung(server, ordner, dateien)
+    abbruch = threading.Timer(wartezeitSekunden, sitzung.abbrechen)
     abbruch.start()
     try:
-        return Sitzung(server, ordner, dateien).lauf()
+        return sitzung.lauf()
     finally:
         abbruch.cancel()
         server.kill()
@@ -162,6 +185,11 @@ class Sitzung:
         self.erwartet: Path | None = None
         self.bereit = False
         self.funde: list[str] = []
+        self.zeitüberschreitung = False
+
+    def abbrechen(self) -> None:
+        self.zeitüberschreitung = True
+        self.server.kill()
 
     def senden(self, nachricht: dict) -> None:
         nachrichtSchreiben(self.server.stdin, nachricht)
@@ -182,7 +210,7 @@ class Sitzung:
         if self.erwartet is None or parameter["uri"] != self.erwartet.as_uri():
             return
         for diagnose in parameter["diagnostics"]:
-            self.funde.append(fundText(self.ordner, parameter["uri"], diagnose))
+            self.funde.append(fundText(self.ordner, self.erwartet, diagnose))
         self.erwartet = None
         self.bereit = True
 
@@ -196,6 +224,7 @@ class Sitzung:
         self.senden(initialisierung(self.ordner))
         while not (self.bereit and not self.übrige):
             nachricht = nachrichtLesen(self.server.stdout)
+            assert not self.zeitüberschreitung, f"SonarLint nach {wartezeitSekunden} s abgebrochen"
             assert nachricht is not None, "Der SonarLint-Server hat sich vor dem Ergebnis beendet"
             self.behandeln(nachricht)
             if self.bereit and self.übrige:
@@ -208,7 +237,16 @@ def lauf(ordner: Path, unterordner: tuple[str, ...]) -> list[str]:
     return funde(ordner, dateien)
 
 
+def einstellung() -> str:
+    """Block für die Benutzereinstellungen von VS Code, gleiche Regeln wie die Sperre."""
+    regeln = {regel: {"level": "off"} for regel in abgeschalteteRegeln}
+    return json.dumps({"sonarlint.rules": regeln}, indent=2)
+
+
 if __name__ == "__main__":
+    if "--einstellung" in sys.argv:
+        print(einstellung())
+        sys.exit(0)
     meldungen = lauf(wurzel, geprüfteOrdner)
     print("\n".join(meldungen) or "SonarLint: keine Funde")
     sys.exit(1 if meldungen else 0)
