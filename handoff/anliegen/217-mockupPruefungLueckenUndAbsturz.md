@@ -1,6 +1,6 @@
 # Prüfung der Mockups: Lücken bei `style=` und Absturz bei fremden Dateien
 
-217 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+217 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von cef00fc (Anliegen 200). Die Tests laufen grün (81 passed);
@@ -43,4 +43,4 @@ sind, rot ohne Ausnahme. `prozess/regeln.md` (Zeile UX-Mockups) nennt dann „nu
 
 Erledigt, wenn die Fälle grün laufen und `regeln.md` die Erweiterung nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, alle vier Punkte.

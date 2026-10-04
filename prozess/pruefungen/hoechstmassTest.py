@@ -8,6 +8,7 @@ import pytest
 from agenten import kopfzeilen
 from anliegen import antwortZeile
 from freigabeKommentare import artefakte, kommentarZeile, pfadDer
+from mockups import istMockupDatei
 from pfade import (
     akzeptanzOrdner,
     anliegenOrdner,
@@ -50,7 +51,7 @@ def zeichenOhneKommentare(datei: Path) -> int:
 
 def mockupFälle():
     for datei in sorted((wurzel / mockupOrdner).rglob("*")):
-        if datei.is_file():
+        if datei.is_file() and istMockupDatei(datei):
             yield datei, zeichen(datei), mockup
 
 
