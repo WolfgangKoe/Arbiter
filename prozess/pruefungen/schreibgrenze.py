@@ -13,6 +13,7 @@ from hookProtokoll import (
 )
 
 schreibwerkzeuge = ("Write", "Edit", "NotebookEdit")
+kopfPräfix = "HEAD "
 
 
 def geänderteDateien(wurzel: Path) -> set[str]:
@@ -64,7 +65,7 @@ def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
 def beimStart(eingabe: dict, wurzel: Path) -> dict:
     datei = standDatei(wurzel, eingabe["agent_id"])
     datei.parent.mkdir(parents=True, exist_ok=True)
-    zeilen = [f"HEAD {kopf(wurzel)}", *sorted(geänderteDateien(wurzel))]
+    zeilen = [f"{kopfPräfix}{kopf(wurzel)}", *sorted(geänderteDateien(wurzel))]
     datei.write_text("\n".join(zeilen), encoding="utf-8")
     muster = schreibpfade(eingabe.get("agent_type") or "", wurzel)
     return zusatzkontext(
@@ -80,9 +81,9 @@ def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
     zeilen = datei.read_text(encoding="utf-8").splitlines() if datei.exists() else []
     datei.unlink(missing_ok=True)
     kopfVorher = next(
-        (zeile.removeprefix("HEAD ") for zeile in zeilen if zeile.startswith("HEAD ")), None
+        (zeile.removeprefix(kopfPräfix) for zeile in zeilen if zeile.startswith(kopfPräfix)), None
     )
-    vorher = {zeile for zeile in zeilen if not zeile.startswith("HEAD ")}
+    vorher = {zeile for zeile in zeilen if not zeile.startswith(kopfPräfix)}
     rolle = eingabe["agent_type"]
     muster = schreibpfade(rolle, wurzel)
     meldungen = []

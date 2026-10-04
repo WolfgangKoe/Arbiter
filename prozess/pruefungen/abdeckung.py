@@ -12,6 +12,7 @@ from typing import NamedTuple
 from pfade import wurzel
 
 schwelle = 95
+prüfskripte = "prozess/pruefungen"
 # Warum: vulture endet mit 0 ohne Fund und mit 3 bei totem Code; alles andere ist ein Fehler
 vultureGültig = (0, 3)
 
@@ -90,7 +91,7 @@ def unbenutzterCode(wurzel: Path, *pfade: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    gemessen = abdeckungMessen(wurzel, "prozess/pruefungen", "prozess/pruefungen", "not stand")
-    meldung = verstoß("prozess/pruefungen", gemessen)
-    print(meldung or f"{abdeckungText('prozess/pruefungen', gemessen)}, ausreichend")
+    gemessen = abdeckungMessen(wurzel, prüfskripte, prüfskripte, "not stand")
+    meldung = verstoß(prüfskripte, gemessen)
+    print(meldung or f"{abdeckungText(prüfskripte, gemessen)}, ausreichend")
     sys.exit(1 if meldung else 0)

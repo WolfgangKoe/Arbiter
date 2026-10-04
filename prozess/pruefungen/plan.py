@@ -6,6 +6,8 @@ from pathlib import Path
 from gitAufruf import freigabeCommit
 from pfade import itemsOrdner
 
+planDatei = Path("handoff") / "plan.md"
+
 
 def zyklus(datei: Path) -> int | None:
     if not datei.is_file():
@@ -17,7 +19,7 @@ def zyklus(datei: Path) -> int | None:
 
 def offeneItems(wurzel: Path) -> list[str]:
     """Items des Plans (Links in `handoff/plan.md`), deren Datei in `domaene/items/` existiert."""
-    plan = wurzel / "handoff" / "plan.md"
+    plan = wurzel / planDatei
     if not plan.is_file():
         return []
     muster = rf"\]\(\.\./{re.escape(itemsOrdner)}/([^)#\s]+\.md)"
@@ -27,7 +29,7 @@ def offeneItems(wurzel: Path) -> list[str]:
 
 def freigegebenerPlan(wurzel: Path) -> int | None:
     """Nummer des Plans, wenn `Freigabe Plan <n>` committet ist, sonst `None`."""
-    nummer = zyklus(wurzel / "handoff" / "plan.md")
+    nummer = zyklus(wurzel / planDatei)
     if nummer is None or freigabeCommit(wurzel, "Plan", nummer) is None:
         return None
     return nummer
@@ -42,7 +44,7 @@ def offeneItemTexte(wurzel: Path) -> list[str]:
 
 def itemsOhneLink(wurzel: Path) -> bool:
     """Der Plan hat einen Abschnitt `## Item(s)`, aber keinen Link auf `domaene/items/`."""
-    plan = wurzel / "handoff" / "plan.md"
+    plan = wurzel / planDatei
     if not plan.is_file():
         return False
     text = plan.read_text(encoding="utf-8")
