@@ -159,12 +159,12 @@ def dran(wurzel: Path) -> dict[str, list[int]]:
     return zuständig
 
 
-def dranAlsText(wurzel: Path, kommentare: dict[str, list[str]] | None = None) -> str:
+def dranAlsText(wurzel: Path, kommentare: dict[str, list[str]]) -> str:
     """Wer dran ist; `kommentare` nennt je Rolle Dateien mit offenem Kommentar des Stakeholders."""
     zuständig = {
         rolle: [f"{nummer:02d}" for nummer in nummern] for rolle, nummern in dran(wurzel).items()
     }
-    for rolle, dateien in (kommentare or {}).items():
+    for rolle, dateien in kommentare.items():
         zuständig.setdefault(rolle, []).extend(dateien)
     if not zuständig:
         return ""

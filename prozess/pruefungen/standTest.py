@@ -426,3 +426,15 @@ def testFreigabeJaOhneCommitMachtDenKoordinatorDran(repo):
     assert "Nächster Schritt: Koordinator: Freigabe Plan 1 committen" in stand(repo.wurzel)
     repo.freigabe("Plan", 1)
     assert "Koordinator: Freigabe" not in stand(repo.wurzel)
+
+
+def testKommentarOhneStellungnahmeInDerReviewMachtDenReviewerDran(repo):
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n\nKommentar: Bitte mehr Belege.\n")
+    assert "Dran: Reviewer (review.md)" in stand(repo.wurzel)
+
+
+def testFreigabeJaInDerRetroOhneCommitMachtDenKoordinatorDran(repo):
+    repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n\n## Freigabe\nFreigabe: ja\n")
+    assert "Nächster Schritt: Koordinator: Freigabe Retro 1 committen" in stand(repo.wurzel)
+    repo.freigabe("Retro", 1)
+    assert "Koordinator: Freigabe" not in stand(repo.wurzel)

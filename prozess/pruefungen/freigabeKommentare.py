@@ -3,8 +3,8 @@
 from pathlib import Path
 from typing import NamedTuple
 
-from gitAufruf import freigabeCommit
-from plan import zyklus
+from gitAufruf import freigaben
+from plan import planDatei, zyklus
 
 
 class Artefakt(NamedTuple):
@@ -14,7 +14,7 @@ class Artefakt(NamedTuple):
 
 
 artefakte = (
-    Artefakt("plan.md", "Plan", "Planer"),
+    Artefakt(planDatei.name, "Plan", "Planer"),
     Artefakt("review.md", "Review", "Reviewer"),
     Artefakt("retro.md", "Retro", "Organisationsentwickler"),
 )
@@ -53,10 +53,11 @@ def autorenDran(wurzel: Path) -> dict[str, list[str]]:
 
 def freigabeZuCommitten(wurzel: Path) -> str | None:
     """Der Commit-Betreff `Freigabe <Gegenstand> <n>`, wenn die Datei `Freigabe: ja` trägt."""
+    betreffs = {betreff for _, betreff in freigaben(wurzel)}
     for artefakt in artefakte:
         nummer = zyklus(wurzel / "handoff" / artefakt.datei)
         if nummer is None or freigabeJa not in zeilenDer(wurzel, artefakt):
             continue
-        if freigabeCommit(wurzel, artefakt.gegenstand, nummer) is None:
+        if f"Freigabe {artefakt.gegenstand} {nummer}" not in betreffs:
             return f"Freigabe {artefakt.gegenstand} {nummer}"
     return None
