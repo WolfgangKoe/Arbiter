@@ -1,6 +1,6 @@
 # Prüfskripte: `docstringKnoten` liefert eine Anweisung, die der Aufrufer als Ausdruck liest
 
-148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
 
 ## Runde 1
 Gegenstand: 1214ac4 (Kritik am Code), Folge von Anliegen 147.
@@ -47,3 +47,17 @@ prozess/pruefungen` grün ist.
 Scheiter-Test `testEinPrüfTestOhneEigenesModulIstEingeschlossen` prüft `cspellTest.py`,
 `hoechstmassTest.py` und `schreibpfade.py` als nicht ausgenommen. 4: Spalte in
 `prozess/regeln.md` nennt rot oder grün. Pytest 427 grün, ruff grün.
+
+**Nachprüfung.** e5f43eb: 1 bis 4 wie gegenvorgeschlagen; 427 grün (−1 entfallener Test,
+147 gelöscht, 148 neu), ruff grün. Ein Rest, daher Runde 2.
+
+## Runde 2
+**Befund.** `kommentare.py:31`: Der Docstring „Alle Knoten mit Docstring, je mit dem
+Ausdruck, der ihn trägt, und seinem Text“ beschreibt die alte Rückgabe; geliefert werden nur
+Ausdruck und Text, kein Knoten.
+
+**Kosten.** Klein; wer den Docstring liest, erwartet drei Werte.
+
+**Gegenvorschlag.** Etwa „Alle Docstrings, je als Ausdruck und Text.“
+
+Erledigt, wenn der Docstring der Rückgabe entspricht.
