@@ -1,6 +1,6 @@
 # Antworten des Stakeholders zählen nicht gegen das Höchstmaß
 
-162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · angenommen
+162 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** `hoechstmassTest.py` zählt ein Anliegen samt den Antworten des Stakeholders. Mit
