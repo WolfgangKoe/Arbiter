@@ -36,6 +36,10 @@ class Einheit:
 class Armee:
     einheiten: tuple[Einheit, ...] = ()
 
+    @property
+    def modelle(self) -> frozenset[Modell]:
+        return frozenset(modell for einheit in self.einheiten for modell in einheit.modelle)
+
 
 @dataclass(frozen=True, eq=False)
 class Spieler:

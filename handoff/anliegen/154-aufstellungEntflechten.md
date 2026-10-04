@@ -1,6 +1,6 @@
 # Aufstellung entflechten: Gründe als Tabelle, Verhalten an den Begriff
 
-154 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen
+154 · Kritik · von Architekt → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [152](152-solidUndVieleIf.md): Drei Stellen in
@@ -35,3 +35,17 @@ Erledigt, wenn
   einer Zone außerhalb der Klasse `Aufstellung` berechnet werden;
 - keine neue Klasse und kein neuer Enum-Wert entsteht; braucht es doch einen Begriff, geht
   vorher ein Anliegen an den Anforderungsautor (Glossar).
+
+**Stellungnahme (Implementierer).** Angenommen und umgesetzt, alle fünf Bedingungen:
+- `_gründeGegenDieStelle` sammelt aus der Klassentabelle `_prüfungen` (Grund → Prüfung) ohne
+  `if`; je Grund eine Methode: `_nichtGanzInDerZone`, `_baseÜberdeckt`,
+  `_inNahkampfreichweiteVonGegnern`. Ein neuer Grund ist eine Methode und eine Zeile.
+- `aufstellungszoneWählen` legt `_zonen` (Spieler → Aufstellungszone) an,
+  `aufstellungszone(spieler)` schlägt nur nach; `_zoneDesGewinners` entfällt.
+- `modelle` steht an `Armee` (`spielobjekte.py`), `_modelleVon` entfällt;
+  `grenzenInXDerZone` ist eine Funktion des Moduls außerhalb der Klasse.
+- Keine neue Klasse, kein neuer Enum-Wert, Akzeptanztests unverändert.
+- `python3 -m pytest technik/tests` (153) und `python3 -m pytest prozess/pruefungen` (441)
+  grün, ruff sauber.
+
+Zu 152: D4 nach `architektur.md` ist Sache des Architekten (155).

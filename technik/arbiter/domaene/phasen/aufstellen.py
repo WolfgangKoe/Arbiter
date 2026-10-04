@@ -1,7 +1,8 @@
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
+from typing import ClassVar
 
 from arbiter.domaene import messen
 from arbiter.domaene.querschnitt import baseÜberdeckt
@@ -25,13 +26,18 @@ class Ausgangslage:
     tiefen: Mapping[Aufstellungszone, Fraction]
 
 
-def _modelleVon(spieler: Spieler) -> set[Modell]:
-    return {modell for einheit in spieler.armee.einheiten for modell in einheit.modelle}
+def grenzenInXDerZone(
+    zone: Aufstellungszone, breite: Fraction, tiefe: Fraction
+) -> tuple[Fraction, Fraction]:
+    if zone is Aufstellungszone.erste:
+        return Fraction(0), tiefe
+    return breite - tiefe, breite
 
 
 def _teilenSichArmeeOderModell(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> bool:
-    return ersterSpieler.armee is zweiterSpieler.armee or not _modelleVon(ersterSpieler).isdisjoint(
-        _modelleVon(zweiterSpieler)
+    return (
+        ersterSpieler.armee is zweiterSpieler.armee
+        or not ersterSpieler.armee.modelle.isdisjoint(zweiterSpieler.armee.modelle)
     )
 
 
@@ -47,7 +53,7 @@ class Aufstellung:
         self._gewinner: Spieler | None = None
         self._einheitInAufstellung: Einheit | None = None
         self._anDerReihe: Spieler | None = None
-        self._zoneDesGewinners: Aufstellungszone | None = None
+        self._zonen: dict[Spieler, Aufstellungszone] = {}
         self._stellen: dict[Modell, Stelle] = {}
         self._aufgestellt: set[Einheit] = set()
 
@@ -65,7 +71,7 @@ class Aufstellung:
 
     @property
     def beendet(self) -> bool:
-        return self._zoneDesGewinners is not None and self._anDerReihe is None
+        return bool(self._zonen) and self._anDerReihe is None
 
     def gesetzt(self, modell: Modell) -> bool:
         return modell in self._stellen
@@ -84,19 +90,16 @@ class Aufstellung:
         self._gewinner = gewinner
 
     def aufstellungszoneWählen(self, zone: Aufstellungszone) -> None:
-        if self._gewinner is None or self._zoneDesGewinners is not None:
+        if self._gewinner is None or self._zonen:
             raise Sperre(Grund.nichtWählbar)
-        self._zoneDesGewinners = zone
+        andere = next(übrige for übrige in Aufstellungszone if übrige is not zone)
+        self._zonen = {self._gewinner: zone, self._gegnerVon(self._gewinner): andere}
         self._anDerReihe = self._nächsterAnDerReihe(self._gewinner)
 
     def aufstellungszone(self, spieler: Spieler) -> Aufstellungszone | None:
         if spieler not in self._spieler:
             raise ValueError("Der Spieler gehört nicht zur Aufstellung")
-        if self._zoneDesGewinners is None:
-            return None
-        if spieler is self._gewinner:
-            return self._zoneDesGewinners
-        return next(zone for zone in Aufstellungszone if zone is not self._zoneDesGewinners)
+        return self._zonen.get(spieler)
 
     def einheitInAufstellungWählen(self, einheit: Einheit) -> None:
         if self._anDerReihe is None or self.aufgestellt(einheit):
@@ -128,33 +131,37 @@ class Aufstellung:
         self._anDerReihe = self._nächsterAnDerReihe(spieler)
 
     def _gründeGegenDieStelle(self, modell: Modell, stelle: Stelle) -> set[Grund]:
+        return {
+            grund for grund, prüfung in self._prüfungen.items() if prüfung(self, modell, stelle)
+        }
+
+    def _nichtGanzInDerZone(self, modell: Modell, stelle: Stelle) -> bool:
         spieler = self._anDerReihe
         assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
-        gründe = set()
-        _, länge = self._ausgangslage.spielfeld.seitenlängen
-        zone = self.aufstellungszone(spieler)
-        assert zone is not None  # Warum: Wer an der Reihe ist, hat die Zone nach der Zonenwahl.
-        grenzenInY = (Fraction(0), länge)
-        if not messen.ganzIn(modell.base, stelle, self._grenzenInX(zone), grenzenInY):
-            gründe.add(Grund.nichtGanzInDerZone)
-        if baseÜberdeckt(modell, stelle, self._stellen):
-            gründe.add(Grund.baseÜberdeckt)
-        eigene = _modelleVon(spieler)
-        for anderes, andereStelle in self._stellen.items():
-            if anderes is modell:
-                continue
-            if anderes not in eigene and messen.abstandHöchstens(
-                modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
-            ):
-                gründe.add(Grund.nahkampfreichweite)
-        return gründe
+        breite, länge = self._ausgangslage.spielfeld.seitenlängen
+        zone = self._zonen[spieler]
+        grenzenInX = grenzenInXDerZone(zone, breite, self._ausgangslage.tiefen[zone])
+        return not messen.ganzIn(modell.base, stelle, grenzenInX, (Fraction(0), länge))
 
-    def _grenzenInX(self, zone: Aufstellungszone) -> tuple[Fraction, Fraction]:
-        breite, _ = self._ausgangslage.spielfeld.seitenlängen
-        tiefe = self._ausgangslage.tiefen[zone]
-        if zone is Aufstellungszone.erste:
-            return Fraction(0), tiefe
-        return breite - tiefe, breite
+    def _baseÜberdeckt(self, modell: Modell, stelle: Stelle) -> bool:
+        return baseÜberdeckt(modell, stelle, self._stellen)
+
+    def _inNahkampfreichweiteVonGegnern(self, modell: Modell, stelle: Stelle) -> bool:
+        spieler = self._anDerReihe
+        assert spieler is not None  # Warum: Einheit in Aufstellung heißt, jemand ist an der Reihe.
+        return any(
+            anderes not in spieler.armee.modelle
+            and messen.abstandHöchstens(
+                modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
+            )
+            for anderes, andereStelle in self._stellen.items()
+        )
+
+    _prüfungen: ClassVar[dict[Grund, Callable[["Aufstellung", Modell, Stelle], bool]]] = {
+        Grund.nichtGanzInDerZone: _nichtGanzInDerZone,
+        Grund.baseÜberdeckt: _baseÜberdeckt,
+        Grund.nahkampfreichweite: _inNahkampfreichweiteVonGegnern,
+    }
 
     def _begonnen(self, einheit: Einheit) -> bool:
         return any(self.gesetzt(modell) for modell in einheit.modelle)
