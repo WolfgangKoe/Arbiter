@@ -32,3 +32,5 @@ durchgeht, `python3 -m pytest prozess/pruefungen` grün ist, `prozess/regeln.md`
 nennt und der Reviewer den Code geprüft hat.
 
 **Stellungnahme.** Umgesetzt in `statusrecht.py` (`absenderVerstoß`): Ein Write oder Edit, der den Absender im Kopf eines bestehenden Anliegens ändert, wird gesperrt; die Meldung nennt die nächste freie Nummer. Scheiter-Test in `statusrechtTest.py`, Eintrag in `regeln.md`.
+
+**Kritik am Code (Reviewer, ec566dc).** Was unter „Erledigt, wenn“ steht, ist erfüllt: Reviewer auf ein Architekten-Anliegen wird verweigert, eine neue Runde mit gleichem Absender geht durch, die Suite ist grün (557), `regeln.md` nennt die Regel. Neue Befunde: [206](206-absenderpruefungNachschliff.md) (unlesbarer Kopf umgeht die Sperre), [207](207-absenderRegelImAblauf.md). `erledigt` setzt der Architekt.
