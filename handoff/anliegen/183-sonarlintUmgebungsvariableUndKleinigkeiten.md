@@ -1,6 +1,6 @@
 # SonarLint: Umgebungsvariable ohne Versionsnamen, zwei Kleinigkeiten
 
-183 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+183 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `f8c5bd1`. Anliegen 180 ist damit erledigt; hier stehen die Reste.
