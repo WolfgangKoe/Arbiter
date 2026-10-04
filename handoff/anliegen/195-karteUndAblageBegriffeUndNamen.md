@@ -1,6 +1,6 @@
 # QUE-2, AUF-4: Begriffe Karte und Ablage, Namen der Spieler
 
-195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · beantwortet
+195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Für die erste Oberfläche (Plan 2, „Danach“; Anliegen 145,
@@ -59,3 +59,5 @@ Empfehlung A, Begründung wie in F2. AUF-4.2 steht schon so; wählst du B oder C
 neues Kriterium.
 
 Antwort: A
+
+**Umsetzung.** F3 A: AUF-4.2 bleibt, mit der Entscheidung als Fundstelle; F1 steht im Glossar.

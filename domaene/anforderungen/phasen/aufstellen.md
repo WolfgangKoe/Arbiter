@@ -43,7 +43,7 @@ Zweck: Arbiter sperrt beim *Setzen* nach [QUE-1](../querschnitt.md) auch jede *S
 
 Zweck: Neben der *Karte* nach [QUE-2](../querschnitt.md) sehen die *Spieler*, welche *Modelle* noch aufzustellen sind, wer *an der Reihe* ist und welche *Aufstellungszone* wem gehört.
 
-- AUF-4.2 Den *Spieler* der ersten *Armee* aus `ausgangslage.yaml` nennt Arbiter „Spieler 1“, den anderen „Spieler 2“ (`Arbiter-old/docs/spec/setup.md:136`).
+- AUF-4.2 Den *Spieler* der ersten *Armee* aus `ausgangslage.yaml` nennt Arbiter „Spieler 1“, den anderen „Spieler 2“ (`Arbiter-old/docs/spec/setup.md:136`, Anliegen 195 F3 A).
 - AUF-4.3 Je *Spieler* zeigt Arbiter eine *Ablage* mit jeder seiner nicht *aufgestellten* *Einheiten* unter ihrem Namen und ihren nicht *gesetzten* *Modellen*, auch wenn keines mehr fehlt (Etappe 1, Anliegen 145 F1 A, 199).
 - AUF-4.4 Arbiter zeigt, welcher *Spieler* *an der Reihe* ist, und keinen, solange es keiner ist.
 - AUF-4.5 In der *Ablage* ist die *Einheit in Aufstellung* gekennzeichnet, solange es eine gibt.
