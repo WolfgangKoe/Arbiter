@@ -1,64 +1,67 @@
-# Plan · Zyklus 2
+# Plan · Zyklus 3
 
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
+Grundlage: Review 2 hat noch kein „Nächstes Vorgehen“; es gilt „Danach“ aus Plan 2. Abweichung:
+Die Ablage wird gezeigt, Ziehen und Zurücklegen kommen später. Sie brauchen Handlungen über
+HTTP und damit den Speicher (153 F1); der Architekt schneidet erst Anzeige, dann Wählen per
+Klick, dann Ziehen (Anliegen 146, git).
+
 ## Items
-1. [Ausgangslage von Only War](../domaene/items/ausgangslage-only-war.md): OBJ-1.1, AUF-2.5 bis
-   AUF-2.7, nur Daten
-2. [Sperren beim Setzen](../domaene/items/sperren-beim-setzen.md): QUE-1.1, QUE-1.2, AUF-2.4,
-   AUF-3.2, AUF-3.5, AUF-3.6, AUF-3.7, ohne Nahkampfreichweite, nach Item 1
-3. [Nahkampfreichweite beim Setzen](../domaene/items/nahkampfreichweite-beim-setzen.md):
-   AUF-3.4 mit seinem Teil von AUF-3.5 und AUF-3.7, nach Item 2
+1. [Karte im Browser](../domaene/items/karte-im-browser.md): QUE-2.1 bis QUE-2.6
+2. [Anzeige der Aufstellung](../domaene/items/anzeige-der-aufstellung.md): AUF-4.1 bis
+   AUF-4.6, nach Item 1
 
 ## Empfehlung
-Freigeben mit allen drei Items. Reihenfolge nach Abhängigkeit und Nutzen: Die Sperren beim
-Setzen sind der Kern von Etappe 1 und das erste Stück Geometrie (Zonen, Bases, Abstände), auf
-dem Bewegen, Schießen und Charge aufbauen; sie brauchen die Modelle mit Base aus Item 1. Die
-Nahkampfreichweite ist die letzte Sperre beim Setzen; mit den 9″-Bändern sperrt sie nie
-allein, sie braucht die mehreren Gründe (AUF-3.5) aus Item 2. Reicht der Zyklus nicht, fällt
-zuerst Item 3, dann Item 2. Alle ohne Oberfläche: Nach Zyklus 2 ist noch nichts klickbar.
+Freigeben mit beiden Items, sobald die Mockups verlinkt sind. Danach startest du Arbiter mit
+einem Befehl und siehst Spielfeld, Zonen, beide Ablagen und wer an der Reihe ist; handeln
+kannst du noch nicht. Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt
+ihre Zonen. Reicht der Zyklus nicht, fällt Item 2. Start, Komponentenseite und Bildschirmtest
+füllen allein einen Zyklus (146); mehr als die reine Anzeige passt nicht.
 
-Der Zyklus ist größer als die Items aussehen (Architekt, Anliegen 102, git):
-- Item 1 liest die Daten der Ausgangslage über `katalog/`, ohne Datenbank; der Regelumsetzer
-  baut im selben Zyklus den Importvertrag (Architektur A1).
-- Item 2 ändert die grünen Tests zu AUF-1: Setzen mit Stelle, Modelle mit Base, eine Sperre mit
-  mehreren Gründen.
-- Item 2 ist technisches Neuland: Vor dem Testautor legt der Architekt nach einem
-  Wegwerf-Versuch fest, wie eine Stelle angegeben wird und womit gerechnet wird, damit die
-  Grenzfälle aus 100 F2 ohne Toleranz gelten; dazu die Messungen (M1) um *überdecken*. Die
-  ganze Geometrie, auch das Zonenband (AUF-2.4), liegt deshalb in Item 2; Item 1 ist allein
-  machbar.
+Noch nicht bereit:
+- DoR 5: Die Mockups fehlen. UX schreibt je Anforderung eins mit CSS-Vorschlag, du siehst sie
+  vor der Freigabe (145 F1). Die Rolle wartet auf die Leitplanken des Organisationsentwicklers
+  ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)).
+- DoR 4: [195](anliegen/195-karteUndAblageBegriffeUndNamen.md) ist offen; die Freigabe
+  beantwortet F1 und F2. Mit F2 B oder C ändert sich AUF-4.2.
 
-Grenzen der Items, damit Testautor und Implementierer nichts erfinden:
-- Gesetzt wird in Tests nur aus der Ausgangslage oder von der vorigen Stelle (AUF-3.7); die
-  Ablage als Ort neben der Karte und Zurücklegen kommen später (Etappe 1, Anliegen 16 F1, F2,
-  git).
-- Mit Sperre bleibt der Zustand unverändert (Architektur D2): Das Modell bleibt ungesetzt
-  oder an seiner vorigen Stelle. Stehenbleiben mit Grund, „zurück“, „gemeinsam übergehen“ und
-  Protokoll kommen später (16 F4).
-- Akzeptanztests beenden eine Einheit erst, wenn alle ihre Modelle gesetzt sind und die Einheit
-  in Kohärenz steht; die Sperren beim Beenden kommen später (16 F3).
-- Nur runde Bases ohne FLY; andere Formen bringt Etappe 6.
+Vor dem Testautor (Technik, 146 Punkt 4): der Aufbau aus
+[153](anliegen/153-frontendBackendUndDatenbank.md) in der Technik, Wegwerf-Versuch zum
+Bildschirmtest, Komponentenseite aus dem CSS der Mockups. Keine Datenbank (153 F1).
+
+## Aufbau der Oberfläche
+Deine Antwort zu 145 F1 als Vorgabe für die Mockups; Einzelheiten schlägt UX vor:
+- Oben der gameHeader aus Arbiter-old: wer an der Reihe ist (AUF-4.4).
+- Links und rechts je Spieler die armyCard mit unitCards aus Arbiter-old: die Ablage
+  (AUF-4.3, AUF-4.5); Spalten wie in `Arbiter-old/docs/spec/ui_layout.md`, Abschnitt 1.
+- In der Mitte, wo Arbiter-old die gameActionsArea hat, die Karte aus ArbiterMap (QUE-2).
+- Die gameActionsArea zieht nach unten, wo ArbiterMap das Datenblatt von unten einfährt
+  (`ArbiterMap/frontend/CLAUDE.md:443`); ihre Knöpfe kommen mit dem Wählen.
+- Farben, Icons, Schrift aus Arbiter-old; für die Karte, die Arbiter-old nicht hat, aus
+  ArbiterMap (QUE-2.6, AUF-4.6).
+
+Dein „SOLID und lesbar“ für den Unterbau trägt die Technik: Aufbau 153, Regel D4
+([152](anliegen/152-solidUndVieleIf.md)); beide warten auf Platz in der Technik
+([159](anliegen/159-zweiteTechnikdatei.md)).
 
 ## Danach, nach Abhängigkeit
-Ablage, Zurücklegen und die erste Oberfläche im Browser, Wunsch des Stakeholders
-([145](anliegen/145-ersteOberflaecheImBrowser.md), Schnitt Anliegen 146):
-Karte mit Spielfeld und Zonen, Ziehen mit Maus und Touch, dafür UX und Mockup · Zurück, gemeinsam übergehen und Protokoll (16 F4) · Beenden
-mit fehlenden Modellen und Kohärenz (16 F3). Mit diesen drei ist Etappe 1 erreichbar.
+Wählen per Klick (Gewinner, Zone, Einheit) mit Speicher · Setzen, Umsetzen und Zurücklegen
+durch Ziehen mit Maus und Touch, Sperre mit Grund · Zurück, gemeinsam übergehen und Protokoll
+(16 F4) · Beenden mit fehlenden Modellen und Kohärenz (16 F3). Damit ist Etappe 1 erreicht.
 
 ## Offene Anliegen
-An dich:
-- [83](anliegen/83-sprungErproben.md): Sprung zwischen Kriterium und Test erproben, Runde 3.
-- [145](anliegen/145-ersteOberflaecheImBrowser.md): erste Oberfläche im Browser, ArbiterMap
-  als Vorbild, Reihenfolge für Plan 3.
+An dich, wirken auf Plan 3:
+- [195](anliegen/195-karteUndAblageBegriffeUndNamen.md) (Anforderungsautor): Begriffe *Karte*
+  und *Ablage*, Namen der Spieler.
+- [153](anliegen/153-frontendBackendUndDatenbank.md) F1 (Architekt): Datenbank erst mit der
+  ersten Handlung.
+- [159](anliegen/159-zweiteTechnikdatei.md), [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md):
+  beantwortet, der Organisationsentwickler liefert Optionen und Leitplanken nach.
 
-Zwischen Rollen:
-- Anliegen 146: Schnitt der ersten Oberfläche, an den
-  Architekten, vor Plan 3.
-- Anliegen 108,
-  Anliegen 109,
-  Anliegen 110,
-  Anliegen 112: angenommen und eingearbeitet, Nachprüfung
-  durch Anforderungsautor und Architekt.
+Zwischen Rollen: [155](anliegen/155-technikBrauchtPlatzUndErstesMockup.md) und 152 warten
+auf 159.
 
-Antwort: .
+## Freigabe
+Freigabe: offen
+Kommentar: .

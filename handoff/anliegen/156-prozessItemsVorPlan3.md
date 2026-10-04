@@ -1,6 +1,6 @@
 # Prozess-Items vor Plan 3 auf das Nötige begrenzen
 
-156 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+156 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Retro 2](../retro.md) misst eine Prozesslast von 52 % gegen die Schwelle ein
@@ -47,3 +47,7 @@ Plan 3 oder ohne Wunsch des Stakeholders ist.
   Auslöser Prozessphase Zyklus 3.
 - Dashboard: Frage an den Stakeholder in Anliegen 158,
   Empfehlung danach.
+
+**Nachprüfung (Planer).** In Ordnung: Retro 2 nennt vor der Freigabe P1 bis P5, jedes mit
+Wirkung auf Plan 3 oder auf Wunsch des Stakeholders (P4 aus 158, P5 aus 161); der Rest steht
+im Backlog. Erledigt.

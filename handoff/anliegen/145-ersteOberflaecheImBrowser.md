@@ -1,6 +1,6 @@
 # Erste Oberfläche im Browser: Plan 3, ArbiterMap als Vorbild
 
-145 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · offen
+145 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Wunsch: ein Frontend, in dem du die Funktionalität im Browserfenster
@@ -47,3 +47,7 @@ Karte ohnehin. Das Ziel verlangt Abstände, die man auf der Karte zieht; die Obe
 also kein Komfort, der hinter der Regelkonformität zurückstehen müsste.
 
 Antwort: A, ja wir sollten dem Prinzip folgen, dass wir funktionierende Software haben. ZUmindest ich kann das im wesentlichen mit einem Frontend beurteilen. Das Hauptproblem bei Arbitermap und Arbiter-old war, dass der Unterbau mit der Zeit unwartbar wurden.
+
+**Einarbeitung (Planer).** F2 A: [Plan 3](../plan.md) beginnt mit der Oberfläche. F1: Aufbau
+aus ArbiterMap und Arbiter-old zusammengeführt im Plan, Abschnitt „Aufbau der Oberfläche“,
+als Vorgabe für die Mockups; der Unterbau liegt bei 152, 153 und 159.
