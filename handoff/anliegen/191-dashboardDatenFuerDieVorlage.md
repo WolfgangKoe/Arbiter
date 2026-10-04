@@ -23,6 +23,11 @@ Ohne sie bleibt die Seite im Aufbau gleich, aber ohne diese Spalten und Segmente
 Modell, Auftrag und Verbrauch weglassen. B: alles. C: so lassen.
 
 Frage F1: A, B oder C?
-Antwort: .
+Antwort: Ich bin mir nicht sicher, ob ich mit deiner Auswahl zufrieden bin. Orchestrator auf jeden Fall von den anderen farblich unterscheiden. Es fehlt die y-Achse in alle Diagrammen. "Beginn" und "Belegung" haben so keine Aussagekraft. Es bräuchte eher so etwas wie Task und Kontextfenster in der Form:
+- Die Task gibt an, was der Subagent gemacht hat. Und bitte nicht nur die Anliegennummer. Zum Beispiel "Erstellung des Dashboads"
+- Die Angabe des Kontextfensters sollte statt "38.247" auf "38k" gerundet werden. 
+- Die Angabe des dahinter liegenden Modells ist notwendig (z.B. Opus, Sonnet,...)
+Nach Umsetzung dieser Punkte, nehme ich das Dashboard ab.
 
-**Stellungnahme.**
+**Stellungnahme.** Für den nächsten Zyklus: Was mir Dashboard noch fehlt sind die Daten z.B. aus Sonarlint oder den Metriken unserer Prüfungen. Ich hätte gerne sinnvolle Kennzahlen, die den aktuellen Stand darstellen. Das wäre aus meiner Sicht auf einer neuen Seite. Das kann im nächsten Zyklus umgesetzt werden.
+Im übernächsten Zyklus könnten wir die Anliegen dort hineinbringen. Da kann ich dann kommentieren und nach "Enter" wird mein Text hier in die Anliegen geschrieben. Wenn Anliegen meine Aufmerksamkeit brauchen und ich etwas "annehmen" möchte, steht da nur ein Schalter und der überschreibt hier den Status. Entsprechend auch für "erledigt". Auf diese Weise überschreibe ich nicht aus Versehen Status und Inhalt anderer Anliegen. 
