@@ -1,6 +1,6 @@
 # Freigabefeld, Kommentare und Freigabe des Reviews im Stand
 
-167 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+167 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder gibt Plan, Review und Retro künftig in der Datei frei und
@@ -32,8 +32,7 @@ Freigabe von Plan 3.
    Freigabe-Commit bleiben ungeprüft (Plan 2, Review 2).
 4. Höchstmaß: Plan, Review, Retro je 4.000 in `hoechstmassTest.py`; jede Zeile `Kommentar:`
    zählt als `Kommentar: .`, mit derselben Zählfunktion wie `Antwort:` in
-   Anliegen 162. Der Punkt steht im
-   [Backlog](../../prozess/backlog.md) und zieht damit vor.
+   Anliegen 162.
 
 Scheiter-Tests: (1) Review 3 ohne Retro 3 und ohne Freigabe: wartet; mit `Freigabe Review 3`:
 Prozessphase. (2) Kommentar ohne Stellungnahme: Autor dran; mit Stellungnahme oder
@@ -56,3 +55,5 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 **Stellungnahme (Teil 4).** Umgesetzt: `hoechstmassTest.py`, `kennzahlen.md`, `regeln.md`. Alle Teile gebaut; offen: Kritik am Code.
 
 **Kritik am Code (Reviewer, e772442 bis 5bb18bb).** Alle vier Teile sind geprüft, die Scheiter-Tests und `pytest prozess/pruefungen` grün. Eigene Befunde: [208](208-freigabeReviewBeantwortetFragen.md), [210](210-freigabefeldNurImAbschnittLesen.md). Noch hier: Die Zeile in `regeln.md` nennt 3.990 Zeichen, der Test zählt 3.980; mit `Kommentar: .` wären 3.990 rot. Korrigieren, dann `angenommen`.
+
+**Nachprüfung.** In Ordnung; „nur Text“ im Ablauf ersetzt, Rest trägt 168.

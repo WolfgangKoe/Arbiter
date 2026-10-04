@@ -68,10 +68,11 @@ Organisationsentwickler sie vor.
    - Zyklusziel: Empfehlung für Plan n+1, mit den technischen Voraussetzungen und Schulden,
      die vorher weg müssen.
    Der Reviewer fasst zusammen und empfiehlt; der Stakeholder entscheidet mit Freigabe und
-   Kommentaren, der Planer schneidet die Items. Mechanismus: nur Text (Anliegen 167).
+   Kommentaren, der Planer schneidet die Items. Mechanismus: `freigabeFormat.py` (Abschnitt
+   und drei Punkte); Inhalt und Beleg nur Text.
 7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
-   `Freigabe Review <n>`. Danach meldet der Stand die Prozessphase. Mechanismus: nur Text
-   (Anliegen 167).
+   `Freigabe Review <n>`. Danach meldet der Stand die Prozessphase. Mechanismus:
+   `phasenfolge.py` (`lage`).
 
 Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest danach),
 technisches Neuland (Wegwerf-Versuch, dann Test).
@@ -141,7 +142,8 @@ Mechanismus: nur Text.
 Mechanismus der Übergänge: Stand-Hook (`prozess/pruefungen/stand.py`).
 
 ## Freigabe und Kommentare
-Plan, Review und Retro enden mit diesem Abschnitt; der Autor legt ihn so an:
+Plan, Review und Retro enden mit diesem Abschnitt; der Autor legt ihn so an (Mechanismus:
+`freigabeFormat.py`):
 ```
 ## Freigabe
 Freigabe: offen
@@ -155,12 +157,13 @@ Kommentar: .
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
   wo>`. Betrifft der Kommentar ein fremdes Artefakt oder braucht er eine Entscheidung, wird
   daraus ein Anliegen; die Stellungnahme nennt dessen Nummer. Solange ein Kommentar ohne
-  Stellungnahme steht, ist der Autor dran, auch nach der Freigabe. Mechanismus: nur Text
-  (Anliegen 167).
+  Stellungnahme steht, ist der Autor dran, auch nach der Freigabe. Mechanismus:
+  `freigabeKommentare.py`, `stand.py`; Anliegen und Inhalt der Stellungnahme nur Text.
 - „.“ im Chat heißt: Die Datei ist durchgesehen. Steht `Freigabe: ja`, committet der
   Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
   Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
-  Datei danach wieder vor. Mechanismus: nur Text (Anliegen 167, 168).
+  Datei danach wieder vor. Mechanismus: `stand.py` nennt den Commit als nächsten Schritt;
+  nur bei `Freigabe: ja` committen ist nur Text (Anliegen 168).
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
 - Die Etappe gibt der Stakeholder mit „.“ im Chat frei.
