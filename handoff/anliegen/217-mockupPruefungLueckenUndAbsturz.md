@@ -1,6 +1,6 @@
 # Prüfung der Mockups: Lücken bei `style=` und Absturz bei fremden Dateien
 
-217 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+217 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von cef00fc (Anliegen 200). Die Tests laufen grün (81 passed);
