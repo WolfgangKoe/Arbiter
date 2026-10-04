@@ -47,6 +47,12 @@ Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die M
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** D, C erledigt; B bis auf 7: Hook-Protokoll (4), `pfade.py` (5), `Phase`, `Lage`, `Etappe` (1, 6), `Fundstelle` (3), Typaliase in PascalCase (2), `Commit` und `FälligeKritik` in `codekritik.py` (1). B 7 erledigt (`kriterium.py`, `spur.py`). Offen: A. A braucht eine Entscheidung: Importe zwischen Ordnern gehen nur über `PYTHONPATH`, `python3 -m` oder `sys.path`; die ersten beiden ändern Hook-Befehle und Erlaubnisliste. Status offen.
+**Stellungnahme.** D, C, B erledigt. Offen: A. Ja, eine Entscheidung, nur diese. Hook-Befehle passe ich selbst an; die Erlaubnisliste ändere ich nicht ohne dein Ja.
 
-Antwort: Okay, hier ist eine Entscheidung vom Stakeholder erforderlich? Falls ja, muss mir das klar gesagt werden. Was muss ich hier ggf. tun?
+**F1 · Wie finden Skripte verschiedener Ordner einander?**
+- a) `PYTHONPATH=prozess/pruefungen` vor Befehlen von Hand; du erlaubst dafür
+  `Bash(PYTHONPATH=prozess/pruefungen python3 *)`. Eine Erlaubnis mehr.
+- b) Je Skript eine `sys.path`-Zeile, gegen den Gegenvorschlag.
+- c) A entfällt, alles bleibt flach.
+Empfehlung: a.
+Antwort: .
