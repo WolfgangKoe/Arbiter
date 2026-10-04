@@ -6,6 +6,7 @@ from agenten import projektordner
 from anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from belegung import belegungAusTranskript, punkte, warnschwelle
 from codekritik import fälligeKritikAlsText
+from freigabeKommentare import autorenDran, freigabeZuCommitten
 from gitAufruf import gitAusgabe
 from hookProtokoll import antwortAusgeben, eingabeLesen, zusatzkontext
 from phasenfolge import aktuelleEtappe, lage
@@ -25,13 +26,15 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
     etappe = aktuelleEtappe(wurzel)
     änderungen = gitAusgabe(wurzel, "status", "--porcelain").splitlines()
     uncommittet = [zeile for zeile in änderungen if zeile]
+    committen = freigabeZuCommitten(wurzel)
+    schritt = f"Koordinator: {committen} committen" if committen else aktuelle.schritt
     teile = [
         etappe.titel if etappe else "Keine Etappe",
         f"Zyklus {aktuelle.zyklus}, {aktuelle.phase}",
-        f"Nächster Schritt: {aktuelle.schritt}",
+        f"Nächster Schritt: {schritt}",
         belegungsText(transkript),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
-        dranAlsText(wurzel),
+        dranAlsText(wurzel, autorenDran(wurzel)),
         nachprüfungenAlsText(wurzel),
         wartendeAlsText(wurzel),
         fälligeKritikAlsText(wurzel),

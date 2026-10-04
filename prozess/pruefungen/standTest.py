@@ -403,3 +403,26 @@ def testFreigabeDesReviewsSchiebtKeinenCodeCommitOhneKritikAusDemFenster(repo):
     repo.datei("prozess/pruefungen/probe.py", "x = 1\n")
     repo.freigabe("Review", 1)
     assert "Kritik am Code fällig" in stand(repo.wurzel)
+
+
+def planMitKommentar(repo, *zeilen):
+    repo.datei("handoff/plan.md", "# Plan · Zyklus 1\n\n" + "\n".join(zeilen) + "\n")
+
+
+def testKommentarOhneStellungnahmeMachtDenAutorDran(repo):
+    planMitKommentar(repo, "Kommentar: Bitte Item 2 teilen.", "", "Weiter Text")
+    assert "Dran: Planer (plan.md)" in stand(repo.wurzel)
+
+
+def testKommentarMitStellungnahmeOderPunktMachtNiemandenDran(repo):
+    planMitKommentar(repo, "Kommentar: Bitte Item 2 teilen.", "", "Stellungnahme: geteilt.")
+    assert "Dran:" not in stand(repo.wurzel)
+    planMitKommentar(repo, "Kommentar: .")
+    assert "Dran:" not in stand(repo.wurzel)
+
+
+def testFreigabeJaOhneCommitMachtDenKoordinatorDran(repo):
+    planMitKommentar(repo, "## Freigabe", "", "Freigabe: ja")
+    assert "Nächster Schritt: Koordinator: Freigabe Plan 1 committen" in stand(repo.wurzel)
+    repo.freigabe("Plan", 1)
+    assert "Koordinator: Freigabe" not in stand(repo.wurzel)

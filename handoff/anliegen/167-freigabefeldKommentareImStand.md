@@ -50,3 +50,5 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 **Stellungnahme.** Teil 1 umgesetzt (`phasenfolge.lage`, `letzteFreigabe` ohne `Freigabe Review`, Tests in `standTest.py`, `regeln.md`). Offen: Teile 2 bis 4, je ein Lauf.
 
 **Kritik am Code (Reviewer, e772442).** Teil 1: `lage` und Codekritik-Fenster stimmen. Befund: [208](208-freigabeReviewBeantwortetFragen.md), die Freigabe des Reviews beantwortet keine Fragen mehr.
+
+**Stellungnahme (Teil 2).** Umgesetzt: `freigabeKommentare.py`, Anzeige in `stand.py`; Tests in `standTest.py`, `regeln.md`. Offen: Teile 3 und 4.
