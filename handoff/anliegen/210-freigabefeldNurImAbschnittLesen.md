@@ -1,6 +1,6 @@
 # Freigabefeld nur im Abschnitt `## Freigabe` lesen
 
-210 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+210 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von b232332 (Anliegen 167, Teil 3). `freigabeFormat.verstöße`

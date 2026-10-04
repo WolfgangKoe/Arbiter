@@ -20,7 +20,7 @@ Je Rolle:
   5. [214](anliegen/214-prozessItemsKommentarUndVerweis.md): klein, schließt 173 ab; vor 205 (beide `phasenfolge.py`).
   6. [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md) Teil A (a); nach 213, beide ändern `bashPositivliste.py`.
   7. [202](anliegen/202-histogrammTestUndAchsenmarke.md) bis [206](anliegen/206-absenderpruefungNachschliff.md); 206 nach 213 und 207 (`statusrecht.py`, Absenderregel).
-- Organisationsentwickler: Anliegen 207, [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (wartet auf 139), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md); Nachprüfung 139, 151, 173, [168](anliegen/168-freigabefeldAendertNurDerStakeholder.md) (erst nach 213).
+- Organisationsentwickler: Anliegen 207, [107](anliegen/107-kritikAnDenPruefungen.md), [138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md) (wartet auf 139), [150](anliegen/150-sonarlintAbdeckungUndToterCode.md); Nachprüfung 139, 151, 173, Anliegen 168 (erst nach 213).
 - Reviewer: Code zu b2a5221 ist geprüft (213); Code zu 4792298 ebenso (214); als Nächstes die Commits zu 210/213.
 - Testautor: wartet (AUF-4, QUE-2).
 
