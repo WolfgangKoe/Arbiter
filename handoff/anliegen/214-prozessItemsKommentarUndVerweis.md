@@ -1,6 +1,6 @@
 # Prozess-Items: Kommentar ohne Historie, Verweis auf die richtige Funktion
 
-214 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+214 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4792298 (Anliegen 173). Korrekt: `python3 -m pytest
