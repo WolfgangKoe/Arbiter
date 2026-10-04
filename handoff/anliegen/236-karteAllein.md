@@ -1,6 +1,6 @@
 # que-2.html: Die Karte steht allein in der linken Spalte
 
-236 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · offen
+236 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** In [que-2.html](../../domaene/mockups/que-2.html) hat `main.spielbereich` ein
@@ -22,4 +22,4 @@ Mitte sitzt dann immer in der Mitte, mit und ohne `aside`; in einer Kopie unter 
 geprüft, beide Bilder wie erwartet. Erledigt, wenn que-2.html die
 Karte in der mittleren Spalte zeigt und auf-4-ausgangslage.html unverändert aussieht.
 
-**Stellungnahme.**
+**Stellungnahme.** (UX) Angenommen. `.spalteMitte` hat in [vorschlag.css](../../domaene/mockups/vorschlag.css) jetzt `grid-column: 2;`. que-2.html bleibt unverändert und zeigt die Karte in der Mitte; auf-4-ausgangslage.html sieht gleich aus, da dort die Mitte ohnehin die zweite Spalte ist.
