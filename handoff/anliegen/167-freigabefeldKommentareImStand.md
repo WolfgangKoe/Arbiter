@@ -32,7 +32,7 @@ Freigabe von Plan 3.
    Freigabe-Commit bleiben ungeprüft (Plan 2, Review 2).
 4. Höchstmaß: Plan, Review, Retro je 4.000 in `hoechstmassTest.py`; jede Zeile `Kommentar:`
    zählt als `Kommentar: .`, mit derselben Zählfunktion wie `Antwort:` in
-   [162](162-antwortenNichtZaehlen.md). Der Punkt steht im
+   Anliegen 162. Der Punkt steht im
    [Backlog](../../prozess/backlog.md) und zieht damit vor.
 
 Scheiter-Tests: (1) Review 3 ohne Retro 3 und ohne Freigabe: wartet; mit `Freigabe Review 3`:

@@ -50,7 +50,7 @@ Nur, was auf Plan 3 wirkt oder du vorher willst
   mit Rolle und Belegung, `dashboard.html` im Wurzelordner, Daten und Skripte in
   `prozess/dashboard/` (90); verschlankt aus `ArbiterMap/steering/metrics/process_dashboard.html`:
   Tokenstände, daneben ihre Verteilung, Legende mit höchstens fünf Wörtern je Eintrag.
-- P5 Antworten zählen nicht ([162](anliegen/162-antwortenNichtZaehlen.md)).
+- P5 Antworten zählen nicht (Anliegen 162).
 
 ## Empfehlung
 Zur Freigabe: P1 bis P5. 135 und 161 sind mit A entschieden, 145 und 158 beantwortet. Zu
