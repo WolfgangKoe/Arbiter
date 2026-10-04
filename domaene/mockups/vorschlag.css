@@ -1,0 +1,201 @@
+:root {
+  --arb-bg: #0f0e0c;
+  --arb-surface: #1c1a14;
+  --arb-border: #2e2618;
+  --arb-accent: #d4a017;
+  --arb-accent-lt: #fbbf24;
+  --arb-muted: #6b5f44;
+  --arb-text: #e7e5e4;
+  --spieler-1: #3b82f6;
+  --spieler-2: #f43f5e;
+  --ohne-spieler: #a3a3a3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--arb-bg);
+  color: var(--arb-text);
+  font-family: system-ui, sans-serif;
+}
+
+.gameHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--arb-surface);
+  border-bottom: 1px solid var(--arb-border);
+}
+
+.gameHeaderTitel {
+  color: var(--arb-accent);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.gameHeaderSpieler {
+  min-width: 10rem;
+  padding: 0.25rem 0.75rem;
+  border-bottom: 3px solid transparent;
+  font-weight: 700;
+}
+
+.gameHeaderSpieler.spieler1 {
+  color: var(--spieler-1);
+}
+
+.gameHeaderSpieler.spieler2 {
+  color: var(--spieler-2);
+  text-align: right;
+}
+
+.gameHeaderSpieler.anDerReihe {
+  border-bottom-color: var(--arb-accent-lt);
+}
+
+.gameHeaderAnDerReihe {
+  display: block;
+  color: var(--arb-accent-lt);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.spielbereich {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  min-height: 0;
+}
+
+.spalte {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.spalteMitte {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.armyCard {
+  padding: 0.75rem;
+  background: var(--arb-surface);
+  border: 1px solid var(--arb-border);
+  border-radius: 0.5rem;
+}
+
+.armyCardName {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.armyCard.spieler1 .armyCardName {
+  color: var(--spieler-1);
+}
+
+.armyCard.spieler2 .armyCardName {
+  color: var(--spieler-2);
+}
+
+.unitCard {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--arb-bg);
+  border: 1px solid var(--arb-border);
+  border-radius: 0.375rem;
+}
+
+.unitCard.inAufstellung {
+  border-color: var(--arb-accent-lt);
+  box-shadow: 0 0 0 1px var(--arb-accent-lt);
+}
+
+.unitCardName {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.unitCardAbzeichen {
+  padding: 0.0625rem 0.5rem;
+  background: var(--arb-accent-lt);
+  border-radius: 0.25rem;
+  color: var(--arb-bg);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.unitCardModelle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unitCardModell {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--arb-muted);
+  border-radius: 999px;
+  color: var(--arb-muted);
+  font-size: 0.75rem;
+}
+
+.karte {
+  width: 100%;
+  max-width: 34rem;
+  max-height: 100%;
+  background: var(--arb-surface);
+  border: 1px solid var(--arb-border);
+}
+
+.spielfeld {
+  fill: var(--arb-bg);
+  stroke: var(--arb-muted);
+  stroke-width: 0.15;
+}
+
+.aufstellungszone {
+  fill-opacity: 0.12;
+  stroke-width: 0.15;
+  stroke-dasharray: 0.6 0.4;
+}
+
+.aufstellungszone.spieler1 {
+  fill: var(--spieler-1);
+  stroke: var(--spieler-1);
+}
+
+.aufstellungszone.spieler2 {
+  fill: var(--spieler-2);
+  stroke: var(--spieler-2);
+}
+
+.aufstellungszone.ohneSpieler {
+  fill: var(--ohne-spieler);
+  stroke: var(--ohne-spieler);
+}
+
+.modell {
+  fill-opacity: 0.85;
+  stroke-width: 0.08;
+}
+
+.modell.spieler1 {
+  fill: var(--spieler-1);
+  stroke: var(--spieler-1);
+}
+
+.modell.spieler2 {
+  fill: var(--spieler-2);
+  stroke: var(--spieler-2);
+}
