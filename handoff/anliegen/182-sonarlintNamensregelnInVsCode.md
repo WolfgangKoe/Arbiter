@@ -1,6 +1,6 @@
 # SonarLint-Namensregeln auch in VS Code abschalten?
 
-182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · beantwortet
+182 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 Aus Anliegen 181. Die Sperre schaltet die Namensregeln S100, S101,
@@ -32,6 +32,18 @@ Ich kann deine Benutzereinstellungen nicht ändern (liegen außerhalb des Projek
 5. Prüfen: In einer `.py`-Datei des Projekts zeigt das Problemfenster keine S100, S101,
    S116, S117, S1542, S1578 mehr (vorher 276 Meldungen).
 
-Danach setze ich `erledigt`, wenn du es bestätigst.
+## Nachprüfung
+Deine `sonarlint.rules` in `~/.config/Code/User/settings.json` sind gleich der Ausgabe von
+`sonarlint.py --einstellung` (per Skript verglichen: wahr). Die Meldungsanzahl im
+Problemfenster sehe ich nicht; bleiben nach „Reload Window“ Namensmeldungen, melde dich.
+
+**cSpell und Spellchecker.** Sie stören die Prüfungen nicht: Sie sind reine Editoranzeige
+und laufen weder im Hook noch in `pytest`. `.vscode/settings.json` schaltet cSpell für
+`*.md` und LTeX schon ab. In `.py` zeigen sie deutsche camelCase-Namen als Fehler; wem das
+Rauschen die Funde überdeckt, dem hilft in den Benutzereinstellungen
+`"cSpell.language": "de,en"` (das deutsche Wörterbuch ist installiert). Dafür braucht es
+kein Anliegen; ein zweiter Rechtschreibprüfer neben cSpell ist doppelt und kann aus.
+
+Status: `erledigt`.
 
 Antwort: Ich habee die Einstellungen gesetzt. Bei mir sieht es gut aus. Prüfe es aber nochmal selbst. Danach ist es vermutlich erledigt. cSpell und Spellchecker geben noch Probleme aus. Stören die dich?
