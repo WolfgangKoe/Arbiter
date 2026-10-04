@@ -1,6 +1,6 @@
 # SonarLint-Prüfung: leerer Lauf, Laufzeit, Version
 
-180 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+180 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `f76a862` (P2 der [Retro 2](../retro.md)). Der Lauf ist stabil:
