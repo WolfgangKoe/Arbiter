@@ -14,7 +14,7 @@ Zweck: Wo immer ein *Modell* aufs *Spielfeld* kommt, *setzen* die *Spieler* es a
 Zweck: Die *Karte* zeigt das *Spielfeld* mit allem, was darauf steht, maßstäblich, aber nicht den exakten Tisch (`domaene/ziel.md`).
 
 - QUE-2.1 Ein Befehl startet Arbiter und nennt die Adresse, unter der die *Spieler* die *Karte* im Browser öffnen (Anliegen 145 F1 A).
-- QUE-2.2 Die *Karte* zeigt das *Spielfeld* als Rechteck, dessen Seiten im Verhältnis seiner Seitenlängen stehen.
+- QUE-2.2 Die *Karte* zeigt das *Spielfeld* als Rechteck.
 - QUE-2.3 Die *Karte* zeigt jede *Aufstellungszone* als Fläche im *Spielfeld*.
 - QUE-2.4 Die *Karte* zeigt jedes *gesetzte* *Modell* als Kreis mit dem *Durchmesser* seiner *Base* und dem Mittelpunkt an seiner *Stelle*, und kein anderes *Modell*.
 - QUE-2.5 Ein *Zoll* ist auf der *Karte* überall gleich lang: in den Seitenlängen des *Spielfelds*, der *Tiefe* der *Aufstellungszonen* und dem *Durchmesser* der *Bases*.

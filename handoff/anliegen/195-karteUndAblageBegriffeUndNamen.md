@@ -3,7 +3,7 @@
 195 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Für die erste Oberfläche (Plan 2, „Danach“; [145](145-ersteOberflaecheImBrowser.md),
+**Befund.** Für die erste Oberfläche (Plan 2, „Danach“; Anliegen 145,
 Schnitt in Anliegen 146) stehen [QUE-2 · Karte](../../domaene/anforderungen/querschnitt.md) und
 [AUF-4 · Anzeige der Aufstellung](../../domaene/anforderungen/phasen/aufstellen.md), die
 Begriffe im [Glossar](../../domaene/glossar.md). Die Kriterien sagen, was die *Spieler* sehen;
@@ -16,7 +16,8 @@ Mockup und Code dasselbe meinen, und die Beschriftung, an der die *Spieler* sich
 
 **F1 · Neue Begriffe.** Ohne Regelbegriff: *Karte* (aus dem Ziel: Abbild des *Spielfelds* mit
 *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich) und *Ablage* (aus Etappe 1: Ort
-neben der *Karte*, je *Spieler* einer, mit seinen nicht *gesetzten* *Modellen*). A: so
+neben der *Karte*, je *Spieler* einer, mit seinen nicht *aufgestellten* *Einheiten* und
+deren nicht *gesetzten* *Modellen*, nach Anliegen 199). A: so
 freigeben. B: Du nennst andere Wörter.
 Empfehlung A: Beide Wörter stehen schon in Ziel, Etappe 1 und Plan 2; die Ablage ist der
 Bestand „Noch nicht aufgestellt“ aus ArbiterMap.

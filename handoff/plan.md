@@ -9,13 +9,16 @@ Klick, dann Ziehen (Anliegen 146, git).
 
 ## Items
 1. [Karte im Browser](../domaene/items/karte-im-browser.md): QUE-2.1 bis QUE-2.6
-2. [Anzeige der Aufstellung](../domaene/items/anzeige-der-aufstellung.md): AUF-4.1 bis
-   AUF-4.6, nach Item 1
+2. [Anzeige der Aufstellung](../domaene/items/anzeige-der-aufstellung.md): AUF-4.2 bis
+   AUF-4.7, nach Item 1
 
 ## Empfehlung
 Freigeben mit beiden Items, sobald die Mockups verlinkt sind. Danach startest du Arbiter mit
-einem Befehl und siehst Spielfeld, Zonen, beide Ablagen und wer an der Reihe ist; handeln
-kannst du noch nicht. Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt
+einem Befehl und siehst die Ausgangslage: Spielfeld, Zonen ohne Farbe, beide Ablagen, keinen
+an der Reihe, kein Modell auf der Karte; handeln kannst du noch nicht. Die Zustände mit
+Spieler an der Reihe, gesetzten Modellen und farbigen Zonen zeigen die Bilder des
+Bildschirmtests im Review; die Tests stellen sie mit den Handlungen der Domäne her (Anliegen
+[198](anliegen/198-plan3SichtbarGeprueftUndAbhaengigkeiten.md) A). Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt
 ihre Zonen. Reicht der Zyklus nicht, fällt Item 2. Start, Komponentenseite und Bildschirmtest
 füllen allein einen Zyklus (146); mehr als die reine Anzeige passt nicht.
 
@@ -27,7 +30,8 @@ Noch nicht bereit:
   beantwortet F1 und F2. Mit F2 B oder C ändert sich AUF-4.2.
 
 Vor dem Testautor (Technik, 146 Punkt 4): der Aufbau aus
-[153](anliegen/153-frontendBackendUndDatenbank.md) in der Technik, Wegwerf-Versuch zum
+[153](anliegen/153-frontendBackendUndDatenbank.md) in der Technik, Voraussetzung 159,
+Wegwerf-Versuch zum
 Bildschirmtest, Komponentenseite aus dem CSS der Mockups. Keine Datenbank (153 F1).
 
 ## Aufbau der Oberfläche
@@ -39,7 +43,7 @@ Deine Antwort zu 145 F1 als Vorgabe für die Mockups; Einzelheiten schlägt UX v
 - Die gameActionsArea zieht nach unten, wo ArbiterMap das Datenblatt von unten einfährt
   (`ArbiterMap/frontend/CLAUDE.md:443`); ihre Knöpfe kommen mit dem Wählen.
 - Farben, Icons, Schrift aus Arbiter-old; für die Karte, die Arbiter-old nicht hat, aus
-  ArbiterMap (QUE-2.6, AUF-4.6).
+  ArbiterMap (QUE-2.6, AUF-4.6, AUF-4.7).
 
 Dein „SOLID und lesbar“ für den Unterbau trägt die Technik: Aufbau 153, Regel D4
 ([152](anliegen/152-solidUndVieleIf.md)); beide warten auf Platz in der Technik

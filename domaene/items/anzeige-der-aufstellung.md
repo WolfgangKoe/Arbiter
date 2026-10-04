@@ -1,6 +1,6 @@
 # Anzeige der Aufstellung
 
-Umfang: AUF-4.1 bis AUF-4.6 ([Aufstellen](../anforderungen/phasen/aufstellen.md)).
+Umfang: AUF-4.2 bis AUF-4.7 ([Aufstellen](../anforderungen/phasen/aufstellen.md)).
 
 Warum jetzt: Ohne Ablage und „an der Reihe“ sehen die Spieler nicht, was aufzustellen ist
 und wer wählt; Wählen und Setzen bauen darauf auf.

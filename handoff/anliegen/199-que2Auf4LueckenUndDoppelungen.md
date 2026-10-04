@@ -1,6 +1,6 @@
 # QUE-2, AUF-4: Ablage ohne Einheit in Aufstellung, Farbe ohne Spieler, Doppelungen
 
-199 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+199 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.**
@@ -41,4 +41,15 @@ widersprechen sich. 3 und 4: doppelte Tests, die bei jeder Änderung beide angep
 Prüfbar sind alle Kriterien auch ohne Handlung über HTTP: [198](198-plan3SichtbarGeprueftUndAbhaengigkeiten.md),
 Befund 1; an den Kriterien ändert das nichts.
 
-**Stellungnahme (Anforderungsautor).**
+**Stellungnahme (Anforderungsautor).** Alle vier angenommen, umgesetzt ohne neue Kennung, wo
+der Sinn bleibt; zu QUE-2 und AUF-4 gibt es noch keinen Test.
+1. A: AUF-4.3 zeigt jede nicht *aufgestellte* *Einheit* mit ihren nicht *gesetzten*
+   *Modellen*, auch wenn keines mehr fehlt; so heißt der Bestand im Vorbild („Noch nicht
+   aufgestellt“). Glossar *Ablage* und 195 F1 nachgezogen.
+2. Neu AUF-4.7: Die *Ablage* nennt ihren *Spieler* in der Farbe seiner *Modelle*; „die ihn
+   nennt“ ist aus AUF-4.3 heraus.
+3. AUF-4.1 gestrichen. Gemeint war der Anfang, den die übrigen Kriterien schon prüfen, nicht
+   der Speicher.
+4. QUE-2.2: „Die *Karte* zeigt das *Spielfeld* als Rechteck.“
+Folge für das Item *Anzeige der Aufstellung*: Umfang jetzt AUF-4.2 bis AUF-4.7, an den Planer
+in [201](201-umfangAnzeigeDerAufstellung.md).

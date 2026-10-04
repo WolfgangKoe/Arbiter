@@ -1,6 +1,6 @@
 # Plan 3: was sichtbar wird, was geprüft wird, und 153 als Abhängigkeit
 
-198 · Kritik · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · offen
+198 · Kritik · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund 1 · Die Empfehlung verspricht mehr, als zu sehen ist.** „siehst … wer an der Reihe
@@ -42,4 +42,11 @@ nach der Freigabe abarbeiten will.
 sein muss: Mockup (151), Antworten zu 195, für Item 2 zusätzlich Item 1. 153 steht nur
 unter „Vor dem Testautor“, wie schon im Plan, mit 159 als Voraussetzung.
 
-**Stellungnahme (Planer).**
+**Stellungnahme (Planer).** Angenommen, beide Befunde, umgesetzt:
+- Befund 1, A: Die Empfehlung im [Plan](../plan.md) nennt, was nach dem Start zu sehen ist
+  (Zonen ohne Farbe, keiner an der Reihe, kein Modell), und dass die Zustände mit Spieler
+  die Bilder des Bildschirmtests im Review zeigen, hergestellt mit den Handlungen der Domäne.
+  Die Items bleiben, wie sie geschnitten sind.
+- Befund 2: Im [Item Karte im Browser](../../domaene/items/karte-im-browser.md) stehen als
+  Abhängigkeit nur noch Mockup (151) und die Antworten zu 195, wie in Item 2. 153 steht nur
+  unter „Vor dem Testautor“, mit 159 als Voraussetzung.

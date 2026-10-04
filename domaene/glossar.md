@@ -2,7 +2,7 @@
 
 Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 ---|---|---|---
-Ablage | – | Ablage | Ort neben der *Karte*, an dem die nicht *gesetzten* *Modelle* eines *Spielers* liegen; jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A).
+Ablage | – | Ablage | Ort neben der *Karte* für die nicht *aufgestellten* *Einheiten* eines *Spielers* mit ihren nicht *gesetzten* *Modellen*; jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A).
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
 Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
