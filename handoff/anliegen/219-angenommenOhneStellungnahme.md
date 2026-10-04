@@ -24,4 +24,13 @@ grün, Stellungnahme in einer früheren Runde zählt nicht. Umsetzung durch den 
 
 Erledigt, wenn der Ablauf die Regel mit Mechanismus nennt und `regeln.md` die Prüfung führt.
 
-**Stellungnahme.**
+**Stellungnahme.** Berechtigt, übernommen wie vorgeschlagen.
+- [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen): neue Regel „Wer `angenommen` oder
+  `abgelehnt` setzt, schreibt in der letzten Runde eine Stellungnahme mit Text“, Mechanismus
+  vorerst nur Text. Der Absender legt den Absatz leer an.
+- Dein Befund zu `anliegen.py` stimmt: Es prüft nur den Kopf. Der Ablauf nennt es jetzt nur
+  dort; die Absätze je Runde sind nur Text.
+- Die Sperre in `statusrecht.py` samt Scheiter-Test und Zeile in `regeln.md` baut der
+  Regelumsetzer ([220](220-stellungnahmePruefen.md)). Danach ersetze ich „nur Text“.
+
+wartet auf 220

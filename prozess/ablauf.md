@@ -209,8 +209,10 @@ Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161). Mechanismus:
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Typ> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`.
 Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.claude/agents/`
-oder Stakeholder, dahinter darf die Perspektive in Klammern stehen. Je Runde Befund, Kosten,
-Gegenvorschlag, Stellungnahme. Mechanismus: `anliegen.py`, `hoechstmassTest.py`.
+oder Stakeholder, dahinter darf die Perspektive in Klammern stehen. Mechanismus:
+`anliegen.py`. Je Runde (`## Runde <n>`) die Absätze `**Befund.**`, `**Kosten.**`,
+`**Gegenvorschlag.**`, `**Stellungnahme.**`, vor dem Punkt darf die Rolle in Klammern stehen;
+die Stellungnahme legt der Absender leer an. Mechanismus: nur Text.
 Unter jeder Frage an den Stakeholder (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`;
 „.“ heißt, die Empfehlung gilt. Die Freigabe beantwortet jede Frage, die in der
 Freigabevorlage steht: mit der Zeile `Antwort:`, sonst mit der Empfehlung. Mechanismus: nur
@@ -238,6 +240,10 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
   `statusrecht.py` (Write, Edit).
+- Wer `angenommen` oder `abgelehnt` setzt, schreibt in der letzten Runde eine Stellungnahme
+  mit Text: was umgesetzt ist und wo, oder die Begründung. Eine Stellungnahme in einer
+  früheren Runde zählt nicht. Mechanismus: nur Text, bis `statusrecht.py` sperrt (Anliegen
+  220).
 - Die Nummer ist eindeutig, der Absender eines Anliegens ändert sich nie; wer eine Nummer
   belegt vorfindet, nimmt die nächste freie. Mechanismus: `anliegennummer.py` (neue Datei),
   `statusrecht.py` (`absenderVerstoß`; Write, Edit).

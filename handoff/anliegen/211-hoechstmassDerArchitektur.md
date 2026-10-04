@@ -1,6 +1,6 @@
 # Höchstmaß der Architektur
 
-211 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+211 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 159 (F2: C) entschieden: Die
