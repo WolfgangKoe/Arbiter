@@ -1,6 +1,6 @@
 # Flask und Playwright fehlen in pyproject.toml
 
-234 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+234 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Plan 3](../plan.md) verlangt einen Start im Browser (QUE-2.1) und
@@ -26,4 +26,7 @@ Erledigt, wenn `.venv/bin/python -c "import flask, playwright"` ohne Fehler läu
 Prüfungen grün sind. eslint und stylelint (ablauf.md, Werkzeuge) kommen mit dem ersten
 JavaScript, nicht hier.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `pyproject.toml`: `Flask==3.1.*` (Laufzeit),
+`playwright==1.60.*` (entwicklung; 1.60 gehört zum Chromium-Build 1223 im Cache, `playwright install`
+entfällt). Scheiter-Test: `formregeln/konfigurationTest.py` (`testFlaskIst…`, `testPlaywrightIst…`).
+`.venv` ist nachinstalliert; `import flask, playwright` läuft.

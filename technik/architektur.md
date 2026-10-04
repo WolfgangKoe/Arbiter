@@ -9,22 +9,22 @@ technik/
   arbiter/
     domaene/    Fachlogik, nur Standardbibliothek
     katalog/    liest das YAML aus domaene/daten/ in Objekte der Domäne
-    speicher/   Datenbank; setzt die Schnittstellen der Domäne um
+    speicher/   Datenbank: die Folge der Handlungen
     web/        Flask; übersetzt Anfragen in Handlungen der Domäne
   frontend/     HTML, CSS, JS; spricht nur über HTTP mit web/
   tests/        akzeptanz/, einheit/
 ```
-Ein Ordner entsteht mit dem ersten Item, das ihn braucht.
+Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Zusammenspiel von `web/` und
+`frontend/`: [Web](architektur/web.md); die Datenbank: [Speicher](architektur/speicher.md).
 
 ## Abhängigkeiten zeigen nach innen
 - **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft:
-  `importvertrag.py`, auch relative Importe.
-- **A2** `web`, `speicher` und `katalog` kennen die Domäne, nie umgekehrt. Braucht die
-  Domäne Speicherung, beschreibt sie eine Schnittstelle (`typing.Protocol`) in
-  `arbiter/domaene/`; `speicher/` setzt sie um, `web/` verdrahtet beides. Prüft: wie A1.
+  `formregeln/importvertrag.py`, auch relative Importe.
+- **A2** `web` und `katalog` kennen die Domäne, nie umgekehrt; `speicher/` kennt weder sie
+  noch `web/`, `web/` verdrahtet beide (P1). Prüft: wie A1.
 - **A3** Katalogdaten stehen nur als YAML in `domaene/daten/`, `katalog/` liest sie
-  (`yaml.safe_load`). Der Spielstand liegt nur in der Datenbank. Prüft: nur Text; Auslöser:
-  erster Spielstand, der eine Sitzung überlebt; dann importiert `katalog/` in die Datenbank.
+  (`yaml.safe_load`). Der Spielstand ist die Folge der Handlungen in der Datenbank (P2).
+  Prüft: nur Text; Auslöser: erstes Modul in `speicher/`.
 
 ## Grundschnitt der Domäne
 `arbiter/domaene/` gliedert sich wie `domaene/anforderungen/`:
@@ -79,19 +79,17 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   `domaene/anforderungen/phasen/aufstellen.md` → `tests/akzeptanz/phasen/aufstellen/auf1Test.py`.
   Für die erste Anforderung einer Datei genügt die Sammeldatei (`querschnittTest.py`), bis
   ein offenes Item eine zweite nennt. Höchstmaß: `prozess/kennzahlen.md`; darüber wird
-  die Anforderung geteilt, nicht der Test. Prüft: `rueckverfolgung.py`, `benennung.py`,
-  `hoechstmassTest.py`.
+  die Anforderung geteilt, nicht der Test. Prüft: `kriterienregeln/rueckverfolgung.py`,
+  `formregeln/benennung.py`, `formregeln/hoechstmassTest.py`.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-1.4`,
-  `testAuf1_4…`). Spur: `python3 prozess/pruefungen/rueckverfolgung.py AUF-1.4`.
+  `testAuf1_4…`). Spur:
+  `python3 prozess/pruefungen/gemeinsam/lauf.py kriterienregeln.rueckverfolgung AUF-1.4`.
 - `tests/einheit/` spiegelt `arbiter/`, etwa `tests/einheit/domaene/phasen/aufstellenTest.py`.
   Jeder Ordner dort hat eine `__init__.py`; sonst kollidiert der Dateiname mit dem
   Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.
 - `arbiter` liegt über `pythonpath` in `pyproject.toml` im Pfad, ohne `sys.path`-Eingriff.
-  Prüft: `konfigurationTest.py`.
+  Prüft: `formregeln/konfigurationTest.py`.
 
 ## Oberfläche
-Auslöser: erstes Item mit Oberfläche. Das Design-System gehört der Technik: eine lebende
-Komponentenseite (HTML, echtes CSS) als Doku, Vorlage der Mockups und Ziel eines
-Bildschirmtests. Eine neue Komponente ist ein Anliegen an die Technik. Tot ist eine
-Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
+Design-System, Komponentenseite und Bildschirmtests: [Web](architektur/web.md#oberfläche).

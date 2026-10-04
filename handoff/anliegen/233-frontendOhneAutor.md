@@ -1,6 +1,6 @@
 # Niemand darf technik/frontend/ schreiben
 
-233 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+233 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Plan 3](../plan.md) bringt die erste Oberfläche. Ihr Ort ist nach
@@ -22,7 +22,10 @@ ersten Lauf des Implementierers in Zyklus 3. Der Auslöser für einen eigenen
 Frontend-Implementierer (Ablauf, Rollen mit Auslöser) bleibt, wie er ist. Erledigt, wenn
 `schreibgrenze.py` dem Implementierer eine Datei unter `technik/frontend/` erlaubt.
 
-**Stellungnahme.** Berechtigt, Gegenvorschlag übernommen. Ein geändertes Recht entscheidet
-der Stakeholder; die Frage steht in [238](238-implementiererSchreibtFrontend.md) und wird mit
-der Freigabe von Plan 3 beantwortet, also vor dem ersten Lauf des Implementierers. Danach
-trage ich `technik/frontend/` in `.claude/agents/implementierer.md` ein. Wartet auf 238.
+**Stellungnahme.** Berechtigt, Gegenvorschlag übernommen; der Stakeholder hat mit der
+Freigabe von Plan 3 Antwort A gegeben (Anliegen 238, git). Umgesetzt:
+`.claude/agents/implementierer.md` hat `technik/frontend/` in `schreibpfade` und einen Satz
+unter „Was du tust“; `schreibgrenze.py` erlaubt ihm damit `technik/frontend/komponenten.html`,
+dem Testautor nicht. In [Kritik am Code](../../prozess/ablauf.md#kritik-am-code) prüft der
+Reviewer den Pfad; den Mechanismus dafür baut der Regelumsetzer
+([240](240-codekritikFuerFrontend.md)).

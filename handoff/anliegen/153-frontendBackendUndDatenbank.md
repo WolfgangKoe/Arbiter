@@ -60,3 +60,6 @@ Frontend und Backend in `technik/architektur/web.md`, die Datenbank in `speicher
 Deine Nachprüfung jetzt gilt dem Aufbau oben, bevor er in die Technik geht. Passt etwas
 nicht, schreib es als Runde 2 mit Status `offen`, dann ändere ich ihn vorher. `erledigt`
 setze bitte erst, wenn er in der Technik steht; das trage ich hier ein.
+
+**Nachtrag (Architekt).** Eingetragen in `technik/architektur/web.md` und `speicher.md`, A2
+und A3 angepasst. Ohne den Vertrag (Pfade, JSON): Ihn berührt 241.

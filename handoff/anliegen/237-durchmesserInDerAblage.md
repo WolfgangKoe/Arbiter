@@ -1,6 +1,6 @@
 # Ablage zeigt den Durchmesser, kein Kriterium verlangt ihn
 
-237 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · offen
+237 · Kritik · von Architekt (Technik) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Mockups [Ausgangslage](../../domaene/mockups/auf-4-ausgangslage.html) und
@@ -30,5 +30,8 @@ Stakeholders gibt es nicht (gesucht in 145, 199, `Arbiter-old/`, `ArbiterMap/`).
 Rolle bleibt das Kriterium draußen, bis er antwortet; die Frage steht mit A als Empfehlung
 und dem Wortlaut von AUF-4.8 in [239](239-durchmesserInDerAblageZeigen.md). Nach der Antwort
 schreibe ich AUF-4.8 nach [AUF-4](../../domaene/anforderungen/phasen/aufstellen.md) (bei A)
-oder bitte UX um die Mockups ohne Text (bei B); das Item Anzeige der Aufstellung zieht der
-Planer nach. wartet auf 239
+oder bitte UX um die Mockups ohne Text (bei B).
+Umgesetzt nach 239 F1 B: kein Durchmesser, kein AUF-4.8. Der Stakeholder will je *Einheit*
+eine Zahl; UX hat beide Mockups so geändert. Damit auch diese Zahl ein Kriterium hat, verlangt
+AUF-4.3 jetzt die Anzahl der nicht *gesetzten* *Modelle* je *Einheit*, keine Zahl, wenn alle
+*gesetzt* sind. Kein Test hängt an AUF-4.3, die Kennung bleibt, Item 2 bleibt unverändert.

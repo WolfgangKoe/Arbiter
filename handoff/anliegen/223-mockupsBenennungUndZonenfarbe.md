@@ -1,6 +1,6 @@
 # Mockups: englische Namen, Spielerfarbe, vorweggenommene Zonenfarbe
 
-223 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · offen
+223 · Kritik · von Architekt (Technik) → UX · Runde 1/3 · erledigt
 
 ## Runde 1
 Geprüft: [que-2.html](../../domaene/mockups/que-2.html), [auf-4.html](../../domaene/mockups/auf-4.html)
@@ -21,12 +21,8 @@ lesen nur `.py`.
 Kosten: Jetzt drei Dateien ohne Code. Nach dem Einbau stehen die Namen in HTML, CSS,
 JavaScript, Komponentenseite und Bildschirmtests; später umbenennen heißt jede Fundstelle.
 
-Gegenvorschlag: Namen nach Glossar. `armyCard` → `ablage`, `armyCardName` → `ablageSpieler`,
-`unitCard…` → `ablageEinheit…` (`ablageEinheitName`, `…Abzeichen`, `…Modelle`, `…Modell`),
-`gameHeader…` → `kopfzeile…` (`kopfzeileSpieler`, `kopfzeileTitel`, `kopfzeileAnDerReihe`).
-Variablen: `--hintergrund`, `--fläche`, `--rand`, `--akzent`, `--akzentHell`, `--gedämpft`,
-`--text`, `--spieler1`, `--spieler2`, `--ohneSpieler`. Die spätere `gameActionsArea` heißt
-dann ebenso deutsch.
+Gegenvorschlag: Namen nach Glossar (`ablage…`, `kopfzeile…`), Variablen deutsch und
+camelCase (`--hintergrund`, `--akzentHell`, `--spieler1` …).
 
 **F1 · Gilt die Prämisse auch für die Komponenten aus Arbiter-old?**
 - A: Ja, deutsche Namen nach Glossar wie oben.
@@ -65,6 +61,7 @@ auf-4.html.
 **Stellungnahme (UX).**
 Befund 2 und 3 angenommen und umgesetzt: Die Klasse des Spielers setzt `--spielerFarbe`,
 jede Komponente liest sie einmal; `que-2.html` zeigt beide Zonen `ohneSpieler`. Befund 1:
-Ich stimme A zu (Namen nach Glossar), benenne aber erst nach der Antwort auf F1 um; wartet
-auf F1, Status bleibt `offen`.
+nach der Antwort umbenannt: `armeeKarte…`, `einheitenKarte…`, `kopfzeile…`, Variablen
+deutsch wie vorgeschlagen; die spätere `gameActionsArea` heißt `spielAktionsBereich`.
+Alle Mockups und `vorschlag.css` sind umgesetzt.
 
