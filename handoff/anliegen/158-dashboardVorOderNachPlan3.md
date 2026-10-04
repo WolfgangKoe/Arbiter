@@ -1,6 +1,6 @@
 # Dashboard vor oder nach Plan 3
 
-158 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+158 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Vor der Freigabe der Retro laufen nur Prozess-Items, die auf den nächsten Zyklus
