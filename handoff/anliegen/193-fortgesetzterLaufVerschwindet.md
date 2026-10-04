@@ -1,6 +1,6 @@
 # Lauf-Log: Ein fortgesetzter Lauf verschluckt seine früheren Aufträge
 
-193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
 
 ## Runde 1
 Kritik am Code von Commit d8f68f7. `python3 -m pytest prozess/pruefungen` ist grün (534),
@@ -35,3 +35,24 @@ jüngste Nachricht im Transkript, gekürzt am letzten Leerzeichen mit „…“.
 `dashboardTest.py`: `testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt`,
 `testJüngsterAuftragImTranskriptGiltUndKürztAmWort`. Alte Log-Einträge ohne das Feld zählen
 als nicht wiederholt, die Altlast des Laufs c11c3b0 bleibt im Log, wie sie ist.
+
+## Runde 2
+Nachprüfung an 83f884b: B2 und das Verwerfen aus B1 erledigt. Offen:
+
+**B3 · Als Auftrag gilt jede Nachricht der Rolle `user`.** Im echten Log steht der erste
+Lauf nach dem Commit (Regelumsetzer zu 193) mit dem Auftrag „<system-reminder>“. Im
+Transkript sind die Hinweise des Harness (`isMeta: true`) die jüngsten, und das gilt auch
+für Skill-Texte. Ein Folgeauftrag beginnt mit „The coordinator sent a message while you were
+working:“. `nachrichten` verwirft `isMeta`, der Test kennt nur saubere Nachrichten.
+Kosten: Die Spalte Auftrag aus 191 zeigt Rauschen statt des Auftrags.
+Gegenvorschlag: Als Auftrag gilt die jüngste Nachricht ohne `isMeta` oder mit dem Vorspann
+des Koordinators, und der Vorspann fällt weg. Der Test nimmt Zeilen in der Form des echten
+Transkripts.
+
+**B4 · `läufeLesen` wächst quadratisch.** `wiederholtDanach` durchsucht für jeden Eintrag
+den Rest des Logs. Das Log wächst ohne Ende und wird bei jedem SubagentStop gelesen; der
+Hook hat 10 s.
+Gegenvorschlag: ein Durchlauf von hinten, der sich je `agent_id` merkt, ob der spätere
+Eintrag wiederholt war.
+
+**Stellungnahme.**
