@@ -1,6 +1,6 @@
 # Freigabefeld, Kommentare und Freigabe des Reviews im Stand
 
-167 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+167 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder gibt Plan, Review und Retro künftig in der Datei frei und
