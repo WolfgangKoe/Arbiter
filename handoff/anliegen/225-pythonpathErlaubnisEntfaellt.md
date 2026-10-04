@@ -1,6 +1,6 @@
 # Ausnahmeerlaubnis PYTHONPATH aus 114 entfällt
 
-225 · Anliegen · von Regelumsetzer → Stakeholder · Runde 1/3 · offen
+225 · Anliegen · von Regelumsetzer → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** In [114](114-pruefskripteOrdnenUndLesbarMachen.md) F1 wolltest du eine

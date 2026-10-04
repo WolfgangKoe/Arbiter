@@ -151,3 +151,19 @@ def testPyYamlIstLaufzeitAbhängigkeitMitFesterMinorVersion():
     assert not any(
         "PyYAML" in eintrag for eintrag in konfiguration["dependency-groups"]["entwicklung"]
     )
+
+
+def testFlaskIstLaufzeitAbhängigkeitMitFesterMinorVersion():
+    konfiguration = pyproject()
+    abhängigkeiten = konfiguration.get("project", {}).get("dependencies", [])
+    assert any(re.fullmatch(r"Flask==\d+\.\d+\.\*", eintrag) for eintrag in abhängigkeiten)
+    entwicklung = konfiguration["dependency-groups"]["entwicklung"]
+    assert not any("Flask" in eintrag for eintrag in entwicklung)
+
+
+def testPlaywrightIstEntwicklungsAbhängigkeitMitFesterMinorVersion():
+    konfiguration = pyproject()
+    entwicklung = konfiguration["dependency-groups"]["entwicklung"]
+    assert any(re.fullmatch(r"playwright==\d+\.\d+\.\*", eintrag) for eintrag in entwicklung)
+    laufzeit = konfiguration.get("project", {}).get("dependencies", [])
+    assert not any("playwright" in eintrag for eintrag in laufzeit)

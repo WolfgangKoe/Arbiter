@@ -40,14 +40,23 @@ max-complexity-allowed = 15
 name = "arbiter"
 version = "0"
 requires-python = ">=3.12"
-# Warum: `arbiter.katalog` liest die Ausgangslage aus YAML (technik/architektur.md, A2);
-# feste Minor-Version, damit ein Update nicht still das Leseverhalten ändert.
-dependencies = ["PyYAML==6.0.*"]
+# Warum: `arbiter.katalog` liest die Ausgangslage aus YAML (technik/architektur.md, A2); Flask trägt
+# das Backend (CLAUDE.md, Technik-Rahmen). Feste Minor-Version, damit ein Update nicht still das
+# Verhalten ändert.
+dependencies = ["PyYAML==6.0.*", "Flask==3.1.*"]
 
 [dependency-groups]
 # Warum: ruff, complexipy, coverage und vulture mit fester Minor-Version, damit ein Update nicht still neue Regeln
-# oder eine andere Zählweise bringt.
-entwicklung = ["pytest", "ruff==0.16.*", "complexipy==8.0.*", "coverage==7.16.*", "vulture==2.16.*"]
+# oder eine andere Zählweise bringt. Playwright (Bildschirmtests) ebenso: 1.60 gehört zum Chromium-Build
+# 1223 unter ~/.cache/ms-playwright; sonst lädt `playwright install chromium` den passenden.
+entwicklung = [
+    "pytest",
+    "ruff==0.16.*",
+    "complexipy==8.0.*",
+    "coverage==7.16.*",
+    "vulture==2.16.*",
+    "playwright==1.60.*",
+]
 
 [tool.coverage.report]
 # Warum: Der Einstieg `if __name__ == "__main__":` ist nur Verdrahtung des Hooks (stdin, stdout);
