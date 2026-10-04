@@ -37,19 +37,17 @@ mehreren Modulen; ein Tupel-Index bricht still.
 - B · Lesbarkeit, Verhalten unverändert: 1 bis 7 beheben, etwa mit benannten Typen
   (`Kriterium`, `Lage`), je einem Modul für die Ein- und Ausgabe der Hooks und für die Pfade,
   einem Enum `Phase`; `rueckverfolgung.py` und `stand.py` nach Aufgaben teilen.
-- C · Mechanismen mit Scheiter-Test für zwei Regeln, die heute nur Text sind: Kommentare und
-  Docstrings nach wir.md 8 (nur `# Regel:` und `# Warum:`, Docstring einzeilig, kein TODO
-  oder FIXME) und Typaliase in PascalCase (wir.md 1), Geltungsbereich nach wir.md. Den
-  Vermerk in wir.md setze ich.
-- D · erledigt: Rückstand der Benennung gelöscht (Datei, Funktionen, Tests, `regeln.md`).
+- C · Mechanismen mit Scheiter-Test für Kommentare und Docstrings (wir.md 8) und PascalCase-Typaliase
+  (wir.md 1). Den Vermerk in wir.md setze ich.
 
-Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, D gelöscht ist, die Mechanismen aus C an je einem
+Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, die Mechanismen aus C an je einem
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** D, C, B erledigt. A (a), der Umzug, ist fertig; `gemeinsam/lauf.py` ersetzt
-`PYTHONPATH` ([225](225-pythonpathErlaubnisEntfaellt.md)); Pfade in Dokumenten:
-[226](226-pruefskriptPfadeInDenDokumenten.md). Offen: `regeln.md` je Ordner gliedern.
+**Stellungnahme.** Zum Hinweis: noch nicht erledigt. D, C, B und der Umzug sind fertig,
+`PYTHONPATH` entfällt (Anliegen 225). Offen: `regeln.md` je Ordner gliedern, Kritik am Code
+([Ablauf](../../prozess/ablauf.md#kritik-am-code)), Pfade in Dokumenten ([226](226-pruefskriptPfadeInDenDokumenten.md)).
+SOLID verlangte 114 nicht, das bewertet 107.
 
 **F1 · Wie finden Skripte verschiedener Ordner einander?**
 - a) `PYTHONPATH=prozess/pruefungen` vor Befehlen, mit Erlaubnis.
@@ -57,3 +55,5 @@ Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 - c) A entfällt.
 Empfehlung: a.
 Antwort: Wir nehmen a. Das ist eine Ausnahmeerlaubnis. Nachdem alles erledigt und abgenommen ist, wird die Erlaubnis wieder entzogen.
+
+Hinweis: Dieses Anliegen sollte erledigt sein, oder? Darauf hin bitte 107 neu bewerten, denn ich finde, dass die Prüfungsmechanismen nicht SOLID oder gut lesbar sind. 
