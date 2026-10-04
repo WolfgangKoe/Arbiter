@@ -7,7 +7,7 @@
 1. `technik/architektur.md` hat 5.985 von 6.000 Zeichen (`prozess/kennzahlen.md`, nur Text).
    Der Stakeholder vermisst Frontend, Backend und Datenbank
    ([153](153-frontendBackendUndDatenbank.md)), dazu kommt Regel D4
-   ([152](152-solidUndVieleIf.md)); zusammen rund 2.500 Zeichen. Kürzen heißt nach
+   (Anliegen 152); zusammen rund 2.500 Zeichen. Kürzen heißt nach
    kennzahlen.md aufteilen, mein Schreibpfad ist aber nur `technik/architektur.md`
    (`.claude/agents/architekt.md`).
 2. DoR 5 verlangt für ein Item mit Oberfläche ein Mockup aus vorhandenen Komponenten. Die

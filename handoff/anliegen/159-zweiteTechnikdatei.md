@@ -6,7 +6,7 @@
 **Befund.** `technik/architektur.md` ist mit 5.985 Zeichen am Höchstmaß 6.000
 ([Kennzahlen](../../prozess/kennzahlen.md)). Dein Anliegen
 [153](153-frontendBackendUndDatenbank.md) (Frontend, Backend, Datenbank) und Regel D4 aus
-[152](152-solidUndVieleIf.md) brauchen rund 2.500 Zeichen mehr. Kürzen heißt aufteilen, der
+Anliegen 152 brauchen rund 2.500 Zeichen mehr. Kürzen heißt aufteilen, der
 Architekt darf aber nur `architektur.md` schreiben ([155](155-technikBrauchtPlatzUndErstesMockup.md),
 Punkt 1). Ein Schreibpfad ist ein Recht; das entscheidest du.
 

@@ -13,14 +13,14 @@ der [Retro](retro.md). Köpfe stehen auf `offen`, bis die Absender nach der Frei
   [166](anliegen/166-anliegenUeberschreibenBeiParallelenLaeufen.md), ferner
   [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Nicht in der Retro; Vorschlag:
   nach P1 bis P5 oder im Backlog.
-- Organisationsentwickler: [164](anliegen/164-specsPfadInDomaene.md) (eine Zeile in
+- Organisationsentwickler: Anliegen 164 (eine Zeile in
   `domaene/CLAUDE.md`); Optionen mit Folgen zu [139](anliegen/139-bashSandboxStattHeuristik.md),
   [159](anliegen/159-zweiteTechnikdatei.md) und Leitplanken zu
   [151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md); außerdem
   Anliegen 134,
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md),
   [155](anliegen/155-technikBrauchtPlatzUndErstesMockup.md); 138 wartet auf 139.
-- Architekt: [152](anliegen/152-solidUndVieleIf.md), Rückfrage zu einem Tag in
+- Architekt: Anliegen 152, Rückfrage zu einem Tag in
   Anliegen 83, Nachprüfung 124 und 157.
 - Planer: Anliegen 145 einarbeiten, 156 nachprüfen.
 - Stakeholder: Nachprüfung 107 und 153.

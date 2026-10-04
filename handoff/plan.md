@@ -46,7 +46,7 @@ Deine Antwort zu 145 F1 als Vorgabe für die Mockups; Einzelheiten schlägt UX v
   ArbiterMap (QUE-2.6, AUF-4.6, AUF-4.7).
 
 Dein „SOLID und lesbar“ für den Unterbau trägt die Technik: Aufbau 153, Regel D4
-([152](anliegen/152-solidUndVieleIf.md)); beide warten auf Platz in der Technik
+(Anliegen 152); beide warten auf Platz in der Technik
 ([159](anliegen/159-zweiteTechnikdatei.md)).
 
 ## Danach, nach Abhängigkeit
