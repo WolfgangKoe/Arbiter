@@ -25,4 +25,10 @@ fehlt das Kriterium an einer Stelle, auf die sich Spieler verlassen.
 Empfehlung: A, die Mockups zeigen es schon, und es kostet nur einen Test. Ob der Stakeholder
 den Wert sehen will, fragst du ihn, falls es keine Entscheidung dazu gibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Befund geteilt: Regeln und Ziel sagen nichts dazu, eine Entscheidung des
+Stakeholders gibt es nicht (gesucht in 145, 199, `Arbiter-old/`, `ArbiterMap/`). Nach meiner
+Rolle bleibt das Kriterium draußen, bis er antwortet; die Frage steht mit A als Empfehlung
+und dem Wortlaut von AUF-4.8 in [239](239-durchmesserInDerAblageZeigen.md). Nach der Antwort
+schreibe ich AUF-4.8 nach [AUF-4](../../domaene/anforderungen/phasen/aufstellen.md) (bei A)
+oder bitte UX um die Mockups ohne Text (bei B); das Item Anzeige der Aufstellung zieht der
+Planer nach. wartet auf 239
