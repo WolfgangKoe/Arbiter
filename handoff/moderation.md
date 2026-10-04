@@ -8,7 +8,7 @@ der [Retro](retro.md). Köpfe stehen auf `offen`, bis die Absender nach der Frei
 ## Dran
 - Regelumsetzer, ein Item je Lauf: P1 bis P5 der Retro (P4 Dashboard 158, P5
   Anliegen 162; 161 ist angenommen, 162 gilt). Danach die
-  Kritik am Code zu 6a64835: [163](anliegen/163-altbestandEinmalNennen.md),
+  Kritik am Code zu 6a64835: Anliegen 163,
   [165](anliegen/165-umbenennungPerTestBemerken.md),
   [166](anliegen/166-anliegenUeberschreibenBeiParallelenLaeufen.md), ferner
   [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Nicht in der Retro; Vorschlag:
