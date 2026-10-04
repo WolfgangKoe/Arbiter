@@ -39,8 +39,8 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
 
 ## Prozess-Items (Regelumsetzer, vor Plan 3, je Lauf eins)
 Nur, was auf Plan 3 wirkt oder du vorher willst
-([Ablauf, Prozessphase](../prozess/ablauf.md#prozessphase) 2).
-- P1 Abdeckung (150, [157](anliegen/157-abdeckungUndVultureRichtigZuschneiden.md)): Zweige
+([Ablauf, Prozessphase](../prozess/ablauf.md#prozessphase) 1).
+- P1 Abdeckung (150, Anliegen 157): Zweige
   ≥ 95 % für `technik/arbiter`, eigene Meldung für `prozess/pruefungen`; vulture nach DoD 2,
   zuerst Wegwerf-Versuch ohne Ausnahmeliste.
 - P2 SonarLint (150): Wegwerf-Versuch mit dem Analysator ohne VS Code, sonst „Sonar way“

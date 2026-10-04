@@ -112,16 +112,21 @@ Auslöser: `Freigabe Review <n>`.
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
    darauf; grafisch und kurz, nur Seltenes (Perspektiven, Rollen, Ordner), Rollentabelle und
    Ordnerbaum per Skript. Mechanismus: nur Text.
-2. Regelumsetzer: Mechanismen zu den Prozess-Items, je mit Scheiter-Test; ein Item je Lauf,
-   damit die Belegung unter 120.000 Token bleibt. Vor der Freigabe laufen nur Items, die auf
-   den nächsten Zyklus wirken oder die der Stakeholder vorher will; die übrigen stehen im
+   Prozess-Items stehen im Abschnitt `## Prozess-Items` als `- P<k> …`; dort nur, was auf
+   den nächsten Zyklus wirkt oder der Stakeholder vorher will, die übrigen im
    [Backlog](backlog.md) bis zur nächsten Prozessphase. Mechanismus: nur Text.
-3. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
-4. Nachkorrektur: Kommentare in der Retro und Antworten in den Anliegen, auf die sie verweist,
+2. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
+3. Nachkorrektur: Kommentare in der Retro und Antworten in den Anliegen, auf die sie verweist,
    arbeitet der Organisationsentwickler ein, bis Befunde, Prozess-Items und Empfehlung zu
    ihnen passen; auch nach der Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)).
-5. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
-   `Freigabe Retro <n>`. Danach meldet der Stand die Domänenphase mit Plan n+1.
+4. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
+   `Freigabe Retro <n>`.
+5. Regelumsetzer: Mechanismen zu den freigegebenen Prozess-Items, je mit Scheiter-Test; ein
+   Item je Lauf, damit die Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item
+   abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
+   `P<k> Zwischenstand: …`. Hat jedes Item der Retro seinen Commit `P<k>:` seit
+   `Freigabe Retro <n>`, meldet der Stand die Domänenphase mit Plan n+1. Mechanismus: nur
+   Text (Anliegen 173).
 
 Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
 ([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.

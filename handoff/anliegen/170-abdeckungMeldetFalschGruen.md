@@ -4,7 +4,7 @@
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473` (P1 der [Retro 2](../retro.md),
-[157](157-abdeckungUndVultureRichtigZuschneiden.md)).
+Anliegen 157).
 
 **Befund.**
 1. `unbenutzterCode` (`prozess/pruefungen/abdeckung.py`) prüft den Rückgabewert von vulture

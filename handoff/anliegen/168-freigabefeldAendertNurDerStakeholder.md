@@ -29,7 +29,7 @@ neue Zeile `Stellungnahme:` grün; Write von Plan 4 über Plan 3 mit Kommentaren
 `Freigabe Plan 3` bei `Freigabe: offen` rot, bei `Freigabe: ja` grün.
 
 Reihenfolge: nach [167](167-freigabefeldKommentareImStand.md); wirkt nicht auf Plan 3,
-deshalb nicht vor dessen Freigabe ([Prozessphase](../../prozess/ablauf.md#prozessphase) 2).
+deshalb nicht vor dessen Freigabe ([Prozessphase](../../prozess/ablauf.md#prozessphase) 1).
 
 Erledigt, wenn beide Teile gebaut sind, die Scheiter-Tests so ausgehen,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Code geprüft hat.

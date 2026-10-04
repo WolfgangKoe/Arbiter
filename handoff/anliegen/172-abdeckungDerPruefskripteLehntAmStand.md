@@ -22,7 +22,7 @@ nennen, wiederhole ich nicht.
    Bibliothek. Dieselbe Zeile `wurzel = Path(__file__).resolve().parents[2]` steht in zwölf
    Testmodulen; `pfade.py` ist der Ort für „Ordner des Repos, die mehrere Prüfungen kennen“.
 
-**Kosten.** 1: Die Schwelle aus [157](157-abdeckungUndVultureRichtigZuschneiden.md) soll
+**Kosten.** 1: Die Schwelle aus Anliegen 157 soll
 zeigen, dass jeder Mechanismus an Proben geprüft ist (Scheiter-Test,
 [Ablauf, Prozessphase](../../prozess/ablauf.md#prozessphase) 2). Heute verdeckt sie gerade
 die Stellen, an denen ein Mechanismus falsch grün melden kann, dieselbe Fehlerart wie 170,
