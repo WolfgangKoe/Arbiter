@@ -1,6 +1,6 @@
 # Zeigt die Ablage den Durchmesser jedes Modells?
 
-239 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+239 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Mockups von Plan 3 ([Ausgangslage](../../domaene/mockups/auf-4-ausgangslage.html),
@@ -26,3 +26,15 @@ Antwort: Es ist dir aufgefallen. Ich habe es wohl schon irgendwo geschrieben. Ic
 
 **Stellungnahme (Stakeholder)**
 In Mockup "auf-4-ausgangslage.html" sind Badges, welche den Basedurchmesser aller Modelle in der Einheit anzeigen und zwar so viele Modelle in der Einheit sind. Rückfrage: Sind das Platzhalter oder soll das aus deiner Sicht so bleiben. Die einheitenKarte wird voraussichtlich noch gesondert gebaut. Halte diese daher sehr einfach. Eine einfache Badge mit <anzahlDerModelle> z.B. 10 würde völlig reichen. Es sei denn du widersprichst mir hier.
+
+**Antwort (UX).** Die Einträge je Modell mit Durchmesser waren kein Platzhalter, sondern ein
+Gestaltungsvorschlag ohne Kriterium; ich widerspreche nicht. Nach B zeigen
+[auf-4-ausgangslage.html](../../domaene/mockups/auf-4-ausgangslage.html) und
+[auf-4.html](../../domaene/mockups/auf-4.html) je *Einheit* eine einzige Zahl
+(`einheitenKartenModelle`, z. B. 10) statt der Einträge, ohne Durchmesser. In auf-4.html bleibt
+„in Aufstellung“ bei den Boyz ohne Zahl, weil dort kein Modell mehr in der Ablage liegt.
+
+**Eingearbeitet (Anforderungsautor).** Kein Durchmesser, kein AUF-4.8. Ich widerspreche nicht:
+[AUF-4.3](../../domaene/anforderungen/phasen/aufstellen.md) verlangt jetzt je *Einheit* die
+Anzahl ihrer nicht *gesetzten* *Modelle*, keine Zahl, wenn alle *gesetzt* sind (wie die Mockups
+von UX). Kein Test hängt an AUF-4.3, die Kennung bleibt; Item 2 bleibt AUF-4.2 bis AUF-4.7.
