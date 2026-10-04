@@ -35,9 +35,9 @@ Offen, blockiert nicht: Die Kritik des Fachkritikers an den Mockups gegen QUE-2 
 
 Vor dem Testautor (146 Punkt 4), in dieser Reihenfolge:
 1. Flask und Playwright in `pyproject.toml`, Regelumsetzer
-   ([234](anliegen/234-flaskUndPlaywrightFehlen.md), umgesetzt, Nachprüfung Architekt).
+   (Anliegen 234, umgesetzt, Nachprüfung Architekt).
 2. Schreibrecht auf `technik/frontend/` für den Implementierer, Organisationsentwickler
-   ([233](anliegen/233-frontendOhneAutor.md), umgesetzt, Nachprüfung Architekt).
+   (Anliegen 233, umgesetzt, Nachprüfung Architekt).
 3. Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) in `web.md` und
    `speicher.md`, Wegwerf-Versuch zum Bildschirmtest, Architekt. Keine Datenbank (153 F1 A).
    Er trägt dein „SOLID und lesbar“ für den Unterbau.
@@ -52,9 +52,9 @@ durch Ziehen mit Maus und Touch, Sperre mit Grund · Zurück, gemeinsam übergeh
 (16 F4) · Beenden mit fehlenden Modellen und Kohärenz (16 F3). Damit ist Etappe 1 erreicht.
 
 ## Offene Anliegen
-Deine Antworten, eingearbeitet: [223](anliegen/223-mockupsBenennungUndZonenfarbe.md) F1 A mit
-deinen Namen · 153 F1 A · 151 F2 A (git) · [238](anliegen/238-implementiererSchreibtFrontend.md)
-F1 A · [239](anliegen/239-durchmesserInDerAblageZeigen.md) F1 B, kein AUF-4.8.
+Deine Antworten, eingearbeitet: Anliegen 223 F1 A mit
+deinen Namen · 153 F1 A · 151 F2 A (git) · Anliegen 238
+F1 A · Anliegen 239 F1 B, kein AUF-4.8.
 
 An dich: [241](anliegen/241-frontendUndBackendParallel.md) (Organisationsentwickler, aus deiner
 Stellungnahme in 238): Frontend und Backend parallel. Plan 3 ändert sich nur bei F1 B. Ich

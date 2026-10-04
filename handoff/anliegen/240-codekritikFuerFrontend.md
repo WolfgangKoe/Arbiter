@@ -3,7 +3,7 @@
 240 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Nach [233](233-frontendOhneAutor.md) schreibt der Implementierer auch
+**Befund.** Nach Anliegen 233 schreibt der Implementierer auch
 `technik/frontend/`; die Tabelle in [Kritik am Code](../../prozess/ablauf.md#kritik-am-code)
 nennt dafür den Reviewer. `kritikerJePfad` in `prozess/pruefungen/standregeln/codekritik.py`
 kennt den Pfad nicht: Ein Commit, der nur die Seite ändert, gilt dem Stand nicht als Code,
