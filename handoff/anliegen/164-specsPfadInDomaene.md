@@ -1,6 +1,6 @@
 # Pfad der alten Spezifikationen in domaene/CLAUDE.md
 
-164 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
+164 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit 6a64835.
