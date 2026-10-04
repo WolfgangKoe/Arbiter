@@ -1,24 +1,27 @@
 """Kriterium ↔ Akzeptanztest: Jedes Kriterium hat einen Test, jeder Test ein Kriterium."""
 
-import ast
 import re
 import sys
-from collections import Counter
 from pathlib import Path
 from typing import NamedTuple
 
 from agenten import projektordner
+from kriterium import (
+    Anforderungsnummer,
+    Kriteriumsnummer,
+    anforderungenMitZeile,
+    anforderungKennung,
+    anforderungVon,
+    doppelte,
+    getesteKriterien,
+    kennung,
+    kriterien,
+    kriterienMitZeile,
+    pfadVon,
+)
 from pfade import akzeptanzOrdner, anforderungsOrdner
 from plan import freigegebenerPlan, offeneItemTexte
-
-Anforderungsnummer = tuple[str, int]
-Kriteriumsnummer = tuple[str, int, int]
-
-
-class Fundstelle(NamedTuple):
-    art: str
-    pfad: str
-    zeile: int
+from spur import spur, spurAlsText
 
 
 class Fehlend(NamedTuple):
@@ -32,72 +35,6 @@ class Zuordnung(NamedTuple):
     anforderung: Anforderungsnummer
     testdatei: Path
     verlangt: set[Kriteriumsnummer]
-
-
-anforderungZeile = re.compile(r"^### ([A-ZÄÖÜ]+)-(\d+)\b")
-kriteriumZeile = re.compile(r"^- ([A-ZÄÖÜ]+)-(\d+)\.(\d+)\b")
-kriteriumKennung = re.compile(r"^([A-ZÄÖÜ]+)-(\d+)\.(\d+)$")
-testKriterium = re.compile(r"^test([A-ZÄÖÜ][a-zäöüß]*)(\d+)_(\d+)")
-stellenAngabe = re.compile(r"^(.+):(\d+)$")
-
-
-def kennung(kriterium: Kriteriumsnummer) -> str:
-    kürzel, hauptnummer, unternummer = kriterium
-    return f"{kürzel}-{hauptnummer}.{unternummer}"
-
-
-def anforderungKennung(anforderung: Anforderungsnummer) -> str:
-    kürzel, nummer = anforderung
-    return f"{kürzel}-{nummer}"
-
-
-def anforderungVon(kriterium: Kriteriumsnummer) -> Anforderungsnummer:
-    kürzel, hauptnummer, _ = kriterium
-    return kürzel, hauptnummer
-
-
-def zeilen(datei: Path) -> list[str]:
-    return datei.read_text(encoding="utf-8").splitlines()
-
-
-def anforderungenMitZeile(anforderungsdatei: Path) -> list[tuple[Anforderungsnummer, int]]:
-    return [
-        ((treffer[1], int(treffer[2])), nummer)
-        for nummer, zeile in enumerate(zeilen(anforderungsdatei), 1)
-        if (treffer := anforderungZeile.match(zeile))
-    ]
-
-
-def kriterienMitZeile(anforderungsdatei: Path) -> list[tuple[Kriteriumsnummer, int]]:
-    return [
-        ((treffer[1], int(treffer[2]), int(treffer[3])), nummer)
-        for nummer, zeile in enumerate(zeilen(anforderungsdatei), 1)
-        if (treffer := kriteriumZeile.match(zeile))
-    ]
-
-
-def kriterien(anforderungsdatei: Path) -> set[Kriteriumsnummer]:
-    return {kriterium for kriterium, _ in kriterienMitZeile(anforderungsdatei)}
-
-
-def testsMitZeile(testdatei: Path) -> list[tuple[Kriteriumsnummer, int, int]]:
-    """Kriterium, erste und letzte Zeile jeder Testfunktion mit Kennung im Namen."""
-    gefunden = []
-    for knoten in ast.walk(ast.parse(testdatei.read_text(encoding="utf-8"))):
-        if isinstance(knoten, ast.FunctionDef | ast.AsyncFunctionDef):
-            treffer = testKriterium.match(knoten.name)
-            if treffer:
-                kriterium = (treffer[1].upper(), int(treffer[2]), int(treffer[3]))
-                gefunden.append((kriterium, knoten.lineno, knoten.end_lineno or knoten.lineno))
-    return gefunden
-
-
-def getesteKriterien(testdatei: Path) -> set[Kriteriumsnummer]:
-    return {kriterium for kriterium, _, _ in testsMitZeile(testdatei)}
-
-
-def doppelte(kennungen: list[str]) -> list[str]:
-    return sorted(name for name, anzahl in Counter(kennungen).items() if anzahl > 1)
 
 
 def anforderungenDerDatei(anforderungsdatei: Path) -> list[Anforderungsnummer]:
@@ -132,10 +69,6 @@ def umfasst(itemTexte: list[str], kriterium: Kriteriumsnummer) -> bool:
 
 def itemTexteDesFreigegebenenPlans(wurzel: Path) -> list[str]:
     return offeneItemTexte(wurzel) if freigegebenerPlan(wurzel) is not None else []
-
-
-def pfadVon(wurzel: Path, datei: Path) -> str:
-    return datei.relative_to(wurzel).as_posix()
 
 
 def testdateiVerstöße(
@@ -299,63 +232,6 @@ def wartende(wurzel: Path) -> list[str]:
 def wartendeAlsText(wurzel: Path) -> str:
     gefunden = wartende(wurzel)
     return f"{', '.join(gefunden)} wartet auf den Testautor" if gefunden else ""
-
-
-def kriteriumsstellen(wurzel: Path) -> dict[Kriteriumsnummer, list[Fundstelle]]:
-    stellen: dict[Kriteriumsnummer, list[Fundstelle]] = {}
-    for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        for kriterium, zeile in kriterienMitZeile(datei):
-            stellen.setdefault(kriterium, []).append(
-                Fundstelle("Kriterium", pfadVon(wurzel, datei), zeile)
-            )
-    return stellen
-
-
-def teststellen(wurzel: Path) -> dict[Kriteriumsnummer, list[Fundstelle]]:
-    stellen: dict[Kriteriumsnummer, list[Fundstelle]] = {}
-    for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
-        for kriterium, zeile, _ in testsMitZeile(datei):
-            stelle = Fundstelle("Test", pfadVon(wurzel, datei), zeile)
-            stellen.setdefault(kriterium, []).append(stelle)
-    return stellen
-
-
-def kriteriumZuStelle(wurzel: Path, pfad: str, zeile: int) -> Kriteriumsnummer | None:
-    """Das Kriterium, das in der Zeile der Datei steht oder dessen Testfunktion sie enthält."""
-    datei = wurzel / pfad
-    if not datei.is_file():
-        return None
-    if datei.suffix == ".md":
-        stellen = kriterienMitZeile(datei)
-        return next((kriterium for kriterium, nummer in stellen if nummer == zeile), None)
-    return next(
-        (kriterium for kriterium, anfang, ende in testsMitZeile(datei) if anfang <= zeile <= ende),
-        None,
-    )
-
-
-def kriteriumZuEingabe(wurzel: Path, eingabe: str) -> Kriteriumsnummer | None:
-    treffer = kriteriumKennung.match(eingabe.upper())
-    if treffer:
-        return treffer[1], int(treffer[2]), int(treffer[3])
-    treffer = testKriterium.match(eingabe)
-    if treffer:
-        return treffer[1].upper(), int(treffer[2]), int(treffer[3])
-    stelle = stellenAngabe.match(eingabe)
-    return kriteriumZuStelle(wurzel, stelle[1], int(stelle[2])) if stelle else None
-
-
-def spur(wurzel: Path, eingabe: str) -> list[Fundstelle] | None:
-    """Kriterium und seine Tests; `None`, wenn die Eingabe kein bekanntes Kriterium nennt."""
-    kriterium = kriteriumZuEingabe(wurzel, eingabe)
-    stellen = kriteriumsstellen(wurzel).get(kriterium, []) if kriterium else []
-    if not stellen:
-        return None
-    return stellen + teststellen(wurzel).get(kriterium, [])
-
-
-def spurAlsText(stellen: list[Fundstelle]) -> str:
-    return "\n".join(f"{stelle.pfad}:{stelle.zeile}" for stelle in stellen)
 
 
 def hauptprogramm(argumente: list[str]) -> int:

@@ -3,16 +3,15 @@ from pathlib import Path
 
 import pytest
 
+from kriterium import getesteKriterien, kriterien
 from pfade import wurzel
 from rueckverfolgung import (
     fehlendeTests,
-    getesteKriterien,
     hauptprogramm,
-    kriterien,
-    spur,
     verstöße,
     wartende,
 )
+from spur import spur
 
 zweiKriterien = 2
 zweiVerstöße = 2
