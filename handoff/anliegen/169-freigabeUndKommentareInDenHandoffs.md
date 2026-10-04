@@ -1,6 +1,6 @@
 # Freigabe und Kommentare in Plan, Review und Retro
 
-169 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
+169 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Wunsch steht im [Ablauf, Freigabe und

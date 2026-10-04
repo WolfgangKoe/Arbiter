@@ -9,6 +9,7 @@ schreibpfade:
   - .claude/settings.json
   - .pre-commit-config.yaml
   - pyproject.toml
+  - .gitignore
   - ruff.toml
   - .vscode/settings.json
   - dashboard.html
@@ -24,8 +25,8 @@ Mechanismus, der ohne Tokenkosten wirkt.
   `prozess/praemissen/`.
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
   Lesbarkeit nach `prozess/praemissen/wir.md`, wie für jeden Code.
-- Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge) schreibst du;
-  der Architekt kritisiert sie per Anliegen.
+- Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge) und
+  `.gitignore` schreibst du; der Architekt kritisiert sie per Anliegen.
 - Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.
   Vorbild: der Test der Bash-Positivliste.
 - Trage den gebauten Mechanismus in `prozess/regeln.md` ein: Regel (Link), Mechanismus,
@@ -38,4 +39,5 @@ Mechanismus, der ohne Tokenkosten wirkt.
 - Je Lauf ein Prozess-Item oder Anliegen. Nennt der Auftrag mehrere, setze das erste um
   und nenne die übrigen in der Schlussantwort.
 - Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und
-  `python3 prozess/pruefungen/abdeckung.py` mit 0 endet (Abdeckung der Prüfskripte).
+  `python3 prozess/pruefungen/abdeckung.py` (Abdeckung der Prüfskripte) und
+  `python3 prozess/pruefungen/sonarlint.py` mit 0 enden.

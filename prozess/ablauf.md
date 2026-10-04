@@ -86,9 +86,11 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    Glossar (`glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
    (`kommentare.py`), toter Code (vulture über `technik/arbiter` und
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `abdeckung.py`), alle
-   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `konfigurationTest.py`.
-   Urteil: Zeilen, die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung,
-   fehlendes Kriterium oder tot); Glossar → Code.
+   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `konfigurationTest.py`;
+   SonarLint (Standardprofil ohne Namensregeln, Ordner nach [regeln.md](regeln.md)) mit
+   `python3 prozess/pruefungen/sonarlint.py`, beim Commit auch als Hook. Urteil: Zeilen,
+   die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung, fehlendes
+   Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.
@@ -100,7 +102,7 @@ Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert)
 pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR2004, PLR0913,
 FBT, ERA, `PLR0912` mit 12), Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
 Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
-wie SonarLint, die Sicht des Stakeholders; Mechanismus: nur Text. Nicht verwendet: radon-Wartbarkeitsindex,
+wie SonarLint, die Sicht des Stakeholders; Mechanismus: `sonarlint.py` (DoD 2). Nicht verwendet: radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
@@ -143,7 +145,8 @@ Freigabe: offen
 Kommentar: .
 ```
 - Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
-  unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Er gibt frei mit
+  unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Zu anderen Dateien
+  kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:`. Er gibt frei mit
   `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: nur Text (Anliegen 168).
 - Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,

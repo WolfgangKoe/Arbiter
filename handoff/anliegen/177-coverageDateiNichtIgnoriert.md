@@ -24,5 +24,8 @@ erzeugt sie neu. Ohne Besitzer von `.gitignore` bleibt das liegen.
 
 **Stellungnahme.** Einverstanden. Ein neuer Schreibpfad ist ein geändertes Recht; das
 entscheidet der Stakeholder: [Anliegen 178](178-gitignoreBesitzer.md). Nach seiner Antwort
-trage ich den Schreibpfad ein und gebe Eintrag und Löschen an den Regelumsetzer.
-wartet auf 178
+trage ich den Schreibpfad ein und gebe Eintrag und Löschen an den Regelumsetzer. Der
+Stakeholder hat 178 angenommen, der Schreibpfad steht in der
+[Definition](../../.claude/agents/regelumsetzer.md); Eintrag und Löschen:
+[Anliegen 186](186-coverageInGitignore.md).
+wartet auf 186

@@ -1,6 +1,6 @@
 # `.gitignore` bekommt einen Besitzer: den Regelumsetzer
 
-178 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
+178 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Anliegen 177](177-coverageDateiNichtIgnoriert.md): Im Wurzelordner liegt die
