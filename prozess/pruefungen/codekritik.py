@@ -2,6 +2,7 @@
 
 import re
 from pathlib import Path
+from typing import NamedTuple
 
 from gitAufruf import gitAusgabe, letzteFreigabe
 from pfade import akzeptanzOrdner
@@ -18,6 +19,16 @@ kritikerJePfad = (
 kurzerHash = re.compile(r"\b[0-9a-f]{7,40}\b")
 
 
+class Commit(NamedTuple):
+    kennung: str
+    betreff: str
+
+
+class FälligeKritik(NamedTuple):
+    kurzerHash: str
+    kritiker: str
+
+
 def kritikerDesCommits(geändertePfade: list[str]) -> str | None:
     """Alle Kritiker der getroffenen Pfade, ohne Doppelte, in der Reihenfolge der Tabelle."""
     kritiker: list[str] = []
@@ -32,7 +43,7 @@ def geprüfteHashes(betreff: str) -> set[str]:
     return set(kurzerHash.findall(betreff)) if betreff.startswith("Kritik ") else set()
 
 
-def commitsSeitDerFreigabe(wurzel: Path) -> list[tuple[str, str]]:
+def commitsSeitDerFreigabe(wurzel: Path) -> list[Commit]:
     """Kennung und Betreff, älteste zuerst, ab dem Commit nach der letzten Freigabe."""
     freigabe = letzteFreigabe(wurzel)
     bereich = [f"{freigabe}..HEAD"] if freigabe else []
@@ -40,22 +51,23 @@ def commitsSeitDerFreigabe(wurzel: Path) -> list[tuple[str, str]]:
     commits = []
     for zeile in reversed(zeilen):
         kennung, _, betreff = zeile.partition(" ")
-        commits.append((kennung, betreff))
+        commits.append(Commit(kennung, betreff))
     return commits
 
 
-def ersteFälligeKritik(wurzel: Path) -> tuple[str, str] | None:
+def ersteFälligeKritik(wurzel: Path) -> FälligeKritik | None:
     """Kurzer Hash und Kritiker des ersten Code-Commits ohne Kritik."""
     commits = commitsSeitDerFreigabe(wurzel)
-    geprüft = {hash for _, betreff in commits for hash in geprüfteHashes(betreff)}
-    for kennung, _ in commits:
+    geprüft = {hash for commit in commits for hash in geprüfteHashes(commit.betreff)}
+    for commit in commits:
+        kennung = commit.kennung
         pfade = gitAusgabe(wurzel, "show", "--format=", "--name-only", kennung).splitlines()
         kritiker = kritikerDesCommits(pfade)
         if kritiker and not any(kennung.startswith(hash) for hash in geprüft):
-            return kennung[:7], kritiker
+            return FälligeKritik(kennung[:7], kritiker)
     return None
 
 
 def fälligeKritikAlsText(wurzel: Path) -> str:
     fällig = ersteFälligeKritik(wurzel)
-    return f"Kritik am Code fällig: {fällig[1]} ({fällig[0]})" if fällig else ""
+    return f"Kritik am Code fällig: {fällig.kritiker} ({fällig.kurzerHash})" if fällig else ""
