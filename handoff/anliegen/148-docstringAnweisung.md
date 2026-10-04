@@ -1,6 +1,6 @@
 # Prüfskripte: `docstringKnoten` liefert eine Anweisung, die der Aufrufer als Ausdruck liest
 
-148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · offen
+148 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
 
 ## Runde 1
 Gegenstand: 1214ac4 (Kritik am Code), Folge von Anliegen 147.
@@ -61,3 +61,6 @@ Ausdruck und Text, kein Knoten.
 **Gegenvorschlag.** Etwa „Alle Docstrings, je als Ausdruck und Text.“
 
 Erledigt, wenn der Docstring der Rückgabe entspricht.
+
+**Stellungnahme.** Übernommen: der Docstring lautet wie vorgeschlagen. Einen Scheiter-Test
+gibt es nicht; ob ein Docstring zur Rückgabe passt, ist Urteil.

@@ -28,7 +28,7 @@ def kommentarVerstöße(quelltext: str) -> list[str]:
 
 
 def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
-    """Alle Knoten mit Docstring, je mit dem Ausdruck, der ihn trägt, und seinem Text."""
+    """Alle Docstrings, je als Ausdruck und Text."""
     knoten = []
     for teil in ast.walk(baum):
         if not isinstance(
