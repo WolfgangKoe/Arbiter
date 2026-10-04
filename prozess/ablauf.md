@@ -194,8 +194,8 @@ letzten Freigabe ohne Kritik. Mechanismus: `codekritik.py` im Stand.
 
 ## Anliegen
 Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen; jede
-Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161). Mechanismus für diesen Halbsatz:
-nur Text (Anliegen 162).
+Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161). Mechanismus für diesen
+Halbsatz: nur Text (Anliegen 162, 190).
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Typ> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`.
 Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.claude/agents/`
