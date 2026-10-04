@@ -1,6 +1,6 @@
 # Einen umbenannten Ordner per Test bemerken
 
-165 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+165 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit 6a64835. Hier steht, was Anliegen 163 noch

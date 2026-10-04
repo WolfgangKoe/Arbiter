@@ -1,6 +1,6 @@
 # Paralleler Lauf überschreibt ein fremdes neues Anliegen
 
-166 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+166 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Reviewer und Architekt liefen gleichzeitig mit der Kritik zu 6a64835. Das erlaubt
