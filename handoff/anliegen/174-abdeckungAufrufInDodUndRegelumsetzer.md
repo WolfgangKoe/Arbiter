@@ -1,6 +1,6 @@
 # Abdeckung: Aufruf und Mechanismus in DoD 1 und Regelumsetzer nachtragen
 
-174 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+174 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** P1 der Retro 2 ist gebaut (Anliegen 170, 171, 172), aber zwei Texte hinken nach:
