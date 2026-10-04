@@ -25,7 +25,7 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
    Auslöser der Rolle UX ([151](anliegen/151-rolleUxFuerDieErsteOberflaeche.md)); du willst
    ihre Leitplanken sehen, ArbiterMaps Mockups als Gegenbeispiel.
 9. Deine Antworten brachten 145 über das Höchstmaß; nach
-   [161](anliegen/161-antwortenUndHoechstmass.md) A zählen sie nicht mit.
+   Anliegen 161 A zählen sie nicht mit.
 
 ## Geändert
 - [Ablauf](../prozess/ablauf.md): DoD 1 Abdeckung 95 %, DoD 2 toter Code (157), SonarLint

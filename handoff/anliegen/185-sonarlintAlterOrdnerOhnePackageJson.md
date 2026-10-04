@@ -1,6 +1,6 @@
 # SonarLint: ein alter Ordner ohne package.json sperrt die neueste Erweiterung
 
-185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · angenommen
+185 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 2/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `1cd5dfd`. Anliegen 183

@@ -1,6 +1,6 @@
 # Messdatei `.coverage` liegt ungeschützt im Wurzelordner
 
-177 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+177 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik bei der Nachprüfung von Commit `6753eed` (P1 der [Retro 2](../retro.md)).

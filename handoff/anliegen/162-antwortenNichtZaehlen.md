@@ -5,7 +5,7 @@
 ## Runde 1
 **Befund.** `hoechstmassTest.py` zählt ein Anliegen samt den Antworten des Stakeholders. Mit
 ihnen hatte [145](145-ersteOberflaecheImBrowser.md) 4.063 Zeichen, der Test war rot. Der
-Stakeholder entscheidet die Regel in [161](161-antwortenUndHoechstmass.md), F1; empfohlen
+Stakeholder entscheidet die Regel in Anliegen 161, F1; empfohlen
 ist A. Dieses Anliegen gilt für A, sobald 161 beantwortet ist (auch mit „.“); bis dahin
 wartet es. Bei B oder C ändere ich es in einer neuen Runde.
 
