@@ -1,6 +1,6 @@
 # Lauf-Log: Schreibgrenze, doppelte Läufe, kaputte Zeile
 
-189 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+189 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code von Commit bbe724a (Retro 2 P4). `dashboardTest.py` ist grün. Sechs Befunde:
