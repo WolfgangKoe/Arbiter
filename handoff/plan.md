@@ -11,14 +11,16 @@ Klick, dann Ziehen (Anliegen 146, git).
 1. [Karte im Browser](../domaene/items/karte-im-browser.md): QUE-2.1 bis QUE-2.6,
    [Mockup](../domaene/mockups/que-2.html)
 2. [Anzeige der Aufstellung](../domaene/items/anzeige-der-aufstellung.md): AUF-4.2 bis
-   AUF-4.7, nach Item 1, [Mockup](../domaene/mockups/auf-4.html)
+   AUF-4.7, nach Item 1, Mockups
+   [Ausgangslage](../domaene/mockups/auf-4-ausgangslage.html) und
+   [Spieler 1 an der Reihe](../domaene/mockups/auf-4.html)
 
-Beide Mockups bringen ihr CSS als [Vorschlag](../domaene/mockups/vorschlag.css) mit; eine
+Die Mockups bringen ihr CSS als [Vorschlag](../domaene/mockups/vorschlag.css) mit; eine
 Komponentenseite gibt es noch nicht (DoR 5). Sie folgen deinem Aufbau aus Anliegen 145 F1
 (git): oben der gameHeader, links und rechts je Spieler die armyCard mit unitCards (Ablage),
 in der Mitte die Karte. Die gameActionsArea fehlt, ihre Knöpfe kommen mit dem Wählen. Die
-Mockups zeigen einen Zustand mit Spieler 1 an der Reihe und gesetzten Modellen, damit du
-Farben und Abzeichen siehst.
+Ausgangslage ist das Bild, das du am Ende des Zyklus siehst; „Spieler 1 an der Reihe“ zeigt
+gesetzte Modelle, damit du Farben und Abzeichen siehst.
 
 ## Empfehlung
 Freigeben mit beiden Items und den Antworten unten. Danach startest du Arbiter mit einem

@@ -2,8 +2,8 @@
 
 Umfang: AUF-4.2 bis AUF-4.7 ([Aufstellen](../anforderungen/phasen/aufstellen.md)).
 
-Warum jetzt: Ohne Ablage und „an der Reihe“ sehen die Spieler nicht, was aufzustellen ist
-und wer wählt; Wählen und Setzen bauen darauf auf.
+Warum jetzt: Ohne Ablage und „an der Reihe“ sehen Spieler nicht, was aufzustellen ist und
+wer wählt; Wählen und Setzen bauen darauf auf.
 
-Abhängigkeit: Item Karte im Browser, [Mockup](../mockups/auf-4.html) mit
-[CSS-Vorschlag](../mockups/vorschlag.css).
+Abhängigkeit: Item Karte im Browser. Mockups: [Ausgangslage](../mockups/auf-4-ausgangslage.html),
+[Spieler 1 an der Reihe](../mockups/auf-4.html).
