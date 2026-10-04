@@ -1,6 +1,6 @@
 # SonarLint meldet S5778 in den Einheitstests
 
-179 · Anliegen · von Regelumsetzer (Prozess) → Implementierer (Technik) · Runde 1/3 · angenommen
+179 · Anliegen · von Regelumsetzer (Prozess) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Wegwerf-Versuch aus P2 (Retro 2, [150](150-sonarlintAbdeckungUndToterCode.md))

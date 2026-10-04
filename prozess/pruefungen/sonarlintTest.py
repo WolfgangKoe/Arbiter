@@ -18,6 +18,7 @@ from sonarlint import (
     erweiterungFinden,
     funde,
     fundText,
+    geprüfteOrdner,
     nachrichtLesen,
     nachrichtSchreiben,
     öffnen,
@@ -58,6 +59,26 @@ def testEineUngenutzteVariableIstEinFund(tmp_path):
     gefunden = funde(tmp_path, dateien)
     assert len(gefunden) == 1
     assert gefunden[0].startswith("schlecht.py:2: python:S1481 ")
+
+
+def testZweiAufrufeInPytestRaisesSindEinFund(tmp_path):
+    # Regel: Anliegen 179, Einheitstests mit S5778 sperrt die Prüfung
+    text = (
+        "import pytest\n\n\n"
+        "def baue():\n    return 1\n\n\n"
+        "def wirf(wert):\n    raise ValueError(wert)\n\n\n"
+        "def testWirft():\n"
+        "    with pytest.raises(ValueError):\n"
+        "        wirf(baue())\n"
+    )
+    datei = tmp_path / "wirftTest.py"
+    datei.write_text(text, encoding="utf-8")
+    gefunden = funde(tmp_path, [datei])
+    assert any("python:S5778" in fund for fund in gefunden)
+
+
+def testDieEinheitstestsSindGeprüft():
+    assert "technik/tests/einheit" in geprüfteOrdner
 
 
 def testDieNamensregelnDesProfilsSindAus():

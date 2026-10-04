@@ -10,8 +10,7 @@ from typing import BinaryIO
 
 from pfade import akzeptanzOrdner, wurzel
 
-# Warum: `technik/tests/einheit` hat noch Funde zu S5778; bis dahin ungeprüft
-geprüfteOrdner = ("technik/arbiter", akzeptanzOrdner, "prozess/pruefungen")
+geprüfteOrdner = ("technik/arbiter", "technik/tests/einheit", akzeptanzOrdner, "prozess/pruefungen")
 erweiterungenOrdner = Path.home() / ".vscode" / "extensions"
 umgebungsvariable = "SONARLINT_ERWEITERUNG"
 wartezeitSekunden = 120
