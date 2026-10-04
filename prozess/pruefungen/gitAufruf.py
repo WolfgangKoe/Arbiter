@@ -29,9 +29,14 @@ def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
 
 
 def letzteFreigabe(wurzel: Path) -> str | None:
-    """Der jüngste Commit, dessen Betreff mit `Freigabe ` beginnt, sonst `None`."""
-    alle = freigaben(wurzel)
-    return alle[0][0] if alle else None
+    """Der jüngste Commit `Freigabe …` außer `Freigabe Review …`, sonst `None`."""
+    # Warum: Die Freigabe des Reviews schließt keine Kritik am Code ab; das Fenster bleibt offen.
+    alle = [
+        kennung
+        for kennung, betreff in freigaben(wurzel)
+        if not betreff.startswith("Freigabe Review ")
+    ]
+    return alle[0] if alle else None
 
 
 def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:

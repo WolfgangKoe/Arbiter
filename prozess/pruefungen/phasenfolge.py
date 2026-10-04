@@ -95,6 +95,8 @@ def lage(wurzel: Path) -> Lage:
         )
     if review != plan:
         return Lage(plan, Phase.technikphase, f"Reviewer: Review {plan}")
+    if retro != plan and freigabeCommit(wurzel, "Review", plan) is None:
+        return Lage(plan, Phase.technikphase, f"Review {plan} wartet auf Kritik und Freigabe")
     if retro != plan:
         return Lage(plan, Phase.prozessphase, f"Organisationsentwickler: Retro {plan}")
     if freigabeCommit(wurzel, "Retro", plan) is None:

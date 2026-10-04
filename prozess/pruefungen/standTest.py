@@ -116,6 +116,7 @@ def planMitItem(repo):
 def testSolangeEinItemOffenIstNenntDerStandDieAbnahmeAuchMitReview(repo):
     planMitItem(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     aktuelle = lage(repo.wurzel)
     assert aktuelle.phase == "Technikphase"
     assert "Fachkritiker: Abnahme" in aktuelle.schritt
@@ -133,6 +134,7 @@ def testGelöschtesItemMitReviewWechseltInDenProzess(repo):
     repo.git("rm", "-q", "domaene/items/probe.md")
     repo.git("commit", "-qm", "Item gelöscht")
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     assert lage(repo.wurzel) == (1, "Prozessphase", "Organisationsentwickler: Retro 1")
 
 
@@ -145,12 +147,14 @@ def testNachDenAkzeptanztestsOhneItemIstDerReviewerDran(repo):
 def testReviewWechseltInDenProzess(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     assert lage(repo.wurzel) == (1, "Prozessphase", "Organisationsentwickler: Retro 1")
 
 
 def testRetroOhneFreigabeWartet(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     assert lage(repo.wurzel).schritt == "Retro 1 wartet auf Kritik und Freigabe"
 
@@ -158,6 +162,7 @@ def testRetroOhneFreigabeWartet(repo):
 def testFreigabeDerRetroBeginntDenNächstenZyklus(repo):
     bisZurFreigabeVonPlan1(repo)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     repo.freigabe("Retro", 1)
     aktuelle = lage(repo.wurzel)
@@ -329,6 +334,7 @@ def retroFreigegebenMitAnforderung(repo, anforderungstext, testtext):
     if testtext:
         repo.datei("technik/tests/akzeptanz/aufstellungTest.py", testtext)
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
     repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n")
     repo.freigabe("Retro", 1)
 
@@ -381,3 +387,19 @@ def testPlanDessenItemsEinFehlendesKriteriumNennenWartetAufKritikUndFreigabe(rep
         repo, zweiKriterienEinsGetestet, "def testAu1_1Eins(): ...\n", "# Probe\n\nAU-1.2.\n"
     )
     assert lage(repo.wurzel).schritt == "Plan 1 wartet auf Kritik (Architekt) und Freigabe"
+
+
+def testReviewOhneFreigabeWartetAufKritikUndFreigabe(repo):
+    repo.datei("handoff/plan.md", "# Plan · Zyklus 3\n")
+    repo.freigabe("Plan", 3)
+    repo.datei("handoff/review.md", "# Review · Zyklus 3\n")
+    assert lage(repo.wurzel) == (3, "Technikphase", "Review 3 wartet auf Kritik und Freigabe")
+    repo.freigabe("Review", 3)
+    assert lage(repo.wurzel) == (3, "Prozessphase", "Organisationsentwickler: Retro 3")
+
+
+def testFreigabeDesReviewsSchiebtKeinenCodeCommitOhneKritikAusDemFenster(repo):
+    repo.freigabe("Plan", 1)
+    repo.datei("prozess/pruefungen/probe.py", "x = 1\n")
+    repo.freigabe("Review", 1)
+    assert "Kritik am Code fällig" in stand(repo.wurzel)

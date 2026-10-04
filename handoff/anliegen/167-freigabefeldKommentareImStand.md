@@ -47,4 +47,4 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Code geprüft hat
 ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.**
+**Stellungnahme.** Teil 1 umgesetzt (`phasenfolge.lage`, `letzteFreigabe` ohne `Freigabe Review`, Tests in `standTest.py`, `regeln.md`). Offen: Teile 2 bis 4, je ein Lauf.
