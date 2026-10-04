@@ -1,6 +1,6 @@
 # Lauf-Log: Ein fortgesetzter Lauf verschluckt seine früheren Aufträge
 
-193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 3/3 · angenommen
+193 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 3/3 · erledigt
 
 ## Runde 1
 Kritik am Code von Commit d8f68f7. `python3 -m pytest prozess/pruefungen` ist grün (534),
