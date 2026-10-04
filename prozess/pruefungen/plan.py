@@ -36,8 +36,7 @@ def freigegebenerPlan(wurzel: Path) -> int | None:
 def offeneItemTexte(wurzel: Path) -> list[str]:
     """Texte der offenen Items des Plans."""
     return [
-        (wurzel / itemsOrdner / name).read_text(encoding="utf-8")
-        for name in offeneItems(wurzel)
+        (wurzel / itemsOrdner / name).read_text(encoding="utf-8") for name in offeneItems(wurzel)
     ]
 
 

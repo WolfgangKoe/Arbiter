@@ -1,9 +1,10 @@
 import json
 from pathlib import Path
 
-from einstellungen import hookBefehle, skripte, verstöße
+import pytest
 
-wurzel = Path(__file__).resolve().parents[2]
+from einstellungen import hookBefehle, skripte, verstöße
+from pfade import wurzel
 
 
 def einstellungenMit(tmp_path: Path, befehl: str) -> None:
@@ -13,6 +14,7 @@ def einstellungenMit(tmp_path: Path, befehl: str) -> None:
     datei.write_text(json.dumps({"hooks": {"PreToolUse": [gruppe]}}), encoding="utf-8")
 
 
+@pytest.mark.stand
 def testJederHookDerEinstellungenZeigtAufEineVorhandeneDatei():
     assert verstöße(wurzel) == []
 

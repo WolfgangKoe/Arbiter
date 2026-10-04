@@ -33,3 +33,8 @@ def testLangeLetzteNachrichtSchicktDieRolleZurück():
 
 def testBeimZweitenStoppWirdNichtErneutGesperrt():
     assert schlussantwort.entscheide(stopp("x" * 2246, aktiv=True)) is None
+
+
+def testEinAndererWerkzeugaufrufWirdNichtGeprüft():
+    eingabe = {**handback("x" * 4714), "tool_name": "Read"}
+    assert schlussantwort.entscheide(eingabe) is None

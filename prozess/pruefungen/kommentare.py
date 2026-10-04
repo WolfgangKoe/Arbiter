@@ -31,14 +31,10 @@ def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
     """Alle Docstrings, je als Ausdruck und Text."""
     knoten = []
     for teil in ast.walk(baum):
-        if not isinstance(
-            teil, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
-        ):
+        if not isinstance(teil, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
             continue
         anweisung = teil.body[0] if teil.body else None
-        if isinstance(anweisung, ast.Expr) and (
-            text := ast.get_docstring(teil, clean=False)
-        ):
+        if isinstance(anweisung, ast.Expr) and (text := ast.get_docstring(teil, clean=False)):
             knoten.append((anweisung, text))
     return knoten
 

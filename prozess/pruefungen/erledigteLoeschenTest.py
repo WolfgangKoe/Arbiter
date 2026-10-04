@@ -4,7 +4,6 @@ from pathlib import Path
 from anliegenTest import anliegenAnlegen, guterKopf
 from erledigteLoeschen import erledigteLöschen
 
-wurzel = Path(__file__).resolve().parents[2]
 identität = ["-c", "user.name=t", "-c", "user.email=t@t"]
 
 

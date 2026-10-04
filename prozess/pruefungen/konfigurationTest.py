@@ -7,7 +7,8 @@ from pathlib import Path
 
 import pytest
 
-wurzel = Path(__file__).resolve().parents[2]
+from pfade import wurzel
+
 ordner = Path(__file__).resolve().parent
 
 
@@ -30,6 +31,7 @@ def testPytestErkenntDateienNachDemSchemaNameTest():
     assert "*Test.py" in pyproject()["tool"]["pytest"]["ini_options"]["python_files"]
 
 
+@pytest.mark.stand
 def testPytestFindetAlleTestdateienDerPrüfungen():
     ausgabe = subprocess.run(
         [sys.executable, "-m", "pytest", "--collect-only", "-q", str(ordner)],
@@ -43,6 +45,7 @@ def testPytestFindetAlleTestdateienDerPrüfungen():
     assert gesucht and fehlend == []
 
 
+@pytest.mark.stand
 def testPreCommitRuftDiePrüfungenAuf():
     text = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "python3 -m pytest prozess/pruefungen" in text
@@ -99,6 +102,7 @@ def testRuffPrüftDenAltbestandNicht(tmp_path):
     assert ergebnis.returncode == 0, ergebnis.stdout
 
 
+@pytest.mark.stand
 def testGitIgnoriertDenAltbestand():
     ergebnis = subprocess.run(
         ["git", "check-ignore", "Arbiter-old/alt.py"],
@@ -110,6 +114,7 @@ def testGitIgnoriertDenAltbestand():
     assert ergebnis.returncode == 0
 
 
+@pytest.mark.stand
 def testDasRepoIstRuffSauber():
     ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout

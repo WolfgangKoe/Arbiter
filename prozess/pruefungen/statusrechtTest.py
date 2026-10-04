@@ -100,3 +100,43 @@ def testInRunde3AufOffenNachAbgelehntIstGesperrt(tmp_path):
 def testInRunde3VonAbgelehntAufEskaliertIstErlaubt(tmp_path):
     datei = anliegenInRunde(tmp_path, 3, "abgelehnt")
     assert entscheide(ändere(datei, "architekt", "· abgelehnt", "· eskaliert"), tmp_path) is None
+
+
+def testEineAndereDateiAlsEinAnliegenIstFrei(tmp_path):
+    datei = tmp_path / "notiz.md"
+    datei.write_text("x", encoding="utf-8")
+    assert entscheide(schreibung(datei, "planer", "Write", content="y"), tmp_path) is None
+
+
+def testEinEditOhneNeuenTextIstFrei(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    assert entscheide(schreibung(datei, "planer", old_string="· offen"), tmp_path) is None
+
+
+def testEinAnderesWerkzeugAlsWriteOderEditIstFrei(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    assert entscheide(schreibung(datei, "planer", "Read"), tmp_path) is None
+
+
+def testEinNeuesAnliegenOhneKopfIstFrei(tmp_path):
+    datei = tmp_path / "handoff" / "anliegen" / "12-neu.md"
+    datei.parent.mkdir(parents=True)
+    assert entscheide(schreibung(datei, "planer", "Write", content="kein Kopf"), tmp_path) is None
+
+
+def testEinNeuesErledigtesAnliegenOhneVorgängerIstDemAbsenderVorbehalten(tmp_path):
+    datei = tmp_path / "handoff" / "anliegen" / "12-neu.md"
+    datei.parent.mkdir(parents=True)
+    kopf = guterKopf.replace("· offen", "· erledigt")
+    inhalt = f"# Titel\n\n{kopf}\n"
+    for rolle in ("architekt", "planer", "fachkritiker"):
+        (tmp_path / ".claude" / "agents").mkdir(parents=True, exist_ok=True)
+        (tmp_path / ".claude" / "agents" / f"{rolle}.md").write_text("x", encoding="utf-8")
+    antwort = entscheide(schreibung(datei, "planer", "Write", content=inhalt), tmp_path)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
+def testEinSchonErledigtesAnliegenDarfJederWeiterschreiben(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("· offen", "· erledigt"))
+    angaben = schreibung(datei, "planer", old_string="## Runde 1", new_string="## Runde 1\nx")
+    assert entscheide(angaben, tmp_path) is None

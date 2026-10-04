@@ -57,6 +57,7 @@ def testStandardbibliothekUndDomäneSindGrün(tmp_path, text):
     assert verstöße(tmp_path) == []
 
 
+@pytest.mark.stand
 def testDieDomäneDesReposHältDenVertrag():
     assert (projektordner() / domaeneOrdner).is_dir()
     assert verstöße(projektordner()) == []

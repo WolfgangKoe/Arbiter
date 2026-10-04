@@ -1,12 +1,10 @@
-from pathlib import Path
-
 import pytest
 
 from kommentare import docstringVerstöße, kommentarVerstöße, verstöße
+from pfade import wurzel
 
-wurzel = Path(__file__).resolve().parents[2]
 
-
+@pytest.mark.stand
 def testDasRepoHältDieKommentarregel():
     assert verstöße(wurzel) == []
 
@@ -52,3 +50,13 @@ def testUnerlaubteDocstringsSindRot(quelltext):
 
 def testEinzeiligerDocstringIstGrün():
     assert docstringVerstöße('def tun():\n    """Tut etwas."""\n') == []
+
+
+def testDieVerstößeEinesVerzeichnissesNennenDateiUndGrund(tmp_path):
+    (tmp_path / "prozess").mkdir()
+    (tmp_path / "prozess" / "gut.py").write_text("x = 1\n", encoding="utf-8")
+    (tmp_path / "prozess" / "schlecht.py").write_text("x = 1  # Zähler\n", encoding="utf-8")
+    (tmp_path / "prozess" / "notiz.md").write_text("# TODO\n", encoding="utf-8")
+    meldungen = verstöße(tmp_path)
+    assert len(meldungen) == 1
+    assert meldungen[0].startswith("prozess/schlecht.py: ")

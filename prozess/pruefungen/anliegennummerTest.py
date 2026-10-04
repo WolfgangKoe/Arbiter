@@ -1,8 +1,11 @@
 import subprocess
 
+import pytest
+
 from anliegen import doppelteNummern, nächsteFreieNummer
 from anliegennummer import entscheide
-from anliegenTest import anliegenAnlegen, guterKopf, wurzel
+from anliegenTest import anliegenAnlegen, guterKopf
+from pfade import wurzel
 
 
 def schreibung(datei):
@@ -45,5 +48,17 @@ def testZweiDateienMitDerselbenNummerSindRot(tmp_path):
     assert doppelteNummern(tmp_path) == {12: ["12-probe.md", "12-zweite.md"]}
 
 
+@pytest.mark.stand
 def testKeinePaarMitDerselbenNummerImRepo():
     assert doppelteNummern(wurzel) == {}
+
+
+def testEinAndererWerkzeugaufrufAlsWriteIstFrei(tmp_path):
+    eingabe = {**schreibung(tmp_path / "handoff" / "anliegen" / "12-x.md"), "tool_name": "Read"}
+    assert entscheide(eingabe, tmp_path) is None
+
+
+def testEineDateiAußerhalbDerAnliegenOderOhneMdIstFrei(tmp_path):
+    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    assert entscheide(schreibung(tmp_path / "prozess" / "12-x.md"), tmp_path) is None
+    assert entscheide(schreibung(tmp_path / "handoff" / "anliegen" / "12-x.txt"), tmp_path) is None

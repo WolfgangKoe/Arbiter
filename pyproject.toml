@@ -4,6 +4,9 @@ python_files = ["*Test.py"]
 # Warum: Das Produkt `arbiter` liegt in technik/. Die Prüfskripte stehen nicht im Suchpfad:
 # pytest stellt den Ordner einer Testdatei ohnehin vorne an, das Produkt soll sie nicht sehen.
 pythonpath = ["technik"]
+# Warum: `stand` kennzeichnet Prüfungen über das echte Repo; die Messung der Prüfskripte lässt sie aus
+# (abdeckung.py), denn sie proben nur den grünen Weg.
+markers = ["stand: prüft den Stand des Repos, keine Probe"]
 
 [tool.ruff]
 line-length = 100
@@ -52,4 +55,4 @@ exclude_also = ['if __name__ == "__main__":']
 [tool.vulture]
 # Warum: pytest ruft `test…` auf, kein Code; `zweite` ist ein Mitglied von `Aufstellungszone`,
 # das `katalog/ausgangslage.py` aus den Daten liest (`Aufstellungszone[name]`).
-ignore_names = ["test*", "zweite"]
+ignore_names = ["test[A-Z]*", "zweite"]

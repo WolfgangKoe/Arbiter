@@ -58,3 +58,12 @@ def testGitShowEinerLangenDateiIstGesperrt(tmp_path):
 def testGitShowOhneAngabeIstGesperrt(tmp_path):
     repoMitDatei(tmp_path, "kurz.md", "Stand")
     assert not lesegrenze.gitShowZulässig(["git", "show"], tmp_path)
+
+
+def testEineFehlendeDateiWirdNichtGesperrt(tmp_path):
+    assert lesegrenze.entscheide(lesen(tmp_path / "gibtsNicht.md"), tmp_path) is None
+
+
+def testEineDateiOhneTextWirdNichtGesperrt(tmp_path):
+    (tmp_path / "bild.bin").write_bytes(b"\xff\xfe\x00" * 5000)
+    assert lesegrenze.entscheide(lesen(tmp_path / "bild.bin"), tmp_path) is None

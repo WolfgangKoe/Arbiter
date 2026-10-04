@@ -1,8 +1,7 @@
-from pathlib import Path
+import pytest
 
 from glossar import glossarBezeichner, gründe, quelltextVerstöße, verstöße
-
-wurzel = Path(__file__).resolve().parents[2]
+from pfade import wurzel
 
 glossarText = """Begriff | englisch | Code-Bezeichner | Definition
 ---|---|---|---
@@ -16,6 +15,7 @@ def meldungenZu(quelltext: str, gründeDerAnforderungen: set[str] | None = None)
     return quelltextVerstöße(quelltext, "modul.py", glossar, gründeDerAnforderungen or set())
 
 
+@pytest.mark.stand
 def testDasRepoHältDieÜbereinstimmungVonCodeUndGlossar():
     assert verstöße(wurzel) == []
 
@@ -74,3 +74,21 @@ def testEnumWertMitAnnotationWirdGeprüft():
 
 def testAnnotationOhneWertIstKeinEnumWert():
     assert meldungenZu("class Aufstellungszone(Enum):\n    erste = 1\n    nord: int\n") == []
+
+
+def testDieVerstößeEinesVerzeichnissesNennenDieDateiMitDemUnbekanntenEnumWert(tmp_path):
+    (tmp_path / "domaene").mkdir()
+    (tmp_path / "domaene" / "glossar.md").write_text(glossarText, encoding="utf-8")
+    (tmp_path / "domaene" / "anforderungen").mkdir()
+    (tmp_path / "domaene" / "anforderungen" / "a.md").write_text("‚Grund‘\n", encoding="utf-8")
+    ordner = tmp_path / "technik" / "arbiter" / "domaene"
+    ordner.mkdir(parents=True)
+    (ordner / "gut.py").write_text("class Einheit:\n    pass\n", encoding="utf-8")
+    (ordner / "schlecht.py").write_text(
+        "from enum import Enum\n\n\nclass Aufstellungszone(Enum):\n    dritte = 3\n",
+        encoding="utf-8",
+    )
+    meldungen = verstöße(tmp_path)
+    assert len(meldungen) == 1
+    assert "schlecht.py" in meldungen[0]
+    assert "Aufstellungszone.dritte" in meldungen[0]

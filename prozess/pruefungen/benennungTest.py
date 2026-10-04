@@ -9,14 +9,14 @@ from benennung import (
     quelltextVerstöße,
     verstöße,
 )
-
-wurzel = Path(__file__).resolve().parents[2]
+from pfade import wurzel
 
 
 def grundZu(quelltext: str, dateiname: str = "modul.py", *, akzeptanz: bool = False) -> list[str]:
     return quelltextVerstöße(quelltext, dateiname, imAkzeptanzordner=akzeptanz)
 
 
+@pytest.mark.stand
 def testDasRepoHältDieBenennung():
     assert verstöße(wurzel) == []
 

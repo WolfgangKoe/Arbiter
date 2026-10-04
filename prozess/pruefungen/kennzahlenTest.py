@@ -2,6 +2,8 @@ import subprocess
 import sys
 from datetime import date
 
+import pytest
+
 from anliegenTest import anliegenAnlegen, guterKopf
 from kennzahlen import kennzahlen
 
@@ -24,6 +26,7 @@ def testErledigteAnliegenZählenNicht(tmp_path):
     assert "Planer" not in kennzahlen(tmp_path, date(2026, 1, 1))
 
 
+@pytest.mark.stand
 def testSkriptLäuftImRepo():
     ergebnis = subprocess.run(
         [sys.executable, "prozess/pruefungen/kennzahlen.py"],

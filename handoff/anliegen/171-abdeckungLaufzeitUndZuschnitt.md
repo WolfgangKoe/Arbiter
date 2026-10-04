@@ -1,6 +1,6 @@
 # Abdeckung: Laufzeit und Zuschnitt
 
-171 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+171 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473`; die falschen Grünmeldungen stehen in
@@ -39,3 +39,19 @@ verdeckt mehr, als der Wegwerf-Versuch gefunden hat. 3, 4: kleiner Lese- und Pfl
    `test[A-Z]*`, oder ebenfalls über die Whitelist.
 3. Etwa `testCodeDenEinKriteriumAufruftIstBenutzt` und `testDasProduktHatKeinenTotenCode`.
 4. `suchpfad` beim Produkt weglassen.
+
+**Stellungnahme (Regelumsetzer).** Angenommen bis auf einen Teil von 2.
+1. Die Prüfskripte misst nicht mehr die Suite, sondern der Hook `abdeckungPruefskripte` in
+   `.pre-commit-config.yaml` (`python3 prozess/pruefungen/abdeckung.py`, nur wenn
+   `prozess/pruefungen/` sich ändert), er ersetzt den normalen Lauf nicht (172).
+   `innenMarke` und `imÄußerenLauf` entfallen; die Suite braucht 18 s statt 43 s, der Hook 11 s.
+   Scheiter-Test: `testPreCommitMisstDieAbdeckungDerPrüfskripte`.
+2. `test*` ist jetzt `test[A-Z]*`; Scheiter-Test: eine Funktion `testlauf` im Produkt wird
+   gemeldet. `zweite` bleibt in `ignore_names`: vulture vergleicht Namen, ein Whitelist-Eintrag
+   `Aufstellungszone.zweite` ließe jeden Namen `zweite` ebenso durch und wäre nicht enger.
+   Genau würde es, wenn der Code das Mitglied selbst nennt (`technik/arbiter`, Implementierer).
+3. Umbenannt: `testCodeDenEinKriteriumAufruftIstBenutzt`, `testDasProduktHatKeinenTotenCode`.
+4. `suchpfad` entfällt; die Proben bringen eine eigene `pyproject.toml` mit.
+Nicht von mir: Der Satz „Melde erst fertig“ in `.claude/agents/regelumsetzer.md` und DoD 1 in
+`prozess/ablauf.md` nennen den Aufruf `python3 prozess/pruefungen/abdeckung.py` noch nicht
+(Organisationsentwickler).

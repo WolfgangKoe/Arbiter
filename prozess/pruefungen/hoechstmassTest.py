@@ -5,9 +5,7 @@ from pathlib import Path
 import pytest
 
 from agenten import kopfzeilen
-from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner
-
-wurzel = Path(__file__).resolve().parents[2]
+from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, wurzel
 
 aktuelleEtappe = 1000
 spätereEtappe = 200
@@ -51,6 +49,7 @@ def fälle():
     yield root, zeichen(root) + zeichen(wurzel / "domaene" / "ziel.md"), rootClaudeMitZiel
 
 
+@pytest.mark.stand
 @pytest.mark.parametrize(
     "datei, länge, grenze",
     [pytest.param(*fall, id=str(fall[0].relative_to(wurzel))) for fall in fälle()],
@@ -60,6 +59,7 @@ def testDateiHältIhrHöchstmaß(datei, länge, grenze):
     assert not überschreitet(datei, grenze)
 
 
+@pytest.mark.stand
 @pytest.mark.parametrize(
     "datei",
     [pytest.param(pfad, id=pfad.stem) for pfad in sorted(rollenordner.glob("*.md"))],

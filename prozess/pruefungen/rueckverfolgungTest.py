@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from pfade import wurzel
 from rueckverfolgung import (
     fehlendeTests,
     getesteKriterien,
@@ -12,8 +13,6 @@ from rueckverfolgung import (
     verstöße,
     wartende,
 )
-
-wurzel = Path(__file__).resolve().parents[2]
 
 zweiKriterien = 2
 zweiVerstöße = 2
@@ -35,6 +34,7 @@ def aufbau(tmp_path: Path, testtext: str) -> None:
     test.write_text(testtext, encoding="utf-8")
 
 
+@pytest.mark.stand
 def testDasRepoHältDieRückverfolgung():
     assert verstöße(wurzel) == []
 

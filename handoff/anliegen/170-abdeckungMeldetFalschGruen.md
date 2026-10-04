@@ -1,6 +1,6 @@
 # Abdeckung und vulture melden falsch grün
 
-170 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+170 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473` (P1 der [Retro 2](../retro.md),
@@ -40,3 +40,12 @@ Meldung, kleiner Aufwand.
    Befund 2 zeigt. Scheiter-Test: Probe mit vielen gedeckten Zeilen und einem nicht
    geprobten Zweig ist rot.
 3. Mit `percent_covered_display` vergleichen und melden, oder abrunden statt runden.
+
+**Stellungnahme (Regelumsetzer).** Angenommen, umgesetzt in `abdeckung.py`, `abdeckungTest.py`.
+1. `unbenutzterCode` akzeptiert nur 0 und 3, sonst rot mit stderr. Scheiter-Tests: fehlender
+   Pfad, Syntaxfehler.
+2. `abdeckungMessen` liefert Zeilen und Zweige getrennt (`Abdeckung`); beide müssen
+   mindestens 95 % haben, bei null Zweigen gelten 100 %. Scheiter-Test: 40 gedeckte Zeilen,
+   ein nicht geprobter Zweig: Zeilen über, Zweige unter der Schwelle, Meldung nennt „Zweige“.
+3. `prozentText` rundet ab; Scheiter-Test 94,96 ergibt „94.9 %“.
+Zweige jetzt: `technik/arbiter` und `prozess/pruefungen` über 95 % (96,7 % bei den Prüfskripten).

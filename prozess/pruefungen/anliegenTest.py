@@ -11,8 +11,8 @@ from anliegen import (
     nachprüfungen,
     nachprüfungenAlsText,
 )
+from pfade import wurzel
 
-wurzel = Path(__file__).resolve().parents[2]
 guterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
 
 
@@ -27,6 +27,7 @@ def anliegenAnlegen(tmp_path: Path, name: str, kopf: str, titel: str = "# Titel"
     return datei
 
 
+@pytest.mark.stand
 @pytest.mark.parametrize(
     "datei", [pytest.param(pfad, id=pfad.name) for pfad in anliegenDateien(wurzel)]
 )

@@ -55,6 +55,7 @@ def ordnerLiterale(quelltext: str) -> list[str]:
     ]
 
 
+@pytest.mark.stand
 def testKeinOrdnerLiteralStehtAußerhalbVonPfade():
     funde = {
         datei.name: treffer

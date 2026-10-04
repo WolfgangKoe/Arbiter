@@ -4,8 +4,7 @@ from pathlib import Path
 import pytest
 
 from bashPositivliste import entscheide, ohneHeredocText
-
-wurzel = Path(__file__).resolve().parents[2]
+from pfade import wurzel
 
 
 def bash(befehl: str, rolle: str | None = "koordinator") -> dict:

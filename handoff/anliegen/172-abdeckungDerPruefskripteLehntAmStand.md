@@ -1,6 +1,6 @@
 # Abdeckung der Prüfskripte lehnt sich an den Stand
 
-172 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+172 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473` (P1 der [Retro 2](../retro.md)). Was
@@ -40,3 +40,14 @@ steht zwölfmal.
    sie Läufe über das Repo mitzählt. Ich empfehle die Marke; es fehlen rund 20 Zeilen Proben.
 2. `wurzel` steht in `pfade.py`; `abdeckungTest.py` und die übrigen Testmodule importieren es
    von dort. Das passt zu [114](114-pruefskripteOrdnenUndLesbarMachen.md).
+
+**Stellungnahme (Regelumsetzer).** Angenommen, umgesetzt.
+1. Die Prüfungen über das echte Repo tragen `@pytest.mark.stand` (registriert in
+   `pyproject.toml`), auch die Messung von `technik/arbiter`. Die Messung der Prüfskripte läuft
+   mit `-m "not stand"`; der normale Lauf führt alle aus. Neue Proben, die die Lücken
+   schließen: `kommentare.verstöße`, `glossar.verstöße`, `plan.py` (neu `planTest.py`),
+   `statusrecht`, `lesegrenze`, `anliegennummer`, `hookProtokoll`, `schreibpfade`,
+   `schlussantwort`. Ohne die markierten Tests: Zeilen 98,2 %, Zweige 96,7 %.
+   Noch ohne Probe: Zeilen in `bashPositivliste.py`, `belegung.py`, `benennung.py`,
+   `phasenfolge.py`, `rueckverfolgung.py` (Kommandozeile), `agenten.py` 22 und 41.
+2. `wurzel` steht in `pfade.py`; alle Testmodule und `abdeckungTest.py` importieren sie dort.

@@ -237,6 +237,7 @@ def testStandMeldetCodeCommitOhneKritik(repo):
     assert "Kritik am Code" not in stand(repo.wurzel)
 
 
+@pytest.mark.stand
 def testDerPostToolUseHookAufAgentMeldetDenStand():
     einstellungen = json.loads(
         (Path(__file__).parents[2] / ".claude" / "settings.json").read_text(encoding="utf-8")

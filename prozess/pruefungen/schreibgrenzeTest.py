@@ -152,3 +152,14 @@ def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel):
     antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
     assert "hat probe committet" in antwort["hookSpecificOutput"]["additionalContext"]
+
+
+def testSchreibpfadeEndenBeimNächstenSchlüsselDesKopfs(wurzel):
+    kopf = rollenkopf.replace("---\nText.", "danach: x\n---\nText.")
+    (wurzel / ".claude" / "agents" / "probe.md").write_text(kopf, encoding="utf-8")
+    assert schreibpfade("probe", wurzel) == probeMuster
+
+
+def testEineRolleOhneKopfHatKeineSchreibpfade(wurzel):
+    (wurzel / ".claude" / "agents" / "probe.md").write_text("Text ohne Kopf.\n", encoding="utf-8")
+    assert schreibpfade("probe", wurzel) == ()

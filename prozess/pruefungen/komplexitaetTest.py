@@ -2,11 +2,12 @@
 
 import shutil
 import subprocess
-from pathlib import Path
+
+import pytest
 
 from konfigurationTest import ruffAufrufen
+from pfade import wurzel
 
-wurzel = Path(__file__).resolve().parents[2]
 codeOrdner = ("prozess/pruefungen", "technik")
 
 
@@ -71,6 +72,7 @@ def testRuffMeldetDreizehnFälle(tmp_path):
     assert meldetFälle(tmp_path, 13)
 
 
+@pytest.mark.stand
 def testDerCodeLiegtUnterDerKomplexitätsschwelle():
     ergebnis = complexipyAufrufen(*codeOrdner)
     assert ergebnis.returncode == 0, ergebnis.stdout
