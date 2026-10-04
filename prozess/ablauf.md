@@ -75,18 +75,20 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 
 ### DoD (Item fertig)
 1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`;
-   Zweigabdeckung mindestens 95 % für `technik/arbiter` (Prüfskripte: Regelumsetzer, eigene
-   Meldung). Mechanismus: nur Text.
+   Zeilen und Zweige mindestens 95 % für `technik/arbiter` und, als eigene Meldung, für
+   `prozess/pruefungen`. Mechanismus: `abdeckung.py`, für `technik/arbiter` im Lauf von
+   `python3 -m pytest prozess/pruefungen`, für die Prüfskripte mit
+   `python3 prozess/pruefungen/abdeckung.py` ([Regelumsetzer](../.claude/agents/regelumsetzer.md)).
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`benennung.py`), Kriterium ↔
    Test (`rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
    Stand), Höchstmaße (`hoechstmassTest.py`), Komplexität (`komplexitaetTest.py`), Code →
    Glossar (`glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
-   (`kommentare.py`), alle im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort
-   über `konfigurationTest.py`. Nur Text: toter Code (vulture über `technik/arbiter` und
-   `technik/tests/akzeptanz`, ohne Einheitstests; Zeilen, die nur Einheitstests erreichen,
-   beurteilt der Reviewer: Vorbedingung, fehlendes Kriterium oder tot). Glossar → Code ist
-   Urteil.
+   (`kommentare.py`), toter Code (vulture über `technik/arbiter` und
+   `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `abdeckung.py`), alle
+   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `konfigurationTest.py`.
+   Urteil: Zeilen, die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung,
+   fehlendes Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: Stand (`stand.py`) erkennt das Review.
@@ -96,8 +98,7 @@ geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 
 Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert): mypy oder
 pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR2004, PLR0913,
-FBT, ERA, `PLR0912` mit 12), vulture wie in DoD 2,
-Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
+FBT, ERA, `PLR0912` mit 12), Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
 Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
 wie SonarLint, die Sicht des Stakeholders; Mechanismus: nur Text. Nicht verwendet: radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).

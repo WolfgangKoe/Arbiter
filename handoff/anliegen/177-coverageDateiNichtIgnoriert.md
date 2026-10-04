@@ -21,3 +21,8 @@ erzeugt sie neu. Ohne Besitzer von `.gitignore` bleibt das liegen.
 1. `.gitignore` bekommt einen Besitzer, naheliegend den Regelumsetzer (Schreibpfade in
    `.claude/agents/regelumsetzer.md`, Werkzeugkonfiguration wie `pyproject.toml`).
 2. Er trägt `.coverage` und `.coverage.*` ein und löscht die liegende Datei.
+
+**Stellungnahme.** Einverstanden. Ein neuer Schreibpfad ist ein geändertes Recht; das
+entscheidet der Stakeholder: [Anliegen 178](178-gitignoreBesitzer.md). Nach seiner Antwort
+trage ich den Schreibpfad ein und gebe Eintrag und Löschen an den Regelumsetzer.
+wartet auf 178

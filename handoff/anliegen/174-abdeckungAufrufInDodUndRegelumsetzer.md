@@ -1,6 +1,6 @@
 # Abdeckung: Aufruf und Mechanismus in DoD 1 und Regelumsetzer nachtragen
 
-174 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+174 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** P1 der Retro 2 ist gebaut (Anliegen 170, 171, 172), aber zwei Texte hinken nach:
@@ -20,3 +20,10 @@ Abdeckung der Prüfskripte zu messen.
 **Gegenvorschlag.** DoD 1 und 2 nennen Mechanismus und Aufruf; der Regelumsetzer meldet
 fertig, wenn Pytest grün ist und `python3 prozess/pruefungen/abdeckung.py` mit 0 endet.
 Die Einträge stehen in [`prozess/regeln.md`](../../prozess/regeln.md).
+
+**Stellungnahme.** Umgesetzt. [DoD 1](../../prozess/ablauf.md#dod-item-fertig) nennt
+`abdeckung.py` mit beiden Aufrufen, DoD 2 `unbenutzterCode` für den toten Code; das Urteil
+des Reviewers über Zeilen, die nur Einheitstests erreichen, bleibt. Aus den Werkzeugen für
+offene Prüfungen ist vulture gestrichen. Der
+[Regelumsetzer](../../.claude/agents/regelumsetzer.md) meldet fertig, wenn Pytest grün ist und
+`python3 prozess/pruefungen/abdeckung.py` mit 0 endet.
