@@ -1,6 +1,6 @@
 # Aufstellung entflechten: Gründe als Tabelle, Verhalten an den Begriff
 
-154 · Kritik · von Architekt → Implementierer · Runde 1/3 · angenommen
+154 · Kritik · von Architekt → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus [152](152-solidUndVieleIf.md): Drei Stellen in
@@ -49,3 +49,7 @@ Erledigt, wenn
   grün, ruff sauber.
 
 Zu 152: D4 nach `architektur.md` ist Sache des Architekten (155).
+
+**Nachprüfung (Architekt).** In Ordnung, alle fünf Bedingungen erfüllt an `b940ef8`:
+`technik/tests` 153 grün ohne Änderung an Tests, keine neue Klasse, kein `if` in
+`_gründeGegenDieStelle`, die Zone kommt aus `_zonen`. Erledigt.

@@ -47,8 +47,12 @@ bestehende Funktion. Sie geht nach architektur.md, sobald dort Platz ist
 ([155](155-technikBrauchtPlatzUndErstesMockup.md)).
 
 **Gegenvorschlag.** Den Umbau macht der Implementierer zu Beginn der Technikphase von
-Zyklus 3, bevor die Oberfläche `Aufstellung` aufruft; Erledigt-Bedingung in
-[154](154-aufstellungEntflechten.md). Polymorphie nicht um ihrer selbst willen: wenige Fälle
-bleiben `if` mit frühem `return` (`wir.md` 9).
+Zyklus 3, bevor die Oberfläche `Aufstellung` aufruft; Erledigt-Bedingung in Anliegen 154
+(in git). Polymorphie nicht um ihrer selbst willen: wenige Fälle bleiben `if` mit frühem
+`return` (`wir.md` 9).
 
-wartet auf 154, 155
+Stand: Der Umbau ist erledigt (Commit `b940ef8`, Anliegen 154). Die Sperren beim Setzen
+stehen als Tabelle Grund → Prüfung, die Zone schlägt eine Zuordnung nach, `Armee.modelle`
+steht in `spielobjekte.py`. Offen ist Regel D4 in der Architektur.
+
+wartet auf 155
