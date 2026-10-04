@@ -28,4 +28,4 @@ vor dem ersten Lauf des Implementierers: `schreibpfade` in
 `schreibgrenze.py` dem Implementierer eine Datei unter `technik/frontend/` erlaubt.
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme (Stakeholder).** Ich nehme deine Antwort an. Wir sollte darüber nachdenken, ab wann Aufgaben parallelisiert werden können. Änderungen am Frontend und Backend können teilweise unabhängig erfolgen. Bitte prüfen, damit erhöhen wir die Effizienz. Berücksichtige auch so etwas wie Integrationstests, so dass beispielsweise Backend und Frontend gut zusammenarbeiten. 

@@ -20,4 +20,4 @@ Gemeldet hat es der Regelumsetzer in
 Mechanismen mit Ordner: `formregeln/importvertrag.py`, `kriterienregeln/rueckverfolgung.py`,
 `formregeln/benennung.py`.
 
-**Stellungnahme.**
+**Stellungnahme.** Es heißt, dass ich hier eine Entscheidung treffen muss. Ich sehe die Entscheidung hier nicht. Bitte ausführen und die jeweiligen Konsequenzen darlegen. Wenn ich hier etwas konkret machen muss, bitte eine Schritt-für-Schritt-Anleitung angeben.

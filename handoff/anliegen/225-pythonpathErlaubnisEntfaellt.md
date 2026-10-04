@@ -23,4 +23,4 @@ wird rot, sobald ein Hook oder eine Erlaubnis `PYTHONPATH` nennt.
 Empfehlung: a.
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Falls es nicht nötig ist, brauchen wir auch keine Ausnahme gestatten. Du kannst dieses Anliegen auf "erledigt" setzen.

@@ -37,7 +37,7 @@ Empfehlung: A. Der Name trägt die Bedeutung (wir.md): `ablageEinheit` sagt, was
 dort sieht, `unitCard` nur, wie es aussieht. Das Design aus Arbiter-old bleibt mit beiden
 Antworten gleich; es ändern sich nur Bezeichner.
 
-Antwort: .
+Antwort: armyCard -> armeeKarte, unitCard -> einheitenKarte, armyCardName -> armeeKartenName und entsprechend alles weitere. gameActionArea -> spielAktionsBereich, alles andere dürfte passen
 
 **Befund 2 · Spielerfarbe je Komponente.** `vorschlag.css` setzt die Farbe des Spielers in
 vier Komponenten einzeln: `.gameHeaderSpieler.spieler1`, `.armyCard.spieler1 .armyCardName`,

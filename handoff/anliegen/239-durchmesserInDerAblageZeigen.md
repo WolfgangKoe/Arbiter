@@ -22,6 +22,7 @@ haben, ist die Zahl der Anhalt, welches Modell du greifst.
 Empfehlung: A. Die Mockups zeigen es schon, es kostet einen Test, und bei gemischten Bases
 unterscheidet man die Modelle daran.
 
-Antwort: .
+Antwort: Es ist dir aufgefallen. Ich habe es wohl schon irgendwo geschrieben. Ich wähle hier B. Denn die einheitenKarte wird später aus Arbiter-old im wesentlichen übernommen. Lass es uns hier einfacher halten.
 
-**Stellungnahme.**
+**Stellungnahme (Stakeholder)**
+In Mockup "auf-4-ausgangslage.html" sind Badges, welche den Basedurchmesser aller Modelle in der Einheit anzeigen und zwar so viele Modelle in der Einheit sind. Rückfrage: Sind das Platzhalter oder soll das aus deiner Sicht so bleiben. Die einheitenKarte wird voraussichtlich noch gesondert gebaut. Halte diese daher sehr einfach. Eine einfache Badge mit <anzahlDerModelle> z.B. 10 würde völlig reichen. Es sei denn du widersprichst mir hier.

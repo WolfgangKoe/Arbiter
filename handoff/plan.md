@@ -67,5 +67,5 @@ Fragen an dich, die Freigabe beantwortet sie mit der Empfehlung:
 Die übrigen offenen Anliegen betreffen den Prozess.
 
 ## Freigabe
-Freigabe: offen
-Kommentar: .
+Freigabe: ja
+Kommentar: Ich habe Anliegen kommentiert und Fragen beantwortet. Bitte systematisch durchgehen.
