@@ -1,6 +1,6 @@
 # Kritik an fd3075f: Dauer bei wiederholtem Stopp, Zyklus im Hook
 
-196 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+196 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Geprüft: `dashboard.py`, `laufLog.py`, `dashboardTest.py` (27 grün, ruff sauber).
