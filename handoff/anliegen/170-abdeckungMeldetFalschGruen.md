@@ -1,6 +1,6 @@
 # Abdeckung und vulture melden falsch grün
 
-170 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+170 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473` (P1 der [Retro 2](../retro.md),

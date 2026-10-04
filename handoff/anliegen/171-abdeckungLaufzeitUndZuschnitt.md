@@ -1,6 +1,6 @@
 # Abdeckung: Laufzeit und Zuschnitt
 
-171 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+171 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473`; die falschen Grünmeldungen stehen in

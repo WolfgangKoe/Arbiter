@@ -1,6 +1,6 @@
 # Abdeckung der Prüfskripte lehnt sich an den Stand
 
-172 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+172 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code zu Commit `6dfe473` (P1 der [Retro 2](../retro.md)). Was
