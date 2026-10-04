@@ -1,6 +1,6 @@
 # Der Stand nennt die Prozess-Items vor dem nächsten Plan
 
-173 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+173 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Seit `Freigabe Retro 2` (`12819fb`) meldet der Stand „Domänenphase · Anforderungsautor:

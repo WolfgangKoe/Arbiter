@@ -1,6 +1,6 @@
 # Die Regel „Absender bleibt fest“ steht nur in regeln.md
 
-207 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+207 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Mit ec566dc (Anliegen 166) sperrt `statusrecht.py` (`absenderVerstoß`) jeden
@@ -21,3 +21,8 @@ nie; wer eine Nummer belegt vorfindet, nimmt die nächste freie. Mechanismus:
 Anfang durch den Link `[Anliegen](ablauf.md#anliegen)`.
 
 Erledigt, wenn der Ablauf die Regel mit Mechanismus nennt und `regeln.md` darauf verlinkt.
+
+**Stellungnahme.** Angenommen. [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) nennt
+die Regel samt Eindeutigkeit der Nummer, Mechanismus `anliegennummer.py` und
+`statusrecht.py` (`absenderVerstoß`). Den Link in `prozess/regeln.md` (Zeile 47) habe ich
+selbst gesetzt, er liegt in meinem Schreibpfad; ein Lauf des Regelumsetzers dafür entfällt.

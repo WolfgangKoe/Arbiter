@@ -54,7 +54,8 @@ Organisationsentwickler sie vor.
 3. Implementierer: macht die Tests grün. Refactoring nur aus einem Befund, als Anliegen an
    ihn von dem, der den Befund hat; der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt
    „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüft der Reviewer (Kritik
-   am Code). Mechanismus: nur Text.
+   am Code). Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben
+   und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
@@ -92,7 +93,8 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `abdeckung.py`), alle
    im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `konfigurationTest.py`;
    SonarLint (Standardprofil ohne Namensregeln, Ordner nach [regeln.md](regeln.md)) mit
-   `python3 prozess/pruefungen/sonarlint.py`, beim Commit auch als Hook. Urteil: Zeilen,
+   `python3 prozess/pruefungen/sonarlint.py`; beim Commit als Hook nur Text, `pre-commit`
+   ist nicht installiert (Anliegen 216). Urteil: Zeilen,
    die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung, fehlendes
    Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
@@ -234,6 +236,9 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
   `statusrecht.py` (Write, Edit).
+- Die Nummer ist eindeutig, der Absender eines Anliegens ändert sich nie; wer eine Nummer
+  belegt vorfindet, nimmt die nächste freie. Mechanismus: `anliegennummer.py` (neue Datei),
+  `statusrecht.py` (`absenderVerstoß`; Write, Edit).
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt
   `erledigt` selbst ein. Mechanismus: `stand.py`.
 - Ein Anliegen an den Stakeholder mit Status `offen`, das im Commit der letzten Freigabe
@@ -245,7 +250,7 @@ erledigt | Absender, wenn in Ordnung | niemand: `erledigteLoeschen.py` löscht d
   `statusrecht.py` nicht, das Löschen schon. Mechanismus: `bashPositivliste.py`, eine
   Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`). Sie erkennt keine Skripte
   (Heredoc, `python3 -c`) und kein `cd <pfad> && …`; dort, und ebenso für die nur lesbaren
-  Pfade, gilt die Regel als nur Text (Anliegen 138).
+  Pfade, gilt die Regel als nur Text, bis die Bash-Sandbox steht (Anliegen 215).
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
   `erledigteLoeschen.py`.
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran

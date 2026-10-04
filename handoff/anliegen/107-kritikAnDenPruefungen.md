@@ -34,3 +34,11 @@ wartet auf 113, 114
 Nachprüfung: Der Koordinator hat mich gebeten, dieses Anliegen nachzuprüfen. Die Datei "benennungRueckstand.txt" finde ich nicht mehr und ist daher wohl gelöscht. Der Teil des Anliegens ist erledigt. 107 ist voraussichtlich mit 114 abgeschlossen, bitte nach Abschluss von 114 dieses Anliegen hier nochmal zur Prüfung vorlegen.
 
 Antwort: Hier scheint noch keine Reaktion vom @organisationsentwickler gekommen zu sein. 
+
+**Stellungnahme (Organisationsentwickler):**
+Stand von [114](114-pruefskripteOrdnenUndLesbarMachen.md): Lesbarkeit (B), Mechanismen für
+Kommentare und Typnamen (C) und der Rückstand (D) sind umgesetzt. Offen ist die Ordnung in
+Themenordnern (A); deine Antwort zu F1 (a, Ausnahmeerlaubnis) liegt dem Regelumsetzer vor,
+der Moderator führt 114 in dessen Reihenfolge. Die Wirksamkeit der Kritik am Code steht als
+Befund 6 in der [Retro](../retro.md). Sobald 114 erledigt ist, prüfe ich die Ordnung gegen
+deine Kritik und lege dir 107 vor. Wartet auf 114.

@@ -9,45 +9,27 @@ halten? Die Testabdeckung müssen wir messen und bei mindestens 95% halten, aber
 sicherstellen, dass wir damit keinen toten Code am Leben halten.“
 
 **Stellungnahme (Organisationsentwickler).** Angenommen in allen Punkten, umgesetzt als
-Prozess-Items P1 und P2 der [Retro 2](../retro.md).
-
-1. **SonarLint ist nicht scharf gestellt.** [Ablauf, Werkzeuge](../../prozess/ablauf.md#technikphase)
-   verlangt eine Sperre mindestens so streng wie SonarLint; abgeglichen hat das niemand.
-   SonarLint 6.0.1 läuft nur in deinem VS Code mit dem Standardprofil, die Agenten sehen
-   seine Meldungen nie. Gesperrt wird über ruff (`pyproject.toml`), complexipy (kognitive
-   Komplexität 15, dieselbe Zählung wie Sonar S3776) und die eigenen Prüfungen.
-   P2: zuerst ein Wegwerf-Versuch, ob der Analysator der Erweiterung (`sonarlint-ls.jar`,
-   `analyzers/sonarpython.jar`, mitgelieferte JRE) ohne VS Code im Lauf der Prüfungen läuft;
-   dann sperrt SonarLint selbst. Sonst bildet der Regelumsetzer die Python-Regeln des Profils
-   „Sonar way“ auf ruff ab, der Rest steht als nur Text in `prozess/regeln.md`. Bis dahin ist
-   jede Meldung, die du in VS Code siehst, als Anliegen ein Befund für eine Regel.
-
-2. **Abdeckung**, Zweige, gemessen an `9b47519` mit `coverage` außerhalb des Repos:
-   - `technik/arbiter`, alle Tests: 100 %.
-   - nur Akzeptanztests: 94 %. Acht Zeilen erreicht nur ein Einheitstest: Vorbedingungen in
-     `aufstellen.py` (42, 44, 81, 94), Datenprüfung in `katalog/ausgangslage.py` (21, 50, 52, 55).
-   - `prozess/pruefungen`: 93 %.
-   P1: Zweigabdeckung mindestens 95 % für `technik/arbiter` und `prozess/pruefungen`, im
-   Lauf von `python3 -m pytest prozess/pruefungen`, darunter rot.
-
-3. **Kein toter Code am Leben.** Ein Einheitstest hält Code grün, den kein Kriterium braucht;
-   eine Zahl allein verhindert das nicht. Darum in P1 zusätzlich:
-   - vulture über `technik/arbiter` sperrt Unbenutztes (bisher nur Text).
-   - Die Abdeckung allein aus den Akzeptanztests wird mitgemessen. Jede Zeile, die nur
-     Einheitstests erreichen, listet die Prüfung; der Reviewer urteilt in der DoD:
-     Vorbedingung oder Datenprüfung nach Architektur (bleibt), fehlendes Kriterium (Anliegen
-     an den Anforderungsautor) oder tot (weg).
-   Abdeckung zeigt, dass Code lief, nicht, dass ein Test ihn prüft. Das zeigen
-   Mutationstests (Ablauf, DoD, letzter Absatz); sie schlage ich vor, sobald ein Befund es
-   verlangt.
-
-4. **Nachhaltig.** Was eine Prüfung sperrt, hält; was nur Text ist, verfällt. Retro 2 macht
-   drei Regeln prüfbar, die nur Text waren: Abdeckung und toter Code (P1), SonarLint (P2),
-   Höchstmaße für Module, Testdateien, Plan, Review und Retro (P3). Die neue Kennzahl
-   Prozesslast ([Kennzahlen](../../prozess/kennzahlen.md)) achtet darauf, dass die Prüfungen
-   nicht schneller wachsen als das Produkt (heute 183.000 zu 12.700 Zeichen).
-
-Umgesetzt: P1 (`abdeckung.py`, 6753eed) und P2 (`sonarlint.py`, 1cd5dfd); beide nennt
+Prozess-Items P1 und P2 der Retro 2; beide nennt
 [DoD 1 und 2](../../prozess/ablauf.md#dod-item-fertig).
+1. **SonarLint:** `sonarlint.py` startet den Analysator deiner VS-Code-Erweiterung ohne
+   VS Code, Standardprofil ohne die Namensregeln (camelCase); heute keine Funde.
+2. **Abdeckung:** Zeilen und Zweige mindestens 95 % für `technik/arbiter` und, als eigene
+   Meldung, für `prozess/pruefungen` (`abdeckung.py`).
+3. **Kein toter Code am Leben:** vulture über Produkt und Akzeptanztests, ohne
+   Einheitstests (`unbenutzterCode`). Zeilen, die nur Einheitstests erreichen, beurteilt der
+   Reviewer in der DoD: Vorbedingung, fehlendes Kriterium oder tot. Ob ein Test Code prüft,
+   statt ihn nur auszuführen, zeigen erst Mutationstests (DoD, letzter Absatz); ich schlage
+   sie vor, sobald ein Befund es verlangt.
+4. **Nachhaltig:** Was eine Prüfung sperrt, hält; was nur Text ist, verfällt. Die Kennzahl
+   Prozesslast ([Kennzahlen](../../prozess/kennzahlen.md)) achtet darauf, dass die
+   Prüfungen nicht schneller wachsen als das Produkt.
 
-Antwort: Bitte Sonarlint scharfstellen. 
+Antwort: Bitte Sonarlint scharfstellen.
+
+**Stellungnahme zur Antwort.** Du hast recht: SonarLint sperrt nichts. `sonarlint.py` hält
+einen Commit nur als Hook aus `.pre-commit-config.yaml` auf, und `pre-commit` ist weder
+installiert noch in `pyproject.toml`; `.git/hooks/` enthält nur Beispiele. Heute läuft
+keiner dieser Hooks, auch die Abdeckung der Prüfskripte nicht. SonarLint lief nur, wenn der
+Regelumsetzer es aufrief. Er macht die Hooks wirksam, mit einer Prüfung, die rot wird,
+solange sie nicht installiert sind ([216](216-commitHooksWirksamMachen.md)); bis dahin ist
+die Sperre in DoD 2 als nur Text markiert. Wartet auf 216.

@@ -27,3 +27,7 @@ kommen durch. 1 schließt die Lücke nicht, darum 2 umgesetzt:
 Heuristik schlage ich die Bash-Sandbox von Claude Code vor; sie ändert die Rechte aller
 Rollen, daher Frage an den Stakeholder in [139](139-bashSandboxStattHeuristik.md). Den
 Testfall baut der Regelumsetzer nach dessen Antwort. Wartet auf 139.
+
+Der Stakeholder hat 139 F2 mit A entschieden: Sandbox, zuerst als Versuch. Den Probelauf je
+Weg aus deinem Befund und den Wegfall der Heuristik führt
+[215](215-bashSandboxAlsVersuch.md); der Ablauf verweist darauf. Wartet auf 215.
