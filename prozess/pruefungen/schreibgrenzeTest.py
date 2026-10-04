@@ -82,7 +82,7 @@ def testStakeholderOhneRolleIstFrei(wurzel):
     [
         pytest.param("VORGEHEN.md", id="Vorgehen"),
         pytest.param("handoff/kritik-entwickler.md", id="Kritik des Entwicklers"),
-        pytest.param("Arbiter/alt.py", id="Arbiter"),
+        pytest.param("Arbiter-old/alt.py", id="Arbiter-old"),
         pytest.param("ArbiterMap/neu.md", id="ArbiterMap, trotz Schreibpfad"),
     ],
 )

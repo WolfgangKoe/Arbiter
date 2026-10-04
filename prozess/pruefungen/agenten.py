@@ -52,7 +52,7 @@ def darfSchreiben(relativerPfad: str, muster: tuple[str, ...]) -> bool:
     )
 
 
-nurLesbar = ("VORGEHEN.md", "handoff/kritik-entwickler.md", "Arbiter/", "ArbiterMap/")
+nurLesbar = ("VORGEHEN.md", "handoff/kritik-entwickler.md", "Arbiter-old/", "ArbiterMap/")
 
 
 def istNurLesbar(relativerPfad: str) -> bool:

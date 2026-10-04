@@ -84,6 +84,32 @@ def testArbiterGiltAuchFürNochFehlendeModuleAlsEigenesPaket(tmp_path):
     assert ruffAufrufen(str(probe)).returncode == 0
 
 
+def testRuffPrüftDenAltbestandNicht(tmp_path):
+    (tmp_path / "pyproject.toml").write_text((wurzel / "pyproject.toml").read_text("utf-8"))
+    (tmp_path / "Arbiter-old").mkdir()
+    quelltext = "def rechnen(a, b, c, d, e, f):\n    return 7\n"
+    (tmp_path / "Arbiter-old" / "probe.py").write_text(quelltext)
+    ergebnis = subprocess.run(
+        [shutil.which("ruff") or str(wurzel / ".venv" / "bin" / "ruff"), "check", "--no-cache"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert ergebnis.returncode == 0, ergebnis.stdout
+
+
+def testGitIgnoriertDenAltbestand():
+    ergebnis = subprocess.run(
+        ["git", "check-ignore", "Arbiter-old/alt.py"],
+        cwd=wurzel,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert ergebnis.returncode == 0
+
+
 def testDasRepoIstRuffSauber():
     ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout

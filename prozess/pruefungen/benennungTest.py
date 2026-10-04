@@ -4,6 +4,7 @@ import pytest
 
 from benennung import (
     dateinamenVerstoß,
+    geprüfteDateien,
     nameVerstoß,
     quelltextVerstöße,
     verstöße,
@@ -18,6 +19,14 @@ def grundZu(quelltext: str, dateiname: str = "modul.py", *, akzeptanz: bool = Fa
 
 def testDasRepoHältDieBenennung():
     assert verstöße(wurzel) == []
+
+
+def testAltbestandOrdnerWerdenNichtGeprüft(tmp_path):
+    for ordner in ("Arbiter-old", "ArbiterMap", "technik"):
+        (tmp_path / ordner).mkdir()
+        (tmp_path / ordner / "schlechterName.py").write_text("x = 1\n")
+    geprüft = {pfad.relative_to(tmp_path).parts[0] for pfad in geprüfteDateien(tmp_path)}
+    assert geprüft == {"technik"}
 
 
 @pytest.mark.parametrize(

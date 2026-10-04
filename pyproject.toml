@@ -7,7 +7,7 @@ pythonpath = ["technik"]
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["Arbiter", "ArbiterMap"]
+extend-exclude = ["Arbiter-old", "ArbiterMap"]
 # Warum: Ohne src hielte ruff `benennung`, `agenten` usw. für fremde Pakete (I001).
 src = ["prozess/pruefungen", "technik"]
 

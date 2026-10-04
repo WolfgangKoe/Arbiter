@@ -29,7 +29,7 @@ Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask n
 Datenbank. Akzeptanztests entstehen vor dem Code.
 
 ## Nur lesbar
-`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter/` und `ArbiterMap/` sind für alle
+`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter-old/` und `ArbiterMap/` sind für alle
 Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `schreibgrenze.py`,
 `bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
 [`prozess/backlog.md`](prozess/backlog.md).

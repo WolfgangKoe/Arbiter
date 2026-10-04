@@ -217,7 +217,8 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     if ändertPfad(befehl, wurzel, istNurLesbar):
         return verweigerung(
             "Dieser Pfad ist nur lesbar, für alle Rollen: VORGEHEN.md, "
-            "handoff/kritik-entwickler.md, Arbiter/, ArbiterMap/. Löschen tut nur der Stakeholder."
+            "handoff/kritik-entwickler.md, Arbiter-old/, ArbiterMap/. "
+            "Löschen tut nur der Stakeholder."
         )
     if ändertPfad(befehl, wurzel, istAnliegen):
         return verweigerung(

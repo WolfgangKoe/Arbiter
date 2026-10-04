@@ -113,7 +113,7 @@ def testRollenDürfenGitNichtSchreiben(befehl):
     [
         pytest.param("rm VORGEHEN.md", id="Vorgehen löschen"),
         pytest.param("rm -r ArbiterMap", id="ArbiterMap löschen"),
-        pytest.param("rm -rf ./Arbiter/backend", id="Arbiter löschen"),
+        pytest.param("rm -rf ./Arbiter-old/backend", id="Arbiter-old löschen"),
         pytest.param("mv ArbiterMap/README.md technik/", id="aus ArbiterMap verschieben"),
         pytest.param("rm handoff/kritik-entwickler.md", id="Kritik des Entwicklers löschen"),
         pytest.param("echo x >> VORGEHEN.md", id="anhängen"),
