@@ -1,6 +1,6 @@
 # pfadeTest.py löschen: Freigabe fehlt
 
-188 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+188 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** P3 der [Retro 2](../retro.md) ist nicht umgesetzt. Der Auto-Mode-Klassifizierer
@@ -19,6 +19,6 @@ und der Test mit bekannter Lücke bleibt im Lauf von `python3 -m pytest prozess/
 Ein Scheiter-Test entfällt, die Löschung entfernt den Mechanismus.
 
 **F1 · Löschung freigeben?** Empfehlung: ja, Regelumsetzer führt sie aus.
-Antwort: .
+Antwort: Ich habe die Datei gelöscht.
 
 **Stellungnahme.**

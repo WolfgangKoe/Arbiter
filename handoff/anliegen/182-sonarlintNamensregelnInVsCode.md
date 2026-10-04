@@ -33,3 +33,5 @@ Ich kann deine Benutzereinstellungen nicht ändern (liegen außerhalb des Projek
    S116, S117, S1542, S1578 mehr (vorher 276 Meldungen).
 
 Danach setze ich `erledigt`, wenn du es bestätigst.
+
+Antwort: Ich habee die Einstellungen gesetzt. Bei mir sieht es gut aus. Prüfe es aber nochmal selbst. Danach ist es vermutlich erledigt. cSpell und Spellchecker geben noch Probleme aus. Stören die dich?
