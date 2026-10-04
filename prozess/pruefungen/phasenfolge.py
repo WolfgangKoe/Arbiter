@@ -5,7 +5,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import NamedTuple
 
-from gitAufruf import freigabeCommit, gitAusgabe
+from gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
 from pfade import akzeptanzOrdner, etappenOrdner, itemsOrdner
 from plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
 from rueckverfolgung import fehlendeTests, nenntFehlendes
@@ -68,6 +68,49 @@ def planOhneFreigabe(wurzel: Path, plan: int) -> str:
     return f"Plan {plan} wartet auf Kritik (Architekt) und Freigabe"
 
 
+def prozessItems(retro: Path) -> list[str]:
+    """Die Kennungen `P<k>` der Zeilen `- P<k> ` im Abschnitt `## Prozess-Items` der Retro."""
+    kennungen: list[str] = []
+    imAbschnitt = False
+    for zeile in retro.read_text(encoding="utf-8").splitlines():
+        if zeile.startswith("## "):
+            imAbschnitt = zeile.startswith("## Prozess-Items")
+        treffer = re.match(r"- (P\d+) ", zeile)
+        if imAbschnitt and treffer:
+            kennungen.append(treffer.group(1))
+    return kennungen
+
+
+def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
+    """Das erste Prozess-Item der Retro ohne Commit `P<k>: …` seit der Freigabe, sonst `None`."""
+    # Warum: Der Betreff darf `Retro <n> ` voranstellen; so heißen die Commits von P4 und P5.
+    betreffe = betreffeSeit(wurzel, freigabe)
+    for kennung in prozessItems(wurzel / "handoff" / "retro.md"):
+        muster = rf"(Retro {retro} )?{kennung}:"
+        if not any(re.match(muster, betreff) for betreff in betreffe):
+            return kennung
+    return None
+
+
+def prozessphase(wurzel: Path, plan: int, retro: int | None) -> Lage:
+    """Retro, ihre Freigabe und die Prozess-Items; danach der nächste Zyklus."""
+    if retro != plan and freigabeCommit(wurzel, "Review", plan) is None:
+        return Lage(plan, Phase.technikphase, f"Review {plan} wartet auf Kritik und Freigabe")
+    if retro != plan:
+        return Lage(plan, Phase.prozessphase, f"Organisationsentwickler: Retro {plan}")
+    freigabeRetro = freigabeCommit(wurzel, "Retro", plan)
+    if freigabeRetro is None:
+        return Lage(plan, Phase.prozessphase, f"Retro {plan} wartet auf Kritik und Freigabe")
+    offen = offenesProzessItem(wurzel, plan, freigabeRetro)
+    if offen is not None:
+        return Lage(
+            plan,
+            Phase.prozessphase,
+            f"Regelumsetzer: Prozess-Item {offen} aus Retro {plan} (Commit `{offen}: …`)",
+        )
+    return Lage(plan + 1, Phase.domänenphase, domänenphase(wurzel, plan + 1))
+
+
 def lage(wurzel: Path) -> Lage:
     """Zyklus, Phase und nächster Schritt aus den Artefakten in `handoff/` und git."""
     handoff = wurzel / "handoff"
@@ -95,10 +138,4 @@ def lage(wurzel: Path) -> Lage:
         )
     if review != plan:
         return Lage(plan, Phase.technikphase, f"Reviewer: Review {plan}")
-    if retro != plan and freigabeCommit(wurzel, "Review", plan) is None:
-        return Lage(plan, Phase.technikphase, f"Review {plan} wartet auf Kritik und Freigabe")
-    if retro != plan:
-        return Lage(plan, Phase.prozessphase, f"Organisationsentwickler: Retro {plan}")
-    if freigabeCommit(wurzel, "Retro", plan) is None:
-        return Lage(plan, Phase.prozessphase, f"Retro {plan} wartet auf Kritik und Freigabe")
-    return Lage(plan + 1, Phase.domänenphase, domänenphase(wurzel, plan + 1))
+    return prozessphase(wurzel, plan, retro)

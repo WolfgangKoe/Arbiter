@@ -132,8 +132,9 @@ Auslöser: `Freigabe Review <n>`.
    Item je Lauf, damit die Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item
    abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
    `P<k> Zwischenstand: …`. Hat jedes Item der Retro seinen Commit `P<k>:` seit
-   `Freigabe Retro <n>`, meldet der Stand die Domänenphase mit Plan n+1. Mechanismus: nur
-   Text (Anliegen 173).
+   `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), meldet der Stand die Domänenphase
+   mit Plan n+1, sonst das erste offene Item. Mechanismus: `phasenfolge.py`
+   (`offenesProzessItem`, Anliegen 173).
 
 Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
 ([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.

@@ -28,6 +28,11 @@ def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
     return None
 
 
+def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
+    """Die Betreffzeilen aller Commits nach dem Commit `kennung`."""
+    return gitAusgabe(wurzel, "log", "--format=%s", f"{kennung}..HEAD").splitlines()
+
+
 def letzteFreigabe(wurzel: Path) -> str | None:
     """Der jüngste Commit `Freigabe …` außer `Freigabe Review …`, sonst `None`."""
     # Warum: Die Freigabe des Reviews schließt keine Kritik am Code ab; das Fenster bleibt offen.

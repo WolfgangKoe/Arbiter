@@ -438,3 +438,62 @@ def testFreigabeJaInDerRetroOhneCommitMachtDenKoordinatorDran(repo):
     assert "Nächster Schritt: Koordinator: Freigabe Retro 1 committen" in stand(repo.wurzel)
     repo.freigabe("Retro", 1)
     assert "Koordinator: Freigabe" not in stand(repo.wurzel)
+
+
+def retroMitProzessItems(repo):
+    bisZurFreigabeVonPlan1(repo)
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
+    repo.datei(
+        "handoff/retro.md",
+        "# Retro · Zyklus 1\n\n## Prozess-Items (je Lauf eins)\n- P1 Eins\n- P2 Zwei\n",
+    )
+
+
+def commit(repo, betreff):
+    repo.git("commit", "-q", "--allow-empty", "-m", betreff)
+
+
+def testProzessItemsNachDerFreigabeNenntDenRegelumsetzerFürDasErsteOffene(repo):
+    retroMitProzessItems(repo)
+    repo.freigabe("Retro", 1)
+    assert lage(repo.wurzel) == (
+        1,
+        "Prozessphase",
+        "Regelumsetzer: Prozess-Item P1 aus Retro 1 (Commit `P1: …`)",
+    )
+    commit(repo, "P1: Eins")
+    assert lage(repo.wurzel).schritt.startswith("Regelumsetzer: Prozess-Item P2")
+
+
+def testZwischenstandSchließtDasProzessItemNichtAb(repo):
+    retroMitProzessItems(repo)
+    repo.freigabe("Retro", 1)
+    commit(repo, "P1: Eins")
+    commit(repo, "P2 Zwischenstand: halb")
+    assert lage(repo.wurzel).schritt.startswith("Regelumsetzer: Prozess-Item P2")
+
+
+def testAlleProzessItemsAbgeschlossenBeginntDenNächstenZyklus(repo):
+    retroMitProzessItems(repo)
+    repo.freigabe("Retro", 1)
+    commit(repo, "P1: Eins")
+    commit(repo, "Retro 1 P2: Zwei")
+    aktuelle = lage(repo.wurzel)
+    assert (aktuelle.zyklus, aktuelle.phase) == (2, "Domänenphase")
+
+
+def testProzessItemVorDerFreigabeZähltNicht(repo):
+    retroMitProzessItems(repo)
+    commit(repo, "P1: zu früh")
+    repo.freigabe("Retro", 1)
+    assert lage(repo.wurzel).schritt.startswith("Regelumsetzer: Prozess-Item P1")
+
+
+def testRetroOhneProzessItemsBeginntGleichDenNächstenZyklus(repo):
+    bisZurFreigabeVonPlan1(repo)
+    repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
+    repo.freigabe("Review", 1)
+    repo.datei("handoff/retro.md", "# Retro · Zyklus 1\n\n- P1 steht außerhalb des Abschnitts\n")
+    repo.freigabe("Retro", 1)
+    assert lage(repo.wurzel).phase == "Domänenphase"

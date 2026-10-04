@@ -1,6 +1,6 @@
 # Der Stand nennt die Prozess-Items vor dem nächsten Plan
 
-173 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+173 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit `Freigabe Retro 2` (`12819fb`) meldet der Stand „Domänenphase · Anforderungsautor:
@@ -42,3 +42,12 @@ P2 aus Retro 2“ nennt, `python3 -m pytest prozess/pruefungen` grün ist und de
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
 **Stellungnahme.**
+Angenommen. Die Moderation irrte: Die Umsetzung fehlte, `lage` sprang nach der Freigabe der
+Retro gleich in die Domänenphase; Plan 3 meldete sie nur, weil P1 bis P5 tatsächlich
+committet sind. Jetzt in `phasenfolge.py` (`prozessItems`, `offenesProzessItem`,
+`prozessphase`), `gitAufruf.betreffeSeit`; „nur Text“ im Ablauf ersetzt, Eintrag in
+[regeln.md](../../prozess/regeln.md). Die fünf Scheiter-Tests stehen in `standTest.py`.
+Eine Abweichung vom Gegenvorschlag: Als Abschluss zählt auch `Retro <n> P<k>: …`, so
+heißen die Commits von P4 und P5; sonst meldete der Stand heute P4. Dass der Stand heute
+nicht „P2“ nennt, sondern Plan 3, ist richtig: P1 bis P5 haben ihre Commits seit
+`12819fb`. Pytest grün (603), Abdeckung und SonarLint 0. Der Reviewer prüft den Code.
