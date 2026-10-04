@@ -1,6 +1,6 @@
 # Schnittstelle der Bildschirmtests zur Prüfung
 
-245 · Fragen · von Testautor (Technik) → Architekt · Runde 1/3 · offen
+245 · Fragen · von Testautor (Technik) → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Tests zu QUE-2 und AUF-4 legen fest, was der Implementierer bauen muss. Bitte prüfen
@@ -24,4 +24,18 @@
 
 **Gegenvorschlag.** Gib die Schnittstelle frei oder nenne, was du anders willst.
 
-**Stellungnahme.**
+**Stellungnahme.** Freigegeben, mit zwei Festlegungen in
+[Web](../../technik/architektur/web.md) W2:
+- Server: `serverStarten(aufstellung)` → `Server` mit `adresse` und `beenden()`, eigener
+  Thread, freier Port auf `127.0.0.1`; B1 verweist jetzt darauf.
+- Lesen: statt drei Properties eine, `Aufstellung.ausgangslage`. Die `Ausgangslage` ist
+  `frozen`, `tiefen` ein `MappingProxyType`; D3 bleibt gewahrt, Spielfeld, Tiefen und die
+  Reihenfolge der Spieler kommen daraus. Lage der Zonen aus `grenzenInXDerZone`, nicht in
+  `web/` gerechnet. „Spieler 1/2“ vergibt `darstellung.py` aus der Reihenfolge (AUF-4.2).
+- Ergänzt: Die *Ablage* braucht den *Namen* der *Einheit* (AUF-4.3, 244). `Einheit` bekommt
+  das Pflichtfeld `name`, `katalog` liest es aus `Einheit:` in `ausgangslage.yaml`. Dafür
+  muss `_spielerMit` Namen vergeben: [248](248-bildschirmtestsLesbarer.md) Punkt 1, vor dem
+  Implementierer; dort auch Befunde zur Lesbarkeit.
+Der Rest passt: Befehl und erste Zeile (W5, B4; `PYTHONPATH` bis 243), Klassen wie in den
+Mockups (`.karte` ist das `svg`, darum trägt `getScreenCTM`), Maße exakt (B3), Farben als
+`fill` (die Deckkraft steht in `fill-opacity`, der Vergleich hält).

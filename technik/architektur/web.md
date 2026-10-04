@@ -9,12 +9,17 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Jinja-Vorlagen, 40.000 Zeichen in einer Datei. Prüft: nur Text; Auslöser: erstes Modul in
   `web/`, dann ein Importvertrag „`web/` importiert kein `render_template`, kein `jinja2`“.
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
-  - `server.py`: startet und beendet den Server, nennt die Adresse.
+  - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
+    Thread auf `127.0.0.1` mit freiem Port und gibt einen `Server` mit `adresse` und
+    `beenden()` zurück.
   - `anwendung.py`: Flask; Anfrage lesen, eine Handlung der Domäne aufrufen, Antwort schreiben.
-  - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte; kennt Flask nicht.
-  Regeln und Rechnen stehen nur in der Domäne: Längen in Zoll liefert `messen.py`, `web/`
-  wandelt `Fraction` nur für die Antwort in `float`. `web/` liest Properties und Abfragen
-  (D3), nie `_`-Felder. Prüft: nur Text; Auslöser: zweite Route.
+  - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte; kennt Flask nicht. „Spieler 1“
+    und „Spieler 2“ vergibt es aus der Reihenfolge der Ausgangslage (AUF-4.2, wie W4).
+  Regeln und Rechnen stehen nur in der Domäne: Längen in Zoll liefern `messen.py` und
+  `grenzenInXDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
+  Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
+  `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
+  Prüft: Akzeptanztests zu QUE-2 und AUF-4; der Rest nur Text; Auslöser: zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`). Prüft: nur Text; Auslöser: erste Handlung über HTTP.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
@@ -45,8 +50,8 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
 Entschieden nach einem Wegwerf-Versuch (Flask im Thread, Playwright, Chromium aus dem Cache;
 drei Tests in 2 s):
 - **B1** Ein Bildschirmtest steht bei den Akzeptanztests seiner Anforderung (T1). Er baut den
-  Zustand mit Handlungen der Domäne, startet `web/server.py` mit ihm im selben Prozess
-  (eigener Thread, freier Port) und liest die Seite mit Playwright. Er importiert weder
+  Zustand mit Handlungen der Domäne, startet mit ihm `serverStarten` (W2) im selben Prozess
+  und liest die Seite mit Playwright. Er importiert weder
   `flask` noch `werkzeug`; Browser je Sitzung, Seite je Test als Fixture in `conftest.py`.
   Prüft: nur Text; Auslöser: erster Bildschirmtest, dann der Importvertrag auch für
   `tests/akzeptanz/`.
