@@ -8,7 +8,14 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from agenten import altbestandOrdner, projektordner
-from pfade import akzeptanzOrdner, anforderungsOrdner, anliegenOrdner, etappenOrdner, itemsOrdner
+from pfade import (
+    akzeptanzOrdner,
+    anforderungsOrdner,
+    anliegenOrdner,
+    etappenOrdner,
+    itemsOrdner,
+    perspektiven,
+)
 
 camelCase = re.compile(r"^[a-zäöü][a-zA-Z0-9äöüÄÖÜß]*$")
 pascalCase = re.compile(r"^[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
@@ -200,7 +207,7 @@ def geprüfteDateien(wurzel: Path) -> Iterator[Path]:
         for pfad in sorted(gefunden):
             relativ = pfad.relative_to(wurzel)
             if pfad.suffix == endung and (
-                endung == ".py" or relativ.parts[0] in ("domaene", "technik", "prozess", "handoff")
+                endung == ".py" or relativ.parts[0] in (*perspektiven, "handoff")
             ):
                 yield pfad
 

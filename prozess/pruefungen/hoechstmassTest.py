@@ -6,7 +6,7 @@ import pytest
 
 from agenten import kopfzeilen
 from anliegen import antwortZeile
-from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, wurzel
+from pfade import akzeptanzOrdner, anliegenOrdner, etappenOrdner, perspektiven, wurzel
 
 aktuelleEtappe = 1000
 spätereEtappe = 200
@@ -44,7 +44,7 @@ def fälle():
         yield moderationsdatei, zeichen(moderationsdatei), moderation
     for datei in sorted((wurzel / akzeptanzOrdner).rglob("*Test.py")):
         yield datei, zeichen(datei), akzeptanztest
-    for ordner in ("domaene", "technik", "prozess"):
+    for ordner in perspektiven:
         datei = wurzel / ordner / "CLAUDE.md"
         if datei.is_file():
             yield datei, zeichen(datei), ordnerClaude

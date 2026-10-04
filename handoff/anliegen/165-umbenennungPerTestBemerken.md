@@ -3,7 +3,7 @@
 165 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-Kritik am Code zu Commit 6a64835. Hier steht, was [163](163-altbestandEinmalNennen.md) noch
+Kritik am Code zu Commit 6a64835. Hier steht, was Anliegen 163 noch
 nicht abdeckt.
 
 **Befund.** Nach B3 aus 163 nennt ein Test jeden Altbestand-Ordner einmal und prüft, dass ruff,
@@ -37,4 +37,4 @@ ein Ordner `.probe/` ihn grün lässt, ein fehlender Altbestand-Ordner ihn grün
 `python3 -m pytest prozess/pruefungen` grün ist, `prozess/regeln.md` den Test nennt und der
 Reviewer den Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `oberordner.py` mit `oberordnerTest.py` (Probeordner `Neu/` rot, `.probe/` und fehlender Altbestand grün); `perspektiven` steht nur noch in `pfade.py`, `rollenkontext.py`, `benennung.py` und `hoechstmassTest.py` nehmen sie von dort. `regeln.md` nennt den Test.

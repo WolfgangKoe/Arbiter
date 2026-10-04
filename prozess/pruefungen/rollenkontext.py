@@ -4,9 +4,8 @@ from pathlib import Path
 
 from agenten import projektordner, schreibpfade
 from hookProtokoll import antwortAusgeben, eingabeLesen, zusatzkontext
+from pfade import perspektiven
 from stand import stand
-
-perspektiven = ("domaene", "technik", "prozess")
 
 
 def perspektive(rolle: str, wurzel: Path) -> str | None:
