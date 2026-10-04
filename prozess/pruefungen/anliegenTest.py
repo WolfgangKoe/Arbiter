@@ -159,6 +159,12 @@ def testFragenImFreigabeCommitSindBeimAbsenderDran(tmp_path):
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
+def testFragenImFreigabeCommitDesReviewsSindBeimAbsenderDran(tmp_path):
+    stakeholderFragen(tmp_path)
+    committen(tmp_path, "Freigabe Review 3")
+    assert dranBei(tmp_path) == {"Planer": [12]}
+
+
 def testNeueRundeNachDerFreigabeIstBeimStakeholderDran(tmp_path):
     datei = stakeholderFragen(tmp_path)
     committen(tmp_path, "Freigabe Plan 2")

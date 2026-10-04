@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import NamedTuple
 
-from gitAufruf import gitAusgabe, letzteFreigabe
+from gitAufruf import gitAusgabe, letzteFreigabeOhneReview
 from pfade import akzeptanzOrdner
 
 kritikerJePfad = (
@@ -45,7 +45,7 @@ def geprüfteHashes(betreff: str) -> set[str]:
 
 def commitsSeitDerFreigabe(wurzel: Path) -> list[Commit]:
     """Kennung und Betreff, älteste zuerst, ab dem Commit nach der letzten Freigabe."""
-    freigabe = letzteFreigabe(wurzel)
+    freigabe = letzteFreigabeOhneReview(wurzel)
     bereich = [f"{freigabe}..HEAD"] if freigabe else []
     zeilen = gitAusgabe(wurzel, "log", "--format=%H %s", *bereich).splitlines()
     commits = []

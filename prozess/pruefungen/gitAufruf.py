@@ -34,6 +34,12 @@ def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
 
 
 def letzteFreigabe(wurzel: Path) -> str | None:
+    """Der jüngste Commit `Freigabe …`, sonst `None`."""
+    alle = freigaben(wurzel)
+    return alle[0][0] if alle else None
+
+
+def letzteFreigabeOhneReview(wurzel: Path) -> str | None:
     """Der jüngste Commit `Freigabe …` außer `Freigabe Review …`, sonst `None`."""
     # Warum: Die Freigabe des Reviews schließt keine Kritik am Code ab; das Fenster bleibt offen.
     alle = [
