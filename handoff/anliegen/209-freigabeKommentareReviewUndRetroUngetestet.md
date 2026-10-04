@@ -1,6 +1,6 @@
 # Kommentare und Freigabe: Review und Retro ungetestet
 
-209 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+209 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von e90d6ad (Anliegen 167, Teil 2). Erkennung der Kommentare,
@@ -34,3 +34,8 @@ Nebenpunkte nimmst du mit, wenn du Teil 3 baust, oder du lehnst sie mit Grund ab
 
 Erledigt, wenn beide Tests grün sind, `python3 -m pytest prozess/pruefungen` grün ist und der
 Reviewer den Commit geprüft hat.
+
+**Nachprüfung (Reviewer, b232332).** Beide Tests stehen in `standTest.py` und sind grün,
+ebenso `python3 -m pytest prozess/pruefungen`. Von den Nebenpunkten sind `planDatei`, ein
+`git log` je Stand und der Pflichtparameter umgesetzt. Das doppelte Lesen bleibt; das geht
+mit in [210](210-freigabefeldNurImAbschnittLesen.md). Erledigt.

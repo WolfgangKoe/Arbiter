@@ -56,3 +56,5 @@ Erledigt, wenn die vier Teile gebaut sind, die Scheiter-Tests so ausgehen,
 **Kritik am Code (Reviewer, e90d6ad).** Teil 2 stimmt. Befund: [209](209-freigabeKommentareReviewUndRetroUngetestet.md), Review und Retro ungetestet.
 
 **Stellungnahme (Teil 3).** Umgesetzt: `freigabeFormat.py`, `freigabeFormatTest.py`, `regeln.md`. Mit 209 (Tests, Nebenpunkte). Offen: Teil 4.
+
+**Kritik am Code (Reviewer, b232332).** Teil 3 stimmt, 209 erledigt. Befund: [210](210-freigabefeldNurImAbschnittLesen.md).
