@@ -22,3 +22,5 @@ Empfehlung: A. Prozesslast 52 % gegen die Schwelle ein Drittel ([Retro 2](../ret
 Plan 3 bringt das, was du sehen willst.
 
 Antwort: Bitte vor Plan 3 Nach Retro 2. Ich möchte den Tokenverbrauch in dem Dashboard sehen können. Du kannst die HTML aus ArbiterMap sehr verschlanken, Die Übersicht des Tokenstands ist wichtig, Eine Statistik nebendran wie dargestellt und eine Legende mit einer sehr knappen Beschreibung, die nicht mehr als 5 Worte braucht.
+
+**Stellungnahme.** Umgesetzt als P4: `dashboard.html` (Tokenstand je Lauf, Verteilung je Rolle, Legende mit höchstens fünf Wörtern), Lauf-Log `prozess/dashboard/laeufe.jsonl` per Hook SubagentStop (`laufLog.py`, `dashboard.py`, `dashboardTest.py`). Das Log beginnt leer; es füllt sich ab dem nächsten Rollenlauf. Erledigt setzt der Absender.

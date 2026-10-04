@@ -1,6 +1,6 @@
 # pfadeTest.py löschen: Freigabe fehlt
 
-188 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
+188 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** P3 der [Retro 2](../retro.md) ist nicht umgesetzt. Der Auto-Mode-Klassifizierer
