@@ -4,7 +4,7 @@
 
 ## Runde 1
 **Befund.** Kritik am Code von 9977e0e (Schnittstelle). Nach
-[263](263-flaecheDerZoneAnEinerStelle.md) liefert `Ausgangslage.grenzenDerZone(zone)` die
+Anliegen 263 liefert `Ausgangslage.grenzenDerZone(zone)` die
 Fläche einer *Aufstellungszone*, Produktcode ruft nur noch diese Abfrage. Die Hilfsfunktion
 `grenzenInXDerZone` ist nur deshalb noch öffentlich, weil
 `technik/tests/akzeptanz/phasen/aufstellen/auf4Test.py` sie importiert,

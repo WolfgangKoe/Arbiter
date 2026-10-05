@@ -3,7 +3,7 @@
 268 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Kritik am Code von 9977e0e. Nach [264](264-markupInVorlagenStattInSeiteJs.md)
+**Befund.** Kritik am Code von 9977e0e. Nach Anliegen 264
 steht das Markup in `<template>` von `technik/frontend/index.html`, `seite.js` klont und füllt
 es. O1 ([Web](../../technik/architektur/web.md)) sagt jetzt: „`seite.js` … erzeugt keine
 Elemente.“ Das ist nur Text. Ein `document.createElement("span")` oder ein `innerHTML = "<span
