@@ -21,6 +21,13 @@ Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zykl
   zugleich (`standregeln/stand.py`); jedes JSON-Beispiel des Vertrags steht in einem Test
   beider Hälften. Auslöser: der des Frontend-Implementierers
   ([Ablauf](ablauf.md#rollen-mit-auslöser)).
+- Eigene Arbeitskopie je Lauf (Anliegen 279, F1): `isolation: worktree` im Kopf der Rolle,
+  Worktree unter `.claude/worktrees/`; Hooks laufen weiter aus dem Hauptbaum
+  (`$CLAUDE_PROJECT_DIR`), Bedingung 3 der [gleichzeitigen Läufe](ablauf.md#gleichzeitige-läufe)
+  fiele. Braucht `worktree.baseRef: "head"`, `.gitignore`, Worktree-Pfade in der Schreibgrenze,
+  Merge durch den Koordinator; offen: `node_modules` und `pip install -e` zeigen auf den
+  Hauptbaum. Auslöser: Hook-Code oder rote Tests des Nachbarn halten in zwei Moderationen eine
+  Kette auf; dann zuerst ein Wegwerf-Versuch.
 - Knöpfe im Dashboard für die Züge des Stakeholders (Anliegen 254, braucht einen lokalen
   Server). Auslöser: Die Sicht aus Anliegen 275 steht.
 - Skills `anforderung-schreiben`, `regel-nachschlagen`, `improve` (E19, E30). Auslöser: dieselbe

@@ -1,6 +1,6 @@
 # Läufe derselben Rolle gleichzeitig, wenn ihre Dateien getrennt sind
 
-279 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+279 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in [Review 3](../review.md): Anliegen an dieselbe Rolle laufen parallel, solange keines vom anderen abhängt. Der [Ablauf](../../prozess/ablauf.md#domänenphase) verbietet das: „Gleichzeitig laufen nur Rollen, die ausschließlich Anliegen schreiben; Ausnahme: Technikphase, Schritt 3.“ Für die Aufträge an den Regelumsetzer aus der [Moderation](../moderation.md) habe ich die Dateien aus Befund und Gegenvorschlag und den `git status` geprüft:
@@ -19,4 +19,10 @@
 
 Erledigt, wenn der Ablauf die Ausnahme nennt und die Moderation die Stränge zeigt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Ablauf, Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe), Moderator und Regelumsetzer verweisen darauf; die Stränge schreibt der Moderator. Erledigt erst nach F1 und F2.
+
+**F1 · Worktree je Lauf jetzt statt im [Backlog](../../prozess/backlog.md)?** A ja, B nein (Empfehlung: kostet mehr als zwei gesparte Schritte).
+Antwort: .
+
+**F2 · Regelumsetzer schreibt `eslint.config.mjs`, `.stylelintrc.json`, `package.json`, `package-lock.json`?** A ja (Empfehlung, [Ablauf](../../prozess/ablauf.md#kritik-am-code): Linter-Konfiguration), B nein.
+Antwort: .

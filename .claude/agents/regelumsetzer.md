@@ -40,4 +40,5 @@ Mechanismus, der ohne Tokenkosten wirkt.
   und nenne die übrigen in der Schlussantwort.
 - Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und
   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung` (Abdeckung der Prüfskripte) und
-  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 enden.
+  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 enden; Rot nur
+  in Dateien eines gleichzeitigen Laufs nennst du (`prozess/ablauf.md`, Gleichzeitige Läufe).

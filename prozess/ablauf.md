@@ -27,8 +27,8 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
    `Freigabe Plan <n>`. Danach Technikphase.
 
 Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage, sortiert vom
-Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Gleichzeitig laufen
-nur Rollen, die ausschließlich Anliegen schreiben; Ausnahme: Technikphase, Schritt 3.
+Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Wer gleichzeitig läuft:
+[Gleichzeitige Läufe](#gleichzeitige-läufe).
 
 ### DoR (Item bereit)
 1. Format und Höchstmaß von Anforderung und Item (`domaene/CLAUDE.md`), die Kriterien-IDs
@@ -62,9 +62,8 @@ Organisationsentwickler sie vor.
    am Code). Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben
    und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
    Hat das Item Vertrag und Tests beider Hälften, laufen Implementierer (Backend) und
-   Frontend-Implementierer gleichzeitig; der Koordinator committet jeden Lauf nach seinen
-   Pfaden, damit die Kritik am Code je Commit bleibt. Mechanismus: nur Text
-   ([Backlog](backlog.md)).
+   Frontend-Implementierer gleichzeitig ([Gleichzeitige Läufe](#gleichzeitige-läufe)).
+   Mechanismus: nur Text ([Backlog](backlog.md)).
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
@@ -219,6 +218,21 @@ Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
 (`Kritik <a> <b>`, notfalls `--allow-empty`). Jeder andere Commit, der Code ändert, wird
 geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ersten seit der
 letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand.
+
+## Gleichzeitige Läufe
+Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen
+oder Items, auch derselben Rolle, wenn (Anliegen 279):
+1. ihre Dateien getrennt sind, nach Befund, Gegenvorschlag und `git status`; eine eigene
+   Zeile in `prozess/regeln.md` zählt als getrennt,
+2. keiner auf den anderen wartet (`wartet auf`, Reihenfolge des Stakeholders),
+3. höchstens einer Hook-Code ändert: Module, die `.claude/settings.json` startet, samt ihren
+   Importen. Sie laufen aus demselben Arbeitsbaum als Hooks jedes Laufs.
+
+Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
+Der Koordinator committet jeden Lauf nach seinen Pfaden, damit die Kritik am Code je Commit
+bleibt; die Zeile eines Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien
+eines laufenden Nachbarn rot, nennt der Lauf sie und meldet fertig; committet wird, wenn
+die Prüfungen grün sind. Mechanismus: nur Text.
 
 ## Anliegen
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
