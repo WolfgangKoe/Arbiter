@@ -39,9 +39,9 @@ Schreibpfade. Für Bash wirkt die Grenze nur als Text
   [265](anliegen/265-ausgeloestePruefungenZuWeb.md) Prüfungen zu W1, W2, D3,
   [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 270 CSRF-Ausnahme ohne Auslöser.
 - Implementierer prüft nach: 261.
-- Testautor: [269](anliegen/269-auf4NimmtGrenzenDerZone.md) Grenzen der Zone in AUF-4.6,
-  [259](anliegen/259-handgriffeImportierenStattFixtures.md),
-  [260](anliegen/260-auf4WaehlenUndAlleBenennen.md).
+- Testautor: Anliegen 269 Grenzen der Zone in AUF-4.6,
+  Anliegen 259,
+  Anliegen 260.
 
 ## Empfehlung
 Freigeben: DoD 1 bis 4 sind erfüllt. Keines der offenen Anliegen ändert Verhalten. Von der
