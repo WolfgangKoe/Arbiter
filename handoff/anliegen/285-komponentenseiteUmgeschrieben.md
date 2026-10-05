@@ -1,9 +1,9 @@
 # Komponentenseite: Karte umgeschrieben statt übernommen
 
-285 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+285 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
-**Befund.** Kritik am Code von 86baa95, gegen [262](262-komponentenseiteOhnePruefung.md)
+**Befund.** Kritik am Code von 86baa95, gegen Anliegen 262
 Punkt 2: „aus dem Markup der drei Mockups, ohne es umzuschreiben“.
 1. Die Karte in `technik/frontend/komponenten.html` gibt es in keinem Mockup. Die Zonen sind
    neu geschnitten: `ohneSpieler` links über die volle Höhe, `spieler1` und `spieler2` rechts
@@ -34,3 +34,9 @@ Erledigt, wenn jedes Markup der Seite wörtlich in einem Mockup steht (bis auf w
 Modelle) und `testDieKomponentenseiteHältDieRegel` grün bleibt.
 
 **Stellungnahme.**
+Angenommen, umgesetzt. `technik/frontend/komponenten.html` besteht jetzt aus Kopfzeile und drei
+Spalten wie in `auf-4.html`. Die Karte steht zweimal, je unverändert aus `auf-4-ausgangslage.html`
+(zwei Zonen `ohneSpieler`) und aus `auf-4.html` (Zonen `spieler1` und `spieler2`, je ein Modell mit
+unveränderten Koordinaten, in der eigenen Zone). Die linke Spalte trägt die Armeekarten von
+Spieler 1 aus beiden Mockups, die rechte die von Spieler 2; die Ausgangslage-Karten ohne
+`inAufstellung` stehen damit auf der Seite. Gekürzt sind nur Modelle.

@@ -15,12 +15,46 @@
     <aside class="spalte">
       <div class="armeeKarte spieler1">
         <h2 class="armeeKartenName">Spieler 1</h2>
+      <section class="einheitenKarte">
+        <div class="einheitenKartenName"><span>Boyz</span><span class="einheitenKartenModelle">10</span></div>
+      </section>
+      <section class="einheitenKarte">
+        <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
+      </section>
+      </div>
+      <div class="armeeKarte spieler1">
+        <h2 class="armeeKartenName">Spieler 1</h2>
       <section class="einheitenKarte inAufstellung">
         <div class="einheitenKartenName"><span>Boyz</span>
         <span class="einheitenKartenAbzeichen">in Aufstellung</span></div>
       </section>
       <section class="einheitenKarte">
         <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
+      </section>
+      </div>
+    </aside>
+    <div class="spalte spalteMitte">
+    <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
+      <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
+      <rect class="aufstellungszone ohneSpieler" x="0" y="0" width="9" height="60"/>
+      <rect class="aufstellungszone ohneSpieler" x="35" y="0" width="9" height="60"/>
+    </svg>
+    <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
+      <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
+      <rect class="aufstellungszone spieler1" x="0" y="0" width="9" height="60"/>
+      <rect class="aufstellungszone spieler2" x="35" y="0" width="9" height="60"/>
+      <circle class="modell spieler1" cx="2.0" cy="20" r="0.630"/>
+      <circle class="modell spieler2" cx="36.0" cy="28" r="0.630"/>
+    </svg>
+    </div>
+    <aside class="spalte">
+      <div class="armeeKarte spieler2">
+        <h2 class="armeeKartenName">Spieler 2</h2>
+      <section class="einheitenKarte">
+        <div class="einheitenKartenName"><span>Necron Warriors</span><span class="einheitenKartenModelle">10</span></div>
+      </section>
+      <section class="einheitenKarte">
+        <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
       </section>
       </div>
       <div class="armeeKarte spieler2">
@@ -30,16 +64,6 @@
       </section>
       </div>
     </aside>
-    <div class="spalte spalteMitte">
-    <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
-      <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
-      <rect class="aufstellungszone ohneSpieler" x="0" y="0" width="9" height="60"/>
-      <rect class="aufstellungszone spieler1" x="35" y="0" width="9" height="30"/>
-      <rect class="aufstellungszone spieler2" x="35" y="30" width="9" height="30"/>
-      <circle class="modell spieler1" cx="2.0" cy="20" r="0.630"/>
-      <circle class="modell spieler2" cx="36.0" cy="28" r="0.630"/>
-    </svg>
-    </div>
   </main>
 </body>
 </html>
