@@ -11,7 +11,7 @@ Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellun
 2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen` auf `779e39a`: 757
    grün; eslint und stylelint ohne Fund (Frontend unverändert). SonarLint auf
    `2635eb8`: keine Funde. Zwei Ausnahmen gelten für `web/` (261,
-   [270](anliegen/270-csrfAusnahmeOhneAusloeser.md)). Nur Einheitstests erreichen
+   Anliegen 270). Nur Einheitstests erreichen
    `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
    Vorbedingungen (`ValueError`). Glossar → Code: *Name*, *Ablage*, *an der Reihe*,
    *Einheit in Aufstellung*, *Karte* stehen wörtlich im Code.
@@ -20,7 +20,7 @@ Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellun
 
 Oberfläche: Bildschirmtests grün; `komponenten.css` gleicht `vorschlag.css`. **Nicht erfüllt:**
 „Mockup gelöscht“. Die Mockups bleiben, bis `komponenten.html` steht
-([262](anliegen/262-komponentenseiteOhnePruefung.md)).
+(Anliegen 262).
 
 ## Code
 Nachgeprüft: `python3 -m arbiter` nennt die Adresse und liefert die Ausgangslage; SIGINT
@@ -33,9 +33,9 @@ vom Implementierer außerhalb seiner Schreibpfade (248 Punkt 7); für Bash wirkt
 nur als Text ([215](anliegen/215-bashSandboxAlsVersuch.md)).
 
 ## Offene Anliegen zur Technik
-- Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
+- Regelumsetzer: Anliegen 262,
   [268](anliegen/268-seiteErzeugtKeineElemente.md),
-  [265](anliegen/265-ausgeloestePruefungenZuWeb.md),
+  Anliegen 265,
   Anliegen 267, 270.
 
 ## Empfehlung

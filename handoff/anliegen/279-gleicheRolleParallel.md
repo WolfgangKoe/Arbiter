@@ -1,6 +1,6 @@
 # Läufe derselben Rolle gleichzeitig, wenn ihre Dateien getrennt sind
 
-279 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+279 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in [Review 3](../review.md): Anliegen an dieselbe Rolle laufen parallel, solange keines vom anderen abhängt. Der [Ablauf](../../prozess/ablauf.md#domänenphase) verbietet das: „Gleichzeitig laufen nur Rollen, die ausschließlich Anliegen schreiben; Ausnahme: Technikphase, Schritt 3.“ Für die Aufträge an den Regelumsetzer aus der [Moderation](../moderation.md) habe ich die Dateien aus Befund und Gegenvorschlag und den `git status` geprüft:

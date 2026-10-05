@@ -1,6 +1,6 @@
 # Schichten: Prüfung lässt Kreise und Unterordner durch, regeln.md nennt alte Pfade
 
-281 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+281 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code von 7de24e8 (Anliegen 253, Punkt 1). Nachgeprüft am Stand des Commits (Abzug in

@@ -4,7 +4,7 @@ Stand: Zyklus 3, Prozessphase, 39 Anliegen-Dateien; nächster Schritt Retro 3.
 
 ## Dran
 Blockiert das Inkrement: nichts. Plan 4 baut auf der Komponentenseite aus
-[262](anliegen/262-komponentenseiteOhnePruefung.md) auf; dessen Nachprüfung ist fällig.
+Anliegen 262 auf; dessen Nachprüfung ist fällig.
 - Organisationsentwickler: Retro 3; [282](anliegen/282-schichtenInEsUndAblauf.md); 107 (Antwort des
   Stakeholders: noch keine Reaktion), 150 (Antwort: SonarLint scharfstellen), 138, 219.
 - Regelumsetzer (27): 253 Punkte 5, 7; 240 Runde 2; 268; 272 bis 276, 278; 281; 246, 247, 249;
