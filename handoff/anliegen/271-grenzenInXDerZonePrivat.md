@@ -1,6 +1,6 @@
 # grenzenInXDerZone wird privat
 
-271 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+271 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Folge aus 269 (Schnittstelle): Seit 50ab353 importiert kein Test mehr
