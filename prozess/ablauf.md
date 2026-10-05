@@ -101,7 +101,7 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
    Stand), Höchstmaße (`formregeln/hoechstmassTest.py`), Komplexität (`formregeln/komplexitaetTest.py`), Code →
-   Glossar (`formregeln/glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/wir.md` 8
+   Glossar (`formregeln/glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/es.md` 8
    (`formregeln/kommentare.py`), toter Code (vulture über `technik/arbiter` und
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `formregeln/abdeckung.py`), alle
    im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/konfigurationTest.py`;
@@ -150,6 +150,9 @@ Auslöser: `Freigabe Review <n>`.
    `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), meldet der Stand die Domänenphase
    mit Plan n+1, sonst das erste offene Item. Mechanismus: `standregeln/phasenfolge.py`
    (`offenesProzessItem`, Anliegen 173).
+6. Der Zyklus endet, wenn der Stand nach Schritt 5 die Domänenphase meldet; dann pusht der
+   [Koordinator](../.claude/agents/koordinator.md) nach `dev`. Mechanismus: nur Text
+   (Anliegen 273).
 
 Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
 ([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.
@@ -201,7 +204,7 @@ Mechanismus: nur Text.
 - Testautor auf Opus: Fachkritik oder Mutationstests zeigen wiederholt fehlende Fälle.
 
 ## Kritik am Code
-Nach jeder Änderung von Code (`prozess/praemissen/wir.md`) prüfen ihn alle Kritiker der
+Nach jeder Änderung von Code (`prozess/praemissen/es.md`) prüfen ihn alle Kritiker der
 getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
 
 Code | schreibt | prüft

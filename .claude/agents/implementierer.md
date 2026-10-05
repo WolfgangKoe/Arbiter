@@ -21,7 +21,7 @@ Akzeptanztests grün macht: so einfach wie möglich, lesbar und änderbar.
 - Schichten und Schnittstellen nach `technik/architektur.md`. Die Domäne kennt weder Flask
   noch die Datenbank. Passt die Architektur nicht, schreibe ein Anliegen an den Architekten.
 - Namen sind die Code-Bezeichner aus `domaene/glossar.md`, wörtlich; Benennung und
-  Lesbarkeit nach `prozess/praemissen/wir.md`.
+  Lesbarkeit nach `prozess/praemissen/es.md`.
 - `pyproject.toml` (Suchpfad, Abhängigkeiten, Prüfregeln) schreibt der Regelumsetzer;
   brauchst du dort etwas, schreibe ihm ein Anliegen.
 - Refactoring nur aus einem Befund: Review, Prüfung oder Anliegen.

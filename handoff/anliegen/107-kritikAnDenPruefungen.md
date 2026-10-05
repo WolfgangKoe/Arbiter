@@ -49,3 +49,5 @@ fünf Module haben mehrere Aufgaben, die Hook-Eingabe und git-Aufrufe stehen meh
 Befunde und Erledigt-Bedingung: [253](253-pruefskripteSolidUndLesbar.md) (Regelumsetzer, vor
 215 bis 221). Damit es nicht nachwächst, schlage ich dir zwei Prämissen vor:
 [255](255-praemisseAufgabeUndRichtung.md). 114 ist erledigt. Wartet auf 253.
+
+**Stellungnahme (Stakeholder):** Verstehe ich es richtig, dass wir hier eine Art Zyklus haben, der im schlimmsten Fall immer weiter wächst, aber keinen echten Mehrwert liefert? Falls ja, wie können wir das sinnvoll eindämmen. Ich bin ein Fan von Regeln, die uns helfen, diese sollte aber möglichst schlank sein. Bevor wir eine neue Regel einführen, sollte geprüft werden, ob es die schon gibt bzw., ob eine bestehende diese schon abdeckt. GGf. muss diese auch einfach nur angepasst werden. 

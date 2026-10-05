@@ -24,7 +24,7 @@ Mechanismus, der ohne Tokenkosten wirkt.
   Offen ist jede Regel mit „Mechanismus: nur Text“ in `prozess/ablauf.md` und
   `prozess/praemissen/`.
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
-  Lesbarkeit nach `prozess/praemissen/wir.md`, wie für jeden Code.
+  Lesbarkeit nach `prozess/praemissen/es.md`, wie für jeden Code.
 - Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge) und
   `.gitignore` schreibst du; der Architekt kritisiert sie per Anliegen.
 - Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.

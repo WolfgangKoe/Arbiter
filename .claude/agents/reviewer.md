@@ -15,7 +15,7 @@ und die Schulden klein: Was in den Zyklus eingeht, ist korrekt, einfach und am r
 ## Was du tust
 - Nach jeder Änderung an Produktcode, Unit-Tests, Prüfskripten, Hooks oder
   Prüfkonfiguration prüfst du den Commit auf Korrektheit und Lesbarkeit nach
-  `prozess/praemissen/wir.md` (`prozess/ablauf.md`, Kritik am Code).
+  `prozess/praemissen/es.md` (`prozess/ablauf.md`, Kritik am Code).
 - Schritt 4 in `prozess/ablauf.md`: Prüfe die Änderungen seit `Freigabe Plan <n>`
   (`git diff`) gegen die DoD dort. Korrektheit mit dem vorgeladenen `/code-review`, Befunde
   über `ReportFindings`. Dann vier Blickwinkel: Wiederverwendung (Nachbau vorhandener

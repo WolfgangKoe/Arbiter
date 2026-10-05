@@ -1,47 +1,67 @@
 # Antworten durch Status und in der Moderation
 
-254 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+254 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · beantwortet
 
 ## Runde 1
-**Befund.** Dein Hinweis zu 241 und die letzte Zeile von `handoff/moderation.md`:
-1. Status: Fragen gelten heute nur über eine Freigabe als beantwortet
-   ([Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)). Dazwischen antwortest du mit dem
-   Status: `angenommen`, `Antwort: .` unverändert, gemeint: Die Empfehlungen gelten. Die
-   Statustabelle kennt `angenommen` nur als „nach der Umsetzung“. Der Stand liest es schon
-   richtig: Bei `angenommen` ist der Absender dran. Es fehlt nur die Regel.
-2. Moderation: `## Fragen an dich` hat keine Antwortzeile; du hast „Bestätigt.“ angehängt und
-   im Chat geantwortet. Der Moderator schreibt die Datei jedes Mal neu, die Antwort geht dabei
-   verloren. Das Format ist eine Regel (`moderator.md`, Ablauf), keine Sache des
-   Regelumsetzers; deine Bitte an ihn nehme ich hier auf.
+Wortlaut: `git show a82c85a:handoff/anliegen/254-antwortDurchStatusUndModeration.md`.
 
-**Kosten.** Ohne Regel rät die Rolle, was dein Status meint. Eine Antwort in der Moderation
-erreicht das Anliegen nicht.
+**F1 · Was heißt dein Status an einem Anliegen mit Fragen?** Empfohlen: `angenommen` = Empfehlungen gelten.
+Antwort: Bitte neu überlegen
 
-**Gegenvorschlag.**
+**F2 · Wie beantwortest du Fragen der Moderation?** Empfohlen: Antwortzeilen in der Moderation.
+Antwort: Bitte neu überlegen
 
-**F1 · Was heißt dein Status an einem Anliegen mit Fragen?**
-- A: `angenommen`: Jede `Antwort: .` gilt als Empfehlung, eine mit Text als deine Antwort;
-  der Absender arbeitet ein und setzt `erledigt`. `abgelehnt`: Deine Antwortzeilen sagen, was
-  stattdessen; der Absender schreibt die nächste Runde. Folgst du der Empfehlung, trägst du
-  nichts ein.
-- B: Wie A, aber jede Frage braucht eine eigene Antwort (`Antwort: A`).
-- C: Wie heute: Nur die Freigabe beantwortet.
-Empfehlung: A. So arbeitest du schon; B kostet je Frage eine Zeile, die Empfehlung steht
-direkt darüber.
+**Stellungnahme.** Danke für deine Fragen, doch greifen sie m.E. noch etwas zu kurz. Stelle mir bitte nochmal dar, welche Formen an ANliegen wir haben. Ich sehe vor allem "Frage", "Kritik". Gibt es noch mehr? Bitte untersuchen, ob es Anliegen gibt, die nicht in eine dieser beiden Kategorien passen. Und dann ist natürlich offen, wie die Muster aussehen sollten, die hier greifen müssen. Auf manch eine Kritik braucht es eine Rückfrage, weil die Erklärung unverständlich ist. Oder man nimmt die Kritik an, wie bisher. Für all das braucht es m.E. klare Felder und Status. Gleichzeitig sollte die Anzahl der Status überschaubar bleiben und einfach zu setzen sein. Bitte stelle mir ein funktionales Konzept vor, dass sich auch in das Dashboard einfach übertragen lässt, um die Anliegen darüber beobachten und steuern zu können.
+
+## Runde 2
+**Befund.** 273 Anliegen in git, nach dem, was der Empfänger tun soll:
+- Kritik (217 und 7 als „Anliegen“ wie 81, 226): Sein Artefakt ist falsch oder veraltet.
+- Fragen (40, 2 „Vorschlag“, 225, 238): Jemand braucht eine Entscheidung; 4 zwischen Rollen.
+- Auftrag (5 „Anliegen“ von dir: 22, 194, 246): Neues, ohne Fehler; abzulehnen ist er nicht.
+Rückfrage ist keine Form, sondern ein Zug, den alle brauchen; heute fehlt er. 256 endeten in Runde 1.
+
+**Kosten.** Ohne Rückfrage bleibt nur `abgelehnt`; `angenommen` ist doppeldeutig; Antworten
+in der Moderation gehen verloren.
+
+**Gegenvorschlag.** Der Status ist der letzte Zug; daraus folgt, wer dran ist.
+
+Zug | setzt | Status | dran
+---|---|---|---
+stellen, neue Runde, Klärung | Absender | offen | Empfänger
+nachfragen | Empfänger | rückfrage | Absender
+umsetzen, beantworten | Empfänger | angenommen | Absender: prüft nach
+widersprechen, Frage verwerfen | Empfänger | abgelehnt | Absender: Runde oder erledigt
+nach Runde 3/3 | Absender | eskaliert | Stakeholder
+abschließen | Absender | erledigt | niemand
+
+Felder: Kopf plus `· wartet auf <nr>`; je Runde wie heute, nach einer Rückfrage
+`**Klärung.**`. Bei `angenommen` gilt `Antwort: .` als Empfehlung. Dashboard: Spalten nach
+„dran“, Karte mit Nummer, Titel, Form, Runde, wartet auf.
+
+**F1 · Welche Formen?**
+- A: Kritik, Fragen, Auftrag (nur von dir; Typ „Anliegen“ entfällt).
+- B: Kritik und Fragen; deine Notizen sind Kritik.
+Empfehlung: A. Einen Auftrag lehnt keine Rolle ab, sie fragt nach.
+Antwort: A, allerdings bleibt "Anliegen" als allgemeiner Überbegriff so wie der Ordner bis heute heißt. 
+
+**F2 · Welche Status?**
+- A: Die sechs oben; die Rückfrage kostet keine Runde.
+- B: Wie A, aber die Klärung ist eine neue Runde.
+Empfehlung: A. Die Runde zählt Widerspruch, nicht Missverständnis. `beantwortet` und die
+Antwort durch die Freigabe entfallen: Den Status setzt du.
 Antwort: .
 
-**F2 · Wie beantwortest du Fragen der Moderation?**
-- A: Fragen zu einem Anliegen verlinkt die Moderation nur, beantwortet wird im Anliegen (F1).
-  Eigene Fragen (Reihenfolge) stehen als `**F<n> · …**` mit Empfehlung und `Antwort: .`;
-  „.“ im Chat heißt, sie gelten. Der Koordinator committet die Datei mit deinen Antworten,
-  bevor der Moderator sie neu schreibt; der Moderator übernimmt sie in die Reihenfolge.
-- B: Die Moderation stellt keine eigenen Fragen; Reihenfolgefragen werden ein Anliegen.
-- C: Wie heute: Antwort im Chat.
-Empfehlung: A. Antwort neben der Frage wie in den Anliegen; der Commit hält sie fest.
+**F3 · Moderation?**
+- A: Sie verlinkt Fragen, du antwortest im Anliegen. Ihre Reihenfolge korrigierst du mit
+  `Kommentar:` wie im Plan; der Koordinator committet sie vor dem Neuschreiben.
+- B: Reihenfolgefragen schreibt der Moderator als Anliegen (neues Recht).
+Empfehlung: A. Eine Form, die du kennst.
 Antwort: .
 
-Nach A und A ändere ich Ablauf (Anliegen) und `moderator.md`. Mechanismen beauftragt der
-Koordinator beim Regelumsetzer: Zeile `Antwort:` unter jeder Frage der Moderation (wie
-`antwortVerstöße`), diese Zeilen ändert nur du (`statusrecht.py`).
+**F4 · Dashboard?**
+- A: Erst Sicht mit Filter (Rolle, Form); Züge setzt du in der Datei.
+- B: Gleich Knöpfe für deine Züge (braucht einen lokalen Server).
+Empfehlung: A. Die Sicht zeigt, was du steuern willst.
+Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Bitte ergänze in Anliegen, die an mich adressiert sind oder mich in irgendeiner Art involvieren eine Art Legende, was ich hier setzen kann, damit ich die richtige Terminologie setzen kann und dann nur durch kopieren und einfügen, den Status setzen kann. Im Dashboard kann man das durch einen Button einfach umstellen. 

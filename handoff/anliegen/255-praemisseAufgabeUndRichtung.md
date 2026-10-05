@@ -1,27 +1,64 @@
 # Prämisse: eine Aufgabe je Modul, Abhängigkeit in einer Richtung
 
-255 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+255 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
-**Befund.** Deine Kritik in [107](107-kritikAnDenPruefungen.md) (nicht SOLID) trifft Regeln,
-die [wir.md](../../prozess/praemissen/wir.md) nicht hat: Sie regelt Namen, Kommentare und
-die Form der Fälle, nicht den Zuschnitt der Module und die Richtung der Abhängigkeiten. Die
-Befunde in [253](253-pruefskripteSolidUndLesbar.md) zeigen beides. Für das Produkt regelt die
-Architektur die Richtung (Importvertrag A1, A2), für die Prüfskripte nichts. Von SOLID greifen
-hier S und D; O deckt Regel 9 (Tabelle), L und I brauchen Klassenhierarchien.
+Wortlaut: `git show a82c85a:handoff/anliegen/255-praemisseAufgabeUndRichtung.md`.
 
-**Kosten.** Ohne Prämisse meldet der Reviewer solche Verstöße nicht als Regelverstoß
-(Retro 2, Befund 6), und nach dem Umbau wachsen sie nach.
+**F1 · Was kommt in wir.md?** Empfohlen: Regel 10 (eine Aufgabe je Modul), Regel 11 (Abhängigkeit ohne Kreis).
+Antwort: s. Stellungnahme
 
-**Gegenvorschlag.**
+**Stellungnahme.** Grundsätzlich gehe ich bei A und C auf deine Frage mit. Ich habe die Sorge, dass wir nun an einem Punkt stehen, an dem wir darauf achten sollten, dass sich die CLAUDE.md im Wurzelordner und den Domänen, Technik und Prozess-Ordner in ein Regelwerk verwandeln, was nicht deren Absicht ist. Die CLAUDE.md sollte überall möglichst schlank konkret und kurz sein. SOLID würde ich in einer solchen Datei sehen, eine Regel allerdings nicht. Du beziehst dich ja bereits auf "wir.md" Es braucht hier vielleicht auch eine "ich.md", wobei diese das gewünschte Verhalten nach außen beschrieben (4 Quadranten-Modell nach Ken Wilber). Lange Rede kurzer Sinn. Mache dir hier mehr Gedanken, statt kurz etwas mit einem Pflaster zu versehen, was eine ganzheitliche Sicht benötigt. Bitte Konzept vorlegen und die Details bedenken. 
 
-**F1 · Was kommt in wir.md?**
-- A: Regel 10: Ein Modul hat eine Aufgabe, sein Docstring nennt sie (Urteil des Reviewers,
-  Höchstmaß Code-Modul). Regel 11: Abhängigkeiten ohne Kreis, im Produkt nach der Architektur,
-  in den Prüfskripten `gemeinsam` ← Lesen ← Regeln ← Stand (import-linter, 253).
-- B: Nur Regel 11, sie ist prüfbar.
-- C: „SOLID“ als Wort, ohne Ausprägung.
-Empfehlung: A. C gibt dem Reviewer keinen Maßstab.
+## Runde 2
+**Befund.**
+1. Die Wurzel-CLAUDE.md (2.041 Zeichen) trägt schon Regeln mit Mechanismus (Schlussantwort,
+   Lesegrenze 4.000). Das Regelwerk wächst darunter: `ablauf.md` 20.896 Zeichen, 47-mal
+   „Mechanismus“.
+2. `wir.md` heißt „Sprache und Kultur“, regelt aber fast nur die Form des Codes.
+3. Prämissen lädt niemand; fünf Agentendefinitionen verweisen auf `wir.md`.
+4. Claude Code: `@import` lädt immer (Datei kürzer, Kontext nicht); `.claude/rules/` mit
+   `paths:` lädt erst, wenn eine Rolle passende Dateien liest oder schreibt.
+
+**Kosten.** Regeln an drei Orten; jede neue verlängert CLAUDE.md.
+
+**Gegenvorschlag.** Je Quadrant ein Ort; CLAUDE.md nennt je eine Zeile Prinzip und Link.
+
+Quadrant | Inhalt | Ort
+---|---|---
+Ich (einzeln, innen) | Haltung und Verhalten jeder Rolle: erfinde nichts, frag nach, kritisiere statt zu ändern, Schlussantwort | `praemissen/ich.md`
+Es (einzeln, außen) | Handwerk: SOLID, S und D als Regel 10, 11; Lesbarkeit 1 bis 9 aus `wir.md` | `praemissen/es.md`
+Wir (gemeinsam, innen) | Sprache: Deutsch, Glossar wörtlich, eine Aussage einmal, keine Historie | `praemissen/wir.md`
+System (gemeinsam, außen) | Phasen, Status, Mechanismen | `ablauf.md`, `regeln.md`
+
+Bei Wilber ist Verhalten außen (Es), Haltung innen (Ich); eine Rolle hat nur ihren Text,
+daher beides in `ich.md`, das Handwerk eigens. Agentendefinitionen tragen nur, was die Rolle
+allein betrifft. Prämissen höchstens 3.000 Zeichen; Kritik an `es.md` vom Architekten.
+Verweise in Prüfskripten (`wir.md 8`) zieht der Regelumsetzer nach.
+
+**F1 · Welche Ordnung?**
+- A: Vier Quadranten wie oben.
+- B: `ich.md` nimmt auch das Handwerk auf.
+- C: SOLID in die Wurzel, Regeln 10, 11 in `wir.md` (Runde 1).
+Empfehlung: A. Das Handwerk betrifft nur den, der Code schreibt oder prüft.
+Antwort: A, allerdings fehlt mir da noch O, L und I von SOLID. Wir mögen da noch keine Regeln haben, aber die können hier schon mal angelegt werden.
+
+**F2 · Wie erreichen die Prämissen die Rollen?**
+- A: `ich.md` und `wir.md` per `@import` in der Wurzel; `es.md` als `.claude/rules/` mit
+  `paths:` auf Code, nach einem Versuch, ob Subagenten sie laden (Schreibpfad für mich).
+- B: Verweis in den Agentendefinitionen, wie heute.
+Empfehlung: A. Was alle brauchen, lädt immer; das Handwerk dort, wo Code entsteht.
+Antwort: .
+
+**F3 · Was darf in einer CLAUDE.md stehen?**
+- A: Ziel, Perspektiven, Format und Höchstmaß der Dateien des Ordners, Prinzip mit Link;
+  keine Regel mit Mechanismus. Eine Prüfung meldet `Mechanismus:` in CLAUDE.md.
+- B: Wie A, nur Text.
+Empfehlung: A. Sonst wächst sie wieder.
 Antwort: .
 
 **Stellungnahme.**
+
+**Nachprüfung (Organisationsentwickler).** Zwischenstand: [ich.md](../../prozess/praemissen/ich.md),
+[es.md](../../prozess/praemissen/es.md) (mit O, L, I), [wir.md](../../prozess/praemissen/wir.md),
+CLAUDE.md mit Import, Verweise umgestellt. Offen: Mechanismen an den Regelumsetzer, `.claude/rules/`.

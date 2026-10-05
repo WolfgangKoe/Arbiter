@@ -4,7 +4,7 @@ description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau
 ---
 # Akzeptanztest schreiben
 
-Benennung nach `prozess/praemissen/wir.md`, Umfang nach `.claude/agents/testautor.md`.
+Benennung nach `prozess/praemissen/es.md`, Umfang nach `.claude/agents/testautor.md`.
 
 ## Datei
 Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1: AUF-1 →

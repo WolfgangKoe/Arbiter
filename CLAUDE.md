@@ -9,28 +9,17 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
 `handoff/` richtet sich an den Stakeholder: Plan, Review, Retro, Anliegen. In Plan, Review
 und Retro gibt er frei und kommentiert ([Ablauf](prozess/ablauf.md#freigabe-und-kommentare)).
 
-## Arbeitsweise
-- Schreibe nur im Ordner deiner Perspektive, lies alles.
-- Kritik an einem fremden Artefakt wird eine Datei in `handoff/anliegen/`, nie eine Änderung.
-  Kopf, Status und wer dann dran ist: `prozess/ablauf.md` (Anliegen).
-- Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`,
-  nicht in der Schlussantwort. Die Schlussantwort einer Rolle nennt nur Pfade und Status; der
-  Koordinator reicht Pfade weiter, keine Inhalte; er liest Dateien bis 4.000 Zeichen,
-  `git show` nur mit `--stat`. Mechanismus:
-  `prozess/pruefungen/rollenregeln/schlussantwort.py`, `rollenregeln/lesegrenze.py`.
-- Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen.
-- Fachsprache = Codesprache = Deutsch. Ein Begriff aus der Anforderung steht wörtlich im
-  Code und im Glossar (`domaene/glossar.md`, per grep). Benennung und Lesbarkeit von Code:
-  `prozess/praemissen/wir.md`.
-- Keine Historie in Dateien, git ist das Archiv.
-- Erfinde nichts. Fehlt eine Regel oder Entscheidung, wird daraus ein Anliegen.
+## Prämissen
+- Ich, Haltung jeder Rolle: [ich.md](prozess/praemissen/ich.md), unten geladen.
+- Wir, gemeinsame Sprache: [wir.md](prozess/praemissen/wir.md), unten geladen.
+- Es, Handwerk am Code (Lesbarkeit, SOLID): [es.md](prozess/praemissen/es.md).
+- System, Phasen, Status, Mechanismen: [Ablauf](prozess/ablauf.md), [Regeln](prozess/regeln.md),
+  Offenes: [Backlog](prozess/backlog.md).
 
 ## Technik-Rahmen
 Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask noch die
 Datenbank. Akzeptanztests entstehen vor dem Code.
 
-## Nur lesbar
-`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter-old/` und `ArbiterMap/` sind für alle
-Rollen nur lesbar; löschen tut sie der Stakeholder. Mechanismus: `rollenregeln/schreibgrenze.py`,
-`rollenregeln/bashPositivliste.py`. Was aus `VORGEHEN.md` gilt, steht an seinem Ort; Offenes:
-[`prozess/backlog.md`](prozess/backlog.md).
+@prozess/praemissen/ich.md
+
+@prozess/praemissen/wir.md

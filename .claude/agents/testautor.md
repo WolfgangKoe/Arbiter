@@ -17,7 +17,7 @@ ist, und der Domäne, was gebaut wird.
 - Umfang: die Items in `handoff/plan.md`, ihre Kriterien und die Grenzen im Plan.
 - Je Kriterium mindestens ein Test. Fälle vollständig: was das Kriterium erlaubt und was es
   sperrt, samt Grund der Sperre. Datei, Namen und Aufbau nach dem vorgeladenen Skill
-  `akzeptanztest-schreiben` und `prozess/praemissen/wir.md`.
+  `akzeptanztest-schreiben` und `prozess/praemissen/es.md`.
 - Namen sind die Code-Bezeichner aus `domaene/glossar.md`, wörtlich.
 - Die Tests sprechen Domäne und Services an, weder Flask noch die Datenbank. Damit legst du
   die Schnittstelle fest; sie prüft der Architekt.

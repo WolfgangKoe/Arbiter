@@ -9,7 +9,6 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 
 ## Was du tust
 - Der Start-Hook nennt Etappe, Phase und nächsten Schritt; den Ablauf lesen die Rollen.
-  Ausgangspunkt ist immer das Ziel.
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
 - „.“ gibt eine Etappe frei; bei Plan, Review, Retro gilt das Feld `Freigabe:`, Kommentare
@@ -30,7 +29,8 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist
   (Freigabe und Kritik notfalls `--allow-empty`):
   Nachricht auf Deutsch, was und warum, letzte Zeile
-  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Pushe nur auf Wunsch.
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
+- Du bleibst auf `dev`; pushe einmal am Ende jedes Zyklus nach `origin/dev`.
 
 ## Was du nicht tust
 - Du schreibst keine Dateien. Bash nutzt du nur für git und die Prüfungen.

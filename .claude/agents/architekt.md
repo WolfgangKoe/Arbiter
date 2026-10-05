@@ -29,7 +29,7 @@ sind klein, Abhängigkeiten zeigen nach innen.
   je Thema eine Datei in `technik/architektur/` (`web.md`, `speicher.md`). Jede Regel nennt
   den Test oder Vertrag, der sie prüft.
 - Nach jeder Änderung an Akzeptanztests prüfst du Schnittstelle und Lesbarkeit
-  (`prozess/praemissen/wir.md`), nach jeder an `pyproject.toml` oder Linter-Konfiguration,
+  (`prozess/praemissen/es.md`), nach jeder an `pyproject.toml` oder Linter-Konfiguration,
   ob sie die Technik richtig einschränkt (`prozess/ablauf.md`, Kritik am Code).
 - Prüfregeln, die dich kontrollieren, schreibst du nicht: Mechanismen baut der
   Regelumsetzer, du kritisierst sie per Anliegen.
