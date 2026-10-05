@@ -30,10 +30,10 @@ class Ausgangslage:
     ) -> tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]:
         """Die Fläche der Zone als Grenzen in x und in y, die Form von `messen.ganzIn`."""
         breite, länge = self.spielfeld.seitenlängen
-        return grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
+        return _grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
 
 
-def grenzenInXDerZone(
+def _grenzenInXDerZone(
     zone: Aufstellungszone, breite: Fraction, tiefe: Fraction
 ) -> tuple[Fraction, Fraction]:
     if zone is Aufstellungszone.erste:

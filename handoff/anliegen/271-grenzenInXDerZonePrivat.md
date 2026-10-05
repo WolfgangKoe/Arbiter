@@ -1,6 +1,6 @@
 # grenzenInXDerZone wird privat
 
-271 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+271 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Folge aus 269 (Schnittstelle): Seit 50ab353 importiert kein Test mehr
@@ -19,4 +19,6 @@ Glossarbegriff vorbei rechnen.
 von `aufstellen.py` niemand sie importiert (grep) und `python3 -m pytest technik/tests` grün
 ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: In `technik/arbiter/domaene/phasen/aufstellen.py` heißt die Funktion
+`_grenzenInXDerZone`; außerhalb der Datei importiert sie niemand (grep), `python3 -m pytest
+technik/tests` ist grün.
