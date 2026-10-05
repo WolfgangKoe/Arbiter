@@ -38,7 +38,7 @@ Vor dem Testautor (146 Punkt 4), in dieser Reihenfolge:
    (Anliegen 234, umgesetzt, Nachprüfung Architekt).
 2. Schreibrecht auf `technik/frontend/` für den Implementierer, Organisationsentwickler
    (Anliegen 233, umgesetzt, Nachprüfung Architekt).
-3. Aufbau aus [153](anliegen/153-frontendBackendUndDatenbank.md) in `web.md` und
+3. Aufbau aus Anliegen 153 in `web.md` und
    `speicher.md`, Wegwerf-Versuch zum Bildschirmtest, Architekt. Keine Datenbank (153 F1 A).
    Er trägt dein „SOLID und lesbar“ für den Unterbau.
 

@@ -36,7 +36,7 @@ nur als Text ([215](anliegen/215-bashSandboxAlsVersuch.md)).
 - Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
   [268](anliegen/268-seiteErzeugtKeineElemente.md),
   [265](anliegen/265-ausgeloestePruefungenZuWeb.md),
-  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md), 270.
+  Anliegen 267, 270.
 
 ## Empfehlung
 Freigeben: DoD 1 bis 4 sind erfüllt. Kein offenes Anliegen ändert Verhalten.
