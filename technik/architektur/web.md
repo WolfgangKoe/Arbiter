@@ -11,7 +11,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
   - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
     Thread auf `127.0.0.1` mit freiem Port und gibt einen `Server` mit `adresse` und
-    `beenden()` zurück.
+    `beenden()` zurück. `make_server` ohne `threaded`: Ein Thread beantwortet die Anfragen
+    nacheinander, denn `Aufstellung` ist nicht threadsicher.
   - `anwendung.py`: Flask; Anfrage lesen, eine Handlung der Domäne aufrufen, Antwort schreiben.
   - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte; kennt Flask nicht. „Spieler 1“
     und „Spieler 2“ vergibt es aus der Reihenfolge der Ausgangslage (AUF-4.2, wie W4).
@@ -42,7 +43,8 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
   Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Prüft: eslint und
   stylelint über `.js` und `.css` (`frontendregeln/frontend.py`); der Rest nur Text.
 - **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
-  Stelle und Base; der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
+  Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
+  (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
 - **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
   gebaut aus `domaene/mockups/vorschlag.css`. Jede Seite verlinkt `komponenten.css`;
   Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und

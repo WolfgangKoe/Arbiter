@@ -70,7 +70,7 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Text; Auslöser: zweite Tabelle.
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
-  einer Fläche. Die Baseform kennt nur `messen.py`. Prüft: nur Text; Auslöser: zweite
+  einer Fläche. In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
   Baseform (Etappe 6), dann ein Vertragstest je Baseform und ein Importvertrag „`phasen`
   importiert keine Baseform“.
 
