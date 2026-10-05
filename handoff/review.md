@@ -62,5 +62,5 @@ DoD der Oberfläche fehlt nur das Löschen der Mockups; es folgt nach 262.
   Wegwerf-Versuch zum Wiederholen der Handlungen.
 
 ## Freigabe
-Freigabe: offen
-Kommentar: .
+Freigabe: ja
+Kommentar: Wir haben sehr viele Anliegen. Wäre es möglich einige davon parallel abzuarbeiten? Wenn mehrere Anliegen an dieselbe Rolle adressiert sind, bedeutet das nicht zwangsläufig, dass sie nur einmal aktiv sein muss. Parallelität wird nur durch Abhängigkeit zwischen den Anliegen infrage gestellt. 
