@@ -34,13 +34,12 @@ nur als Text ([215](anliegen/215-bashSandboxAlsVersuch.md)).
 
 ## Offene Anliegen zur Technik
 - Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
-  [268](anliegen/268-seiteErzeugtKeineElemente.md) ESLint-Verbot für erzeugte Elemente,
-  [265](anliegen/265-ausgeloestePruefungenZuWeb.md) Prüfungen zu W1, W2, D3,
-  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 270 CSRF-Ausnahme ohne Auslöser.
+  [268](anliegen/268-seiteErzeugtKeineElemente.md),
+  [265](anliegen/265-ausgeloestePruefungenZuWeb.md),
+  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md), 270.
 
 ## Empfehlung
-Freigeben: DoD 1 bis 4 sind erfüllt. Kein offenes Anliegen ändert Verhalten. Von der
-DoD der Oberfläche fehlt nur das Löschen der Mockups; es folgt nach 262.
+Freigeben: DoD 1 bis 4 sind erfüllt. Kein offenes Anliegen ändert Verhalten.
 
 ## Nächstes Vorgehen
 - **Produktziel:** Noch keine der 7 Etappen erreicht. Am meisten fehlt die erste Handlung
@@ -64,3 +63,4 @@ DoD der Oberfläche fehlt nur das Löschen der Mockups; es folgt nach 262.
 ## Freigabe
 Freigabe: ja
 Kommentar: Wir haben sehr viele Anliegen. Wäre es möglich einige davon parallel abzuarbeiten? Wenn mehrere Anliegen an dieselbe Rolle adressiert sind, bedeutet das nicht zwangsläufig, dass sie nur einmal aktiv sein muss. Parallelität wird nur durch Abhängigkeit zwischen den Anliegen infrage gestellt. 
+Stellungnahme: Geht, braucht eine Änderung am Ablauf: [279](anliegen/279-gleicheRolleParallel.md). Nach 253 Punkt 1 laufen 240, 262, 265, 267, 268, 270 gleichzeitig; der Rest bleibt eine Kette.
