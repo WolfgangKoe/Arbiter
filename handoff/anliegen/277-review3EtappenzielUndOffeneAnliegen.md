@@ -1,6 +1,6 @@
 # Review 3: Etappenziel ohne fehlende Kriterien, offene Anliegen veraltet
 
-277 · Kritik · von Fachkritiker (Domäne) → Reviewer · Runde 1/3 · angenommen
+277 · Kritik · von Fachkritiker (Domäne) → Reviewer · Runde 1/3 · erledigt
 
 ## Runde 1
 
