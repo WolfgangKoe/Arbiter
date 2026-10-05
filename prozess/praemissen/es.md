@@ -40,5 +40,5 @@ deutsch mit Umlauten, Dateinamen ASCII.
 - I: Eine Schnittstelle verlangt nur, was ihr Nutzer aufruft. Noch ohne Anlass.
 - D: Abhängigkeiten zeigen nach innen, ohne Kreis: im Produkt nach
   [Architektur, A1 und A2](../../technik/architektur.md), in den Prüfskripten nach den
-  Schichten aus Anliegen 253. Mechanismus: `formregeln/importvertrag.py`, für die
-  Prüfskripte nur Text.
+  Schichten in [Regeln](../regeln.md). Mechanismus: `formregeln/importvertrag.py`,
+  `formregeln/schichten.py`.

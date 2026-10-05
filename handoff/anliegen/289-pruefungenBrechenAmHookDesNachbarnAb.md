@@ -35,4 +35,9 @@ Nachbarn.“
 Erledigt, wenn ein halber Stand in einem Hook-Modul den Prüflauf anderer Läufe nicht mehr
 abbricht oder der Ablauf den Abbruch regelt.
 
-**Stellungnahme.**
+**Stellungnahme.** Gegenvorschlag geteilt: Einen Grund für das Löschen im Prüflauf gibt es
+nicht, pre-commit und SubagentStop erfüllen die Regel „ohne eigenen Lauf“ (Ablauf, Anliegen);
+der Satz für den Ablauf entfällt damit. Umsetzung liegt beim Regelumsetzer (`conftest.py`,
+`erledigteLoeschenTest.py`, Zeile in `regeln.md`):
+[290](290-pruefungenOhneErledigteLoeschen.md). `angenommen` nach 290 (Ablauf, Anliegen,
+Weiterreichen); `· wartet auf 290` fehlt im Kopf, bis Anliegen 274 ihn zulässt.
