@@ -2,52 +2,34 @@
 
 107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
 
+Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
+
 Kritik: Ich möchte mir die Prüfskripte gerne anschauen können. Je mehr dazukommen, desto unübersichtlicher wird der Inhalt des Ordners. Des Weiteren scheinen mir die Prüfskripte nicht den Kriterien für lesbaren Code zu entsprechen.
 
-**Stellungnahme (Organisationsentwickler):**
-Ich nehme beide Punkte an. Umsetzen wird der Regelumsetzer in der Prozessphase von Zyklus 2,
-weil das Inkrement nicht davon abhängt ([Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)).
-- Ordnung: 48 Dateien in einem Ordner, Hooks, Prüfungen, Befehle und Tests gemischt. Wonach
-  geordnet wird, fragt [113](113-ordnungDerPruefskripte.md); empfohlen sind Themenordner wie
-  in `prozess/regeln.md`, die dann als Inhaltsverzeichnis dient.
-- Lesbarkeit: Die Skripte halten die geprüften Regeln ein (ruff, Komplexität, Benennung),
-  verletzen aber ungeprüfte: Indizes auf Tupel statt benannter Typen (wir.md 6), einen
-  Erklärkommentar (wir.md 8), Hook-Protokoll und Repo-Pfade mehrfach gebaut, zwei Module mit
-  mehreren Aufgaben. Fundstellen und Erledigt-Bedingung:
-  Anliegen 114.
-- Ursache: Die Regeln 6 bis 9 der Prämisse sind nur Text, und die Kritik am Code hat die
-  Verstöße in den Prüfskripten nicht gemeldet. 114 baut Mechanismen für Regel 8 und für
-  Typnamen; die Wirksamkeit der Kritik am Code nehme ich in die Retro 2.
-
-wartet auf 113, 114 
+**Stellungnahme (Organisationsentwickler):** Angenommen; die früheren Stellungnahmen im
+Wortlaut: `git show 9edb97e:handoff/anliegen/107-kritikAnDenPruefungen.md`. Die Ordnung in
+Themenordnern und der Rückstand sind mit Anliegen 113 und 114 umgesetzt; SOLID und
+Lesbarkeit führt [253](253-pruefskripteSolidUndLesbar.md) beim Regelumsetzer.
 
 Weitere Kritik: Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
-
-**Stellungnahme (Organisationsentwickler):**
-Sie ist tot. Sie nahm Altdateien unter `technik/` von der Benennungsprüfung aus, solange sie
-unverändert waren. Seit Anliegen 66 hat sie keinen Eintrag mehr, nur noch ihren Kopf. Ich nehme
-die Kritik an: Der Regelumsetzer löscht die Datei samt Code, Tests und Ausnahme in ruff
-(Anliegen 114, Punkt D).
-
-wartet auf 113, 114
 
 Nachprüfung: Der Koordinator hat mich gebeten, dieses Anliegen nachzuprüfen. Die Datei "benennungRueckstand.txt" finde ich nicht mehr und ist daher wohl gelöscht. Der Teil des Anliegens ist erledigt. 107 ist voraussichtlich mit 114 abgeschlossen, bitte nach Abschluss von 114 dieses Anliegen hier nochmal zur Prüfung vorlegen.
 
 Antwort: Hier scheint noch keine Reaktion vom @organisationsentwickler gekommen zu sein. 
 
-**Stellungnahme (Organisationsentwickler):**
-Stand von Anliegen 114: Lesbarkeit (B), Mechanismen für
-Kommentare und Typnamen (C) und der Rückstand (D) sind umgesetzt. Offen ist die Ordnung in
-Themenordnern (A); deine Antwort zu F1 (a, Ausnahmeerlaubnis) liegt dem Regelumsetzer vor,
-der Moderator führt 114 in dessen Reihenfolge. Die Wirksamkeit der Kritik am Code steht als
-Befund 6 in der [Retro](../retro.md). Sobald 114 erledigt ist, prüfe ich die Ordnung gegen
-deine Kritik und lege dir 107 vor. Wartet auf 114.
-
-**Stellungnahme (Organisationsentwickler):**
-Neu bewertet gegen den Code: Du hast recht. Die Themenordner importieren einander im Kreis,
-fünf Module haben mehrere Aufgaben, die Hook-Eingabe und git-Aufrufe stehen mehrfach.
-Befunde und Erledigt-Bedingung: [253](253-pruefskripteSolidUndLesbar.md) (Regelumsetzer, vor
-215 bis 221). Damit es nicht nachwächst, schlage ich dir zwei Prämissen vor:
-[255](255-praemisseAufgabeUndRichtung.md). 114 ist erledigt. Wartet auf 253.
-
 **Stellungnahme (Stakeholder):** Verstehe ich es richtig, dass wir hier eine Art Zyklus haben, der im schlimmsten Fall immer weiter wächst, aber keinen echten Mehrwert liefert? Falls ja, wie können wir das sinnvoll eindämmen. Ich bin ein Fan von Regeln, die uns helfen, diese sollte aber möglichst schlank sein. Bevor wir eine neue Regel einführen, sollte geprüft werden, ob es die schon gibt bzw., ob eine bestehende diese schon abdeckt. GGf. muss diese auch einfach nur angepasst werden. 
+
+**Stellungnahme (Organisationsentwickler):** Ja, der Kreis ist messbar: Jede Regel will einen
+Mechanismus, jeder Mechanismus ist Code, jeder Code bekommt Kritik, jede Kritik wird ein
+Anliegen an den Regelumsetzer. Seit `Freigabe Retro 2` gingen 71 von 107 neuen Anliegen an
+ihn oder mich (66 %, Schwelle der [Prozesslast](../../prozess/kennzahlen.md) ein Drittel);
+die Prüfskripte samt Tests wuchsen von 183.000 auf 322.600 Zeichen, der Produktcode von
+13.000 auf 18.300. Die Bremse der Kennzahl, erst löschen, dann neu, ist nur Text und griff nie.
+Schlank eindämmen:
+1. Erst suchen, dann regeln: [ich.md](../../prozess/praemissen/ich.md) 4, seit 255 in Kraft.
+2. Der Stand rechnet die Prozesslast; darüber beauftragt der Koordinator keinen neuen
+   Mechanismus, der nicht von dir kommt, bevor ein alter gelöscht ist.
+3. Ein Gesamtmaß für `prozess/pruefungen/`: Was hinzukommt, nimmt anderswo weg.
+2 und 3 lege ich dir in Retro 3 als Prozess-Items vor ([Backlog](../../prozess/backlog.md));
+dort sortiere ich auch die 26 offenen Anliegen an den Regelumsetzer in behalten,
+zurückstellen, schließen. Wartet auf 253.

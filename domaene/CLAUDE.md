@@ -4,7 +4,7 @@
 
 - `etappen/<nn>-<kurz>.md`, `<nn>` zweistellig: erste Zeile `# Etappe <n> · <Name>`, Zweck
   in einem Satz, Bedingung fürs Erreichen. Die kleinste Nummer ist aktuell;
-  Erreichtes wird gelöscht. Höchstens 1.000 Zeichen (`formregeln/hoechstmassTest.py`).
+  Erreichtes wird gelöscht. Höchstens 1.000 Zeichen.
 - `anforderungen/<bereich>.md`, Bereiche `spielobjekte`, `phasen/<phase>`, `querschnitt`:
   je Anforderung `### <Kürzel>-<n> · <Name>`, Zweck in 1–2 Sätzen, Kriterien
   `<Kürzel>-<n>.<m>` je ein Satz, Fachbegriffe *kursiv*, regelbasiert mit Fundstelle.
@@ -21,5 +21,3 @@
 Quellen: Regeltexte in `referenz/rules/` (Fundstelle `<datei>:<zeile>`). Alte
 Spezifikationen (`referenz/domainRules.md`, `Arbiter-old/Arbiter_Specs/`) zeigen die
 Absicht des Stakeholders. Das Ziel geht vor; Widerspruch oder Lücke wird eine Frage.
-
-Mechanismus: sonst nur Text.

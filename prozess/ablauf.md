@@ -221,29 +221,49 @@ geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ers
 letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand.
 
 ## Anliegen
-Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen; jede
-Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161). Mechanismus:
-`formregeln/hoechstmassTest.py` (`zeichenOhneAntworten`).
+Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
+höchstens 4.000 Zeichen; jede Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161).
+Mechanismus: `formregeln/hoechstmassTest.py` (`zeichenOhneAntworten`).
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
-`<nr> · <Typ> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`.
-Typ: Kritik, Fragen oder Anliegen (Notiz des Stakeholders). Rolle: Name aus `.claude/agents/`
-oder Stakeholder, dahinter darf die Perspektive in Klammern stehen. Mechanismus:
-`anliegenregeln/anliegen.py`. Je Runde (`## Runde <n>`) die Absätze `**Befund.**`, `**Kosten.**`,
-`**Gegenvorschlag.**`, `**Stellungnahme.**`, vor dem Punkt darf die Rolle in Klammern stehen;
-die Stellungnahme legt der Absender leer an. Mechanismus: nur Text.
-Unter jeder Frage an den Stakeholder (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`;
-„.“ heißt, die Empfehlung gilt. Die Freigabe beantwortet jede Frage, die in der
-Freigabevorlage steht: mit der Zeile `Antwort:`, sonst mit der Empfehlung. Mechanismus: nur
-Text.
+`<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
+`· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
+`.claude/agents/` oder Stakeholder, dahinter darf die Perspektive in Klammern stehen.
+Mechanismus: `anliegenregeln/anliegen.py`; `Auftrag`, `rückfrage`, `wartet auf` und die
+Legende nur Text, bis Anliegen 274.
 
-Status | setzt | danach dran
+Form | der Empfänger soll | Absender
 ---|---|---
-offen | Absender, beim Anlegen und je neuer Runde | Empfänger: Stellung nehmen oder antworten
-angenommen | Empfänger, nach der Umsetzung | Absender: nachprüfen
-abgelehnt | Empfänger, mit Begründung | Absender: nächste Runde; nach Runde 3 `eskaliert`
-beantwortet | Absender, nach der Freigabe | Absender: Antworten einarbeiten
-eskaliert | Absender, wenn nach Runde 3/3 eine weitere Runde nötig wäre | Stakeholder: entscheidet
-erledigt | Absender, wenn in Ordnung | niemand: `anliegenregeln/erledigteLoeschen.py` löscht die Datei
+Kritik | sein Artefakt berichtigen, es ist falsch oder veraltet | jede Rolle, Stakeholder
+Fragen | entscheiden | jede Rolle
+Auftrag | Neues umsetzen; er fragt nach, lehnt aber nicht ab | Stakeholder
+
+Je Runde (`## Runde <n>`) die Absätze `**Befund.**`, `**Kosten.**`, `**Gegenvorschlag.**`,
+`**Stellungnahme.**`, vor dem Punkt darf die Rolle in Klammern stehen; die Stellungnahme legt
+der Absender leer an. Eine Rückfrage steht in der Stellungnahme, die Antwort des Absenders
+darunter als `**Klärung.**`; beide kosten keine Runde. Unter jeder Frage an den Stakeholder
+(`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`; „.“ heißt bei `angenommen`: Die
+Empfehlung gilt. Mechanismus: nur Text.
+
+Der Status ist der letzte Zug; daraus folgt, wer dran ist.
+
+Zug | setzt | Status | dann dran
+---|---|---|---
+stellen, neue Runde, Klärung | Absender | offen | Empfänger
+nachfragen | Empfänger | rückfrage | Absender: klären
+umsetzen, beantworten | Empfänger | angenommen | Absender: nachprüfen
+widersprechen, Frage verwerfen | Empfänger, mit Begründung | abgelehnt | Absender: neue Runde oder `erledigt`
+nach Runde 3/3 weiter uneins | Absender | eskaliert | Stakeholder: entscheidet
+abschließen | Absender | erledigt | niemand: `anliegenregeln/erledigteLoeschen.py` löscht die Datei
+
+Ist der Stakeholder Empfänger oder Absender, steht unter dem Kopf die Legende, die der
+Absender beim Anlegen kopiert; der Stakeholder ersetzt den Status im Kopf durch einen Wert
+daraus:
+```
+Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
+```
+Die Moderation verlinkt Fragen, er antwortet im Anliegen; ihre Vorschläge korrigiert er mit
+einer Zeile `Kommentar:` darunter ([Moderator](../.claude/agents/moderator.md)). Mechanismus:
+nur Text.
 
 - Runde 3/3 ist die letzte: Der Zähler verhindert, dass zwei Rollen endlos diskutieren.
   Wäre danach eine weitere Runde nötig, setzt der Absender `eskaliert`; auch eine Hebung
@@ -254,24 +274,22 @@ erledigt | Absender, wenn in Ordnung | niemand: `anliegenregeln/erledigteLoesche
   `anliegenregeln/statusrecht.py` (Rollen senken keine Runde, ändern `eskaliert` nicht und setzen in
   Runde 3/3 nach `abgelehnt` nur `eskaliert` oder `erledigt`).
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
-  wenn jenes Anliegen erledigt ist; bis dahin endet seine Stellungnahme mit „wartet auf <nr>“.
+  wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `· wartet auf <nr>`.
   Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
   `anliegenregeln/statusrecht.py` (Write, Edit).
-- Wer `angenommen` oder `abgelehnt` setzt, schreibt in der letzten Runde eine Stellungnahme
-  mit Text: was umgesetzt ist und wo, oder die Begründung. Eine Stellungnahme in einer
-  früheren Runde zählt nicht. Mechanismus: nur Text, bis `anliegenregeln/statusrecht.py` sperrt (Anliegen
+- Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine
+  Stellungnahme mit Text: was umgesetzt ist und wo, die Begründung oder die Frage; dem
+  Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt nicht. Mechanismus: nur Text, bis `anliegenregeln/statusrecht.py` sperrt (Anliegen
   220).
 - Die Nummer ist eindeutig, der Absender eines Anliegens ändert sich nie; wer eine Nummer
   belegt vorfindet, nimmt die nächste freie. Mechanismus: `anliegenregeln/anliegennummer.py` (neue Datei),
   `anliegenregeln/statusrecht.py` (`absenderVerstoß`; Write, Edit).
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt
   `erledigt` selbst ein. Mechanismus: `standregeln/stand.py`.
-- Ein Anliegen an den Stakeholder mit Status `offen`, das im Commit der letzten Freigabe
-  (Betreff `Freigabe …`) schon in derselben Runde `offen` war, hat die Freigabe beantwortet:
-  Dran ist der Absender, er setzt `beantwortet` und arbeitet die Antworten ein. Notizen und
-  ersetzte Links ändern daran nichts, erst eine neue Runde des Absenders. Mechanismus:
-  `anliegenregeln/anliegen.py` (`beantwortetDurchFreigabe`, `wartetAuf`), `gemeinsam/gitAufruf.py` (`letzteFreigabe`).
+- Den Status eines Anliegens an ihn setzt der Stakeholder selbst; die Freigabe beantwortet
+  keine Frage. Mechanismus: nur Text; bis Anliegen 274 nennt der Stand nach einer Freigabe
+  noch den Absender (`anliegenregeln/anliegen.py`, `beantwortetDurchFreigabe`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `anliegenregeln/statusrecht.py` nicht, das Löschen schon. Mechanismus: `rollenregeln/bashPositivliste.py`, eine
   Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`). Sie erkennt keine Skripte

@@ -1,6 +1,6 @@
 # Prämisse: eine Aufgabe je Modul, Abhängigkeit in einer Richtung
 
-255 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · angenommen
+255 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 Wortlaut: `git show a82c85a:handoff/anliegen/255-praemisseAufgabeUndRichtung.md`.
@@ -59,6 +59,7 @@ Antwort: .
 
 **Stellungnahme.**
 
-**Nachprüfung (Organisationsentwickler).** Zwischenstand: [ich.md](../../prozess/praemissen/ich.md),
-[es.md](../../prozess/praemissen/es.md) (mit O, L, I), [wir.md](../../prozess/praemissen/wir.md),
-CLAUDE.md mit Import, Verweise umgestellt. Offen: Mechanismen an den Regelumsetzer, `.claude/rules/`.
+**Nachprüfung (Organisationsentwickler).** F1: `ich.md`, `es.md` (mit O, L, I), `wir.md`;
+Verweise zeigen auf `es.md`. F2: Import in CLAUDE.md, `.claude/rules/es.md`; die Verweise der
+Agentendefinitionen bleiben bis zur Messung. F3: meine Definition, `domaene/CLAUDE.md`.
+Rest: Anliegen 276. Erledigt.

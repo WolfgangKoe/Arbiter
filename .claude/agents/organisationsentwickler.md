@@ -7,6 +7,7 @@ schreibpfade:
   - prozess/
   - .claude/agents/
   - .claude/skills/
+  - .claude/rules/
   - CLAUDE.md
   - "*/CLAUDE.md"
   - doku/
@@ -39,4 +40,6 @@ und Schulden eindämmt.
 - Eine Rolle entsteht erst bei beobachtetem Bedarf. Was über mehrere Zyklen nie auslöst,
   kommt in die Retro.
 - Höchstmaße in Zeichen: Agentendefinition 2.500, Beschreibung 150, Ordner-CLAUDE.md 1.500,
-  Root-CLAUDE.md samt Ziel 4.000.
+  Root-CLAUDE.md samt Ziel 4.000, Prämisse 3.000.
+- Eine CLAUDE.md nennt Ziel, Perspektiven, Format und Höchstmaß der Dateien ihres Ordners
+  und Prinzipien mit Link; Regeln mit Mechanismus stehen in `prozess/` (Anliegen 255).

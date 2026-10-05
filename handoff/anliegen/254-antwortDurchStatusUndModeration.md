@@ -1,6 +1,6 @@
 # Antworten durch Status und in der Moderation
 
-254 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · beantwortet
+254 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 Wortlaut: `git show a82c85a:handoff/anliegen/254-antwortDurchStatusUndModeration.md`.
@@ -23,20 +23,9 @@ Rückfrage ist keine Form, sondern ein Zug, den alle brauchen; heute fehlt er. 2
 **Kosten.** Ohne Rückfrage bleibt nur `abgelehnt`; `angenommen` ist doppeldeutig; Antworten
 in der Moderation gehen verloren.
 
-**Gegenvorschlag.** Der Status ist der letzte Zug; daraus folgt, wer dran ist.
-
-Zug | setzt | Status | dran
----|---|---|---
-stellen, neue Runde, Klärung | Absender | offen | Empfänger
-nachfragen | Empfänger | rückfrage | Absender
-umsetzen, beantworten | Empfänger | angenommen | Absender: prüft nach
-widersprechen, Frage verwerfen | Empfänger | abgelehnt | Absender: Runde oder erledigt
-nach Runde 3/3 | Absender | eskaliert | Stakeholder
-abschließen | Absender | erledigt | niemand
-
-Felder: Kopf plus `· wartet auf <nr>`; je Runde wie heute, nach einer Rückfrage
-`**Klärung.**`. Bei `angenommen` gilt `Antwort: .` als Empfehlung. Dashboard: Spalten nach
-„dran“, Karte mit Nummer, Titel, Form, Runde, wartet auf.
+**Gegenvorschlag.** Der Status ist der letzte Zug; daraus folgt, wer dran ist. Züge, Felder
+und Legende stehen jetzt in [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen), die
+Dashboard-Sicht in Anliegen 275.
 
 **F1 · Welche Formen?**
 - A: Kritik, Fragen, Auftrag (nur von dir; Typ „Anliegen“ entfällt).
@@ -64,4 +53,9 @@ Antwort: .
 Empfehlung: A. Die Sicht zeigt, was du steuern willst.
 Antwort: .
 
-**Stellungnahme.** Bitte ergänze in Anliegen, die an mich adressiert sind oder mich in irgendeiner Art involvieren eine Art Legende, was ich hier setzen kann, damit ich die richtige Terminologie setzen kann und dann nur durch kopieren und einfügen, den Status setzen kann. Im Dashboard kann man das durch einen Button einfach umstellen. 
+**Stellungnahme.** Bitte ergänze in Anliegen, die an mich adressiert sind oder mich in irgendeiner Art involvieren eine Art Legende, was ich hier setzen kann, damit ich die richtige Terminologie setzen kann und dann nur durch kopieren und einfügen, den Status setzen kann. Im Dashboard kann man das durch einen Button einfach umstellen.
+
+**Einarbeitung (Organisationsentwickler).** F1 bis F3 und die Legende:
+[Ablauf, Anliegen](../../prozess/ablauf.md#anliegen), [Moderator](../../.claude/agents/moderator.md).
+F4: Sicht in Anliegen 275; den Knopf lese ich als nächsten Schritt nach der Sicht, er steht im
+[Backlog](../../prozess/backlog.md). Prüfungen: Anliegen 274. Erledigt. 

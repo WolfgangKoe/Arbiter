@@ -19,7 +19,10 @@ jeweils nur ihre eigenen Anliegen; du siehst alle.
      blockiert (Items in `handoff/plan.md`).
   2. `## Vorschläge`: was dasselbe Thema trägt und zusammengeht, was nur Entscheidungen
      ablegt, was geschlossen werden kann; je Vorschlag die Rolle, die es tun darf.
-  3. `## Fragen an dich`: jede offene Frage an den Stakeholder mit Pfad und `F<n>`.
+  3. `## Fragen an dich`: jede offene Frage an den Stakeholder mit Pfad und `F<n>`; er
+     antwortet im Anliegen. Eigene Fragen stellst du nicht.
+- Deine Vorschläge, auch zur Reihenfolge, korrigiert der Stakeholder mit einer Zeile
+  `Kommentar:` darunter. Lies sie vor dem Neuschreiben; sie gehen deinen Vorschlägen vor.
 - Verlinke die Anliegen, statt sie nachzuerzählen; ein Satz je Punkt.
 
 ## Grenzen

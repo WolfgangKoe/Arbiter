@@ -6,7 +6,8 @@ Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zykl
 - Höchstmaße in `formregeln/hoechstmassTest.py`: Code-Modul 12.000 (auch `conftest.py`,
   Anliegen 251), Einheitstest-Datei 8.000; vorher `kriterienregeln/rueckverfolgung.py` (114 B 7), `kriterienregeln/rueckverfolgungTest.py` und
   `standregeln/standTest.py` teilen (Retro 2, Befund 4).
-- `standregeln/kennzahlen.py` rechnet die Prozesslast.
+- `standregeln/kennzahlen.py` rechnet die Prozesslast; Gesamtmaß für `prozess/pruefungen/`,
+  damit Löschen wie Hinzufügen zählt (Anliegen 107).
 - Anliegen 114 (Prüfskripte ordnen) und 139 (Sandbox, nach der Entscheidung des Stakeholders).
 
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Retro 3, oder eine Regel
@@ -20,6 +21,8 @@ Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zykl
   zugleich (`standregeln/stand.py`); jedes JSON-Beispiel des Vertrags steht in einem Test
   beider Hälften. Auslöser: der des Frontend-Implementierers
   ([Ablauf](ablauf.md#rollen-mit-auslöser)).
+- Knöpfe im Dashboard für die Züge des Stakeholders (Anliegen 254, braucht einen lokalen
+  Server). Auslöser: Die Sicht aus Anliegen 275 steht.
 - Skills `anforderung-schreiben`, `regel-nachschlagen`, `improve` (E19, E30). Auslöser: dieselbe
   Kritik an derselben Art Artefakt zweimal.
 - Update der SonarLint-Erweiterung (heute 6.0.1): VS Code meldet wiederholt, JSON-Dateien
