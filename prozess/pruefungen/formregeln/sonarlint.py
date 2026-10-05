@@ -31,6 +31,17 @@ abgeschalteteRegeln = (
     "python:S1578",
 )
 
+# Warum: In `web/` sind beide Funde unbegründet (nur GET-Routen, nur `127.0.0.1`, Anliegen 261).
+# Warum: Ausgenommen sind Datei und Regel, nicht der Ordner.
+ausnahmen = (
+    ("technik/arbiter/web/anwendung.py", "python:S4502"),
+    ("technik/arbiter/web/server.py", "python:S5332"),
+)
+
+
+def istAusgenommen(ordner: Path, datei: Path, regel: str) -> bool:
+    return (datei.relative_to(ordner).as_posix(), regel) in ausnahmen
+
 
 def version(ordner: Path) -> str:
     """Feld `version` aus `package.json` der Erweiterung."""
@@ -223,6 +234,8 @@ class Sitzung:
         if self.erwartet is None or parameter["uri"] != self.erwartet.as_uri():
             return
         for diagnose in parameter["diagnostics"]:
+            if istAusgenommen(self.ordner, self.erwartet, diagnose["code"]):
+                continue
             self.funde.append(fundText(self.ordner, self.erwartet, diagnose))
         self.erwartet = None
         self.bereit = True

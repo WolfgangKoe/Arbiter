@@ -87,6 +87,30 @@ def testDieNamensregelnDesProfilsSindAus():
     assert "python:S117" in abgeschalteteRegeln
 
 
+def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(
+    monkeypatch, tmp_path
+):
+    # Regel: Anliegen 261, S5332 ist nur in `server.py` unter `web/` ausgenommen
+    ausgenommen = tmp_path / "server.py"
+    anderswo = tmp_path / "anderswo.py"
+    for datei in (ausgenommen, anderswo):
+        datei.write_text('gerät = "x"\nadresse = f"http://{gerät}/"\n', encoding="utf-8")
+    ohneAusnahme = funde(tmp_path, [ausgenommen, anderswo])
+    assert any(fund.startswith("server.py:") for fund in ohneAusnahme)
+    assert all("python:S5332" in fund for fund in ohneAusnahme)
+    monkeypatch.setattr(sonarlint, "ausnahmen", (("server.py", "python:S5332"),))
+    mitAusnahme = funde(tmp_path, [ausgenommen, anderswo])
+    assert mitAusnahme
+    assert all(fund.startswith("anderswo.py:") for fund in mitAusnahme)
+
+
+def testDieAusnahmenGeltenNurFürWebUndZweiRegeln():
+    assert set(sonarlint.ausnahmen) == {
+        ("technik/arbiter/web/anwendung.py", "python:S4502"),
+        ("technik/arbiter/web/server.py", "python:S5332"),
+    }
+
+
 def testDerFundNenntPfadZeileRegelUndMeldung(tmp_path):
     datei = tmp_path / "a.py"
     diagnose = {"range": {"start": {"line": 6}}, "code": "python:S1", "message": "Text"}

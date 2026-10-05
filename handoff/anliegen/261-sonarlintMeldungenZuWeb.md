@@ -1,6 +1,6 @@
 # SonarLint-Meldungen zu web/
 
-261 · Kritik · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · offen
+261 · Kritik · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `formregeln.sonarlint` endet mit Exit 0, meldet aber drei Hinweise zu `web/`:
@@ -13,4 +13,6 @@ nur für `127.0.0.1` ([Web](../../technik/architektur/web.md), W5).
 **Gegenvorschlag.** Entscheide, ob SonarLint diese beiden Regeln für `web/` ausnimmt oder die
 Hinweise gelten. Erledigt, wenn der Lauf sie nicht mehr meldet oder dokumentiert ist, warum sie bleiben.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: SonarLint nimmt die drei Funde aus, je Datei und Regel, nicht den Ordner `web/`
+(`ausnahmen` in `prozess/pruefungen/formregeln/sonarlint.py`, Begründung dort und in [Regeln](../../prozess/regeln.md)).
+Scheiter-Test: `formregeln/sonarlintTest.py` (dieselbe Regel in einer anderen Datei bleibt ein Fund).
