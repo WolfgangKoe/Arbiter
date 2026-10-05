@@ -1,36 +1,44 @@
 # Moderation
 
-Stand: Zyklus 3, Technikphase, 36 offene Anliegen; [Review 3](review.md) wartet auf Freigabe.
+Stand: Zyklus 3, Prozessphase, 39 Anliegen-Dateien; nächster Schritt Retro 3.
 
 ## Dran
-Blockiert das Inkrement: nichts mehr. Von der DoD fehlt nur „Mockup gelöscht“, es hängt an
-[262](anliegen/262-komponentenseiteOhnePruefung.md); Plan 4 baut auf dessen Ergebnis.
-- Regelumsetzer (30): [253](anliegen/253-pruefskripteSolidUndLesbar.md) Punkte 1, 2, 5, 7;
-  [240](anliegen/240-codekritikFuerFrontend.md) Runde 2; 262, 265, 267, 268, 270; 272 bis 276, 278;
-  danach 215, 216, 218, 220, 221, 228 bis 232, 247, 249, 202 bis 206.
-- Organisationsentwickler: 107, 138, 150, 219 (je wartet auf Regelumsetzer-Arbeit, siehe unten); in
-  240 den Vermerk „nur Text“ im Ablauf streichen.
-- Stakeholder nachprüfen: [153](anliegen/153-frontendBackendUndDatenbank.md),
-  [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md). Bei 246 steht Status `angenommen`,
-  die Stellungnahme sagt aber „Ich warte auf Umsetzung“: erst prüfen, ob umgesetzt ist.
-- Architekt, Reviewer, Testautor, Anforderungsautor: nichts offen.
+Blockiert das Inkrement: nichts. Plan 4 baut auf der Komponentenseite aus
+[262](anliegen/262-komponentenseiteOhnePruefung.md) auf; dessen Nachprüfung ist fällig.
+- Organisationsentwickler: Retro 3; [282](anliegen/282-schichtenInEsUndAblauf.md); 107 (Antwort des
+  Stakeholders: noch keine Reaktion), 150 (Antwort: SonarLint scharfstellen), 138, 219.
+- Regelumsetzer (27): 253 Punkte 5, 7; 240 Runde 2; 268; 272 bis 276, 278; 281; 246, 247, 249;
+  215, 216, 218, 220, 221, 228 bis 232; 202 bis 206.
+- Architekt: Nachprüfung 262, 265. Reviewer: Nachprüfung 270, 279; Kritik an 9d6514a.
+- Stakeholder: Fragen unten. Testautor, Anforderungsautor, Planer: nichts offen.
 
 ## Vorschläge
-Reihenfolge Regelumsetzer (deine Vorgaben zuerst, dann meine):
-1. 253 Punkte 1, 2, 5, 7, je ein Lauf, je ein Commit (Stakeholder).
-2. 240 Runde 2 (Stakeholder).
-3. [272](anliegen/272-einzelstellenLassenGegenbeispieleDurch.md): Kritik am Teilstand von 253
-   (Punkte 3, 4); gleiche Dateien, kurz nach 253, bevor weitere Module wandern.
-4. 262, dann 268 (Teil c von 262 sieht die Klassen), 265, 267, 270. 262 hält die Mockups.
-5. [278](anliegen/278-schreibgrenzeMeldetNurDerRolle.md), [273](anliegen/273-pushNurNachDevJeZyklus.md),
-   [274](anliegen/274-anliegenZuegeUndLegende.md): sie fassen Kopf und Züge der Anliegen an;
-   dann 276, dann 275 und 246 in einem Lauf (beide `dashboard.py`), 275 nutzt die Köpfe aus 274.
-6. 215, 216, 218, 220, 221; 229+232, 231+247, 228+230, 249; zuletzt 202 bis 206 (204 mit 205).
-Zusammen: 231, 232, 247 (`konfigurationTest.py`); 275 und 246.
-Schließen (Organisationsentwickler): 107 und 226 nach 253 (Neubewertung steht in 253); 138 nach 215;
-219 nach 220. Anliegen 277 ist erledigt, die Datei darf
-weg. 246 trägt noch den Typ `Anliegen`; 274 Punkt 1 deckt das.
+Stränge nach [Ablauf, Gleichzeitige Läufe](../prozess/ablauf.md#gleichzeitige-läufe). Vor jedem
+Start `git status` gegen die Dateien des Nachbarn prüfen.
+
+Regelumsetzer, drei Stränge gleichzeitig:
+1. Kette (Hook-Code, höchstens ein Lauf): 253 P5 → P7 → 281 → 272 → 278 → 273 → 274 → 276 (nach
+   268) → 275 mit 246; danach 215, 218, 220 (ebenfalls Hooks).
+   281 und 272 prüfen beide die Schichten; ein Lauf, wenn die Dateien dieselben sind.
+2. Linter, kein Hook: 268 (`eslint.config.mjs`, `frontendTest.py`; Schreibpfad hängt an F2 in 279),
+   240 Runde 2 (Status klären, Commit 973cb7b liegt vor). 276 wartet auf 268.
+3. Prüfskript-Werkzeug, kein Hook: 229 mit 232, dann 231 mit 247 (`konfigurationTest.py`), 228 mit
+   230, 249; daneben 221 und 202 bis 206 (204 mit 205), solange ihre Dateien frei sind. 216 erst
+   nach der Kette.
+
+Reviewer: Nachprüfung 270, 279 und Kritik 9d6514a gleichzeitig (nur Anliegen); danach je Lauf der
+Kette Kritik am Code. 279 wartet auf F1, F2.
+Architekt: Nachprüfung 262, 265 gleichzeitig mit allen anderen; später Kritik an
+Linter-Konfiguration aus Strang 2.
+Organisationsentwickler: Retro 3 (`retro.md`) und 282 (`ablauf.md`, `es.md`) gleichzeitig, Dateien
+getrennt. 282 deckt dieselben Pfadzeilen wie [281](anliegen/281-schichtenLassenKreiseUndUnterordnerDurch.md)
+Befund 1 und 2 in `regeln.md`; das Anliegen trägt je Rolle ihre Datei. Schließen: 107, 226 nach
+253; 138 nach 215; 219 nach 220; 150 nach 216 und Antwort auf 280.
+Ablegen: 267 ist erledigt, die Datei geht von selbst. 153 ist gelöscht und nicht mehr offen.
 
 ## Fragen an dich
-Keine offen. Ich habe keine Datei mit offener `F<n>` gefunden; 153 F1 ist mit „.“ beantwortet.
-Zur Freigabe von Review 3: Review nennt zwei Ausnahmen für `web/` (270); sie gelten bis 270 erledigt ist.
+- [279](anliegen/279-gleicheRolleParallel.md) F1: Worktree je Lauf jetzt (Empfehlung: nein).
+- 279 F2: darf der Regelumsetzer `eslint.config.mjs`, `.stylelintrc.json`, `package.json`,
+  `package-lock.json` schreiben (Empfehlung: ja); blockiert 268 und 276.
+- [280](anliegen/280-sonarlintPrueftNurPython.md) F1: soll `sonarlint.py` das Frontend prüfen
+  (Empfehlung: nein, Node ≥ 22.12 wäre Voraussetzung).
