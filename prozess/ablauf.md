@@ -16,11 +16,11 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
    Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](#freigabe-und-kommentare)).
    Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
    `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme (Technikphase,
-   Schritt 5). Mechanismus: `standregeln/plan.py` (`itemsOhneLink`), `standregeln/stand.py` nennt
+   Schritt 5). Mechanismus: `lesen/plan.py` (`itemsOhneLink`), `standregeln/stand.py` nennt
    den Planer, solange der Link fehlt. Jedes Item nennt Kriterien ohne Test (`AUF-1.4`)
    oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
    den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
-   Mechanismus für 4 und diesen Satz: `standregeln/stand.py` (`domänenphase`, `planOhneFreigabe`).
+   Mechanismus für 4 und diesen Satz: `standregeln/phasenfolge.py` (`domänenphase`, `planOhneFreigabe`).
 6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests. Am
    Mockup: Fachkritiker (gegen die Kriterien), Architekt (nur vorhandene Komponenten).
 7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
@@ -170,8 +170,8 @@ Kommentar: .
 - Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
   unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Zu anderen Dateien
   kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:`. Er gibt frei mit
-  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: `anliegenregeln/statusrecht.py` (Write, Edit),
-  `rollenregeln/bashPositivliste.py` (`istFreigabeArtefakt`, Heuristik wie bei Anliegen).
+  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: `anliegenregeln/freigabeSperre.py` (Write, Edit),
+  `rollenregeln/bashPositivliste.py` mit `pfadsperren.py` (`istFreigabeArtefakt`, Heuristik wie bei Anliegen).
 - Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
   wo>`. Betrifft der Kommentar ein fremdes Artefakt oder braucht er eine Entscheidung, wird
@@ -182,7 +182,7 @@ Kommentar: .
   Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
   Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
   Datei danach wieder vor. Mechanismus: `standregeln/stand.py` nennt den Commit als nächsten Schritt;
-  nur bei `Freigabe: ja` committen: `rollenregeln/bashPositivliste.py` (`freigabeCommitVerstoß`), ohne
+  nur bei `Freigabe: ja` committen: `rollenregeln/freigabeCommit.py` (`freigabeCommitVerstoß`), ohne
   `-C`, `--reuse-message` und `-F` ([regeln.md](regeln.md)).
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
@@ -284,7 +284,7 @@ nur Text.
   wählt dann der Stakeholder. Er schreibt seine Entscheidung ins Anliegen: zurück auf
   `Runde 1/3 · offen` oder eine andere Anweisung. Die Runde senkt und `eskaliert` ändert nur
   er; mit seiner Entscheidung setzt er auch den Kopf, sonst bleibt er dran. Mechanismus:
-  `anliegenregeln/anliegen.py` (Runde höchstens 3, bei `eskaliert` ist der Stakeholder dran),
+  `anliegenregeln/anliegen.py` (Runde höchstens 3), `anliegenregeln/anliegenDran.py` (bei `eskaliert` ist der Stakeholder dran),
   `anliegenregeln/statusrecht.py` (Rollen senken keine Runde, ändern `eskaliert` nicht und setzen in
   Runde 3/3 nach `abgelehnt` nur `eskaliert` oder `erledigt`).
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
@@ -303,7 +303,7 @@ nur Text.
   `erledigt` selbst ein. Mechanismus: `standregeln/stand.py`.
 - Den Status eines Anliegens an ihn setzt der Stakeholder selbst; die Freigabe beantwortet
   keine Frage. Mechanismus: nur Text; bis Anliegen 274 nennt der Stand nach einer Freigabe
-  noch den Absender (`anliegenregeln/anliegen.py`, `beantwortetDurchFreigabe`).
+  noch den Absender (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `anliegenregeln/statusrecht.py` nicht, das Löschen schon. Mechanismus: `rollenregeln/bashPositivliste.py`, eine
   Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`). Sie erkennt keine Skripte
@@ -322,7 +322,7 @@ nur Text.
 ## Budget
 Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und
 jede Rolle; der Stand zeigt sie. Die Zahl der Rollenläufe ist weder Budget noch Kennzahl.
-Mechanismus: `rollenregeln/belegung.py`; der Stand nennt keine Rollenläufe (`standregeln/standTest.py`).
+Mechanismus: `standregeln/belegung.py`; der Stand nennt keine Rollenläufe (`standregeln/standTest.py`).
 - Ab 120.000 Token meldet ein Hook; die Rolle beginnt nichts Neues und schließt ab, der
   Koordinator empfiehlt einen neuen Chat.
 - Ab 150.000 Token sperrt ein Hook alles außer Schreiben im eigenen Pfad und der
