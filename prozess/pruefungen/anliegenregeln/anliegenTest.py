@@ -6,7 +6,7 @@ import pytest
 from anliegenregeln.anliegen import kopfVerstöße
 from anliegenregeln.anliegenDran import dran, nachprüfungen
 from gemeinsam.pfade import wurzel
-from lesen.anliegenKopf import anliegenDateien, kopfLesen
+from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
 
 guterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
 
@@ -191,3 +191,11 @@ def testOhneFreigabeInGitBleibtDerStakeholderDran(tmp_path):
     stakeholderFragen(tmp_path)
     committen(tmp_path, "Fragen")
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
+
+
+def testStatusIstEinWertDerAufzählungUnbekannterBleibtText(tmp_path):
+    bekannt = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    assert kopfLesen(bekannt).status is Status.offen
+    unbekannt = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf.replace("offen", "fertig"))
+    assert kopfLesen(unbekannt).status == "fertig"
+    assert not isinstance(kopfLesen(unbekannt).status, Status)

@@ -3,6 +3,7 @@
 import html
 import statistics
 
+from rollenregeln.laufLesen import Lauf
 from standregeln.belegung import sperrschwelle, warnschwelle
 
 klassenbreite = 25_000
@@ -73,13 +74,13 @@ def säule(nummer: int, beschriftung: str, belegung: int, klasse: str) -> str:
     )
 
 
-def säulenListe(läufe: list[dict]) -> list[tuple[str, int, str]]:
-    stände = [lauf["koordinator"] for lauf in läufe if lauf.get("koordinator")]
+def säulenListe(läufe: list[Lauf]) -> list[tuple[str, int, str]]:
+    stände = [lauf.koordinator for lauf in läufe if lauf.koordinator]
     liste = [("Koordinator", stände[-1], "orchestrator")] if stände else []
-    return liste + [(lauf["rolle"], lauf["belegung"], stufe(lauf["belegung"])) for lauf in läufe]
+    return liste + [(lauf.rolle, lauf.belegung, stufe(lauf.belegung)) for lauf in läufe]
 
 
-def säulendiagramm(läufe: list[dict]) -> str:
+def säulendiagramm(läufe: list[Lauf]) -> str:
     säulen = säulenListe(läufe)
     breite = randLinks + säulenabstand + len(säulen) * (säulenbreite + säulenabstand)
     gesamt = randOben + diagrammhöhe + randUnten
@@ -95,8 +96,8 @@ def säulendiagramm(läufe: list[dict]) -> str:
     )
 
 
-def histogramm(läufe: list[dict]) -> str:
-    werte = [lauf["belegung"] for lauf in läufe]
+def histogramm(läufe: list[Lauf]) -> str:
+    werte = [lauf.belegung for lauf in läufe]
     klassen = int(achsenhöhe // klassenbreite) + 1
     anzahl = [0] * klassen
     for wert in werte:

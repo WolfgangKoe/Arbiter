@@ -2,8 +2,14 @@
 
 import subprocess
 from pathlib import Path
+from typing import NamedTuple
 
 from gemeinsam.pfade import relativZurWurzel
+
+
+class Freigabe(NamedTuple):
+    kennung: str
+    betreff: str
 
 
 def gitAusgabe(wurzel: Path, *argumente: str) -> str:
@@ -12,21 +18,21 @@ def gitAusgabe(wurzel: Path, *argumente: str) -> str:
     ).stdout
 
 
-def freigaben(wurzel: Path) -> list[tuple[str, str]]:
+def freigaben(wurzel: Path) -> list[Freigabe]:
     """Kennung und Betreff aller Commits mit Betreff `Freigabe …`, jüngster zuerst."""
     gefunden = []
     for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
         kennung, _, betreff = zeile.partition(" ")
         if betreff.startswith("Freigabe "):
-            gefunden.append((kennung, betreff))
+            gefunden.append(Freigabe(kennung, betreff))
     return gefunden
 
 
 def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
     """Der Commit mit der Betreffzeile `Freigabe <gegenstand> <nummer>`, sonst `None`."""
-    for kennung, betreff in freigaben(wurzel):
-        if betreff == f"Freigabe {gegenstand} {nummer}":
-            return kennung
+    for freigabe in freigaben(wurzel):
+        if freigabe.betreff == f"Freigabe {gegenstand} {nummer}":
+            return freigabe.kennung
     return None
 
 
@@ -38,16 +44,16 @@ def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
 def letzteFreigabe(wurzel: Path) -> str | None:
     """Der jüngste Commit `Freigabe …`, sonst `None`."""
     alle = freigaben(wurzel)
-    return alle[0][0] if alle else None
+    return alle[0].kennung if alle else None
 
 
 def letzteFreigabeOhneReview(wurzel: Path) -> str | None:
     """Der jüngste Commit `Freigabe …` außer `Freigabe Review …`, sonst `None`."""
     # Warum: Die Freigabe des Reviews schließt keine Kritik am Code ab; das Fenster bleibt offen.
     alle = [
-        kennung
-        for kennung, betreff in freigaben(wurzel)
-        if not betreff.startswith("Freigabe Review ")
+        freigabe.kennung
+        for freigabe in freigaben(wurzel)
+        if not freigabe.betreff.startswith("Freigabe Review ")
     ]
     return alle[0] if alle else None
 

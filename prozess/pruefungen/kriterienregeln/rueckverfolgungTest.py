@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from gemeinsam.pfade import wurzel
-from kriterienregeln.kriterium import getesteKriterien, kriterien
+from kriterienregeln.kriterium import Kriterium, getesteKriterien, kriterien
 from kriterienregeln.rueckverfolgung import (
     fehlendeTests,
     hauptprogramm,
@@ -332,3 +332,8 @@ def testSammeldateiOhneKennungsTestIstOhneAnforderungGrün(tmp_path):
     test.parent.mkdir(parents=True)
     test.write_text("def hilfe(): ...\n", encoding="utf-8")
     assert verstöße(tmp_path) == []
+
+
+def testKriteriumNenntKennungUndAnforderung():
+    kriterium = Kriterium("AUF", 1, 4)
+    assert (kriterium.kennung, kriterium.anforderung) == ("AUF-1.4", ("AUF", 1))

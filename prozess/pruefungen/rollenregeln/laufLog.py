@@ -8,7 +8,7 @@ from pathlib import Path
 from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
 from gemeinsam.pfade import projektordner
 from rollenregeln.dashboard import dashboardSchreiben
-from rollenregeln.laufLesen import eintragAusZeile, logPfad
+from rollenregeln.laufLesen import Lauf, eintragAusZeile, logPfad
 from standregeln.belegung import belegungAusTranskript, eigenesTranskript
 
 zielLänge = 80
@@ -112,7 +112,7 @@ def koordinatorStand(eingabe: HookEingabe) -> int | None:
     return belegungAusTranskript(haupt) if eingabe.agentId and haupt else None
 
 
-def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> dict | None:
+def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> Lauf | None:
     """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
     rolle = eingabe.rolle
     transkript = eigenesTranskript(eingabe)
@@ -122,27 +122,27 @@ def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> dict | No
     einträge = transkriptEinträge(transkript)
     ziel, modell = zielUndModell(einträge)
     zyklus, phase = zyklusUndPhase(ordner)
-    return {
-        "zeit": zeit.isoformat(timespec="seconds"),
-        "rolle": rolle,
-        "agent_id": eingabe.agentId,
-        "sitzung": eingabe.sitzung,
-        "belegung": belegung,
-        "ziel": ziel,
-        "modell": modell,
-        "koordinator": koordinatorStand(eingabe),
-        "dauer": dauerSekunden(einträge),
-        "zyklus": zyklus,
-        "phase": phase,
-        "stopp_wiederholt": eingabe.stoppWiederholt,
-    }
+    return Lauf(
+        zeit=zeit.isoformat(timespec="seconds"),
+        rolle=rolle,
+        belegung=belegung,
+        agentId=eingabe.agentId,
+        sitzung=eingabe.sitzung,
+        ziel=ziel,
+        modell=modell,
+        koordinator=koordinatorStand(eingabe),
+        dauer=dauerSekunden(einträge),
+        zyklus=zyklus,
+        phase=phase,
+        stoppWiederholt=eingabe.stoppWiederholt,
+    )
 
 
-def eintragAnhängen(wurzel: Path, eintrag: dict) -> None:
+def eintragAnhängen(wurzel: Path, lauf: Lauf) -> None:
     datei = logPfad(wurzel)
     datei.parent.mkdir(parents=True, exist_ok=True)
     with datei.open("a", encoding="utf-8") as ziel:
-        ziel.write(json.dumps(eintrag, ensure_ascii=False) + "\n")
+        ziel.write(json.dumps(lauf.alsEintrag(), ensure_ascii=False) + "\n")
 
 
 def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:

@@ -1,21 +1,22 @@
 """Gruppiert die Läufe des Logs nach Sitzung und Rolle und benennt die Sitzungen."""
 
+from rollenregeln.laufLesen import Lauf
+
 ohneSitzung = "ohne Sitzung"
 
 
-def nachSitzung(läufe: list[dict]) -> dict[str, list[dict]]:
-    gruppen: dict[str, list[dict]] = {}
+def nachSitzung(läufe: list[Lauf]) -> dict[str, list[Lauf]]:
+    gruppen: dict[str, list[Lauf]] = {}
     for lauf in läufe:
-        kennung = lauf.get("sitzung")
-        gruppen.setdefault(kennung[:8] if kennung else ohneSitzung, []).append(lauf)
+        gruppen.setdefault(lauf.sitzung[:8] if lauf.sitzung else ohneSitzung, []).append(lauf)
     return gruppen
 
 
-def sitzungsTitel(sitzung: str, läufe: list[dict]) -> str:
+def sitzungsTitel(sitzung: str, läufe: list[Lauf]) -> str:
     """„Zyklus 3 Prozessphase“; wechselt die Sitzung die Phase, „Zyklus 3 Domänenphase bis …“."""
     if sitzung == ohneSitzung:
         return f"Altbestand, {ohneSitzung}"
-    benannt = [(lauf["zyklus"], lauf["phase"]) for lauf in läufe if lauf.get("zyklus")]
+    benannt = [(lauf.zyklus, lauf.phase) for lauf in läufe if lauf.zyklus]
     if not benannt:
         return f"Sitzung {sitzung} (vor Zyklus und Phase im Log)"
     (zyklusVon, phaseVon), (zyklusBis, phaseBis) = benannt[0], benannt[-1]
@@ -28,8 +29,8 @@ def sitzungsTitel(sitzung: str, läufe: list[dict]) -> str:
     return name
 
 
-def belegungNachRolle(läufe: list[dict]) -> dict[str, list[int]]:
+def belegungNachRolle(läufe: list[Lauf]) -> dict[str, list[int]]:
     nachRolle: dict[str, list[int]] = {}
     for lauf in läufe:
-        nachRolle.setdefault(lauf["rolle"], []).append(lauf["belegung"])
+        nachRolle.setdefault(lauf.rolle, []).append(lauf.belegung)
     return nachRolle

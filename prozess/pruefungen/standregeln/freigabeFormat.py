@@ -8,6 +8,7 @@ from gemeinsam.pfade import handoffOrdner
 from lesen.artefakt import Artefakt, artefakte, artefaktVon, pfadDer
 from lesen.plan import zyklus
 from standregeln.freigabeKommentare import (
+    Abschnitt,
     abschnitte,
     freigabeAbschnitt,
     freigabeZeilen,
@@ -19,8 +20,8 @@ vorgehenAbschnitt = "Nächstes Vorgehen"
 vorgehenPunkte = ("Produktziel", "Etappenziel", "Zyklusziel")
 
 
-def vorgehenVerstoß(teile: list[tuple[str, list[str]]]) -> str | None:
-    texte = ["\n".join(inhalt) for titel, inhalt in teile if titel == vorgehenAbschnitt]
+def vorgehenVerstoß(teile: list[Abschnitt]) -> str | None:
+    texte = ["\n".join(teil.zeilen) for teil in teile if teil.titel == vorgehenAbschnitt]
     if not texte:
         return f"Abschnitt `## {vorgehenAbschnitt}` fehlt"
     fehlend = [punkt for punkt in vorgehenPunkte if punkt not in texte[0]]
@@ -29,7 +30,7 @@ def vorgehenVerstoß(teile: list[tuple[str, list[str]]]) -> str | None:
 
 def formatVerstoß(zeilen: list[str], artefakt: Artefakt) -> str | None:
     teile = abschnitte(zeilen)
-    if [titel for titel, _ in teile][-1:] != [freigabeAbschnitt]:
+    if [teil.titel for teil in teile][-1:] != [freigabeAbschnitt]:
         return "endet nicht mit `## Freigabe`"
     felder = [zeile for zeile in freigabeZeilen(zeilen) if zeile.startswith("Freigabe:")]
     if len(felder) != 1 or not freigabeFeld.match(felder[0]):

@@ -7,9 +7,12 @@ from anliegenregeln.anliegenNummern import nächsteFreieNummer
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import anliegenOrdner, projektordner
 from gemeinsam.schreibvorgang import bisherigerInhalt, neuerInhalt, schreibZiel
-from lesen.anliegenKopf import Anliegen, höchstRunde, kopfAusText
+from lesen.anliegenKopf import Anliegen, Status, höchstRunde, kopfAusText
 
-letzteRunde = "Runde 3/3 ist die letzte; setze `eskaliert`, der Stakeholder entscheidet."
+letzteRunde = (
+    f"Runde {höchstRunde}/{höchstRunde} ist die letzte; "
+    "setze `eskaliert`, der Stakeholder entscheidet."
+)
 
 
 def entscheide(daten: dict, wurzel: Path) -> dict | None:
@@ -48,9 +51,9 @@ def absenderVerstoß(alt: Anliegen | None, neu: Anliegen, freieNummer: int) -> s
 
 
 def erledigtVerstoß(alt: Anliegen | None, neu: Anliegen, rolle: str) -> str | None:
-    if neu.status != "erledigt" or neu.absender.lower() == rolle.lower():
+    if neu.status != Status.erledigt or neu.absender.lower() == rolle.lower():
         return None
-    if alt is not None and alt.status == "erledigt":
+    if alt is not None and alt.status == Status.erledigt:
         return None
     return (
         f"setzt auf `erledigt` nur der Absender ({neu.absender}), nicht {rolle}. "
@@ -63,15 +66,21 @@ def rundenVerstoß(alt: Anliegen | None, neu: Anliegen) -> str | None:
     if alt is None:
         return None
     if neu.runde < alt.runde:
-        return f"senkt die Runde von {alt.runde}/3 auf {neu.runde}/3. {letzteRunde}"
-    if alt.status == "eskaliert" and neu.status != "eskaliert":
+        return (
+            f"senkt die Runde von {alt.runde}/{höchstRunde} auf {neu.runde}/{höchstRunde}. "
+            f"{letzteRunde}"
+        )
+    if alt.status == Status.eskaliert and neu.status != Status.eskaliert:
         return f"ändert `eskaliert` zu `{neu.status}`. Der Stakeholder entscheidet."
     if (
         alt.runde == höchstRunde
-        and alt.status == "abgelehnt"
-        and neu.status not in ("abgelehnt", "eskaliert", "erledigt")
+        and alt.status == Status.abgelehnt
+        and neu.status not in (Status.abgelehnt, Status.eskaliert, Status.erledigt)
     ):
-        return f"setzt in Runde 3/3 nach `abgelehnt` `{neu.status}`. {letzteRunde}"
+        return (
+            f"setzt in Runde {höchstRunde}/{höchstRunde} nach `abgelehnt` "
+            f"`{neu.status}`. {letzteRunde}"
+        )
     return None
 
 

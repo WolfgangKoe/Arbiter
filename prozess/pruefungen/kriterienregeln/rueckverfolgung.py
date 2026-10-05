@@ -8,13 +8,11 @@ from typing import NamedTuple
 from gemeinsam.pfade import akzeptanzOrdner, anforderungsOrdner, projektordner
 from kriterienregeln.kriterium import (
     Anforderungsnummer,
-    Kriteriumsnummer,
+    Kriterium,
     anforderungenMitZeile,
     anforderungKennung,
-    anforderungVon,
     doppelte,
     getesteKriterien,
-    kennung,
     kriterien,
     kriterienMitZeile,
     pfadVon,
@@ -27,19 +25,19 @@ class Fehlend(NamedTuple):
     """Ein Kriterium ohne Test oder eine Anforderung ohne Testdatei, mit allen ihren Kriterien."""
 
     kennung: str
-    kriterien: set[Kriteriumsnummer]
+    kriterien: set[Kriterium]
 
 
 class Zuordnung(NamedTuple):
     anforderung: Anforderungsnummer
     testdatei: Path
-    verlangt: set[Kriteriumsnummer]
+    verlangt: set[Kriterium]
 
 
 def anforderungenDerDatei(anforderungsdatei: Path) -> list[Anforderungsnummer]:
     """Die Anforderungen der Datei, auch die, von denen nur Kriterien da sind."""
     gefunden = {anforderung for anforderung, _ in anforderungenMitZeile(anforderungsdatei)}
-    gefunden |= {anforderungVon(kriterium) for kriterium in kriterien(anforderungsdatei)}
+    gefunden |= {kriterium.anforderung for kriterium in kriterien(anforderungsdatei)}
     return sorted(gefunden)
 
 
@@ -54,14 +52,14 @@ def einzeldateiZu(wurzel: Path, anforderungsdatei: Path, anforderung: Anforderun
     return wurzel / akzeptanzOrdner / pfad / f"{kürzel.lower()}{nummer}Test.py"
 
 
-def nennt(text: str, kriterium: Kriteriumsnummer) -> bool:
+def nennt(text: str, kriterium: Kriterium) -> bool:
     """Der Text nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     kürzel, haupt, unter = kriterium
     muster = rf"\b{kürzel}-{haupt}(?:\.{unter}(?!\d)|(?!\d)(?!\.\d))"
     return re.search(muster, text) is not None
 
 
-def umfasst(itemTexte: list[str], kriterium: Kriteriumsnummer) -> bool:
+def umfasst(itemTexte: list[str], kriterium: Kriterium) -> bool:
     """Ein Itemtext nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     return any(nennt(text, kriterium) for text in itemTexte)
 
@@ -80,24 +78,24 @@ def testdateiVerstöße(
     getestet = getesteKriterien(zuordnung.testdatei)
     pfad = pfadVon(wurzel, zuordnung.testdatei)
     meldungen += [
-        f"{pfad}: {kennung(kriterium)} hat keinen Test"
+        f"{pfad}: {kriterium.kennung} hat keinen Test"
         for kriterium in sorted(zuordnung.verlangt - getestet)
         if umfasst(itemTexte, kriterium)
     ]
     meldungen += [
-        f"{pfad}: Test zu {kennung(kriterium)}, das in {pfadVon(wurzel, anforderungsdatei)} "
+        f"{pfad}: Test zu {kriterium.kennung}, das in {pfadVon(wurzel, anforderungsdatei)} "
         "fehlt oder zu einer anderen Anforderung gehört"
         for kriterium in sorted(getestet - zuordnung.verlangt)
     ]
     return meldungen
 
 
-def anforderungUmfasst(itemTexte: list[str], verlangt: set[Kriteriumsnummer]) -> bool:
+def anforderungUmfasst(itemTexte: list[str], verlangt: set[Kriterium]) -> bool:
     return any(umfasst(itemTexte, kriterium) for kriterium in verlangt)
 
 
 def sammeldateiGilt(
-    sammeldatei: Path, spätereVerlangt: list[set[Kriteriumsnummer]], itemTexte: list[str]
+    sammeldatei: Path, spätereVerlangt: list[set[Kriterium]], itemTexte: list[str]
 ) -> bool:
     """Die Sammeldatei liegt vor, und kein Plan umfasst eine spätere Anforderung."""
     return sammeldatei.is_file() and not any(
@@ -125,11 +123,11 @@ def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> 
     if not anforderungen:
         return []
     erste, *spätere = anforderungen
-    verlangt: dict[Anforderungsnummer, set[Kriteriumsnummer]] = {
+    verlangt: dict[Anforderungsnummer, set[Kriterium]] = {
         anforderung: set() for anforderung in anforderungen
     }
     for kriterium in kriterien(anforderungsdatei):
-        verlangt[anforderungVon(kriterium)].add(kriterium)
+        verlangt[kriterium.anforderung].add(kriterium)
     späterVerlangt = [verlangt[nummer] for nummer in spätere]
     gilt = sammeldateiGilt(sammeldateiZu(wurzel, anforderungsdatei), späterVerlangt, itemTexte)
     return [
@@ -146,7 +144,7 @@ def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> 
 
 def doppelteKennungen(anforderungsdatei: Path) -> list[str]:
     return doppelte(
-        [kennung(kriterium) for kriterium, _ in kriterienMitZeile(anforderungsdatei)]
+        [kriterium.kennung for kriterium, _ in kriterienMitZeile(anforderungsdatei)]
         + [anforderungKennung(nummer) for nummer, _ in anforderungenMitZeile(anforderungsdatei)]
     )
 
@@ -174,7 +172,7 @@ def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: lis
     if sammeldatei.is_file() and not zugeordnet:
         getestet = sorted(getesteKriterien(sammeldatei))
         if getestet:
-            gefunden = ", ".join(kennung(kriterium) for kriterium in getestet)
+            gefunden = ", ".join(kriterium.kennung for kriterium in getestet)
             meldungen.append(f"{pfadVon(wurzel, sammeldatei)}: Tests ohne Anforderung: {gefunden}")
     elif sammeldatei.is_file() and sammeldatei not in {eintrag.testdatei for eintrag in zugeordnet}:
         meldungen.append(
@@ -214,7 +212,7 @@ def fehlendeTests(wurzel: Path, itemTexte: list[str]) -> list[Fehlend]:
                 gefunden.append(Fehlend(kennungDerAnforderung, zuordnung.verlangt))
                 continue
             fehlend = zuordnung.verlangt - getesteKriterien(zuordnung.testdatei)
-            gefunden += [Fehlend(kennung(kriterium), {kriterium}) for kriterium in sorted(fehlend)]
+            gefunden += [Fehlend(kriterium.kennung, {kriterium}) for kriterium in sorted(fehlend)]
     return gefunden
 
 

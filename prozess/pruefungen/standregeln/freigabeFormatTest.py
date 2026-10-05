@@ -4,6 +4,7 @@ import pytest
 
 from gemeinsam.pfade import wurzel
 from standregeln.freigabeFormat import verstöße
+from standregeln.freigabeKommentare import abschnitte
 from standregeln.standTest import Repo
 
 vorgehen = "## Nächstes Vorgehen\n- Produktziel: a\n- Etappenziel: b\n- Zyklusziel: c\n\n"
@@ -79,3 +80,9 @@ def testFreigabeFeldAußerhalbDesAbschnittsZähltNicht(tmp_path):
     text = "# Plan · Zyklus 3\n\nFreigabe: ja\n\n## Freigabe\nKommentar: .\n"
     schreiben(tmp_path, "plan.md", text)
     assert len(verstöße(tmp_path)) == 1
+
+
+def testAbschnitteNennenTitelUndZeilen():
+    teile = abschnitte(["vorab", "## Plan", "eins", "## Freigabe", "Freigabe: ja"])
+    assert [teil.titel for teil in teile] == ["Plan", "Freigabe"]
+    assert teile[-1].zeilen == ["Freigabe: ja"]

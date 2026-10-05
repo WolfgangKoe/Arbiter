@@ -6,7 +6,7 @@ from pathlib import Path
 
 from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, projektordner
-from lesen.anliegenKopf import anliegenDateien, kopfLesen
+from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
 
 link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
 suchOrdner = ("domaene", "technik", "prozess", handoffOrdner, ".claude", "doku")
@@ -54,7 +54,7 @@ def erledigteLöschen(wurzel: Path) -> list[str]:
     )
     for datei in anliegenDateien(wurzel):
         gelesen = kopfLesen(datei)
-        if gelesen is None or gelesen.status != "erledigt":
+        if gelesen is None or gelesen.status != Status.erledigt:
             continue
         pfad = datei.relative_to(wurzel).as_posix()
         if pfad in bekannt and pfad not in geändert:

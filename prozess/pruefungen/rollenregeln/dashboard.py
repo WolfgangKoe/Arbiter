@@ -8,7 +8,7 @@ from gemeinsam.pfade import wurzel
 from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
 from rollenregeln.dashboardStil import legende, stil
-from rollenregeln.laufLesen import läufeLesen
+from rollenregeln.laufLesen import Lauf, läufeLesen
 
 dashboardDatei = "dashboard.html"
 sichtbareSitzungen = 5
@@ -27,13 +27,13 @@ def modellName(modell: str) -> str:
     return teile[1].capitalize() if teile[0] == "claude" and len(teile) > 1 else modell
 
 
-def tabelle(läufe: list[dict]) -> str:
+def tabelle(läufe: list[Lauf]) -> str:
     zeilen = "".join(
-        f'<tr><td class="rolle">{html.escape(lauf["rolle"])}</td>'
-        f"<td>{html.escape(modellName(lauf.get('modell') or fehlt))}</td>"
-        f"<td>{html.escape(lauf.get('ziel') or fehlt)}</td>"
-        f'<td class="stand">{dauerText(lauf.get("dauer"))}</td>'
-        f'<td class="stand">{kilo(lauf["belegung"])}</td></tr>'
+        f'<tr><td class="rolle">{html.escape(lauf.rolle)}</td>'
+        f"<td>{html.escape(modellName(lauf.modell or fehlt))}</td>"
+        f"<td>{html.escape(lauf.ziel or fehlt)}</td>"
+        f'<td class="stand">{dauerText(lauf.dauer)}</td>'
+        f'<td class="stand">{kilo(lauf.belegung)}</td></tr>'
         for lauf in läufe
     )
     return (
@@ -42,8 +42,8 @@ def tabelle(läufe: list[dict]) -> str:
     )
 
 
-def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
-    kopf = f"{len(läufe)} Läufe · Höchststand {kilo(max(lauf['belegung'] for lauf in läufe))}"
+def sitzungsKarte(sitzung: str, läufe: list[Lauf]) -> str:
+    kopf = f"{len(läufe)} Läufe · Höchststand {kilo(max(lauf.belegung for lauf in läufe))}"
     titel = sitzungsTitel(sitzung, läufe)
     return (
         f'<div class="sitzungs-karte"><h3>{html.escape(titel)}</h3>'
@@ -52,7 +52,7 @@ def sitzungsKarte(sitzung: str, läufe: list[dict]) -> str:
     )
 
 
-def rollenZeilen(läufe: list[dict]) -> str:
+def rollenZeilen(läufe: list[Lauf]) -> str:
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(rolle)} ({len(werte)})</td>'
         f'<td class="stand">{kilo(sum(werte) / len(werte))}</td>'
@@ -75,7 +75,7 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[dict]) -> str:
+def seiteErzeugen(läufe: list[Lauf]) -> str:
     if läufe:
         sitzungen = list(nachSitzung(läufe).items())[-sichtbareSitzungen:]
         karten = "".join(sitzungsKarte(name, gruppe) for name, gruppe in reversed(sitzungen))

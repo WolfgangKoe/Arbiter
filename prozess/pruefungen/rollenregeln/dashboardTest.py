@@ -9,7 +9,7 @@ from rollenregeln.dashboard import dashboardSchreiben, modellName, seiteErzeugen
 from rollenregeln.dashboardDiagramm import kilo
 from rollenregeln.dashboardGruppen import sitzungsTitel
 from rollenregeln.dashboardStil import legende
-from rollenregeln.laufLesen import dauerSumme, logPfad, läufeLesen
+from rollenregeln.laufLesen import Lauf, dauerSumme, logPfad, läufeLesen
 from rollenregeln.laufLog import (
     dauerSekunden,
     eintragAnhängen,
@@ -41,13 +41,20 @@ def transkript(ordner, belegung):
     return datei
 
 
+def eintragRoh(ordner, eintrag):
+    datei = logPfad(ordner)
+    datei.parent.mkdir(parents=True, exist_ok=True)
+    with datei.open("a", encoding="utf-8") as ziel:
+        ziel.write(json.dumps(eintrag) + "\n")
+
+
 def stopp(datei, rolle="planer"):
     return {"agent_type": rolle, "agent_id": "a1", "agent_transcript_path": str(datei)}
 
 
 def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
     eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
-    assert eintrag == {
+    assert eintrag.alsEintrag() == {
         "zeit": "2026-10-04T12:30:00+00:00",
         "rolle": "planer",
         "agent_id": "a1",
@@ -71,7 +78,7 @@ def testKoordinatorStandKommtAusDemHauptTranskript(tmp_path):
         encoding="utf-8",
     )
     eingabe = stopp(transkript(tmp_path, 80_000)) | {"transcript_path": str(haupt)}
-    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path)["koordinator"] == hauptstand
+    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path).koordinator == hauptstand
 
 
 @pytest.mark.parametrize(
@@ -83,23 +90,28 @@ def testLaufOhneRolleOderBelegungBleibtUnprotokolliert(eingabe, tmp_path):
 
 def testLogWächstUndLässtSichLesen(tmp_path):
     assert läufeLesen(tmp_path) == []
-    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
-    eintragAnhängen(tmp_path, {"zeit": "b", "rolle": "architekt", "belegung": 2})
+    eintragRoh(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
+    eintragRoh(tmp_path, {"zeit": "b", "rolle": "architekt", "belegung": 2})
     logPfad(tmp_path).write_text(
         logPfad(tmp_path).read_text(encoding="utf-8") + "\n", encoding="utf-8"
     )
-    assert [lauf["rolle"] for lauf in läufeLesen(tmp_path)] == ["planer", "architekt"]
+    assert [lauf.rolle for lauf in läufeLesen(tmp_path)] == ["planer", "architekt"]
 
 
 def testDashboardNenntRolleBelegungUndStufen(tmp_path):
     for rolle, belegung in (("planer", 50_000), ("planer", 130_000), ("architekt", 155_000)):
-        eintragAnhängen(
-            tmp_path, {"zeit": "2026-10-04T12:30:00", "rolle": rolle, "belegung": belegung}
-        )
+        eintragRoh(tmp_path, {"zeit": "2026-10-04T12:30:00", "rolle": rolle, "belegung": belegung})
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "planer (2)" in seite and "architekt (1)" in seite
     assert "130k" in seite and "90k" in seite and "38.000" not in seite and "--bg:#0f0e0c" in seite
     assert "saeule warnung" in seite and "Sperrschwelle 150k" in seite and "Median" in seite
+
+
+def testLaufKommtAusDemLogWiederHeraus(tmp_path):
+    gesendet = Lauf("a", "planer", 7, agentId="a1", stoppWiederholt=True, zyklus=3)
+    eintragAnhängen(tmp_path, gesendet)
+    assert logPfad(tmp_path).read_text(encoding="utf-8").count("agent_id") == 1
+    assert läufeLesen(tmp_path) == [gesendet]
 
 
 def testLeeresLogZeigtHinweis():
@@ -107,7 +119,7 @@ def testLeeresLogZeigtHinweis():
 
 
 def testRolleWirdMaskiert():
-    seite = seiteErzeugen([{"zeit": "2026-10-04T12:30:00", "rolle": "<b>", "belegung": 1}])
+    seite = seiteErzeugen([Lauf("2026-10-04T12:30:00", "<b>", 1)])
     assert "<b>" not in seite.split("bericht-zeile")[1]
 
 
@@ -122,25 +134,25 @@ def testJedeLegendeNenntHöchstensFünfWörter():
 
 def testWiederholterStoppDesselbenLaufsZähltEinmal(tmp_path):
     for belegung, wiederholt in ((10, False), (20, True)):
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "a", "rolle": "planer", "agent_id": "a1", "belegung": belegung}
             | {"stopp_wiederholt": wiederholt},
         )
-    eintragAnhängen(tmp_path, {"zeit": "b", "rolle": "planer", "agent_id": None, "belegung": 5})
-    eintragAnhängen(tmp_path, {"zeit": "c", "rolle": "planer", "agent_id": None, "belegung": 6})
-    assert [lauf["belegung"] for lauf in läufeLesen(tmp_path)] == [20, 5, 6]
+    eintragRoh(tmp_path, {"zeit": "b", "rolle": "planer", "agent_id": None, "belegung": 5})
+    eintragRoh(tmp_path, {"zeit": "c", "rolle": "planer", "agent_id": None, "belegung": 6})
+    assert [lauf.belegung for lauf in läufeLesen(tmp_path)] == [20, 5, 6]
 
 
 def testGeblocktesStoppWirdVerworfenFortgesetzterLaufBleibt(tmp_path):
     folge = [("a1", "erst", False), ("a1", "zweiter Auftrag", False), ("a1", "Rückmeldung", True)]
     for laufId, ziel, wiederholt in folge:
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "a", "rolle": "r", "agent_id": laufId, "belegung": 1, "ziel": ziel}
             | {"stopp_wiederholt": wiederholt},
         )
-    assert [lauf["ziel"] for lauf in läufeLesen(tmp_path)] == ["erst", "zweiter Auftrag"]
+    assert [lauf.ziel for lauf in läufeLesen(tmp_path)] == ["erst", "zweiter Auftrag"]
 
 
 def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
@@ -152,7 +164,7 @@ def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
         {"message": {"role": "user", "content": langer}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    ziel = laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path)["ziel"]
+    ziel = laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path).ziel
     assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
@@ -175,7 +187,7 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
     assert (
-        laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path)["ziel"]
+        laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path).ziel
         == "Neuer Auftrag: zweiter"
     )
 
@@ -183,20 +195,20 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
 def testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter(tmp_path):
     folge = [("erst", False), ("Rück1", True), ("Rück2", True)]
     for ziel, wiederholt in folge:
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "a", "rolle": "r", "agent_id": "a1", "belegung": 1, "ziel": ziel}
             | {"stopp_wiederholt": wiederholt},
         )
-    assert [lauf["ziel"] for lauf in läufeLesen(tmp_path)] == ["erst"]
+    assert [lauf.ziel for lauf in läufeLesen(tmp_path)] == ["erst"]
 
 
 def testKaputteZeileWirdÜbersprungen(tmp_path):
-    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
+    eintragRoh(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
     with logPfad(tmp_path).open("a", encoding="utf-8") as ziel:
         ziel.write('{"zeit": "b", "rol\n[1]\n')
-    eintragAnhängen(tmp_path, {"zeit": "c", "rolle": "architekt", "belegung": 2})
-    assert [lauf["rolle"] for lauf in läufeLesen(tmp_path)] == ["planer", "architekt"]
+    eintragRoh(tmp_path, {"zeit": "c", "rolle": "architekt", "belegung": 2})
+    assert [lauf.rolle for lauf in läufeLesen(tmp_path)] == ["planer", "architekt"]
     assert dashboardSchreiben(tmp_path).is_file()
 
 
@@ -205,22 +217,22 @@ def testJetztHatDieOrtszone():
 
 
 def testEintragOhnePflichtfeldWirdÜbersprungen(tmp_path):
-    eintragAnhängen(tmp_path, {"rolle": "planer", "belegung": 1})
-    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer"})
-    eintragAnhängen(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
+    eintragRoh(tmp_path, {"rolle": "planer", "belegung": 1})
+    eintragRoh(tmp_path, {"zeit": "a", "rolle": "planer"})
+    eintragRoh(tmp_path, {"zeit": "a", "rolle": "planer", "belegung": 1})
     assert len(läufeLesen(tmp_path)) == 1
     assert dashboardSchreiben(tmp_path).is_file()
 
 
 def testAltbestandOhneSitzungHatLesbarenTitel(tmp_path):
-    eintragAnhängen(tmp_path, {"zeit": "2026-10-04T12:17:11+00:00", "rolle": "a", "belegung": 1})
+    eintragRoh(tmp_path, {"zeit": "2026-10-04T12:17:11+00:00", "rolle": "a", "belegung": 1})
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "<h3>Altbestand, ohne Sitzung</h3>" in seite
     assert '<td>–</td><td>–</td><td class="stand">–</td>' in seite
 
 
 def testTitelNenntZyklusUndPhase(tmp_path):
-    eintragAnhängen(
+    eintragRoh(
         tmp_path,
         {"zeit": "a", "rolle": "r", "belegung": 1, "sitzung": "f8ebd61f-0000"}
         | {"zyklus": 3, "phase": "Prozessphase"},
@@ -239,8 +251,8 @@ def testDauerReichtVomJüngstenAuftragBisZurLetztenZeile(tmp_path):
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
     assert dauerSekunden(transkriptEinträge(datei)) == 150  # noqa: PLR2004
-    assert "3 min" in seiteErzeugen([{"zeit": "a", "rolle": "r", "belegung": 1, "dauer": 180}])
-    assert "45 s" in seiteErzeugen([{"zeit": "a", "rolle": "r", "belegung": 1, "dauer": 45}])
+    assert "3 min" in seiteErzeugen([Lauf("a", "r", 1, dauer=180)])
+    assert "45 s" in seiteErzeugen([Lauf("a", "r", 1, dauer=45)])
 
 
 def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
@@ -248,7 +260,7 @@ def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
 
     monkeypatch.setattr(laufLog, "zyklusUndPhase", lambda _ordner: (3, "Prozessphase"))
     eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
-    assert (eintrag["zyklus"], eintrag["phase"]) == (3, "Prozessphase")
+    assert (eintrag.zyklus, eintrag.phase) == (3, "Prozessphase")
 
 
 def testZyklusUndPhaseLiestPhasenfolge(monkeypatch):
@@ -266,7 +278,7 @@ def testDauerOhneZeitstempelIstLeer(tmp_path):
 
 
 def testTabelleNenntModellAuftragUndRundetAufKilo(tmp_path):
-    eintragAnhängen(
+    eintragRoh(
         tmp_path,
         {
             "zeit": "2026-10-04T12:30:00+00:00",
@@ -292,7 +304,7 @@ def testKiloUndModellName():
 def testJedeSitzungBekommtEineKarteMitTabelle(tmp_path):
     sitzungen = ("aaaaaaaa-1", "bbbbbbbb-2")
     for sitzung in sitzungen:
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "2026-10-04T12:30:00", "rolle": "planer", "sitzung": sitzung, "belegung": 5},
         )
@@ -304,31 +316,31 @@ def testJedeSitzungBekommtEineKarteMitTabelle(tmp_path):
 
 def testTitelNenntAllePhasenDerSitzung(tmp_path):
     for zyklus, phase in ((3, "Domänenphase"), (3, "Technikphase"), (4, "Domänenphase")):
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "a", "rolle": "r", "belegung": 1, "sitzung": "f8ebd61f-0"}
             | {"zyklus": zyklus, "phase": phase},
         )
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "Zyklus 3 Domänenphase bis Zyklus 4 Domänenphase</h3>" in seite
-    läufe = [{"zyklus": 3, "phase": "Domänenphase"}, {"zyklus": 3, "phase": "Technikphase"}]
+    läufe = [Lauf("a", "r", 1, zyklus=3, phase=phase) for phase in ("Domänenphase", "Technikphase")]
     assert "Zyklus 3 Domänenphase bis Technikphase" in sitzungsTitel("f8ebd61f", läufe)
 
 
 def testLaufOhneSitzungMitZyklusHeißtAltbestand():
-    läufe = [{"zyklus": 3, "phase": "Prozessphase"}]
+    läufe = [Lauf("a", "r", 1, zyklus=3, phase="Prozessphase")]
     assert sitzungsTitel("ohne Sitzung", läufe) == "Altbestand, ohne Sitzung"
 
 
 def testDauerBeimZusammenführenSummiertBeideTeile(tmp_path):
     folge = [(600, False), (60, True)]
     for dauer, wiederholt in folge:
-        eintragAnhängen(
+        eintragRoh(
             tmp_path,
             {"zeit": "a", "rolle": "r", "agent_id": "a1", "belegung": 1, "dauer": dauer}
             | {"stopp_wiederholt": wiederholt},
         )
-    assert [lauf["dauer"] for lauf in läufeLesen(tmp_path)] == [660]
+    assert [lauf.dauer for lauf in läufeLesen(tmp_path)] == [660]
     assert dauerSumme({"dauer": None}, {"dauer": 5}) is None
 
 
@@ -340,12 +352,12 @@ def testFehlerInDerLageKostetDenEintragNicht(tmp_path, monkeypatch):
 
     monkeypatch.setattr(phasenfolge, "lage", wirft)
     eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
-    assert eintrag["belegung"] and eintrag["zyklus"] is None
+    assert eintrag.belegung and eintrag.zyklus is None
 
 
 def testHookWegTrägtZyklusEin(tmp_path):
     protokollieren(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), tmp_path)
-    assert läufeLesen(tmp_path)[0]["zyklus"] == 1
+    assert läufeLesen(tmp_path)[0].zyklus == 1
     assert (tmp_path / "dashboard.html").is_file()
 
 
@@ -369,7 +381,7 @@ def testFehlerBeimSchreibenIstMitStillStill(monkeypatch):
 
 
 def testVerteilungHatYAchseUndZahlJeBalken():
-    läufe = [{"zeit": "a", "rolle": "r", "belegung": wert} for wert in (10_000, 12_000, 60_000)]
+    läufe = [Lauf("a", "r", wert) for wert in (10_000, 12_000, 60_000)]
     verteilung = seiteErzeugen(läufe).split("Verteilung der Tokenstände")[1]
     assert 'y1="10.0" y2="10.0"' in verteilung
     assert ">2</text>" in verteilung and ">1</text>" in verteilung

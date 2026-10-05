@@ -2,10 +2,42 @@
 
 import json
 from pathlib import Path
+from typing import NamedTuple
 
 pflichtfelder = ("zeit", "rolle", "belegung")
 logOrdner = "prozess/dashboard"
 logDatei = "laeufe.jsonl"
+
+
+class Lauf(NamedTuple):
+    zeit: str
+    rolle: str
+    belegung: int
+    agentId: str | None = None
+    sitzung: str | None = None
+    ziel: str | None = None
+    modell: str | None = None
+    koordinator: int | None = None
+    dauer: int | None = None
+    zyklus: int | None = None
+    phase: str | None = None
+    stoppWiederholt: bool = False
+
+    @classmethod
+    def ausEintrag(cls, eintrag: dict) -> "Lauf":
+        felder = {name: eintrag.get(logFeld(name)) for name in cls._fields}
+        felder["stoppWiederholt"] = bool(felder["stoppWiederholt"])
+        return cls(**felder)
+
+    def alsEintrag(self) -> dict:
+        return {logFeld(name): wert for name, wert in self._asdict().items()}
+
+
+logFelder = {"agentId": "agent_id", "stoppWiederholt": "stopp_wiederholt"}
+
+
+def logFeld(name: str) -> str:
+    return logFelder.get(name, name)
 
 
 def logPfad(wurzel: Path) -> Path:
@@ -29,7 +61,7 @@ def dauerSumme(spät: dict, früh: dict) -> int | None:
     return sum(teile) if all(teil is not None for teil in teile) else spät.get("dauer")
 
 
-def läufeLesen(wurzel: Path) -> list[dict]:
+def läufeLesen(wurzel: Path) -> list[Lauf]:
     datei = logPfad(wurzel)
     if not datei.is_file():
         return []
@@ -54,4 +86,4 @@ def läufeLesen(wurzel: Path) -> list[dict]:
         ergebnis.append(eintrag)
         if laufId:
             behalten[laufId] = eintrag
-    return ergebnis[::-1]
+    return [Lauf.ausEintrag(eintrag) for eintrag in ergebnis[::-1]]

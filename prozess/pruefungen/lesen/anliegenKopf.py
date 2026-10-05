@@ -2,16 +2,27 @@
 
 import re
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 
 from gemeinsam.pfade import anliegenOrdner
 
-statusWerte = ("offen", "angenommen", "abgelehnt", "beantwortet", "eskaliert", "erledigt")
+
+class Status(StrEnum):
+    offen = "offen"
+    angenommen = "angenommen"
+    abgelehnt = "abgelehnt"
+    beantwortet = "beantwortet"
+    eskaliert = "eskaliert"
+    erledigt = "erledigt"
+
+
 typWerte = ("Kritik", "Fragen", "Anliegen")
 höchstRunde = 3
 kopfzeile = re.compile(
-    r"^(?P<nummer>\d+) · (?P<typ>\w+) · von (?P<absender>[^\s(]+)(?: \([^)]+\))?"
-    r" → (?P<empfänger>[^\s(]+)(?: \([^)]+\))? · Runde (?P<runde>\d+)/3 · (?P<status>\w+)$"
+    rf"^(?P<nummer>\d+) · (?P<typ>\w+) · von (?P<absender>[^\s(]+)(?: \([^)]+\))?"
+    rf" → (?P<empfänger>[^\s(]+)(?: \([^)]+\))?"
+    rf" · Runde (?P<runde>\d+)/{höchstRunde} · (?P<status>\w+)$"
 )
 stakeholder = "Stakeholder"
 
@@ -24,7 +35,11 @@ class Anliegen:
     absender: str
     empfänger: str
     runde: int
-    status: str
+    status: Status | str  # Warum: ein unbekannter Text bleibt Text, `kopfVerstöße` meldet ihn
+
+
+def statusAusText(text: str) -> Status | str:
+    return Status(text) if text in Status.__members__ else text
 
 
 def anliegenDateien(wurzel: Path) -> list[Path]:
@@ -48,7 +63,7 @@ def kopfAusText(text: str, datei: Path) -> Anliegen | None:
         absender=treffer["absender"],
         empfänger=treffer["empfänger"],
         runde=int(treffer["runde"]),
-        status=treffer["status"],
+        status=statusAusText(treffer["status"]),
     )
 
 

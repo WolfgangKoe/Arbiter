@@ -2,10 +2,17 @@
 
 import re
 from pathlib import Path
+from typing import NamedTuple
 
 from gemeinsam.gitAufruf import freigaben
 from lesen.artefakt import Artefakt, artefakte, freigabeJa, istStakeholderKommentar, pfadDer
 from lesen.plan import zyklus
+
+
+class Abschnitt(NamedTuple):
+    titel: str
+    zeilen: list[str]
+
 
 stellungnahmeZeile = "Stellungnahme:"
 freigabeAbschnitt = "Freigabe"
@@ -19,15 +26,15 @@ def zeilenDer(wurzel: Path, artefakt: Artefakt) -> list[str]:
     return [zeile.strip() for zeile in datei.read_text(encoding="utf-8").splitlines()]
 
 
-def abschnitte(zeilen: list[str]) -> list[tuple[str, list[str]]]:
-    """Paare (Überschrift, Zeilen), in Reihenfolge der Datei, auch bei wiederholter Überschrift."""
-    gefunden: list[tuple[str, list[str]]] = []
+def abschnitte(zeilen: list[str]) -> list[Abschnitt]:
+    """Abschnitte in Reihenfolge der Datei, auch bei wiederholter Überschrift."""
+    gefunden: list[Abschnitt] = []
     for zeile in zeilen:
         treffer = überschrift.match(zeile)
         if treffer:
-            gefunden.append((treffer[1], []))
+            gefunden.append(Abschnitt(treffer[1], []))
         elif gefunden:
-            gefunden[-1][1].append(zeile)
+            gefunden[-1].zeilen.append(zeile)
     return gefunden
 
 
@@ -35,9 +42,9 @@ def freigabeZeilen(zeilen: list[str]) -> list[str]:
     """Die Zeilen unter `## Freigabe`; nur dort steht das Feld."""
     return [
         zeile
-        for titel, inhalt in abschnitte(zeilen)
-        if titel == freigabeAbschnitt
-        for zeile in inhalt
+        for abschnitt in abschnitte(zeilen)
+        if abschnitt.titel == freigabeAbschnitt
+        for zeile in abschnitt.zeilen
     ]
 
 
@@ -70,7 +77,7 @@ def autorenDran(wurzel: Path) -> dict[str, list[str]]:
 
 def freigabeZuCommitten(wurzel: Path) -> str | None:
     """Der Commit-Betreff `Freigabe <Gegenstand> <n>`, wenn die Datei `Freigabe: ja` trägt."""
-    vorhanden = {betreff for _, betreff in freigaben(wurzel)}
+    vorhanden = {freigabe.betreff for freigabe in freigaben(wurzel)}
     for artefakt in artefakte:
         nummer = freigegebenerZyklus(wurzel, artefakt)
         betreff = f"Freigabe {artefakt.gegenstand} {nummer}"

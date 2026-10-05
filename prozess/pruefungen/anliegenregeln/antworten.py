@@ -2,7 +2,7 @@
 
 import re
 
-from lesen.anliegenKopf import Anliegen, stakeholder
+from lesen.anliegenKopf import Anliegen, Status, stakeholder
 
 frage = re.compile(r"^\*\*F(\d+)\b")
 antwortZeile = re.compile(r"^Antwort:")
@@ -10,7 +10,7 @@ antwortZeile = re.compile(r"^Antwort:")
 
 def antwortVerstöße(text: str, anliegen: Anliegen) -> list[str]:
     """Unter jeder Frage an den Stakeholder steht eine Zeile `Antwort:`."""
-    if anliegen.empfänger != stakeholder or anliegen.status != "offen":
+    if anliegen.empfänger != stakeholder or anliegen.status != Status.offen:
         return []
     verstöße = []
     nummer = None
