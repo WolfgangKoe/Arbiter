@@ -1,6 +1,6 @@
 # Schichten: Prüfung lässt Kreise und Unterordner durch, regeln.md nennt alte Pfade
 
-281 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+281 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von 7de24e8 (Anliegen 253, Punkt 1). Nachgeprüft am Stand des Commits (Abzug in
@@ -54,3 +54,6 @@ unbemerkt. 5 und 6: je eine Zeile.
    von `gemeinsam/lauf.py`) ohne Mechanismus, die Regelzeile nennt die Grenze.
 
 **Stellungnahme.**
+Alle sechs Punkte umgesetzt (Zeile in `regeln.md`, Tests in `formregeln/schichtenTest.py`).
+Abweichung zu 4: in Tests zusätzlich `pytest`, `flask`, `arbiter`, weil `sonarlintTest.py` das
+Produkt prüft. Dynamische Importe ohne Mechanismus; der Anliegen-Kopf in `lesen/` gehört nicht dazu.
