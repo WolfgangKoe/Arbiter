@@ -1,6 +1,6 @@
 # Frontend, Backend und Datenbank fehlen in der Technik
 
-153 · Kritik · von Stakeholder → Architekt · Runde 1/3 · angenommen
+153 · Kritik · von Stakeholder → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund (Stakeholder).** „Ich vermisse in der Technik die Frontend Backend Struktur sowie

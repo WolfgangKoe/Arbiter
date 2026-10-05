@@ -1,6 +1,6 @@
 # Dashboard: alle Sessions auffindbar, sechs je Seite
 
-246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · angenommen
+246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Das Dashboard (`dashboard.html`, erzeugt von `prozess/pruefungen/rollenregeln/dashboard.py`)
