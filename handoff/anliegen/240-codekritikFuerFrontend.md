@@ -35,4 +35,5 @@ grün, „nur Text“ im Ablauf ist gestrichen. Offen ist eine Zelle: Die Zeile
 `standregeln/codekritikTest.py` (benannte Felder; Commit nur unter `technik/frontend/` macht
 die Kritik des Reviewers fällig). Erledigt, wenn die Zelle ihn nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Die Zelle Scheiter-Test der Zeile
+[Kritik am Code](../../prozess/regeln.md#standregeln) nennt jetzt `standregeln/codekritikTest.py`.
