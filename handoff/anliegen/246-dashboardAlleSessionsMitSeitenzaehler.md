@@ -25,4 +25,4 @@ Dieses Feature war bereits im Dashboard von ArbiterMap implementiert.“
 - Offen für den Regelumsetzer: ob der Zähler im Browser (wie ArbiterMap, Skript in der HTML)
   oder als vorab erzeugte Seiten läuft; die Stellungnahme entscheidet.
 
-**Stellungnahme.**
+**Stellungnahme.** Ich warte auf Umsetzung.
