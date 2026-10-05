@@ -25,6 +25,13 @@ class Ausgangslage:
     spielfeld: Spielfeld
     tiefen: Mapping[Aufstellungszone, Fraction]
 
+    def grenzenDerZone(
+        self, zone: Aufstellungszone
+    ) -> tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]:
+        """Die Fläche der Zone als Grenzen in x und in y, die Form von `messen.ganzIn`."""
+        breite, länge = self.spielfeld.seitenlängen
+        return grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
+
 
 def grenzenInXDerZone(
     zone: Aufstellungszone, breite: Fraction, tiefe: Fraction
@@ -146,10 +153,8 @@ class Aufstellung:
 
     def _nichtGanzInDerZone(self, modell: Modell, stelle: Stelle) -> bool:
         spieler = self._spielerAnDerReihe
-        breite, länge = self._ausgangslage.spielfeld.seitenlängen
-        zone = self._zonen[spieler]
-        grenzenInX = grenzenInXDerZone(zone, breite, self._ausgangslage.tiefen[zone])
-        return not messen.ganzIn(modell.base, stelle, grenzenInX, (Fraction(0), länge))
+        grenzen = self._ausgangslage.grenzenDerZone(self._zonen[spieler])
+        return not messen.ganzIn(modell.base, stelle, *grenzen)
 
     def _baseÜberdeckt(self, modell: Modell, stelle: Stelle) -> bool:
         return baseÜberdeckt(modell, stelle, self._stellen)

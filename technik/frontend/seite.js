@@ -1,32 +1,25 @@
-// Regel: Die Seite holt den Spielstand per fetch und zeichnet ihn in einem Schritt (web.md, O1)
+// Regel: Die Seite holt den Spielstand per fetch und zeichnet ihn in einem Schritt; das Markup steht in den Vorlagen der Seite (web.md, O1)
 
-const svgNamensraum = "http://www.w3.org/2000/svg"
-
-function element(tag, klassen, inhalt = "") {
-  const neu = document.createElement(tag)
-  neu.className = klassen
-  neu.textContent = inhalt
-  return neu
+function ausVorlage(name) {
+  return document.getElementById(name).content.firstElementChild.cloneNode(true)
 }
 
-function svgElement(tag, klassen, attribute) {
-  const neu = document.createElementNS(svgNamensraum, tag)
-  neu.setAttribute("class", klassen)
-  for (const [name, wert] of Object.entries(attribute)) {
-    neu.setAttribute(name, wert)
-  }
-  return neu
+function ausSvgVorlage(name) {
+  // Warum: Ein Element der Karte behält den SVG-Namensraum nur innerhalb eines <svg> der Vorlage
+  return ausVorlage(name).firstElementChild
 }
 
-function spielerKlasse(nummer) {
-  return nummer === null ? "ohneSpieler" : `spieler${nummer}`
+function mitSpieler(element, nummer) {
+  element.classList.replace("spieler1", nummer === null ? "ohneSpieler" : `spieler${nummer}`)
+  return element
 }
 
 function kopfzeilenSpieler(spieler) {
-  const feld = element("div", `kopfzeileSpieler spieler${spieler.nummer}`, spieler.name)
-  if (spieler.anDerReihe) {
-    feld.classList.add("anDerReihe")
-    feld.append(element("span", "kopfzeileAnDerReihe", "an der Reihe"))
+  const feld = mitSpieler(ausVorlage("kopfzeileSpieler"), spieler.nummer)
+  feld.firstChild.nodeValue = spieler.name
+  if (!spieler.anDerReihe) {
+    feld.classList.remove("anDerReihe")
+    feld.querySelector(".kopfzeileAnDerReihe").remove()
   }
   return feld
 }
@@ -35,63 +28,64 @@ function kopfzeile(spielstand) {
   const [ersterSpieler, zweiterSpieler] = spielstand.spieler
   return [
     kopfzeilenSpieler(ersterSpieler),
-    element("div", "kopfzeileTitel", "ARBITER"),
+    ausVorlage("kopfzeileTitel"),
     kopfzeilenSpieler(zweiterSpieler),
   ]
 }
 
 function einheitenKarte(einheit) {
-  const karte = element("section", "einheitenKarte")
-  const name = element("div", "einheitenKartenName")
-  name.append(element("span", "", einheit.name))
-  if (einheit.inAufstellung) {
-    karte.classList.add("inAufstellung")
-    name.append(element("span", "einheitenKartenAbzeichen", "in Aufstellung"))
+  const karte = ausVorlage("einheitenKarte")
+  karte.querySelector(".einheitenKartenName span").textContent = einheit.name
+  if (!einheit.inAufstellung) {
+    karte.classList.remove("inAufstellung")
+    karte.querySelector(".einheitenKartenAbzeichen").remove()
   }
   if (einheit.nichtGesetzt > 0) {
-    name.append(element("span", "einheitenKartenModelle", String(einheit.nichtGesetzt)))
+    karte.querySelector(".einheitenKartenModelle").textContent = String(einheit.nichtGesetzt)
+  } else {
+    karte.querySelector(".einheitenKartenModelle").remove()
   }
-  karte.append(name)
   return karte
 }
 
 function armeeKarte(spieler) {
-  const karte = element("div", `armeeKarte spieler${spieler.nummer}`)
-  karte.append(element("h2", "armeeKartenName", spieler.name))
+  const karte = mitSpieler(ausVorlage("armeeKarte"), spieler.nummer)
+  karte.querySelector(".armeeKartenName").textContent = spieler.name
   karte.append(...spieler.ablage.map(einheitenKarte))
   return karte
 }
 
 function spalte(inhalt) {
-  const neu = element("aside", "spalte")
+  const neu = ausVorlage("spalte")
   neu.append(inhalt)
   return neu
 }
 
+function flächeSetzen(element, { x, y, breite, länge }) {
+  element.setAttribute("x", x)
+  element.setAttribute("y", y)
+  element.setAttribute("width", breite)
+  element.setAttribute("height", länge)
+}
+
 function karte(spielstand) {
   const { breite, länge } = spielstand.spielfeld
-  const zeichnung = svgElement("svg", "karte", {
-    viewBox: `0 0 ${breite} ${länge}`,
-    role: "img",
-    "aria-label": "Karte",
-  })
-  zeichnung.append(svgElement("rect", "spielfeld", { x: 0, y: 0, width: breite, height: länge }))
+  const mitte = ausVorlage("karte")
+  const zeichnung = mitte.querySelector(".karte")
+  zeichnung.setAttribute("viewBox", `0 0 ${breite} ${länge}`)
+  flächeSetzen(zeichnung.querySelector(".spielfeld"), { x: 0, y: 0, breite, länge })
   for (const zone of spielstand.zonen) {
-    zeichnung.append(
-      svgElement("rect", `aufstellungszone ${spielerKlasse(zone.spieler)}`, {
-        x: zone.x, y: 0, width: zone.tiefe, height: länge,
-      }),
-    )
+    const fläche = mitSpieler(ausSvgVorlage("aufstellungszone"), zone.spieler)
+    flächeSetzen(fläche, zone)
+    zeichnung.append(fläche)
   }
   for (const modell of spielstand.modelle) {
-    zeichnung.append(
-      svgElement("circle", `modell ${spielerKlasse(modell.spieler)}`, {
-        "cx": modell.x, "cy": modell.y, "r": modell.radius,
-      }),
-    )
+    const kreis = mitSpieler(ausSvgVorlage("modell"), modell.spieler)
+    kreis.setAttribute("cx", modell.x)
+    kreis.setAttribute("cy", modell.y)
+    kreis.setAttribute("r", modell.radius)
+    zeichnung.append(kreis)
   }
-  const mitte = element("div", "spalte spalteMitte")
-  mitte.append(zeichnung)
   return mitte
 }
 

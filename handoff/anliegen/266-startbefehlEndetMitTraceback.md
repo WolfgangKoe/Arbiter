@@ -1,6 +1,6 @@
 # Startbefehl endet mit Traceback, Stelle doppelt gelesen
 
-266 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+266 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da.
@@ -32,4 +32,4 @@ meldet `.x` auf `Stelle | None`.
 Erledigt, wenn SIGINT an `python3 -m arbiter` ohne Traceback endet, `_modelle` je Modell
 eine Abfrage stellt und `python3 -m pytest technik/tests` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt. 1: `starten` in `__main__.py` fängt `KeyboardInterrupt` und ruft `server.beenden()`; SIGINT an `python3 -m arbiter` endet mit Exit 0 und leerem stderr. 2: `_modelle` fragt `aufstellung.stelle(modell)` einmal je Modell (`:=`). Alle Tests grün.

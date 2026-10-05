@@ -1,7 +1,7 @@
 """Der Spielstand der Aufstellung als JSON-fähige Werte (technik/architektur/web.md, W2, W4)."""
 
 from arbiter.domaene.messen import radiusInZoll
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, grenzenInXDerZone
+from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.spielobjekte import Einheit, Spieler
 
 
@@ -24,14 +24,15 @@ def _nummer(spieler: tuple[Spieler, ...], gesucht: Spieler | None) -> int | None
 
 
 def _zone(aufstellung: Aufstellung, zone: Aufstellungszone, spieler: tuple[Spieler, ...]) -> dict:
-    breite, _ = aufstellung.ausgangslage.spielfeld.seitenlängen
-    anfang, ende = grenzenInXDerZone(zone, breite, aufstellung.ausgangslage.tiefen[zone])
+    (anfangX, endeX), (anfangY, endeY) = aufstellung.ausgangslage.grenzenDerZone(zone)
     besitzer = next(
         (einer for einer in spieler if aufstellung.aufstellungszone(einer) is zone), None
     )
     return {
-        "x": float(anfang),
-        "tiefe": float(ende - anfang),
+        "x": float(anfangX),
+        "y": float(anfangY),
+        "breite": float(endeX - anfangX),
+        "länge": float(endeY - anfangY),
         "spieler": _nummer(spieler, besitzer),
     }
 
@@ -39,15 +40,15 @@ def _zone(aufstellung: Aufstellung, zone: Aufstellungszone, spieler: tuple[Spiel
 def _modelle(aufstellung: Aufstellung, spieler: tuple[Spieler, ...]) -> list[dict]:
     return [
         {
-            "x": float(aufstellung.stelle(modell).x),
-            "y": float(aufstellung.stelle(modell).y),
+            "x": float(stelle.x),
+            "y": float(stelle.y),
             "radius": float(radiusInZoll(modell.base)),
             "spieler": nummer,
         }
         for nummer, einer in enumerate(spieler, start=1)
         for einheit in einer.armee.einheiten
         for modell in einheit.modelle
-        if aufstellung.gesetzt(modell)
+        if (stelle := aufstellung.stelle(modell))
     ]
 
 

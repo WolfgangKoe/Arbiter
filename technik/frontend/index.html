@@ -9,5 +9,20 @@
 <body>
   <header class="kopfzeile"></header>
   <main class="spielbereich"></main>
+  <template id="kopfzeileSpieler"><div class="kopfzeileSpieler spieler1 anDerReihe">Spieler 1<span class="kopfzeileAnDerReihe">an der Reihe</span></div></template>
+  <template id="kopfzeileTitel"><div class="kopfzeileTitel">ARBITER</div></template>
+  <template id="spalte"><aside class="spalte"></aside></template>
+  <template id="armeeKarte"><div class="armeeKarte spieler1"><h2 class="armeeKartenName">Spieler 1</h2></div></template>
+  <template id="einheitenKarte"><section class="einheitenKarte inAufstellung">
+    <div class="einheitenKartenName"><span>Boyz</span>
+    <span class="einheitenKartenAbzeichen">in Aufstellung</span><span class="einheitenKartenModelle">1</span></div>
+  </section></template>
+  <template id="karte"><div class="spalte spalteMitte">
+    <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
+      <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
+    </svg>
+  </div></template>
+  <template id="aufstellungszone"><svg><rect class="aufstellungszone spieler1" x="0" y="0" width="9" height="60"/></svg></template>
+  <template id="modell"><svg><circle class="modell spieler1" cx="2.0" cy="20" r="0.630"/></svg></template>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Wo eine Aufstellungszone liegt, an einer Stelle
 
-263 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+263 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da (Schnitt). Wo eine *Aufstellungszone* liegt, wird an
@@ -40,4 +40,4 @@ Erledigt, wenn außerhalb von `phasen/aufstellen.py` niemand mehr die Fläche ei
 zusammensetzt (`web/` ruft nur die Abfrage, `seite.js` setzt kein festes `y`) und
 `python3 -m pytest technik/tests` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen. `Ausgangslage.grenzenDerZone(zone)` (`phasen/aufstellen.py`) liefert die Grenzen in x und y; `_nichtGanzInDerZone` und `darstellung._zone` rufen nur sie, `_zone` gibt `x, y, breite, länge`, `seite.js` setzt kein festes `y` mehr. `grenzenInXDerZone` bleibt öffentlich, weil `auf4Test.py` (gesperrt) es importiert; außerhalb von `aufstellen.py` ruft es kein Produktcode mehr. Alle Tests grün. Der JSON-Schlüssel `tiefe` entfällt, W2 ist deine Sache.

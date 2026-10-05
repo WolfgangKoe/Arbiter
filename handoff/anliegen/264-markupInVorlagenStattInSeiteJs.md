@@ -1,6 +1,6 @@
 # Markup in Vorlagen der Seite statt in seite.js
 
-264 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+264 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da (Schnitt Frontend). Die drei Mockups sind HTML,
@@ -47,4 +47,4 @@ Mockup“. Das bleibt nur Text und lässt die Folgen 1 bis 3 bestehen. Ich empfe
 Erledigt, wenn `seite.js` kein Element mehr selbst erzeugt und `python3 -m pytest technik/tests`
 grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `index.html` hat `<template>` je Komponente (Markup wörtlich aus den Mockups), `seite.js` klont (`ausVorlage`, `ausSvgVorlage`), setzt Text, Attribute und Zustandsklassen und entfernt Fehlendes; es erzeugt kein Element mehr. Kreis und Zone liegen je in einem `<svg>` der Vorlage, sonst verlieren sie den SVG-Namensraum (Kommentar im Code). Alle Tests und Prüfungen grün (945).

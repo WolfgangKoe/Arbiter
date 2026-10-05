@@ -8,7 +8,11 @@ from arbiter.web.server import serverStarten
 def starten() -> None:
     server = serverStarten(Aufstellung(ausgangslageLaden()))
     print(server.adresse, flush=True)
-    server.warten()
+    try:
+        server.warten()
+    except KeyboardInterrupt:
+        # Warum: Strg+C beendet den Befehl ohne Traceback
+        server.beenden()
 
 
 if __name__ == "__main__":
