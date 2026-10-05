@@ -42,6 +42,15 @@ def testSauberesJavaScriptIstGrün(tmp_path):
     assert eslintVerstöße(tmp_path) == ""
 
 
+def testDasKlonenDerTemplateIstGrün(tmp_path):
+    klon = (
+        "export const knoten = "
+        'document.getElementById("vorlage").content.firstElementChild.cloneNode(true);\n'
+    )
+    probeAnlegen(tmp_path, "seite.js", klon)
+    assert eslintVerstöße(tmp_path) == ""
+
+
 def testSauberesCssIstGrün(tmp_path):
     probeAnlegen(tmp_path, "seite.css", verstoßFreiesCss)
     assert stylelintVerstöße(tmp_path) == ""
@@ -58,6 +67,32 @@ def testSauberesCssIstGrün(tmp_path):
         pytest.param("eqeqeq", "export const gleich = (x, y) => x == y;\n", id="=="),
         pytest.param("no-unused-vars", "const ungenutzt = 1;\n", id="ungenutzt"),
         pytest.param("complexity", zuKomplexeFunktion, id="16"),
+        pytest.param(
+            "no-restricted-properties",
+            'export const knoten = document.createElement("div");\n',
+            id="createElement",
+        ),
+        pytest.param(
+            "no-restricted-properties",
+            'export const knoten = document.createElementNS("x", "g");\n',
+            id="createElementNS",
+        ),
+        pytest.param("no-restricted-properties", 'document.write("a");\n', id="write"),
+        pytest.param(
+            "no-restricted-syntax",
+            'document.body.innerHTML = "<span></span>";\n',
+            id="innerHTML",
+        ),
+        pytest.param(
+            "no-restricted-syntax",
+            'document.body.outerHTML = "<span></span>";\n',
+            id="outerHTML",
+        ),
+        pytest.param(
+            "no-restricted-syntax",
+            'document.body.insertAdjacentHTML("beforeend", "<span></span>");\n',
+            id="insertAdjacentHTML",
+        ),
         pytest.param("arbiter/kommentare", "// erklärt nur\nexport const eins = 1;\n", id="Prosa"),
         pytest.param("arbiter/kommentare", "/* Block */\nexport const eins = 1;\n", id="Block"),
         pytest.param("arbiter/kommentare", "// Warum: TODO\nexport const eins = 1;\n", id="TODO"),

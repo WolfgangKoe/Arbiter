@@ -1,6 +1,6 @@
 # sonarlint.py prüft nur Python, das Frontend bleibt ohne SonarLint
 
-280 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
+280 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -27,4 +27,6 @@ Rückfrage des Stakeholders: Was bedeutet „der Lauf würde länger“? Statt 1
 Klärung: Heute 44 s gemessen; mit JS geschätzt 50 bis 60 s (siehe Kosten), nicht Minuten.
 Antwort: Nein.
 
-**Stellungnahme.** 
+**Stellungnahme.** Nach „Nein“ steht in [regeln.md](../../prozess/regeln.md) bei SonarLint „Prüft
+nur Python“ mit Verweis auf ESLint und Stylelint. Der Ablauf (Werkzeuge) nennt „mindestens so
+streng wie SonarLint“ noch ohne diese Grenze: Anliegen 291. 
