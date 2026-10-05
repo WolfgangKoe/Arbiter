@@ -1,6 +1,6 @@
 # AUF-4: Wählen und „alle Einheiten“ benennen
 
-260 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+260 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von d6e3af0 (Lesbarkeit, `prozess/praemissen/wir.md`), in
@@ -39,4 +39,4 @@ Implementierer wird nicht blockiert.
 Am billigsten zusammen mit [259](259-handgriffeImportierenStattFixtures.md). Erledigt, wenn 1
 bis 4 umgesetzt sind und jeder Test aus demselben Grund rot oder grün ist wie vorher.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in `auf4Test.py` und `handgriffe.py`: 1. Die Wahl heißt `einheitInAufstellungWählen(…)`. 2. `alleEinheitenAufstellen(aufstellung)` steht in `handgriffe.py`, die Summen entfallen. 3. `aufstellungVorDerZonenwahl` (ausgangslage, nachDerGewinnerwahl) ersetzt den Schalter; AUF-4.4 „solange keiner an der Reihe ist“ teilt sich dafür in zwei Tests (vor der Zonenwahl, nach der Aufstellung), weil die Fixture die dritte Form nicht trägt. 4. Der Test zu AUF-4.3 steht bei den übrigen von AUF-4.3.

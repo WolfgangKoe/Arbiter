@@ -4,8 +4,10 @@ from dataclasses import dataclass
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, grenzenInXDerZone
+from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.spielobjekte import Spieler
+from tests.akzeptanz.bildschirm import ablageVon, elementeDerSeite, modellfarben
+from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, einheitenAufstellen, modelleSetzen
 
 
 @dataclass(frozen=True)
@@ -37,21 +39,22 @@ def gewählteAufstellung(ausgangsaufstellung, gewinnerwahl, zoneDesGewinners):
     return ausgangsaufstellung
 
 
-@pytest.fixture(params=["ausgangslage", "nachDerGewinnerwahl", "nachDerAufstellung"])
-def aufstellungOhneJemandAnDerReihe(
-    request, ausgangsaufstellung, spielerEins, spielerZwei, einheitenAufstellen
-):
-    if request.param != "ausgangslage":
-        ausgangsaufstellung.gewinnerWählen(spielerEins)
-    if request.param == "nachDerAufstellung":
-        ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.zweite)
-        alleEinheiten = len(spielerEins.armee.einheiten) + len(spielerZwei.armee.einheiten)
-        einheitenAufstellen(ausgangsaufstellung, alleEinheiten)
-    return ausgangsaufstellung
+@pytest.fixture(params=["ausgangslage", "nachDerGewinnerwahl"])
+def aufstellungVorDerZonenwahl(request, ausgangslage, spielerEins) -> Aufstellung:
+    aufstellung = Aufstellung(ausgangslage)
+    if request.param == "nachDerGewinnerwahl":
+        aufstellung.gewinnerWählen(spielerEins)
+    return aufstellung
+
+
+@pytest.fixture
+def aufstellungNachDerAufstellung(aufstellungNachDerZonenwahl) -> Aufstellung:
+    alleEinheitenAufstellen(aufstellungNachDerZonenwahl)
+    return aufstellungNachDerZonenwahl
 
 
 @pytest.fixture(params=["nachDerZonenwahl", "nachDemBeenden"])
-def aufstellungOhneEinheitInAufstellung(request, aufstellungNachDerZonenwahl, einheitenAufstellen):
+def aufstellungOhneEinheitInAufstellung(request, aufstellungNachDerZonenwahl):
     if request.param == "nachDemBeenden":
         einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
     return aufstellungNachDerZonenwahl
@@ -60,7 +63,7 @@ def aufstellungOhneEinheitInAufstellung(request, aufstellungNachDerZonenwahl, ei
 def testAuf4_2DieAblageDesSpielersDerErstenArmeeHeißtSpieler1(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    ablage = bildschirm.ablageVon(seite, "Spieler 1")
+    ablage = ablageVon(seite, "Spieler 1")
 
     assert ablage.count() == 1
     assert ablage.locator(".einheitenKarte", has_text="Boyz").count() == 1
@@ -70,7 +73,7 @@ def testAuf4_2DieAblageDesSpielersDerErstenArmeeHeißtSpieler1(bildschirm, ausga
 def testAuf4_2DieAblageDesSpielersDerZweitenArmeeHeißtSpieler2(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    ablage = bildschirm.ablageVon(seite, "Spieler 2")
+    ablage = ablageVon(seite, "Spieler 2")
 
     assert ablage.count() == 1
     assert ablage.locator(".einheitenKarte", has_text="Necron Warriors").count() == 1
@@ -90,7 +93,7 @@ def testAuf4_3DieAblageZeigtJedeEinheitMitDerAnzahlIhrerNichtGesetztenModelle(
 ):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    ablage = bildschirm.ablageVon(seite, spielername)
+    ablage = ablageVon(seite, spielername)
 
     karten = ablage.locator(".einheitenKarte")
     anzahlen = {
@@ -111,7 +114,7 @@ def testAuf4_3DieAblageZähltNurDieNichtGesetztenModelleDerEinheit(
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    karte = bildschirm.ablageVon(seite, "Spieler 1").locator(".einheitenKarte", has_text="Boyz")
+    karte = ablageVon(seite, "Spieler 1").locator(".einheitenKarte", has_text="Boyz")
     assert karte.locator(".einheitenKartenModelle").text_content() == nichtGesetzt
 
 
@@ -122,32 +125,60 @@ def testAuf4_3SindAlleModelleGesetztZeigtDieAblageDieEinheitOhneAnzahl(
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    karte = bildschirm.ablageVon(seite, "Spieler 1").locator(".einheitenKarte", has_text="Boyz")
+    karte = ablageVon(seite, "Spieler 1").locator(".einheitenKarte", has_text="Boyz")
     assert karte.count() == 1
     assert karte.locator(".einheitenKartenModelle").count() == 0
 
 
 def testAuf4_3DieAblageZeigtKeineAufgestellteEinheit(
-    bildschirm, aufstellungNachDerZonenwahl, spielerZwei, einheitenAufstellen
+    bildschirm, aufstellungNachDerZonenwahl, spielerZwei
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    ablageEins = bildschirm.ablageVon(seite, "Spieler 1")
-    ablageZwei = bildschirm.ablageVon(seite, "Spieler 2")
+    ablageEins = ablageVon(seite, "Spieler 1")
+    ablageZwei = ablageVon(seite, "Spieler 2")
     assert ablageEins.locator(".einheitenKarte").count() == 1
     assert ablageEins.locator(".einheitenKarte", has_text="Warboss").count() == 1
     assert ablageZwei.locator(".einheitenKarte").count() == len(spielerZwei.armee.einheiten)
 
 
-def testAuf4_4SolangeKeinerAnDerReiheIstZeigtArbiterKeinen(
-    bildschirm, aufstellungOhneJemandAnDerReihe
+def testAuf4_3HatEinSpielerAlleEinheitenAufgestelltBleibtSeineAblageLeerUndNenntIhn(
+    bildschirm, aufstellungNachDerZonenwahl
 ):
-    seite = bildschirm.seiteZu(aufstellungOhneJemandAnDerReihe)
+    alleEinheitenAufstellen(aufstellungNachDerZonenwahl)
 
-    kopfzeilen = bildschirm.elementeDerSeite(seite, ".kopfzeileSpieler")
-    texte = " ".join(kopfzeile.text for kopfzeile in kopfzeilen)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    for spielername in ("Spieler 1", "Spieler 2"):
+        ablage = ablageVon(seite, spielername)
+        assert ablage.count() == 1
+        assert ablage.locator(".einheitenKarte").count() == 0
+
+
+def kopfzeilenTexte(seite) -> str:
+    kopfzeilen = elementeDerSeite(seite, ".kopfzeileSpieler")
+    return " ".join(kopfzeile.text for kopfzeile in kopfzeilen)
+
+
+def testAuf4_4VorDerZonenwahlZeigtArbiterKeinenAnDerReihe(bildschirm, aufstellungVorDerZonenwahl):
+    seite = bildschirm.seiteZu(aufstellungVorDerZonenwahl)
+
+    texte = kopfzeilenTexte(seite)
+
+    assert "Spieler 1" in texte
+    assert "Spieler 2" in texte
+    assert seite.locator(".kopfzeileAnDerReihe").count() == 0
+
+
+def testAuf4_4NachDerAufstellungZeigtArbiterKeinenAnDerReihe(
+    bildschirm, aufstellungNachDerAufstellung
+):
+    seite = bildschirm.seiteZu(aufstellungNachDerAufstellung)
+
+    texte = kopfzeilenTexte(seite)
+
     assert "Spieler 1" in texte
     assert "Spieler 2" in texte
     assert seite.locator(".kopfzeileAnDerReihe").count() == 0
@@ -166,7 +197,7 @@ def testAuf4_4ArbiterZeigtDenSpielerAnDerReihe(bildschirm, ausgangsaufstellung, 
 
 
 def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
-    bildschirm, ausgangsaufstellung, gewinnerwahl, einheitenAufstellen
+    bildschirm, ausgangsaufstellung, gewinnerwahl
 ):
     ausgangsaufstellung.gewinnerWählen(gewinnerwahl.gewinner)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
@@ -181,13 +212,13 @@ def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
 
 @pytest.mark.parametrize("gesetzt", [0, 3, 10], ids=["keinGesetzt", "dreiGesetzt", "alleGesetzt"])
 def testAuf4_5DieEinheitInAufstellungIstInDerAblageGekennzeichnet(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, modelleSetzen, gesetzt
+    bildschirm, aufstellungNachDerZonenwahl, boyz, gesetzt
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, gesetzt)
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    ablage = bildschirm.ablageVon(seite, "Spieler 1")
+    ablage = ablageVon(seite, "Spieler 1")
     abzeichen = seite.locator(".einheitenKartenAbzeichen")
     assert abzeichen.count() == 1
     assert abzeichen.text_content() == "in Aufstellung"
@@ -200,15 +231,15 @@ def testAuf4_5DieEinheitInAufstellungIstInDerAblageGekennzeichnet(
 
 
 def testAuf4_5DieEinheitInAufstellungDesZweitenSpielersIstInSeinerAblageGekennzeichnet(
-    bildschirm, aufstellungNachDerZonenwahl, necronWarriors, einheitenAufstellen, modelleSetzen
+    bildschirm, aufstellungNachDerZonenwahl, necronWarriors
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
-    modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 0)
+    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(necronWarriors)
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    ablageEins = bildschirm.ablageVon(seite, "Spieler 1")
-    ablageZwei = bildschirm.ablageVon(seite, "Spieler 2")
+    ablageEins = ablageVon(seite, "Spieler 1")
+    ablageZwei = ablageVon(seite, "Spieler 2")
     assert ablageEins.locator(".einheitenKartenAbzeichen").count() == 0
     assert ablageZwei.locator(".einheitenKartenAbzeichen").count() == 1
     assert (
@@ -220,14 +251,14 @@ def testAuf4_5DieEinheitInAufstellungDesZweitenSpielersIstInSeinerAblageGekennze
 
 
 def testAuf4_5MitDerWahlEinerAnderenEinheitWandertDieKennzeichnung(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, warboss, modelleSetzen
+    bildschirm, aufstellungNachDerZonenwahl, boyz, warboss
 ):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 0)
-    modelleSetzen(aufstellungNachDerZonenwahl, warboss, 0)
+    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(boyz)
+    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(warboss)
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    ablage = bildschirm.ablageVon(seite, "Spieler 1")
+    ablage = ablageVon(seite, "Spieler 1")
     abzeichen = ablage.locator(".einheitenKartenAbzeichen")
     assert abzeichen.count() == 1
     assert (
@@ -248,40 +279,36 @@ def testAuf4_5OhneEinheitInAufstellungKennzeichnetDieAblageKeine(
 
 
 def testAuf4_6NachDerWahlZeigtDieKarteJedeZoneInDerFarbeDerModelleIhresSpielers(
-    bildschirm, gewählteAufstellung, ausgangslage, einheitenAufstellen
+    bildschirm, gewählteAufstellung, ausgangslage
 ):
-    breite, _ = ausgangslage.spielfeld.seitenlängen
     einheitenAufstellen(gewählteAufstellung, 2)
 
     seite = bildschirm.seiteZu(gewählteAufstellung)
 
-    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
     farbeJeZone = {zone.zahl("x"): zone.fill for zone in zonen}
     for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler):
         zone = gewählteAufstellung.aufstellungszone(spieler)
-        zoneBeginnt, _ = grenzenInXDerZone(zone, breite, ausgangslage.tiefen[zone])
-        (farbeDerModelle,) = bildschirm.modellfarben(seite, gewählteAufstellung, spieler)
+        (zoneBeginnt, _), _ = ausgangslage.grenzenDerZone(zone)
+        (farbeDerModelle,) = modellfarben(seite, gewählteAufstellung, spieler)
         assert farbeJeZone[float(zoneBeginnt)] == farbeDerModelle
 
 
-@pytest.mark.parametrize(
-    "gewinnerGewählt", [False, True], ids=["ausgangslage", "nachDerGewinnerwahl"]
-)
 def testAuf4_6VorDerWahlZeigtDieKarteKeineZoneInDerFarbeEinesSpielers(
-    bildschirm, ausgangslage, aufstellungMitModellenBeiderSpieler, gewinnerGewählt
+    bildschirm,
+    aufstellungVorDerZonenwahl,
+    aufstellungMitModellenBeiderSpieler,
+    spielerEins,
+    spielerZwei,
 ):
-    spielerEins, spielerZwei = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
-    vorDerWahl = Aufstellung(ausgangslage)
-    if gewinnerGewählt:
-        vorDerWahl.gewinnerWählen(spielerEins)
     seiteMitModellen = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
-    farbenDerModelle = bildschirm.modellfarben(
+    farbenDerModelle = modellfarben(
         seiteMitModellen, aufstellungMitModellenBeiderSpieler, spielerEins
-    ) | bildschirm.modellfarben(seiteMitModellen, aufstellungMitModellenBeiderSpieler, spielerZwei)
+    ) | modellfarben(seiteMitModellen, aufstellungMitModellenBeiderSpieler, spielerZwei)
 
-    seite = bildschirm.seiteZu(vorDerWahl)
+    seite = bildschirm.seiteZu(aufstellungVorDerZonenwahl)
 
-    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
     farbenDerZonen = {zone.fill for zone in zonen}
     assert len(zonen) == len(Aufstellungszone)
     assert farbenDerZonen.isdisjoint(farbenDerModelle)
@@ -292,23 +319,9 @@ def testAuf4_7DieAblageNenntIhrenSpielerInDerFarbeSeinerModelle(
 ):
     seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
 
-    namen = bildschirm.elementeDerSeite(seite, ".armeeKartenName")
+    namen = elementeDerSeite(seite, ".armeeKartenName")
 
     farbeJeName = {name.text: {name.farbe} for name in namen}
-    farbenEins = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
-    farbenZwei = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
+    farbenEins = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
+    farbenZwei = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
     assert farbeJeName == {"Spieler 1": farbenEins, "Spieler 2": farbenZwei}
-
-
-def testAuf4_3HatEinSpielerAlleEinheitenAufgestelltBleibtSeineAblageLeerUndNenntIhn(
-    bildschirm, aufstellungNachDerZonenwahl, spielerEins, spielerZwei, einheitenAufstellen
-):
-    alleEinheiten = len(spielerEins.armee.einheiten) + len(spielerZwei.armee.einheiten)
-    einheitenAufstellen(aufstellungNachDerZonenwahl, alleEinheiten)
-
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-
-    for spielername in ("Spieler 1", "Spieler 2"):
-        ablage = bildschirm.ablageVon(seite, spielername)
-        assert ablage.count() == 1
-        assert ablage.locator(".einheitenKarte").count() == 0

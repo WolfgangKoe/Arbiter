@@ -1,4 +1,4 @@
-"""Testdaten und Bildschirm der Akzeptanztests: kleine Armeen auf Only War, Browser und Server."""
+"""Fixtures der Akzeptanztests: Testdaten, Spielstände, Bildschirm."""
 
 import pytest
 from playwright.sync_api import Browser, sync_playwright
@@ -6,19 +6,14 @@ from playwright.sync_api import Browser, sync_playwright
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
-from tests.akzeptanz import handgriffe
 from tests.akzeptanz.bildschirm import Bildschirm
-from tests.akzeptanz.handgriffe import Platz
-
-
-@pytest.fixture
-def sperrgründe():
-    return handgriffe.sperrgründe
-
-
-@pytest.fixture
-def durchmesserJeEinheit():
-    return handgriffe.durchmesserJeEinheit
+from tests.akzeptanz.handgriffe import (
+    Platz,
+    aufstellungVon,
+    einheitAufstellen,
+    modelleSetzen,
+    spielerMit,
+)
 
 
 @pytest.fixture
@@ -27,43 +22,18 @@ def ausgangslage() -> Ausgangslage:
 
 
 @pytest.fixture
-def spielerMit():
-    return handgriffe.spielerMit
-
-
-@pytest.fixture
-def aufstellungVon():
-    return handgriffe.aufstellungVon
-
-
-@pytest.fixture
-def stellenDerEinheit():
-    return handgriffe.stellenDerEinheit
-
-
-@pytest.fixture
-def stelleDesErstenModells():
-    return handgriffe.stelleDesErstenModells
-
-
-@pytest.fixture
-def einheitAufstellen():
-    return handgriffe.einheitAufstellen
-
-
-@pytest.fixture
 def ersterSpieler() -> Spieler:
-    return handgriffe.spielerMit(2, 1)
+    return spielerMit(2, 1)
 
 
 @pytest.fixture
 def zweiterSpieler() -> Spieler:
-    return handgriffe.spielerMit(2, 1)
+    return spielerMit(2, 1)
 
 
 @pytest.fixture
 def aufstellung(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
-    return handgriffe.aufstellungVon(ersterSpieler, zweiterSpieler)
+    return aufstellungVon(ersterSpieler, zweiterSpieler)
 
 
 @pytest.fixture(params=list(Aufstellungszone), ids=[zone.name for zone in Aufstellungszone])
@@ -99,15 +69,10 @@ def einheitNachDemAnderenSpieler(
     einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
     aufstellung.gewinnerWählen(zweiterSpieler)
     aufstellung.aufstellungszoneWählen(andereZone)
-    handgriffe.einheitAufstellen(aufstellung, ersteEinheit)
-    handgriffe.einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
+    einheitAufstellen(aufstellung, ersteEinheit)
+    einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
     aufstellung.einheitInAufstellungWählen(zweiteEinheit)
     return zweiteEinheit
-
-
-@pytest.fixture
-def radiusInZoll():
-    return handgriffe.radiusInZoll
 
 
 @pytest.fixture
@@ -154,22 +119,12 @@ def aufstellungNachDerZonenwahl(
 
 
 @pytest.fixture
-def modelleSetzen():
-    return handgriffe.modelleSetzen
-
-
-@pytest.fixture
 def aufstellungMitModellenBeiderSpieler(
     aufstellungNachDerZonenwahl: Aufstellung, boyz: Einheit, necronWarriors: Einheit
 ) -> Aufstellung:
-    handgriffe.einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
-    handgriffe.einheitAufstellen(aufstellungNachDerZonenwahl, necronWarriors)
+    einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
+    einheitAufstellen(aufstellungNachDerZonenwahl, necronWarriors)
     return aufstellungNachDerZonenwahl
-
-
-@pytest.fixture
-def einheitenAufstellen():
-    return handgriffe.einheitenAufstellen
 
 
 @pytest.fixture(scope="session")
@@ -188,7 +143,7 @@ def bildschirm(browser: Browser):
 
 
 @pytest.fixture
-def boyzSetzen(aufstellungNachDerZonenwahl, boyz, modelleSetzen):
+def boyzSetzen(aufstellungNachDerZonenwahl, boyz):
     """Spieler 1 wählt die Boyz und setzt so viele ihrer Modelle, wie verlangt."""
 
     def setzen(anzahl: int) -> list[tuple[Modell, Stelle]]:

@@ -5,6 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.handgriffe import sperrgründe
 
 
 def testQue1_1VorDemSetzenIstDasModellNichtGesetzt(aufstellung, einheitInAufstellung):
@@ -32,7 +33,7 @@ def testQue1_1OhneSperreIstDasModellDanachAnDerStelleGesetzt(
     ids=["dieselbeStelle", "halbVersetzt", "knappInDerLänge", "knappSchräg"],
 )
 def testQue1_2ÜberdecktDieBaseDieEinesGesetztenModellsIstSieGesperrt(
-    aufstellung, einheitInAufstellung, anteile, platz, sperrgründe
+    aufstellung, einheitInAufstellung, anteile, platz
 ):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
     anteilX, anteilY = anteile
@@ -62,9 +63,7 @@ def testQue1_2BerührenSichDieBasesIstDasSetzenNichtGesperrt(
     assert aufstellung.gesetzt(zweitesModell)
 
 
-def testQue1_2EinMillionstelZollZuNahIstGesperrt(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
-):
+def testQue1_2EinMillionstelZollZuNahIstGesperrt(aufstellung, einheitInAufstellung, platz):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3, 3 * platz.radius - platz.millionstel)
@@ -75,7 +74,7 @@ def testQue1_2EinMillionstelZollZuNahIstGesperrt(
 
 
 def testQue1_2AuchDasModellEinerAufgestelltenEinheitWirdÜberdeckt(
-    aufstellung, einheitNachDemAnderenSpieler, ersterSpieler, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, ersterSpieler
 ):
     aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
     aufgestelltesModell, *_ = aufgestellteEinheit.modelle

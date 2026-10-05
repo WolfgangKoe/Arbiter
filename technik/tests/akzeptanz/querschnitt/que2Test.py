@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
+from tests.akzeptanz.handgriffe import einheitenAufstellen, radiusInZoll
 
 _technik = Path(__file__).parents[3]
 _sekundenBisZurAdresse = 15
@@ -66,7 +68,7 @@ def testQue2_2DieKarteZeigtDasSpielfeldAlsRechteckMitDenSeitenlängenDerAusgangs
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
     assert spielfeld.art == "rect"
     assert spielfeld.zahl("x") == 0
     assert spielfeld.zahl("y") == 0
@@ -83,7 +85,7 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
     gezeigt = sorted(
         (zone.zahl("x"), zone.zahl("y"), zone.zahl("width"), zone.zahl("height")) for zone in zonen
     )
@@ -96,11 +98,11 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
 def testQue2_4OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    assert bildschirm.elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".karte .modell") == ()
 
 
 def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
-    bildschirm, aufstellungMitModellenBeiderSpieler, einheitenAufstellen, radiusInZoll, ausgangslage
+    bildschirm, aufstellungMitModellenBeiderSpieler, ausgangslage
 ):
     einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
     aufstellung = aufstellungMitModellenBeiderSpieler
@@ -121,14 +123,14 @@ def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAn
 
     seite = bildschirm.seiteZu(aufstellung)
 
-    kreise = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    kreise = elementeDerSeite(seite, ".karte .modell")
     gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
     assert len(gezeigt) == len(gesetzte)
     assert gezeigt == erwartet
 
 
 def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, radiusInZoll
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
 ):
     gesetzte = boyzSetzen(_anzahlGesetzterModelle)
     erwartet = sorted(
@@ -138,7 +140,7 @@ def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    kreise = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    kreise = elementeDerSeite(seite, ".karte .modell")
     gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
     assert gezeigt == erwartet
     assert len(gezeigt) == _anzahlGesetzterModelle
@@ -165,7 +167,7 @@ def testQue2_5DieSeitenlängenDesSpielfeldsHabenAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
+    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     assert spielfeld.höheInPixeln / float(länge) == pytest.approx(
         pixelJeZoll, rel=_pixelgenauigkeit
@@ -181,15 +183,15 @@ def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
-    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
+    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
     zone = next(zone for zone in zonen if zone.zahl("x") == 0)
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     assert zone.breiteInPixeln / float(tiefe) == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
 
 
 def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
-    bildschirm, einGesetztesModell, ausgangslage, radiusInZoll, fenster
+    bildschirm, einGesetztesModell, ausgangslage, fenster
 ):
     aufstellung, modell = einGesetztesModell
     breite, _ = ausgangslage.spielfeld.seitenlängen
@@ -197,8 +199,8 @@ def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
-    (kreis,) = bildschirm.elementeDerSeite(seite, ".karte .modell")
+    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
+    (kreis,) = elementeDerSeite(seite, ".karte .modell")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     durchmesser = float(2 * radiusInZoll(modell))
     assert kreis.breiteInPixeln / durchmesser == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
@@ -209,8 +211,8 @@ def testQue2_6DieModelleEinesSpielersHabenAufDerKarteEineFarbe(
 ):
     seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
 
-    farbenEins = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
-    farbenZwei = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
+    farbenEins = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
+    farbenZwei = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
 
     assert len(farbenEins) == 1
     assert len(farbenZwei) == 1
@@ -221,7 +223,7 @@ def testQue2_6DieModelleDerZweiSpielerHabenAufDerKarteVerschiedeneFarben(
 ):
     seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
 
-    farbenEins = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
-    farbenZwei = bildschirm.modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
+    farbenEins = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerEins)
+    farbenZwei = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
 
     assert farbenEins.isdisjoint(farbenZwei)

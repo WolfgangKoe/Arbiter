@@ -4,6 +4,7 @@ from fractions import Fraction
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.handgriffe import durchmesserJeEinheit, sperrgründe
 
 
 def modelleDerArmeen(ausgangslage):
@@ -18,7 +19,7 @@ def einheitenDerArmeen(ausgangslage):
     ]
 
 
-def durchmesserDerArmeen(ausgangslage, durchmesserJeEinheit) -> list[tuple[tuple[int, ...], ...]]:
+def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
     return sorted(
         [
             durchmesserJeEinheit(ausgangslage.ersterSpieler),
@@ -37,7 +38,7 @@ def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitIn
 
 
 def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
+    aufstellung, einheitInAufstellung, platz
 ):
     erstesModell, _ = einheitInAufstellung.modelle
     stelle = platz.stelle(platz.tiefeDerZone - platz.radius + platz.millionstel, 10)
@@ -103,12 +104,12 @@ def testAuf2_6JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
     assert zahlenDerModelle == [(10, 1), (10, 1)]
 
 
-def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage, durchmesserJeEinheit):
+def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
     # Regel: Durchmesser in mm je Modell, ausgangslage.yaml
     orks = ((32,) * 10, (40,))
     necrons = ((32,) * 10, (32,))
 
-    durchmesser = durchmesserDerArmeen(ausgangslage, durchmesserJeEinheit)
+    durchmesser = durchmesserDerArmeen(ausgangslage)
 
     assert durchmesser == sorted([orks, necrons])
 

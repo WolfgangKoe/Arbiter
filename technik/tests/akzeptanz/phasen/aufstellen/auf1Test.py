@@ -7,6 +7,14 @@ import pytest
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Spieler, Stelle
+from tests.akzeptanz.handgriffe import (
+    aufstellungVon,
+    einheitAufstellen,
+    sperrgründe,
+    spielerMit,
+    stelleDesErstenModells,
+    stellenDerEinheit,
+)
 
 ersteZone, zweiteZone = list(Aufstellungszone)
 # Warum: Gesperrt wird vor jeder Prüfung der Stelle (AUF-3.6), welche Stelle ist gleich.
@@ -18,9 +26,7 @@ def nachDerWahlDerAufstellungszone(aufstellung: Aufstellung, gewinner: Spieler) 
     aufstellung.aufstellungszoneWählen(ersteZone)
 
 
-def reihenfolgeBeimAufstellen(
-    aufstellung: Aufstellung, einheiten: list[Einheit], einheitAufstellen
-) -> list[Spieler]:
+def reihenfolgeBeimAufstellen(aufstellung: Aufstellung, einheiten: list[Einheit]) -> list[Spieler]:
     reihenfolge = []
     for einheit in einheiten:
         reihenfolge.append(aufstellung.anDerReihe)
@@ -62,9 +68,7 @@ def testAuf1_1GewinnerKannJederDerBeidenSpielerSein(aufstellung, ersterSpieler, 
     assert aufstellung.aufstellungszone(ersterSpieler) == zweiteZone
 
 
-def testAuf1_2DieAufstellungszoneVorDemGewinnerIstNichtWählbar(
-    aufstellung, ersterSpieler, sperrgründe
-):
+def testAuf1_2DieAufstellungszoneVorDemGewinnerIstNichtWählbar(aufstellung, ersterSpieler):
     gründe = sperrgründe(aufstellung.aufstellungszoneWählen, ersteZone)
 
     assert gründe == {Grund.nichtWählbar}
@@ -72,9 +76,7 @@ def testAuf1_2DieAufstellungszoneVorDemGewinnerIstNichtWählbar(
     assert aufstellung.aufstellungszone(ersterSpieler) is None
 
 
-def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(
-    aufstellung, ersterSpieler, sperrgründe
-):
+def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(aufstellung, ersterSpieler):
     sperrgründe(aufstellung.aufstellungszoneWählen, ersteZone)
     aufstellung.gewinnerWählen(ersterSpieler)
 
@@ -84,9 +86,7 @@ def testAuf1_2NachDerGesperrtenZoneSindGewinnerUndZoneNochWählbar(
     assert aufstellung.aufstellungszone(ersterSpieler) == ersteZone
 
 
-def testAuf1_2DerGewinnerEinZweitesMalIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
-):
+def testAuf1_2DerGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler, zweiterSpieler):
     aufstellung.gewinnerWählen(ersterSpieler)
 
     gründe = sperrgründe(aufstellung.gewinnerWählen, zweiterSpieler)
@@ -95,7 +95,7 @@ def testAuf1_2DerGewinnerEinZweitesMalIstNichtWählbar(
     assert aufstellung.gewinner is ersterSpieler
 
 
-def testAuf1_2DerselbeGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler, sperrgründe):
+def testAuf1_2DerselbeGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterSpieler):
     aufstellung.gewinnerWählen(ersterSpieler)
 
     gründe = sperrgründe(aufstellung.gewinnerWählen, ersterSpieler)
@@ -105,7 +105,7 @@ def testAuf1_2DerselbeGewinnerEinZweitesMalIstNichtWählbar(aufstellung, ersterS
 
 
 def testAuf1_2DerGewinnerNachDerAufstellungszoneIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
 
@@ -118,7 +118,7 @@ def testAuf1_2DerGewinnerNachDerAufstellungszoneIstNichtWählbar(
 
 @pytest.mark.parametrize("zweiteWahl", list(Aufstellungszone))
 def testAuf1_2DieAufstellungszoneEinZweitesMalIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiteWahl, sperrgründe
+    aufstellung, ersterSpieler, zweiteWahl
 ):
     aufstellung.gewinnerWählen(ersterSpieler)
     aufstellung.aufstellungszoneWählen(ersteZone)
@@ -156,7 +156,7 @@ def testAuf1_3IstDerZweiteSpielerGewinnerIstDerErsteAnDerReihe(
 
 
 def testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen(
-    aufstellung, ersterSpieler, zweiterSpieler, stelleDesErstenModells
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
@@ -170,7 +170,7 @@ def testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen(
 
 
 def testAuf1_4OhneEinheitInAufstellungIstSetzenNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
@@ -182,7 +182,7 @@ def testAuf1_4OhneEinheitInAufstellungIstSetzenNichtInAufstellung(
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf1_4VorDerWahlIstSetzenNichtInAufstellung(aufstellung, ersterSpieler, sperrgründe):
+def testAuf1_4VorDerWahlIstSetzenNichtInAufstellung(aufstellung, ersterSpieler):
     ersteEinheit, _ = ersterSpieler.armee.einheiten
     erstesModell, *_ = ersteEinheit.modelle
 
@@ -193,7 +193,7 @@ def testAuf1_4VorDerWahlIstSetzenNichtInAufstellung(aufstellung, ersterSpieler, 
 
 
 def testAuf1_4EinModellEinerAnderenEinheitIstNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheitInAufstellung, andereEinheit = zweiterSpieler.armee.einheiten
@@ -207,7 +207,7 @@ def testAuf1_4EinModellEinerAnderenEinheitIstNichtInAufstellung(
 
 
 def testAuf1_4EinModellDesAnderenSpielersIstNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheitInAufstellung, _ = zweiterSpieler.armee.einheiten
@@ -222,7 +222,7 @@ def testAuf1_4EinModellDesAnderenSpielersIstNichtInAufstellung(
 
 
 def testAuf1_4OhneEinheitInAufstellungIstBeendenNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
 
@@ -232,7 +232,7 @@ def testAuf1_4OhneEinheitInAufstellungIstBeendenNichtInAufstellung(
     assert aufstellung.anDerReihe is zweiterSpieler
 
 
-def testAuf1_4VorDerWahlIstBeendenNichtInAufstellung(aufstellung, sperrgründe):
+def testAuf1_4VorDerWahlIstBeendenNichtInAufstellung(aufstellung):
     gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
 
     assert gründe == {Grund.nichtInAufstellung}
@@ -241,7 +241,7 @@ def testAuf1_4VorDerWahlIstBeendenNichtInAufstellung(aufstellung, sperrgründe):
 
 
 def testAuf1_4NachDemBeendenGibtEsKeineEinheitZumErneutenBeenden(
-    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
@@ -264,7 +264,7 @@ def testAuf1_5EineNichtAufgestellteEinheitDesSpielersAnDerReiheIstWählbar(
     assert aufstellung.einheitInAufstellung is zweiteEinheit
 
 
-def testAuf1_5VorDerWahlIstKeineEinheitWählbar(aufstellung, ersterSpieler, sperrgründe):
+def testAuf1_5VorDerWahlIstKeineEinheitWählbar(aufstellung, ersterSpieler):
     ersteEinheit, _ = ersterSpieler.armee.einheiten
 
     gründe = sperrgründe(aufstellung.einheitInAufstellungWählen, ersteEinheit)
@@ -273,9 +273,7 @@ def testAuf1_5VorDerWahlIstKeineEinheitWählbar(aufstellung, ersterSpieler, sper
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5EineEinheitDesSpielersNichtAnDerReiheIstNichtWählbar(
-    aufstellung, ersterSpieler, sperrgründe
-):
+def testAuf1_5EineEinheitDesSpielersNichtAnDerReiheIstNichtWählbar(aufstellung, ersterSpieler):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = ersterSpieler.armee.einheiten
 
@@ -285,9 +283,7 @@ def testAuf1_5EineEinheitDesSpielersNichtAnDerReiheIstNichtWählbar(
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
-):
+def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(aufstellung, ersterSpieler, zweiterSpieler):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     aufgestellteEinheit, _ = zweiterSpieler.armee.einheiten
     einheitDesAnderenSpielers, _ = ersterSpieler.armee.einheiten
@@ -300,9 +296,7 @@ def testAuf1_5EineAufgestellteEinheitIstNichtWählbar(
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen, sperrgründe
-):
+def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(aufstellung, ersterSpieler, zweiterSpieler):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheitErster, zweiteEinheitErster = ersterSpieler.armee.einheiten
     ersteEinheitZweiter, zweiteEinheitZweiter = zweiterSpieler.armee.einheiten
@@ -326,7 +320,7 @@ def testAuf1_5NachDerAufstellungIstKeineEinheitWählbar(
 
 
 def testAuf1_5GegenEineNichtWählbareEinheitGiltNichtWählbarAuchNachBegonnenerEinheit(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe, stelleDesErstenModells
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, _ = zweiterSpieler.armee.einheiten
@@ -354,9 +348,7 @@ def testAuf1_6OhneGesetztesModellLöstDieWählbareEinheitDieBisherigeAb(
     assert aufstellung.einheitInAufstellung is wählbareEinheit
 
 
-def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe, stelleDesErstenModells
-):
+def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(aufstellung, ersterSpieler, zweiterSpieler):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
     erstesModell, *_ = begonneneEinheit.modelle
@@ -371,7 +363,7 @@ def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(
 
 
 def testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht(
-    aufstellung, ersterSpieler, zweiterSpieler, stelleDesErstenModells
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, _ = zweiterSpieler.armee.einheiten
@@ -387,7 +379,7 @@ def testAuf1_6DieBegonneneEinheitErneutWählenSperrtNicht(
 
 
 def testAuf1_7NachDemBeendenIstDieEinheitAufgestelltUndKeineInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, stellenDerEinheit
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, zweiteEinheit = zweiterSpieler.armee.einheiten
@@ -403,7 +395,7 @@ def testAuf1_7NachDemBeendenIstDieEinheitAufgestelltUndKeineInAufstellung(
 
 
 def testAuf1_7NachDemBeendenIstDerAndereSpielerAnDerReihe(
-    aufstellung, ersterSpieler, zweiterSpieler, stellenDerEinheit
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheit, _ = zweiterSpieler.armee.einheiten
@@ -416,22 +408,18 @@ def testAuf1_7NachDemBeendenIstDerAndereSpielerAnDerReihe(
     assert aufstellung.anDerReihe is ersterSpieler
 
 
-def testAuf1_7DieSpielerStellenAbwechselndAuf(
-    aufstellung, ersterSpieler, zweiterSpieler, einheitAufstellen
-):
+def testAuf1_7DieSpielerStellenAbwechselndAuf(aufstellung, ersterSpieler, zweiterSpieler):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     ersteEinheitErster, zweiteEinheitErster = ersterSpieler.armee.einheiten
     ersteEinheitZweiter, zweiteEinheitZweiter = zweiterSpieler.armee.einheiten
     einheiten = [ersteEinheitZweiter, ersteEinheitErster, zweiteEinheitZweiter, zweiteEinheitErster]
 
-    reihenfolge = reihenfolgeBeimAufstellen(aufstellung, einheiten, einheitAufstellen)
+    reihenfolge = reihenfolgeBeimAufstellen(aufstellung, einheiten)
 
     assert reihenfolge == [zweiterSpieler, ersterSpieler, zweiterSpieler, ersterSpieler]
 
 
-def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe(
-    spielerMit, einheitAufstellen, aufstellungVon
-):
+def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe():
     kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1, 1)
     aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
@@ -444,9 +432,7 @@ def testAuf1_7DerselbeSpielerBleibtNachSeinerErstenEinheitAnDerReihe(
     assert aufstellung.anDerReihe is größererSpieler
 
 
-def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe(
-    spielerMit, einheitAufstellen, aufstellungVon
-):
+def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe():
     kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1, 1)
     aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
@@ -460,9 +446,7 @@ def testAuf1_7DerselbeSpielerBleibtNachSeinerZweitenEinheitAnDerReihe(
     assert aufstellung.anDerReihe is größererSpieler
 
 
-def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet(
-    spielerMit, einheitAufstellen, aufstellungVon
-):
+def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet():
     kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1)
     aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)
@@ -478,9 +462,7 @@ def testAuf1_7HabenBeideAlleEinheitenAufgestelltIstDieAufstellungBeendet(
     assert aufstellung.einheitInAufstellung is None
 
 
-def testAuf1_7FehltNochEineEinheitIstDieAufstellungNichtBeendet(
-    spielerMit, einheitAufstellen, aufstellungVon
-):
+def testAuf1_7FehltNochEineEinheitIstDieAufstellungNichtBeendet():
     kleinerSpieler, größererSpieler = spielerMit(1), spielerMit(1, 1)
     aufstellung = aufstellungVon(kleinerSpieler, größererSpieler)
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=größererSpieler)

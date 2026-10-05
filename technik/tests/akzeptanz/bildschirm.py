@@ -1,4 +1,4 @@
-"""Bildschirm der Akzeptanztests: Browser, Server und was die Seite zeigt."""
+"""Bildschirm der Akzeptanztests: Browser, Server und das Lesen der Seite."""
 
 from dataclasses import dataclass
 
@@ -40,6 +40,29 @@ _elementeLesen = """elemente => elemente.map(element => {
 })"""
 
 
+def elementeDerSeite(seite: Page, auswahl: str) -> tuple[Element, ...]:
+    gelesen = seite.locator(auswahl).evaluate_all(_elementeLesen)
+    return tuple(Element(**eintrag) for eintrag in gelesen)
+
+
+def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> frozenset[str]:
+    """Die Füllfarben der Kreise an den Stellen der gesetzten Modelle des Spielers."""
+    farbeJeStelle = {
+        (kreis.zahl("cx"), kreis.zahl("cy")): kreis.fill
+        for kreis in elementeDerSeite(seite, ".karte .modell")
+    }
+    return frozenset(
+        farbeJeStelle[float(stelle.x), float(stelle.y)]
+        for modell in spieler.armee.modelle
+        if (stelle := aufstellung.stelle(modell)) is not None
+    )
+
+
+def ablageVon(seite: Page, spielername: str) -> Locator:
+    name = seite.locator(".armeeKartenName", has_text=spielername)
+    return seite.locator(".armeeKarte").filter(has=name)
+
+
 # Warum: Länger als das wartet Playwright nicht; dann antwortet der Server nicht
 wartezeitInMillisekunden = 5000
 
@@ -66,28 +89,6 @@ class Bildschirm:
         server = serverStarten(aufstellung)
         self._server.append(server)
         return self.seiteBei(server.adresse)
-
-    def elementeDerSeite(self, seite: Page, auswahl: str) -> tuple[Element, ...]:
-        gelesen = seite.locator(auswahl).evaluate_all(_elementeLesen)
-        return tuple(Element(**eintrag) for eintrag in gelesen)
-
-    def modellfarben(
-        self, seite: Page, aufstellung: Aufstellung, spieler: Spieler
-    ) -> frozenset[str]:
-        """Die Füllfarben der Kreise an den Stellen der gesetzten Modelle des Spielers."""
-        farbeJeStelle = {
-            (kreis.zahl("cx"), kreis.zahl("cy")): kreis.fill
-            for kreis in self.elementeDerSeite(seite, ".karte .modell")
-        }
-        return frozenset(
-            farbeJeStelle[float(stelle.x), float(stelle.y)]
-            for modell in spieler.armee.modelle
-            if (stelle := aufstellung.stelle(modell)) is not None
-        )
-
-    def ablageVon(self, seite: Page, spielername: str) -> Locator:
-        name = seite.locator(".armeeKartenName", has_text=spielername)
-        return seite.locator(".armeeKarte").filter(has=name)
 
     def beenden(self) -> None:
         for seite in self._seiten:

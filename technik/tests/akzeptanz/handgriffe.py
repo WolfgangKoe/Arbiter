@@ -140,3 +140,13 @@ def einheitenAufstellen(aufstellung: Aufstellung, anzahl: int) -> None:
             einheit for einheit in spieler.armee.einheiten if not aufstellung.aufgestellt(einheit)
         )
         einheitAufstellen(aufstellung, nächste)
+
+
+def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
+    """Beide Spieler stellen alle Einheiten ihrer Armee auf."""
+    ausgangslage = aufstellung.ausgangslage
+    einheitenAufstellen(
+        aufstellung,
+        len(ausgangslage.ersterSpieler.armee.einheiten)
+        + len(ausgangslage.zweiterSpieler.armee.einheiten),
+    )

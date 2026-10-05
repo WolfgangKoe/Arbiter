@@ -1,5 +1,7 @@
 """OBJ-1 · Armeen und Spielfeld."""
 
+from tests.akzeptanz.handgriffe import durchmesserJeEinheit
+
 
 def testObj1_1JederSpielerFührtEineArmeeMitEinheiten(ausgangslage):
     ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
@@ -15,7 +17,7 @@ def testObj1_1DieZweiSpielerFührenVerschiedeneArmeen(ausgangslage):
     assert ersterSpieler.armee is not zweiterSpieler.armee
 
 
-def testObj1_1DieZweiArmeenUnterscheidenSichImInhalt(ausgangslage, durchmesserJeEinheit):
+def testObj1_1DieZweiArmeenUnterscheidenSichImInhalt(ausgangslage):
     ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
 
     assert durchmesserJeEinheit(ersterSpieler) != durchmesserJeEinheit(zweiterSpieler)

@@ -5,6 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.handgriffe import sperrgründe
 
 # Regel: Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
 gerade = (1, 0)
@@ -17,7 +18,7 @@ schräg = (Fraction(3, 5), Fraction(4, 5))
     ids=["überDieSpielfeldkante", "mitteDesSpielfelds", "zoneDesAnderenSpielers"],
 )
 def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
-    aufstellung, einheitInAufstellung, lageInRadien, platz, sperrgründe
+    aufstellung, einheitInAufstellung, lageInRadien, platz
 ):
     erstesModell, _ = einheitInAufstellung.modelle
     tiefeInRadien, längeInRadien = lageInRadien
@@ -32,9 +33,7 @@ def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
     assert aufstellung.stelle(erstesModell) is None
 
 
-def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
-):
+def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(aufstellung, einheitInAufstellung, platz):
     erstesModell, _ = einheitInAufstellung.modelle
     stelle = platz.stelle(3, platz.radius - platz.millionstel)
 
@@ -44,9 +43,7 @@ def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
-):
+def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(aufstellung, einheitInAufstellung, platz):
     erstesModell, _ = einheitInAufstellung.modelle
     stelle = platz.stelle(3, platz.längeDerSpielfeldkante - platz.radius + platz.millionstel)
 
@@ -62,7 +59,7 @@ def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(
     ids=["einZoll", "einZollSchräg", "halberZoll", "berührend", "überdeckend"],
 )
 def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesperrt(
-    aufstellung, einheitNachDemAnderenSpieler, lage, platz, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, lage, platz
 ):
     (modell,) = einheitNachDemAnderenSpieler.modelle
     abstand, richtung = lage
@@ -77,7 +74,7 @@ def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesp
 
 @pytest.mark.parametrize("richtung", [gerade, schräg], ids=["gerade", "schräg"])
 def testAuf3_4JenseitsVonEinemZollIstNichtInNahkampfreichweite(
-    aufstellung, einheitNachDemAnderenSpieler, richtung, platz, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, richtung, platz
 ):
     (modell,) = einheitNachDemAnderenSpieler.modelle
     mittelpunkte = 2 * platz.radius + 1 + platz.millionstel
@@ -100,9 +97,7 @@ def testAuf3_4EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
     assert aufstellung.gesetzt(zweitesModell)
 
 
-def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
-):
+def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(aufstellung, einheitInAufstellung, platz):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
     aufstellung.modellSetzen(
         erstesModell, platz.stelle(platz.tiefeDerZone - platz.radius, platz.radius)
@@ -116,7 +111,7 @@ def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(
 
 
 def testAuf3_5NichtGanzInDerZoneUndNahkampfreichweiteNenntArbiterBeide(
-    aufstellung, einheitNachDemAnderenSpieler, platz, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
     (modell,) = einheitNachDemAnderenSpieler.modelle
     stelle = platz.stelleBeimAnderenSpieler(2 * platz.radius + Fraction(1, 2), gerade)
@@ -128,7 +123,7 @@ def testAuf3_5NichtGanzInDerZoneUndNahkampfreichweiteNenntArbiterBeide(
 
 
 def testAuf3_5AufDemModellDesAnderenSpielersNenntArbiterBaseNahkampfreichweiteUndZone(
-    aufstellung, einheitNachDemAnderenSpieler, platz, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
     (modell,) = einheitNachDemAnderenSpieler.modelle
     stelle = platz.stelleBeimAnderenSpieler(0, gerade)
@@ -140,9 +135,7 @@ def testAuf3_5AufDemModellDesAnderenSpielersNenntArbiterBaseNahkampfreichweiteUn
 
 
 @pytest.mark.usefixtures("einheitInAufstellung")
-def testAuf3_6AußerhalbDerZoneNenntArbiterNurNichtInAufstellung(
-    aufstellung, ersterSpieler, platz, sperrgründe
-):
+def testAuf3_6AußerhalbDerZoneNenntArbiterNurNichtInAufstellung(aufstellung, ersterSpieler, platz):
     _, andereEinheit = ersterSpieler.armee.einheiten
     (modellDerAnderenEinheit,) = andereEinheit.modelle
     stelle = platz.stelle(22, 30)
@@ -154,7 +147,7 @@ def testAuf3_6AußerhalbDerZoneNenntArbiterNurNichtInAufstellung(
 
 @pytest.mark.usefixtures("einheitNachDemAnderenSpieler")
 def testAuf3_6AufDemModellDesAnderenSpielersNenntArbiterNurNichtInAufstellung(
-    aufstellung, ersterSpieler, zweiterSpieler, sperrgründe
+    aufstellung, ersterSpieler, zweiterSpieler
 ):
     aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
     einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
@@ -192,7 +185,7 @@ def testAuf3_7DieVorigeStelleDesModellsZähltNichtAlsÜberdeckung(
 
 
 def testAuf3_7NachDemÜberdeckenBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
+    aufstellung, einheitInAufstellung, platz
 ):
     erstesModell, zweitesModell = einheitInAufstellung.modelle
     vorigeStelle = platz.stelle(2, platz.radius)
@@ -206,7 +199,7 @@ def testAuf3_7NachDemÜberdeckenBleibtDasModellAnSeinerVorigenStelle(
 
 
 def testAuf3_7NachDemVerlassenDerZoneBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, einheitInAufstellung, platz, sperrgründe
+    aufstellung, einheitInAufstellung, platz
 ):
     erstesModell, _ = einheitInAufstellung.modelle
     vorigeStelle = platz.stelle(2, platz.radius)
@@ -219,7 +212,7 @@ def testAuf3_7NachDemVerlassenDerZoneBleibtDasModellAnSeinerVorigenStelle(
 
 
 def testAuf3_7NachDerNahkampfreichweiteBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, einheitNachDemAnderenSpieler, platz, sperrgründe
+    aufstellung, einheitNachDemAnderenSpieler, platz
 ):
     (modell,) = einheitNachDemAnderenSpieler.modelle
     vorigeStelle = platz.stelle(6, 20)

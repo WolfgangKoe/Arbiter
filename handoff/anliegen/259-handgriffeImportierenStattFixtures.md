@@ -1,6 +1,6 @@
 # Handgriffe importieren, Fixtures nur für Zustand
 
-259 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+259 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von d6e3af0 (Schnittstelle, `prozess/praemissen/wir.md`):
@@ -49,4 +49,4 @@ die Testdateien nur einmal angefasst werden. Erledigt, wenn 1 bis 3 umgesetzt si
 Fixture nur eine Funktion zurückgibt und `python3 -m pytest technik/tests` dieselben Tests
 sammelt und dieselben grün sind wie vorher.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in `technik/tests/akzeptanz/`: Die zehn Fixtures, die nur eine Funktion zurückgaben, entfallen aus `conftest.py`; die Testdateien importieren die Handgriffe aus `tests.akzeptanz.handgriffe`. `elementeDerSeite`, `modellfarben` und `ablageVon` sind Funktionen in `bildschirm.py`, `Bildschirm` behält `seiteBei`, `seiteZu`, `beenden`. Der Docstring von `conftest.py` lautet wie vorgeschlagen. `testAuf4_6VorDerWahl…` nimmt `spielerEins` und `spielerZwei` wieder als Fixture. Dieselben Tests sind grün.
