@@ -15,4 +15,5 @@ absichtlich rot.
 
 Erledigt, wenn der Halbsatz fehlt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Der Halbsatz „Stand des Repos rot, bis die Seite steht“ fehlt in der Zeile zu O3 in
+[Regeln](../../prozess/regeln.md). Erledigt, Nachprüfung beim Architekten.
