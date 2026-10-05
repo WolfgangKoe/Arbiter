@@ -68,7 +68,7 @@ Regel (Link) | Mechanismus | Scheiter-Test
 ---|---|---
 [Budget](ablauf.md#budget) nach Kontextfenster (Anliegen 22): 120.000 Meldung, 150.000 Sperre | `rollenregeln/belegung.py` (PreToolUse, PostToolUse); der Stand zeigt die Belegung; Freigabe durch den Stakeholder in `.git/arbiter/belegungsgrenze.txt` | `rollenregeln/belegungTest.py`, `standregeln/standTest.py`
 Der Koordinator liest nur kurze Dateien, `git show` nur mit `--stat` oder unter 4.000 Zeichen | `rollenregeln/lesegrenze.py` (Read), `rollenregeln/bashPositivliste.py` ruft `gitShowZulässig` | `rollenregeln/lesegrenzeTest.py`, `rollenregeln/bashPositivlisteTest.py`
-`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter-old/`, `ArbiterMap/` sind für alle Rollen und den Koordinator nur lesbar | `agenten.nurLesbar`, `rollenregeln/schreibgrenze.py` (Write, Edit, Meldung beim Ende), `rollenregeln/bashPositivliste.py` (rm, mv, cp, sed -i, Umleitung) | `rollenregeln/schreibgrenzeTest.py`, `rollenregeln/bashPositivlisteTest.py`
+`VORGEHEN.md`, `handoff/kritik-entwickler.md`, `Arbiter-old/`, `ArbiterMap/` sind für alle Rollen und den Koordinator nur lesbar | `agenten.nurLesbar`, `rollenregeln/schreibgrenze.py` (Write, Edit; die Meldung beim Ende erreicht den Koordinator nicht, Anliegen 278), `rollenregeln/bashPositivliste.py` (rm, mv, cp, sed -i, Umleitung) | `rollenregeln/schreibgrenzeTest.py`, `rollenregeln/bashPositivlisteTest.py`
 Koordinator: nur Positivliste; Rollen nutzen git nur lesend | `rollenregeln/bashPositivliste.py` | `rollenregeln/bashPositivlisteTest.py`
 Schreibpfade je Rolle | `rollenregeln/schreibgrenze.py` | `rollenregeln/schreibgrenzeTest.py`
 Schlussantwort höchstens 800 Zeichen | `rollenregeln/schlussantwort.py` | `rollenregeln/schlussantwortTest.py`

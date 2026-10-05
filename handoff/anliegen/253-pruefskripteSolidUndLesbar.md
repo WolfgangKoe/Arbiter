@@ -33,7 +33,7 @@ Ort. Etwa ein Lauf je Punkt; vor 215 bis 221 (dieselben Dateien).
 1. Schichten `gemeinsam` < `lesen` (neu: Anliegen-Kopf, Artefakt, Plan, Agent) < `kriterienregeln` <
    `anliegenregeln` < `standregeln` < `rollenregeln` < `formregeln`; `belegung.py` nach `standregeln`,
    `freigabeVerstoß` nach `anliegenregeln`. Mechanismus: Importvertrag der Prüfskripte (Standardbibliothek),
-   Scheiter-Test mit Rückimport; Regel [255](255-praemisseAufgabeUndRichtung.md).
+   Scheiter-Test mit Rückimport; Regel Anliegen 255.
 2. Nach Aufgaben teilen (`anliegen`, `bashPositivliste`, `statusrecht`, `schreibgrenze`, `dashboard`);
    der Docstring nennt die eine Aufgabe.
 3. `HookEingabe` in `hookProtokoll.py`; Mechanismus: `eingabe.get(` nur dort.
