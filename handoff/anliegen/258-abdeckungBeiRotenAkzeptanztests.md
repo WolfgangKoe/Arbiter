@@ -1,6 +1,6 @@
 # Abdeckung, solange die Akzeptanztests rot sind
 
-258 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler · Runde 1/3 · angenommen
+258 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `formregeln/abdeckungTest.py::testDasProduktErreichtDieSchwelleMitSeinenTests` misst

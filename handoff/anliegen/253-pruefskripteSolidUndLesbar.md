@@ -14,7 +14,7 @@
    Freigabe-Commit, Pfadsperren, git lesend), `statusrecht.py` (auch Plan, Review, Retro),
    `schreibgrenze.py` (Sperre, Bilanz bei Start und Stopp), `dashboard.py` (13.780 Zeichen:
    Gruppieren, SVG, HTML, CSS, Datei).
-3. [114](114-pruefskripteOrdnenUndLesbarMachen.md) Punkt 4 halb: 14 Module lesen
+3. Anliegen 114 Punkt 4 halb: 14 Module lesen
    `eingabe.get("agent_type")`, `"tool_name"`, `"agent_id"`, `"hook_event_name"` selbst.
 4. Doppelt: git per `subprocess` in `schreibgrenze.py`, `lesegrenze.py` neben `gitAufruf.py`;
    Pfad relativ zur Wurzel viermal (`statusrecht`, `schreibgrenze`, `bashPositivliste.meintPfad`,

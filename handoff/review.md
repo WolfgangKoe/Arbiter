@@ -35,7 +35,7 @@ sind 147 und 148 erledigt.
   Architekten, vor Plan 3.
 - Anliegen 124: Sprung per Klick, Nachprüfung durch den
   Architekten.
-- [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md): Prüfskripte ordnen, an den
+- Anliegen 114: Prüfskripte ordnen, an den
   Regelumsetzer.
 
 ## Empfehlung

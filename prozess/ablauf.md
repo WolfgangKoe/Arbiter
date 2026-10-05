@@ -96,7 +96,7 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    Ist in `technik/tests` ein Test rot, gilt die Schwelle für `technik/arbiter` nicht: In der
    Technikphase misst die Prüfung nicht und nennt die Zahl der roten Tests (Tests vor dem
    Code brechen auch geteilte Fixtures); außerhalb der Technikphase ist sie rot. Mechanismus:
-   nur Text (Anliegen 258).
+   `formregeln/abdeckung.py` (`aussetzung`, `verstoß`).
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`formregeln/benennung.py`), Kriterium ↔
    Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der

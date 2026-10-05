@@ -18,7 +18,7 @@ Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md),
    (Anliegen 139).
 6. Kritik am Code lief für jeden Code-Commit; die Lesbarkeit der Prüfskripte meldete sie erst
    nach [107](anliegen/107-kritikAnDenPruefungen.md), den Rest führt
-   [114](anliegen/114-pruefskripteOrdnenUndLesbarMachen.md). Ein Mechanismus bräuchte Urteil.
+   Anliegen 114. Ein Mechanismus bräuchte Urteil.
 7. Dein Anliegen [150](anliegen/150-sonarlintAbdeckungUndToterCode.md): SonarLint ist nicht
    scharf, Abdeckung ungemessen (Zweige: Produkt 100 %, Prüfskripte 93 %).
 8. Plan 3 bringt die erste Oberfläche (Anliegen 145):

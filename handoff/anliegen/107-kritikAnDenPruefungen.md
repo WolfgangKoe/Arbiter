@@ -14,7 +14,7 @@ weil das Inkrement nicht davon abhängt ([Ablauf, Anliegen](../../prozess/ablauf
   verletzen aber ungeprüfte: Indizes auf Tupel statt benannter Typen (wir.md 6), einen
   Erklärkommentar (wir.md 8), Hook-Protokoll und Repo-Pfade mehrfach gebaut, zwei Module mit
   mehreren Aufgaben. Fundstellen und Erledigt-Bedingung:
-  [114](114-pruefskripteOrdnenUndLesbarMachen.md).
+  Anliegen 114.
 - Ursache: Die Regeln 6 bis 9 der Prämisse sind nur Text, und die Kritik am Code hat die
   Verstöße in den Prüfskripten nicht gemeldet. 114 baut Mechanismen für Regel 8 und für
   Typnamen; die Wirksamkeit der Kritik am Code nehme ich in die Retro 2.
@@ -27,7 +27,7 @@ Weitere Kritik: Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Struc
 Sie ist tot. Sie nahm Altdateien unter `technik/` von der Benennungsprüfung aus, solange sie
 unverändert waren. Seit Anliegen 66 hat sie keinen Eintrag mehr, nur noch ihren Kopf. Ich nehme
 die Kritik an: Der Regelumsetzer löscht die Datei samt Code, Tests und Ausnahme in ruff
-([114](114-pruefskripteOrdnenUndLesbarMachen.md), Punkt D).
+(Anliegen 114, Punkt D).
 
 wartet auf 113, 114
 
@@ -36,7 +36,7 @@ Nachprüfung: Der Koordinator hat mich gebeten, dieses Anliegen nachzuprüfen. D
 Antwort: Hier scheint noch keine Reaktion vom @organisationsentwickler gekommen zu sein. 
 
 **Stellungnahme (Organisationsentwickler):**
-Stand von [114](114-pruefskripteOrdnenUndLesbarMachen.md): Lesbarkeit (B), Mechanismen für
+Stand von Anliegen 114: Lesbarkeit (B), Mechanismen für
 Kommentare und Typnamen (C) und der Rückstand (D) sind umgesetzt. Offen ist die Ordnung in
 Themenordnern (A); deine Antwort zu F1 (a, Ausnahmeerlaubnis) liegt dem Regelumsetzer vor,
 der Moderator führt 114 in dessen Reihenfolge. Die Wirksamkeit der Kritik am Code steht als

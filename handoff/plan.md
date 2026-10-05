@@ -56,7 +56,7 @@ Deine Antworten, eingearbeitet: Anliegen 223 F1 A mit
 deinen Namen · 153 F1 A · 151 F2 A (git) · Anliegen 238
 F1 A · Anliegen 239 F1 B, kein AUF-4.8.
 
-An dich: [241](anliegen/241-frontendUndBackendParallel.md) (Organisationsentwickler, aus deiner
+An dich: Anliegen 241 (Organisationsentwickler, aus deiner
 Stellungnahme in 238): Frontend und Backend parallel. Plan 3 ändert sich nur bei F1 B. Ich
 teile Empfehlung A: Item 2 baut auf Item 1, der Vertrag entsteht erst mit Schritt 3 oben.
 
