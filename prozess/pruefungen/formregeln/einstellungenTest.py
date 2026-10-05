@@ -48,10 +48,10 @@ def testBefehleUndSkriptpfadeWerdenAusDenEinstellungenGelesen(tmp_path):
 
 
 def testHinterDemStarterStehtDasPrüfskriptAlsModul(tmp_path):
-    befehl = 'python3 "$CLAUDE_PROJECT_DIR/pruefungen/gemeinsam/lauf.py" rollenregeln.belegung'
+    befehl = 'python3 "$CLAUDE_PROJECT_DIR/pruefungen/gemeinsam/lauf.py" standregeln.belegung'
     assert skripte(befehl, tmp_path) == [
         tmp_path / "pruefungen" / "gemeinsam" / "lauf.py",
-        tmp_path / "pruefungen" / "rollenregeln" / "belegung.py",
+        tmp_path / "pruefungen" / "standregeln" / "belegung.py",
     ]
 
 

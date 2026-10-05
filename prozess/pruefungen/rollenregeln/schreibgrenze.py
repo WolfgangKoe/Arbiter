@@ -11,7 +11,7 @@ from gemeinsam.hookProtokoll import (
     zusatzkontext,
 )
 from gemeinsam.pfade import istNurLesbar, nurLesbar, projektordner
-from rollenregeln.agenten import darfSchreiben, schreibpfade
+from lesen.agenten import darfSchreiben, schreibpfade
 
 schreibwerkzeuge = ("Write", "Edit", "NotebookEdit")
 kopfPräfix = "HEAD "

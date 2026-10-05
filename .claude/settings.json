@@ -65,7 +65,7 @@
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.stand", "timeout": 10}]}
     ],
     "PreToolUse": [
-      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.belegung", "timeout": 10}]},
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.belegung", "timeout": 10}]},
       {"matcher": "Write|Edit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibgrenze", "timeout": 10}]},
       {"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.statusrecht", "timeout": 10}]},
       {"matcher": "Write", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.anliegennummer", "timeout": 10}]},
@@ -75,7 +75,7 @@
     ],
     "PostToolUse": [
       {"matcher": "Agent", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.stand", "timeout": 10}]},
-      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.belegung", "timeout": 10}]}
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.belegung", "timeout": 10}]}
     ],
     "SubagentStart": [
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.rollenkontext", "timeout": 10}]},

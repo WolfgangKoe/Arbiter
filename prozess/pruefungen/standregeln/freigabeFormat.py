@@ -5,17 +5,14 @@ from pathlib import Path
 
 from gemeinsam.gitAufruf import freigabeCommit
 from gemeinsam.pfade import handoffOrdner
+from lesen.artefakt import Artefakt, artefakte, artefaktVon, pfadDer
+from lesen.plan import zyklus
 from standregeln.freigabeKommentare import (
-    Artefakt,
     abschnitte,
-    artefakte,
-    artefaktVon,
     freigabeAbschnitt,
     freigabeZeilen,
-    pfadDer,
     zeilenDer,
 )
-from standregeln.plan import zyklus
 
 freigabeFeld = re.compile(r"^Freigabe: (offen|ja)$")
 vorgehenAbschnitt = "Nächstes Vorgehen"

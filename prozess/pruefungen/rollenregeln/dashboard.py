@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 
 from gemeinsam.pfade import wurzel
-from rollenregeln.belegung import sperrschwelle, warnschwelle
 from rollenregeln.laufLog import läufeLesen
+from standregeln.belegung import sperrschwelle, warnschwelle
 
 dashboardDatei = "dashboard.html"
 sichtbareSitzungen = 5

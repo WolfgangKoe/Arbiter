@@ -7,8 +7,9 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, nurLesbar, projektordner
+from lesen.artefakt import artefakte, artefaktVon, freigabeJa
 from rollenregeln.lesegrenze import gitShowZulässig
-from standregeln.freigabeKommentare import artefakte, artefaktVon, freigabeJa, freigegebenerZyklus
+from standregeln.freigabeKommentare import freigegebenerZyklus
 
 geprüfteRolle = "koordinator"
 

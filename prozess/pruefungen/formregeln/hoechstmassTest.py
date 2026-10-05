@@ -15,8 +15,8 @@ from gemeinsam.pfade import (
     perspektiven,
     wurzel,
 )
-from rollenregeln.agenten import kopfzeilen
-from standregeln.freigabeKommentare import artefakte, kommentarZeile, pfadDer
+from lesen.agenten import kopfzeilen
+from lesen.artefakt import artefakte, kommentarZeile, pfadDer
 
 aktuelleEtappe = 1000
 spätereEtappe = 200

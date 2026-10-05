@@ -6,7 +6,7 @@ from pathlib import Path
 
 from gemeinsam.gitAufruf import dateiBeiCommit, gitAusgabe, letzteFreigabe
 from gemeinsam.pfade import anliegenOrdner
-from rollenregeln.agenten import rollennamen
+from lesen.agenten import rollennamen
 
 statusWerte = ("offen", "angenommen", "abgelehnt", "beantwortet", "eskaliert", "erledigt")
 typWerte = ("Kritik", "Fragen", "Anliegen")

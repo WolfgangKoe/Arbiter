@@ -46,9 +46,9 @@ Ort. Etwa ein Lauf je Punkt; vor 215 bis 221 (dieselben Dateien).
 Erledigt, wenn kein Fundort aus 1 bis 7 bleibt, die Mechanismen aus 1, 3, 4 an je einem
 Gegenbeispiel rot werden, die Prüfungen grün sind und der Reviewer geprüft hat.
 
-**Stellungnahme.** Teilstand, Status `offen`. Umgesetzt: Punkt 6 (`pfadsperren` in
-`rollenregeln/bashPositivliste.py`); Punkt 3 (alle Hooks lesen nur ihre Felder aus `HookEingabe`);
-Punkt 4 teils (git nur in `gemeinsam/gitAufruf.py` samt `geänderteDateien`, `kopfCommit`, `blobGröße`;
-`projektordner`, `nurLesbar`, `istNurLesbar`, `relativZurWurzel`, `handoffOrdner` in
-`gemeinsam/pfade.py`, eine Wurzel). Mechanismus für 3 und 4: `formregeln/einzelstellen.py`, Scheiter-Test
-`formregeln/einzelstellenTest.py`. Offen: 1, 2, 5, 7, je Punkt ein eigener Lauf.
+**Stellungnahme.** Status `offen`. Umgesetzt: 6 (`pfadsperren`); 3 und 4 (`HookEingabe`, git nur in
+`gemeinsam/gitAufruf.py`, Pfade in `gemeinsam/pfade.py`; Mechanismus `formregeln/einzelstellen.py`);
+1: neu `lesen/` (`agenten`, `plan`, `artefakt`), `belegung` nach `standregeln/`, `freigabeVerstoß` nach
+`anliegenregeln/freigabeVerstoss.py`; Mechanismus `formregeln/schichten.py`, Scheiter-Test
+`schichtenTest.py` (Rückimport rot). Offen: 2 (auch `laufLog` ↔ `dashboard`), 5, 7, je ein Lauf.
+Organisationsentwickler: `ablauf.md` Zeilen 19, 181, 311 nennen alte Pfade.

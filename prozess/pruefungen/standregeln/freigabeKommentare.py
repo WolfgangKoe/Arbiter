@@ -1,40 +1,15 @@
 """Kommentare und Freigabe des Stakeholders in Plan, Review und Retro, wie der Stand sie liest."""
 
 import re
-from collections import Counter
 from pathlib import Path
-from typing import NamedTuple
 
 from gemeinsam.gitAufruf import freigaben
-from gemeinsam.pfade import handoffOrdner
-from standregeln.plan import planDatei, zyklus, zyklusAusText
+from lesen.artefakt import Artefakt, artefakte, freigabeJa, istStakeholderKommentar, pfadDer
+from lesen.plan import zyklus
 
-
-class Artefakt(NamedTuple):
-    datei: str
-    gegenstand: str
-    autor: str
-
-
-artefakte = (
-    Artefakt(planDatei.name, "Plan", "Planer"),
-    Artefakt("review.md", "Review", "Reviewer"),
-    Artefakt("retro.md", "Retro", "Organisationsentwickler"),
-)
-kommentarZeile = "Kommentar:"
 stellungnahmeZeile = "Stellungnahme:"
-freigabeJa = "Freigabe: ja"
-freigabeOffen = "Freigabe: offen"
 freigabeAbschnitt = "Freigabe"
 überschrift = re.compile(r"^## (.+)$")
-
-
-def artefaktVon(gegenstand: str) -> Artefakt:
-    return next(artefakt for artefakt in artefakte if artefakt.gegenstand == gegenstand)
-
-
-def pfadDer(wurzel: Path, artefakt: Artefakt) -> Path:
-    return wurzel / handoffOrdner / artefakt.datei
 
 
 def zeilenDer(wurzel: Path, artefakt: Artefakt) -> list[str]:
@@ -73,14 +48,6 @@ def freigegebenerZyklus(wurzel: Path, artefakt: Artefakt) -> int | None:
     return zyklus(pfadDer(wurzel, artefakt))
 
 
-def istStakeholderKommentar(zeile: str) -> bool:
-    """Eine Zeile `Kommentar:` mit anderem Text als `.`; sie gehört dem Stakeholder."""
-    return zeile.startswith(kommentarZeile) and zeile.removeprefix(kommentarZeile).strip() not in (
-        "",
-        ".",
-    )
-
-
 def hatKommentarOhneStellungnahme(zeilen: list[str]) -> bool:
     """Ein Kommentar des Stakeholders, auf den keine `Stellungnahme:` folgt."""
     for nummer, zeile in enumerate(zeilen):
@@ -109,33 +76,4 @@ def freigabeZuCommitten(wurzel: Path) -> str | None:
         betreff = f"Freigabe {artefakt.gegenstand} {nummer}"
         if nummer is not None and betreff not in vorhanden:
             return betreff
-    return None
-
-
-def geschützteZeilen(text: str) -> list[str]:
-    """`Freigabe: ja` und Kommentare des Stakeholders; beide ändert nur er."""
-    zeilen = [zeile.strip() for zeile in text.splitlines()]
-    return [zeile for zeile in zeilen if zeile == freigabeJa or istStakeholderKommentar(zeile)]
-
-
-def freigabeVerstoß(bisher: str, danach: str) -> str | None:
-    """Warum eine Rolle Freigabe oder Kommentare nicht so ändern darf, sonst `None`."""
-    alteZeilen = [zeile.strip() for zeile in bisher.splitlines()]
-    neueZeilen = [zeile.strip() for zeile in danach.splitlines()]
-    alt, neu = zyklusAusText(bisher), zyklusAusText(danach)
-    if alt is None or (neu is not None and neu > alt):
-        # Warum: Die Datei des nächsten Zyklus beginnt neu, aber nie schon freigegeben.
-        return (
-            "beginnt mit `Freigabe: ja`; das setzt nur der Stakeholder."
-            if (freigabeJa in neueZeilen)
-            else None
-        )
-    vorher, nachher = Counter(geschützteZeilen(bisher)), Counter(geschützteZeilen(danach))
-    if nachher - vorher:
-        return f"setzt `{next(iter(nachher - vorher))}`; das tut nur der Stakeholder."
-    if vorher - nachher:
-        fehlt = next(iter(vorher - nachher))
-        return f"ändert oder entfernt `{fehlt}`; das tut nur der Stakeholder."
-    if freigabeOffen in alteZeilen and freigabeOffen not in neueZeilen:
-        return "ändert `Freigabe: offen`; das tut nur der Stakeholder."
     return None

@@ -4,9 +4,10 @@ import sys
 from pathlib import Path
 
 from anliegenregeln.anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
+from anliegenregeln.freigabeVerstoss import freigabeVerstoß
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import anliegenOrdner, projektordner
-from standregeln.freigabeKommentare import artefakte, freigabeVerstoß, pfadDer
+from lesen.artefakt import artefakte, pfadDer
 
 letzteRunde = "Runde 3/3 ist die letzte; setze `eskaliert`, der Stakeholder entscheidet."
 

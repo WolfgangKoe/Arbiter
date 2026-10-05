@@ -7,7 +7,7 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
 from gemeinsam.pfade import projektordner
-from rollenregeln.belegung import belegungAusTranskript, eigenesTranskript
+from standregeln.belegung import belegungAusTranskript, eigenesTranskript
 
 pflichtfelder = ("zeit", "rolle", "belegung")
 zielLänge = 80

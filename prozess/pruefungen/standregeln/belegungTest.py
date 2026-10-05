@@ -3,7 +3,7 @@ import json
 import pytest
 
 from gemeinsam.hookProtokoll import HookEingabe
-from rollenregeln.belegung import (
+from standregeln.belegung import (
     belegungAusTranskript,
     eigenesTranskript,
     entscheide,

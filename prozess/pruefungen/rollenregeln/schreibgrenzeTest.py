@@ -2,7 +2,7 @@ import subprocess
 
 import pytest
 
-from rollenregeln.agenten import darfSchreiben, schreibpfade
+from lesen.agenten import darfSchreiben, schreibpfade
 from rollenregeln.schreibgrenze import entscheide
 
 rollenkopf = """---

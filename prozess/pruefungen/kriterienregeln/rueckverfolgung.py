@@ -20,7 +20,7 @@ from kriterienregeln.kriterium import (
     pfadVon,
 )
 from kriterienregeln.spur import spur, spurAlsText
-from standregeln.plan import freigegebenerPlan, offeneItemTexte
+from lesen.plan import freigegebenerPlan, offeneItemTexte
 
 
 class Fehlend(NamedTuple):

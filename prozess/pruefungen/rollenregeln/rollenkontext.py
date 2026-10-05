@@ -4,7 +4,7 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
 from gemeinsam.pfade import perspektiven, projektordner
-from rollenregeln.agenten import schreibpfade
+from lesen.agenten import schreibpfade
 from standregeln.stand import stand
 
 

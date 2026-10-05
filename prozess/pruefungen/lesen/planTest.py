@@ -1,4 +1,4 @@
-from standregeln.plan import itemsOhneLink, offeneItems
+from lesen.plan import itemsOhneLink, offeneItems
 
 
 def planSchreiben(wurzel, text):

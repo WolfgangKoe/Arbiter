@@ -8,7 +8,7 @@ from typing import NamedTuple
 from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
 from gemeinsam.pfade import akzeptanzOrdner, etappenOrdner, handoffOrdner, itemsOrdner
 from kriterienregeln.rueckverfolgung import fehlendeTests, nenntFehlendes
-from standregeln.plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
+from lesen.plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
 
 
 class Phase(StrEnum):

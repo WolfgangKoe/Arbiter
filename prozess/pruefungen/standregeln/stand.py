@@ -7,7 +7,7 @@ from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
 from gemeinsam.pfade import projektordner
 from kriterienregeln.rueckverfolgung import wartendeAlsText
-from rollenregeln.belegung import belegungAusTranskript, punkte, warnschwelle
+from standregeln.belegung import belegungAusTranskript, punkte, warnschwelle
 from standregeln.codekritik import fälligeKritikAlsText
 from standregeln.freigabeKommentare import autorenDran, freigabeZuCommitten
 from standregeln.phasenfolge import aktuelleEtappe, lage
