@@ -9,7 +9,7 @@ Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellun
    nachgestellt (unter Code). `prozess/pruefungen` 98,6 % und 97,2 %.
 2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen` auf `9977e0e`: 749 grün; eslint und
    stylelint ohne Fund. SonarLint auf `2635eb8`: keine Funde. Zwei Ausnahmen gelten für
-   `web/` ([261](anliegen/261-sonarlintMeldungenZuWeb.md),
+   `web/` (Anliegen 261,
    [270](anliegen/270-csrfAusnahmeOhneAusloeser.md)). Nur Einheitstests erreichen
    `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
    Vorbedingungen (`ValueError`). Glossar → Code: *Name*, *Ablage*, *an der Reihe*,

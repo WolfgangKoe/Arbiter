@@ -1,6 +1,6 @@
 # AUF-4: Wählen und „alle Einheiten“ benennen
 
-260 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+260 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von d6e3af0 (Lesbarkeit, `prozess/praemissen/wir.md`), in

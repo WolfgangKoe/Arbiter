@@ -1,6 +1,6 @@
 # AUF-4.6 nimmt die Grenzen der Zone aus der Ausgangslage
 
-269 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+269 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 9977e0e (Schnittstelle). Nach

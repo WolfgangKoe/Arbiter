@@ -1,6 +1,6 @@
 # Handgriffe importieren, Fixtures nur für Zustand
 
-259 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+259 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von d6e3af0 (Schnittstelle, `prozess/praemissen/wir.md`):
