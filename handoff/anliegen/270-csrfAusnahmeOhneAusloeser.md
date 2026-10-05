@@ -1,6 +1,6 @@
 # CSRF-Ausnahme gilt über ihren Grund hinaus
 
-270 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+270 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 2635eb8. Nachgeprüft: `formregeln.sonarlint` meldet „keine
@@ -40,3 +40,9 @@ Ausnahme besteht, die Liste nur noch an einer Stelle steht, die Kommentare kein 
 nennen und `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+Umgesetzt wie vorgeschlagen. 1: `sonarlintTest.py`, `testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat`
+liest `anwendungFür(...).url_map` und ist rot, sobald eine Route außer GET, HEAD, OPTIONS besteht, solange
+S4502 in `ausnahmen` steht; Scheiter-Probe `testEineRouteMitPostIstEineRouteAußerLesen`. Auslöser steht in
+`prozess/regeln.md`. Die Entscheidung zu CSRF für Handlungen bleibt bei W3 (Architekt, nicht von mir als Prüfung
+fassbar). 2: der abgeschriebene Listentest ist gelöscht. 3: „Anliegen 261“ aus beiden Kommentaren gestrichen,
+Fundstelle ist `prozess/regeln.md`. Zur Node-Frage: Anliegen 280.

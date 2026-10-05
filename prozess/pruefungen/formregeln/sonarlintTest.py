@@ -6,7 +6,9 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from flask import Flask
 
+from arbiter.web.anwendung import anwendungFür
 from formregeln import sonarlint
 from formregeln.sonarlint import (
     Sitzung,
@@ -88,7 +90,7 @@ def testDieNamensregelnDesProfilsSindAus():
 
 
 def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(monkeypatch, tmp_path):
-    # Regel: Anliegen 261, S5332 ist nur in `server.py` unter `web/` ausgenommen
+    # Regel: prozess/regeln.md, SonarLint, S5332 ist nur in `server.py` unter `web/` ausgenommen
     ausgenommen = tmp_path / "server.py"
     anderswo = tmp_path / "anderswo.py"
     for datei in (ausgenommen, anderswo):
@@ -102,11 +104,24 @@ def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(mon
     assert all(fund.startswith("anderswo.py:") for fund in mitAusnahme)
 
 
-def testDieAusnahmenGeltenNurFürWebUndZweiRegeln():
-    assert set(sonarlint.ausnahmen) == {
-        ("technik/arbiter/web/anwendung.py", "python:S4502"),
-        ("technik/arbiter/web/server.py", "python:S5332"),
-    }
+def routenAußerLesen(anwendung: Flask) -> list[str]:
+    lesend = {"GET", "HEAD", "OPTIONS"}
+    return [regel.rule for regel in anwendung.url_map.iter_rules() if not regel.methods <= lesend]
+
+
+def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
+    # Regel: prozess/regeln.md, SonarLint, S4502 fällt mit der ersten Route außer GET
+    ausnahme = ("technik/arbiter/web/anwendung.py", "python:S4502")
+    verändernd = routenAußerLesen(anwendungFür(None))
+    assert ausnahme not in sonarlint.ausnahmen or not verändernd, (
+        f"Route außer GET {verändernd}: S4502 aus `ausnahmen` streichen, CSRF entscheiden"
+    )
+
+
+def testEineRouteMitPostIstEineRouteAußerLesen():
+    anwendung = Flask(__name__)
+    anwendung.add_url_rule("/wählen", endpoint="wählen", methods=["POST"])
+    assert routenAußerLesen(anwendung) == ["/wählen"]
 
 
 def testDerFundNenntPfadZeileRegelUndMeldung(tmp_path):

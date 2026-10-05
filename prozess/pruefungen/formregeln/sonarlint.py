@@ -31,7 +31,7 @@ abgeschalteteRegeln = (
     "python:S1578",
 )
 
-# Warum: In `web/` sind beide Funde unbegründet (nur GET-Routen, nur `127.0.0.1`, Anliegen 261).
+# Warum: In `web/` sind beide Funde unbegründet (nur GET-Routen, nur `127.0.0.1`).
 # Warum: Ausgenommen sind Datei und Regel, nicht der Ordner.
 ausnahmen = (
     ("technik/arbiter/web/anwendung.py", "python:S4502"),
