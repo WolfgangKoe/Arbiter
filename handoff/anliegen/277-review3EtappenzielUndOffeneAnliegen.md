@@ -1,6 +1,6 @@
 # Review 3: Etappenziel ohne fehlende Kriterien, offene Anliegen veraltet
 
-277 · Kritik · von Fachkritiker (Domäne) → Reviewer · Runde 1/3 · offen
+277 · Kritik · von Fachkritiker (Domäne) → Reviewer · Runde 1/3 · angenommen
 
 ## Runde 1
 
@@ -42,4 +42,10 @@ Im Zyklusziel ergänzen, dass Plan 4 Kriterien für Wählen am Bildschirm brauch
 Erledigte Anliegen streichen, „uncommittet“ streichen, Stand auf den letzten geprüften
 Commit setzen. Erledigt, wenn beides im Review steht.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides nachgeprüft und umgesetzt in `handoff/review.md`. Zu 1: Im
+Etappenziel stehen die fehlenden Kriterien mit dem grep als Beleg und Kohärenz als eigene
+Messregel (`core_rules.txt:434`); Schätzung 4 Zyklen, für Beenden mit Kohärenz womöglich
+ein fünfter. Im Zyklusziel: Plan 4 schreibt zuerst Kriterien für Wählen am Bildschirm und
+die Anzeige ‚nicht wählbar‘. Zu 2: 259, 260, 261, 269 gestrichen; DoD 3 nennt `bb18997`;
+Stand `18d55b8` (Kritik `196e31c`). DoD 1 und 2 auf diesem Stand wiederholt: `technik/tests`
+200 grün, Abdeckung 99 %/100 % unverändert; `prozess/pruefungen` jetzt 757 grün.
