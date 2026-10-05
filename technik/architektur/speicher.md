@@ -27,4 +27,6 @@ ersten Handlung über HTTP (Wählen oder Setzen); die Anzeige der Ausgangslage b
 
 ## Neuland
 Das Wiederholen der Handlungen: vorher ein Wegwerf-Versuch, mit der ersten Handlung über
-HTTP. Offen bis dahin: wie eine übergangene Sperre beim Wiederholen übersprungen wird (D2).
+HTTP. Offen bis dahin: wie eine übergangene Sperre beim Wiederholen übersprungen wird (D2), und
+wie ein Bildschirmtest seinen Zustand übergibt: Heute bekommt `serverStarten` die
+`Aufstellung` (W2, B1), mit dem Speicher wäre es die Folge der Handlungen.
