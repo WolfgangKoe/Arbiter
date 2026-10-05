@@ -1,43 +1,60 @@
-# Review · Zyklus 2
+# Review · Zyklus 3
 
-Inkrement: Änderungen seit `Freigabe Plan 2` (`1553538`) unter `technik/`, Stand `ef7ef88`.
-Items aus [Plan 2](plan.md): *Ausgangslage von Only War*, *Sperren beim Setzen*,
-*Nahkampfreichweite beim Setzen*; abgenommen in `1e725cd`, gelöscht in `52eedbd`.
+Inkrement: Änderungen seit `Freigabe Plan 3` (`d592f7b`) unter `technik/`, Stand `4d8480f`.
+Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellung* (AUF-4).
 
 ## DoD
-1. **Erfüllt.** `python3 -m pytest technik/tests`: 150 bestanden. Die Grenzfälle aus S2
-   (Berühren, ein Millionstel Zoll zu nah oder zu weit, Rand der Zone) laufen exakt.
-2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 427 bestanden (Benennung, Spiegel,
-   Rückverfolgung, Höchstmaße, Komplexität, Glossar, Kommentare, Importvertrag, ruff). Zur
-   Probe auch ruff mit ARG, PLR2004, PLR0913, FBT, ERA, C901 über `technik/arbiter`: ohne
-   Fund. Toter Code (nur Text): keiner gefunden, jede Funktion und jeder `Grund` hat einen
-   Aufrufer. Glossar → Code (Urteil): *überdecken*, *ganz in*, *Abstand*,
-   *Nahkampfreichweite*, *Stelle*, *Tiefe*, *Ausgangslage* stehen wörtlich im Code.
-3. **Erfüllt.** `domaene/items/` ist leer; AUF-2, AUF-3, QUE-1 und OBJ-1 beschreiben das
-   gebaute Verhalten.
-4. **Erfüllt.** Der Fachkritiker hat die drei Items in `1e725cd` abgenommen, sein Anliegen
-   dazu ist erledigt; dieses Review steht.
+1. **Erfüllt.** `python3 -m pytest technik/tests`: 200 grün. Abdeckung `technik/arbiter`
+   100 % Zeilen und Zweige, `prozess/pruefungen` 98,6 % und 97,2 %.
+2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen`: 735 grün; eslint und
+   stylelint ohne Fund. SonarLint Exit 0 mit drei Hinweisen zu `web/`
+   ([261](anliegen/261-sonarlintMeldungenZuWeb.md)). Nur Einheitstests erreichen
+   `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
+   Vorbedingungen (`ValueError`). Glossar → Code: *Name*, *Ablage*, *an der Reihe*,
+   *Einheit in Aufstellung*, *Karte* stehen wörtlich im Code.
+3. **Offen.** Beide Items liegen noch in `domaene/items/`; sie fallen nach der Abnahme.
+4. **Offen.** Die Abnahme des Fachkritikers fehlt.
+
+Oberfläche: Bildschirmtests grün; `komponenten.css` gleicht `vorschlag.css`. **Nicht erfüllt:**
+„Mockup gelöscht“. Die Mockups bleiben, bis `komponenten.html` steht
+([262](anliegen/262-komponentenseiteOhnePruefung.md)).
 
 ## Code
-Domäne nur mit Standardbibliothek (A1), Katalog liest über `yaml.safe_load` und prüft die
-Daten beim Laden (A3, S2: ganze mm, beide Zonen, Kante der zweiten Seitenlänge). Gemessen
-wird nur in `messen.py` mit `Fraction`, Abstände als Quadrate (M1, S2). `modellSetzen`
-sammelt alle Gründe, bevor es den Zustand ändert (D2, AUF-3.5), und prüft die Stelle nicht,
-wenn AUF-1.4 sperrt (AUF-3.6). Spielobjekte `frozen`, Tiefen als `MappingProxyType` (D3).
-Nichts nachgebaut, nichts ineffizient. Der einzige Befund (QUE-1.2 in der Aufstellung statt
-in `querschnitt.py`) ist in `68a2797` behoben und erledigt (Anliegen 149); danach
-`technik/tests` 153 grün.
-Kritik am Code ist für jeden Code-Commit seit der Freigabe gelaufen; aus den Prüfskripten
-sind 147 und 148 erledigt.
+Nachgeprüft: `python3 -m arbiter` nennt die Adresse und liefert die Ausgangslage. `web/` liest
+nur Properties, wandelt `Fraction` erst für die Antwort in `float` und vergibt „Spieler 1“
+und „Spieler 2“ aus der Reihenfolge (W2). Die Domäne kennt Flask nicht.
+`bildschirm.py` steht im Pfad des Testautors, hat aber eine Zeile vom Implementierer: Der
+Import steht jetzt oben (248 Punkt 7). Die Änderung ist richtig, liegt aber außerhalb seiner
+Schreibpfade. Für Bash wirkt die Grenze nur als Text
+([215](anliegen/215-bashSandboxAlsVersuch.md)).
 
 ## Offene Anliegen zur Technik
-- Anliegen 146: Schnitt der ersten Oberfläche, an den
-  Architekten, vor Plan 3.
-- Anliegen 124: Sprung per Klick, Nachprüfung durch den
-  Architekten.
-- Anliegen 114: Prüfskripte ordnen, an den
-  Regelumsetzer.
+- Implementierer: [263](anliegen/263-flaecheDerZoneAnEinerStelle.md) Zone an einer
+  Stelle, [264](anliegen/264-markupInVorlagenStattInSeiteJs.md) Markup in Vorlagen,
+  [266](anliegen/266-startbefehlEndetMitTraceback.md) Strg+C endet mit Traceback.
+- Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
+  [265](anliegen/265-ausgeloestePruefungenZuWeb.md) Prüfungen zu W1, W2, D3,
+  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 261.
+- Testautor: [259](anliegen/259-handgriffeImportierenStattFixtures.md),
+  [260](anliegen/260-auf4WaehlenUndAlleBenennen.md).
 
 ## Empfehlung
-Die DoD ist für alle drei Items erfüllt, Plan 2 ist abgenommen. Aus diesem Review ist am
-Code nichts offen.
+Technisch abnahmefähig: DoD 1 und 2 sind erfüllt. Keines der Anliegen ändert Verhalten. Es
+bleiben die Abnahme und das Löschen der Mockups nach 262.
+
+## Nächstes Vorgehen
+- **Produktziel:** Erreicht ist noch keine der 7 Etappen. Am meisten fehlt die erste Handlung
+  am Bildschirm: Arbiter zeigt heute nur an
+  ([Etappe 1](../domaene/etappen/01-aufstellen.md)).
+- **Etappenziel:** Es fehlen die vier Punkte aus „Danach“ in Plan 3: Wählen, Ziehen, Zurück
+  mit Übergehen und Protokoll, Beenden. Wenn ein Punkt je Zyklus fertig wird, sind das 4
+  Zyklen. Nur für Wählen kommen Speicher und Vertrag neu hinzu (`speicher.md`, Neuland).
+- **Zyklusziel:** Plan 4 soll Wählen per Klick (Gewinner, Zone, Einheit) mit Speicher
+  bringen. Vorher müssen weg: 264 und 262, denn das nächste Mockup baut auf Vorlagen und der
+  Komponentenseite auf. Dazu 265 D3: Ab der ersten Handlung über HTTP ändert `web/` den
+  Zustand. Für die Technikphase von Plan 4 gilt: Vertrag in `web.md` vor dem Testautor
+  (Ablauf, Technikphase 1) und Wegwerf-Versuch zum Wiederholen der Handlungen.
+
+## Freigabe
+Freigabe: offen
+Kommentar: .
