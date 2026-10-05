@@ -6,40 +6,11 @@
 **Befund (Stakeholder).** „Ich vermisse in der Technik die Frontend Backend Struktur sowie
 die Anlage der Datenbank.“
 
-**Stellungnahme (Architekt).** Berechtigt. [architektur.md](../../technik/architektur.md)
-nennt `web/`, `speicher/` und `frontend/` nur als Ordner; wie sie zusammenspielen, fehlt, und
-für die Datenbank steht nur der Auslöser (A3). Der Aufbau unten geht in die Technik, sobald
-dort Platz ist: architektur.md hat 5.985 von 6.000 Zeichen
-(Anliegen 155). Er beantwortet zugleich die Fragen 1 bis 3
-in Anliegen 146.
-
-*Frontend und Backend*
-- Ein Befehl startet Flask (`web/`) und nennt die Adresse. `web/` liefert die Dateien aus
-  `frontend/` unverändert aus und beantwortet unter `/api/` Anfragen mit JSON. Getrennt
-  heißt: `web/` erzeugt kein HTML, das Frontend kennt nur diese Adressen. Gegenbeispiel
-  ArbiterMap: Das Backend füllt Jinja-Vorlagen aus `frontend/templates/`,
-  `routes/map.py` hat 40.000 Zeichen.
-- `web/` ist dünn: Anfrage lesen, eine Handlung der Domäne aufrufen, Antwort schreiben. Eine
-  Anfrage je Handlung (Anliegen 03, in git); eine Sperre wird HTTP 409 mit der Liste ihrer
-  Gründe (`Sperre.gründe`, Text aus `Grund`). Regeln stehen nur in der Domäne.
-- Spielobjekte haben in der Domäne keine Kennung, sie sind über `is` gleich (D1). `web/`
-  vergibt sie aus der Reihenfolge der Ausgangslage: Spieler, Einheit, Modell.
-- Frontend: HTML, CSS mit Variablen und JavaScript-Module; kein Framework, kein
-  Build-Schritt, kein Tailwind. Die Karte ist ein SVG in Zoll, der Browser skaliert. eslint
-  und stylelint prüfen.
-
-*Datenbank*
-- SQLite über `sqlite3` aus der Standardbibliothek, ohne ORM; eine Datei außerhalb von git.
-- Gespeichert wird nicht der Zustand, sondern die Folge der Handlungen einer Partie: Tabelle
-  `partie` (Kennung, Beginn) und `handlung` (Partie, Nummer, Art, Angaben als JSON,
-  übergangene Sperre). Den Spielstand stellt `web/` her, indem es die Handlungen auf der
-  Ausgangslage wiederholt.
-- Warum: Die Domäne bleibt die einzige Prüfinstanz und braucht keine Schnittstelle zur
-  Datenbank (A2). „Zurück“ heißt, die letzte Handlung weglassen; das Protokoll des Übergehens
-  ist dieselbe Tabelle. Das Schema wächst nicht mit jedem Spielobjekt; ArbiterMap hält den
-  Zustand in eigenen Tabellen für Einheiten und Modelle, `schema.sql` hat 10.000 Zeichen.
-- Katalogdaten bleiben YAML (A3); der dort geplante Import in die Datenbank entfällt.
-- Neuland ist das Wiederholen der Handlungen: vorher ein Wegwerf-Versuch.
+**Stellungnahme (Architekt).** Berechtigt. Der Aufbau steht jetzt in der Technik:
+Frontend und Backend in [Web](../../technik/architektur/web.md), die Datenbank in
+[Speicher](../../technik/architektur/speicher.md); [Architektur](../../technik/architektur.md)
+verlinkt beide, A2 und A3 sind angepasst. Er beantwortet zugleich die Fragen 1 bis 3 in
+Anliegen 146 (git).
 
 **F1 · Wann wird die Datenbank angelegt?**
 - A: Mit der ersten Handlung über HTTP (Wählen oder Setzen); die reine Anzeige der
@@ -47,19 +18,32 @@ in Anliegen 146.
 - B: Schon mit der ersten Oberfläche, auch wenn sie nur anzeigt.
 
 Empfehlung: A. Vor der ersten Handlung gibt es nichts zu speichern, was nicht schon im YAML
-steht; B brächte `speicher/`, Schema und Tests in den Zyklus, der ohnehin Start, Karte,
-Komponentenseite und Bildschirmtest bringt.
+steht.
 
 Antwort: .
 
-**Nachtrag (Architekt).** Die Technik hat Platz (Anliegen 159, C;
-Anliegen 155 erledigt). Eingetragen wird der Aufbau oben
-als erster Schritt der Technikphase von Zyklus 3, vor dem Testautor ([Plan 3](../plan.md)):
-Frontend und Backend in `technik/architektur/web.md`, die Datenbank in `speicher.md`,
-`architektur.md` verlinkt beide. F1 beantwortet die Freigabe von Plan 3.
-Deine Nachprüfung jetzt gilt dem Aufbau oben, bevor er in die Technik geht. Passt etwas
-nicht, schreib es als Runde 2 mit Status `offen`, dann ändere ich ihn vorher. `erledigt`
-setze bitte erst, wenn er in der Technik steht; das trage ich hier ein.
+Beantwortet mit der Freigabe von Plan 3: A, eingetragen in Speicher (erster Absatz).
 
-**Nachtrag (Architekt).** Eingetragen in `technik/architektur/web.md` und `speicher.md`, A2
-und A3 angepasst. Ohne den Vertrag (Pfade, JSON): Ihn berührt 241.
+Rückfrage: Betrachtest du dieses Anliegen als erledigt? Bitte begründen.
+
+**Antwort (Architekt).** Ja, dein Befund ist behoben. Begründung:
+1. *Frontend und Backend* stehen in Web: getrennt (W1), ein dünnes `web/` mit drei Modulen,
+   je eins für Server, Anfragen und Übersetzung des Spielstands (W2), ein Befehl mit Adresse
+   (W5), Oberfläche ohne Framework (O1 bis O3). Der Code folgt dem: `web/anwendung.py`
+   liefert `technik/frontend/` unverändert aus und antwortet mit JSON (`jsonify`). Ein
+   `render_template` wie in `ArbiterMap/backend/app/routes/map.py` gibt es nicht.
+2. *Datenbank* steht in Speicher: SQLite ohne ORM, Tabellen `partie` und `handlung`, der
+   Spielstand entsteht durch Wiederholen der Handlungen (P1 bis P3). Eine Datei gibt es noch
+   nicht; das ist deine Antwort F1 A. Sie entsteht mit „Wählen per Klick mit Speicher“
+   ([Plan 3](../plan.md), Danach).
+3. Was offen ist, gehört nicht zu diesem Befund und hat schon einen eigenen Ort:
+   - der Vertrag (Pfade, JSON): [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase),
+     Schritt 1, fällig mit dem ersten Item mit beiden Hälften;
+   - zwei Fragen zum Wiederholen: [Speicher, Neuland](../../technik/architektur/speicher.md#neuland),
+     Wegwerf-Versuch mit der ersten Handlung über HTTP;
+   - Prüfungen zu W1, W2 und D3: [265](265-ausgeloestePruefungenZuWeb.md), beim
+     Regelumsetzer.
+   Hielte 153 sie fest, stünden sie zweimal.
+
+Zusichern kann ich nicht, dass P2 trägt; das zeigt erst der Wegwerf-Versuch. Ändert er den
+Aufbau, wird das ein neues Anliegen. Empfehlung: Setze `erledigt`; das darf nur der Absender.

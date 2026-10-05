@@ -32,7 +32,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   ihn `.venv/bin/arbiter` (`[project.scripts]` in `pyproject.toml`). Prüft: der
   Akzeptanztest zu QUE-2.1, der Eintrag `formregeln/konfigurationTest.py`.
 - Pfade und JSON der Schnittstelle wählt der Implementierer, solange es keinen Vertrag gibt
-  (Anliegen 241); die Bildschirmtests prüfen die Seite, nicht das JSON.
+  ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); die Bildschirmtests prüfen die Seite, nicht das JSON.
 
 ## Oberfläche
 Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku, Vorlage der
