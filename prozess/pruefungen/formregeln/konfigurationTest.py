@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import sys
 import tomllib
+from importlib.metadata import entry_points
 from pathlib import Path
 
 import pytest
@@ -167,3 +168,25 @@ def testPlaywrightIstEntwicklungsAbhängigkeitMitFesterMinorVersion():
     assert any(re.fullmatch(r"playwright==\d+\.\d+\.\*", eintrag) for eintrag in entwicklung)
     laufzeit = konfiguration.get("project", {}).get("dependencies", [])
     assert not any("playwright" in eintrag for eintrag in laufzeit)
+
+
+def testEinBefehlStartetArbiterAusDemPaketInTechnik():
+    konfiguration = pyproject()
+    assert konfiguration["project"]["scripts"] == {"arbiter": "arbiter.__main__:starten"}
+    suche = konfiguration["tool"]["setuptools"]["packages"]["find"]
+    assert suche["where"] == ["technik"]
+    assert "arbiter*" in suche["include"]
+
+
+@pytest.mark.stand
+def testDerBefehlArbiterIstInDerUmgebungInstalliert():
+    eintraege = entry_points(group="console_scripts", name="arbiter")
+    assert [eintrag.value for eintrag in eintraege] == ["arbiter.__main__:starten"], (
+        "Einmal `.venv/bin/python -m pip install -e .` aus der Wurzel"
+    )
+
+
+def testDieMessungFolgtKindprozessenUndSigterm():
+    messung = pyproject()["tool"]["coverage"]["run"]
+    assert messung["patch"] == ["subprocess"]
+    assert messung["sigterm"] is True

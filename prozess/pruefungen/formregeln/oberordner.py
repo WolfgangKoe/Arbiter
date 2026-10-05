@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from formregeln.benennung import ausgeschlosseneOrdner
 from gemeinsam.pfade import perspektiven
 from rollenregeln.agenten import altbestandOrdner
 
@@ -13,5 +14,8 @@ def unbekannteOrdner(wurzel: Path) -> list[str]:
     return sorted(
         ordner.name
         for ordner in wurzel.iterdir()
-        if ordner.is_dir() and not ordner.name.startswith(".") and ordner.name not in bekannteOrdner
+        if ordner.is_dir()
+        and not ordner.name.startswith(".")
+        and ordner.name not in bekannteOrdner
+        and ordner.name not in ausgeschlosseneOrdner
     )

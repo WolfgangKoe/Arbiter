@@ -14,3 +14,9 @@ __pycache__/
 # Warum: Messung, keine Historie
 /dashboard.html
 /prozess/dashboard/laeufe.jsonl
+
+# Warum: Abdruck von `pip install -e .`, keine Quelle
+*.egg-info/
+
+# Warum: Installierte Werkzeuge des Frontends (package.json), keine Quelle
+node_modules/

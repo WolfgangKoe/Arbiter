@@ -8,6 +8,7 @@ perspektiven = ("domaene", "technik", "prozess")
 akzeptanzOrdner = "technik/tests/akzeptanz"
 anforderungsOrdner = "domaene/anforderungen"
 anliegenOrdner = "handoff/anliegen"
+frontendOrdner = "technik/frontend"
 etappenOrdner = "domaene/etappen"
 itemsOrdner = "domaene/items"
 mockupOrdner = "domaene/mockups"

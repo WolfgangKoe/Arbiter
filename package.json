@@ -1,0 +1,12 @@
+{
+  "name": "arbiter",
+  "private": true,
+  "warum": {
+    "eslint": "Prüft technik/frontend/**/*.js nach wir.md (camelCase, Namenslänge, Kommentare) und Ablauf, Werkzeuge; feste Minor-Version, damit ein Update nicht still neue Regeln bringt.",
+    "stylelint": "Prüft technik/frontend/**/*.css (camelCase, Farben nur in :root); feste Minor-Version wie eslint."
+  },
+  "devDependencies": {
+    "eslint": "9.39.*",
+    "stylelint": "16.26.*"
+  }
+}

@@ -1,4 +1,4 @@
-"""Messdateien von coverage und die Dashboard-Ausgaben stehen in .gitignore."""
+"""Messdateien von coverage, Installationsabdruck und Dashboard-Ausgaben stehen in .gitignore."""
 
 import pytest
 
@@ -16,3 +16,9 @@ def testEineMessdateiVonCoverageIstIgnoriert(datei):
 @pytest.mark.parametrize("datei", ["dashboard.html", "prozess/dashboard/laeufe.jsonl"])
 def testEineDashboardDateiIstIgnoriert(datei):
     assert gitAusgabe(wurzel, "check-ignore", "--no-index", datei).strip() == datei
+
+
+@pytest.mark.stand
+def testDerAbdruckDerInstallationIstIgnoriert():
+    abdruck = "technik/arbiter.egg-info/PKG-INFO"
+    assert gitAusgabe(wurzel, "check-ignore", "--no-index", abdruck).strip() == abdruck

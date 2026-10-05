@@ -1,6 +1,6 @@
 # Aufrufpfade der Prüfskripte in Dokumenten nachziehen
 
-226 · Anliegen · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · angenommen
+226 · Anliegen · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Seit dem Umzug ([114](114-pruefskripteOrdnenUndLesbarMachen.md) A) liegen die
@@ -30,3 +30,6 @@ auch die letzten Mechanismen ohne Ordner: `formregeln/hoechstmassTest.py` in
 `prozess/kennzahlen.md` und `domaene/CLAUDE.md`, `formregeln/mockups.py` in
 `.claude/agents/ux.md`. Ein grep nach Skriptnamen ohne Ordner in `prozess/`, `technik/`,
 `.claude/` und den CLAUDE.md findet keine mehr; `formregeln.hoechstmassTest` ist grün.
+
+Nachgeprüft: Ein grep nach Skriptnamen ohne Ordner und nach `prozess/pruefungen/<name>.py` findet in
+`prozess/`, `technik/`, `.claude/`, `domaene/`, `CLAUDE.md` nichts mehr.

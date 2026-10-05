@@ -15,3 +15,11 @@ def testFälligeKritikTrägtBenannteFelder(monkeypatch):
     assert (
         fälligeKritikAlsText(Path(".")) == "Kritik am Code fällig: Architekt und Reviewer (abc1234)"
     )
+
+
+def testEinCommitNurUnterTechnikFrontendMachtDieKritikDesReviewersFällig(monkeypatch):
+    monkeypatch.setattr(
+        codekritik, "commitsSeitDerFreigabe", lambda _wurzel: [Commit("def5678a", "Seite")]
+    )
+    monkeypatch.setattr(codekritik, "gitAusgabe", lambda *_argumente: "technik/frontend/seite.js")
+    assert ersteFälligeKritik(Path(".")) == FälligeKritik("def5678", "Reviewer")

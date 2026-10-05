@@ -28,7 +28,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Ausgangslage, startet den Server auf `127.0.0.1` mit einem freien Port und gibt die
   Adresse in der ersten Zeile aus (QUE-2.1). Nur `127.0.0.1`: zwei Spieler an einem Gerät
   (`domaene/ziel.md`). Werkzeug-Server von Flask, ohne Debug-Modus. Aus der Wurzel startet
-  ihn `.venv/bin/arbiter` (Anliegen 243). Prüft: der Akzeptanztest zu QUE-2.1.
+  ihn `.venv/bin/arbiter` (`[project.scripts]` in `pyproject.toml`). Prüft: der
+  Akzeptanztest zu QUE-2.1, der Eintrag `formregeln/konfigurationTest.py`.
 - Pfade und JSON der Schnittstelle wählt der Implementierer, solange es keinen Vertrag gibt
   (Anliegen 241); die Bildschirmtests prüfen die Seite, nicht das JSON.
 
@@ -36,9 +37,10 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
 Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku, Vorlage der
 Mockups und Ziel eines Bildschirmtests. Eine neue Komponente ist ein Anliegen an die Technik.
 Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
-- **O1** HTML, CSS mit Variablen, JavaScript-Module; kein Framework, kein Build-Schritt, kein
-  Tailwind. Die Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt.
-  Prüft: nur Text; eslint und stylelint: Anliegen 242.
+- **O1** HTML, CSS mit Variablen in `.css`, JavaScript-Module in `.js`; kein `<style>`, kein
+  `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
+  Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Prüft: eslint und
+  stylelint über `.js` und `.css` (`frontendregeln/frontend.py`); der Rest nur Text.
 - **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
   Stelle und Base; der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
 - **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
@@ -63,4 +65,5 @@ drei Tests in 2 s):
   `getScreenCTM()`: `a == d`, `b == c == 0`. Farben vergleicht er als `getComputedStyle`
   zweier Elemente (QUE-2.6, AUF-4.6, AUF-4.7), nicht als Wert aus dem CSS.
 - **B4** QUE-2.1 startet `sys.executable -m arbiter` als eigenen Prozess und öffnet die
-  Adresse aus der ersten Zeile. Abdeckung dieses Prozesses: Anliegen 243.
+  Adresse aus der ersten Zeile. Seine Abdeckung misst coverage im Kindprozess
+  (`[tool.coverage.run]`, `formregeln/abdeckung.py`).

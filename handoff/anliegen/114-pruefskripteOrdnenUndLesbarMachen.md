@@ -1,6 +1,6 @@
 # Prüfskripte ordnen und lesbar machen
 
-114 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+114 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder findet sich in `prozess/pruefungen/` nicht zurecht ([107](107-kritikAnDenPruefungen.md)). ruff, Komplexität und
@@ -44,10 +44,9 @@ Erledigt, wenn keine Fundstelle aus 1 bis 7 mehr besteht, die Mechanismen aus C 
 Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den
 Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)).
 
-**Stellungnahme.** Zum Hinweis: noch nicht erledigt. D, C, B und der Umzug sind fertig,
-`PYTHONPATH` entfällt (Anliegen 225). Offen: `regeln.md` je Ordner gliedern, Kritik am Code
-([Ablauf](../../prozess/ablauf.md#kritik-am-code)), Pfade in Dokumenten ([226](226-pruefskriptPfadeInDenDokumenten.md)).
-SOLID verlangte 114 nicht, das bewertet 107.
+**Stellungnahme.** Umgesetzt: A (Themenordner, Querimporte über `gemeinsam/lauf.py`), B, C, D;
+`prozess/regeln.md` je Ordner gegliedert, Pfade in den Dokumenten nachgezogen ([226](226-pruefskriptPfadeInDenDokumenten.md)).
+Offen: Kritik am Code ([Ablauf](../../prozess/ablauf.md#kritik-am-code)), Reviewer. SOLID bewertet 107.
 
 **F1 · Wie finden Skripte verschiedener Ordner einander?**
 - a) `PYTHONPATH=prozess/pruefungen` vor Befehlen, mit Erlaubnis.
@@ -56,4 +55,6 @@ SOLID verlangte 114 nicht, das bewertet 107.
 Empfehlung: a.
 Antwort: Wir nehmen a. Das ist eine Ausnahmeerlaubnis. Nachdem alles erledigt und abgenommen ist, wird die Erlaubnis wieder entzogen.
 
-Hinweis: Dieses Anliegen sollte erledigt sein, oder? Darauf hin bitte 107 neu bewerten, denn ich finde, dass die Prüfungsmechanismen nicht SOLID oder gut lesbar sind. 
+Hinweis: Dieses Anliegen sollte erledigt sein, oder? Darauf hin bitte 107 neu bewerten, denn ich finde, dass die Prüfungsmechanismen nicht SOLID oder gut lesbar sind.
+
+Nachprüfung: erledigt, Rest in [253](253-pruefskripteSolidUndLesbar.md).

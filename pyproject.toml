@@ -36,6 +36,17 @@ max-branches = 12
 # Warum: Kognitive Komplexität einer Funktion höchstens 15, Verschachtelung zählt mit.
 max-complexity-allowed = 15
 
+[build-system]
+# Warum: `pip install -e .` macht `arbiter` aus jedem Ordner auffindbar und legt `.venv/bin/arbiter` an
+# (QUE-2.1: ein Befehl startet Arbiter). Feste Minor-Version wie bei den Abhängigkeiten.
+requires = ["setuptools==84.0.*"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+# Warum: Das Paket liegt in technik/, nicht in der Wurzel; Tests und Architektur gehören nicht hinein.
+where = ["technik"]
+include = ["arbiter*"]
+
 [project]
 name = "arbiter"
 version = "0"
@@ -44,6 +55,10 @@ requires-python = ">=3.12"
 # das Backend (CLAUDE.md, Technik-Rahmen). Feste Minor-Version, damit ein Update nicht still das
 # Verhalten ändert.
 dependencies = ["PyYAML==6.0.*", "Flask==3.1.*"]
+
+[project.scripts]
+# Warum: W5 (technik/architektur/web.md): `arbiter` ruft `arbiter.__main__:starten`.
+arbiter = "arbiter.__main__:starten"
 
 [dependency-groups]
 # Warum: ruff, complexipy, coverage und vulture mit fester Minor-Version, damit ein Update nicht still neue Regeln
@@ -57,6 +72,13 @@ entwicklung = [
     "vulture==2.16.*",
     "playwright==1.60.*",
 ]
+
+[tool.coverage.run]
+# Warum: Ein Befehl läuft im eigenen Prozess (`python3 -m arbiter`); ohne `patch` zählt, was nur ein
+# Kindprozess der Tests ausführt, als nicht gedeckt. `sigterm`: Der Test beendet den Server mit
+# SIGTERM, sonst schreibt coverage nichts (`formregeln/abdeckung.py` vereint mit `coverage combine`).
+patch = ["subprocess"]
+sigterm = true
 
 [tool.coverage.report]
 # Warum: Der Einstieg `if __name__ == "__main__":` ist nur Verdrahtung des Hooks (stdin, stdout);

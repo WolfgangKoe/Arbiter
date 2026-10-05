@@ -1,6 +1,6 @@
 # Befehl aus der Wurzel und Abdeckung des eigenen Prozesses
 
-243 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+243 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** QUE-2.1: „Ein Befehl startet Arbiter und nennt die Adresse.“ Nach
@@ -34,4 +34,12 @@ Beides blockiert den Implementierer bei QUE-2.1, nicht den Testautor.
 Erledigt, wenn `.venv/bin/arbiter` aus der Wurzel startet, sobald `__main__.py` steht, und
 beide Scheiter-Tests grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `pyproject.toml`
+(`[project.scripts]`, `[build-system]` mit setuptools 84.0.\*, Paketsuche `technik/`,
+`[tool.coverage.run]` `patch`, `sigterm`) und `formregeln/abdeckung.py` (`coverage combine`).
+`pip install -e .` ist in `.venv` gelaufen; `.venv/bin/arbiter` zeigt auf `arbiter.__main__:starten`
+und startet, sobald das Modul steht. Scheiter-Tests: `formregeln/konfigurationTest.py` (Eintrag,
+Paketsuche, Messung, Befehl installiert), `formregeln/abdeckungTest.py` (Probe, die nur ein
+Kindprozess ausführt: gedeckt; ohne die Messung nicht). Offen, nicht aus 243:
+`testDasProduktErreichtDieSchwelleMitSeinenTests` ist rot (Zeilen 94,2 %, Zweige 80 %), solange
+die Tests zu Plan 3 rot sind.

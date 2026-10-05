@@ -25,3 +25,8 @@ def testEinOrdnerMitPunktUndEinePerspektiveSindGrün(tmp_path):
 
 def testEinFehlenderAltbestandOrdnerIstGrün(tmp_path):
     assert unbekannteOrdner(tmp_path) == []
+
+
+def testNodeModulesSindKeinNeuerOrdner(tmp_path):
+    (tmp_path / "node_modules").mkdir()
+    assert unbekannteOrdner(tmp_path) == []

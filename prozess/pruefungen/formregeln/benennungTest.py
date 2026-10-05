@@ -30,6 +30,14 @@ def testAltbestandOrdnerWerdenNichtGeprüft(tmp_path):
     assert geprüft == {"technik"}
 
 
+def testFrontendDateienUndNodeModulesWerdenGeprüftBeziehungsweiseAusgelassen(tmp_path):
+    for pfad in ("technik/frontend/a.js", "node_modules/b/c.js", "technik/frontend/d.png"):
+        (tmp_path / pfad).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / pfad).write_text("")
+    geprüft = {pfad.relative_to(tmp_path).as_posix() for pfad in geprüfteDateien(tmp_path)}
+    assert geprüft == {"technik/frontend/a.js"}
+
+
 @pytest.mark.parametrize(
     "name",
     [
@@ -139,6 +147,11 @@ def testTestfunktionenHeißenNachDerPrämisse(dateiname, akzeptanz, funktion, gu
         pytest.param("handoff/anliegen/28-benennungOffenePunkte.md", True, id="neues Anliegen"),
         pytest.param("handoff/anliegen/32-neue-sache.md", False, id="Anliegen mit Bindestrich"),
         pytest.param("technik/CLAUDE.md", True, id="CLAUDE.md"),
+        pytest.param("technik/frontend/spielfeld.js", True, id="Frontend camelCase"),
+        pytest.param("technik/frontend/komponenten.html", True, id="Frontend html"),
+        pytest.param("technik/frontend/spiel-feld.js", False, id="Frontend kebab"),
+        pytest.param("technik/frontend/Spielfeld.css", False, id="Frontend groß"),
+        pytest.param("technik/frontend/größe.js", False, id="Frontend Umlaut"),
     ],
 )
 def testDateinamen(tmp_path, pfad, gut):
@@ -204,3 +217,28 @@ def testPytestHookAußerhalbVonConftestBleibtRot():
     quelltext = "def pytest_configure(config):\n    pass\n"
     assert grundZu(quelltext, "modul.py") != []
     assert grundZu("def pytest_irgendwas(config):\n    pass\n", "conftest.py") == []
+
+
+def hilfsmodulAufbauen(tmp_path, ordnername: str, quelltext: str) -> Path:
+    ordner = tmp_path / "technik" / "tests" / "akzeptanz" / ordnername
+    ordner.mkdir(parents=True)
+    datei = ordner / "handgriffe.py"
+    datei.write_text(quelltext, encoding="utf-8")
+    return datei
+
+
+def testHilfsmodulImAkzeptanzordnerBrauchtKeineAnforderung(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n")
+    assert verstöße(tmp_path) == []
+
+
+def testHilfsmodulMitTestfunktionIstRot(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def testAuf1_1Probe(): ...\n")
+    assert any(
+        "handgriffe.py" in meldung and "Testfunktion" in meldung for meldung in verstöße(tmp_path)
+    )
+
+
+def testHilfsmodulInEinemUnterordnerBleibtRot(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "phasen", "def stelleSetzen(): ...\n")
+    assert any("handgriffe.py" in meldung for meldung in verstöße(tmp_path))

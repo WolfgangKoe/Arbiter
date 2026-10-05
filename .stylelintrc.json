@@ -1,0 +1,9 @@
+{
+  "plugins": ["./prozess/pruefungen/frontendregeln/stylelintFarben.mjs"],
+  "rules": {
+    "selector-class-pattern": ["^[a-zäöüß][a-zA-ZäöüÄÖÜß0-9]*$", {"message": "Klassen in camelCase (wir.md 1)"}],
+    "custom-property-pattern": ["^[a-zäöüß][a-zA-ZäöüÄÖÜß0-9]*$", {"message": "Variablen in camelCase (wir.md 1)"}],
+    "color-named": "never",
+    "arbiter/farbenNurInRoot": true
+  }
+}

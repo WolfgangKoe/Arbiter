@@ -241,6 +241,25 @@ def segmentÄndert(segment: list[str], wurzel: Path, gesperrt: Callable[[str], b
     return False
 
 
+pfadsperren = (
+    (
+        istNurLesbar,
+        f"Dieser Pfad ist nur lesbar, für alle Rollen: {', '.join(nurLesbar)}. "
+        "Löschen tut nur der Stakeholder.",
+    ),
+    (
+        istAnliegen,
+        "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
+        "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen).",
+    ),
+    (
+        istFreigabeArtefakt,
+        "Plan, Review und Retro ändern Rollen nur mit Write und Edit, nie per Bash: Daran "
+        "vorbei greift die Freigabesperre nicht (prozess/ablauf.md, Freigabe und Kommentare).",
+    ),
+)
+
+
 def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
     rolle = eingabe.get("agent_type")
     if not rolle or eingabe.get("tool_name") != "Bash":
@@ -257,21 +276,9 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
             "4.000 Zeichen. Andere Arbeit beauftragst du bei einer Rolle."
         )
     befehl = ohneHeredocText(befehl)
-    if ändertPfad(befehl, wurzel, istNurLesbar):
-        return verweigerung(
-            f"Dieser Pfad ist nur lesbar, für alle Rollen: {', '.join(nurLesbar)}. "
-            "Löschen tut nur der Stakeholder."
-        )
-    if ändertPfad(befehl, wurzel, istAnliegen):
-        return verweigerung(
-            "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
-            "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen)."
-        )
-    if ändertPfad(befehl, wurzel, istFreigabeArtefakt):
-        return verweigerung(
-            "Plan, Review und Retro ändern Rollen nur mit Write und Edit, nie per Bash: Daran "
-            "vorbei greift die Freigabesperre nicht (prozess/ablauf.md, Freigabe und Kommentare)."
-        )
+    for istGesperrt, meldung in pfadsperren:
+        if ändertPfad(befehl, wurzel, istGesperrt):
+            return verweigerung(meldung)
     schreibend = [name for name in gitUnterbefehle(befehl) if name not in gitLesend]
     if not schreibend:
         return None

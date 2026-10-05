@@ -3,6 +3,7 @@
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -10,6 +11,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.pfade import wurzel
+from standregeln.phasenfolge import Phase
 
 schwelle = 95
 prüfskripte = "prozess/pruefungen"
@@ -20,6 +22,7 @@ vultureGültig = (0, 3)
 class Abdeckung(NamedTuple):
     zeilen: float
     zweige: float
+    rote: int = 0
 
 
 def prozentText(prozent: float) -> str:
@@ -36,37 +39,57 @@ def abdeckungText(name: str, abdeckung: Abdeckung) -> str:
 
 def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
     """Meldung, wenn Zeilen oder Zweige von `name` unter der Schwelle liegen."""
-    if min(abdeckung) >= schwelle:
+    if abdeckung.rote:
+        return f"{name}: {abdeckung.rote} Tests rot, die Schwelle gilt erst, wenn sie grün sind"
+    if min(abdeckung.zeilen, abdeckung.zweige) >= schwelle:
         return None
     return f"{abdeckungText(name, abdeckung)}, verlangt {schwelle} %"
+
+
+def aussetzung(abdeckung: Abdeckung, phase: Phase) -> str | None:
+    """Meldung, wenn die Schwelle nicht gilt: rote Tests in der Technikphase (DoD 1)."""
+    if abdeckung.rote and phase == Phase.technikphase:
+        return f"{abdeckung.rote} Tests rot (Tests vor dem Code), Abdeckung nicht gemessen"
+    return None
+
+
+def roteTests(pytestAusgabe: str) -> int:
+    """Summe aus `failed` und `error(s)` der Schlusszeile von pytest."""
+    return sum(int(zahl) for zahl in re.findall(r"\b(\d+) (?:failed|error)", pytestAusgabe))
 
 
 def quote(gedeckt: int, gesamt: int) -> float:
     return 100 * gedeckt / gesamt if gesamt else 100.0
 
 
+def coverageAufrufen(wurzel: Path, umgebung: dict, *argumente: str):
+    return subprocess.run(
+        [sys.executable, "-m", "coverage", *argumente],
+        cwd=wurzel,
+        env=umgebung,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
 def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None = None) -> Abdeckung:
-    """Zeilen und Zweige von `quelle` im Lauf von `tests`; `auswahl` ist ein pytest-Ausdruck."""
+    """Zeilen und Zweige von `quelle` im Lauf von `tests` samt Kindprozessen (`auswahl`: -m)."""
     with tempfile.TemporaryDirectory() as ablage:
         messdatei = Path(ablage) / "messung"
         umgebung = {**os.environ, "COVERAGE_FILE": str(messdatei)}
-        aufruf = [sys.executable, "-m", "coverage", "run", "--branch", f"--source={quelle}"]
-        aufruf += ["--omit=*Test.py,*conftest.py", "-m", "pytest", "-q", "-p", "no:cacheprovider"]
+        aufruf = ["run", "--branch", f"--source={quelle}", "--omit=*Test.py,*conftest.py"]
+        aufruf += ["-m", "pytest", "-q", "-p", "no:cacheprovider"]
         if auswahl:
             aufruf += ["-m", auswahl]
-        lauf = subprocess.run(
-            [*aufruf, tests], cwd=wurzel, env=umgebung, capture_output=True, text=True, check=False
+        lauf = coverageAufrufen(wurzel, umgebung, *aufruf, tests)
+        # Warum: `patch = subprocess` schreibt je Prozess eine Datei; erst `combine` vereint sie
+        vereint = coverageAufrufen(wurzel, umgebung, "combine", "-q")
+        assert messdatei.exists(), (
+            f"coverage ist nicht installiert (pyproject.toml): {lauf.stderr}{vereint.stderr}"
         )
-        assert messdatei.exists(), f"coverage ist nicht installiert (pyproject.toml): {lauf.stderr}"
         bericht = Path(ablage) / "bericht.json"
-        auswertung = subprocess.run(
-            [sys.executable, "-m", "coverage", "json", "-q", "-o", str(bericht)],
-            cwd=wurzel,
-            env=umgebung,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+        auswertung = coverageAufrufen(wurzel, umgebung, "json", "-q", "-o", str(bericht))
         assert auswertung.returncode == 0, (
             f"coverage hat zu {quelle} nichts gemessen: {auswertung.stdout}{auswertung.stderr}"
         )
@@ -74,6 +97,7 @@ def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None =
         return Abdeckung(
             quote(summen["covered_lines"], summen["num_statements"]),
             quote(summen["covered_branches"], summen["num_branches"]),
+            roteTests(lauf.stdout),
         )
 
 

@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.gitAufruf import gitAusgabe, letzteFreigabeOhneReview
-from gemeinsam.pfade import akzeptanzOrdner
+from gemeinsam.pfade import akzeptanzOrdner, frontendOrdner
 
 kritikerJePfad = (
     (f"{akzeptanzOrdner}/", ("Fachkritiker", "Architekt")),
     ("technik/arbiter/", ("Reviewer",)),
+    (f"{frontendOrdner}/", ("Reviewer",)),
     ("technik/tests/einheit/", ("Reviewer",)),
     ("prozess/pruefungen/", ("Reviewer",)),
     (".claude/settings.json", ("Reviewer",)),

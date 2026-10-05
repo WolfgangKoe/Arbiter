@@ -1,6 +1,6 @@
 # eslint und stylelint vor dem ersten JavaScript
 
-242 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+242 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** In Zyklus 3 schreibt der Implementierer das erste Frontend: HTML, CSS und
@@ -38,4 +38,12 @@ Erledigt, wenn je Regel ein Scheiter-Test rot wird (englischer Name, `var`,
 kebab-case-Klasse, Hex-Farbe in einer Komponente) und die Prüfungen auf dem leeren Ordner
 grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt. `package.json` (eslint 9.39.\*,
+stylelint 16.26.\*, „warum“ je Paket), `node_modules/` in `.gitignore`, `eslint.config.mjs`,
+`.stylelintrc.json`; die zwei eigenen Regeln (Kommentare, Farben nur in `:root`) liegen in
+`prozess/pruefungen/frontendregeln/*.mjs`. Aufruf und Scheiter-Tests (je Regel ein Gegenbeispiel,
+grün auf leerem Ordner, ohne `npm install` rot mit dem Befehl): `frontendregeln/frontend.py`,
+`frontendregeln/frontendTest.py`, im Lauf von pytest. Dateinamen: `formregeln/benennung.py`.
+Grenzen: Ein „englischer Name“ ist für kein Werkzeug erkennbar; eslint sperrt einbuchstabige,
+zu kurze und snake_case-Namen, englische Wörter bleiben Urteil des Reviewers. Farbnamen
+(`red`) sind auch in `:root` gesperrt. Einmal `npm install` aus der Wurzel.

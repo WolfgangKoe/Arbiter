@@ -6,12 +6,14 @@ from formregeln.abdeckung import (
     Abdeckung,
     abdeckungMessen,
     abdeckungText,
+    aussetzung,
     prozentText,
     schwelle,
     unbenutzterCode,
     verstoß,
 )
 from gemeinsam.pfade import akzeptanzOrdner, wurzel
+from standregeln.phasenfolge import Phase, lage
 
 vollständig = 100
 modulMitZweig = "def zeichen(wert):\n    if wert:\n        return 'ja'\n    return 'nein'\n"
@@ -31,10 +33,15 @@ konfigurationDerProbe = (
 )
 
 
+def messungAusDemRepo() -> str:
+    abschnitt = (wurzel / "pyproject.toml").read_text(encoding="utf-8").split("[tool.coverage.run]")
+    return "[tool.coverage.run]" + abschnitt[1].split("\n[")[0] + "\n"
+
+
 def probeAnlegen(tmp_path, modul: str, test: str):
     for ordner in ("quelle", "tests"):
         (tmp_path / ordner).mkdir()
-    (tmp_path / "pyproject.toml").write_text(konfigurationDerProbe)
+    (tmp_path / "pyproject.toml").write_text(konfigurationDerProbe + messungAusDemRepo())
     (tmp_path / "quelle" / "modul.py").write_text(modul)
     (tmp_path / "tests" / "probeTest.py").write_text(test)
 
@@ -92,6 +99,26 @@ def testEinFalscherQuellpfadNenntDenPfad(tmp_path):
         abdeckungMessen(tmp_path, "quelleFalsch", "tests")
 
 
+testDerNurEinKindprozessProbt = (
+    "import os\nimport subprocess\nimport sys\n\n\n"
+    "def testKind():\n"
+    '    umgebung = {**os.environ, "PYTHONPATH": "quelle"}\n'
+    '    befehl = [sys.executable, "-c", "import modul; modul.eins()"]\n'
+    "    subprocess.run(befehl, env=umgebung, check=True)\n"
+)
+
+
+def testWasNurEinKindprozessDerTestsAusführtIstGedeckt(tmp_path):
+    gemessen = probeMessen(tmp_path, "def eins():\n    return 1\n", testDerNurEinKindprozessProbt)
+    assert gemessen == Abdeckung(vollständig, vollständig)
+
+
+def testOhneMessungDerKindprozesseIstDieselbeProbeNichtGedeckt(tmp_path):
+    probeAnlegen(tmp_path, "def eins():\n    return 1\n", testDerNurEinKindprozessProbt)
+    (tmp_path / "pyproject.toml").write_text(konfigurationDerProbe)
+    assert abdeckungMessen(tmp_path, "quelle", "tests").zeilen < schwelle
+
+
 def testDieSchwelleGiltAuchFürDieZeilen():
     assert verstoß("probe", Abdeckung(90, 100)) is not None
 
@@ -105,9 +132,41 @@ def testEinProduktOhneZweigeHatVolleZweigabdeckung(tmp_path):
     assert gemessen.zweige == vollständig
 
 
+testDerRotIst = "from modul import zeichen\n\n\ndef testRot():\n    assert zeichen(1) == 42\n"
+
+
+def rotMessen(tmp_path) -> Abdeckung:
+    return probeMessen(
+        tmp_path, modulMitZweig, testDerRotIst + testDerBeidesProbt.split("\n\n\n", 1)[1]
+    )
+
+
+def testRoteTestsInDerTechnikphaseSetzenDieSchwelleAus(tmp_path):
+    gemessen = rotMessen(tmp_path)
+    assert gemessen.rote == 1
+    assert "1 Tests rot" in aussetzung(gemessen, Phase.technikphase)
+
+
+@pytest.mark.parametrize("phase", [Phase.domänenphase, Phase.prozessphase])
+def testRoteTestsAußerhalbDerTechnikphaseSindRot(tmp_path, phase):
+    gemessen = rotMessen(tmp_path)
+    assert aussetzung(gemessen, phase) is None
+    assert "1 Tests rot" in verstoß("probe", gemessen)
+
+
+def testGrüneTestsSetzenDieSchwelleInDerTechnikphaseNichtAus(tmp_path):
+    gemessen = probeMessen(tmp_path, modulMitZweig, testDerNurJaProbt)
+    assert gemessen.rote == 0
+    assert aussetzung(gemessen, Phase.technikphase) is None
+    assert verstoß("probe", gemessen) is not None
+
+
 @pytest.mark.stand
 def testDasProduktErreichtDieSchwelleMitSeinenTests():
     gemessen = abdeckungMessen(wurzel, "technik/arbiter", "technik/tests")
+    ausgesetzt = aussetzung(gemessen, lage(wurzel).phase)
+    if ausgesetzt:
+        pytest.skip(ausgesetzt)
     assert verstoß("technik/arbiter", gemessen) is None, verstoß("technik/arbiter", gemessen)
 
 

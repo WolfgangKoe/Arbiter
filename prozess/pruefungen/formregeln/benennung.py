@@ -12,6 +12,7 @@ from gemeinsam.pfade import (
     anforderungsOrdner,
     anliegenOrdner,
     etappenOrdner,
+    frontendOrdner,
     itemsOrdner,
     perspektiven,
 )
@@ -24,8 +25,11 @@ akzeptanzTestName = re.compile(r"^test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[A-ZÄÖÜ
 pythonDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.py$")
 markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
 geteilterTest = re.compile(r"^(?P<kürzel>[a-z]+)(?P<nummer>\d+)Test\.py$")
+frontendDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.(js|css|html)$")
 anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 
+dateinameFalsch = "Dateiname nicht in camelCase, ASCII"
+frontendEndungen = (".js", ".css", ".html")
 mindestlänge = 3
 achsen = {"x", "y"}
 typgenerika = {"tuple", "list", "dict", "set", "frozenset", "Callable", "Literal", "Union"}
@@ -33,6 +37,8 @@ ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
+# Warum: Diese Hilfsmodule haben keine Anforderung hinter sich (Anliegen 257).
+akzeptanzHilfsmodule = {"handgriffe.py", "bildschirm.py"}
 ausgeschlosseneOrdner = {
     *altbestandOrdner,
     ".git",
@@ -40,6 +46,7 @@ ausgeschlosseneOrdner = {
     ".venv",
     ".pytest_cache",
     ".ruff_cache",
+    "node_modules",
 }
 nummerierteOrdner = (etappenOrdner, itemsOrdner, "handoff")
 
@@ -161,8 +168,10 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
     relativ = pfad.relative_to(wurzel).as_posix()
     if pfad.name in werkzeugdateien:
         return None
+    if relativ.startswith(f"{frontendOrdner}/") and pfad.suffix in frontendEndungen:
+        return None if frontendDatei.match(pfad.name) else dateinameFalsch
     if pfad.suffix == ".py":
-        return None if pythonDatei.match(pfad.name) else "Dateiname nicht in camelCase, ASCII"
+        return None if pythonDatei.match(pfad.name) else dateinameFalsch
     if relativ.startswith(f"{anliegenOrdner}/"):
         nummer = pfad.name.partition("-")[0]
         zuPrüfen = nummer.isdigit() and int(nummer) >= ersteBenannteAnliegenNummer
@@ -171,7 +180,7 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
         return None
     if relativ.startswith(nummerierteOrdner):
         return None
-    return None if markdownDatei.match(pfad.name) else "Dateiname nicht in camelCase, ASCII"
+    return None if markdownDatei.match(pfad.name) else dateinameFalsch
 
 
 def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
@@ -179,6 +188,9 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None
+    if pfad.parent == ordner and pfad.name in akzeptanzHilfsmodule:
+        hatTest = any(testfunktionen(ast.parse(pfad.read_text(encoding="utf-8"))))
+        return "Hilfsmodul darf keine Testfunktion enthalten" if hatTest else None
     if not pfad.name.endswith("Test.py"):
         return "Akzeptanztest muss `<anforderung>Test.py` heißen"
     anforderungen = wurzel / anforderungsOrdner
@@ -198,18 +210,20 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
     return f"keine Anforderung {anforderung.relative_to(wurzel).as_posix()} zum Spiegeln"
 
 
+def istGeprüft(relativ: Path) -> bool:
+    if relativ.suffix == ".py":
+        return True
+    if relativ.suffix == ".md":
+        return relativ.parts[0] in (*perspektiven, "handoff")
+    return relativ.suffix in frontendEndungen and relativ.is_relative_to(frontendOrdner)
+
+
 def geprüfteDateien(wurzel: Path) -> Iterator[Path]:
     gefunden = []
     for ordner, unterordner, dateien in os.walk(wurzel):
         unterordner[:] = [name for name in unterordner if name not in ausgeschlosseneOrdner]
         gefunden += [Path(ordner) / name for name in dateien]
-    for endung in (".py", ".md"):
-        for pfad in sorted(gefunden):
-            relativ = pfad.relative_to(wurzel)
-            if pfad.suffix == endung and (
-                endung == ".py" or relativ.parts[0] in (*perspektiven, "handoff")
-            ):
-                yield pfad
+    yield from (pfad for pfad in sorted(gefunden) if istGeprüft(pfad.relative_to(wurzel)))
 
 
 def dateiVerstöße(pfad: Path, wurzel: Path) -> list[str]:
