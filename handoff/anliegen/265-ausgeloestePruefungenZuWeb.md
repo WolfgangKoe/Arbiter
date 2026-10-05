@@ -1,6 +1,6 @@
 # Ausgelöste Prüfungen zu web/: W1, W2, D3
 
-265 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+265 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da. Mit `technik/arbiter/web/` sind drei Auslöser aus
@@ -45,4 +45,4 @@ Danach setze ich in W1, W2 und D3 „Prüft“ auf diese Tests und streiche den 
 Erledigt, wenn die Scheiter-Tests zu 1, 2, 3a und 3b grün sind und
 `python3 -m pytest prozess/pruefungen` grün bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** W1, W2 in `formregeln/importvertrag.py` (`webVerstöße`), D3a und D3b in neuem `formregeln/zustandsschutz.py`, je mit Scheiter-Test in `<modul>Test.py` und Zeile in `prozess/regeln.md`. Der Zustandsschutz liegt in eigenem Modul, weil er keine Importe prüft (eine Aufgabe je Modul). `Prüft` in `web.md` und `architektur.md` setzt der Architekt.

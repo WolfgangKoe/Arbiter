@@ -1,7 +1,7 @@
 import pytest
 
 from formregeln.glossar import domaeneOrdner
-from formregeln.importvertrag import verstöße
+from formregeln.importvertrag import verstöße, webOrdner
 from gemeinsam.pfade import projektordner
 
 
@@ -60,4 +60,54 @@ def testStandardbibliothekUndDomäneSindGrün(tmp_path, text):
 @pytest.mark.stand
 def testDieDomäneDesReposHältDenVertrag():
     assert (projektordner() / domaeneOrdner).is_dir()
+    assert verstöße(projektordner()) == []
+
+
+def webdatei(tmp_path, text, name="probe.py"):
+    datei = tmp_path / webOrdner / name
+    datei.parent.mkdir(parents=True, exist_ok=True)
+    datei.write_text(text, encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "from flask import render_template\n",
+        "from flask import jsonify, render_template_string\n",
+        "import jinja2\n",
+        "from markupsafe import Markup\n",
+        "import flask.templating\n",
+    ],
+)
+def testW1HtmlErzeugenInWebIstRot(tmp_path, text):
+    webdatei(tmp_path, text)
+    assert verstöße(tmp_path)
+
+
+def testW1FlaskJsonifyInWebIstGrün(tmp_path):
+    webdatei(tmp_path, "from flask import jsonify\n")
+    assert verstöße(tmp_path) == []
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "from flask import jsonify\n",
+        "import flask.json\n",
+        "from werkzeug.serving import make_server\n",
+    ],
+)
+def testW2FlaskInDarstellungIstRot(tmp_path, text):
+    webdatei(tmp_path, text, "darstellung.py")
+    assert verstöße(tmp_path)
+
+
+def testW2FlaskInAnderemWebModulIstGrün(tmp_path):
+    webdatei(tmp_path, "from flask import Flask\n", "anwendung.py")
+    assert verstöße(tmp_path) == []
+
+
+@pytest.mark.stand
+def testDasWebDesReposHältDenVertrag():
+    assert (projektordner() / webOrdner).is_dir()
     assert verstöße(projektordner()) == []
