@@ -1,6 +1,6 @@
 # Wo eine Aufstellungszone liegt, an einer Stelle
 
-263 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+263 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da (Schnitt). Wo eine *Aufstellungszone* liegt, wird an

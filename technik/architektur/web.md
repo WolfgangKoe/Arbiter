@@ -17,7 +17,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte; kennt Flask nicht. „Spieler 1“
     und „Spieler 2“ vergibt es aus der Reihenfolge der Ausgangslage (AUF-4.2, wie W4).
   Regeln und Rechnen stehen nur in der Domäne: Längen in Zoll liefern `messen.py` und
-  `grenzenInXDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
+  `Ausgangslage.grenzenDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
   Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
   `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
   Prüft: Akzeptanztests zu QUE-2 und AUF-4; der Rest nur Text; Auslöser: zweite Route.
@@ -40,8 +40,10 @@ Mockups und Ziel eines Bildschirmtests. Eine neue Komponente ist ein Anliegen an
 Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
 - **O1** HTML, CSS mit Variablen in `.css`, JavaScript-Module in `.js`; kein `<style>`, kein
   `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
-  Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Prüft: eslint und
-  stylelint über `.js` und `.css` (`frontendregeln/frontend.py`); der Rest nur Text.
+  Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Das Markup steht
+  in `<template>` der Seite; `seite.js` klont und füllt es und erzeugt keine Elemente.
+  Prüft: eslint und stylelint über `.js` und `.css` (`frontendregeln/frontend.py`); der Rest
+  nur Text, „keine Elemente“ bis Anliegen 268.
 - **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
   Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
   (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.

@@ -1,6 +1,6 @@
 # Markup in Vorlagen der Seite statt in seite.js
 
-264 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+264 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da (Schnitt Frontend). Die drei Mockups sind HTML,
