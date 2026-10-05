@@ -1,6 +1,6 @@
 # Schnittstelle der Bildschirmtests zur Prüfung
 
-245 · Fragen · von Testautor (Technik) → Architekt · Runde 1/3 · angenommen
+245 · Fragen · von Testautor (Technik) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Tests zu QUE-2 und AUF-4 legen fest, was der Implementierer bauen muss. Bitte prüfen

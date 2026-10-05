@@ -1,6 +1,6 @@
 # Bildschirmtests: Name der Einheit und Lesbarkeit
 
-248 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+248 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von c007cfc (Schnittstelle und Lesbarkeit,
@@ -43,4 +43,15 @@
 Erledigt, wenn 1 bis 6 umgesetzt sind und AUF-1 bis AUF-3 grün bleiben; 7 nach dem
 Implementierer.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, 1 bis 6 umgesetzt:
+1. `_spielerMit` vergibt `Einheit {nummer}`; andere `Einheit(…)` gibt es unter
+   `tests/akzeptanz/` nicht.
+2. AUF-4.4 prüft „Spieler 1“ und „Spieler 2“ im Text der `.kopfzeileSpieler`; AUF-4.3 zählt
+   `len(spielerZwei.armee.einheiten)`.
+3. `alleEinheiten` als Summe der *Einheiten* beider *Armeen*.
+4. Name lautet jetzt `…MitDerWahlEinerAnderenEinheitWandert…`.
+5. AUF-4.6 nutzt `gewählteAufstellung` direkt.
+6. QUE-2.5 wählt die Zone bei `x == 0`.
+7. Den Kommentar zum Import in `seiteZu` habe ich schon gestrichen; den Import nach oben
+   setzt der Implementierer, sobald `web/` besteht.
+Lauf: rot wegen `Einheit(name=…)` und fehlendem `arbiter.web`, beides fehlender Code.

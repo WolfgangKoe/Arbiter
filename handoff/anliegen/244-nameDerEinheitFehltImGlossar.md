@@ -1,6 +1,6 @@
 # Name der Einheit fehlt im Glossar
 
-244 · Fragen · von Testautor (Technik) → Anforderungsautor · Runde 1/3 · angenommen
+244 · Fragen · von Testautor (Technik) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** AUF-4.3 verlangt jede *Einheit* „unter ihrem Namen“. Das [Glossar](../../domaene/glossar.md)

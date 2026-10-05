@@ -14,6 +14,8 @@ from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 _technik = Path(__file__).parents[3]
 _sekundenBisZurAdresse = 15
 _anzahlGesetzterModelle = 3
+# Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.4 prüfen Zoll exakt
+_pixelgenauigkeit = 1e-4
 
 
 def _ersteZeile(prozess: subprocess.Popen) -> str:
@@ -51,8 +53,8 @@ def testQue2_1DerBefehlNenntInDerErstenZeileEineAdresseNurFürDasEigeneGerät(ad
     assert adresse.port is not None
 
 
-def testQue2_1UnterDerAdresseÖffnetDerBrowserDieKarteMitDemSpielfeld(adresseDesBefehls, seiteBei):
-    seite = seiteBei(adresseDesBefehls)
+def testQue2_1UnterDerAdresseÖffnetDerBrowserDieKarteMitDemSpielfeld(adresseDesBefehls, bildschirm):
+    seite = bildschirm.seiteBei(adresseDesBefehls)
 
     assert seite.locator(".karte .spielfeld").count() == 1
 
@@ -165,7 +167,9 @@ def testQue2_5DieSeitenlängenDesSpielfeldsHabenAufDerKarteDenselbenMaßstab(
 
     (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
-    assert spielfeld.höheInPixeln / float(länge) == pytest.approx(pixelJeZoll, rel=1e-4)
+    assert spielfeld.höheInPixeln / float(länge) == pytest.approx(
+        pixelJeZoll, rel=_pixelgenauigkeit
+    )
 
 
 def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
@@ -178,9 +182,10 @@ def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
     seite.set_viewport_size(fenster)
 
     (spielfeld,) = bildschirm.elementeDerSeite(seite, ".karte .spielfeld")
-    zone, _ = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = bildschirm.elementeDerSeite(seite, ".karte .aufstellungszone")
+    zone = next(zone for zone in zonen if zone.zahl("x") == 0)
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
-    assert zone.breiteInPixeln / float(tiefe) == pytest.approx(pixelJeZoll, rel=1e-4)
+    assert zone.breiteInPixeln / float(tiefe) == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
 
 
 def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
@@ -196,7 +201,7 @@ def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
     (kreis,) = bildschirm.elementeDerSeite(seite, ".karte .modell")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     durchmesser = float(2 * radiusInZoll(modell))
-    assert kreis.breiteInPixeln / durchmesser == pytest.approx(pixelJeZoll, rel=1e-4)
+    assert kreis.breiteInPixeln / durchmesser == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
 
 
 def testQue2_6DieModelleEinesSpielersHabenAufDerKarteEineFarbe(
