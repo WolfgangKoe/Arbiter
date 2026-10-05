@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from anliegenregeln.anliegen import antwortZeile
+from anliegenregeln.antworten import antwortZeile
 from formregeln.mockups import istMockupDatei
 from gemeinsam.pfade import (
     akzeptanzOrdner,

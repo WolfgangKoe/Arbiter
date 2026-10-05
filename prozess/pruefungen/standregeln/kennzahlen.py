@@ -3,9 +3,10 @@
 from datetime import UTC, date, datetime
 from pathlib import Path
 
-from anliegenregeln.anliegen import Anliegen, gelesene, wartetAuf
+from anliegenregeln.anliegenDran import wartetAuf
 from gemeinsam.gitAufruf import gitAusgabe, letzteFreigabe
 from gemeinsam.pfade import projektordner
+from lesen.anliegenKopf import Anliegen, gelesene
 
 
 def alterInTagen(wurzel: Path, anliegen: Anliegen, heute: date) -> int:

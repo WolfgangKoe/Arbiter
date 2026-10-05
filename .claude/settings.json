@@ -68,6 +68,7 @@
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.belegung", "timeout": 10}]},
       {"matcher": "Write|Edit|NotebookEdit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibgrenze", "timeout": 10}]},
       {"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.statusrecht", "timeout": 10}]},
+      {"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.freigabeSperre", "timeout": 10}]},
       {"matcher": "Write", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.anliegennummer", "timeout": 10}]},
       {"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.bashPositivliste", "timeout": 10}]},
       {"matcher": "SubagentHandback", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schlussantwort", "timeout": 10}]},

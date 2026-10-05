@@ -2,11 +2,12 @@
 
 from pathlib import Path
 
-from anliegenregeln.anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
 from gemeinsam.pfade import projektordner
 from kriterienregeln.rueckverfolgung import wartendeAlsText
+from lesen.anliegenKopf import anliegenDateien
+from standregeln.anliegenText import dranAlsText, nachprüfungenAlsText
 from standregeln.belegung import belegungAusTranskript, punkte, warnschwelle
 from standregeln.codekritik import fälligeKritikAlsText
 from standregeln.freigabeKommentare import autorenDran, freigabeZuCommitten

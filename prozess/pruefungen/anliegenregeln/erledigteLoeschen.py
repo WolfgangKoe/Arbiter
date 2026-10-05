@@ -4,9 +4,9 @@ import re
 import sys
 from pathlib import Path
 
-from anliegenregeln.anliegen import anliegenDateien, kopfLesen
 from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, projektordner
+from lesen.anliegenKopf import anliegenDateien, kopfLesen
 
 link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
 suchOrdner = ("domaene", "technik", "prozess", handoffOrdner, ".claude", "doku")

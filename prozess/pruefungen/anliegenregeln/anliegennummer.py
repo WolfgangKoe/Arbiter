@@ -3,7 +3,11 @@
 import sys
 from pathlib import Path
 
-from anliegenregeln.anliegen import nummerAusDateiname, nächsteFreieNummer, vergebeneNummern
+from anliegenregeln.anliegenNummern import (
+    nummerAusDateiname,
+    nächsteFreieNummer,
+    vergebeneNummern,
+)
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import anliegenOrdner, projektordner
 

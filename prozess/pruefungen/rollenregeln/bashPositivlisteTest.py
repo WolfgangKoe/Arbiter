@@ -4,7 +4,8 @@ from pathlib import Path
 import pytest
 
 from gemeinsam.pfade import wurzel
-from rollenregeln.bashPositivliste import entscheide, ohneHeredocText
+from rollenregeln.bashPositivliste import entscheide
+from rollenregeln.shellZerlegen import ohneHeredocText
 
 
 def bash(befehl: str, rolle: str | None = "koordinator") -> dict:

@@ -3,48 +3,27 @@
 import sys
 from pathlib import Path
 
-from anliegenregeln.anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
-from anliegenregeln.freigabeVerstoss import freigabeVerstoß
+from anliegenregeln.anliegenNummern import nächsteFreieNummer
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import anliegenOrdner, projektordner
-from lesen.artefakt import artefakte, pfadDer
+from gemeinsam.schreibvorgang import bisherigerInhalt, neuerInhalt, schreibZiel
+from lesen.anliegenKopf import Anliegen, höchstRunde, kopfAusText
 
 letzteRunde = "Runde 3/3 ist die letzte; setze `eskaliert`, der Stakeholder entscheidet."
-
-
-def neuerInhalt(werkzeug: str, angaben: dict, bisher: str) -> str | None:
-    if werkzeug == "Write":
-        return angaben.get("content")
-    if werkzeug == "Edit":
-        alt, neu = angaben.get("old_string"), angaben.get("new_string")
-        if alt is None or neu is None:
-            return None
-        anzahl = -1 if angaben.get("replace_all") else 1
-        return bisher.replace(alt, neu, anzahl)
-    return None
 
 
 def entscheide(daten: dict, wurzel: Path) -> dict | None:
     eingabe = HookEingabe.aus(daten)
     # Warum: Ohne Rolle spricht die Hauptsitzung, für sie gilt keine Grenze.
-    rolle, werkzeug, angaben = eingabe.rolle, eingabe.werkzeug, eingabe.angaben
-    if not rolle or werkzeug not in ("Write", "Edit") or not angaben.get("file_path"):
+    rolle = eingabe.rolle
+    ziel = schreibZiel(eingabe, wurzel) if rolle else None
+    if ziel is None or ziel.parent != (wurzel / anliegenOrdner).resolve() or ziel.suffix != ".md":
         return None
-    ziel = Path(angaben["file_path"])
-    ziel = ziel if ziel.is_absolute() else wurzel / ziel
-    ziel = ziel.resolve()
-    istArtefakt = ziel in {pfadDer(wurzel, artefakt).resolve() for artefakt in artefakte}
-    istAnliegen = ziel.parent == (wurzel / anliegenOrdner).resolve() and ziel.suffix == ".md"
-    if not (istArtefakt or istAnliegen):
+    bisher = bisherigerInhalt(ziel)
+    danach = neuerInhalt(eingabe, bisher) if bisher is not None else None
+    if bisher is None or danach is None:
         return None
-    try:
-        bisher = ziel.read_text(encoding="utf-8") if ziel.is_file() else ""
-    except UnicodeDecodeError:
-        return None
-    danach = neuerInhalt(werkzeug, angaben, bisher)
-    if istArtefakt:
-        return freigabeAntwort(ziel, bisher, danach)
-    neu = kopfAusText(danach, ziel) if danach is not None else None
+    neu = kopfAusText(danach, ziel)
     alt = kopfAusText(bisher, ziel)
     if neu is None:
         return None
@@ -56,11 +35,6 @@ def entscheide(daten: dict, wurzel: Path) -> dict | None:
     if grund is None:
         return None
     return verweigerung(f"Statusrecht: {ziel.name} {grund}")
-
-
-def freigabeAntwort(ziel: Path, bisher: str, danach: str | None) -> dict | None:
-    grund = freigabeVerstoß(bisher, danach) if danach is not None else None
-    return verweigerung(f"Freigabe und Kommentare: {ziel.name} {grund}") if grund else None
 
 
 def absenderVerstoß(alt: Anliegen | None, neu: Anliegen, freieNummer: int) -> str | None:

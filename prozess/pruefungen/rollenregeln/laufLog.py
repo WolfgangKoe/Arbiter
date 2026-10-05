@@ -7,18 +7,13 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
 from gemeinsam.pfade import projektordner
+from rollenregeln.dashboard import dashboardSchreiben
+from rollenregeln.laufLesen import eintragAusZeile, logPfad
 from standregeln.belegung import belegungAusTranskript, eigenesTranskript
 
-pflichtfelder = ("zeit", "rolle", "belegung")
 zielLänge = 80
 koordinatorVorspann = "The coordinator sent a message while you were working:"
 hinweisBlock = re.compile(r"<system-reminder>.*?</system-reminder>", re.DOTALL)
-logOrdner = "prozess/dashboard"
-logDatei = "laeufe.jsonl"
-
-
-def logPfad(wurzel: Path) -> Path:
-    return wurzel / logOrdner / logDatei
 
 
 def jetzt() -> datetime:
@@ -150,55 +145,8 @@ def eintragAnhängen(wurzel: Path, eintrag: dict) -> None:
         ziel.write(json.dumps(eintrag, ensure_ascii=False) + "\n")
 
 
-def eintragAusZeile(zeile: str, pflicht: tuple = pflichtfelder) -> dict | None:
-    """Der Eintrag einer Zeile; `None` bei leerer, unlesbarer oder unvollständiger Zeile."""
-    try:
-        eintrag = json.loads(zeile)
-    except json.JSONDecodeError:
-        return None
-    if not isinstance(eintrag, dict) or not all(feld in eintrag for feld in pflicht):
-        return None
-    return eintrag
-
-
-def dauerSumme(spät: dict, früh: dict) -> int | None:
-    """Beide Teile des Laufs zusammen; die Rückmeldung des Hooks zählt ab ihrem Beginn."""
-    teile = (spät.get("dauer"), früh.get("dauer"))
-    return sum(teile) if all(teil is not None for teil in teile) else spät.get("dauer")
-
-
-def läufeLesen(wurzel: Path) -> list[dict]:
-    datei = logPfad(wurzel)
-    if not datei.is_file():
-        return []
-    gelesen = [
-        eintrag
-        for zeile in datei.read_text(encoding="utf-8").splitlines()
-        if (eintrag := eintragAusZeile(zeile)) is not None
-    ]
-    späterer: dict = {}
-    behalten: dict = {}
-    ergebnis = []
-    for eintrag in reversed(gelesen):
-        laufId = eintrag.get("agent_id")
-        spät = späterer.get(laufId) if laufId else None
-        if laufId:
-            späterer[laufId] = eintrag
-        if spät and spät.get("stopp_wiederholt"):
-            behalten[laufId]["ziel"] = eintrag.get("ziel")  # Warum: gilt dem Auftrag davor
-            behalten[laufId]["dauer"] = dauerSumme(behalten[laufId], eintrag)
-            continue
-        eintrag = dict(eintrag)
-        ergebnis.append(eintrag)
-        if laufId:
-            behalten[laufId] = eintrag
-    return ergebnis[::-1]
-
-
 def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
     """Trägt den Lauf ein und schreibt das Dashboard neu."""
-    from rollenregeln.dashboard import dashboardSchreiben
-
     gefunden = laufEintrag(eingabe, jetzt(), ordner)
     if gefunden:
         eintragAnhängen(ordner, gefunden)

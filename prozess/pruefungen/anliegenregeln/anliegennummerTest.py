@@ -2,8 +2,8 @@ import subprocess
 
 import pytest
 
-from anliegenregeln.anliegen import doppelteNummern, nächsteFreieNummer
 from anliegenregeln.anliegennummer import entscheide
+from anliegenregeln.anliegenNummern import doppelteNummern, nächsteFreieNummer
 from anliegenregeln.anliegenTest import anliegenAnlegen, guterKopf
 from gemeinsam.pfade import wurzel
 

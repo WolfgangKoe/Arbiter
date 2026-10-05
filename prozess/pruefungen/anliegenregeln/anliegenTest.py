@@ -3,15 +3,10 @@ from pathlib import Path
 
 import pytest
 
-from anliegenregeln.anliegen import (
-    anliegenDateien,
-    dran,
-    kopfLesen,
-    kopfVerstöße,
-    nachprüfungen,
-    nachprüfungenAlsText,
-)
+from anliegenregeln.anliegen import kopfVerstöße
+from anliegenregeln.anliegenDran import dran, nachprüfungen
 from gemeinsam.pfade import wurzel
+from lesen.anliegenKopf import anliegenDateien, kopfLesen
 
 guterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
 
@@ -81,12 +76,6 @@ def testNachprüfungenNenntenDenAbsenderDerAngenommenenAnliegen(tmp_path):
         tmp_path, "14-probe.md", "14 · Kritik · von Fachkritiker → Planer · Runde 1/3 · angenommen"
     )
     assert nachprüfungen(tmp_path) == {"Architekt": [12], "Fachkritiker": [14]}
-    assert nachprüfungenAlsText(tmp_path) == "Nachprüfung fällig: Architekt (12), Fachkritiker (14)"
-
-
-def testOhneAngenommeneAnliegenIstDerTextLeer(tmp_path):
-    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
-    assert nachprüfungenAlsText(tmp_path) == ""
 
 
 def fragenAnStakeholder(tmp_path, körper, status="offen"):

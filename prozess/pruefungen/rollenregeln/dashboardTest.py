@@ -5,22 +5,16 @@ import pytest
 
 from gemeinsam.hookProtokoll import HookEingabe
 from rollenregeln import dashboard
-from rollenregeln.dashboard import (
-    dashboardSchreiben,
-    kilo,
-    legende,
-    modellName,
-    seiteErzeugen,
-    sitzungsTitel,
-)
+from rollenregeln.dashboard import dashboardSchreiben, modellName, seiteErzeugen
+from rollenregeln.dashboardDiagramm import kilo
+from rollenregeln.dashboardGruppen import sitzungsTitel
+from rollenregeln.dashboardStil import legende
+from rollenregeln.laufLesen import dauerSumme, logPfad, läufeLesen
 from rollenregeln.laufLog import (
     dauerSekunden,
-    dauerSumme,
     eintragAnhängen,
     jetzt,
     laufEintrag,
-    logPfad,
-    läufeLesen,
     protokollieren,
     transkriptEinträge,
     zielLänge,

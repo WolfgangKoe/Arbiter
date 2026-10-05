@@ -26,14 +26,10 @@
 7. Regel im Test: `hoechstmassTest.py`, `komplexitaetTest.py`, `konfigurationTest.py`; zehn
    Testdateien bauen je ein eigenes git-Repo.
 
-**Kosten.** Wer den Stand ändert, kann eine Sperre brechen; eine Regel steht nicht an einem
-Ort. Etwa ein Lauf je Punkt; vor 215 bis 221 (dieselben Dateien).
-
 **Gegenvorschlag.** Verhalten unverändert, je Punkt ein Commit:
 1. Schichten `gemeinsam` < `lesen` (neu: Anliegen-Kopf, Artefakt, Plan, Agent) < `kriterienregeln` <
    `anliegenregeln` < `standregeln` < `rollenregeln` < `formregeln`; `belegung.py` nach `standregeln`,
-   `freigabeVerstoß` nach `anliegenregeln`. Mechanismus: Importvertrag der Prüfskripte (Standardbibliothek),
-   Scheiter-Test mit Rückimport; Regel Anliegen 255.
+   `freigabeVerstoß` nach `anliegenregeln`. Mechanismus: Importvertrag, Scheiter-Test mit Rückimport (Anliegen 255).
 2. Nach Aufgaben teilen (`anliegen`, `bashPositivliste`, `statusrecht`, `schreibgrenze`, `dashboard`);
    der Docstring nennt die eine Aufgabe.
 3. `HookEingabe` in `hookProtokoll.py`; Mechanismus: `eingabe.get(` nur dort.
@@ -46,9 +42,4 @@ Ort. Etwa ein Lauf je Punkt; vor 215 bis 221 (dieselben Dateien).
 Erledigt, wenn kein Fundort aus 1 bis 7 bleibt, die Mechanismen aus 1, 3, 4 an je einem
 Gegenbeispiel rot werden, die Prüfungen grün sind und der Reviewer geprüft hat.
 
-**Stellungnahme.** Status `offen`. Umgesetzt: 6 (`pfadsperren`); 3 und 4 (`HookEingabe`, git nur in
-`gemeinsam/gitAufruf.py`, Pfade in `gemeinsam/pfade.py`; Mechanismus `formregeln/einzelstellen.py`);
-1: neu `lesen/` (`agenten`, `plan`, `artefakt`), `belegung` nach `standregeln/`, `freigabeVerstoß` nach
-`anliegenregeln/freigabeVerstoss.py`; Mechanismus `formregeln/schichten.py`, Scheiter-Test
-`schichtenTest.py` (Rückimport rot). Offen: 2 (auch `laufLog` ↔ `dashboard`), 5, 7, je ein Lauf.
-Organisationsentwickler: `ablauf.md` Zeilen 19, 181, 311 nennen alte Pfade.
+**Stellungnahme.** Status `offen`. Umgesetzt: 1, 3, 4, 6 (`formregeln/schichten.py`, `einzelstellen.py`, je mit Test) und 2: `anliegen` geteilt in fünf Module; `bashPositivliste` (`shellZerlegen`, `gitBefehle`, `freigabeCommit`, `pfadsperren`); `statusrecht` und neuer Hook `freigabeSperre` (Plan, Review, Retro); `schreibgrenze` und neuer Hook `schreibBilanz` (Start, Stopp), beide in `settings.json`; `dashboard` (`dashboardGruppen`, `dashboardDiagramm`, `dashboardStil`, `laufLesen`, löst `laufLog` ↔ `dashboard`). Punkt 2: kein Mechanismus (Urteil des Reviewers); neue Tests je Hook und für `anliegenText`. Offen: 5, 7, je ein Lauf. Organisationsentwickler: `ablauf.md` Zeilen 19, 181, 311 alte Pfade.
