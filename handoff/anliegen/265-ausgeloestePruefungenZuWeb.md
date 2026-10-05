@@ -1,6 +1,6 @@
 # Ausgelöste Prüfungen zu web/: W1, W2, D3
 
-265 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+265 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da. Mit `technik/arbiter/web/` sind drei Auslöser aus

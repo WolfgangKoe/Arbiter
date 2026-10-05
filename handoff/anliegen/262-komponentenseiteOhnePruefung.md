@@ -1,6 +1,6 @@
 # Komponentenseite: Prüfung statt Bildschirmtest
 
-262 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+262 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach 488d8da gibt es `technik/frontend/komponenten.css` (gleich

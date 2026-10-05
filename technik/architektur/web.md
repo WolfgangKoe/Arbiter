@@ -6,8 +6,9 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
 - **W1** Getrennt: `arbiter/web/` liefert die Dateien aus `technik/frontend/` unverändert aus
   und beantwortet Anfragen unter `/api/` mit JSON; es erzeugt kein HTML. Das Frontend kennt
   nur diese Adressen. Gegenbeispiel `ArbiterMap/backend/app/routes/map.py`: Das Backend füllt
-  Jinja-Vorlagen, 40.000 Zeichen in einer Datei. Prüft: nur Text; Auslöser: erstes Modul in
-  `web/`, dann ein Importvertrag „`web/` importiert kein `render_template`, kein `jinja2`“.
+  Jinja-Vorlagen, 40.000 Zeichen in einer Datei. Prüft: `formregeln/importvertrag.py`
+  (`webVerstöße`: kein `jinja2`, `markupsafe`, `flask.templating`, kein `from flask import
+  render_template`); `flask.render_template` als Attribut nur Text.
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
   - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
     Thread auf `127.0.0.1` mit freiem Port und gibt einen `Server` mit `adresse` und
@@ -20,7 +21,9 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   `Ausgangslage.grenzenDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
   Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
   `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
-  Prüft: Akzeptanztests zu QUE-2 und AUF-4; der Rest nur Text; Auslöser: zweite Route.
+  Prüft: Akzeptanztests zu QUE-2 und AUF-4; „`darstellung.py` kennt Flask nicht“
+  `formregeln/importvertrag.py`; „nie `_`-Felder“ `formregeln/zustandsschutz.py` (D3); der
+  Rest nur Text; Auslöser: zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`). Prüft: nur Text; Auslöser: erste Handlung über HTTP.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
@@ -35,8 +38,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); die Bildschirmtests prüfen die Seite, nicht das JSON.
 
 ## Oberfläche
-Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku, Vorlage der
-Mockups und Ziel eines Bildschirmtests. Eine neue Komponente ist ein Anliegen an die Technik.
+Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku und Vorlage der
+Mockups. Eine neue Komponente ist ein Anliegen an die Technik.
 Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
 - **O1** HTML, CSS mit Variablen in `.css`, JavaScript-Module in `.js`; kein `<style>`, kein
   `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
@@ -50,7 +53,10 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
 - **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
   gebaut aus `domaene/mockups/vorschlag.css`. Jede Seite verlinkt `komponenten.css`;
   Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und
-  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Prüft: ihr Bildschirmtest.
+  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Prüft:
+  `formregeln/komponentenseite.py` (Seite neben der CSS und verlinkt sie, keine tote Klasse,
+  keine neue Klasse in Mockups und `technik/frontend/*.html`); Klassen aus `seite.js`, der
+  Link jeder Seite und „ohne Umschreiben“ nur Text.
 
 ## Bildschirmtests
 Entschieden nach einem Wegwerf-Versuch (Flask im Thread, Playwright, Chromium aus dem Cache;

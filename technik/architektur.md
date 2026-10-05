@@ -61,8 +61,9 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel oder
   `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
   Properties ohne Setter oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
-  `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung; der Rest nur
-  Text; Auslöser: `web/`, dann eine Prüfung „nur `_`-Felder zuweisen, Dataclasses `frozen`“.
+  `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung;
+  `formregeln/zustandsschutz.py` (Dataclasses der Domäne `frozen`; `web/` und `katalog/` lesen
+  keine `_`-Felder, `web/` weist nur an `self` zu); der Rest nur Text.
 - **D4** Gründe, die zusammen gelten (AUF-3.5), stehen in einer Tabelle Grund → benannte
   Prüfung (`Aufstellung._prüfungen`); die Handlung sammelt ein, ein neuer Grund ist eine
   Zeile, keine geänderte Funktion; ein ausschließender Grund (AUF-3.6) bleibt Wächter.
