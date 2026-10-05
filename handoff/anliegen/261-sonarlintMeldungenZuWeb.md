@@ -1,6 +1,6 @@
 # SonarLint-Meldungen zu web/
 
-261 · Kritik · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+261 · Kritik · von Implementierer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `formregeln.sonarlint` endet mit Exit 0, meldet aber drei Hinweise zu `web/`:

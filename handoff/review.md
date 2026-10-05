@@ -8,8 +8,9 @@ Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellun
    99 % Zeilen, 100 % Zweige; unerreicht nur `__main__.py` 13–15 (Strg+C), von Hand
    nachgestellt (unter Code). `prozess/pruefungen` 98,6 % und 97,2 %.
 2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen` auf `9977e0e`: 749 grün; eslint und
-   stylelint ohne Fund. SonarLint Exit 0 mit drei Hinweisen zu `web/`
-   ([261](anliegen/261-sonarlintMeldungenZuWeb.md)). Nur Einheitstests erreichen
+   stylelint ohne Fund. SonarLint auf `2635eb8`: keine Funde. Zwei Ausnahmen gelten für
+   `web/` ([261](anliegen/261-sonarlintMeldungenZuWeb.md),
+   [270](anliegen/270-csrfAusnahmeOhneAusloeser.md)). Nur Einheitstests erreichen
    `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
    Vorbedingungen (`ValueError`). Glossar → Code: *Name*, *Ablage*, *an der Reihe*,
    *Einheit in Aufstellung*, *Karte* stehen wörtlich im Code.
@@ -36,7 +37,8 @@ Schreibpfade. Für Bash wirkt die Grenze nur als Text
 - Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
   [268](anliegen/268-seiteErzeugtKeineElemente.md) ESLint-Verbot für erzeugte Elemente,
   [265](anliegen/265-ausgeloestePruefungenZuWeb.md) Prüfungen zu W1, W2, D3,
-  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 261.
+  [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 270 CSRF-Ausnahme ohne Auslöser.
+- Implementierer prüft nach: 261.
 - Testautor: [269](anliegen/269-auf4NimmtGrenzenDerZone.md) Grenzen der Zone in AUF-4.6,
   [259](anliegen/259-handgriffeImportierenStattFixtures.md),
   [260](anliegen/260-auf4WaehlenUndAlleBenennen.md).
