@@ -28,7 +28,7 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
 
 Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage, sortiert vom
 Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Gleichzeitig laufen
-nur Rollen, die ausschließlich Anliegen schreiben.
+nur Rollen, die ausschließlich Anliegen schreiben; Ausnahme: Technikphase, Schritt 3.
 
 ### DoR (Item bereit)
 1. Format und Höchstmaß von Anforderung und Item (`domaene/CLAUDE.md`), die Kriterien-IDs
@@ -46,7 +46,12 @@ zeigt sich spätestens an den roten Tests.
 ## Technikphase
 Auslöser: Stand „Technikphase“ nach `Freigabe Plan <n>`. Fehlen Rollen, schlägt der
 Organisationsentwickler sie vor.
-1. Testautor: Akzeptanztests je Kriterium der Items, rot.
+1. Testautor: Akzeptanztests je Kriterium der Items, rot. Hat ein Item beide Hälften
+   (Handlung über HTTP, ihre Anzeige), legt vorher der Architekt den Vertrag fest: Pfade
+   und je Antwort ein JSON-Beispiel in `technik/architektur/web.md`. Daraus testet der
+   Testautor das Backend mit dem Flask-Testclient, das Frontend mit einem Bildschirmtest,
+   dem Playwright das Beispiel statt des Servers liefert; derselbe Bildschirmtest gegen den
+   echten Server ist der Akzeptanztest des Items (Anliegen 241). Mechanismus: nur Text.
 2. Kritik: Fachkritiker (trifft der Test das Kriterium?), Architekt (Schnittstelle).
    Ein bemängelter Test geht nicht in die Umsetzung, bis das Anliegen geklärt ist;
    widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
@@ -56,6 +61,10 @@ Organisationsentwickler sie vor.
    „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüft der Reviewer (Kritik
    am Code). Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben
    und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
+   Hat das Item Vertrag und Tests beider Hälften, laufen Implementierer (Backend) und
+   Frontend-Implementierer gleichzeitig; der Koordinator committet jeden Lauf nach seinen
+   Pfaden, damit die Kritik am Code je Commit bleibt. Mechanismus: nur Text
+   ([Backlog](backlog.md)).
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
@@ -84,6 +93,10 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    `prozess/pruefungen`. Mechanismus: `formregeln/abdeckung.py`, für `technik/arbiter` im Lauf von
    `python3 -m pytest prozess/pruefungen`, für die Prüfskripte mit
    `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung` ([Regelumsetzer](../.claude/agents/regelumsetzer.md)).
+   Ist in `technik/tests` ein Test rot, gilt die Schwelle für `technik/arbiter` nicht: In der
+   Technikphase misst die Prüfung nicht und nennt die Zahl der roten Tests (Tests vor dem
+   Code brechen auch geteilte Fixtures); außerhalb der Technikphase ist sie rot. Mechanismus:
+   nur Text (Anliegen 258).
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`formregeln/benennung.py`), Kriterium ↔
    Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
@@ -176,8 +189,10 @@ Kommentar: .
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
 Mechanismus: nur Text.
-- Frontend-Implementierer: Der Reviewer findet wiederholt, dass ein Mockup beim Einbau
-  umgeschrieben wurde (Anliegen 151).
+- Frontend-Implementierer mit `technik/frontend/`, der Implementierer gibt den Pfad ab:
+  Der Reviewer findet wiederholt, dass ein Mockup beim Einbau umgeschrieben wurde (Anliegen
+  151), oder ein Item des freigegebenen Plans hat Vertrag und Tests beider Hälften
+  (Technikphase, Schritt 1; Anliegen 241).
 - Prozesskritiker: Prozesskritik fehlt, oder der Organisationsentwickler verteidigt
   wiederholt eigene Regeln.
 - Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der
@@ -200,8 +215,7 @@ Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritikl
 Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
 (`Kritik <a> <b>`, notfalls `--allow-empty`). Jeder andere Commit, der Code ändert, wird
 geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ersten seit der
-letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand; für
-`technik/frontend/` nur Text (Anliegen 240).
+letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand.
 
 ## Anliegen
 Eine Datei je Diskussion: `handoff/anliegen/<nr>-<kurz>.md`, höchstens 4.000 Zeichen; jede

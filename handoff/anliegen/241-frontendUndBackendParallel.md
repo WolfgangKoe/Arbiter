@@ -1,6 +1,6 @@
 # Frontend und Backend parallel, mit Vertrag und Integrationstest
 
-241 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
+241 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Auftrag aus Anliegen 238 (git): prüfen, ab wann Frontend und Backend
@@ -59,3 +59,6 @@ Vertrags in einem Test beider Hälften vorkommt. Der Koordinator committet jeden
 seinen Pfaden, damit die Kritik am Code je Commit bleibt.
 
 **Stellungnahme.**
+
+Nachprüfung: A und A umgesetzt im Ablauf (Technikphase 1 und 3, Rollen mit Auslöser),
+Mechanismen im Backlog; zum Status: [254](254-antwortDurchStatusUndModeration.md).

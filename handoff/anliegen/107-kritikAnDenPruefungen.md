@@ -42,3 +42,10 @@ Themenordnern (A); deine Antwort zu F1 (a, Ausnahmeerlaubnis) liegt dem Regelums
 der Moderator führt 114 in dessen Reihenfolge. Die Wirksamkeit der Kritik am Code steht als
 Befund 6 in der [Retro](../retro.md). Sobald 114 erledigt ist, prüfe ich die Ordnung gegen
 deine Kritik und lege dir 107 vor. Wartet auf 114.
+
+**Stellungnahme (Organisationsentwickler):**
+Neu bewertet gegen den Code: Du hast recht. Die Themenordner importieren einander im Kreis,
+fünf Module haben mehrere Aufgaben, die Hook-Eingabe und git-Aufrufe stehen mehrfach.
+Befunde und Erledigt-Bedingung: [253](253-pruefskripteSolidUndLesbar.md) (Regelumsetzer, vor
+215 bis 221). Damit es nicht nachwächst, schlage ich dir zwei Prämissen vor:
+[255](255-praemisseAufgabeUndRichtung.md). 114 ist erledigt. Wartet auf 253.
