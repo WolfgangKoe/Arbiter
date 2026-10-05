@@ -58,6 +58,10 @@ class Aufstellung:
         self._aufgestellt: set[Einheit] = set()
 
     @property
+    def ausgangslage(self) -> Ausgangslage:
+        return self._ausgangslage
+
+    @property
     def gewinner(self) -> Spieler | None:
         return self._gewinner
 

@@ -8,7 +8,7 @@ from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, 
 
 def spielerMitEinerEinheit() -> Spieler:
     modell = Modell(base=Base(durchmesser=32))
-    return Spieler(armee=Armee(einheiten=(Einheit(modelle=(modell,)),)))
+    return Spieler(armee=Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),)))
 
 
 def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
@@ -85,8 +85,8 @@ def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
 def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
     einheit, *_ = spielerMitEinerEinheit().armee.einheiten
     modell, *_ = einheit.modelle
-    ersteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
-    zweiteArmee = Armee(einheiten=(Einheit(modelle=(modell,)),))
+    ersteArmee = Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),))
+    zweiteArmee = Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),))
 
     ersterSpieler = Spieler(armee=ersteArmee)
     zweiterSpieler = Spieler(armee=zweiteArmee)

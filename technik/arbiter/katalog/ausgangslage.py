@@ -26,10 +26,11 @@ def _armeeLesen(einheiten: list[dict]) -> Armee:
     return Armee(
         einheiten=tuple(
             Einheit(
+                name=eintrag["Einheit"],
                 modelle=tuple(
                     Modell(base=Base(durchmesser=_durchmesserLesen(zahl)))
                     for zahl in eintrag["durchmesser"]
-                )
+                ),
             )
             for eintrag in einheiten
         )

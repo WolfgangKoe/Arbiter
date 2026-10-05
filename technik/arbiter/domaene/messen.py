@@ -8,7 +8,7 @@ from arbiter.domaene.spielobjekte import Base, Stelle
 _millimeterJeZoll = Fraction(254, 10)
 
 
-def _radiusInZoll(base: Base) -> Fraction:
+def radiusInZoll(base: Base) -> Fraction:
     return Fraction(base.durchmesser, 2) / _millimeterJeZoll
 
 
@@ -19,14 +19,14 @@ def _quadratDerMittelpunkte(ersteStelle: Stelle, zweiteStelle: Stelle) -> Fracti
 def überdecken(
     ersteBase: Base, ersteStelle: Stelle, zweiteBase: Base, zweiteStelle: Stelle
 ) -> bool:
-    radien = _radiusInZoll(ersteBase) + _radiusInZoll(zweiteBase)
+    radien = radiusInZoll(ersteBase) + radiusInZoll(zweiteBase)
     return _quadratDerMittelpunkte(ersteStelle, zweiteStelle) < radien**2
 
 
 def abstandHöchstens(
     ersteBase: Base, ersteStelle: Stelle, zweiteBase: Base, zweiteStelle: Stelle, zoll: Fraction
 ) -> bool:
-    reichweite = _radiusInZoll(ersteBase) + _radiusInZoll(zweiteBase) + zoll
+    reichweite = radiusInZoll(ersteBase) + radiusInZoll(zweiteBase) + zoll
     return _quadratDerMittelpunkte(ersteStelle, zweiteStelle) <= reichweite**2
 
 
@@ -36,7 +36,7 @@ def ganzIn(
     grenzenInX: tuple[Fraction, Fraction],
     grenzenInY: tuple[Fraction, Fraction],
 ) -> bool:
-    radius = _radiusInZoll(base)
+    radius = radiusInZoll(base)
     vonX, bisX = grenzenInX
     vonY, bisY = grenzenInY
     inX = vonX <= stelle.x - radius and stelle.x + radius <= bisX

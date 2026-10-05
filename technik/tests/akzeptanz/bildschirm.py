@@ -6,6 +6,7 @@ from playwright.sync_api import Browser, Locator, Page
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Spieler
+from arbiter.web.server import serverStarten
 
 
 @dataclass(frozen=True)
@@ -62,8 +63,6 @@ class Bildschirm:
 
     def seiteZu(self, aufstellung: Aufstellung) -> Page:
         """Startet den Server mit dem Spielstand im selben Prozess und öffnet seine Seite."""
-        from arbiter.web.server import serverStarten
-
         server = serverStarten(aufstellung)
         self._server.append(server)
         return self.seiteBei(server.adresse)

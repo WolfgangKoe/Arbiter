@@ -29,6 +29,7 @@ class Modell:
 
 @dataclass(frozen=True, eq=False)
 class Einheit:
+    name: str
     modelle: tuple[Modell, ...]
 
 
