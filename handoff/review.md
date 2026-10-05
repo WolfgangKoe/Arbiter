@@ -1,12 +1,13 @@
 # Review · Zyklus 3
 
-Inkrement: Änderungen seit `Freigabe Plan 3` (`d592f7b`) unter `technik/`, Stand `4d8480f`.
+Inkrement: Änderungen seit `Freigabe Plan 3` (`d592f7b`) unter `technik/`, Stand `9977e0e`.
 Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellung* (AUF-4).
 
 ## DoD
 1. **Erfüllt.** `python3 -m pytest technik/tests`: 200 grün. Abdeckung `technik/arbiter`
-   100 % Zeilen und Zweige, `prozess/pruefungen` 98,6 % und 97,2 %.
-2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen`: 735 grün; eslint und
+   99 % Zeilen, 100 % Zweige; unerreicht nur `__main__.py` 13–15 (Strg+C), von Hand
+   nachgestellt (unter Code). `prozess/pruefungen` 98,6 % und 97,2 %.
+2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen`: 749 grün; eslint und
    stylelint ohne Fund. SonarLint Exit 0 mit drei Hinweisen zu `web/`
    ([261](anliegen/261-sonarlintMeldungenZuWeb.md)). Nur Einheitstests erreichen
    `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
@@ -20,7 +21,10 @@ Oberfläche: Bildschirmtests grün; `komponenten.css` gleicht `vorschlag.css`. *
 ([262](anliegen/262-komponentenseiteOhnePruefung.md)).
 
 ## Code
-Nachgeprüft: `python3 -m arbiter` nennt die Adresse und liefert die Ausgangslage. `web/` liest
+Nachgeprüft: `python3 -m arbiter` nennt die Adresse und liefert die Ausgangslage; SIGINT
+beendet ihn mit Exit 0 und leerem stderr (Anliegen 266 erledigt). Die Fläche der Zone kommt
+nur aus `Ausgangslage.grenzenDerZone`; `seite.js` setzt kein festes `y` mehr und erzeugt kein
+Element mehr, es klont die Vorlagen in `index.html`. `web/` liest
 nur Properties, wandelt `Fraction` erst für die Antwort in `float` und vergibt „Spieler 1“
 und „Spieler 2“ aus der Reihenfolge (W2). Die Domäne kennt Flask nicht.
 `bildschirm.py` steht im Pfad des Testautors, hat aber eine Zeile vom Implementierer: Der
@@ -29,13 +33,12 @@ Schreibpfade. Für Bash wirkt die Grenze nur als Text
 ([215](anliegen/215-bashSandboxAlsVersuch.md)).
 
 ## Offene Anliegen zur Technik
-- Implementierer: [263](anliegen/263-flaecheDerZoneAnEinerStelle.md) Zone an einer
-  Stelle, [264](anliegen/264-markupInVorlagenStattInSeiteJs.md) Markup in Vorlagen,
-  [266](anliegen/266-startbefehlEndetMitTraceback.md) Strg+C endet mit Traceback.
 - Regelumsetzer: [262](anliegen/262-komponentenseiteOhnePruefung.md),
+  [268](anliegen/268-seiteErzeugtKeineElemente.md) ESLint-Verbot für erzeugte Elemente,
   [265](anliegen/265-ausgeloestePruefungenZuWeb.md) Prüfungen zu W1, W2, D3,
   [267](anliegen/267-roteTestsNurAusDerSchlusszeile.md) Zahl der roten Tests, 261.
-- Testautor: [259](anliegen/259-handgriffeImportierenStattFixtures.md),
+- Testautor: [269](anliegen/269-auf4NimmtGrenzenDerZone.md) Grenzen der Zone in AUF-4.6,
+  [259](anliegen/259-handgriffeImportierenStattFixtures.md),
   [260](anliegen/260-auf4WaehlenUndAlleBenennen.md).
 
 ## Empfehlung
@@ -50,7 +53,7 @@ bleiben die Abnahme und das Löschen der Mockups nach 262.
   mit Übergehen und Protokoll, Beenden. Wenn ein Punkt je Zyklus fertig wird, sind das 4
   Zyklen. Nur für Wählen kommen Speicher und Vertrag neu hinzu (`speicher.md`, Neuland).
 - **Zyklusziel:** Plan 4 soll Wählen per Klick (Gewinner, Zone, Einheit) mit Speicher
-  bringen. Vorher müssen weg: 264 und 262, denn das nächste Mockup baut auf Vorlagen und der
+  bringen. Vorher muss 262 weg, denn das nächste Mockup baut auf Vorlagen und der
   Komponentenseite auf. Dazu 265 D3: Ab der ersten Handlung über HTTP ändert `web/` den
   Zustand. Für die Technikphase von Plan 4 gilt: Vertrag in `web.md` vor dem Testautor
   (Ablauf, Technikphase 1) und Wegwerf-Versuch zum Wiederholen der Handlungen.

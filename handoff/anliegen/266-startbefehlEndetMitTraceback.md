@@ -1,6 +1,6 @@
 # Startbefehl endet mit Traceback, Stelle doppelt gelesen
 
-266 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+266 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 488d8da.
