@@ -30,4 +30,6 @@ Zusammen: 231, 232, 247 in einem Lauf.
 - [Moderation](moderation.md) F1: 107 und 114 vor 215 bis 221 (ändert deine Antwort auf F2 von vorhin)? 114 ist fast fertig, und die Lesbarkeitsarbeit gehört vor die Mechanismen, die dieselben Dateien anfassen. Empfehlung: ja.
 - [Moderation](moderation.md) F2: 242 und 243 vor 215 bis 221, weil sie den Implementierer blockieren? Empfehlung: ja.
 - [241](anliegen/241-frontendUndBackendParallel.md) F1 (A), F2 (A): beide offen. Empfehlung A und A.
-- [153](anliegen/153-frontendBackendUndDatenbank.md) F1: `Antwort: .` steht noch; die Freigabe galt A. Bitte eintragen oder bestätigen.
+- [153](anliegen/153-frontendBackendUndDatenbank.md) F1: `Antwort: .` steht noch; die Freigabe galt A. Bitte eintragen oder bestätigen. - Bestätigt.
+
+Auch hier fehlt mir eine Möglichkeit, deine Empfehlung einfach anzunehmen oder zu korrigieren. ich habe oben einfach mal reingeschrieben. Wenn du das anders haben willst, bitte den Regelumsetzer, dies anzupassen.

@@ -1,6 +1,6 @@
 # Frontend und Backend parallel, mit Vertrag und Integrationstest
 
-241 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+241 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Dein Auftrag aus Anliegen 238 (git): prüfen, ab wann Frontend und Backend
