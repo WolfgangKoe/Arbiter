@@ -9,14 +9,16 @@ from pathlib import Path
 
 from gemeinsam.pfade import (
     akzeptanzOrdner,
+    altbestandOrdner,
     anforderungsOrdner,
     anliegenOrdner,
     etappenOrdner,
     frontendOrdner,
+    handoffOrdner,
     itemsOrdner,
     perspektiven,
+    projektordner,
 )
-from rollenregeln.agenten import altbestandOrdner, projektordner
 
 camelCase = re.compile(r"^[a-zäöü][a-zA-Z0-9äöüÄÖÜß]*$")
 pascalCase = re.compile(r"^[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
@@ -48,7 +50,7 @@ ausgeschlosseneOrdner = {
     ".ruff_cache",
     "node_modules",
 }
-nummerierteOrdner = (etappenOrdner, itemsOrdner, "handoff")
+nummerierteOrdner = (etappenOrdner, itemsOrdner, handoffOrdner)
 
 
 def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:
@@ -214,7 +216,7 @@ def istGeprüft(relativ: Path) -> bool:
     if relativ.suffix == ".py":
         return True
     if relativ.suffix == ".md":
-        return relativ.parts[0] in (*perspektiven, "handoff")
+        return relativ.parts[0] in (*perspektiven, handoffOrdner)
     return relativ.suffix in frontendEndungen and relativ.is_relative_to(frontendOrdner)
 
 

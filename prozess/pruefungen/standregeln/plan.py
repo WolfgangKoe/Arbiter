@@ -4,9 +4,9 @@ import re
 from pathlib import Path
 
 from gemeinsam.gitAufruf import freigabeCommit
-from gemeinsam.pfade import itemsOrdner
+from gemeinsam.pfade import handoffOrdner, itemsOrdner
 
-planDatei = Path("handoff") / "plan.md"
+planDatei = Path(handoffOrdner) / "plan.md"
 
 
 def zyklusAusText(text: str) -> int | None:

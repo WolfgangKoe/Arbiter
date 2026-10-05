@@ -3,8 +3,14 @@
 import json
 from pathlib import Path
 
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, zusatzkontext
-from rollenregeln.agenten import projektordner
+from gemeinsam.hookProtokoll import (
+    HookEingabe,
+    antwortAusgeben,
+    eingabeLesen,
+    verweigerung,
+    zusatzkontext,
+)
+from gemeinsam.pfade import projektordner
 
 warnschwelle = 120_000
 sperrschwelle = 150_000
@@ -37,19 +43,17 @@ def belegungAusTranskript(transkript: Path) -> int | None:
     return None
 
 
-def eigenesTranskript(eingabe: dict) -> Path | None:
-    """Rollen haben ein eigenes Transkript; `transcript_path` zeigt dann auf den Koordinator."""
-    agentId = eingabe.get("agent_id")
-    hauptTranskript = eingabe.get("transcript_path")
-    if not agentId:
-        return Path(hauptTranskript) if hauptTranskript else None
-    eigenes = eingabe.get("agent_transcript_path")
-    if eigenes:
-        return Path(eigenes)
-    sitzung = eingabe.get("session_id")
-    if not (hauptTranskript and sitzung):
+def eigenesTranskript(eingabe: HookEingabe) -> Path | None:
+    """Rollen haben ein eigenes Transkript; das der Eingabe ist dann das des Koordinators."""
+    if not eingabe.agentId:
+        return eingabe.transkript
+    if eingabe.rollenTranskript:
+        return eingabe.rollenTranskript
+    if not (eingabe.transkript and eingabe.sitzung):
         return None
-    treffer = sorted((Path(hauptTranskript).parent / sitzung).rglob(f"agent-{agentId}.jsonl"))
+    treffer = sorted(
+        (eingabe.transkript.parent / eingabe.sitzung).rglob(f"agent-{eingabe.agentId}.jsonl")
+    )
     return treffer[0] if treffer else None
 
 
@@ -72,15 +76,15 @@ def punkte(zahl: int) -> str:
     return f"{zahl:,}".replace(",", ".")
 
 
-def vorWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
-    if not eingabe.get("agent_type") or eingabe.get("tool_name") in erlaubteWerkzeuge:
+def vorWerkzeug(eingabe: HookEingabe, wurzel: Path) -> dict | None:
+    if not eingabe.rolle or eingabe.werkzeug in erlaubteWerkzeuge:
         return None
     transkript = eigenesTranskript(eingabe)
     belegung = belegungAusTranskript(transkript) if transkript else None
     grenze = geltendeSperrschwelle(wurzel)
     if belegung is None or belegung < grenze:
         return None
-    if eingabe.get("agent_id"):
+    if eingabe.agentId:
         weiter = "Schreibe nur noch in deinem Pfad und schließe mit der Schlussantwort ab."
     else:
         weiter = (
@@ -92,18 +96,18 @@ def vorWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
     )
 
 
-def nachWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
-    rolle = eingabe.get("agent_type")
+def nachWerkzeug(eingabe: HookEingabe, wurzel: Path) -> dict | None:
+    rolle = eingabe.rolle
     transkript = eigenesTranskript(eingabe)
     belegung = belegungAusTranskript(transkript) if transkript else None
     if not rolle or belegung is None or belegung < warnschwelle:
         return None
-    datei = meldungsdatei(wurzel, eingabe.get("agent_id") or eingabe.get("session_id") or "haupt")
+    datei = meldungsdatei(wurzel, eingabe.agentId or eingabe.sitzung or "haupt")
     if datei.exists():
         return None
     datei.parent.mkdir(parents=True, exist_ok=True)
     datei.write_text(str(belegung), encoding="utf-8")
-    if eingabe.get("agent_id"):
+    if eingabe.agentId:
         folge = "Beginne nichts Neues, schließe ab und melde mit der Schlussantwort."
     else:
         folge = "Beginne nichts Neues und empfiehl dem Stakeholder einen neuen Chat."
@@ -114,11 +118,11 @@ def nachWerkzeug(eingabe: dict, wurzel: Path) -> dict | None:
     return zusatzkontext("PostToolUse", text)
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    ereignis = eingabe.get("hook_event_name")
-    if ereignis == "PreToolUse":
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    if eingabe.ereignis == "PreToolUse":
         return vorWerkzeug(eingabe, wurzel)
-    if ereignis == "PostToolUse":
+    if eingabe.ereignis == "PostToolUse":
         return nachWerkzeug(eingabe, wurzel)
     return None
 

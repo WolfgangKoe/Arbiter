@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from gemeinsam.hookProtokoll import HookEingabe
 from rollenregeln import dashboard
 from rollenregeln.dashboard import (
     dashboardSchreiben,
@@ -51,7 +52,7 @@ def stopp(datei, rolle="planer"):
 
 
 def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
-    eintrag = laufEintrag(stopp(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
     assert eintrag == {
         "zeit": "2026-10-04T12:30:00+00:00",
         "rolle": "planer",
@@ -76,14 +77,14 @@ def testKoordinatorStandKommtAusDemHauptTranskript(tmp_path):
         encoding="utf-8",
     )
     eingabe = stopp(transkript(tmp_path, 80_000)) | {"transcript_path": str(haupt)}
-    assert laufEintrag(eingabe, zeitpunkt, tmp_path)["koordinator"] == hauptstand
+    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path)["koordinator"] == hauptstand
 
 
 @pytest.mark.parametrize(
     "eingabe", [{}, {"agent_type": "planer"}, {"agent_type": "planer", "agent_id": "a1"}]
 )
 def testLaufOhneRolleOderBelegungBleibtUnprotokolliert(eingabe, tmp_path):
-    assert laufEintrag(eingabe, zeitpunkt, tmp_path) is None
+    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path) is None
 
 
 def testLogWächstUndLässtSichLesen(tmp_path):
@@ -157,7 +158,7 @@ def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
         {"message": {"role": "user", "content": langer}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    ziel = laufEintrag(stopp(datei), zeitpunkt, tmp_path)["ziel"]
+    ziel = laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path)["ziel"]
     assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
@@ -179,7 +180,10 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
         {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    assert laufEintrag(stopp(datei), zeitpunkt, tmp_path)["ziel"] == "Neuer Auftrag: zweiter"
+    assert (
+        laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path)["ziel"]
+        == "Neuer Auftrag: zweiter"
+    )
 
 
 def testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter(tmp_path):
@@ -249,7 +253,7 @@ def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
     from rollenregeln import laufLog
 
     monkeypatch.setattr(laufLog, "zyklusUndPhase", lambda _ordner: (3, "Prozessphase"))
-    eintrag = laufEintrag(stopp(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
     assert (eintrag["zyklus"], eintrag["phase"]) == (3, "Prozessphase")
 
 
@@ -341,12 +345,12 @@ def testFehlerInDerLageKostetDenEintragNicht(tmp_path, monkeypatch):
         raise RuntimeError
 
     monkeypatch.setattr(phasenfolge, "lage", wirft)
-    eintrag = laufEintrag(stopp(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
     assert eintrag["belegung"] and eintrag["zyklus"] is None
 
 
 def testHookWegTrägtZyklusEin(tmp_path):
-    protokollieren(stopp(transkript(tmp_path, 80_000)), tmp_path)
+    protokollieren(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), tmp_path)
     assert läufeLesen(tmp_path)[0]["zyklus"] == 1
     assert (tmp_path / "dashboard.html").is_file()
 

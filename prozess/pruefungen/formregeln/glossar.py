@@ -5,8 +5,7 @@ import re
 import sys
 from pathlib import Path
 
-from gemeinsam.pfade import anforderungsOrdner
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import anforderungsOrdner, projektordner
 
 bezeichnerZelle = re.compile(r"^(\w+)(?: \(([^)]*)\))?$")
 grundText = re.compile(r"‚([^‘]+)‘")

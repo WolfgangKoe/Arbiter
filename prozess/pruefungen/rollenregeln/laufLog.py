@@ -5,8 +5,8 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-from gemeinsam.hookProtokoll import eingabeLesen
-from rollenregeln.agenten import projektordner
+from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
+from gemeinsam.pfade import projektordner
 from rollenregeln.belegung import belegungAusTranskript, eigenesTranskript
 
 pflichtfelder = ("zeit", "rolle", "belegung")
@@ -112,14 +112,14 @@ def zyklusUndPhase(ordner: Path) -> tuple[int | None, str | None]:
     return gefunden.zyklus, str(gefunden.phase)
 
 
-def koordinatorStand(eingabe: dict) -> int | None:
-    haupt = eingabe.get("transcript_path")
-    return belegungAusTranskript(Path(haupt)) if eingabe.get("agent_id") and haupt else None
+def koordinatorStand(eingabe: HookEingabe) -> int | None:
+    haupt = eingabe.transkript
+    return belegungAusTranskript(haupt) if eingabe.agentId and haupt else None
 
 
-def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path) -> dict | None:
+def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> dict | None:
     """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
-    rolle = eingabe.get("agent_type")
+    rolle = eingabe.rolle
     transkript = eigenesTranskript(eingabe)
     belegung = belegungAusTranskript(transkript) if transkript else None
     if not rolle or belegung is None:
@@ -130,8 +130,8 @@ def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path) -> dict | None:
     return {
         "zeit": zeit.isoformat(timespec="seconds"),
         "rolle": rolle,
-        "agent_id": eingabe.get("agent_id"),
-        "sitzung": eingabe.get("session_id"),
+        "agent_id": eingabe.agentId,
+        "sitzung": eingabe.sitzung,
         "belegung": belegung,
         "ziel": ziel,
         "modell": modell,
@@ -139,7 +139,7 @@ def laufEintrag(eingabe: dict, zeit: datetime, ordner: Path) -> dict | None:
         "dauer": dauerSekunden(einträge),
         "zyklus": zyklus,
         "phase": phase,
-        "stopp_wiederholt": bool(eingabe.get("stop_hook_active")),
+        "stopp_wiederholt": eingabe.stoppWiederholt,
     }
 
 
@@ -195,7 +195,7 @@ def läufeLesen(wurzel: Path) -> list[dict]:
     return ergebnis[::-1]
 
 
-def protokollieren(eingabe: dict, ordner: Path) -> None:
+def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
     """Trägt den Lauf ein und schreibt das Dashboard neu."""
     from rollenregeln.dashboard import dashboardSchreiben
 
@@ -207,6 +207,6 @@ def protokollieren(eingabe: dict, ordner: Path) -> None:
 
 if __name__ == "__main__":
     try:
-        protokollieren(eingabeLesen(), projektordner())
+        protokollieren(HookEingabe.aus(eingabeLesen()), projektordner())
     except Exception:  # Warum: eine Messung, die scheitert, darf keinen Rollenlauf beenden
         pass

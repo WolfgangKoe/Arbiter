@@ -5,7 +5,7 @@ from pathlib import Path
 
 from anliegenregeln.anliegen import Anliegen, gelesene, wartetAuf
 from gemeinsam.gitAufruf import gitAusgabe, letzteFreigabe
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import projektordner
 
 
 def alterInTagen(wurzel: Path, anliegen: Anliegen, heute: date) -> int:

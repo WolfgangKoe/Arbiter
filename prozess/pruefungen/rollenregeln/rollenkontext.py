@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, zusatzkontext
-from gemeinsam.pfade import perspektiven
-from rollenregeln.agenten import projektordner, schreibpfade
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
+from gemeinsam.pfade import perspektiven, projektordner
+from rollenregeln.agenten import schreibpfade
 from standregeln.stand import stand
 
 
@@ -24,8 +24,6 @@ def kontext(rolle: str, wurzel: Path) -> str:
 
 
 if __name__ == "__main__":
-    eingabe = eingabeLesen()
-    if eingabe.get("agent_type"):
-        antwortAusgeben(
-            zusatzkontext("SubagentStart", kontext(eingabe["agent_type"], projektordner()))
-        )
+    eingabe = HookEingabe.aus(eingabeLesen())
+    if eingabe.rolle:
+        antwortAusgeben(zusatzkontext("SubagentStart", kontext(eingabe.rolle, projektordner())))

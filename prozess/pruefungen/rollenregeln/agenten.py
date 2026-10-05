@@ -1,12 +1,7 @@
 """Liest Angaben aus den Agentendefinitionen in `.claude/agents/`."""
 
-import os
 from fnmatch import fnmatch
 from pathlib import Path
-
-
-def projektordner() -> Path:
-    return Path(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd())).resolve()
 
 
 def rollennamen(wurzel: Path) -> list[str]:
@@ -49,19 +44,4 @@ def darfSchreiben(relativerPfad: str, muster: tuple[str, ...]) -> bool:
         if eintrag.endswith("/")
         else fnmatch(relativerPfad, eintrag)
         for eintrag in muster
-    )
-
-
-nurLesbar = ("VORGEHEN.md", "handoff/kritik-entwickler.md", "Arbiter-old/", "ArbiterMap/")
-# Warum: Ordner unter `nurLesbar` (Eintrag mit `/` am Ende) sind der Altbestand; ihn prüft nichts.
-altbestandOrdner = tuple(eintrag.rstrip("/") for eintrag in nurLesbar if eintrag.endswith("/"))
-
-
-def istNurLesbar(relativerPfad: str) -> bool:
-    """Für alle Rollen und den Koordinator nur lesbar; löschen tut nur der Stakeholder."""
-    return any(
-        f"{relativerPfad.rstrip('/')}/".startswith(eintrag)
-        if eintrag.endswith("/")
-        else relativerPfad == eintrag
-        for eintrag in nurLesbar
     )

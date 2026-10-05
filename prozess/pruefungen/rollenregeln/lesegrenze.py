@@ -1,19 +1,20 @@
 """Der Koordinator liest nur kurze Dateien: Hook `PreToolUse` auf `Read` und `git show`."""
 
-import subprocess
 from pathlib import Path
 
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
-from rollenregeln.agenten import projektordner
+from gemeinsam.gitAufruf import blobGröße
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
+from gemeinsam.pfade import projektordner
 
 geprüfteRolle = "koordinator"
 höchstlänge = 4000
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    if eingabe.get("agent_type") != geprüfteRolle or eingabe.get("tool_name") != "Read":
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    if eingabe.rolle != geprüfteRolle or eingabe.werkzeug != "Read":
         return None
-    datei = Path(werkzeugAngaben(eingabe).get("file_path", ""))
+    datei = Path(eingabe.angaben.get("file_path", ""))
     datei = datei if datei.is_absolute() else wurzel / datei
     if not datei.is_file():
         return None
@@ -27,14 +28,6 @@ def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
         f"{datei.name} hat {länge} Zeichen; du liest höchstens "
         f"{höchstlänge}. Nenne der zuständigen Rolle den Pfad, sie liest selbst."
     )
-
-
-def blobGröße(wurzel: Path, angabe: str) -> int | None:
-    """Größe von `<rev>:<pfad>` in Byte (mindestens die Zeichenzahl); `None`, wenn unbekannt."""
-    ergebnis = subprocess.run(
-        ["git", "cat-file", "-s", angabe], cwd=wurzel, capture_output=True, text=True, check=False
-    )
-    return int(ergebnis.stdout) if ergebnis.returncode == 0 else None
 
 
 def gitShowZulässig(wörter: list[str], wurzel: Path) -> bool:

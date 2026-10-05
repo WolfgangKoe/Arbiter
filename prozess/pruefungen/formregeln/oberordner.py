@@ -3,10 +3,9 @@
 from pathlib import Path
 
 from formregeln.benennung import ausgeschlosseneOrdner
-from gemeinsam.pfade import perspektiven
-from rollenregeln.agenten import altbestandOrdner
+from gemeinsam.pfade import altbestandOrdner, handoffOrdner, perspektiven
 
-bekannteOrdner = {*perspektiven, "handoff", *altbestandOrdner}
+bekannteOrdner = {*perspektiven, handoffOrdner, *altbestandOrdner}
 
 
 def unbekannteOrdner(wurzel: Path) -> list[str]:

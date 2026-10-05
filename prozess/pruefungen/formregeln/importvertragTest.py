@@ -2,7 +2,7 @@ import pytest
 
 from formregeln.glossar import domaeneOrdner
 from formregeln.importvertrag import verstöße
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import projektordner
 
 
 def domänendatei(tmp_path, text, name="phasen/probe.py"):

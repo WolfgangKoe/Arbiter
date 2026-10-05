@@ -8,7 +8,7 @@ import tokenize
 from pathlib import Path
 
 from formregeln.benennung import geprüfteDateien
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import projektordner
 
 erlaubterKommentar = re.compile(r"^# (Regel|Warum): \S")
 werkzeugkommentar = re.compile(r"^(#!|# ?(noqa|type:|pragma|ruff:|fmt:|cspell:|pyright:|mypy:))")

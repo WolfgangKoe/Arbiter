@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import NamedTuple
 
-from gemeinsam.pfade import akzeptanzOrdner, anforderungsOrdner
+from gemeinsam.pfade import akzeptanzOrdner, anforderungsOrdner, projektordner
 from kriterienregeln.kriterium import (
     Anforderungsnummer,
     Kriteriumsnummer,
@@ -20,7 +20,6 @@ from kriterienregeln.kriterium import (
     pfadVon,
 )
 from kriterienregeln.spur import spur, spurAlsText
-from rollenregeln.agenten import projektordner
 from standregeln.plan import freigegebenerPlan, offeneItemTexte
 
 

@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from formregeln.glossar import domaeneOrdner
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import projektordner
 
 eigenesPaket = "arbiter.domaene"
 

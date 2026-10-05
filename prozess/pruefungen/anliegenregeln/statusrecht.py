@@ -4,31 +4,29 @@ import sys
 from pathlib import Path
 
 from anliegenregeln.anliegen import Anliegen, höchstRunde, kopfAusText, nächsteFreieNummer
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
-from gemeinsam.pfade import anliegenOrdner
-from rollenregeln.agenten import projektordner
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
+from gemeinsam.pfade import anliegenOrdner, projektordner
 from standregeln.freigabeKommentare import artefakte, freigabeVerstoß, pfadDer
 
 letzteRunde = "Runde 3/3 ist die letzte; setze `eskaliert`, der Stakeholder entscheidet."
 
 
-def neuerInhalt(werkzeug: str, eingabe: dict, bisher: str) -> str | None:
+def neuerInhalt(werkzeug: str, angaben: dict, bisher: str) -> str | None:
     if werkzeug == "Write":
-        return eingabe.get("content")
+        return angaben.get("content")
     if werkzeug == "Edit":
-        alt, neu = eingabe.get("old_string"), eingabe.get("new_string")
+        alt, neu = angaben.get("old_string"), angaben.get("new_string")
         if alt is None or neu is None:
             return None
-        anzahl = -1 if eingabe.get("replace_all") else 1
+        anzahl = -1 if angaben.get("replace_all") else 1
         return bisher.replace(alt, neu, anzahl)
     return None
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    # Warum: Ohne `agent_type` spricht die Hauptsitzung, für sie gilt keine Grenze.
-    rolle = eingabe.get("agent_type")
-    werkzeug = eingabe.get("tool_name")
-    angaben = werkzeugAngaben(eingabe)
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    # Warum: Ohne Rolle spricht die Hauptsitzung, für sie gilt keine Grenze.
+    rolle, werkzeug, angaben = eingabe.rolle, eingabe.werkzeug, eingabe.angaben
     if not rolle or werkzeug not in ("Write", "Edit") or not angaben.get("file_path"):
         return None
     ziel = Path(angaben["file_path"])

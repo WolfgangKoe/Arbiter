@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from gemeinsam.gitAufruf import freigabeCommit
+from gemeinsam.pfade import handoffOrdner
 from standregeln.freigabeKommentare import (
     Artefakt,
     abschnitte,
@@ -55,5 +56,5 @@ def verstöße(wurzel: Path) -> list[str]:
             continue
         grund = formatVerstoß(zeilenDer(wurzel, artefakt), artefakt)
         if grund:
-            meldungen.append(f"handoff/{artefakt.datei}: {grund}")
+            meldungen.append(f"{handoffOrdner}/{artefakt.datei}: {grund}")
     return meldungen

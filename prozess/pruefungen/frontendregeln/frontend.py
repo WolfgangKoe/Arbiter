@@ -4,8 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from gemeinsam.pfade import frontendOrdner
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import frontendOrdner, projektordner
 
 
 def werkzeugAufrufen(wurzel: Path, werkzeug: str, *argumente: str) -> str:

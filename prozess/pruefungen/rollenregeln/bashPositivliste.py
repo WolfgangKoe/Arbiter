@@ -5,9 +5,8 @@ import shlex
 from collections.abc import Callable
 from pathlib import Path
 
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
-from gemeinsam.pfade import anliegenOrdner
-from rollenregeln.agenten import istNurLesbar, nurLesbar, projektordner
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
+from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, nurLesbar, projektordner
 from rollenregeln.lesegrenze import gitShowZulässig
 from standregeln.freigabeKommentare import artefakte, artefaktVon, freigabeJa, freigegebenerZyklus
 
@@ -155,8 +154,9 @@ def freigabeCommitVerstoß(befehl: str, wurzel: Path) -> str | None:
     if freigegebenerZyklus(wurzel, artefakt) == nummer:
         return None
     return (
-        f"Freigabe {gegenstand} {nummer} nur, wenn handoff/{artefakt.datei} `{freigabeJa}` trägt "
-        f"und in der ersten Zeile Zyklus {nummer} nennt; beides setzt der Stakeholder."
+        f"Freigabe {gegenstand} {nummer} nur, wenn {handoffOrdner}/{artefakt.datei} "
+        f"`{freigabeJa}` trägt und in der ersten Zeile Zyklus {nummer} nennt; "
+        "beides setzt der Stakeholder."
     )
 
 
@@ -190,7 +190,7 @@ def istAnliegen(relativerPfad: str) -> bool:
 
 
 def istFreigabeArtefakt(relativerPfad: str) -> bool:
-    return relativerPfad in {f"handoff/{artefakt.datei}" for artefakt in artefakte}
+    return relativerPfad in {f"{handoffOrdner}/{artefakt.datei}" for artefakt in artefakte}
 
 
 def meintPfad(wort: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
@@ -260,11 +260,12 @@ pfadsperren = (
 )
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    rolle = eingabe.get("agent_type")
-    if not rolle or eingabe.get("tool_name") != "Bash":
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    rolle = eingabe.rolle
+    if not rolle or eingabe.werkzeug != "Bash":
         return None
-    befehl = werkzeugAngaben(eingabe).get("command", "")
+    befehl = eingabe.angaben.get("command", "")
     if rolle == geprüfteRolle:
         if istErlaubt(befehl, wurzel):
             grund = freigabeCommitVerstoß(befehl, wurzel)

@@ -4,14 +4,14 @@ import sys
 from pathlib import Path
 
 from anliegenregeln.anliegen import nummerAusDateiname, nächsteFreieNummer, vergebeneNummern
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
-from gemeinsam.pfade import anliegenOrdner
-from rollenregeln.agenten import projektordner
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
+from gemeinsam.pfade import anliegenOrdner, projektordner
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    angaben = werkzeugAngaben(eingabe)
-    if eingabe.get("tool_name") != "Write" or not angaben.get("file_path"):
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    angaben = eingabe.angaben
+    if eingabe.werkzeug != "Write" or not angaben.get("file_path"):
         return None
     ziel = Path(angaben["file_path"])
     ziel = (ziel if ziel.is_absolute() else wurzel / ziel).resolve()

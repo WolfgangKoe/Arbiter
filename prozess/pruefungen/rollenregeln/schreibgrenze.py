@@ -1,49 +1,33 @@
 """Hook: Eine Rolle schreibt nur in ihren Schreibpfaden; manche Pfade sind für alle nur lesbar."""
 
-import subprocess
 from pathlib import Path
 
+from gemeinsam.gitAufruf import geänderteDateien, kopfCommit
 from gemeinsam.hookProtokoll import (
+    HookEingabe,
     antwortAusgeben,
     eingabeLesen,
     verweigerung,
-    werkzeugAngaben,
     zusatzkontext,
 )
-from rollenregeln.agenten import darfSchreiben, istNurLesbar, nurLesbar, projektordner, schreibpfade
+from gemeinsam.pfade import istNurLesbar, nurLesbar, projektordner
+from rollenregeln.agenten import darfSchreiben, schreibpfade
 
 schreibwerkzeuge = ("Write", "Edit", "NotebookEdit")
 kopfPräfix = "HEAD "
-
-
-def geänderteDateien(wurzel: Path) -> set[str]:
-    ausgabe = subprocess.run(
-        ["git", "status", "--porcelain", "--untracked-files=all"],
-        cwd=wurzel,
-        capture_output=True,
-        text=True,
-        check=False,
-    ).stdout
-    return {zeile[3:].split(" -> ")[-1] for zeile in ausgabe.splitlines() if zeile}
-
-
-def kopf(wurzel: Path) -> str:
-    return subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=wurzel, capture_output=True, text=True, check=False
-    ).stdout.strip()
 
 
 def standDatei(wurzel: Path, agentId: str) -> Path:
     return wurzel / ".git" / "arbiter-schreibgrenze" / f"{agentId}.txt"
 
 
-def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
-    # Warum: Ohne `agent_type` spricht die Hauptsitzung, für sie gilt keine Grenze.
-    rolle = eingabe.get("agent_type")
-    if not rolle or eingabe.get("tool_name") not in schreibwerkzeuge:
+def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
+    # Warum: Ohne Rolle spricht die Hauptsitzung, für sie gilt keine Grenze.
+    rolle = eingabe.rolle
+    if not rolle or eingabe.werkzeug not in schreibwerkzeuge:
         return None
-    werkzeug = werkzeugAngaben(eingabe)
-    ziel = Path(werkzeug.get("file_path") or werkzeug.get("notebook_path") or "")
+    angaben = eingabe.angaben
+    ziel = Path(angaben.get("file_path") or angaben.get("notebook_path") or "")
     ziel = (wurzel / ziel).resolve() if not ziel.is_absolute() else ziel.resolve()
     if ziel.is_relative_to(wurzel):
         relativ = ziel.relative_to(wurzel).as_posix()
@@ -62,12 +46,12 @@ def vorDemSchreiben(eingabe: dict, wurzel: Path) -> dict | None:
     )
 
 
-def beimStart(eingabe: dict, wurzel: Path) -> dict:
-    datei = standDatei(wurzel, eingabe["agent_id"])
+def beimStart(eingabe: HookEingabe, wurzel: Path) -> dict:
+    datei = standDatei(wurzel, eingabe.agentId)
     datei.parent.mkdir(parents=True, exist_ok=True)
-    zeilen = [f"{kopfPräfix}{kopf(wurzel)}", *sorted(geänderteDateien(wurzel))]
+    zeilen = [f"{kopfPräfix}{kopfCommit(wurzel)}", *sorted(geänderteDateien(wurzel))]
     datei.write_text("\n".join(zeilen), encoding="utf-8")
-    muster = schreibpfade(eingabe.get("agent_type") or "", wurzel)
+    muster = schreibpfade(eingabe.rolle or "", wurzel)
     return zusatzkontext(
         "SubagentStart",
         "Deine Schreibpfade: "
@@ -76,15 +60,15 @@ def beimStart(eingabe: dict, wurzel: Path) -> dict:
     )
 
 
-def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
-    datei = standDatei(wurzel, eingabe["agent_id"])
+def beimEnde(eingabe: HookEingabe, wurzel: Path) -> dict | None:
+    datei = standDatei(wurzel, eingabe.agentId)
     zeilen = datei.read_text(encoding="utf-8").splitlines() if datei.exists() else []
     datei.unlink(missing_ok=True)
     kopfVorher = next(
         (zeile.removeprefix(kopfPräfix) for zeile in zeilen if zeile.startswith(kopfPräfix)), None
     )
     vorher = {zeile for zeile in zeilen if not zeile.startswith(kopfPräfix)}
-    rolle = eingabe["agent_type"]
+    rolle = eingabe.rolle
     muster = schreibpfade(rolle, wurzel)
     meldungen = []
     verstöße = sorted(
@@ -97,7 +81,7 @@ def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
             f"Schreibgrenze verletzt: {rolle} hat außerhalb seiner Schreibpfade oder in nur "
             f"lesbaren Pfaden geändert: {', '.join(verstöße)}."
         )
-    if kopfVorher is not None and kopf(wurzel) != kopfVorher:
+    if kopfVorher is not None and kopfCommit(wurzel) != kopfVorher:
         meldungen.append(
             f"Während {rolle} lief, kam ein Commit hinzu. Hast du ihn nicht selbst gemacht, "
             f"hat {rolle} committet; das ist dem Koordinator vorbehalten."
@@ -109,13 +93,13 @@ def beimEnde(eingabe: dict, wurzel: Path) -> dict | None:
     )
 
 
-def entscheide(eingabe: dict, wurzel: Path) -> dict | None:
-    ereignis = eingabe.get("hook_event_name")
-    if ereignis == "PreToolUse":
+def entscheide(daten: dict, wurzel: Path) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    if eingabe.ereignis == "PreToolUse":
         return vorDemSchreiben(eingabe, wurzel)
-    if ereignis == "SubagentStart" and eingabe.get("agent_id"):
+    if eingabe.ereignis == "SubagentStart" and eingabe.agentId:
         return beimStart(eingabe, wurzel)
-    if ereignis == "SubagentStop" and eingabe.get("agent_id"):
+    if eingabe.ereignis == "SubagentStop" and eingabe.agentId:
         return beimEnde(eingabe, wurzel)
     return None
 

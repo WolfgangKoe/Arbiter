@@ -4,9 +4,9 @@ from pathlib import Path
 
 from anliegenregeln.anliegen import anliegenDateien, dranAlsText, nachprüfungenAlsText
 from gemeinsam.gitAufruf import gitAusgabe
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, zusatzkontext
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
+from gemeinsam.pfade import projektordner
 from kriterienregeln.rueckverfolgung import wartendeAlsText
-from rollenregeln.agenten import projektordner
 from rollenregeln.belegung import belegungAusTranskript, punkte, warnschwelle
 from standregeln.codekritik import fälligeKritikAlsText
 from standregeln.freigabeKommentare import autorenDran, freigabeZuCommitten
@@ -44,9 +44,6 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
 
 
 if __name__ == "__main__":
-    eingabe = eingabeLesen()
-    transkript = eingabe.get("transcript_path")
-    ereignis = eingabe.get("hook_event_name", "SessionStart")
-    antwortAusgeben(
-        zusatzkontext(ereignis, stand(projektordner(), Path(transkript) if transkript else None))
-    )
+    eingabe = HookEingabe.aus(eingabeLesen())
+    ereignis = eingabe.ereignis or "SessionStart"
+    antwortAusgeben(zusatzkontext(ereignis, stand(projektordner(), eingabe.transkript)))

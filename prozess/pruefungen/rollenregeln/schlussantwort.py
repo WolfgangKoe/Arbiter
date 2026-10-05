@@ -1,6 +1,6 @@
 """Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade."""
 
-from gemeinsam.hookProtokoll import antwortAusgeben, eingabeLesen, verweigerung, werkzeugAngaben
+from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 
 höchstlänge = 800
 
@@ -12,18 +12,19 @@ def grund(länge: int) -> str:
     )
 
 
-def entscheide(eingabe: dict) -> dict | None:
-    if not eingabe.get("agent_type"):
+def entscheide(daten: dict) -> dict | None:
+    eingabe = HookEingabe.aus(daten)
+    if not eingabe.rolle:
         return None
     # Warum: Im Headless-Lauf ruft die Rolle `SubagentHandback` nicht auf; dort gilt `SubagentStop`.
-    if eingabe.get("hook_event_name") == "SubagentStop":
-        bericht = eingabe.get("last_assistant_message") or ""
-        if len(bericht) <= höchstlänge or eingabe.get("stop_hook_active"):
+    if eingabe.ereignis == "SubagentStop":
+        bericht = eingabe.letzteAntwort
+        if len(bericht) <= höchstlänge or eingabe.stoppWiederholt:
             return None
         return {"decision": "block", "reason": grund(len(bericht))}
-    if eingabe.get("tool_name") != "SubagentHandback":
+    if eingabe.werkzeug != "SubagentHandback":
         return None
-    bericht = werkzeugAngaben(eingabe).get("message", "")
+    bericht = eingabe.angaben.get("message", "")
     if len(bericht) <= höchstlänge:
         return None
     return verweigerung(grund(len(bericht)))

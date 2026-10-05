@@ -1,7 +1,9 @@
-"""Ein lesender Aufruf von git im Projektordner."""
+"""Alle Aufrufe von git im Projektordner, nur lesend."""
 
 import subprocess
 from pathlib import Path
+
+from gemeinsam.pfade import relativZurWurzel
 
 
 def gitAusgabe(wurzel: Path, *argumente: str) -> str:
@@ -52,5 +54,22 @@ def letzteFreigabeOhneReview(wurzel: Path) -> str | None:
 
 def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
     """Der Text der Datei im Commit; leer, wenn es sie dort nicht gab."""
-    pfad = datei.resolve().relative_to(wurzel.resolve()).as_posix()
+    pfad = relativZurWurzel(datei, wurzel)
+    assert pfad is not None, f"{datei} liegt außerhalb von {wurzel}"
     return gitAusgabe(wurzel, "show", f"{kennung}:{pfad}")
+
+
+def geänderteDateien(wurzel: Path) -> set[str]:
+    """Pfade der geänderten und neuen Dateien (`git status --porcelain`)."""
+    ausgabe = gitAusgabe(wurzel, "status", "--porcelain", "--untracked-files=all")
+    return {zeile[3:].split(" -> ")[-1] for zeile in ausgabe.splitlines() if zeile}
+
+
+def kopfCommit(wurzel: Path) -> str:
+    return gitAusgabe(wurzel, "rev-parse", "HEAD").strip()
+
+
+def blobGröße(wurzel: Path, angabe: str) -> int | None:
+    """Größe von `<rev>:<pfad>` in Byte (mindestens die Zeichenzahl); `None`, wenn unbekannt."""
+    ausgabe = gitAusgabe(wurzel, "cat-file", "-s", angabe)
+    return int(ausgabe) if ausgabe.strip().isdigit() else None

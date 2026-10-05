@@ -9,8 +9,7 @@ from formregeln.benennung import (
     quelltextVerstöße,
     verstöße,
 )
-from gemeinsam.pfade import wurzel
-from rollenregeln.agenten import altbestandOrdner
+from gemeinsam.pfade import altbestandOrdner, wurzel
 
 
 def grundZu(quelltext: str, dateiname: str = "modul.py", *, akzeptanz: bool = False) -> list[str]:

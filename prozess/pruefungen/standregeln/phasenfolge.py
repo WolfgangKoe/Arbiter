@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
-from gemeinsam.pfade import akzeptanzOrdner, etappenOrdner, itemsOrdner
+from gemeinsam.pfade import akzeptanzOrdner, etappenOrdner, handoffOrdner, itemsOrdner
 from kriterienregeln.rueckverfolgung import fehlendeTests, nenntFehlendes
 from standregeln.plan import itemsOhneLink, offeneItems, offeneItemTexte, zyklus
 
@@ -85,7 +85,7 @@ def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
     """Das erste Prozess-Item der Retro ohne Commit `P<k>: …` seit der Freigabe, sonst `None`."""
     # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` (Prozessphase, Schritt 5).
     betreffe = betreffeSeit(wurzel, freigabe)
-    for kennung in prozessItems(wurzel / "handoff" / "retro.md"):
+    for kennung in prozessItems(wurzel / handoffOrdner / "retro.md"):
         muster = rf"(Retro {retro} )?{kennung}:"
         if not any(re.match(muster, betreff) for betreff in betreffe):
             return kennung
@@ -113,7 +113,7 @@ def prozessphase(wurzel: Path, plan: int, retro: int | None) -> Lage:
 
 def lage(wurzel: Path) -> Lage:
     """Zyklus, Phase und nächster Schritt aus den Artefakten in `handoff/` und git."""
-    handoff = wurzel / "handoff"
+    handoff = wurzel / handoffOrdner
     plan, review, retro = (zyklus(handoff / f"{name}.md") for name in ("plan", "review", "retro"))
     if plan is None:
         return Lage(1, Phase.domänenphase, domänenphase(wurzel, 1))

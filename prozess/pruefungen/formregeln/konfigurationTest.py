@@ -10,8 +10,7 @@ import pytest
 
 from formregeln.benennung import ausgeschlosseneOrdner
 from gemeinsam.gitAufruf import gitAusgabe
-from gemeinsam.pfade import wurzel
-from rollenregeln.agenten import altbestandOrdner
+from gemeinsam.pfade import altbestandOrdner, wurzel
 
 ordner = Path(__file__).resolve().parent
 

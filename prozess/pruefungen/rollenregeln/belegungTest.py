@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from gemeinsam.hookProtokoll import HookEingabe
 from rollenregeln.belegung import (
     belegungAusTranskript,
     eigenesTranskript,
@@ -75,7 +76,7 @@ def testRollenMessenIhrEigenesTranskriptNichtDasDesKoordinators(tmp_path):
         "session_id": "sitzung1",
         "transcript_path": str(tmp_path / "sitzung1.jsonl"),
     }
-    assert eigenesTranskript(eingabe) == eigenes
+    assert eigenesTranskript(HookEingabe.aus(eingabe)) == eigenes
 
 
 def testUnterDerWarnschwelleKommtKeineMeldung(wurzel):

@@ -87,9 +87,7 @@ def testDieNamensregelnDesProfilsSindAus():
     assert "python:S117" in abgeschalteteRegeln
 
 
-def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(
-    monkeypatch, tmp_path
-):
+def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(monkeypatch, tmp_path):
     # Regel: Anliegen 261, S5332 ist nur in `server.py` unter `web/` ausgenommen
     ausgenommen = tmp_path / "server.py"
     anderswo = tmp_path / "anderswo.py"

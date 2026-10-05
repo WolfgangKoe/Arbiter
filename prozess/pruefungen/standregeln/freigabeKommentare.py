@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.gitAufruf import freigaben
+from gemeinsam.pfade import handoffOrdner
 from standregeln.plan import planDatei, zyklus, zyklusAusText
 
 
@@ -33,7 +34,7 @@ def artefaktVon(gegenstand: str) -> Artefakt:
 
 
 def pfadDer(wurzel: Path, artefakt: Artefakt) -> Path:
-    return wurzel / "handoff" / artefakt.datei
+    return wurzel / handoffOrdner / artefakt.datei
 
 
 def zeilenDer(wurzel: Path, artefakt: Artefakt) -> list[str]:

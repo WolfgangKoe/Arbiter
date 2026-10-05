@@ -3,8 +3,7 @@
 253 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Neubewertung von [107](107-kritikAnDenPruefungen.md) gegen `prozess/pruefungen`
-(5a3e886). Liskov und Schnittstellentrennung greifen nicht (keine Klassenhierarchien). Offen:
+**Befund.** Neubewertung von [107](107-kritikAnDenPruefungen.md) gegen `prozess/pruefungen` (5a3e886). Liskov, Schnittstellentrennung greifen nicht (keine Klassenhierarchien). Offen:
 1. Kreise zwischen Themenordnern: `standregeln` ↔ `rollenregeln` (`stand` → `belegung`,
    `rollenkontext` → `stand`), ↔ `anliegenregeln` (`stand` → `anliegen`, `statusrecht` →
    `freigabeKommentare`), ↔ `kriterienregeln` (`phasenfolge` → `rueckverfolgung` → `plan`).
@@ -28,24 +27,28 @@
    Testdateien bauen je ein eigenes git-Repo.
 
 **Kosten.** Wer den Stand ändert, kann eine Sperre brechen; eine Regel steht nicht an einem
-Ort. Etwa ein Lauf je Punkt; vor 215 bis 221, die dieselben Dateien anfassen.
+Ort. Etwa ein Lauf je Punkt; vor 215 bis 221 (dieselben Dateien).
 
 **Gegenvorschlag.** Verhalten unverändert, je Punkt ein Commit:
-1. Schichten `gemeinsam` ← Lesen (Anliegen, Artefakt, Plan, Kriterium, Agent) ← Regeln ←
-   `stand`; `projektordner`, `nurLesbar` nach `gemeinsam`. Mechanismus: import-linter
-   ([Backlog](../../prozess/backlog.md)), Scheiter-Test mit Rückimport; Regel: [255](255-praemisseAufgabeUndRichtung.md).
-2. Nach Aufgaben teilen; der Docstring nennt die eine Aufgabe.
+1. Schichten `gemeinsam` < `lesen` (neu: Anliegen-Kopf, Artefakt, Plan, Agent) < `kriterienregeln` <
+   `anliegenregeln` < `standregeln` < `rollenregeln` < `formregeln`; `belegung.py` nach `standregeln`,
+   `freigabeVerstoß` nach `anliegenregeln`. Mechanismus: Importvertrag der Prüfskripte (Standardbibliothek),
+   Scheiter-Test mit Rückimport; Regel [255](255-praemisseAufgabeUndRichtung.md).
+2. Nach Aufgaben teilen (`anliegen`, `bashPositivliste`, `statusrecht`, `schreibgrenze`, `dashboard`);
+   der Docstring nennt die eine Aufgabe.
 3. `HookEingabe` in `hookProtokoll.py`; Mechanismus: `eingabe.get(` nur dort.
-4. git nur in `gitAufruf.py`; `relativZurWurzel`, `handoffOrdner` in `pfade.py`;
-   Mechanismus: `subprocess` und `"handoff` nur dort.
+4. git nur in `gitAufruf.py`; `relativZurWurzel`, `handoffOrdner` in `pfade.py`; Mechanismus:
+   `subprocess` und `"handoff` nur dort.
 5. NamedTuple `Freigabe`, `Abschnitt`, `Kriterium`, `Lauf`; Enum `Status`.
 6. Pfadsperren als Tabelle (Prüffunktion, Meldung).
 7. Regeln aus `*Test.py` in Module; Fixture `gitRepo` in `conftest.py`.
 
 Erledigt, wenn kein Fundort aus 1 bis 7 bleibt, die Mechanismen aus 1, 3, 4 an je einem
-Gegenbeispiel rot werden, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer
-geprüft hat.
+Gegenbeispiel rot werden, die Prüfungen grün sind und der Reviewer geprüft hat.
 
-**Stellungnahme.** Teilstand: Punkt 6 umgesetzt (`pfadsperren` als Tabelle in
-`rollenregeln/bashPositivliste.py`, Verhalten unverändert). Punkte 1 bis 5 und 7 offen; Status
-bleibt `offen`.
+**Stellungnahme.** Teilstand, Status `offen`. Umgesetzt: Punkt 6 (`pfadsperren` in
+`rollenregeln/bashPositivliste.py`); Punkt 3 (alle Hooks lesen nur ihre Felder aus `HookEingabe`);
+Punkt 4 teils (git nur in `gemeinsam/gitAufruf.py` samt `geänderteDateien`, `kopfCommit`, `blobGröße`;
+`projektordner`, `nurLesbar`, `istNurLesbar`, `relativZurWurzel`, `handoffOrdner` in
+`gemeinsam/pfade.py`, eine Wurzel). Mechanismus für 3 und 4: `formregeln/einzelstellen.py`, Scheiter-Test
+`formregeln/einzelstellenTest.py`. Offen: 1, 2, 5, 7, je Punkt ein eigener Lauf.

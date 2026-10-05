@@ -6,7 +6,7 @@ import shlex
 import sys
 from pathlib import Path
 
-from rollenregeln.agenten import projektordner
+from gemeinsam.pfade import projektordner
 
 
 def hookBefehle(einstellungen: dict) -> list[str]:

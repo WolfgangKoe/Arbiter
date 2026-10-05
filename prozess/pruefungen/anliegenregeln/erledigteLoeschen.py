@@ -6,11 +6,10 @@ from pathlib import Path
 
 from anliegenregeln.anliegen import anliegenDateien, kopfLesen
 from gemeinsam.gitAufruf import gitAusgabe
-from gemeinsam.pfade import anliegenOrdner
-from rollenregeln.agenten import istNurLesbar, projektordner
+from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, projektordner
 
 link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
-suchOrdner = ("domaene", "technik", "prozess", "handoff", ".claude", "doku")
+suchOrdner = ("domaene", "technik", "prozess", handoffOrdner, ".claude", "doku")
 
 
 def markdownDateien(wurzel: Path) -> list[Path]:
