@@ -22,7 +22,7 @@ Erledigt, wenn der Ablauf die Ausnahme nennt und die Moderation die Stränge zei
 **Stellungnahme.** Umgesetzt in [Ablauf, Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe), Moderator und Regelumsetzer verweisen darauf; die Stränge schreibt der Moderator. Erledigt erst nach F1 und F2.
 
 **F1 · Worktree je Lauf jetzt statt im [Backlog](../../prozess/backlog.md)?** A ja, B nein (Empfehlung: kostet mehr als zwei gesparte Schritte).
-Antwort: .
+Antwort: Nein.
 
 **F2 · Regelumsetzer schreibt `eslint.config.mjs`, `.stylelintrc.json`, `package.json`, `package-lock.json`?** A ja (Empfehlung, [Ablauf](../../prozess/ablauf.md#kritik-am-code): Linter-Konfiguration), B nein.
-Antwort: .
+Antwort: ja.

@@ -1,6 +1,6 @@
 # sonarlint.py prüft nur Python, das Frontend bleibt ohne SonarLint
 
-280 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+280 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · angenommen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -25,6 +25,6 @@ die Lücke bei etwa 100 Zeilen JavaScript klein.
 Node ≥ 22.12 wird Voraussetzung, fehlt es, ist die Prüfung rot.
 Rückfrage des Stakeholders: Was bedeutet „der Lauf würde länger“? Statt 10 Sekunden 10 Minuten?
 Klärung: Heute 44 s gemessen; mit JS geschätzt 50 bis 60 s (siehe Kosten), nicht Minuten.
-Antwort: .
+Antwort: Nein.
 
 **Stellungnahme.** 
