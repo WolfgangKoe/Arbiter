@@ -119,8 +119,9 @@ geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert): mypy oder
 pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR2004, PLR0913,
 FBT, ERA, `PLR0912` mit 12), Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
-Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist mindestens so streng
-wie SonarLint, die Sicht des Stakeholders; Mechanismus: `formregeln/sonarlint.py` (DoD 2). Nicht verwendet: radon-Wartbarkeitsindex,
+Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist für Python mindestens so
+streng wie SonarLint, die Sicht des Stakeholders; Mechanismus: `formregeln/sonarlint.py` (DoD 2).
+SonarLint prüft nur Python, das Frontend prüfen eslint und stylelint (Anliegen 280). Nicht verwendet: radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase

@@ -11,6 +11,10 @@ schreibpfade:
   - pyproject.toml
   - .gitignore
   - ruff.toml
+  - eslint.config.mjs
+  - .stylelintrc.json
+  - package.json
+  - package-lock.json
   - .vscode/settings.json
   - dashboard.html
   - prozess/dashboard/
@@ -25,8 +29,9 @@ Mechanismus, der ohne Tokenkosten wirkt.
   `prozess/praemissen/`.
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
   Lesbarkeit nach `prozess/praemissen/es.md`, wie für jeden Code.
-- Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge) und
-  `.gitignore` schreibst du; der Architekt kritisiert sie per Anliegen.
+- Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge, eslint,
+  stylelint, `package.json`) und `.gitignore` schreibst du; der Architekt kritisiert sie
+  per Anliegen.
 - Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.
   Vorbild: der Test der Bash-Positivliste.
 - Trage den gebauten Mechanismus in `prozess/regeln.md` ein: Regel (Link), Mechanismus,
