@@ -7,14 +7,14 @@ Items aus [Plan 3](plan.md): *Karte im Browser* (QUE-2), *Anzeige der Aufstellun
 1. **Erfüllt.** `python3 -m pytest technik/tests`: 200 grün. Abdeckung `technik/arbiter`
    99 % Zeilen, 100 % Zweige; unerreicht nur `__main__.py` 13–15 (Strg+C), von Hand
    nachgestellt (unter Code). `prozess/pruefungen` 98,6 % und 97,2 %.
-2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen`: 749 grün; eslint und
+2. **Erfüllt, mit Hinweisen.** `python3 -m pytest prozess/pruefungen` auf `9977e0e`: 749 grün; eslint und
    stylelint ohne Fund. SonarLint Exit 0 mit drei Hinweisen zu `web/`
    ([261](anliegen/261-sonarlintMeldungenZuWeb.md)). Nur Einheitstests erreichen
    `aufstellen.py` 48, 50, 91, 105 und `katalog/ausgangslage.py` 21, 51, 53, 56: alles
    Vorbedingungen (`ValueError`). Glossar → Code: *Name*, *Ablage*, *an der Reihe*,
    *Einheit in Aufstellung*, *Karte* stehen wörtlich im Code.
-3. **Offen.** Beide Items liegen noch in `domaene/items/`; sie fallen nach der Abnahme.
-4. **Offen.** Die Abnahme des Fachkritikers fehlt.
+3. **Erfüllt.** Der Planer hat beide Items aus `domaene/items/` gelöscht (uncommittet).
+4. **Erfüllt.** Der Fachkritiker hat QUE-2 und AUF-4 ohne Befund abgenommen.
 
 Oberfläche: Bildschirmtests grün; `komponenten.css` gleicht `vorschlag.css`. **Nicht erfüllt:**
 „Mockup gelöscht“. Die Mockups bleiben, bis `komponenten.html` steht
@@ -42,8 +42,8 @@ Schreibpfade. Für Bash wirkt die Grenze nur als Text
   [260](anliegen/260-auf4WaehlenUndAlleBenennen.md).
 
 ## Empfehlung
-Technisch abnahmefähig: DoD 1 und 2 sind erfüllt. Keines der Anliegen ändert Verhalten. Es
-bleiben die Abnahme und das Löschen der Mockups nach 262.
+Freigeben: DoD 1 bis 4 sind erfüllt. Keines der offenen Anliegen ändert Verhalten. Von der
+DoD der Oberfläche fehlt nur das Löschen der Mockups; es folgt nach 262.
 
 ## Nächstes Vorgehen
 - **Produktziel:** Erreicht ist noch keine der 7 Etappen. Am meisten fehlt die erste Handlung
