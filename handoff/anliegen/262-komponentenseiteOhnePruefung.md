@@ -1,6 +1,6 @@
 # Komponentenseite: Prüfung statt Bildschirmtest
 
-262 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+262 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach 488d8da gibt es `technik/frontend/komponenten.css` (gleich
@@ -50,4 +50,4 @@ nur mit Browser und zwei Rollen mehr. Ich empfehle die Prüfung.
 Erledigt, wenn die Scheiter-Tests zu a bis c grün sind. Danach ist die Prüfung rot, bis
 `komponenten.html` steht.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als Gegenvorschlag, Punkt 1 a bis c, in `formregeln/komponentenseite.py` mit Scheiter-Tests in `formregeln/komponentenseiteTest.py` (Seite fehlt, Link fehlt, tote Klasse, neue Klasse im Mockup und in `index.html` je rot; Zahl im Wert und bekannte Klasse grün); Zeile in [Regeln](../../prozess/regeln.md). Der Stand-Test `testDieKomponentenseiteHältDieRegel` ist rot, bis der Implementierer `technik/frontend/komponenten.html` nach Punkt 2 baut; die Mockups bleiben bis dahin. Punkt 3 (O3 „Prüft“) setzt der Architekt. Klassen aus `seite.js` bleiben Urteil.
