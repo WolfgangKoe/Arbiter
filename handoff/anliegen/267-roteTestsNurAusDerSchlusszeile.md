@@ -1,6 +1,6 @@
 # Rote Tests nur aus der Schlusszeile zählen
 
-267 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+267 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 0235e05. `roteTests` in
@@ -29,4 +29,4 @@ Schlusszeile `1 failed in 0.02s` ergibt 1.
 Erledigt, wenn der Scheiter-Test grün ist und `python3 -m pytest prozess/pruefungen` grün
 bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: `roteTests` wertet nur die letzte nicht leere Zeile aus, bei leerer Ausgabe 0. Scheiter-Tests in `formregeln/abdeckungTest.py` (Traceback mit `2 errors`, Schlusszeile `1 failed` ergibt 1; leere Ausgabe ergibt 0). Eintrag in `regeln.md` ergänzt. Der Hinweis zu `oberordner.py` bleibt unberührt, er gehört nicht zur Erledigt-Bedingung. Die drei roten Tests im Gesamtlauf (komplexitaetTest, konfigurationTest/ruff, schichtenTest) stammen aus fremden Dateien (`importvertrag.py`, `zustandsschutz.py`, `anliegenTest.py`).

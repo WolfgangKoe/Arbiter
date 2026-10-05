@@ -55,7 +55,10 @@ def aussetzung(abdeckung: Abdeckung, phase: Phase) -> str | None:
 
 def roteTests(pytestAusgabe: str) -> int:
     """Summe aus `failed` und `error(s)` der Schlusszeile von pytest."""
-    return sum(int(zahl) for zahl in re.findall(r"\b(\d+) (?:failed|error)", pytestAusgabe))
+    zeilen = pytestAusgabe.strip().splitlines()
+    if not zeilen:
+        return 0
+    return sum(int(zahl) for zahl in re.findall(r"\b(\d+) (?:failed|error)", zeilen[-1]))
 
 
 def quote(gedeckt: int, gesamt: int) -> float:

@@ -8,6 +8,7 @@ from formregeln.abdeckung import (
     abdeckungText,
     aussetzung,
     prozentText,
+    roteTests,
     schwelle,
     unbenutzterCode,
     verstoß,
@@ -159,6 +160,15 @@ def testGrüneTestsSetzenDieSchwelleInDerTechnikphaseNichtAus(tmp_path):
     assert gemessen.rote == 0
     assert aussetzung(gemessen, Phase.technikphase) is None
     assert verstoß("probe", gemessen) is not None
+
+
+def testRoteTestsZähltNurDieSchlusszeile():
+    ausgabe = "assert '2 errors' == '0 errors'\nE  3 failed\n\n1 failed in 0.02s\n"
+    assert roteTests(ausgabe) == 1
+
+
+def testRoteTestsBeiLeererAusgabeIstNull():
+    assert roteTests("  \n") == 0
 
 
 @pytest.mark.stand
