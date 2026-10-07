@@ -1,62 +1,58 @@
-# Retro · Zyklus 2
+# Retro · Zyklus 3
 
-Etappe 1 · Aufstellen, Plan 2 mit drei Items. Grundlage: [Review 2](review.md), git seit
-`Freigabe Retro 1`, Anliegen, Belegung je Lauf.
+Etappe 1 · Aufstellen, Plan 3 mit zwei Items. Grundlage: [Review 3](review.md),
+[Moderation](moderation.md), git seit `Freigabe Retro 2`, Anliegen, Belegung je Lauf
+(`prozess/dashboard/laeufe.jsonl`).
 
 ## Befunde
-1. Inkrement: DoD erfüllt, alle Items abgenommen, ohne Nacharbeit wie in Zyklus 1.
-2. Prozesslast: 77 Anliegen, 31 an den Regelumsetzer, 9 an mich: 52 % (neue
-   [Kennzahl](../prozess/kennzahlen.md), Schwelle ein Drittel). Ketten: 142 → 148 um einen
-   Test mit bekannter Lücke; der Sprung zweimal gebaut, ganz gelöscht. Prüfskripte 183.000
-   Zeichen, Produkt 12.700.
-3. Belegung: Der Regelumsetzer lag zweimal über 120.000 Token (einmal 197.000), je mit
-   mehreren Anliegen im Auftrag.
-4. Höchstmaße sind nur Text und verletzt: Retro 1 4.167/4.000, `rueckverfolgung.py`
-   14.621/12.000, zwei Testdateien über 8.000.
-5. Der Bash-Schutz für Anliegen wurde zum zweiten Mal umgangen
-   ([138](anliegen/138-anliegenPerSkriptAmBashSchutzVorbei.md)); Bordmittel: Sandbox
-   (Anliegen 139).
-6. Kritik am Code lief für jeden Code-Commit; die Lesbarkeit der Prüfskripte meldete sie erst
-   nach [107](anliegen/107-kritikAnDenPruefungen.md), den Rest führt
-   Anliegen 114. Ein Mechanismus bräuchte Urteil.
-7. Dein Anliegen [150](anliegen/150-sonarlintAbdeckungUndToterCode.md): SonarLint ist nicht
-   scharf, Abdeckung ungemessen (Zweige: Produkt 100 %, Prüfskripte 93 %).
-8. Plan 3 bringt die erste Oberfläche (Anliegen 145):
-   Auslöser der Rolle UX (Anliegen 151); du willst
-   ihre Leitplanken sehen, ArbiterMaps Mockups als Gegenbeispiel.
-9. Deine Antworten brachten 145 über das Höchstmaß; nach
-   Anliegen 161 A zählen sie nicht mit.
+1. Inkrement: DoD 1 bis 4 erfüllt, QUE-2 und AUF-4 ohne Befund abgenommen. Die Mockups
+   bleiben, bis die Komponentenseite steht (262).
+2. Prozesslast zum zweiten Mal über der Schwelle: 90 von 129 neuen Anliegen gingen an den
+   Regelumsetzer oder mich, 70 % (Retro 2: 52 %, Schwelle ein Drittel). Offen sind 38, alle
+   in der Perspektive Prozess, 31 an den Regelumsetzer. Prüfskripte 367.500 Zeichen
+   (Retro 2: 183.000), Produkt samt Frontend 29.100. Von 230 Läufen waren 70 des
+   Regelumsetzers, 46 der Rollen am Produkt. Die Reaktion „erst einen Mechanismus löschen“
+   ist nur Text und griff wieder nicht.
+3. Kritik erzeugt Kritik: Gut die Hälfte der offenen Anliegen ist Kritik am Code der
+   Prüfskripte; 202 bis 206 sind Nachschliff am Nachschliff.
+4. Belegung: 9 Läufe über 120.000 Token, höchstens 145.000 (Testautor), keiner über
+   150.000 (Retro 2: einmal 197.000). Dreimal war ich es.
+5. Gleichzeitige Läufe gehen (279). Ein halber Hook-Code bricht den Prüflauf der Nachbarn ab
+   ([289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md), Umsetzung 290).
+6. Der [Backlog](../prozess/backlog.md) löst für Retro 3 aus: Höchstmaße im Test,
+   `kennzahlen.py` mit Gesamtmaß, Auslösezähler. Alles neue Mechanismen; nach Befund 2
+   stelle ich sie bis Retro 4 zurück.
+7. Claude Code bis 2.1.292: Nichts ersetzt einen eigenen Mechanismus. Die Korrekturen an der
+   Sandbox (2.1.289, 2.1.290) gehen an den Versuch 215.
 
-## Geändert
-- [Ablauf](../prozess/ablauf.md): DoD 1 Abdeckung 95 %, DoD 2 toter Code (157), SonarLint
-  nur Text; DoR 5 erstes Mockup (155); Prozessphase: ein Item je Lauf, vor der Freigabe nur,
-  was auf den nächsten Zyklus wirkt (156); Antworten zählen nicht (161); Kritik am Code
-  auch für das Dashboard.
-- [Regelumsetzer](../.claude/agents/regelumsetzer.md): ein Item je Lauf, Abdeckung der
-  Prüfskripte 95 %; Schreibpfade `dashboard.html`, `prozess/dashboard/` (90).
-- [Kennzahlen](../prozess/kennzahlen.md): Prozesslast. [Backlog](../prozess/backlog.md):
-  zurückgestellte Items.
+## Fragen an dich
+Aus der Moderation, auf deinen Kommentar angelegt:
+[296](anliegen/296-prozesslastEindaemmen.md). Sie passen zwei bestehende Regeln an, die
+Reaktion der Prozesslast und Kritik am Code; neu gebaut wird nichts.
+- F1: höchstens 10 offene Anliegen an den Regelumsetzer; 202 bis 206, 221, 295 in den
+  Backlog.
+- F2: vor Plan 4 nur 294 (P1) und 286, falls die Nachprüfung eine Lücke findet; im Strang
+  Hook-Code zuerst 290.
+- F3: Kritik am Code der Prüfskripte wird nur bei Fehlverhalten ein Anliegen, der Rest ein
+  Sammelanliegen je Zyklus.
 
-## Prozess-Items (Regelumsetzer, vor Plan 3, je Lauf eins)
-Nur, was auf Plan 3 wirkt oder du vorher willst
-([Ablauf, Prozessphase](../prozess/ablauf.md#prozessphase) 1).
-- P1 Abdeckung (150, Anliegen 157): Zweige
-  ≥ 95 % für `technik/arbiter`, eigene Meldung für `prozess/pruefungen`; vulture nach DoD 2,
-  zuerst Wegwerf-Versuch ohne Ausnahmeliste.
-- P2 SonarLint (150): Wegwerf-Versuch mit dem Analysator ohne VS Code, sonst „Sonar way“
-  auf ruff. Wirkt auf die DoD von Plan 3.
-- P3 `pfadeTest.py` löschen: bekannte Lücke, drei Anliegen; die Löschung der Kennzahl.
-- P4 Dashboard (Anliegen 158, dein Wunsch): Lauf-Log
-  mit Rolle und Belegung, `dashboard.html` im Wurzelordner, Daten und Skripte in
-  `prozess/dashboard/` (90); verschlankt aus `ArbiterMap/steering/metrics/process_dashboard.html`:
-  Tokenstände, daneben ihre Verteilung, Legende mit höchstens fünf Wörtern je Eintrag.
-- P5 Antworten zählen nicht (Anliegen 162).
+## Anliegen an mich
+- [107](anliegen/107-kritikAnDenPruefungen.md): angenommen, 253 ist erledigt; das Eindämmen
+  führt 296. Du prüfst nach.
+- 138 wartet auf 215, [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) auf 216, 219 auf
+  220, 289 auf 290; ich schließe sie mit dem Umsetzen.
+
+## Prozess-Items (Regelumsetzer, vor Plan 4)
+Nur, was auf Plan 4 wirkt ([Ablauf, Prozessphase](../prozess/ablauf.md#prozessphase) 1).
+- P1 Elementverbot ohne Lücken
+  ([294](anliegen/294-elementverbotHatLuecken.md)): Es prüft das Frontend, das Plan 4
+  ändert. Kein neuer Mechanismus, eine Lücke im bestehenden. Gilt mit F2 A.
 
 ## Empfehlung
-Zur Freigabe: P1 bis P5. 135 und 161 sind mit A entschieden, 145 und 158 beantwortet. Zu
-139, 151 und 159 liefere ich Optionen mit Folgen nach; 151 und 159 entscheidest du vor
-Plan 3, 139 wirkt nicht darauf und wartet mit 138.
+Beantworte 296; danach ziehe ich Kennzahlen, Ablauf und Backlog nach (Nachkorrektur). Zur
+Freigabe: P1. Danach Plan 4 mit Wählen per Klick (Review 3); die Kette des Regelumsetzers
+läuft daneben, nach den Strängen der Moderation.
 
 ## Freigabe
-Freigabe: ja
+Freigabe: offen
 Kommentar: .

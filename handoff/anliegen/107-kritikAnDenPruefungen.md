@@ -1,6 +1,6 @@
 # Die Prüfskripte sind nicht ordentlich strukturiert abgelegt
 
-107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+107 · Kritik · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -33,3 +33,9 @@ Schlank eindämmen:
 2 und 3 lege ich dir in Retro 3 als Prozess-Items vor ([Backlog](../../prozess/backlog.md));
 dort sortiere ich auch die 26 offenen Anliegen an den Regelumsetzer in behalten,
 zurückstellen, schließen. Wartet auf 253.
+
+**Stellungnahme (Organisationsentwickler):** 253 ist erledigt, die Prüfskripte sind
+gegliedert und nach [es.md](../../prozess/praemissen/es.md) überarbeitet. Zum Eindämmen
+schlage ich statt 2 schlankere Anpassungen bestehender Regeln vor: Deckel, Backlog und Kritik
+nur bei Fehlverhalten, Fragen in [296](296-prozesslastEindaemmen.md), aufgenommen in
+[Retro 3](../retro.md). Punkt 3 bleibt im Backlog. Bitte nachprüfen.
