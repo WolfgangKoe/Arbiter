@@ -1,6 +1,6 @@
 # Offene Anliegen wirksam begrenzen, Schreibbilanz ohne Fehlalarm
 
-306 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+306 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · beantwortet
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -32,7 +32,7 @@ Text), 138 wartet auf 215; offen bleiben 10, davon 4 an den Regelumsetzer.
 - A (empfohlen): so, in einem Lauf je Absender.
 - B: nur 202 bis 206, 221 (schon im Backlog).
 
-Antwort: .
+Antwort: A. Wichtig wäre zunächst den Bestand abzubauen, bevor etwas neues geöffnet wird, aber gleichzeitig etwas wirksames zu implementieren, damit der Regelumsetzer nicht immer angefragt wird und die Pipeline voll macht. Ich sehe ehrlich gesagt nicht, ob all diese ANliegen dem Produkt dienen oder ob hier nicht wieder die Organisation das Produkt ist.
 
 **F2 · Zufluss sperren.** Fehlverhalten am Code des Regelumsetzers zählt nur mit Beleg aus
 einem echten Lauf (Lauf, Befehl, Meldung); Gelesenes und Nachgestelltes geht ins Sammel.
@@ -42,7 +42,7 @@ Stakeholder; ein weiteres Fehlverhalten kommt als neue Runde ins offene Anliegen
 - B: Beleg-Regel nur als Text, Deckel ohne Sperre.
 - C: Kritik am Code der Prüfskripte bis Retro 4 aussetzen.
 
-Antwort: .
+Antwort: Hmm, wäre ein Beleg ein wirksamer Mechanismus, der den Zulauf sperrt?
 
 **F3 · Mechanismus löschen.** Zuerst gelöscht (Prozesslast-Reaktion): Schreibbilanz am
 SubagentStop samt `angefasstePfade.py`, `schreibMeldung.py` und Tests. Write und Edit sperrt
@@ -54,7 +54,7 @@ der Koordinator committet es nicht und meldet nichts.
   Commit-Meldung entfallen.
 - C: behalten, „unklar, wer“ als Hinweis ohne „Nicht committen“.
 
-Antwort: .
+Antwort: Was hat "Mechanismus löschen" mit committen zu tun? Ich will, dass mein Produkt entwickelt wird und nicht, wie könnne wir jedes zweites Anliegen eine Schraube nach links drehen um sie dazwischen kurz nach rechts zu drehen. Bitte einen wirksamen Vorschlag um das Zustopfen des Regelumsetzers einzudämmen. Ich will sehen, dass Anforderungen geschrieben, in AK-testfälle umgesetzt und diese dann durch Produktivcoe grün gemacht werden. Wo ist das Problem?
 
 Nach deinen Antworten ändere ich Kennzahlen, Ablauf und Backlog und beauftrage den Regelumsetzer.
 
