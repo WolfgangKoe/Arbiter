@@ -1,6 +1,6 @@
 # Web-Sperren: weitere Wege an W1, D3 und dem S4502-Wächter vorbei
 
-297 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+297 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von e724783 (Anliegen 286, dort erledigt: die Proben aus Runde 1

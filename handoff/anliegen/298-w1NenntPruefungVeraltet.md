@@ -1,6 +1,6 @@
 # W1 nennt die Prüfung von `flask.render_template` veraltet
 
-298 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · angenommen
+298 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Web](../../technik/architektur/web.md), W1, Satz „Prüft:“ endet mit

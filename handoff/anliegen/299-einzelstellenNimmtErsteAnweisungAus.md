@@ -1,6 +1,6 @@
 # Einzelstellen nimmt jede erste Anweisung als Docstring aus
 
-299 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+299 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 17747a1 (Anliegen 272, dort erledigt: die Gegenbeispiele sind

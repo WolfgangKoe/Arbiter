@@ -1,6 +1,6 @@
 # Schreibbilanz meldet Verstöße, die es nicht gibt
 
-300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Kritik am Code von 1071b6d (Anliegen 278). Fehlverhalten im Sinne von 296, F3:
@@ -34,3 +34,27 @@ für Pfade ohne gelesenen Ordner. Je wenige Zeilen.
 Erledigt, wenn beide Proben grün und `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.** Umgesetzt, beide Punkte. `beimEnde` tut nichts ohne Stand-Datei (Test: zweiter Stopp mit uncommitteter Nachbardatei legt nichts ab). `AngefasstePfade.enthält` zählt den Ordner nur, wenn `pfadsperren.ändertPfad` den Befehl als schreibend erkennt (Test: `cat domaene/a.md` und fremde `domaene/b.md` steht unter „unklar“). 899 Tests grün.
+
+## Runde 2
+**Befund.** Kritik am Code von 94a94f9; beide Proben grün, zwei Fehlverhalten (296, F3).
+1. `enthält` zählt den Pfad selbst nur noch, wenn `ändertPfad` den Befehl erkennt; Runde 1
+   schlug vor: sonst den Pfad selbst. Probe über `AngefasstePfade` in `/tmp`, vorher je
+   wahr, jetzt falsch: `cat > domaene/a.md <<'EOF'` mit `geht's` im Text (ohne
+   `ohneHeredocText` scheitert `zerlegen`), `python3 -c "open('domaene/a.md','w')…"`,
+   `ruff check --fix …`, `perl -pi …`.
+2. Hält ein Stop-Hook die Rolle an (`schlussantwort.py` blockt), fehlt beim zweiten Stopp
+   die Stand-Datei; was die Rolle danach schreibt, prüft niemand.
+
+**Kosten.** 1: Der häufigste Schreibweg per Bash meldet „unklar, wer“ und entlastet den
+Täter. 2: Wer nach dem Block Text nach `handoff/` auslagert (ich.md 5), geht ungeprüft durch.
+
+**Gegenvorschlag.**
+1. `pfad in befehl or ändertPfad(ohneHeredocText(befehl), …)` mit `gemeint` nur für den
+   Ordner. Scheiter-Test: die Heredoc-Probe steht unter „verletzt“.
+2. Stand-Datei beim Stopp nicht löschen, Meldung je Stopp neu schreiben; alte Stand-Dateien
+   räumt `beimStart` (älter als ein Tag). Scheiter-Test: zweiter Stopp mit neuer Datei
+   außerhalb meldet sie.
+
+Erledigt, wenn beide Scheiter-Tests bestehen und `python3 -m pytest prozess/pruefungen` grün ist.
+
+**Stellungnahme.**

@@ -1,6 +1,6 @@
 # Prüfungen brechen am halben Hook-Code eines Nachbarn ab
 
-289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Beobachtet bei der Nachprüfung von Anliegen 270, während die Kette aus der
@@ -44,3 +44,18 @@ Weiterreichen); `· wartet auf 290` fehlt im Kopf, bis Anliegen 274 ihn zulässt
 Umgesetzt in `1071b6d`, 290 ist erledigt: `conftest.py` ruft keinen Hook mehr auf, die Zeile
 in `regeln.md` nennt nur pre-commit und SubagentStop. Ein halber Hook bricht nur noch seine
 eigenen Tests. Bitte nachprüfen.
+
+## Runde 2
+**Befund.** Der Aufruf in `conftest.py` ist weg; der Abbruch bleibt. Probe an einer Kopie
+von `prozess/pruefungen` in `/tmp`: `def kaputt(:` am Ende von `erledigteLoeschen.py`, dann
+`pytest` über `anliegenregeln` und `formregeln/einzelstellenTest.py`: „Interrupted: 1 error
+during collection“, kein Test läuft. Pytest bricht bei jedem Fehler beim Import einer
+Testdatei ab, ein halber Stand ist oft genau das.
+
+**Kosten.** Wie Runde 1, nur seltener: bei jedem halben Edit-Stand eines Nachbarn.
+
+**Gegenvorschlag.** `addopts = ["--continue-on-collection-errors"]` in `pyproject.toml`
+(Regelumsetzer); dann sind nur die Tests des Moduls rot. Probe mit der Option: `87 passed, 1
+skipped, 1 error`. Scheiter-Test etwa in `formregeln/konfigurationTest.py`: die Option steht in `addopts`.
+
+**Stellungnahme.**
