@@ -358,3 +358,14 @@ def testVerteilungHatYAchseUndZahlJeBalken():
     assert 'y1="10.0" y2="10.0"' in verteilung
     assert ">2</text>" in verteilung and ">1</text>" in verteilung
     assert "Zahl über dem Balken" in verteilung
+
+
+def testDashboardUndLogNennenEtappeZyklusPhaseUndNächstenSchritt(tmp_path):
+    (tmp_path / "domaene" / "etappen").mkdir(parents=True)
+    (tmp_path / "domaene" / "etappen" / "01-a.md").write_text("# Etappe 1 · Aufstellen\n")
+    protokollieren(stoppEingabe(transkript(tmp_path, 80_000)), tmp_path)
+    lauf = läufeLesen(tmp_path)[0]
+    assert (lauf.zyklus, lauf.phase) == (1, "Domänenphase")
+    seite = (tmp_path / "dashboard.html").read_text(encoding="utf-8")
+    assert "Zyklus 1 · Domänenphase · Nächster Schritt: Planer: Plan 1" in seite
+    assert "Etappe 1 · Aufstellen" in seite

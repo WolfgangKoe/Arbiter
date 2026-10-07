@@ -1,6 +1,6 @@
 # Querimporte: pytest erlaubt mehr als der Starter
 
-228 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+228 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Commit 4b492f5. Der Suchpfad unter pytest ist ein anderer als unter
@@ -44,3 +44,4 @@ Erledigt, wenn das Gegenbeispiel aus 1 rot ist, die Kommentare aus 2 stimmen und
 `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).

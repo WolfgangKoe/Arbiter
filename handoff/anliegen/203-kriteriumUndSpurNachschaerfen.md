@@ -1,6 +1,6 @@
 # Kriterium und Spur nachschärfen
 
-203 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+203 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von c3cd6d5 (Anliegen 114, B 7). Verhalten unverändert:
@@ -47,3 +47,6 @@ still, wenn sich der Importstil ändert.
 
 Erledigt, wenn 1 bis 3 umgesetzt sind und 4 umgesetzt oder begründet abgelehnt ist,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Commit geprüft hat.
+
+**Stellungnahme.**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).

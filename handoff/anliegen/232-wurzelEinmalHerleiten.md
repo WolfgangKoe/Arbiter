@@ -1,6 +1,6 @@
 # Wurzel nur einmal herleiten; Starter-Test ist ein Stand-Test
 
-232 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+232 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4b492f5 (114 Teil A a), zwei Kleinigkeiten:
@@ -39,3 +39,4 @@ Erledigt, wenn `grep -rln __file__ prozess/pruefungen` nur noch `gemeinsam/pfade
 grün ist.
 
 **Stellungnahme.**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).

@@ -10,6 +10,7 @@ from gemeinsam.pfade import projektordner
 from rollenregeln.dashboard import dashboardSchreiben
 from rollenregeln.laufLesen import Lauf, eintragAusZeile, logPfad
 from standregeln.belegung import belegungAusTranskript, eigenesTranskript
+from standregeln.phasenfolge import lage
 
 zielLänge = 80
 koordinatorVorspann = "The coordinator sent a message while you were working:"
@@ -133,7 +134,8 @@ def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
     """Trägt den Lauf ein und schreibt das Dashboard neu."""
     gefunden = laufEintrag(eingabe, jetzt())
     if gefunden:
-        eintragAnhängen(ordner, gefunden)
+        stand = lage(ordner)
+        eintragAnhängen(ordner, gefunden._replace(zyklus=stand.zyklus, phase=stand.phase.value))
         dashboardSchreiben(ordner)
 
 

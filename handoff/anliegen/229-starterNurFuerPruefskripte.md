@@ -1,6 +1,6 @@
 # Der Starter läuft jedes Modul, nicht nur Prüfskripte
 
-229 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+229 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Commit 4b492f5, `prozess/pruefungen/gemeinsam/lauf.py`: `starten` reicht jeden
@@ -37,3 +37,4 @@ Erledigt, wenn die Tests aus 2 und 3 an ihren Gegenbeispielen rot sind und
 `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).

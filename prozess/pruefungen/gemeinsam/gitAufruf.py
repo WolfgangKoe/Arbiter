@@ -47,3 +47,8 @@ def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
     pfad = relativZurWurzel(datei, wurzel)
     assert pfad is not None, f"{datei} liegt außerhalb von {wurzel}"
     return gitAusgabe(wurzel, "show", f"{kennung}:{pfad}")
+
+
+def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
+    """Die Betreffzeilen der Commits nach `kennung` bis HEAD."""
+    return gitAusgabe(wurzel, "log", "--format=%s", f"{kennung}..HEAD").splitlines()

@@ -1,6 +1,6 @@
 # Sammelanliegen Zyklus 3: Nachschliff an Prüfskripten
 
-302 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+302 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Befunde ohne Fehlverhalten aus der Kritik am Code, gesammelt nach
@@ -41,3 +41,4 @@ Erledigt, wenn alle Abschnitte umgesetzt oder an das Sammelanliegen des nächste
 übergeben sind.
 
 **Stellungnahme.**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).

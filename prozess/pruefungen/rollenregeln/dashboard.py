@@ -9,6 +9,7 @@ from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
 from rollenregeln.dashboardStil import legende, stil
 from rollenregeln.laufLesen import Lauf, läufeLesen
+from standregeln.phasenfolge import lage
 
 dashboardDatei = "dashboard.html"
 sichtbareSitzungen = 5
@@ -75,7 +76,7 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[Lauf]) -> str:
+def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
     if läufe:
         sitzungen = list(nachSitzung(läufe).items())[-sichtbareSitzungen:]
         karten = "".join(sitzungsKarte(name, gruppe) for name, gruppe in reversed(sitzungen))
@@ -86,6 +87,7 @@ def seiteErzeugen(läufe: list[Lauf]) -> str:
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
         "<title>Arbiter · Prozess-Dashboard</title>"
         f"<style>{stil}</style></head><body><h1>Prozess-Dashboard</h1>"
+        f'<p class="muted">{html.escape(lageText)}</p>'
         '<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
         f'<div class="karten-spalte">{karten}</div><aside class="seiten-spalte">'
         f'<section class="kasten"><h3>Verteilung der Tokenstände</h3>{verteilung}</section>'
@@ -95,7 +97,7 @@ def seiteErzeugen(läufe: list[Lauf]) -> str:
 
 def dashboardSchreiben(ordner: Path) -> Path:
     ziel = ordner / dashboardDatei
-    ziel.write_text(seiteErzeugen(läufeLesen(ordner)), encoding="utf-8")
+    ziel.write_text(seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText()), encoding="utf-8")
     return ziel
 
 

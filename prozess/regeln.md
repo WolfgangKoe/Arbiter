@@ -58,4 +58,5 @@ Dashboard (Retro 2, P4; Anliegen 158): Rolle, Belegung, Dauer und Zyklus je Lauf
 
 Regel (Link) | Mechanismus | Scheiter-Test
 ---|---|---
-Stand in einer Zeile (SessionStart, nach jedem Agent-Aufruf): Belegung, offene Anliegen, wer dran ist, fällige Nachprüfungen, Kriterien ohne Test, uncommittete Dateien | `standregeln/stand.py` (SessionStart, PostToolUse auf Agent) | `standregeln/standTest.py`
+Stand in einer Zeile (SessionStart, nach jedem Agent-Aufruf): Etappe, Zyklus, Phase, nächster Schritt, Belegung, offene Anliegen, wer dran ist, fällige Nachprüfungen, Kriterien ohne Test, uncommittete Dateien | `standregeln/stand.py` (SessionStart, PostToolUse auf Agent) | `standregeln/standTest.py`
+[Ablauf](ablauf.md): Etappe, Zyklus, Phase und nächster Schritt aus `handoff/plan.md`, `review.md`, `retro.md`, den Commits `Freigabe …` und `P<k>: …`; der Stand, das Lauf-Log (`zyklus`, `phase`) und das Dashboard nennen sie | `standregeln/phasenfolge.py` (`lage`) | `standregeln/phasenfolgeTest.py` (jede Stufe von Plan 1 bis Plan n+1), `rollenregeln/dashboardTest.py` (Log und Seite)

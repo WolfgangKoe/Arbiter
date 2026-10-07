@@ -9,6 +9,7 @@ from kriterienregeln.rueckverfolgung import wartendeAlsText
 from lesen.anliegenKopf import anliegenDateien
 from standregeln.anliegenText import dranAlsText, nachprüfungenAlsText
 from standregeln.belegung import belegungAusTranskript, punkte, warnschwelle
+from standregeln.phasenfolge import lage
 
 
 def belegungsText(transkript: Path | None) -> str:
@@ -23,6 +24,7 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
     änderungen = gitAusgabe(wurzel, "status", "--porcelain").splitlines()
     uncommittet = [zeile for zeile in änderungen if zeile]
     teile = [
+        lage(wurzel).alsText(),
         belegungsText(transkript),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
         dranAlsText(wurzel),

@@ -1,6 +1,6 @@
 # Verteilung: Test erkennt die Zahl je Balken nicht, Achsenmarke doppelt
 
-202 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+202 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code von 6d0c615 (Anliegen 191, zweite Runde). a214e08 (Anliegen 179) ist ohne
@@ -32,3 +32,4 @@ Text als Parameter; keine Änderung an der Ausgabe.
    `histogrammRand` und `marke`.
 
 **Stellungnahme (Regelumsetzer).**
+Entfällt: Kritik am Prüfcode geht in den Rundgang (Retro 3).
