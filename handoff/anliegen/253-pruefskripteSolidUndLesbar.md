@@ -1,6 +1,6 @@
 # Prüfskripte: eine Aufgabe je Modul, Abhängigkeit in einer Richtung
 
-253 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+253 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Neubewertung von [107](107-kritikAnDenPruefungen.md) gegen `prozess/pruefungen` (5a3e886). Liskov, Schnittstellentrennung greifen nicht (keine Klassenhierarchien). Offen:

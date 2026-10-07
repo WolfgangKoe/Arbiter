@@ -99,11 +99,11 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`formregeln/benennung.py`), Kriterium ↔
    Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
-   Stand), Höchstmaße (`formregeln/hoechstmassTest.py`), Komplexität (`formregeln/komplexitaetTest.py`), Code →
+   Stand), Höchstmaße (`formregeln/hoechstmass.py`), Komplexität (`formregeln/werkzeugaufruf.py`, `complexipyAufrufen`), Code →
    Glossar (`formregeln/glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/es.md` 8
    (`formregeln/kommentare.py`), toter Code (vulture über `technik/arbiter` und
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `formregeln/abdeckung.py`), alle
-   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/konfigurationTest.py`;
+   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/werkzeugaufruf.py` (`ruffAufrufen`);
    SonarLint (Standardprofil ohne Namensregeln, Ordner nach [regeln.md](regeln.md)) mit
    `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`; beim Commit als Hook nur Text, `pre-commit`
    ist nicht installiert (Anliegen 216). Urteil: Zeilen,
@@ -238,7 +238,7 @@ die Prüfungen grün sind. Mechanismus: nur Text.
 ## Anliegen
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
 höchstens 4.000 Zeichen; jede Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161).
-Mechanismus: `formregeln/hoechstmassTest.py` (`zeichenOhneAntworten`).
+Mechanismus: `formregeln/hoechstmass.py` (`zeichenOhneAntworten`).
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
