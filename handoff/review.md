@@ -60,6 +60,38 @@ Freigeben: DoD 1 bis 4 sind erfüllt. Kein offenes Anliegen ändert Verhalten.
   Zustand. Technikphase: Vertrag in `web.md` vor dem Testautor (Ablauf, Technikphase 1),
   Wegwerf-Versuch zum Wiederholen der Handlungen.
 
+## Rückbau der Prüfskripte: Codequalität des Produkts
+Empfehlung je Kandidat in `prozess/pruefungen/`; alle sieben laufen heute grün (Lauf am
+Stand `417f30b`: 121 Tests, SonarLint ohne Funde).
+
+- **`formregeln/kommentare.py` behalten:** einzige Prüfung von
+  [es.md](../prozess/praemissen/es.md) 8 im Python-Produkt (ruff `ERA` findet nur
+  auskommentierten Code), 67 Zeilen ohne fremde Abhängigkeit.
+- **`formregeln/komplexitaetTest.py` behalten, gekürzt:** Prüfung ist nur
+  `testDerCodeLiegtUnterDerKomplexitätsschwelle` (complexipy, Schwelle 15); die vier
+  Grenzproben testen das Werkzeug, nicht unseren Code, und können weg.
+- **`formregeln/abdeckung.py` behalten, gekürzt:** 95 % für `technik/arbiter` und vulture
+  (toter Code) prüfen das Produkt; die Messung der Prüfskripte (`__main__`, Hook
+  `abdeckungPruefskripte`) fällt mit dem Rückbau.
+- **`formregeln/sonarlint.py` behalten:** dein Maßstab („mindestens so streng wie SonarLint“,
+  Anliegen 150), findet, was ruff nicht findet; Kosten: rund 37 s, Java und die lokale
+  VS-Code-Erweiterung, deshalb nur als eigener Aufruf, nicht im Lauf der Prüfungen.
+- **`frontendregeln/frontend.py` behalten:** einzige Prüfung von JavaScript und CSS
+  (SonarLint prüft nur Python), 38 Zeilen, rund 1 s.
+- **`frontendregeln/eslintKommentare.mjs` behalten:** es.md 8 für JavaScript, Gegenstück zu
+  `kommentare.py`; `eslint.config.mjs` bindet die Regel ein.
+- **`frontendregeln/stylelintFarben.mjs` behalten:** setzt „Farbwerte nur in `:root`“ aus
+  `vorschlag.css` durch, das stylelint selbst nicht kann; `.stylelintrc.json` bindet es ein.
+
+Zwei Abhängigkeiten außerhalb der Liste:
+1. ruff mit `PLR0912` (höchstens 12 Fälle) und dem übrigen Regelsatz läuft über das Repo nur in
+   `testDasRepoIstRuffSauber` in `formregeln/konfigurationTest.py`: Diesen Test behalten,
+   sonst fällt ruff ganz weg.
+2. `abdeckung.py` importiert `standregeln.phasenfolge` (`aussetzung`): Fallen die
+   Standregeln, wird ein roter Test in `technik/tests` ohne Phasenbezug übersprungen und die
+   Zahl genannt. Sonst sperrt die Abdeckung jeden Commit der Technikphase, denn dort sind die
+   Tests vor dem Code rot. Grün verlangt dann die Kette Anforderung → Akzeptanztest → grüner Code.
+
 ## Freigabe
 Freigabe: ja
 Kommentar: Wir haben sehr viele Anliegen. Wäre es möglich einige davon parallel abzuarbeiten? Wenn mehrere Anliegen an dieselbe Rolle adressiert sind, bedeutet das nicht zwangsläufig, dass sie nur einmal aktiv sein muss. Parallelität wird nur durch Abhängigkeit zwischen den Anliegen infrage gestellt. 
