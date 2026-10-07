@@ -1,9 +1,9 @@
 import json
-import subprocess
 from pathlib import Path
 
 import pytest
 
+from gemeinsam.gitAufruf import gitAusgabe
 from standregeln.freigabeKommentare import freigabeZuCommitten
 from standregeln.phasenfolge import aktuelleEtappe, lage
 from standregeln.stand import stand
@@ -13,16 +13,16 @@ class Repo:
     def __init__(self, gitRepo):
         self.wurzel = gitRepo.ordner
         self.git = gitRepo.git
+        self.festhalten = gitRepo.festhalten
 
     def datei(self, pfad, text):
         ziel = self.wurzel / pfad
         ziel.parent.mkdir(parents=True, exist_ok=True)
         ziel.write_text(text, encoding="utf-8")
-        self.git("add", "-A")
-        self.git("commit", "-qm", f"{pfad} geschrieben")
+        self.festhalten(f"{pfad} geschrieben")
 
     def freigabe(self, gegenstand, nummer):
-        self.git("commit", "-q", "--allow-empty", "-m", f"Freigabe {gegenstand} {nummer}")
+        self.festhalten(f"Freigabe {gegenstand} {nummer}")
 
 
 @pytest.fixture
@@ -118,14 +118,14 @@ def testSolangeEinItemOffenIstNenntDerStandDieAbnahmeAuchMitReview(repo):
 def testGelöschtesItemOhneReviewNenntDenReviewer(repo):
     planMitItem(repo)
     repo.git("rm", "-q", "domaene/items/probe.md")
-    repo.git("commit", "-qm", "Item gelöscht")
+    repo.festhalten("Item gelöscht")
     assert lage(repo.wurzel) == (1, "Technikphase", "Reviewer: Review 1")
 
 
 def testGelöschtesItemMitReviewWechseltInDenProzess(repo):
     planMitItem(repo)
     repo.git("rm", "-q", "domaene/items/probe.md")
-    repo.git("commit", "-qm", "Item gelöscht")
+    repo.festhalten("Item gelöscht")
     repo.datei("handoff/review.md", "# Review · Zyklus 1\n")
     repo.freigabe("Review", 1)
     assert lage(repo.wurzel) == (1, "Prozessphase", "Organisationsentwickler: Retro 1")
@@ -227,11 +227,9 @@ def testWartetAufÄndertNichtsAmDran(repo):
 
 def testStandMeldetCodeCommitOhneKritik(repo):
     repo.datei("prozess/pruefungen/probe.py", "x = 1\n")
-    kennung = subprocess.run(
-        ["git", "rev-parse", "--short=7", "HEAD"], cwd=repo.wurzel, capture_output=True, text=True
-    ).stdout.strip()
+    kennung = kurzerHashVon(repo)
     assert f"Kritik am Code fällig: Reviewer ({kennung})" in stand(repo.wurzel)
-    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {kennung} ohne Befund")
+    repo.festhalten(f"Kritik {kennung} ohne Befund")
     assert "Kritik am Code" not in stand(repo.wurzel)
 
 
@@ -281,17 +279,14 @@ def testPlanMitLinkAufEinGelöschtesItemWartetAufKritikUndFreigabe(repo):
 
 
 def kurzerHashVon(repo):
-    return subprocess.run(
-        ["git", "rev-parse", "--short=7", "HEAD"], cwd=repo.wurzel, capture_output=True, text=True
-    ).stdout.strip()
+    return gitAusgabe(repo.wurzel, "rev-parse", "--short=7", "HEAD").strip()
 
 
 def testStandNenntAlleKritikerDerGetroffenenPfade(repo):
     for pfad in ("prozess/pruefungen/probe.py", "pyproject.toml"):
         (repo.wurzel / pfad).parent.mkdir(parents=True, exist_ok=True)
         (repo.wurzel / pfad).write_text("x = 1\n", encoding="utf-8")
-    repo.git("add", "-A")
-    repo.git("commit", "-qm", "Regelumsetzer: Probe")
+    repo.festhalten("Regelumsetzer: Probe")
     assert "Kritik am Code fällig: Reviewer und Architekt" in stand(repo.wurzel)
 
 
@@ -304,10 +299,9 @@ def testCommitOhneBetreffLegtDenStandNichtLahm(repo):
 def testEinCodeCommitMitKritikImBetreffWirdTrotzdemGemeldet(repo):
     repo.datei("technik/arbiter/probe.py", "x = 1\n")
     erster = kurzerHashVon(repo)
-    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {erster} ohne Befund")
+    repo.festhalten(f"Kritik {erster} ohne Befund")
     (repo.wurzel / "technik/arbiter/probe2.py").write_text("y = 2\n", encoding="utf-8")
-    repo.git("add", "-A")
-    repo.git("commit", "-qm", f"Implementierer: Befund aus Kritik {erster}")
+    repo.festhalten(f"Implementierer: Befund aus Kritik {erster}")
     zweiter = kurzerHashVon(repo)
     assert f"Kritik am Code fällig: Reviewer ({zweiter})" in stand(repo.wurzel)
 
@@ -317,7 +311,7 @@ def testEinKritikCommitDecktMehrereHashes(repo):
     erster = kurzerHashVon(repo)
     repo.datei("technik/arbiter/probe2.py", "y = 2\n")
     zweiter = kurzerHashVon(repo)
-    repo.git("commit", "-q", "--allow-empty", "-m", f"Kritik {erster} {zweiter}")
+    repo.festhalten(f"Kritik {erster} {zweiter}")
     assert "Kritik am Code" not in stand(repo.wurzel)
 
 
@@ -443,7 +437,7 @@ def retroMitProzessItems(
 
 
 def commit(repo, betreff):
-    repo.git("commit", "-q", "--allow-empty", "-m", betreff)
+    repo.festhalten(betreff)
 
 
 def testProzessItemsNachDerFreigabeNenntDenRegelumsetzerFürDasErsteOffene(repo):

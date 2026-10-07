@@ -1,6 +1,6 @@
 # standTest baut gitRepo und gitAufruf nach
 
-295 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+295 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von b800ee7 (Anliegen 253 Punkt 7).
@@ -29,4 +29,4 @@ Erledigt, wenn `standTest.py` kein `subprocess` und kein `"commit"` außerhalb v
 (`--amend`, leere Nachricht) mehr enthält, `fälle` `rollenordner` nutzt und
 `python3 -m pytest prozess/pruefungen` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `standTest.py` hat kein `subprocess` mehr; `kurzerHashVon` nutzt `gitAusgabe`, Zeile 230 ruft `kurzerHashVon`; `Repo.datei`, `Repo.freigabe` und die ausgeschriebenen Paare gehen über `GitRepo.festhalten` (`Repo.festhalten`). Einzig der Sonderfall `--allow-empty-message` ruft `git commit` selbst. `hoechstmass.fälle` nutzt `rollenordner`. 875 Tests grün.

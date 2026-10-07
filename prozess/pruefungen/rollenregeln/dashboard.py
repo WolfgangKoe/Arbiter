@@ -113,7 +113,3 @@ def hauptlauf(argumente: list[str]) -> int:
 
 if __name__ == "__main__":
     sys.exit(hauptlauf(sys.argv[1:]))
-
-
-if __name__ == "__main__":
-    sys.exit(hauptlauf(sys.argv[1:]))

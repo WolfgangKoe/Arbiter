@@ -1,6 +1,8 @@
+import json
+
 import pytest
 
-from rollenregeln.schreibBilanz import entscheide
+from rollenregeln.schreibBilanz import entscheide, meldungsOrdner
 from rollenregeln.schreibgrenzeTest import rollenkopf
 
 
@@ -9,6 +11,42 @@ def wurzel(gitRepo):
     (gitRepo.ordner / ".claude" / "agents").mkdir(parents=True)
     (gitRepo.ordner / ".claude" / "agents" / "probe.md").write_text(rollenkopf, encoding="utf-8")
     return gitRepo.ordner.resolve()
+
+
+def meldungVon(wurzel, agentId):
+    return (meldungsOrdner(wurzel) / f"{agentId}.txt").read_text(encoding="utf-8")
+
+
+def transkriptMit(ordner, *aufrufe):
+    datei = ordner / "rolle.jsonl"
+    zeilen = [
+        json.dumps({"message": {"content": [{"type": "tool_use", "name": name, "input": eingabe}]}})
+        for name, eingabe in aufrufe
+    ]
+    datei.write_text("\n".join(zeilen), encoding="utf-8")
+    return datei
+
+
+def testPfadenDieDieRolleNichtAnfasstSteheUnterUnklarStattUnterVerletzt(wurzel, tmp_path):
+    rahmen = {"agent_type": "probe", "agent_id": "a5"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    (wurzel / "domaene").mkdir()
+    (wurzel / "domaene" / "ziel.md").write_text("von der Rolle")
+    (wurzel / "handoff").mkdir()
+    (wurzel / "handoff" / "plan.md").write_text("von einem anderen")
+    transkript = transkriptMit(
+        tmp_path, ("Bash", {"command": "echo x > domaene/ziel.md"}), ("Read", {})
+    )
+
+    entscheide(
+        {"hook_event_name": "SubagentStop", "agent_transcript_path": str(transkript), **rahmen},
+        wurzel,
+    )
+
+    verletzt, _, unklar = meldungVon(wurzel, "a5").partition("unklar, wer")
+    assert "domaene/ziel.md" in verletzt
+    assert "handoff/plan.md" not in verletzt
+    assert "handoff/plan.md" in unklar
 
 
 def testRolleErfährtBeimStartIhreSchreibpfade(wurzel):
@@ -31,7 +69,8 @@ def testBashÄnderungAußerhalbWirdBeimEndeGemeldet(wurzel):
 
     antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
-    meldung = antwort["hookSpecificOutput"]["additionalContext"]
+    meldung = meldungVon(wurzel, "a1")
+    assert antwort is None
     assert "domaene/ziel.md" in meldung
     assert "prozess/ok.md" not in meldung
     assert "schonVorher.txt" not in meldung
@@ -43,9 +82,9 @@ def testBashÄnderungInNurLesbaremWirdTrotzSchreibpfadGemeldet(wurzel):
     (wurzel / "ArbiterMap").mkdir()
     (wurzel / "ArbiterMap" / "neu.md").write_text("per Bash geschrieben")
 
-    antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
-    assert "ArbiterMap/neu.md" in antwort["hookSpecificOutput"]["additionalContext"]
+    assert "ArbiterMap/neu.md" in meldungVon(wurzel, "a3")
 
 
 def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel, gitRepo):
@@ -54,9 +93,9 @@ def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel, gitRepo):
     entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
     gitRepo.festhalten("von der Rolle")
 
-    antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
-    assert "hat probe committet" in antwort["hookSpecificOutput"]["additionalContext"]
+    assert "hat probe committet" in meldungVon(wurzel, "a2")
 
 
 @pytest.mark.parametrize("ereignis", ["SubagentStart", "SubagentStop"])

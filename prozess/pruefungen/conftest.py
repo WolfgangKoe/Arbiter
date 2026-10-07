@@ -1,11 +1,9 @@
-"""Vor dem Sammeln der Tests löschen: erledigte Anliegen verschwinden mit jedem Prüflauf."""
+"""Legt die Themenordner in den Importpfad und stellt das git-Archiv für Tests bereit."""
 
 import subprocess
 from pathlib import Path
 
 import pytest
-
-from anliegenregeln.erledigteLoeschen import erledigteLöschen
 
 identität = ("-c", "user.name=t", "-c", "user.email=t@t")
 
@@ -31,7 +29,3 @@ class GitRepo:
 @pytest.fixture
 def gitRepo(tmp_path):
     return GitRepo(tmp_path)
-
-
-def pytest_configure():
-    erledigteLöschen(Path(__file__).resolve().parents[2])

@@ -1,6 +1,6 @@
 # Schreibbilanz läuft nicht: Hook nicht eingehängt
 
-287 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+287 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 180d1d1 (Anliegen 253 Punkt 2).
@@ -35,6 +35,4 @@ Skript existiert. 2: eine Zeile Verwirrung.
 Erledigt, wenn `schreibBilanz` bei Start und Ende läuft, die Prüfung aus 2 an beiden
 Gegenbeispielen rot wird und `python3 -m pytest prozess/pruefungen` grün ist.
 
-**Stellungnahme.** Status `offen`, nichts umgesetzt. Der Auto-Mode-Klassifikator lehnte meinen Schreibaufruf ohne Begründung ab. Er enthielt die Umstellung der Docstrings der Hook-Module und den Eintrag `schreibBilanz` statt `schreibgrenze` unter `SubagentStart` und `SubagentStop` in `.claude/settings.json`. Welcher Teil gesperrt war, weiß ich nicht, vermutlich `settings.json`. Ich habe den Aufruf weder zerlegt noch anders versucht. Gleichzeitige Läufe: Die Kette (253 P7) ändert Testcode und `conftest.py`, keinen Hook-Code; meine Dateien waren getrennt (`settings.json`, `formregeln/einstellungen.py` mit Test, Docstrings der Hook-Module, `rollenregeln/dashboard.py`).
-Geplant: (1) `settings.json` wie im Gegenvorschlag; (2) `einstellungen.py` vergleicht je über `lauf.py` eingetragenes Modul die ersten Docstring-Zeile `Hook (A, B): …` mit den Ereignissen in `settings.json` (Mengengleichheit; ein Modul mit `Hook (X)` ohne Eintrag ist rot); (3) Scheiter-Test an beiden Gegenbeispielen plus Stand-Test; (4) elf Hook-Docstrings auf `Hook (…)`: stand, belegung, bashPositivliste, schlussantwort (PreToolUse, SubagentStop), lesegrenze, rollenkontext, laufLog, erledigteLoeschen, statusrecht, freigabeSperre, anliegennummer; (5) doppelten `__main__`-Block in `dashboard.py` streichen; (6) Zeile in `prozess/regeln.md`.
-Nächster Schritt: Stakeholder gibt den Eingriff in `.claude/settings.json` frei, oder er trägt Punkt 1 selbst ein; dann setze ich 2 bis 6 um.
+**Stellungnahme.** Umgesetzt, Punkte 1 bis 3 des Gegenvorschlags. `settings.json` hängt `rollenregeln.schreibBilanz` unter `SubagentStart` und `SubagentStop` ein. `formregeln/einstellungen.py` vergleicht je Modul die Ereignisse der ersten Docstring-Zeile `Hook (A, B): …` mit den Einträgen (Mengengleichheit, umgekehrt jedes Modul mit `Hook (…)` ohne Eintrag rot); elf Hook-Docstrings angepasst. Scheiter-Tests in `einstellungenTest.py`: Modul unter einem Ereignis, das der Docstring nicht nennt, rot; `Hook (…)` ohne Eintrag rot; eingetragenes Modul ohne Ereignis rot; Stand-Test an `settings.json`. Der doppelte `__main__`-Block in `dashboard.py` ist gestrichen. Zeile in `prozess/regeln.md` ergänzt. Der Schreibaufruf auf `settings.json` wurde nicht gesperrt. `python3 -m pytest prozess/pruefungen`: 875 grün; Abdeckung und SonarLint 0. Nächster Schritt: Reviewer prüft den Code.

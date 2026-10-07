@@ -1,4 +1,4 @@
-// Regel: prozess/praemissen/wir.md 8: Kommentare nur einzeilig als `// Regel:` oder `// Warum:`.
+// Regel: prozess/praemissen/es.md 8: Kommentare nur einzeilig als `// Regel:` oder `// Warum:`.
 const erlaubterKommentar = /^ (Regel|Warum): \S/;
 const werkzeugkommentar = /^\s*(eslint|global|globals|exported)\b/;
 const offenerPunkt = /\b(TODO|FIXME)\b/;

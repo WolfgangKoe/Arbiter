@@ -1,4 +1,4 @@
-"""Hook `SubagentStart`: Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive."""
+"""Hook (SubagentStart): Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive."""
 
 from pathlib import Path
 

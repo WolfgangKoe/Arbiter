@@ -93,6 +93,43 @@ def testSauberesCssIstGrün(tmp_path):
             'document.body.insertAdjacentHTML("beforeend", "<span></span>");\n',
             id="insertAdjacentHTML",
         ),
+        pytest.param(
+            "no-restricted-properties",
+            'export const knoten = window.document.createElement("div");\n',
+            id="window.document.createElement",
+        ),
+        pytest.param(
+            "no-restricted-properties",
+            'export const knoten = wurzel.ownerDocument.createElement("div");\n',
+            id="ownerDocument.createElement",
+        ),
+        pytest.param("no-restricted-properties", 'document.writeln("a");\n', id="writeln"),
+        pytest.param(
+            "no-restricted-syntax",
+            'document.body["innerHTML"] = "<span></span>";\n',
+            id="innerHTML berechnet",
+        ),
+        pytest.param(
+            "no-restricted-properties",
+            'export const baum = new DOMParser().parseFromString("<b></b>", "text/html");\n',
+            id="parseFromString",
+        ),
+        pytest.param(
+            "no-restricted-properties",
+            'export const teil = document.createRange().createContextualFragment("<b></b>");\n',
+            id="createContextualFragment",
+        ),
+        pytest.param(
+            "no-restricted-properties",
+            'document.body.setHTMLUnsafe("<b></b>");\n',
+            id="setHTMLUnsafe",
+        ),
+        pytest.param(
+            "no-restricted-syntax",
+            'export const eintrag = new Option("Name", "wert");\n',
+            id="Option",
+        ),
+        pytest.param("no-restricted-syntax", "export const bild = new Image();\n", id="Image"),
         pytest.param("arbiter/kommentare", "// erklärt nur\nexport const eins = 1;\n", id="Prosa"),
         pytest.param("arbiter/kommentare", "/* Block */\nexport const eins = 1;\n", id="Block"),
         pytest.param("arbiter/kommentare", "// Warum: TODO\nexport const eins = 1;\n", id="TODO"),

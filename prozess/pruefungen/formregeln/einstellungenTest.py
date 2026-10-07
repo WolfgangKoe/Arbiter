@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from formregeln.einstellungen import hookBefehle, skripte, verstöße
+from formregeln.einstellungen import ereignisVerstöße, hookBefehle, skripte, verstöße
 from gemeinsam.pfade import wurzel
 
 
@@ -96,3 +96,59 @@ def testKeineErlaubnisNenntPythonpath():
     einstellungen = json.loads((wurzel / ".claude" / "settings.json").read_text(encoding="utf-8"))
     erlaubt = einstellungen["permissions"]["allow"]
     assert [eintrag for eintrag in erlaubt if "PYTHONPATH" in eintrag] == []
+
+
+starter = "prozess/pruefungen/gemeinsam/lauf.py"
+
+
+def hookMitModul(tmp_path: Path, ereignisse: list[str], docstring: str | None) -> None:
+    """Legt `rollenregeln/probe.py` an und trägt es unter den Ereignissen ein."""
+    gruppe = {
+        "hooks": [
+            {
+                "type": "command",
+                "command": f'python3 "$CLAUDE_PROJECT_DIR/{starter}" rollenregeln.probe',
+            }
+        ]
+    }
+    datei = tmp_path / ".claude" / "settings.json"
+    datei.parent.mkdir(parents=True)
+    datei.write_text(
+        json.dumps({"hooks": {name: [gruppe] for name in ereignisse}}), encoding="utf-8"
+    )
+    for ordner in (Path(starter).parent, Path("prozess/pruefungen/rollenregeln")):
+        (tmp_path / ordner).mkdir(parents=True, exist_ok=True)
+    (tmp_path / starter).write_text("x = 1\n", encoding="utf-8")
+    text = f'"""{docstring}"""\n' if docstring else "x = 1\n"
+    (tmp_path / "prozess/pruefungen/rollenregeln/probe.py").write_text(text, encoding="utf-8")
+
+
+@pytest.mark.stand
+def testJedesHookModulStehtUnterGenauSeinenEreignissen():
+    einstellungen = json.loads((wurzel / ".claude" / "settings.json").read_text(encoding="utf-8"))
+    assert ereignisVerstöße(einstellungen, wurzel) == []
+
+
+def testModulUnterEinemEreignisDasSeinDocstringNichtNenntIstRot(tmp_path):
+    hookMitModul(tmp_path, ["SubagentStart", "SubagentStop"], "Hook (SubagentStop): probe.")
+    assert verstöße(tmp_path) == [
+        "Hook probe.py: eingetragen unter ['SubagentStart', 'SubagentStop'], "
+        "Docstring nennt ['SubagentStop']"
+    ]
+
+
+def testModulMitHookDocstringOhneEintragIstRot(tmp_path):
+    hookMitModul(tmp_path, [], "Hook (PreToolUse): probe.")
+    assert verstöße(tmp_path) == ["Hook probe.py: Docstring nennt Ereignisse, aber kein Eintrag"]
+
+
+def testEingetragenesModulOhneEreignisImDocstringIstRot(tmp_path):
+    hookMitModul(tmp_path, ["PreToolUse"], "Tut etwas.")
+    assert "Docstring nennt kein Ereignis" in verstöße(tmp_path)[0]
+
+
+def testModulUnterGenauSeinenEreignissenIstGrün(tmp_path):
+    hookMitModul(
+        tmp_path, ["SubagentStart", "SubagentStop"], "Hook (SubagentStart, SubagentStop): probe."
+    )
+    assert verstöße(tmp_path) == []

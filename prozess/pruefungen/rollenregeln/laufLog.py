@@ -1,4 +1,4 @@
-"""Hook SubagentStop: trägt Rolle, Auftrag, Modell, Belegung, Dauer und Zyklus ins Lauf-Log ein."""
+"""Hook (SubagentStop): trägt Rolle, Auftrag, Modell, Belegung, Dauer, Zyklus ins Log ein."""
 
 import json
 import re

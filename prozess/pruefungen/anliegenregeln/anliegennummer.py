@@ -1,4 +1,4 @@
-"""Hook (PreToolUse, Write): Eine neue Anliegen-Datei trägt eine noch nie vergebene Nummer."""
+"""Hook (PreToolUse): Eine neue Anliegen-Datei trägt eine noch nie vergebene Nummer."""
 
 import sys
 from pathlib import Path

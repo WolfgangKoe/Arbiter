@@ -1,14 +1,17 @@
 import kommentare from "./prozess/pruefungen/frontendregeln/eslintKommentare.mjs";
 
-// Regel: prozess/praemissen/wir.md 1, 5, 8 und prozess/ablauf.md (Werkzeuge) für technik/frontend/.
+// Regel: prozess/praemissen/es.md 1, 5, 8 und prozess/ablauf.md (Werkzeuge) für technik/frontend/.
 const meldung = "Markup aus einer <template> der Seite klonen (Architektur, Web, O1)";
-const verboteneAufrufe = ["createElement", "createElementNS", "write"].map((property) => ({
-  object: "document",
-  property,
-  message: meldung,
-}));
+const aufJedemObjekt = ["createElement", "createElementNS", "parseFromString", "createContextualFragment", "setHTMLUnsafe"];
+const aufDocument = ["write", "writeln"];
+const verboteneAufrufe = [
+  ...aufJedemObjekt.map((property) => ({property, message: meldung})),
+  ...aufDocument.map((property) => ({object: "document", property, message: meldung})),
+];
 const verboteneSyntax = [
   {selector: "AssignmentExpression[left.property.name=/^(innerHTML|outerHTML)$/]", message: meldung},
+  {selector: "AssignmentExpression[left.property.value=/^(innerHTML|outerHTML)$/]", message: meldung},
+  {selector: "NewExpression[callee.name=/^(Image|Option|Audio)$/]", message: meldung},
   {selector: "CallExpression[callee.property.name='insertAdjacentHTML']", message: meldung},
 ];
 

@@ -1,4 +1,4 @@
-"""Hooks `SessionStart` und `PostToolUse` (auf `Agent`): der Stand in einer Zeile."""
+"""Hook (SessionStart, PostToolUse): der Stand in einer Zeile, nach jedem Agent-Aufruf neu."""
 
 from pathlib import Path
 

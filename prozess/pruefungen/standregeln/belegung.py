@@ -1,4 +1,4 @@
-"""Hook: Belegung des Kontextfensters je Lauf, gleich für den Koordinator und jede Rolle."""
+"""Hook (PreToolUse, PostToolUse): Belegung des Kontextfensters je Lauf, für alle Agenten."""
 
 import json
 from pathlib import Path

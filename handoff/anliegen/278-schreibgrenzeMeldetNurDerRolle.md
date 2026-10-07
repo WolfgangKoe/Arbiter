@@ -1,6 +1,6 @@
 # Meldung der Schreibgrenze erreicht den Koordinator nicht
 
-278 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+278 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 
@@ -38,4 +38,4 @@ Agent-Aufruf, nicht als SubagentStop-Kontext; (b) ein Pfad, den die Rolle nicht 
 hat, steht nicht unter „verletzt“. Bis dahin markiere ich in `prozess/regeln.md` die Meldung
 beim Ende als nicht wirksam.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, mit Abweichung beim Weg. `PostToolUse` mit Matcher `Agent` trägt nicht: 159 der Agent-Aufrufe in den Transkripten sind `async_launched`, der Hook liefe beim Start der Rolle, nicht an ihrem Ende. Stattdessen legt `schreibBilanz` (SubagentStop) die Meldung in `.git/arbiter-meldungen/<agentId>.txt` ab; der neue Hook `rollenregeln/schreibMeldung.py` (`PostToolUse`, ohne Matcher, nur ohne `agent_id`, also im Koordinator) liefert sie beim nächsten Werkzeugaufruf als `additionalContext` und löscht sie. Zu 2: `rollenregeln/angefasstePfade.py` liest das Transkript der Rolle; „verletzt“ steht nur, was ihr Write, Edit oder Bash nennt (Pfad oder dessen Ordner), der Rest unter „unklar, wer“. Scheiter-Tests: `schreibBilanzTest.py` (SubagentStop antwortet nichts, Meldung in der Ablage; fremder Pfad unter „unklar“), `schreibMeldungTest.py` (Koordinator einmal, Rolle nicht). Der Eintrag in `settings.json` steht, `regeln.md` ist angepasst. Noch ungeprüft: ob `agent_transcript_path` und `agent_id` im Lauf so ankommen wie in den Tests; der Reviewer sieht es am nächsten Rollenlauf.

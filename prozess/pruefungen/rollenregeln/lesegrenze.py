@@ -1,4 +1,4 @@
-"""Der Koordinator liest nur kurze Dateien: Hook `PreToolUse` auf `Read` und `git show`."""
+"""Hook (PreToolUse): Der Koordinator liest nur kurze Dateien, auch per `git show`."""
 
 from pathlib import Path
 

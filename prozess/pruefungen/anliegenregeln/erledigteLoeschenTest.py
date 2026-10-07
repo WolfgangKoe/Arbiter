@@ -19,10 +19,10 @@ def testOhneErledigteBleibtAllesStehen(tmp_path):
     assert datei.exists()
 
 
-def testDerPrüflaufRuftErledigteLöschenVorDemSammelnAuf():
+def testDerPrüflaufLöschtNichtsUndConftestImportiertKeinHookModul():
     conftest = (Path(__file__).parents[1] / "conftest.py").read_text(encoding="utf-8")
-    assert "def pytest_configure" in conftest
-    assert "erledigteLöschen(" in conftest
+    assert "erledigteLoeschen" not in conftest
+    assert "pytest_configure" not in conftest
 
 
 def testUnversioniertesErledigtesBleibtLiegen(tmp_path, gitRepo):

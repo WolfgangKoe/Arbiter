@@ -1,4 +1,4 @@
-"""Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade."""
+"""Hook (PreToolUse, SubagentStop): Schlussantworten nennen nur Status und Pfade."""
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import handoffOrdner

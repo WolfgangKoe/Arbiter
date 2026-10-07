@@ -76,16 +76,17 @@
     ],
     "PostToolUse": [
       {"matcher": "Agent", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.stand", "timeout": 10}]},
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibMeldung", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" standregeln.belegung", "timeout": 10}]}
     ],
     "SubagentStart": [
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.rollenkontext", "timeout": 10}]},
-      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibgrenze", "timeout": 10}]}
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibBilanz", "timeout": 10}]}
     ],
     "SubagentStop": [
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.laufLog", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" anliegenregeln.erledigteLoeschen", "timeout": 10}]},
-      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibgrenze", "timeout": 10}]},
+      {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schreibBilanz", "timeout": 10}]},
       {"hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/prozess/pruefungen/gemeinsam/lauf.py\" rollenregeln.schlussantwort", "timeout": 10}]}
     ]
   }

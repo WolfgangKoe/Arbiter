@@ -1,6 +1,6 @@
 # Elementverbot im Frontend hat Lücken
 
-294 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+294 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik an der Linter-Konfiguration nach Anliegen 268 (`eslint.config.mjs`,
@@ -43,3 +43,9 @@ Erledigt, wenn `frontendTest.py` je Form 1 bis 5 eine rote Probe hat, das Klonen
 und `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+Umgesetzt wie vorgeschlagen in `eslint.config.mjs`: `createElement`, `createElementNS`,
+`parseFromString`, `createContextualFragment`, `setHTMLUnsafe` auf jedem Objekt gesperrt,
+`document.write` und `writeln`; `no-restricted-syntax` ergänzt um berechnetes `innerHTML` und
+`outerHTML` sowie `new Image`, `new Option`, `new Audio`. Beide Kopfzeilen nennen jetzt `es.md`.
+`frontendregeln/frontendTest.py` hat je Form 1 bis 5 eine rote Probe, das Klonen der Template
+bleibt grün. [Regeln](../../prozess/regeln.md#frontendregeln) führt die Fälle.

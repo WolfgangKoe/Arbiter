@@ -1,4 +1,4 @@
-"""Hook (PreToolUse, Write und Edit): Freigabe und Kommentare in Plan, Review und Retro."""
+"""Hook (PreToolUse): Freigabe und Kommentare in Plan, Review und Retro."""
 
 from pathlib import Path
 

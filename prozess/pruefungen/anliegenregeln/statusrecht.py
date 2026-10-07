@@ -1,4 +1,4 @@
-"""Hook (PreToolUse, Write und Edit): Statusrecht und Absender eines Anliegens."""
+"""Hook (PreToolUse): Statusrecht und Absender eines Anliegens."""
 
 import sys
 from pathlib import Path

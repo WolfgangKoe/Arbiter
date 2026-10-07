@@ -1,4 +1,4 @@
-"""Hook: Der Koordinator führt nur Befehle der Positivliste aus; Rollen nutzen git nur lesend."""
+"""Hook (PreToolUse): Bash nur nach Positivliste; Rollen nutzen git nur lesend."""
 
 from pathlib import Path
 

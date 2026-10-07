@@ -1,4 +1,4 @@
-"""Löscht erledigte, committete Anliegen; Links darauf werden zu „Anliegen <nr>“."""
+"""Hook (SubagentStop): Löscht erledigte, committete Anliegen; Links darauf werden Text."""
 
 import re
 import sys

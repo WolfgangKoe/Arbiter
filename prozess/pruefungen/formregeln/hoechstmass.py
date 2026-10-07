@@ -71,7 +71,7 @@ def fälle():
     for nummer, datei in enumerate(etappen):
         grenze = aktuelleEtappe if nummer == 0 else spätereEtappe
         yield datei, zeichen(datei), grenze
-    for datei in sorted((wurzel / ".claude" / "agents").glob("*.md")):
+    for datei in sorted(rollenordner.glob("*.md")):
         yield datei, zeichen(datei), agentendefinition
     for datei in sorted((wurzel / anliegenOrdner).glob("*.md")):
         yield datei, zeichenOhneAntworten(datei), anliegen
