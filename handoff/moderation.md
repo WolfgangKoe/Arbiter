@@ -16,7 +16,7 @@ Stand: Zyklus 3, Prozessphase, 38 offene Anliegen; nächster Schritt Retro 3.
 - Fehlt: ein Anliegen mit Frage zu dieser Lage. Die alten Fragen (279, 280) sind erledigt.
 
 ## Dran
-Blockiert Plan 4 (Komponentenseite): [286](anliegen/286-pruefungenZuWebUndKomponentenLuecken.md),
+Blockiert Plan 4 (Komponentenseite): Anliegen 286,
 [294](anliegen/294-elementverbotHatLuecken.md); Prüfung vor dem Frontend, sonst nichts.
 - Regelumsetzer: 33 an ihn, Kette siehe unten.
 - Organisationsentwickler: Retro 3; 107, 138, 150, 219, 289.
