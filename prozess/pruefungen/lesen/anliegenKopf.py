@@ -39,7 +39,7 @@ class Anliegen:
 
 
 def statusAusText(text: str) -> Status | str:
-    return Status(text) if text in Status.__members__ else text
+    return Status(text) if text in Status else text
 
 
 def anliegenDateien(wurzel: Path) -> list[Path]:

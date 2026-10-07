@@ -73,11 +73,16 @@ def kreise(kanten: dict[str, set[str]]) -> list[list[str]]:
     return [list(gruppe) for gruppe in sorted(gruppen)]
 
 
+def istTest(datei: Path) -> bool:
+    """Ein Test oder die `conftest.py`, die das Testwerkzeug vorgibt."""
+    return datei.stem.endswith("Test") or datei.name == "conftest.py"
+
+
 def fremderImport(ordner: str, datei: Path) -> bool:
     """Ein Name außerhalb der Schichten, der weder Standardbibliothek noch Testwerkzeug ist."""
     if ordner in sys.stdlib_module_names:
         return False
-    return not (ordner in nurInTestsErlaubt and datei.stem.endswith("Test"))
+    return not (ordner in nurInTestsErlaubt and istTest(datei))
 
 
 def importVerstoß(importName: str, eigener: str, datei: Path) -> str | None:
@@ -107,7 +112,7 @@ def dateiVerstöße(datei: Path, basis: Path, module: set[str]) -> tuple[list[st
         if meldung:
             gefunden.append(f"{pfad}:{zeile} {meldung}")
         ziele.add(zielModul(importName, module))
-    return gefunden, ziele - {None}
+    return list(dict.fromkeys(gefunden)), ziele - {None}
 
 
 def verstöße(wurzel: Path) -> list[str]:

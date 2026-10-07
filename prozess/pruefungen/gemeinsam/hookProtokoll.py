@@ -5,6 +5,25 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+# Warum: Nur hier stehen die Feldnamen der Hook-Eingabe; `formregeln/einzelstellen.py` prüft das.
+feldnamen = {
+    "rolle": "agent_type",
+    "werkzeug": "tool_name",
+    "ereignis": "hook_event_name",
+    "agentId": "agent_id",
+    "sitzung": "session_id",
+    "transkript": "transcript_path",
+    "rollenTranskript": "agent_transcript_path",
+    "letzteAntwort": "last_assistant_message",
+    "stoppWiederholt": "stop_hook_active",
+    "angaben": "tool_input",
+}
+
+
+def feldVon(daten: dict, attribut: str):
+    """Der Wert des Feldes der Hook-Eingabe, das zum Attribut von `HookEingabe` gehört."""
+    return daten.get(feldnamen[attribut])
+
 
 @dataclass(frozen=True)
 class HookEingabe:
@@ -23,19 +42,19 @@ class HookEingabe:
 
     @classmethod
     def aus(cls, daten: dict) -> "HookEingabe":
-        transkript = daten.get("transcript_path")
-        rollenTranskript = daten.get("agent_transcript_path")
+        transkript = feldVon(daten, "transkript")
+        rollenTranskript = feldVon(daten, "rollenTranskript")
         return cls(
-            rolle=daten.get("agent_type") or None,
-            werkzeug=daten.get("tool_name"),
-            ereignis=daten.get("hook_event_name"),
-            agentId=daten.get("agent_id") or None,
-            sitzung=daten.get("session_id"),
+            rolle=feldVon(daten, "rolle") or None,
+            werkzeug=feldVon(daten, "werkzeug"),
+            ereignis=feldVon(daten, "ereignis"),
+            agentId=feldVon(daten, "agentId") or None,
+            sitzung=feldVon(daten, "sitzung"),
             transkript=Path(transkript) if transkript else None,
             rollenTranskript=Path(rollenTranskript) if rollenTranskript else None,
-            letzteAntwort=daten.get("last_assistant_message") or "",
-            stoppWiederholt=bool(daten.get("stop_hook_active")),
-            angaben=daten.get("tool_input") or {},
+            letzteAntwort=feldVon(daten, "letzteAntwort") or "",
+            stoppWiederholt=bool(feldVon(daten, "stoppWiederholt")),
+            angaben=feldVon(daten, "angaben") or {},
         )
 
 

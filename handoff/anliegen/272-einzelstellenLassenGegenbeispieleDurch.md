@@ -1,6 +1,6 @@
 # Einzelstellen: Prüfung lässt Gegenbeispiele durch, Pfad relativ zur Wurzel noch dreifach
 
-272 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+272 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von 823dd21 (Anliegen 253, Teilstand). Nachgeprüft: `formregeln.einzelstellen`
@@ -59,3 +59,7 @@ Gegenbeispiel rot werden; heute bricht ein neuer Hook die Einzelstelle unbemerkt
 7. `stopp` gibt `HookEingabe.aus(…)` zurück.
 
 **Stellungnahme.**
+Alle sieben Punkte umgesetzt; Mechanismus in `regeln.md`. Abweichungen:
+2. Ein bloßer Text `git …` ist nicht rot (`bashPositivliste.erlaubt` ist Daten).
+4. Keine Regel für `projektordner` und `relative_to` (viele berechtigte Stellen); `regeln.md` nennt das als Grenze.
+6. Gemeint ist `schreibBilanz.entscheide`.

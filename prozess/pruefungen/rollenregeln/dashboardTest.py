@@ -52,8 +52,12 @@ def stopp(datei, rolle="planer"):
     return {"agent_type": rolle, "agent_id": "a1", "agent_transcript_path": str(datei)}
 
 
+def stoppEingabe(datei, rolle="planer"):
+    return HookEingabe.aus(stopp(datei, rolle))
+
+
 def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
-    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
     assert eintrag.alsEintrag() == {
         "zeit": "2026-10-04T12:30:00+00:00",
         "rolle": "planer",
@@ -164,7 +168,7 @@ def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
         {"message": {"role": "user", "content": langer}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    ziel = laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path).ziel
+    ziel = laufEintrag(stoppEingabe(datei), zeitpunkt, tmp_path).ziel
     assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
@@ -186,10 +190,7 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
         {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    assert (
-        laufEintrag(HookEingabe.aus(stopp(datei)), zeitpunkt, tmp_path).ziel
-        == "Neuer Auftrag: zweiter"
-    )
+    assert laufEintrag(stoppEingabe(datei), zeitpunkt, tmp_path).ziel == "Neuer Auftrag: zweiter"
 
 
 def testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter(tmp_path):
@@ -259,7 +260,7 @@ def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
     from rollenregeln import laufLog
 
     monkeypatch.setattr(laufLog, "zyklusUndPhase", lambda _ordner: (3, "Prozessphase"))
-    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
     assert (eintrag.zyklus, eintrag.phase) == (3, "Prozessphase")
 
 
@@ -341,7 +342,7 @@ def testDauerBeimZusammenführenSummiertBeideTeile(tmp_path):
             | {"stopp_wiederholt": wiederholt},
         )
     assert [lauf.dauer for lauf in läufeLesen(tmp_path)] == [660]
-    assert dauerSumme({"dauer": None}, {"dauer": 5}) is None
+    assert dauerSumme(Lauf("a", "planer", 1, dauer=None), Lauf("a", "planer", 1, dauer=5)) is None
 
 
 def testFehlerInDerLageKostetDenEintragNicht(tmp_path, monkeypatch):
@@ -351,12 +352,12 @@ def testFehlerInDerLageKostetDenEintragNicht(tmp_path, monkeypatch):
         raise RuntimeError
 
     monkeypatch.setattr(phasenfolge, "lage", wirft)
-    eintrag = laufEintrag(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
     assert eintrag.belegung and eintrag.zyklus is None
 
 
 def testHookWegTrägtZyklusEin(tmp_path):
-    protokollieren(HookEingabe.aus(stopp(transkript(tmp_path, 80_000))), tmp_path)
+    protokollieren(stoppEingabe(transkript(tmp_path, 80_000)), tmp_path)
     assert läufeLesen(tmp_path)[0].zyklus == 1
     assert (tmp_path / "dashboard.html").is_file()
 

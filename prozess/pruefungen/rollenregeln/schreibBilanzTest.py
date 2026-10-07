@@ -57,3 +57,8 @@ def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel, gitRepo):
     antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
     assert "hat probe committet" in antwort["hookSpecificOutput"]["additionalContext"]
+
+
+@pytest.mark.parametrize("ereignis", ["SubagentStart", "SubagentStop"])
+def testOhneRolleMeldetDerHookNichts(wurzel, ereignis):
+    assert entscheide({"hook_event_name": ereignis, "agent_id": "a9"}, wurzel) is None

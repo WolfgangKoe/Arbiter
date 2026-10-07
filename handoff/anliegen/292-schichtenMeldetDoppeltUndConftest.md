@@ -1,6 +1,6 @@
 # Schichten meldet doppelt und sperrt `conftest.py`; Lauf halb als dict
 
-292 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+292 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 Kritik am Code von 1aa626e (Anliegen 281) und 1f5c1cf (253 Punkt 5). Am Stand von 1f5c1cf
@@ -41,3 +41,7 @@ Punkt 5 deckt die Stelle, an der die Läufe zusammengeführt werden, nicht ab. J
    die Werte). Oder die Stellungnahme nennt, warum das Log an der Grenze dict bleibt.
 
 **Stellungnahme.**
+Alle drei Punkte umgesetzt.
+1. `dateiVerstöße` entfernt Wiederholungen (`dict.fromkeys`); Scheiter-Test `from … import a, b, c` und `from . import x, y`.
+2. `istTest` (Name auf `Test` oder `conftest.py`) in `fremderImport`; Scheiter-Test mit `formregeln/conftest.py`.
+3. `läufeLesen` führt `Lauf` mit `_replace` zusammen, `dauerSumme` nimmt `Lauf`; `eintragAusZeile` bleibt dict, weil `laufLog.py` die Zeile ohne Pflichtfelder prüft. `statusAusText` fragt `text in Status`.

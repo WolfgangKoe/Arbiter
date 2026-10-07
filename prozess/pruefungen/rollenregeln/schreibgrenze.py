@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
-from gemeinsam.pfade import istNurLesbar, projektordner
+from gemeinsam.pfade import istNurLesbar, projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
 
 schreibwerkzeuge = ("Write", "Edit", "NotebookEdit")
@@ -16,18 +16,16 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
         return None
     angaben = eingabe.angaben
     ziel = Path(angaben.get("file_path") or angaben.get("notebook_path") or "")
-    ziel = (wurzel / ziel).resolve() if not ziel.is_absolute() else ziel.resolve()
-    if ziel.is_relative_to(wurzel):
-        relativ = ziel.relative_to(wurzel).as_posix()
-        if istNurLesbar(relativ):
-            return verweigerung(
-                f"Schreibgrenze: {relativ} ist nur lesbar, für alle Rollen und den Koordinator. "
-                "Löschen und ändern tut nur der Stakeholder."
-            )
-        if darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
-            return None
-    else:
+    relativ = relativZurWurzel(ziel, wurzel)
+    if relativ is None:
         relativ = str(ziel)
+    elif istNurLesbar(relativ):
+        return verweigerung(
+            f"Schreibgrenze: {relativ} ist nur lesbar, für alle Rollen und den Koordinator. "
+            "Löschen und ändern tut nur der Stakeholder."
+        )
+    elif darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
+        return None
     return verweigerung(
         f"Schreibgrenze: {rolle} darf {relativ} nicht schreiben. "
         "Kritik an fremden Artefakten wird ein Anliegen."

@@ -87,6 +87,22 @@ def testEinRelativerImportIstRot(tmp_path):
     assert "relativer Import" in verstöße(tmp_path)[0]
 
 
+def testMehrereNamenEinesImportsMeldenNurEinmal(tmp_path):
+    skriptAnlegen(tmp_path, "lesen/plan.py", "from standregeln.stand import a, b, c\n")
+    skriptAnlegen(tmp_path, "lesen/zweiter.py", "from . import x, y\n")
+    meldungen = verstöße(tmp_path)
+    assert meldungen == [
+        "prozess/pruefungen/lesen/plan.py:1 importiert aus `standregeln`, "
+        "höhere Schicht als `lesen`",
+        "prozess/pruefungen/lesen/zweiter.py:1 relativer Import",
+    ]
+
+
+def testConftestImportiertPytestWieEinTest(tmp_path):
+    skriptAnlegen(tmp_path, "formregeln/conftest.py", "import pytest\n")
+    assert verstöße(tmp_path) == []
+
+
 @pytest.mark.stand
 def testDieSchichtenDesReposSindEingehalten():
     assert verstöße(wurzel) == []

@@ -1,6 +1,7 @@
 """Hook `PreToolUse` auf `SubagentHandback`: Schlussantworten nennen nur Status und Pfade."""
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
+from gemeinsam.pfade import handoffOrdner
 
 höchstlänge = 800
 
@@ -8,7 +9,7 @@ höchstlänge = 800
 def grund(länge: int) -> str:
     return (
         f"Schlussantwort hat {länge} Zeichen, höchstens {höchstlänge}. Inhalte, Fragen und "
-        "Empfehlungen gehören in eine Datei in handoff/; hier nur Status und Pfade."
+        f"Empfehlungen gehören in eine Datei in {handoffOrdner}/; hier nur Status und Pfade."
     )
 
 

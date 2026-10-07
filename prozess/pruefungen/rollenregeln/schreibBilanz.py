@@ -19,7 +19,7 @@ def beimStart(eingabe: HookEingabe, wurzel: Path) -> dict:
     datei.parent.mkdir(parents=True, exist_ok=True)
     zeilen = [f"{kopfPräfix}{kopfCommit(wurzel)}", *sorted(geänderteDateien(wurzel))]
     datei.write_text("\n".join(zeilen), encoding="utf-8")
-    muster = schreibpfade(eingabe.rolle or "", wurzel)
+    muster = schreibpfade(eingabe.rolle, wurzel)
     return zusatzkontext(
         "SubagentStart",
         "Deine Schreibpfade: "
@@ -63,9 +63,9 @@ def beimEnde(eingabe: HookEingabe, wurzel: Path) -> dict | None:
 
 def entscheide(daten: dict, wurzel: Path) -> dict | None:
     eingabe = HookEingabe.aus(daten)
-    if eingabe.ereignis == "SubagentStart" and eingabe.agentId:
+    if eingabe.ereignis == "SubagentStart" and eingabe.agentId and eingabe.rolle:
         return beimStart(eingabe, wurzel)
-    if eingabe.ereignis == "SubagentStop" and eingabe.agentId:
+    if eingabe.ereignis == "SubagentStop" and eingabe.agentId and eingabe.rolle:
         return beimEnde(eingabe, wurzel)
     return None
 
