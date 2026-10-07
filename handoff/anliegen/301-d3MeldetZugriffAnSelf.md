@@ -1,6 +1,6 @@
 # D3 meldet `getattr` an `self` und `vars()`; W1 lässt `from flask import *` durch
 
-301 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+301 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 94a94f9 (Anliegen 297, dort erledigt). Fehlverhalten nach

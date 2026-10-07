@@ -10,7 +10,9 @@ Sammelanliegen des nächsten Zyklus.
 
 1. `formregeln/importvertrag.py` (94a94f9): `importierteNamen` wiederholt die Schleife von
    `importierteModule` und fügt nur `modul.name` hinzu; `aufgelöst(knoten, paket) or "?"`
-   steht dreimal. Die Sortierung in `vorlagenImporte` vertauscht das Paar zweimal.
+   steht dreimal. Die Sortierung in `vorlagenImporte` vertauscht das Paar zweimal. (c0239e5)
+   `"*"` steht in `vorlagenFunktionen`, ist aber keine Funktion: Der Name sagt etwas anderes
+   als der Inhalt.
 2. `formregeln/zustandsschutz.py` (94a94f9): `textKonstante` baut `einzelstellen.textVon`
    nach (gleiche Schicht `formregeln`). Der Docstring von `umwegVerstöße` sagt „Lesen“, die
    Prüfung meldet auch Schreiben über `__dict__`.
@@ -18,17 +20,22 @@ Sammelanliegen des nächsten Zyklus.
    `testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat` liest jede Datei
    zweimal von der Platte, je einmal für `routenAußerLesen` und `ansichtsKlassen`.
 4. `prozess/regeln.md`, Zeile Ablauf, Werkzeuge (94a94f9): Die Scheiter-Tests nennen
-   „S4502-Ausnahme rot bei Route außer GET“, nicht die Klassenansicht.
+   „S4502-Ausnahme rot bei Route außer GET“, nicht die Klassenansicht. (c0239e5) Die Zeile
+   „nur lesbar“ nennt `open(…, "w"/"a")`, `pfadsperren.schreibAufruf` prüft auch `"x"`.
+5. `rollenregeln/angefasstePfade.py` (c0239e5): `pfad in befehl` vergleicht Teilstrings;
+   `cat domaene/a.md.bak` zählt als Anfassen von `domaene/a.md`.
 
 **Kosten.** Lesbarkeit und doppelte Stellen; kein falsches Ergebnis. Je wenige Zeilen.
 
 **Gegenvorschlag.**
 1. `importierteNamen` aus `importierteModule` ableiten oder umgekehrt; das Auflösen mit `?`
-   in eine Funktion; `sorted(treffer, key=itemgetter(1, 0))`.
+   in eine Funktion; `sorted(treffer, key=itemgetter(1, 0))`. Den Sternimport als eigene
+   Konstante (`sternImport = "flask.*"`) in `istVorlagenName`.
 2. `textVon` wiederverwenden (`or ""` am Aufruf), Docstring „Zugriff auf `_`-Attribute ohne
    Punkt“.
 3. Den Quelltext einmal je Datei lesen.
-4. „Klassenansicht“ zu den Scheiter-Tests der Zeile.
+4. „Klassenansicht“ zu den Scheiter-Tests der Zeile; `"w"/"a"/"x"`.
+5. Den Pfad als ganzes Wort suchen (`wörter(befehl)` oder Wortgrenze).
 
 Erledigt, wenn alle Abschnitte umgesetzt oder an das Sammelanliegen des nächsten Zyklus
 übergeben sind.

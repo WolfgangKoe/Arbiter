@@ -1,6 +1,6 @@
 # Schreibbilanz meldet Verstöße, die es nicht gibt
 
-300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 2/3 · angenommen
+300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 1071b6d (Anliegen 278). Fehlverhalten im Sinne von 296, F3:
