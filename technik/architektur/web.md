@@ -7,8 +7,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   und beantwortet Anfragen unter `/api/` mit JSON; es erzeugt kein HTML. Das Frontend kennt
   nur diese Adressen. Gegenbeispiel `ArbiterMap/backend/app/routes/map.py`: Das Backend füllt
   Jinja-Vorlagen, 40.000 Zeichen in einer Datei. Prüft: `formregeln/importvertrag.py`
-  (`webVerstöße`: kein `jinja2`, `markupsafe`, `flask.templating`, kein `from flask import
-  render_template`); `flask.render_template` als Attribut nur Text.
+  (`webVerstöße`), die Fälle nennt [Regeln](../../prozess/regeln.md).
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
   - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
     Thread auf `127.0.0.1` mit freiem Port und gibt einen `Server` mit `adresse` und
