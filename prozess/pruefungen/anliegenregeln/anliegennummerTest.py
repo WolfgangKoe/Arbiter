@@ -1,5 +1,3 @@
-import subprocess
-
 import pytest
 
 from anliegenregeln.anliegennummer import entscheide
@@ -31,12 +29,9 @@ def testBestehendeDateiDarfNeuGeschriebenWerden(tmp_path):
     assert entscheide(schreibung(datei), tmp_path) is None
 
 
-def testGelöschteNummerWirdNichtNeuVergeben(tmp_path):
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+def testGelöschteNummerWirdNichtNeuVergeben(tmp_path, gitRepo):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
-    git = ["git", "-c", "user.name=t", "-c", "user.email=t@t"]
-    subprocess.run([*git, "add", "-A"], cwd=tmp_path, check=True)
-    subprocess.run([*git, "commit", "-qm", "x"], cwd=tmp_path, check=True)
+    gitRepo.festhalten()
     datei.unlink()
     assert nächsteFreieNummer(tmp_path) > int(datei.name[:2])
     assert entscheide(schreibung(datei), tmp_path) is not None

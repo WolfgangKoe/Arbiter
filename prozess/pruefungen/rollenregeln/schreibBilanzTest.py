@@ -1,5 +1,3 @@
-import subprocess
-
 import pytest
 
 from rollenregeln.schreibBilanz import entscheide
@@ -7,11 +5,10 @@ from rollenregeln.schreibgrenzeTest import rollenkopf
 
 
 @pytest.fixture
-def wurzel(tmp_path):
-    (tmp_path / ".claude" / "agents").mkdir(parents=True)
-    (tmp_path / ".claude" / "agents" / "probe.md").write_text(rollenkopf, encoding="utf-8")
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
-    return tmp_path.resolve()
+def wurzel(gitRepo):
+    (gitRepo.ordner / ".claude" / "agents").mkdir(parents=True)
+    (gitRepo.ordner / ".claude" / "agents" / "probe.md").write_text(rollenkopf, encoding="utf-8")
+    return gitRepo.ordner.resolve()
 
 
 def testRolleErfährtBeimStartIhreSchreibpfade(wurzel):
@@ -51,16 +48,11 @@ def testBashÄnderungInNurLesbaremWirdTrotzSchreibpfadGemeldet(wurzel):
     assert "ArbiterMap/neu.md" in antwort["hookSpecificOutput"]["additionalContext"]
 
 
-def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel):
-    def gitAusführen(*argumente):
-        subprocess.run(["git", *argumente], cwd=wurzel, check=True, capture_output=True)
-
-    gitAusführen("config", "user.email", "probe@example.invalid")
-    gitAusführen("config", "user.name", "probe")
-    gitAusführen("commit", "--allow-empty", "-qm", "vorher")
+def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel, gitRepo):
+    gitRepo.festhalten("vorher")
     rahmen = {"agent_type": "probe", "agent_id": "a2"}
     entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
-    gitAusführen("commit", "--allow-empty", "-qm", "von der Rolle")
+    gitRepo.festhalten("von der Rolle")
 
     antwort = entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 

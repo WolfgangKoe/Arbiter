@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -55,24 +54,20 @@ def testAlleKriterienMitTestIstGrün(tmp_path):
     assert verstöße(tmp_path) == []
 
 
-def freigegebenerPlanMitItem(wurzel: Path, itemtext: str) -> None:
+def freigegebenerPlanMitItem(gitRepo, itemtext: str) -> None:
+    wurzel = gitRepo.ordner
     (wurzel / "handoff").mkdir(exist_ok=True)
     (wurzel / "handoff" / "plan.md").write_text(
         "# Plan · Zyklus 1\n\n1. [Probe](../domaene/items/probe.md)\n", encoding="utf-8"
     )
     (wurzel / "domaene" / "items").mkdir(parents=True, exist_ok=True)
     (wurzel / "domaene" / "items" / "probe.md").write_text(itemtext, encoding="utf-8")
-    for befehl in (
-        ["init", "-q"],
-        ["add", "-A"],
-        ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "-m", "Freigabe Plan 1"],
-    ):
-        subprocess.run(["git", *befehl], cwd=wurzel, check=True)
+    gitRepo.festhalten("Freigabe Plan 1")
 
 
-def testFehlenderTestZumKriteriumIstRot(tmp_path):
+def testFehlenderTestZumKriteriumIstRot(tmp_path, gitRepo):
     aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
-    freigegebenerPlanMitItem(tmp_path, "# Probe\n\nUmfang: AUF-1.\n")
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
     meldungen = verstöße(tmp_path)
     assert len(meldungen) == 1
     assert "AUF-1.4 hat keinen Test" in meldungen[0]
@@ -86,9 +81,9 @@ def testTestOhneKriteriumIstRot(tmp_path):
 
 
 @pytest.mark.parametrize("test", ["def test_auf_1_1_eins(): ...\n", "def testAuf1Eins(): ...\n"])
-def testAltesOderUnvollständigesSchemaZähltNichtAlsTest(tmp_path, test):
+def testAltesOderUnvollständigesSchemaZähltNichtAlsTest(tmp_path, test, gitRepo):
     aufbau(tmp_path, test)
-    freigegebenerPlanMitItem(tmp_path, "# Probe\n\nUmfang: AUF-1.\n")
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
     assert len(verstöße(tmp_path)) == zweiKriterien
 
 
@@ -105,26 +100,25 @@ def testKriteriumOhneTestWartetSolangeKeinFreigegebenerPlanEsUmfasst(tmp_path):
     assert wartende(tmp_path) == ["AUF-1.4"]
 
 
-def testPlanOhneFreigabeUmfasstNichts(tmp_path):
+def testPlanOhneFreigabeUmfasstNichts(tmp_path, gitRepo):
     aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
-    freigegebenerPlanMitItem(tmp_path, "# Probe\n\nUmfang: AUF-1.\n")
-    amend = ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q", "--amend", "-m", "Plan 1"]
-    subprocess.run(["git", *amend], cwd=tmp_path, check=True)
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
+    gitRepo.git("commit", "-q", "--amend", "-m", "Plan 1")
     assert verstöße(tmp_path) == []
 
 
 @pytest.mark.parametrize("umfang", ["AUF-1", "AUF-1.4"])
-def testFreigegebenerPlanMachtDasFehlendeKriteriumRot(tmp_path, umfang):
+def testFreigegebenerPlanMachtDasFehlendeKriteriumRot(tmp_path, umfang, gitRepo):
     aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
-    freigegebenerPlanMitItem(tmp_path, f"# Probe\n\nUmfang: {umfang}.\n")
+    freigegebenerPlanMitItem(gitRepo, f"# Probe\n\nUmfang: {umfang}.\n")
     assert len(verstöße(tmp_path)) == 1
     assert wartende(tmp_path) == []
 
 
 @pytest.mark.parametrize("umfang", ["AUF-14", "AUF-1.5", "AUF-2"])
-def testItemMitAndererKennungMachtDasKriteriumNichtRot(tmp_path, umfang):
+def testItemMitAndererKennungMachtDasKriteriumNichtRot(tmp_path, umfang, gitRepo):
     aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
-    freigegebenerPlanMitItem(tmp_path, f"# Probe\n\nUmfang: {umfang}.\n")
+    freigegebenerPlanMitItem(gitRepo, f"# Probe\n\nUmfang: {umfang}.\n")
     assert verstöße(tmp_path) == []
 
 
@@ -175,11 +169,11 @@ def testJeAnforderungEineTestdateiIstGrün(tmp_path):
     assert verstöße(tmp_path) == []
 
 
-def testTestsZuZweiAnforderungenInEinerDateiSindRot(tmp_path):
+def testTestsZuZweiAnforderungenInEinerDateiSindRot(tmp_path, gitRepo):
     zweiAnforderungenMitTests(
         tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\ndef testAuf2_1Zwei(): ...\n"}
     )
-    planMitUmfang(tmp_path, "AUF-2")
+    planMitUmfang(gitRepo, "AUF-2")
     assert "teilen nach Anforderung" in verstöße(tmp_path)[0]
 
 
@@ -229,13 +223,13 @@ def testSpurZuUnbekanntemKriteriumIstEinFehler(tmp_path, eingabe, monkeypatch, c
     assert "Unbekanntes Kriterium" in capsys.readouterr().err
 
 
-def planMitUmfang(wurzel: Path, umfang: str) -> None:
-    freigegebenerPlanMitItem(wurzel, f"# Probe\n\nUmfang: {umfang}.\n")
+def planMitUmfang(gitRepo, umfang: str) -> None:
+    freigegebenerPlanMitItem(gitRepo, f"# Probe\n\nUmfang: {umfang}.\n")
 
 
-def testFehlendeTestdateiEinerUmfasstenAnforderungIstRot(tmp_path):
+def testFehlendeTestdateiEinerUmfasstenAnforderungIstRot(tmp_path, gitRepo):
     zweiAnforderungenMitTests(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
-    planMitUmfang(tmp_path, "AUF-2")
+    planMitUmfang(gitRepo, "AUF-2")
     meldungen = verstöße(tmp_path)
     assert meldungen == ["technik/tests/akzeptanz/phasen/aufstellen/auf2Test.py fehlt"]
 
@@ -246,11 +240,11 @@ def testFehlendeTestdateiEinerNichtUmfasstenAnforderungWartet(tmp_path):
     assert wartende(tmp_path) == ["AUF-2"]
 
 
-def testSammeldateiBleibtGrünBisEinPlanEineSpätereAnforderungUmfasst(tmp_path):
+def testSammeldateiBleibtGrünBisEinPlanEineSpätereAnforderungUmfasst(tmp_path, gitRepo):
     zweiAnforderungenMitTests(tmp_path, {"aufstellenTest.py": "def testAuf1_1Eins(): ...\n"})
     assert verstöße(tmp_path) == []
     assert wartende(tmp_path) == ["AUF-2"]
-    planMitUmfang(tmp_path, "AUF-2")
+    planMitUmfang(gitRepo, "AUF-2")
     meldungen = verstöße(tmp_path)
     assert len(meldungen) == zweiVerstöße
     assert "teilen nach Anforderung" in meldungen[0]
@@ -293,9 +287,9 @@ def testEinzeldateiDerEinzigenAnforderungIstGrünUndNichtWartend(tmp_path):
     assert wartende(tmp_path) == []
 
 
-def testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieEinzeldatei(tmp_path):
+def testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieEinzeldatei(tmp_path, gitRepo):
     einzigeAnforderung(tmp_path, {})
-    planMitUmfang(tmp_path, "AUF-1")
+    planMitUmfang(gitRepo, "AUF-1")
     assert verstöße(tmp_path) == ["technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py fehlt"]
 
 
@@ -311,9 +305,11 @@ def testTestsOhneAnforderungNennenDieKennungen(tmp_path):
     assert meldungen[0].endswith("Tests ohne Anforderung: AUF-7.1")
 
 
-def testItemMitNichtVorhandenerKennungMachtDieAnforderungOhneTestdateiNichtUnsichtbar(tmp_path):
+def testItemMitNichtVorhandenerKennungMachtDieAnforderungOhneTestdateiNichtUnsichtbar(
+    tmp_path, gitRepo
+):
     zweiAnforderungenMitTests(tmp_path, {"aufstellen/auf1Test.py": "def testAuf1_1Eins(): ...\n"})
-    freigegebenerPlanMitItem(tmp_path, "# Probe\n\nUmfang: AUF-2.9.\n")
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-2.9.\n")
     assert wartende(tmp_path) == ["AUF-2"]
 
 

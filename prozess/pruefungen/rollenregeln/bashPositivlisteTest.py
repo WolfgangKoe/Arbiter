@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -18,17 +17,10 @@ def gesperrt(befehl: str, rolle: str | None = "koordinator", ordner: Path = wurz
 
 
 @pytest.fixture
-def repo(tmp_path):
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+def repo(tmp_path, gitRepo):
     (tmp_path / "kurz.md").write_text("Stand", encoding="utf-8")
     (tmp_path / "lang.md").write_text("x" * 9000, encoding="utf-8")
-    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
-    subprocess.run(
-        ["git", "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "x"],
-        cwd=tmp_path,
-        check=True,
-        capture_output=True,
-    )
+    gitRepo.festhalten()
     return tmp_path
 
 

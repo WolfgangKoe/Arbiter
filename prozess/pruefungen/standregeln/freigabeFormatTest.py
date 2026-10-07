@@ -56,8 +56,8 @@ def testReviewOhneVorgehenIstRot(tmp_path):
     assert "Nächstes Vorgehen" in verstöße(tmp_path)[0]
 
 
-def testDateiMitFreigabeCommitBleibtUngeprüft(tmp_path):
-    repo = Repo(tmp_path)
+def testDateiMitFreigabeCommitBleibtUngeprüft(tmp_path, gitRepo):
+    repo = Repo(gitRepo)
     repo.datei("handoff/plan.md", "# Plan · Zyklus 2\n\nKein Abschnitt\n")
     assert len(verstöße(tmp_path)) == 1
     repo.freigabe("Plan", 2)

@@ -1,29 +1,12 @@
 """Komplexitätsschwellen im Lauf der Prüfungen: complexipy (Verschachtelung), ruff PLR0912."""
 
-import shutil
 import subprocess
 
 import pytest
 
-from formregeln.konfigurationTest import ruffAufrufen
-from gemeinsam.pfade import wurzel
+from formregeln.werkzeugaufruf import complexipyAufrufen, ruffAufrufen
 
 codeOrdner = ("prozess/pruefungen", "technik")
-
-
-def complexipyAufrufen(*pfade: str) -> subprocess.CompletedProcess:
-    """Rot, wenn complexipy fehlt: `pyproject.toml` nennt es unter `dependency-groups`."""
-    programm = shutil.which("complexipy") or shutil.which(
-        "complexipy", path=str(wurzel / ".venv" / "bin")
-    )
-    assert programm, "complexipy ist nicht installiert (pyproject.toml, dependency-groups)"
-    return subprocess.run(
-        [programm, "--plain", "--failed", *pfade],
-        cwd=wurzel,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
 
 
 def funktionMitKomplexität(einfacheFälle: int) -> str:

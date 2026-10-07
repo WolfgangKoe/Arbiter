@@ -1,5 +1,3 @@
-import subprocess
-
 import pytest
 
 from lesen.agenten import darfSchreiben, schreibpfade
@@ -20,11 +18,10 @@ probeMuster = ("prozess/", "*/CLAUDE.md", "handoff/retro.md", "ArbiterMap/neu.md
 
 
 @pytest.fixture
-def wurzel(tmp_path):
-    (tmp_path / ".claude" / "agents").mkdir(parents=True)
-    (tmp_path / ".claude" / "agents" / "probe.md").write_text(rollenkopf, encoding="utf-8")
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
-    return tmp_path.resolve()
+def wurzel(gitRepo):
+    (gitRepo.ordner / ".claude" / "agents").mkdir(parents=True)
+    (gitRepo.ordner / ".claude" / "agents" / "probe.md").write_text(rollenkopf, encoding="utf-8")
+    return gitRepo.ordner.resolve()
 
 
 def schreiben(pfad, rolle="probe"):

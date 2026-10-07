@@ -1,22 +1,17 @@
 import re
-import shutil
 import subprocess
 import sys
-import tomllib
 from importlib.metadata import entry_points
 from pathlib import Path
 
 import pytest
 
 from formregeln.benennung import ausgeschlosseneOrdner
+from formregeln.werkzeugaufruf import pyproject, ruffAufrufen
 from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import altbestandOrdner, wurzel
 
 ordner = Path(__file__).resolve().parent
-
-
-def pyproject() -> dict:
-    return tomllib.loads((wurzel / "pyproject.toml").read_text(encoding="utf-8"))
 
 
 def testRuffEnthältDenWerkzeugsatzAusDemAblauf():
@@ -53,21 +48,6 @@ def testPreCommitRuftDiePrüfungenAuf():
     text = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
     assert "python3 -m pytest prozess/pruefungen" in text
     assert "formregeln.benennung" in text
-
-
-def ruffAufrufen(
-    *argumente: str, cwd: Path = wurzel, config: Path = wurzel / "pyproject.toml"
-) -> subprocess.CompletedProcess:
-    """Rot, wenn ruff fehlt: `pyproject.toml` nennt es unter `dependency-groups`."""
-    ruff = shutil.which("ruff") or shutil.which("ruff", path=str(wurzel / ".venv" / "bin"))
-    assert ruff, "ruff ist nicht installiert (pyproject.toml, dependency-groups, entwicklung)"
-    return subprocess.run(
-        [ruff, "check", "--no-cache", "--config", str(config), *argumente],
-        cwd=cwd,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
 
 
 def testRuffMeldetEinenVerstoßGegenDenWerkzeugsatz(tmp_path):

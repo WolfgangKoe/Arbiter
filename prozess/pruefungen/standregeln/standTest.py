@@ -10,17 +10,9 @@ from standregeln.stand import stand
 
 
 class Repo:
-    def __init__(self, wurzel):
-        self.wurzel = wurzel
-        self.git("init", "-q")
-
-    def git(self, *argumente):
-        subprocess.run(
-            ["git", "-c", "user.name=t", "-c", "user.email=t@t", *argumente],
-            cwd=self.wurzel,
-            check=True,
-            capture_output=True,
-        )
+    def __init__(self, gitRepo):
+        self.wurzel = gitRepo.ordner
+        self.git = gitRepo.git
 
     def datei(self, pfad, text):
         ziel = self.wurzel / pfad
@@ -34,8 +26,8 @@ class Repo:
 
 
 @pytest.fixture
-def repo(tmp_path):
-    return Repo(tmp_path)
+def repo(gitRepo):
+    return Repo(gitRepo)
 
 
 def etappe(repo):

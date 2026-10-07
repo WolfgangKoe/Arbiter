@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -111,85 +110,69 @@ def testBeantworteteFragenBrauchenKeineAntwortzeile(tmp_path):
     assert kopfVerstöße(datei, tmp_path) == []
 
 
-def gitAufrufen(ordner, *argumente):
-    subprocess.run(
-        ["git", "-c", "user.name=t", "-c", "user.email=t@t", *argumente],
-        cwd=ordner,
-        check=True,
-        capture_output=True,
-    )
-
-
 def stakeholderFragen(tmp_path, status="offen"):
-    gitAufrufen(tmp_path, "init", "-q")
     kopf = f"12 · Fragen · von Planer → Stakeholder · Runde 1/3 · {status}"
     return anliegenAnlegen(tmp_path, "12-probe.md", kopf)
-
-
-def committen(tmp_path, betreff):
-    gitAufrufen(tmp_path, "add", "-A")
-    gitAufrufen(tmp_path, "commit", "-q", "--allow-empty", "-m", betreff)
 
 
 def dranBei(tmp_path):
     return {rolle: nummern for rolle, nummern in dran(tmp_path).items() if nummern == [12]}
 
 
-def testFragenVorDerFreigabeSindBeimAbsenderDran(tmp_path):
+def testFragenVorDerFreigabeSindBeimAbsenderDran(tmp_path, gitRepo):
     stakeholderFragen(tmp_path)
-    committen(tmp_path, "Fragen")
-    committen(tmp_path, "Freigabe Plan 2")
+    gitRepo.festhalten("Fragen")
+    gitRepo.festhalten("Freigabe Plan 2")
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
-def testFragenImFreigabeCommitSindBeimAbsenderDran(tmp_path):
+def testFragenImFreigabeCommitSindBeimAbsenderDran(tmp_path, gitRepo):
     stakeholderFragen(tmp_path)
-    committen(tmp_path, "Freigabe Retro 3")
+    gitRepo.festhalten("Freigabe Retro 3")
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
-def testFragenImFreigabeCommitDesReviewsSindBeimAbsenderDran(tmp_path):
+def testFragenImFreigabeCommitDesReviewsSindBeimAbsenderDran(tmp_path, gitRepo):
     stakeholderFragen(tmp_path)
-    committen(tmp_path, "Freigabe Review 3")
+    gitRepo.festhalten("Freigabe Review 3")
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
-def testNeueRundeNachDerFreigabeIstBeimStakeholderDran(tmp_path):
+def testNeueRundeNachDerFreigabeIstBeimStakeholderDran(tmp_path, gitRepo):
     datei = stakeholderFragen(tmp_path)
-    committen(tmp_path, "Freigabe Plan 2")
+    gitRepo.festhalten("Freigabe Plan 2")
     datei.write_text(
         datei.read_text(encoding="utf-8").replace("Runde 1/3", "Runde 2/3"), encoding="utf-8"
     )
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
-    committen(tmp_path, "Nachgefragt")
+    gitRepo.festhalten("Nachgefragt")
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
 
 
-def testNotizNachDerFreigabeÄndertNichtsAmDran(tmp_path):
+def testNotizNachDerFreigabeÄndertNichtsAmDran(tmp_path, gitRepo):
     datei = stakeholderFragen(tmp_path)
-    committen(tmp_path, "Freigabe Plan 2")
+    gitRepo.festhalten("Freigabe Plan 2")
     datei.write_text(datei.read_text(encoding="utf-8") + "Notiz\n", encoding="utf-8")
     assert dranBei(tmp_path) == {"Planer": [12]}
-    committen(tmp_path, "Notiz")
+    gitRepo.festhalten("Notiz")
     assert dranBei(tmp_path) == {"Planer": [12]}
 
 
-def testNeueFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path):
-    gitAufrufen(tmp_path, "init", "-q")
-    committen(tmp_path, "Freigabe Plan 2")
+def testNeueFragenNachDerFreigabeSindBeimStakeholderDran(tmp_path, gitRepo):
+    gitRepo.festhalten("Freigabe Plan 2")
     stakeholderFragen(tmp_path)
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
 
 
-def testEskaliertVorDerFreigabeBleibtBeimStakeholder(tmp_path):
+def testEskaliertVorDerFreigabeBleibtBeimStakeholder(tmp_path, gitRepo):
     stakeholderFragen(tmp_path, status="eskaliert")
-    committen(tmp_path, "Freigabe Plan 2")
+    gitRepo.festhalten("Freigabe Plan 2")
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
 
 
-def testOhneFreigabeInGitBleibtDerStakeholderDran(tmp_path):
+def testOhneFreigabeInGitBleibtDerStakeholderDran(tmp_path, gitRepo):
     stakeholderFragen(tmp_path)
-    committen(tmp_path, "Fragen")
+    gitRepo.festhalten("Fragen")
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
 
 

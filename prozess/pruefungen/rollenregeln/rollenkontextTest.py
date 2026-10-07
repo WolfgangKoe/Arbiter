@@ -1,5 +1,3 @@
-import subprocess
-
 import pytest
 
 from rollenregeln.rollenkontext import kontext
@@ -13,13 +11,12 @@ def rolle(wurzel, name, *pfade):
 
 
 @pytest.fixture
-def wurzel(tmp_path):
-    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
-    (tmp_path / "domaene").mkdir()
-    (tmp_path / "domaene" / "CLAUDE.md").write_text("DOMAENENREGELN\n")
-    (tmp_path / "prozess").mkdir()
-    (tmp_path / "prozess" / "CLAUDE.md").write_text("PROZESSREGELN\n")
-    return tmp_path
+def wurzel(gitRepo):
+    (gitRepo.ordner / "domaene").mkdir()
+    (gitRepo.ordner / "domaene" / "CLAUDE.md").write_text("DOMAENENREGELN\n")
+    (gitRepo.ordner / "prozess").mkdir()
+    (gitRepo.ordner / "prozess" / "CLAUDE.md").write_text("PROZESSREGELN\n")
+    return gitRepo.ordner
 
 
 def testPlanerBekommtStandUndDomänenClaudeMd(wurzel):
