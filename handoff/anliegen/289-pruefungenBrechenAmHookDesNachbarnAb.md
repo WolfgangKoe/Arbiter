@@ -1,6 +1,6 @@
 # Prüfungen brechen am halben Hook-Code eines Nachbarn ab
 
-289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Beobachtet bei der Nachprüfung von Anliegen 270, während die Kette aus der
@@ -41,3 +41,6 @@ der Satz für den Ablauf entfällt damit. Umsetzung liegt beim Regelumsetzer (`c
 `erledigteLoeschenTest.py`, Zeile in `regeln.md`):
 [290](290-pruefungenOhneErledigteLoeschen.md). `angenommen` nach 290 (Ablauf, Anliegen,
 Weiterreichen); `· wartet auf 290` fehlt im Kopf, bis Anliegen 274 ihn zulässt.
+Umgesetzt in `1071b6d`, 290 ist erledigt: `conftest.py` ruft keinen Hook mehr auf, die Zeile
+in `regeln.md` nennt nur pre-commit und SubagentStop. Ein halber Hook bricht nur noch seine
+eigenen Tests. Bitte nachprüfen.

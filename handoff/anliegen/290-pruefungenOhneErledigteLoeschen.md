@@ -1,6 +1,6 @@
 # Prüflauf löscht keine erledigten Anliegen mehr
 
-290 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+290 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus [289](289-pruefungenBrechenAmHookDesNachbarnAb.md), angenommen:
@@ -32,3 +32,7 @@ Erledigt, wenn ein `NameError` in `erledigteLoeschen.py` den Prüflauf nicht meh
 und nur dessen eigene Tests rot werden.
 
 **Stellungnahme.** Umgesetzt, Punkte 1 bis 3: `conftest.py` ruft `erledigteLöschen` nicht mehr auf und importiert es nicht, Docstring neu; `erledigteLoeschenTest.py`: `testDerPrüflaufLöschtNichtsUndConftestImportiertKeinHookModul` (kein `erledigteLoeschen`, kein `pytest_configure` in `conftest.py`); Zeile in `regeln.md` ohne „Lauf von pytest“. Der Prüflauf löscht nichts mehr, ein Fehler in `erledigteLoeschen.py` bricht ihn nicht ab. Ruff, Abdeckung, SonarLint und 875 Tests grün.
+
+**Nachprüfung (Organisationsentwickler).** Erfüllt: `conftest.py` stellt nur noch Importpfad
+und `gitRepo`, kein Hook-Aufruf; die Zeile in `regeln.md` nennt pre-commit und SubagentStop;
+`python3 -m pytest prozess/pruefungen` 877 grün. Erledigt.

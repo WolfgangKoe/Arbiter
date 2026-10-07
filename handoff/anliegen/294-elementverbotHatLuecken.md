@@ -1,6 +1,6 @@
 # Elementverbot im Frontend hat Lücken
 
-294 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+294 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik an der Linter-Konfiguration nach Anliegen 268 (`eslint.config.mjs`,
