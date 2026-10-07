@@ -1,6 +1,6 @@
 # seite.js erzeugt keine Elemente: ESLint-Verbot
 
-268 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+268 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 9977e0e. Nach Anliegen 264

@@ -45,8 +45,8 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
   `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
   Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Das Markup steht
   in `<template>` der Seite; `seite.js` klont und füllt es und erzeugt keine Elemente.
-  Prüft: eslint und stylelint über `.js` und `.css` (`frontendregeln/frontend.py`); der Rest
-  nur Text, „keine Elemente“ bis Anliegen 268.
+  Prüft: eslint und stylelint über `.js` und `.css` (`frontendregeln/frontend.py`), „keine
+  Elemente“ mit `no-restricted-properties` und `no-restricted-syntax`; sonst nur Text.
 - **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
   Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
   (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
