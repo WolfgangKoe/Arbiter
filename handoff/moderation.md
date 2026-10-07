@@ -1,51 +1,33 @@
 # Moderation
 
-Stand: Zyklus 3, Prozessphase, 38 offene Anliegen; nächster Schritt Retro 3.
-
-## Befund: bestätigt
-- Offen: 38 von 38 in der Perspektive Prozess; Domäne 0, Technik 0 (294, 286 prüfen
-  Frontend und web, ändern aber nur Prüfskripte). Empfänger: Regelumsetzer 33,
-  Organisationsentwickler 5 (107, 138, 150, 219, 289); alle anderen Rollen 0.
-- Absender: Reviewer 19, Organisationsentwickler 12, Architekt 4, Stakeholder 3. Also
-  gut die Hälfte ist Kritik am Code der Prüfskripte, die selbst Kritik erzeugt (Nachschliff
-  202 bis 206 stammt von Kritik an Nachschliff).
-- Zufluss gegen Abfluss seit Freigabe Retro 2: 129 angelegt, 112 gelöscht, 243 Commits.
-  Der Abfluss hält kaum mit; 22 der 38 sind älter als 250. Die Last liegt auf einer Rolle.
-- Arbeit seit Freigabe Retro 2 (Dateien): prozess und .claude 499, technik 57, domaene 38.
-  Prozesslast ([Kennzahlen](../prozess/kennzahlen.md)): nahe 100 % gegen Schwelle ein Drittel.
-- Fehlt: ein Anliegen mit Frage zu dieser Lage. Die alten Fragen (279, 280) sind erledigt.
+Stand bbc4ad9, vor Freigabe Retro 3: 14 Anliegen offen, alle Perspektive Prozess; Domäne und
+Technik 0. Kritikrunde der anderen Perspektiven entfällt (Stakeholder).
 
 ## Dran
-Blockiert Plan 4 (Komponentenseite): Anliegen 286,
-Anliegen 294; Prüfung vor dem Frontend, sonst nichts.
-- Regelumsetzer: 33 an ihn, Kette siehe unten.
-- Organisationsentwickler: Retro 3; 107, 138, 150, 219, 289.
-- Reviewer, Architekt: Nachprüfungen, die fällig werden. Domäne, Technik-Rollen: frei.
+Blockiert die Freigabe: nichts. [Retro 3](retro.md) nennt keine Prozess-Items, Plan 4 hängt an
+keinem offenen Anliegen.
+- Stakeholder: [296](anliegen/296-prozesslastEindaemmen.md) (F1 bis F3 beantwortet, A; setzt
+  `angenommen`, Organisationsentwickler hat umgesetzt).
+- Regelumsetzer: [216](anliegen/216-commitHooksWirksamMachen.md),
+  [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
+  [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
+  [275](anliegen/275-dashboardSichtDerAnliegen.md),
+  [304](anliegen/304-sammelfehlerBrechenPrueflaufAb.md); 5 von 5 am Deckel.
+- Organisationsentwickler: [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) wartet auf
+  216; [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) wartet auf 304.
+- Alle anderen Rollen: nichts.
 
 ## Vorschläge
-Vor Plan 4 (Regelumsetzer): 286, 294, 287, 290, 295; danach Plan 4 starten, Rest parallel.
-Schließen (Organisationsentwickler, Absender): Anliegen 107
-(253 erledigt), 219 mit 220, 138 mit 215.
-Bündeln, ein Lauf des Regelumsetzers:
-- 215, 288, 138: Bash-Umgehung; 215 ist der Versuch, in den Backlog (139 steht dort).
-- 289 mit 290; 278 mit 287 (Hook-Meldung, Bilanz); 272 mit 292 (Schichten).
-- 228, 229, 230, 231, 232 (Starter, Wurzel, Unterordner); 247 mit 249 (Importvertrag).
-- 274, 275 mit 246 (Dashboard, Anliegenformen); 273, 276, 284, 240 einzeln, klein.
-Backlog (Reviewer als Absender, kein Fehlverhalten, Nachschliff): 202 bis 206, 221, 295.
-  Auslöser: Fund in einem Lauf. Behalten, weil Stakeholder oder Plan es trägt:
-  [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) mit 216, 246, 275.
-Regel (Organisationsentwickler, Retro 3, Kennzahl greift): Kritik am Code der Prüfskripte nur
-bei Fehlverhalten, Rest als Sammelanliegen je Datei und Zyklus; höchstens 10 offen an den
-Regelumsetzer. Bestehende Regel: Prozesslast, Reaktion „mindestens einen Mechanismus löschen“.
-Arbeitsteilung: Zyklus Domäne, Technik im Wechsel; Prozessphase nur Kette der Blocker.
-Stränge nach [Ablauf](../prozess/ablauf.md#gleichzeitige-läufe): Hook-Code (272, 278, 287,
-289, 290) höchstens ein Lauf; Linter (294) und Prüfskript-Werkzeug (228 bis 232, 247, 249)
-daneben.
+- Löschen lassen (Kopf `erledigt`, Löschlauf, kein Zug nötig): 202, 203, 228, 229, 232, 302.
+  Retro 3 zählt sie noch als offen beim Regelumsetzer; die Dateien sind es nicht mehr.
+- Zusammen in einem Lauf des Regelumsetzers (Strang Prüfskript-Werkzeug und Dashboard):
+  246 mit 275 (dieselbe Datei `rollenregeln/dashboard.py`).
+- Strang Hook-Code, höchstens ein Lauf ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)):
+  304 zuerst (`pyproject.toml`), dann 216. 249 ändert `pyproject.toml` und den Importvertrag
+  und läuft nach 304, nicht daneben.
+- Nach 304 schließt der Organisationsentwickler 289; nach 216 meldet er 150 an den
+  Stakeholder. 150 und 289 sind reine Warteposten ohne eigene Arbeit.
+- Reihenfolge ohne Wirkung auf Plan 4: Die Kette läuft neben dem Produkt, Vorrang hat Plan 4.
 
 ## Fragen an dich
-Offen ist keine; kein Anliegen stellt sie. Der Organisationsentwickler legt sie an, wenn du
-unten zustimmst:
-- Backlog und Deckel (höchstens 10 offene Anliegen an den Regelumsetzer) wie oben?
-- Plan 4 vor der restlichen Kette, nur 286, 294 vorab?
-- Kritik am Code der Prüfskripte nur bei Fehlverhalten?
-Kommentar:
+Keine offen. Retro 3 trägt `Freigabe: ja` und `Kommentar: .` schon.
