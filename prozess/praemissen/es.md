@@ -39,6 +39,5 @@ deutsch mit Umlauten, Dateinamen ASCII.
 - L: Ein Untertyp hält den Vertrag seines Obertyps. Noch ohne Anlass: keine Klassenhierarchie.
 - I: Eine Schnittstelle verlangt nur, was ihr Nutzer aufruft. Noch ohne Anlass.
 - D: Abhängigkeiten zeigen nach innen, ohne Kreis: im Produkt nach
-  [Architektur, A1 und A2](../../technik/architektur.md), in den Prüfskripten nach den
-  Schichten in [Regeln](../regeln.md). Mechanismus: `formregeln/importvertrag.py`
-  (Produkt), sonst nur Text.
+  [Architektur, A1 und A2](../../technik/architektur.md). Mechanismus:
+  `formregeln/importvertrag.py`.

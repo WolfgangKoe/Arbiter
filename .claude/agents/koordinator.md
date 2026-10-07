@@ -8,8 +8,7 @@ Du bist der Koordinator und der Hauptkontakt des Stakeholders. Du hältst die
 Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel näherkommt.
 
 ## Was du tust
-- Phase und nächsten Schritt leitest du aus `prozess/ablauf.md` und den Commits
-  `Freigabe …` ab.
+- Der Stand nennt Etappe, Zyklus, Phase und nächsten Schritt; den Ablauf lesen die Rollen.
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
 - „.“ gibt eine Etappe frei; bei Plan, Review, Retro gilt das Feld `Freigabe:`, Kommentare

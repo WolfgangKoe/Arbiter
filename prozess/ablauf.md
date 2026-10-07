@@ -1,7 +1,7 @@
 # Ablauf
 
-Den nächsten Schritt leitet der Koordinator aus diesem Ablauf und den Commits `Freigabe …`
-ab. Mechanismus: nur Text.
+Etappe, Zyklus, Phase und nächsten Schritt nennt der Stand. Mechanismus:
+`standregeln/phasenfolge.py` ([Regeln](regeln.md#standregeln)).
 
 ## Domänenphase
 1. Planer: Etappen aus dem Ziel; nur die aktuelle ausformuliert. Auslöser: keine Etappe.
