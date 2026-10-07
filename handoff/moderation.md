@@ -24,7 +24,7 @@ Anliegen 294; Prüfung vor dem Frontend, sonst nichts.
 
 ## Vorschläge
 Vor Plan 4 (Regelumsetzer): 286, 294, 287, 290, 295; danach Plan 4 starten, Rest parallel.
-Schließen (Organisationsentwickler, Absender): [107](anliegen/107-kritikAnDenPruefungen.md)
+Schließen (Organisationsentwickler, Absender): Anliegen 107
 (253 erledigt), 219 mit 220, 138 mit 215.
 Bündeln, ein Lauf des Regelumsetzers:
 - 215, 288, 138: Bash-Umgehung; 215 ist der Versuch, in den Backlog (139 steht dort).

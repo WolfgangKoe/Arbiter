@@ -9,7 +9,7 @@ Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · a
 oder mich (70 %, Schwelle der [Prozesslast](../../prozess/kennzahlen.md) ein Drittel). Offen
 sind 38, 31 an den Regelumsetzer, gut die Hälfte Kritik am Code der Prüfskripte (202 bis
 206: Nachschliff am Nachschliff). Die Reaktion der Kennzahl ist nur Text und griff nie.
-Fragen aus der [Moderation](../moderation.md), zu deiner Frage in [107](107-kritikAnDenPruefungen.md).
+Fragen aus der [Moderation](../moderation.md), zu deiner Frage in Anliegen 107.
 
 **Kosten.** Plan 4 wartet auf eine Kette einer Rolle; Domäne und Technik sind frei.
 
