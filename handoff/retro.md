@@ -26,6 +26,10 @@ Etappe 1 · Aufstellen, Plan 3 mit zwei Items. Grundlage: [Review 3](review.md),
    bis Retro 4 zurückgestellt.
 7. Claude Code bis 2.1.292: Nichts ersetzt einen eigenen Mechanismus. Die Korrekturen an der
    Sandbox (2.1.289, 2.1.290) gehen an den Versuch 215.
+8. Dein Kommentar: zu viele offene Anliegen. Der Deckel griff nicht: 27 an den
+   Regelumsetzer, Zufluss über die Ausnahme „Fehlverhalten“; seit Retro 2 kamen 139, 127 gingen.
+9. Dein Kommentar: Die Schreibbilanz meldet deine Änderungen und die gleichzeitiger Läufe als
+   „unklar, wer … Nicht committen“. Beides in [306](anliegen/306-offeneAnliegenWirksamBegrenzen.md).
 
 ## Geändert
 Nach deinen Antworten in [296](anliegen/296-prozesslastEindaemmen.md) (F1 bis F3: A); zwei
@@ -37,7 +41,6 @@ bestehende Regeln angepasst, nichts neu gebaut.
 - [Backlog](../prozess/backlog.md): Nachschliff 202 bis 206, 221; Befund 6 bis Retro 4.
 
 ## Anliegen an mich
-- Anliegen 107: angenommen; du schließt es (296, Klärung).
 - [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) bleibt offen, bis SonarLint mit 216
   sperrt; ich melde es dort. 138 wartet auf 215, 219 auf 220, 289 auf 304.
 
@@ -45,9 +48,10 @@ bestehende Regeln angepasst, nichts neu gebaut.
 Keine. F2 ist erfüllt: 286, 287, 290, 294, 295 sind erledigt.
 
 ## Empfehlung
-Freigeben. Danach meldet der Stand Plan 4, Wählen per Klick (Review 3). Die Kette des
-Regelumsetzers läuft daneben unter dem Deckel; 202 bis 206 und 221 schließt er mit Verweis
-auf den Backlog.
+Erst [306](anliegen/306-offeneAnliegenWirksamBegrenzen.md) beantworten (F1 bis F3: A): Bestand
+von 34 auf 10 offene, Sperre gegen neue über dem Deckel, Schreibbilanz löschen. Dann
+freigeben; der Stand meldet Plan 4, Wählen per Klick (Review 3). Bis dahin beauftragt der
+Koordinator den Regelumsetzer nur mit 304.
 
 ## Freigabe
 Freigabe: offen
