@@ -1,7 +1,7 @@
 # Architektur
 
-Jede Regel nennt, was sie prüft. „Nur Text“ heißt: noch ohne Mechanismus; der Auslöser steht
-dabei, danach baut der Regelumsetzer ihn auf Anliegen des Architekten.
+Jede Regel nennt, was sie prüft. „Nur Text“ heißt: ohne Mechanismus; steht ein Auslöser
+dabei, baut der Regelumsetzer ihn danach auf Anliegen des Architekten.
 
 ## Schichten
 ```
@@ -61,10 +61,9 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel oder
   `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
   Properties ohne Setter oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
-  `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung;
-  `formregeln/zustandsschutz.py` (Dataclasses der Domäne `frozen`; `web/` und `katalog/` lesen
-  keine `_`-Felder, `web/` ändert Attribute nur an `self`, auch per `setattr`, `delattr`, nie
-  per `object.__setattr__`, das `frozen` umgeht); der Rest nur Text.
+  `modell.gesetzt = True` jede Sperre. `web/` und `katalog/` lesen keine `_`-Felder; `web/`
+  ändert Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
+  Prüft: Python wirft bei der Zuweisung; der Rest nur Text.
 - **D4** Gründe, die zusammen gelten (AUF-3.5), stehen in einer Tabelle Grund → benannte
   Prüfung (`Aufstellung._prüfungen`); die Handlung sammelt ein, ein neuer Grund ist eine
   Zeile, keine geänderte Funktion; ein ausschließender Grund (AUF-3.6) bleibt Wächter.
@@ -82,7 +81,7 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Für die erste Anforderung einer Datei genügt die Sammeldatei (`querschnittTest.py`), bis
   ein offenes Item eine zweite nennt. Höchstmaß: `prozess/kennzahlen.md`; darüber wird
   die Anforderung geteilt, nicht der Test. Prüft: `kriterienregeln/rueckverfolgung.py`,
-  `formregeln/benennung.py`, `formregeln/hoechstmassTest.py`.
+  `formregeln/benennung.py`; das Höchstmaß nur Text.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-1.4`,
   `testAuf1_4…`). Spur:
@@ -91,7 +90,7 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Jeder Ordner dort hat eine `__init__.py`; sonst kollidiert der Dateiname mit dem
   Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.
 - `arbiter` liegt über `pythonpath` in `pyproject.toml` im Pfad, ohne `sys.path`-Eingriff.
-  Prüft: `formregeln/konfigurationTest.py`.
+  Prüft: nur Text.
 
 ## Oberfläche
 Design-System, Komponentenseite und Bildschirmtests: [Web](architektur/web.md#oberfläche).

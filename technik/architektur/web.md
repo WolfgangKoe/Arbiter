@@ -21,8 +21,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
   `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
   Prüft: Akzeptanztests zu QUE-2 und AUF-4; „`darstellung.py` kennt Flask nicht“
-  `formregeln/importvertrag.py`; „nie `_`-Felder“ `formregeln/zustandsschutz.py` (D3); der
-  Rest nur Text; Auslöser: zweite Route.
+  `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
+  zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`). Prüft: nur Text; Auslöser: erste Handlung über HTTP.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
@@ -32,7 +32,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Adresse in der ersten Zeile aus (QUE-2.1). Nur `127.0.0.1`: zwei Spieler an einem Gerät
   (`domaene/ziel.md`). Werkzeug-Server von Flask, ohne Debug-Modus. Aus der Wurzel startet
   ihn `.venv/bin/arbiter` (`[project.scripts]` in `pyproject.toml`). Prüft: der
-  Akzeptanztest zu QUE-2.1, der Eintrag `formregeln/konfigurationTest.py`.
+  Akzeptanztest zu QUE-2.1; der Eintrag in `pyproject.toml` nur Text.
 - Pfade und JSON der Schnittstelle wählt der Implementierer, solange es keinen Vertrag gibt
   ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); die Bildschirmtests prüfen die Seite, nicht das JSON.
 
@@ -52,10 +52,8 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
 - **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
   gebaut aus `domaene/mockups/vorschlag.css`. Jede Seite verlinkt `komponenten.css`;
   Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und
-  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Prüft:
-  `formregeln/komponentenseite.py` (Seite neben der CSS und verlinkt sie, keine tote Klasse,
-  keine neue Klasse in Mockups und `technik/frontend/*.html`); Klassen aus `seite.js`, der
-  Link jeder Seite und „ohne Umschreiben“ nur Text.
+  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Keine tote Klasse, keine neue
+  Klasse in Mockups und `technik/frontend/*.html`. Prüft: nur Text.
 
 ## Bildschirmtests
 Entschieden nach einem Wegwerf-Versuch (Flask im Thread, Playwright, Chromium aus dem Cache;
