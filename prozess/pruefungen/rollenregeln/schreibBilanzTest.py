@@ -1,8 +1,10 @@
 import json
+import os
+import time
 
 import pytest
 
-from rollenregeln.schreibBilanz import entscheide, meldungsOrdner
+from rollenregeln.schreibBilanz import entscheide, meldungsOrdner, standDatei
 from rollenregeln.schreibgrenzeTest import rollenkopf
 
 
@@ -120,13 +122,55 @@ def testGelesenerOrdnerMachtFremdeÄnderungDarinNichtZurVerletzung(wurzel, tmp_p
     assert "domaene/b.md" in unklar
 
 
-def testZweiterStoppOhneAusgangsstandLegtKeineMeldungAb(wurzel):
+def testZweiterStoppMeldetNeueDateiAußerhalb(wurzel):
     rahmen = {"agent_type": "probe", "agent_id": "a7"}
     entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
     entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
     (wurzel / "domaene").mkdir()
-    (wurzel / "domaene" / "nachbar.md").write_text("uncommittet von einem Nachbarn")
+    (wurzel / "domaene" / "neu.md").write_text("nach dem ersten Stopp")
 
     entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
 
-    assert not (meldungsOrdner(wurzel) / "a7.txt").exists()
+    assert "domaene/neu.md" in meldungVon(wurzel, "a7")
+
+
+def testZweiterStoppMeldetDateiVorDemStartNicht(wurzel):
+    (wurzel / "schonVorher.txt").write_text("x")
+    rahmen = {"agent_type": "probe", "agent_id": "a8"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+
+    assert not (meldungsOrdner(wurzel) / "a8.txt").exists()
+
+
+def testBashHeredocSchreibenAnDieDateiIstVerletzt(wurzel, tmp_path):
+    rahmen = {"agent_type": "probe", "agent_id": "a10"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    (wurzel / "domaene").mkdir()
+    (wurzel / "domaene" / "a.md").write_text("geschrieben")
+    befehl = "cat > domaene/a.md <<'EOF'\ngeht's nicht\nEOF"
+    transkript = transkriptMit(tmp_path, ("Bash", {"command": befehl}))
+
+    entscheide(
+        {"hook_event_name": "SubagentStop", "agent_transcript_path": str(transkript), **rahmen},
+        wurzel,
+    )
+
+    verletzt, _, _ = meldungVon(wurzel, "a10").partition("unklar, wer")
+    assert "domaene/a.md" in verletzt
+
+
+def testStartRäumtStandDateienÄlterAlsEinTag(wurzel):
+    alt = standDatei(wurzel, "uralt")
+    alt.parent.mkdir(parents=True)
+    alt.write_text("HEAD x")
+    vorgestern = time.time() - 2 * 24 * 60 * 60
+    os.utime(alt, (vorgestern, vorgestern))
+
+    entscheide(
+        {"hook_event_name": "SubagentStart", "agent_type": "probe", "agent_id": "a11"}, wurzel
+    )
+
+    assert not alt.exists()
+    assert standDatei(wurzel, "a11").exists()

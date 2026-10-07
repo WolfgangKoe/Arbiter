@@ -7,7 +7,12 @@ from gemeinsam.pfade import projektordner
 from rollenregeln.freigabeCommit import freigabeCommitVerstoß
 from rollenregeln.gitBefehle import gitLesend, gitUnterbefehle
 from rollenregeln.lesegrenze import gitShowZulässig
-from rollenregeln.pfadsperren import pfadsperren, ändertPfad
+from rollenregeln.pfadsperren import (
+    anliegenMeldung,
+    pfadsperren,
+    skriptSchreibtAnliegen,
+    ändertPfad,
+)
 from rollenregeln.shellZerlegen import ohneHeredocText, wörter
 
 geprüfteRolle = "koordinator"
@@ -60,6 +65,8 @@ def entscheide(daten: dict, wurzel: Path) -> dict | None:
             + "; ohne Verkettung und Umleitung; git show nur mit --stat oder für Dateien unter "
             "4.000 Zeichen. Andere Arbeit beauftragst du bei einer Rolle."
         )
+    if skriptSchreibtAnliegen(befehl):
+        return verweigerung(anliegenMeldung)
     befehl = ohneHeredocText(befehl)
     for istGesperrt, meldung in pfadsperren:
         if ändertPfad(befehl, wurzel, istGesperrt):

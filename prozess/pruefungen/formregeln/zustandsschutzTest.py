@@ -111,6 +111,9 @@ def testD3UmwegZumUnterstrichZugriffIstRot(tmp_path, ordner, text):
         'getattr(aufstellung, "__name__")\n',
         "getattr(aufstellung, name)\n",
         "self.__dict__\nvars(self)\n",
+        'getattr(self, "_x", None)\n',
+        'hasattr(self, "_x")\n',
+        "vars()\n",
     ],
 )
 def testD3GetattrOhneUnterstrichUndSelfSindGrün(tmp_path, text):

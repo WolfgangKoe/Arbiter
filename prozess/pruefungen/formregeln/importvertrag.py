@@ -10,7 +10,7 @@ from gemeinsam.pfade import projektordner, webOrdner
 eigenesPaket = "arbiter.domaene"
 darstellungsDatei = "darstellung.py"
 vorlagenModule = ("jinja2", "markupsafe", "flask.templating")
-vorlagenFunktionen = ("render_template", "render_template_string")
+vorlagenFunktionen = ("render_template", "render_template_string", "*")
 serverModule = ("flask", "werkzeug")
 
 
@@ -49,7 +49,7 @@ def erlaubt(modul: str) -> bool:
 
 
 def istVorlagenName(name: str) -> bool:
-    """Ob der volle Name ein Vorlagenmodul, darunter oder eine Vorlagenfunktion von Flask ist."""
+    """Ob der volle Name ein Vorlagenmodul, darunter, eine Vorlagenfunktion oder `flask.*` ist."""
     return any(istOderUnter(name, modul) for modul in vorlagenModule) or name in {
         f"flask.{funktion}" for funktion in vorlagenFunktionen
     }

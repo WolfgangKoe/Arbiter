@@ -5,6 +5,7 @@ from pathlib import Path
 
 from gemeinsam.pfade import relativZurWurzel
 from rollenregeln.pfadsperren import ändertPfad
+from rollenregeln.shellZerlegen import ohneHeredocText
 
 dateiWerkzeuge = ("Write", "Edit", "NotebookEdit")
 
@@ -44,12 +45,16 @@ class AngefasstePfade:
         self.befehle = [eingabe.get("command", "") for name, eingabe in aufrufe if name == "Bash"]
 
     def enthält(self, pfad: str) -> bool:
-        """Ob die Rolle den Pfad schrieb oder ihn oder seinen Ordner per Bash änderte."""
+        """Ob die Rolle den Pfad schrieb oder nannte, oder seinen Ordner per Bash änderte."""
         ordner = pfad.rpartition("/")[0]
 
         def gemeint(relativerPfad: str) -> bool:
-            return relativerPfad in (pfad, ordner)
+            return relativerPfad == ordner
 
-        return pfad in self.dateien or any(
-            ändertPfad(befehl, self.wurzel, gemeint) for befehl in self.befehle
+        return (
+            pfad in self.dateien
+            or any(pfad in befehl for befehl in self.befehle)
+            or any(
+                ändertPfad(ohneHeredocText(befehl), self.wurzel, gemeint) for befehl in self.befehle
+            )
         )

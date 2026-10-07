@@ -1,5 +1,6 @@
 """Erkennt, ob ein Bash-Befehl einen gesperrten Pfad ändert, und nennt die Meldung dazu."""
 
+import re
 from collections.abc import Callable
 from pathlib import Path
 
@@ -33,6 +34,14 @@ umleitungen = {">", ">>", ">|", "&>"}
     "mv",
 }
 ändernZiel = {"cp", "ln", "rsync", "install"}
+skriptAufruf = re.compile(r"<<|\bpython3?\s+-c\b")
+schreibAufruf = re.compile(r"write_text|write_bytes|unlink|rename|open\([^)]*[\"'][wax]")
+
+
+anliegenMeldung = (
+    "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
+    "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen)."
+)
 
 
 def istAnliegen(relativerPfad: str) -> bool:
@@ -41,6 +50,15 @@ def istAnliegen(relativerPfad: str) -> bool:
 
 def istFreigabeArtefakt(relativerPfad: str) -> bool:
     return relativerPfad in {f"{handoffOrdner}/{artefakt.datei}" for artefakt in artefakte}
+
+
+def skriptSchreibtAnliegen(befehl: str) -> bool:
+    """Ob ein Heredoc oder `python3 -c` den Anliegenordner nennt und Schreibaufrufe enthält."""
+    return bool(
+        skriptAufruf.search(befehl)
+        and f"{anliegenOrdner}/" in befehl
+        and schreibAufruf.search(befehl)
+    )
 
 
 def meintPfad(wort: str, wurzel: Path, gesperrt: Callable[[str], bool]) -> bool:
@@ -93,11 +111,7 @@ pfadsperren = (
         f"Dieser Pfad ist nur lesbar, für alle Rollen: {', '.join(nurLesbar)}. "
         "Löschen tut nur der Stakeholder.",
     ),
-    (
-        istAnliegen,
-        "Anliegen ändern Rollen nur mit Write und Edit, nie per Bash: Daran vorbei "
-        "greifen Statusrecht und Nummernprüfung nicht (prozess/ablauf.md, Anliegen).",
-    ),
+    (istAnliegen, anliegenMeldung),
     (
         istFreigabeArtefakt,
         "Plan, Review und Retro ändern Rollen nur mit Write und Edit, nie per Bash: Daran "

@@ -228,3 +228,53 @@ def testKeineRolleÄndertFreigabeArtefakteMitBash(befehl):
 
 def testFreigabeArtefaktePerBashLesenBleibtErlaubt():
     assert not gesperrt("cat handoff/plan.md", rolle="planer")
+
+
+statusSkript = (
+    "cd /home/wolfgang/Dokumente/Arbiter && python3 - <<'EOF'\n"
+    "from pathlib import Path\n"
+    'p=Path("handoff/anliegen/282-schichtenInEsUndAblauf.md"); t=p.read_text()\n'
+    't=t.replace("Runde 1/3 · offen","Runde 1/3 · angenommen",1)\n'
+    "p.write_text(t)\n"
+    "EOF"
+)
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param(statusSkript, id="Heredoc aus Anliegen 288"),
+        pytest.param(
+            "python3 -c \"open('handoff/anliegen/12-probe.md','w').write('x')\"", id="python3 -c"
+        ),
+        pytest.param(
+            "python3 <<EOF\nfrom pathlib import Path\n"
+            "Path('handoff/anliegen/12-probe.md').unlink()\nEOF",
+            id="Heredoc ohne Anführungszeichen, löschen",
+        ),
+    ],
+)
+def testSkriptDasAnliegenSchreibtIstGesperrt(befehl):
+    assert gesperrt(befehl, rolle="reviewer")
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param(
+            "python3 - <<'EOF'\nfrom pathlib import Path\n"
+            "print(Path('handoff/anliegen/12-probe.md').read_text())\nEOF",
+            id="lesendes Heredoc",
+        ),
+        pytest.param(
+            "python3 - <<'EOF'\nfrom pathlib import Path\n"
+            "Path('prozess/probe.md').write_text('x')\nEOF",
+            id="Schreiben außerhalb der Anliegen",
+        ),
+        pytest.param(
+            "python3 -c \"print(open('handoff/anliegen/12-probe.md').read())\"", id="-c lesend"
+        ),
+    ],
+)
+def testSkriptDasAnliegenNurLiestIstFrei(befehl):
+    assert not gesperrt(befehl, rolle="reviewer")

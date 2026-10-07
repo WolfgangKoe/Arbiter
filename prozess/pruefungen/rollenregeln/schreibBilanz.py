@@ -1,5 +1,6 @@
 """Hook (SubagentStart, SubagentStop): legt Änderungen außerhalb der Schreibpfade ab."""
 
+import time
 from pathlib import Path
 
 from gemeinsam.gitAufruf import geänderteDateien, kopfCommit
@@ -9,6 +10,7 @@ from lesen.agenten import darfSchreiben, schreibpfade
 from rollenregeln.angefasstePfade import AngefasstePfade
 
 kopfPräfix = "HEAD "
+sekundenProTag = 24 * 60 * 60
 
 
 def standDatei(wurzel: Path, agentId: str) -> Path:
@@ -19,9 +21,17 @@ def meldungsOrdner(wurzel: Path) -> Path:
     return wurzel / ".git" / "arbiter-meldungen"
 
 
+def räumeAlteStände(ordner: Path) -> None:
+    grenze = time.time() - sekundenProTag
+    for alt in ordner.glob("*.txt"):
+        if alt.stat().st_mtime < grenze:
+            alt.unlink()
+
+
 def beimStart(eingabe: HookEingabe, wurzel: Path) -> dict:
     datei = standDatei(wurzel, eingabe.agentId)
     datei.parent.mkdir(parents=True, exist_ok=True)
+    räumeAlteStände(datei.parent)
     zeilen = [f"{kopfPräfix}{kopfCommit(wurzel)}", *sorted(geänderteDateien(wurzel))]
     datei.write_text("\n".join(zeilen), encoding="utf-8")
     muster = schreibpfade(eingabe.rolle, wurzel)
@@ -62,9 +72,8 @@ def pfadMeldungen(eingabe: HookEingabe, wurzel: Path, vorher: set[str]) -> list[
 def beimEnde(eingabe: HookEingabe, wurzel: Path) -> None:
     datei = standDatei(wurzel, eingabe.agentId)
     if not datei.exists():
-        return  # Warum: Ohne Ausgangsstand (zweiter Stopp desselben Laufs) gibt es keine Aussage.
+        return  # Warum: Ohne Ausgangsstand gibt es keine Aussage.
     zeilen = datei.read_text(encoding="utf-8").splitlines()
-    datei.unlink()
     kopfVorher = next(
         (zeile.removeprefix(kopfPräfix) for zeile in zeilen if zeile.startswith(kopfPräfix)), None
     )

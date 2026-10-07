@@ -115,10 +115,12 @@ def textKonstante(knoten: ast.expr | None) -> str:
 
 
 def versteckterZugriff(aufruf: ast.Call) -> bool:
-    """`getattr`/`hasattr` mit `_name` und `vars(x)` umgehen den `_`-Zugriff; `self` ist erlaubt."""
+    """`getattr`, `hasattr`, `vars(x)` umgehen den `_`-Zugriff; an `self` und `vars()` nicht."""
     name = aufrufName(aufruf)
+    if anSelfGerichtet(aufruf):
+        return False
     if name == "vars":
-        return not anSelfGerichtet(aufruf)
+        return bool(aufruf.args)
     zweites = aufruf.args[1] if len(aufruf.args) > 1 else None
     versteckt = textKonstante(zweites)
     return name in ("getattr", "hasattr") and versteckt.startswith("_") and not istDunder(versteckt)

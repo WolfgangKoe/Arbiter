@@ -1,6 +1,6 @@
 # Status eines Anliegens per Heredoc gesetzt, Statusrecht griff nicht
 
-288 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+288 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Beim Bearbeiten von Anliegen 282 habe ich Status und Stellungnahme per Bash geschrieben. Der Befehl ging durch:
@@ -23,4 +23,4 @@ Greifen hätten sollen: `rollenregeln/bashPositivliste.py` mit `pfadsperren.py` 
 
 Erledigt, wenn der Befehl oben gesperrt wird (durch 215 oder Punkt 2), sein Scheiter-Test an einem Gegenbeispiel rot wird und die Prüfungen grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Punkt 2 umgesetzt: `pfadsperren.skriptSchreibtAnliegen` sperrt Heredoc und `python3 -c`, die den Anliegenordner nennen und schreiben; Test mit dem Befehl oben, lesende Skripte grün. Grenze (zusammengesetzter Pfad, anderer Schreibaufruf) in `regeln.md`; `ablauf.md` (Anliegen) sagt noch „erkennt keine Skripte“, das setzt der Organisationsentwickler. 215 bleibt offen.
