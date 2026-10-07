@@ -5,7 +5,7 @@ Stand: Zyklus 3, Prozessphase, 39 Anliegen-Dateien; nächster Schritt Retro 3.
 ## Dran
 Blockiert das Inkrement: nichts. Plan 4 baut auf der Komponentenseite aus
 Anliegen 262 auf; dessen Nachprüfung ist fällig.
-- Organisationsentwickler: Retro 3; [282](anliegen/282-schichtenInEsUndAblauf.md); 107 (Antwort des
+- Organisationsentwickler: Retro 3; Anliegen 282; 107 (Antwort des
   Stakeholders: noch keine Reaktion), 150 (Antwort: SonarLint scharfstellen), 138, 219.
 - Regelumsetzer (27): 253 Punkte 5, 7; 240 Runde 2; 268; 272 bis 276, 278; 281; 246, 247, 249;
   215, 216, 218, 220, 221, 228 bis 232; 202 bis 206.
@@ -31,14 +31,14 @@ Kette Kritik am Code. 279 wartet auf F1, F2.
 Architekt: Nachprüfung 262, 265 gleichzeitig mit allen anderen; später Kritik an
 Linter-Konfiguration aus Strang 2.
 Organisationsentwickler: Retro 3 (`retro.md`) und 282 (`ablauf.md`, `es.md`) gleichzeitig, Dateien
-getrennt. 282 deckt dieselben Pfadzeilen wie [281](anliegen/281-schichtenLassenKreiseUndUnterordnerDurch.md)
+getrennt. 282 deckt dieselben Pfadzeilen wie Anliegen 281
 Befund 1 und 2 in `regeln.md`; das Anliegen trägt je Rolle ihre Datei. Schließen: 107, 226 nach
 253; 138 nach 215; 219 nach 220; 150 nach 216 und Antwort auf 280.
 Ablegen: 267 ist erledigt, die Datei geht von selbst. 153 ist gelöscht und nicht mehr offen.
 
 ## Fragen an dich
-- [279](anliegen/279-gleicheRolleParallel.md) F1: Worktree je Lauf jetzt (Empfehlung: nein).
+- Anliegen 279 F1: Worktree je Lauf jetzt (Empfehlung: nein).
 - 279 F2: darf der Regelumsetzer `eslint.config.mjs`, `.stylelintrc.json`, `package.json`,
   `package-lock.json` schreiben (Empfehlung: ja); blockiert 268 und 276.
-- [280](anliegen/280-sonarlintPrueftNurPython.md) F1: soll `sonarlint.py` das Frontend prüfen
+- Anliegen 280 F1: soll `sonarlint.py` das Frontend prüfen
   (Empfehlung: nein, Node ≥ 22.12 wäre Voraussetzung).

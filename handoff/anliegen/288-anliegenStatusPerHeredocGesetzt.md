@@ -3,7 +3,7 @@
 288 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Beim Bearbeiten von [282](282-schichtenInEsUndAblauf.md) habe ich Status und Stellungnahme per Bash geschrieben. Der Befehl ging durch:
+**Befund.** Beim Bearbeiten von Anliegen 282 habe ich Status und Stellungnahme per Bash geschrieben. Der Befehl ging durch:
 ```
 cd /home/wolfgang/Dokumente/Arbiter && python3 - <<'EOF'
 from pathlib import Path

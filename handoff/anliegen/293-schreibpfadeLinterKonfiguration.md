@@ -1,6 +1,6 @@
 # Schreibpfade des Regelumsetzers ohne Linter-Konfiguration
 
-293 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+293 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 279 F2 mit „ja“ beantwortet

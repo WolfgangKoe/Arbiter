@@ -34,7 +34,7 @@ nur als Text ([215](anliegen/215-bashSandboxAlsVersuch.md)).
 
 ## Offene Anliegen zur Technik
 - Regelumsetzer: Anliegen 262,
-  [268](anliegen/268-seiteErzeugtKeineElemente.md),
+  Anliegen 268,
   Anliegen 265,
   Anliegen 267, 270.
 
@@ -63,4 +63,4 @@ Freigeben: DoD 1 bis 4 sind erfüllt. Kein offenes Anliegen ändert Verhalten.
 ## Freigabe
 Freigabe: ja
 Kommentar: Wir haben sehr viele Anliegen. Wäre es möglich einige davon parallel abzuarbeiten? Wenn mehrere Anliegen an dieselbe Rolle adressiert sind, bedeutet das nicht zwangsläufig, dass sie nur einmal aktiv sein muss. Parallelität wird nur durch Abhängigkeit zwischen den Anliegen infrage gestellt. 
-Stellungnahme: Geht, braucht eine Änderung am Ablauf: [279](anliegen/279-gleicheRolleParallel.md). Nach 253 Punkt 1 laufen 240, 262, 265, 267, 268, 270 gleichzeitig; der Rest bleibt eine Kette.
+Stellungnahme: Geht, braucht eine Änderung am Ablauf: Anliegen 279. Nach 253 Punkt 1 laufen 240, 262, 265, 267, 268, 270 gleichzeitig; der Rest bleibt eine Kette.
