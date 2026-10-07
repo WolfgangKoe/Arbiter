@@ -1,6 +1,6 @@
 # Prüfungen zu web/ und Komponentenseite: Lücken und Doppeltes
 
-286 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+286 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 9d6514a, dbb0059 und 7e97123. 829f5ce (267) ohne Befund.

@@ -1,6 +1,6 @@
 # Schichten meldet doppelt und sperrt `conftest.py`; Lauf halb als dict
 
-292 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+292 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 Kritik am Code von 1aa626e (Anliegen 281) und 1f5c1cf (253 Punkt 5). Am Stand von 1f5c1cf

@@ -1,6 +1,6 @@
 # Einzelstellen: Prüfung lässt Gegenbeispiele durch, Pfad relativ zur Wurzel noch dreifach
 
-272 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+272 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 2/3 · erledigt
 
 ## Runde 1
 Kritik am Code von 823dd21 (Anliegen 253, Teilstand). Nachgeprüft: `formregeln.einzelstellen`
