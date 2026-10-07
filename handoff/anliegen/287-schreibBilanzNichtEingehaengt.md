@@ -1,6 +1,6 @@
 # Schreibbilanz läuft nicht: Hook nicht eingehängt
 
-287 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+287 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 180d1d1 (Anliegen 253 Punkt 2).

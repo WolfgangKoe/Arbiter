@@ -1,6 +1,6 @@
 # standTest baut gitRepo und gitAufruf nach
 
-295 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+295 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von b800ee7 (Anliegen 253 Punkt 7).
