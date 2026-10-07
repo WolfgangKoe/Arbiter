@@ -18,7 +18,9 @@ Etappe 1 · Aufstellen, Plan 3 mit zwei Items. Grundlage: [Review 3](review.md),
 4. Belegung: 9 Läufe über 120.000 Token, höchstens 145.000 (Testautor), keiner über
    150.000 (Retro 2: einmal 197.000). Dreimal war ich es.
 5. Gleichzeitige Läufe gehen (279). Ein halber Hook-Code bricht den Prüflauf der Nachbarn ab
-   ([289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md)); behoben mit 290.
+   ([289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md)). 290 nahm den Hook aus dem
+   Prüflauf; ein Importfehler bricht ihn weiter ab, das behebt
+   [304](anliegen/304-sammelfehlerBrechenPrueflaufAb.md) mit einer Zeile Konfiguration.
 6. Der [Backlog](../prozess/backlog.md) löste für Retro 3 aus: Höchstmaße im Test,
    Gesamtmaß der Prüfskripte, Auslösezähler. Alles neue Mechanismen; nach Befund 2 sind sie
    bis Retro 4 zurückgestellt.
@@ -35,9 +37,9 @@ bestehende Regeln angepasst, nichts neu gebaut.
 - [Backlog](../prozess/backlog.md): Nachschliff 202 bis 206, 221; Befund 6 bis Retro 4.
 
 ## Anliegen an mich
-- [107](anliegen/107-kritikAnDenPruefungen.md): angenommen; du schließt es (296, Klärung).
+- Anliegen 107: angenommen; du schließt es (296, Klärung).
 - [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) bleibt offen, bis SonarLint mit 216
-  sperrt; ich melde es dort. 138 wartet auf 215, 219 auf 220; 289 ist angenommen.
+  sperrt; ich melde es dort. 138 wartet auf 215, 219 auf 220, 289 auf 304.
 
 ## Prozess-Items
 Keine. F2 ist erfüllt: 286, 287, 290, 294, 295 sind erledigt.

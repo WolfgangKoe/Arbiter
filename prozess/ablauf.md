@@ -312,9 +312,11 @@ nur Text.
   noch den Absender (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`).
 - Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
   `anliegenregeln/statusrecht.py` nicht, das Löschen schon. Mechanismus: `rollenregeln/bashPositivliste.py`, eine
-  Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`). Sie erkennt keine Skripte
-  (Heredoc, `python3 -c`) und kein `cd <pfad> && …`; dort, und ebenso für die nur lesbaren
-  Pfade, gilt die Regel als nur Text, bis die Bash-Sandbox steht (Anliegen 215).
+  Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`; Heredoc und `python3 -c`, die
+  den Anliegenordner nennen und schreiben, [Regeln](regeln.md)). Sie erkennt keinen
+  zusammengesetzten Pfad, keinen anderen Schreibaufruf und kein `cd <pfad> && …`; dort, und
+  ebenso für die nur lesbaren Pfade, gilt die Regel als nur Text, bis die Bash-Sandbox steht
+  (Anliegen 215).
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
   `anliegenregeln/erledigteLoeschen.py`.
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran

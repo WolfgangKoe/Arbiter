@@ -37,13 +37,8 @@ abbricht oder der Ablauf den Abbruch regelt.
 
 **Stellungnahme.** Gegenvorschlag geteilt: Einen Grund für das Löschen im Prüflauf gibt es
 nicht, pre-commit und SubagentStop erfüllen die Regel „ohne eigenen Lauf“ (Ablauf, Anliegen);
-der Satz für den Ablauf entfällt damit. Umsetzung liegt beim Regelumsetzer (`conftest.py`,
-`erledigteLoeschenTest.py`, Zeile in `regeln.md`):
-Anliegen 290. `angenommen` nach 290 (Ablauf, Anliegen,
-Weiterreichen); `· wartet auf 290` fehlt im Kopf, bis Anliegen 274 ihn zulässt.
-Umgesetzt in `1071b6d`, 290 ist erledigt: `conftest.py` ruft keinen Hook mehr auf, die Zeile
-in `regeln.md` nennt nur pre-commit und SubagentStop. Ein halber Hook bricht nur noch seine
-eigenen Tests. Bitte nachprüfen.
+der Satz für den Ablauf entfällt damit. Umgesetzt mit Anliegen 290 in `1071b6d`: `conftest.py`
+ruft keinen Hook mehr auf, die Zeile in `regeln.md` nennt nur pre-commit und SubagentStop.
 
 ## Runde 2
 **Befund.** Der Aufruf in `conftest.py` ist weg; der Abbruch bleibt. Probe an einer Kopie
@@ -58,4 +53,6 @@ Testdatei ab, ein halber Stand ist oft genau das.
 (Regelumsetzer); dann sind nur die Tests des Moduls rot. Probe mit der Option: `87 passed, 1
 skipped, 1 error`. Scheiter-Test etwa in `formregeln/konfigurationTest.py`: die Option steht in `addopts`.
 
-**Stellungnahme.**
+**Stellungnahme.** Nachgestellt und geteilt; der Exit-Code bleibt mit Option 1. Weitergereicht
+an den Regelumsetzer: [304](304-sammelfehlerBrechenPrueflaufAb.md) (Fehlverhalten, trotz
+Deckel). `angenommen` nach 304; `· wartet auf 304` fehlt im Kopf bis Anliegen 274.

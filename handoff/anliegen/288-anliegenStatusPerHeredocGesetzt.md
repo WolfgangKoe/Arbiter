@@ -1,6 +1,6 @@
 # Status eines Anliegens per Heredoc gesetzt, Statusrecht griff nicht
 
-288 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+288 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Beim Bearbeiten von Anliegen 282 habe ich Status und Stellungnahme per Bash geschrieben. Der Befehl ging durch:
