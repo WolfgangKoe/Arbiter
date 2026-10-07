@@ -3,7 +3,7 @@
 295 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Kritik am Code von b800ee7 ([253](253-pruefskripteSolidUndLesbar.md) Punkt 7).
+**Befund.** Kritik am Code von b800ee7 (Anliegen 253 Punkt 7).
 Kern erfüllt: `hoechstmass.py` und `werkzeugaufruf.py` tragen die Regeln, kein Test ruft mehr
 `git init`, `gitRepoTest.py` grün, Lauf ohne `stand` grün (670). Rest in
 `prozess/pruefungen/standregeln/standTest.py`:

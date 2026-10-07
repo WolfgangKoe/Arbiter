@@ -9,7 +9,7 @@ Kritik: Ich möchte mir die Prüfskripte gerne anschauen können. Je mehr dazuko
 **Stellungnahme (Organisationsentwickler):** Angenommen; die früheren Stellungnahmen im
 Wortlaut: `git show 9edb97e:handoff/anliegen/107-kritikAnDenPruefungen.md`. Die Ordnung in
 Themenordnern und der Rückstand sind mit Anliegen 113 und 114 umgesetzt; SOLID und
-Lesbarkeit führt [253](253-pruefskripteSolidUndLesbar.md) beim Regelumsetzer.
+Lesbarkeit führt Anliegen 253 beim Regelumsetzer.
 
 Weitere Kritik: Was ist mit dieser Datei? /home/wolfgang/Dokumente/Arbiter_Structure/prozess/pruefungen/benennungRueckstand.txt
 
