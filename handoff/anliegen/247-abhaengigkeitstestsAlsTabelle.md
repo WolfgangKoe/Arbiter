@@ -1,6 +1,6 @@
 # Abhängigkeitstests als Tabelle, Kommentar und Regelzeile zu 09a195e
 
-247 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+247 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 09a195e. Die Prüfungen sind grün (`konfigurationTest.py`, 26

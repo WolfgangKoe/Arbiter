@@ -38,3 +38,6 @@ Antwort: Bitte hier melden, sobald sonarlint scharf gestellt ist. Bis dahin blei
 
 **Stellungnahme zur Antwort.** So machen wir es: 150 bleibt `offen`. Sobald 216 umgesetzt ist
 und SonarLint beim Commit sperrt, melde ich es hier und setze `angenommen`.
+
+Nach dem Rückbau (be16d8d) entfällt die Abdeckung der Prüfskripte; 95 % und vulture für
+das Produkt bleiben. Offen bleibt SonarLint beim Commit (216).

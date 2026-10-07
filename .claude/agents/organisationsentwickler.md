@@ -28,8 +28,8 @@ und Schulden eindämmt.
   Nachkorrektur aus Kommentaren und Antworten des Stakeholders (Freigabe und Kommentare).
 - Prozess-Items entstehen nur aus einem Befund: Kennzahl über der Schwelle, Anliegen oder
   Auslösezähler. Löschen zählt wie Hinzufügen.
-- Jede Regel nennt ihren Mechanismus. Den baut der Regelumsetzer; der Koordinator
-  beauftragt ihn. Eine Regel ohne Mechanismus ist als „nur Text“ markiert.
+- Jede Regel nennt ihren Mechanismus. Den baut der Regelumsetzer erst bei beobachtetem
+  Bedarf; der Koordinator beauftragt ihn. Eine Regel ohne Mechanismus ist als „nur Text“ markiert.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs), bevor du Eigenes baust.
 - Ist ein Mechanismus gebaut (`prozess/regeln.md`), ersetzt du „nur Text“ bei der Regel.
 - Anliegen an dich und von dir führst du nach `prozess/ablauf.md` (Anliegen), samt Status.

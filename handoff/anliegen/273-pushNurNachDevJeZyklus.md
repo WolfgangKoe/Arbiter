@@ -1,6 +1,6 @@
 # Push nur nach dev, einmal je Zyklus
 
-273 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+273 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders im Chat: „Wir sollten hier auf dev bleiben. Am Ende

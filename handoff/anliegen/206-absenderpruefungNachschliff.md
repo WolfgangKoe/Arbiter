@@ -1,6 +1,6 @@
 # Absenderprüfung: kaputter Kopf, Nummer nur bei Bedarf
 
-206 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+206 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von ec566dc (Anliegen 166). Die Suite ist grün (557 Tests). Zwei

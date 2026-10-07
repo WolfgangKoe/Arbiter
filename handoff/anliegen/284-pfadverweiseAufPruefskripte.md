@@ -1,6 +1,6 @@
 # Pfadverweise auf Prüfskripte veralten bei jedem Umzug
 
-284 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+284 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach 253 P1 und P2 nannte der [Ablauf](../../prozess/ablauf.md) sieben Module oder Funktionen am alten Ort (Anliegen 282, berichtigt). In `prozess/regeln.md` stehen noch:

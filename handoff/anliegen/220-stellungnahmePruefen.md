@@ -1,6 +1,6 @@
 # Stellungnahme vor `angenommen` und `abgelehnt` prüfen
 
-220 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+220 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Reviewer hat bei 208 und 213 `angenommen` ohne Stellungnahme gefunden

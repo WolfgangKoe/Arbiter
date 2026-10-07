@@ -1,6 +1,6 @@
 # `angenommen` ohne Stellungnahme
 
-219 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+219 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Bei der Nachprüfung von 208 (Commit baa3b02) und 213 (Commit 1bc5648) hatte der
@@ -34,3 +34,5 @@ Erledigt, wenn der Ablauf die Regel mit Mechanismus nennt und `regeln.md` die Pr
   Regelumsetzer ([220](220-stellungnahmePruefen.md)). Danach ersetze ich „nur Text“.
 
 wartet auf 220
+
+Stellungnahme: Entfällt mit dem Rückbau.

@@ -25,15 +25,15 @@ Mechanismus, der ohne Tokenkosten wirkt.
 
 ## Was du tust
 - Umsetzen, was dein Auftrag verlangt: Hook, Prüfskript, Berechtigung oder Linter-Regel.
-  Offen ist jede Regel mit „Mechanismus: nur Text“ in `prozess/ablauf.md` und
-  `prozess/praemissen/`.
+  „Mechanismus: nur Text“ allein ist kein Auftrag: Ein Mechanismus entsteht erst bei
+  beobachtetem Bedarf (`prozess/ablauf.md`, Prozessphase).
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
   Lesbarkeit nach `prozess/praemissen/es.md`, wie für jeden Code.
 - Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge, eslint,
   stylelint, `package.json`) und `.gitignore` schreibst du; der Architekt kritisiert sie
   per Anliegen.
 - Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.
-  Vorbild: der Test der Bash-Positivliste.
+  Vorbild: `formregeln/importvertragTest.py`.
 - Trage den gebauten Mechanismus in `prozess/regeln.md` ein: Regel (Link), Mechanismus,
   Scheiter-Test. Den Vermerk bei der Regel setzt der Organisationsentwickler.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs).
@@ -44,6 +44,5 @@ Mechanismus, der ohne Tokenkosten wirkt.
 - Je Lauf ein Prozess-Item oder Anliegen. Nennt der Auftrag mehrere, setze das erste um
   und nenne die übrigen in der Schlussantwort.
 - Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und
-  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung` (Abdeckung der Prüfskripte) und
-  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 enden; Rot nur
+  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 endet; Rot nur
   in Dateien eines gleichzeitigen Laufs nennst du (`prozess/ablauf.md`, Gleichzeitige Läufe).

@@ -1,6 +1,6 @@
 # Höchstmaß der Architektur zählt nur `.md` der obersten Ebene
 
-221 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+221 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4cc6e03 (Anliegen 211). Die Tests laufen grün (76 passed), die drei

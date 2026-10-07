@@ -1,6 +1,6 @@
 # Bash-Sandbox als Versuch, danach ohne Pfad-Heuristik
 
-215 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+215 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 139 F2 mit A

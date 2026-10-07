@@ -1,6 +1,6 @@
 # Altbestand: Regelzeile, Ableitung, Dateisuche
 
-204 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+204 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 8d51d93 (Anliegen 163). Die Suite ist grün (549 Tests). Die

@@ -1,6 +1,6 @@
 # Kritik am Code auch für technik/frontend/
 
-240 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · offen
+240 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach Anliegen 233 schreibt der Implementierer auch

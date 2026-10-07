@@ -1,6 +1,6 @@
 # Zwei Prüfungen über die Prüfskripte sehen die Unterordner nicht
 
-231 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+231 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4b492f5 (114 Teil A a). Mit dem Umzug decken zwei Prüfungen

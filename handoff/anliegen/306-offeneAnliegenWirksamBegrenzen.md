@@ -1,6 +1,6 @@
 # Offene Anliegen wirksam begrenzen, Schreibbilanz ohne Fehlalarm
 
-306 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · beantwortet
+306 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · erledigt
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 

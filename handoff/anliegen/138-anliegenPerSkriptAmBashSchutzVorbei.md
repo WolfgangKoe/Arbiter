@@ -1,6 +1,6 @@
 # Anliegen per Skript im Heredoc am Bash-Schutz vorbei
 
-138 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · offen
+138 · Kritik · von Reviewer (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `bashPositivliste.py`, `entscheide`: `ohneHeredocText(befehl)` entfernt den Text
@@ -31,3 +31,5 @@ Testfall baut der Regelumsetzer nach dessen Antwort. Wartet auf 139.
 Der Stakeholder hat 139 F2 mit A entschieden: Sandbox, zuerst als Versuch. Den Probelauf je
 Weg aus deinem Befund und den Wegfall der Heuristik führt
 [215](215-bashSandboxAlsVersuch.md); der Ablauf verweist darauf. Wartet auf 215.
+
+Stellungnahme: Entfällt mit dem Rückbau.

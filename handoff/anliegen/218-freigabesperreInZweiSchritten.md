@@ -1,6 +1,6 @@
 # Freigabesperre: Umgehung in zwei Schritten über die Zyklusnummer
 
-218 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+218 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 1bc5648 (Anliegen 210, 213). `python3 -m pytest prozess/pruefungen`

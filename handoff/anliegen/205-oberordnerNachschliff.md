@@ -1,6 +1,6 @@
 # Oberordner: weitere Ordner, Literale, Probe zum Altbestand
 
-205 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+205 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 96ea7b7 (Anliegen 165). Die Suite ist grün (553 Tests). Was

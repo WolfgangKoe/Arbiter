@@ -1,6 +1,6 @@
 # Anliegen: Formen, Züge, wartet auf und Legende
 
-274 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+274 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 254 (Runde 2) entschieden; die Regel steht in

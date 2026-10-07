@@ -1,7 +1,9 @@
 # Ablauf
 
+Den nächsten Schritt leitet der Koordinator aus diesem Ablauf und den Commits `Freigabe …`
+ab. Mechanismus: nur Text.
+
 ## Domänenphase
-Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/standregeln/stand.py`.
 1. Planer: Etappen aus dem Ziel; nur die aktuelle ausformuliert. Auslöser: keine Etappe.
 2. Architekt: Kritik an der aktuellen Etappe und der Reihenfolge, als Anliegen.
 3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
@@ -10,18 +12,16 @@ Der Stand nennt den nächsten Schritt; die Folge steht in `prozess/pruefungen/st
    Abschnitt „Danach“ des vorigen Plans); Begriffe ins Glossar. Eine genügt. Auslöser:
    kein Kriterium ohne Akzeptanztest. Bei einer Oberfläche danach
    [UX](../.claude/agents/ux.md): ein Mockup je Anforderung (DoR 5); das Item verlinkt es.
-   Mechanismus: nur Text (der Stand nennt UX nicht).
+   Mechanismus: nur Text.
 5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
    eins genügt, höchstens drei; weicht er vom Zyklusziel des Reviews ab, begründet er es.
    Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](#freigabe-und-kommentare)).
    Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
-   `[…](../domaene/items/<id>.md)`; daran erkennt der Stand die Abnahme (Technikphase,
-   Schritt 5). Mechanismus: `lesen/plan.py` (`itemsOhneLink`), `standregeln/stand.py` nennt
-   den Planer, solange der Link fehlt. Jedes Item nennt Kriterien ohne Test (`AUF-1.4`)
-   oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit, der Stand nennt
-   den Anforderungsautor, wenn es kein Kriterium ohne Test gibt, sonst den Planer.
-   Mechanismus für 4 und diesen Satz: `standregeln/phasenfolge.py` (`domänenphase`, `planOhneFreigabe`).
-6. Kritik: Architekt an Anforderungen und Items; Format und Größe prüfen die Tests. Am
+   `[…](../domaene/items/<id>.md)`; daran erkennt die Rückverfolgung die Items des Plans
+   (DoD 2). Mechanismus: `lesen/plan.py` (`offeneItems`). Jedes Item nennt Kriterien ohne
+   Test (`AUF-1.4`) oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit.
+   Mechanismus: nur Text; der Stand nennt die Kriterien ohne Test.
+6. Kritik: Architekt an Anforderungen und Items, auch an Format und Größe. Am
    Mockup: Fachkritiker (gegen die Kriterien), Architekt (nur vorhandene Komponenten).
 7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
    `Freigabe Plan <n>`. Danach Technikphase.
@@ -44,7 +44,7 @@ Mechanismus für 1 bis 5: nur Text. Fachliche Vollständigkeit ist Urteil (Schri
 zeigt sich spätestens an den roten Tests.
 
 ## Technikphase
-Auslöser: Stand „Technikphase“ nach `Freigabe Plan <n>`. Fehlen Rollen, schlägt der
+Auslöser: `Freigabe Plan <n>`. Fehlen Rollen, schlägt der
 Organisationsentwickler sie vor.
 1. Testautor: Akzeptanztests je Kriterium der Items, rot. Hat ein Item beide Hälften
    (Handlung über HTTP, ihre Anzeige), legt vorher der Architekt den Vertrag fest: Pfade
@@ -67,8 +67,7 @@ Organisationsentwickler sie vor.
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
-   die abgenommenen Items. Mechanismus: `standregeln/stand.py` nennt den Schritt, solange ein Item des
-   Plans in `domaene/items/` liegt, auch wenn `review.md` schon Zyklus n trägt.
+   die abgenommenen Items. Mechanismus: nur Text.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, vor dem Abschnitt
    `## Freigabe` der Abschnitt `## Nächstes Vorgehen` mit drei Punkten, je mit Beleg:
    - Produktziel: welche Etappen erreicht sind, was dem Ziel am meisten fehlt.
@@ -77,41 +76,41 @@ Organisationsentwickler sie vor.
    - Zyklusziel: Empfehlung für Plan n+1, mit den technischen Voraussetzungen und Schulden,
      die vorher weg müssen.
    Der Reviewer fasst zusammen und empfiehlt; der Stakeholder entscheidet mit Freigabe und
-   Kommentaren, der Planer schneidet die Items. Mechanismus: `standregeln/freigabeFormat.py` (Abschnitt
-   und drei Punkte); Inhalt und Beleg nur Text.
+   Kommentaren, der Planer schneidet die Items. Davor der Abschnitt `## Rundgang Prüfcode`:
+   Einmal je Zyklus geht der Reviewer mit dem Stakeholder durch den Prüfcode, der seit dem
+   letzten Review entstanden ist (`prozess/pruefungen/`, Hooks in `.claude/settings.json`,
+   Prüfkonfiguration): die Dateien und die wesentlichen Probleme, je mit Fundstelle. Der
+   Stakeholder kommentiert; was er beauftragt, wird in der Nachkorrektur ein Anliegen an den
+   Regelumsetzer. Mechanismus: nur Text.
 7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
-   `Freigabe Review <n>`. Danach meldet der Stand die Prozessphase. Mechanismus:
-   `standregeln/phasenfolge.py` (`lage`).
+   `Freigabe Review <n>`. Danach Prozessphase. Mechanismus: nur Text.
 
 Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest danach),
 technisches Neuland (Wegwerf-Versuch, dann Test).
 
 ### DoD (Item fertig)
 1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`;
-   Zeilen und Zweige mindestens 95 % für `technik/arbiter` und, als eigene Meldung, für
-   `prozess/pruefungen`. Mechanismus: `formregeln/abdeckung.py`, für `technik/arbiter` im Lauf von
-   `python3 -m pytest prozess/pruefungen`, für die Prüfskripte mit
-   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung` ([Regelumsetzer](../.claude/agents/regelumsetzer.md)).
-   Ist in `technik/tests` ein Test rot, gilt die Schwelle für `technik/arbiter` nicht: In der
-   Technikphase misst die Prüfung nicht und nennt die Zahl der roten Tests (Tests vor dem
-   Code brechen auch geteilte Fixtures); außerhalb der Technikphase ist sie rot. Mechanismus:
-   `formregeln/abdeckung.py` (`aussetzung`, `verstoß`).
+   Zeilen und Zweige mindestens 95 % für `technik/arbiter`. Mechanismus:
+   `formregeln/abdeckung.py` im Lauf von `python3 -m pytest prozess/pruefungen`.
+   Ist in `technik/tests` ein Test rot, gilt die Schwelle nicht: Die Prüfung misst nicht und
+   nennt die Zahl der roten Tests (Tests vor dem Code brechen auch geteilte Fixtures).
+   Mechanismus: `formregeln/abdeckung.py` (`aussetzung`, `verstoß`).
 2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`formregeln/benennung.py`), Kriterium ↔
    Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
    rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
-   Stand), Höchstmaße (`formregeln/hoechstmass.py`), Komplexität (`formregeln/werkzeugaufruf.py`, `complexipyAufrufen`), Code →
+   Stand), Komplexität (`formregeln/werkzeugaufruf.py`, `complexipyAufrufen`), Code →
    Glossar (`formregeln/glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/es.md` 8
    (`formregeln/kommentare.py`), toter Code (vulture über `technik/arbiter` und
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `formregeln/abdeckung.py`), alle
    im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/werkzeugaufruf.py` (`ruffAufrufen`);
    SonarLint (Standardprofil ohne Namensregeln, Ordner nach [regeln.md](regeln.md)) mit
    `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`; beim Commit als Hook nur Text, `pre-commit`
-   ist nicht installiert (Anliegen 216). Urteil: Zeilen,
+   ist nicht installiert (Anliegen 216); Höchstmaße nur Text ([Kennzahlen](kennzahlen.md)). Urteil: Zeilen,
    die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung, fehlendes
    Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
-   Mechanismus: Stand (`standregeln/stand.py`) erkennt das Review.
+   Mechanismus: nur Text.
 
 Kommen Mutationstests oder eine Oberfläche hinzu, gelten auch Mutationsschwelle der
 geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
@@ -128,7 +127,9 @@ ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 Auslöser: `Freigabe Review <n>`.
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
-   Prozess-Items nur aus einem Befund. Dazu: Neuerungen von Claude Code, die einen eigenen
+   Prozess-Items nur aus einem Befund. Ein Mechanismus entsteht wie eine Rolle erst bei
+   beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
+   Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
    Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
@@ -147,22 +148,18 @@ Auslöser: `Freigabe Review <n>`.
    Item je Lauf, damit die Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item
    abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
    `P<k> Zwischenstand: …`. Hat jedes Item der Retro seinen Commit `P<k>:` seit
-   `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), meldet der Stand die Domänenphase
-   mit Plan n+1, sonst das erste offene Item. Mechanismus: `standregeln/phasenfolge.py`
-   (`offenesProzessItem`, Anliegen 173).
-6. Der Zyklus endet, wenn der Stand nach Schritt 5 die Domänenphase meldet; dann pusht der
-   [Koordinator](../.claude/agents/koordinator.md) nach `dev`. Mechanismus: nur Text
-   (Anliegen 273).
+   `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), folgt die Domänenphase mit Plan n+1.
+   Mechanismus: nur Text.
+6. Der Zyklus endet nach Schritt 5; dann pusht der
+   [Koordinator](../.claude/agents/koordinator.md) nach `dev`. Mechanismus: nur Text.
 
 Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
 ([Koordinator](../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.
 Mechanismus: nur Text.
 
-Mechanismus der Übergänge: Stand-Hook (`prozess/pruefungen/standregeln/stand.py`).
-
 ## Freigabe und Kommentare
 Plan, Review und Retro enden mit diesem Abschnitt; der Autor legt ihn so an (Mechanismus:
-`standregeln/freigabeFormat.py`):
+nur Text):
 ```
 ## Freigabe
 Freigabe: offen
@@ -171,20 +168,16 @@ Kommentar: .
 - Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
   unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Zu anderen Dateien
   kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:`. Er gibt frei mit
-  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: `anliegenregeln/freigabeSperre.py` (Write, Edit),
-  `rollenregeln/bashPositivliste.py` mit `pfadsperren.py` (`istFreigabeArtefakt`, Heuristik wie bei Anliegen).
+  `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: nur Text.
 - Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
   wo>`. Betrifft der Kommentar ein fremdes Artefakt oder braucht er eine Entscheidung, wird
   daraus ein Anliegen; die Stellungnahme nennt dessen Nummer. Solange ein Kommentar ohne
-  Stellungnahme steht, ist der Autor dran, auch nach der Freigabe. Mechanismus:
-  `standregeln/freigabeKommentare.py`, `standregeln/stand.py`; Anliegen und Inhalt der Stellungnahme nur Text.
+  Stellungnahme steht, ist der Autor dran, auch nach der Freigabe. Mechanismus: nur Text.
 - „.“ im Chat heißt: Die Datei ist durchgesehen. Steht `Freigabe: ja`, committet der
   Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
   Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
-  Datei danach wieder vor. Mechanismus: `standregeln/stand.py` nennt den Commit als nächsten Schritt;
-  nur bei `Freigabe: ja` committen: `rollenregeln/freigabeCommit.py` (`freigabeCommitVerstoß`), ohne
-  `-C`, `--reuse-message` und `-F` ([regeln.md](regeln.md)).
+  Datei danach wieder vor. Mechanismus: nur Text.
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
 - Die Etappe gibt der Stakeholder mit „.“ im Chat frei.
@@ -204,26 +197,20 @@ Mechanismus: nur Text.
 - Testautor auf Opus: Fachkritik oder Mutationstests zeigen wiederholt fehlende Fälle.
 
 ## Kritik am Code
-Nach jeder Änderung von Code (`prozess/praemissen/es.md`) prüfen ihn alle Kritiker der
+Nach jeder Änderung von Produktcode (`prozess/praemissen/es.md`) prüfen ihn die Kritiker der
 getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
-Am Code des Regelumsetzers nur Fehlverhalten (Anliegen 296): Eine Prüfung lässt einen
-Verstoß durch, meldet einen, den es nicht gibt, bricht einen Lauf ab oder sperrt eine Rolle
-zu Unrecht. Übrige Befunde sammelt der Reviewer in einem Anliegen je Zyklus, ein Abschnitt
-je Datei; der Regelumsetzer nimmt einen Abschnitt mit, wenn er die Datei ohnehin ändert,
-offene übernimmt das des nächsten Zyklus. Mechanismus: nur Text (Urteil des Reviewers).
+Den Code der Prüfskripte und Hooks kritisiert niemand je Commit; dafür gibt es den Rundgang
+([Technikphase](#technikphase), Schritt 6). Mechanismus: nur Text.
 
 Code | schreibt | prüft
 ---|---|---
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
 `technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Reviewer
-`prozess/pruefungen/`, `prozess/dashboard/`, `dashboard.html`, `.claude/settings.json` | Regelumsetzer | Reviewer
-`pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt, Reviewer
+`pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt (schränkt sie die Technik richtig ein?)
 
 Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf, der
 Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
-(`Kritik <a> <b>`, notfalls `--allow-empty`). Jeder andere Commit, der Code ändert, wird
-geprüft, auch wenn sein Betreff „Kritik“ enthält; der Stand meldet den ersten seit der
-letzten Freigabe ohne Kritik. Mechanismus: `standregeln/codekritik.py` im Stand.
+(`Kritik <a> <b>`, notfalls `--allow-empty`). Mechanismus: nur Text.
 
 ## Gleichzeitige Läufe
 Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen
@@ -243,13 +230,14 @@ die Prüfungen grün sind. Mechanismus: nur Text.
 ## Anliegen
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
 höchstens 4.000 Zeichen; jede Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161).
-Mechanismus: `formregeln/hoechstmass.py` (`zeichenOhneAntworten`).
+Mechanismus: nur Text.
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
 `.claude/agents/` oder Stakeholder, dahinter darf die Perspektive in Klammern stehen.
-Mechanismus: `anliegenregeln/anliegen.py`; `Auftrag`, `rückfrage`, `wartet auf` und die
-Legende nur Text, bis Anliegen 274.
+Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`),
+`rückfrage` und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); die Legende
+nur Text.
 
 Form | der Empfänger soll | Absender
 ---|---|---
@@ -290,38 +278,32 @@ nur Text.
   wählt dann der Stakeholder. Er schreibt seine Entscheidung ins Anliegen: zurück auf
   `Runde 1/3 · offen` oder eine andere Anweisung. Die Runde senkt und `eskaliert` ändert nur
   er; mit seiner Entscheidung setzt er auch den Kopf, sonst bleibt er dran. Mechanismus:
-  `anliegenregeln/anliegen.py` (Runde höchstens 3), `anliegenregeln/anliegenDran.py` (bei `eskaliert` ist der Stakeholder dran),
-  `anliegenregeln/statusrecht.py` (Rollen senken keine Runde, ändern `eskaliert` nicht und setzen in
-  Runde 3/3 nach `abgelehnt` nur `eskaliert` oder `erledigt`).
+  `anliegenregeln/anliegen.py` (Runde höchstens 3), `anliegenregeln/anliegenDran.py` (bei
+  `eskaliert` ist der Stakeholder dran); wer Runde und Status ändert, nur Text.
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
   wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `· wartet auf <nr>`.
   Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
-  `anliegenregeln/statusrecht.py` (Write, Edit).
+  nur Text.
 - Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine
   Stellungnahme mit Text: was umgesetzt ist und wo, die Begründung oder die Frage; dem
-  Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt nicht. Mechanismus: nur Text, bis `anliegenregeln/statusrecht.py` sperrt (Anliegen
-  220).
+  Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt
+  nicht. Mechanismus: nur Text.
 - Die Nummer ist eindeutig, der Absender eines Anliegens ändert sich nie; wer eine Nummer
-  belegt vorfindet, nimmt die nächste freie. Mechanismus: `anliegenregeln/anliegennummer.py` (neue Datei),
-  `anliegenregeln/statusrecht.py` (`absenderVerstoß`; Write, Edit).
+  belegt vorfindet, nimmt die nächste freie. Mechanismus: nur Text.
 - Ist der Stakeholder Absender, nennt der Stand die fällige Nachprüfung; er trägt
   `erledigt` selbst ein. Mechanismus: `standregeln/stand.py`.
 - Den Status eines Anliegens an ihn setzt der Stakeholder selbst; die Freigabe beantwortet
-  keine Frage. Mechanismus: nur Text; bis Anliegen 274 nennt der Stand nach einer Freigabe
-  noch den Absender (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`).
-- Rollen ändern Anliegen nur mit Write und Edit, nie per Bash: Daran vorbei greift
-  `anliegenregeln/statusrecht.py` nicht, das Löschen schon. Mechanismus: `rollenregeln/bashPositivliste.py`, eine
-  Heuristik (Umleitung, `rm`, `mv`, `cp`, `sed -i`, `tee`; Heredoc und `python3 -c`, die
-  den Anliegenordner nennen und schreiben, [Regeln](regeln.md)). Sie erkennt keinen
-  zusammengesetzten Pfad, keinen anderen Schreibaufruf und kein `cd <pfad> && …`; dort, und
-  ebenso für die nur lesbaren Pfade, gilt die Regel als nur Text, bis die Bash-Sandbox steht
-  (Anliegen 215).
+  keine Frage. Mechanismus: nur Text; abweichend nennt der Stand nach einer Freigabe den
+  Absender als dran (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`;
+  [Backlog](backlog.md)).
+- Rollen ändern Anliegen nur mit Write und Edit, nie per Bash. Mechanismus: nur Text.
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
   `anliegenregeln/erledigteLoeschen.py`.
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran
-  ist, mit dessen Belegung. Mechanismus: nur Text (heute nennt der Stand beim Start die
-  fälligen Nachprüfungen mit Rolle).
+  ist, mit dessen Belegung. Mechanismus: `standregeln/stand.py` (PostToolUse auf Agent)
+  nennt, wer dran ist und welche Nachprüfung fällig ist; geänderte Status und Belegung nur
+  Text.
 - Der Koordinator beauftragt die Rolle, die dran ist: Lief sie in diesem Chat und liegt ihre
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
   neu. Anliegen an eine Perspektive, deren Phase nicht läuft, warten, außer sie blockieren

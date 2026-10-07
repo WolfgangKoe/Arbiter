@@ -1,6 +1,6 @@
 # Bash-Sperren und Schreibbilanz lassen weitere Wege durch
 
-305 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+305 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von c0239e5 (300 und 301 dort erledigt). Fehlverhalten nach

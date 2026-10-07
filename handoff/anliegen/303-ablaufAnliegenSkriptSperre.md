@@ -1,6 +1,6 @@
 # Ablauf, Anliegen: Heuristik erkennt Heredoc und python3 -c inzwischen
 
-303 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+303 · Kritik · von Regelumsetzer (Prozess) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `prozess/ablauf.md`, Abschnitt Anliegen (Zeilen 313 bis 317) sagt, die Bash-Heuristik erkenne keine Skripte (Heredoc, `python3 -c`); dort gelte die Regel als nur Text. Seit Anliegen 288 stimmt das nicht mehr: `rollenregeln/pfadsperren.py` (`skriptSchreibtAnliegen`) sperrt ein Heredoc oder `python3 -c`, das den Anliegenordner nennt und `write_text`, `write_bytes`, `unlink`, `rename` oder `open(…, "w"/"a"/"x")` enthält. Scheiter-Test: `rollenregeln/bashPositivlisteTest.py`; Eintrag in `prozess/regeln.md`.

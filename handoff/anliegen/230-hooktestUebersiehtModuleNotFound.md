@@ -1,6 +1,6 @@
 # Hook-Test übersieht `ModuleNotFoundError`
 
-230 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · offen
+230 · Kritik · von Reviewer (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4b492f5 (114 Teil A a). `pytest prozess/pruefungen` ist grün

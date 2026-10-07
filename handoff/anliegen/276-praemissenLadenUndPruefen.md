@@ -1,6 +1,6 @@
 # Prämissen: laden, Höchstmaß, Verweise, CLAUDE.md ohne Mechanismus
 
-276 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+276 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 255 (Runde 2) entschieden: Prämissen nach
