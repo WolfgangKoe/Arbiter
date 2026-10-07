@@ -97,3 +97,15 @@ def testTestsUndConftestSindAusgenommen(tmp_path):
 @pytest.mark.stand
 def testDieSkripteDesReposHaltenDieEinzelstellen():
     assert verstöße(wurzel) == []
+
+
+@pytest.mark.parametrize(
+    "inhalt",
+    [
+        'def f():\n    os.system("git add -A")\n',
+        'subprocess.run("git status", shell=True)\n',
+    ],
+)
+def testErsteAnweisungMitGitAufrufIstKeinDocstring(tmp_path, inhalt):
+    skriptAnlegen(tmp_path, "rollenregeln/grenze.py", inhalt)
+    assert len(verstöße(tmp_path)) == 1

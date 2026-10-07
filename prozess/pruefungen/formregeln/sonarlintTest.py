@@ -138,13 +138,30 @@ def routenAußerLesen(quelltext: str) -> list[int]:
     ]
 
 
+def ansichtsKlassen(quelltext: str) -> list[int]:
+    """Zeilen von Klassen, die von `View` oder `MethodView` erben; sie können POST tragen."""
+    return [
+        knoten.lineno
+        for knoten in ast.walk(ast.parse(quelltext))
+        if isinstance(knoten, ast.ClassDef)
+        and any(
+            (base.id if isinstance(base, ast.Name) else getattr(base, "attr", ""))
+            in ("View", "MethodView")
+            for base in knoten.bases
+        )
+    ]
+
+
 def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
     # Regel: prozess/regeln.md, SonarLint, S4502 fällt mit der ersten Route außer GET
     ausnahme = (f"{webOrdner}/anwendung.py", "python:S4502")
     verändernd = [
         f"{datei.name}:{zeile}"
         for datei in sorted((wurzel / webOrdner).rglob("*.py"))
-        for zeile in routenAußerLesen(datei.read_text(encoding="utf-8"))
+        for zeile in [
+            *routenAußerLesen(datei.read_text(encoding="utf-8")),
+            *ansichtsKlassen(datei.read_text(encoding="utf-8")),
+        ]
     ]
     assert ausnahme not in sonarlint.ausnahmen or not verändernd, (
         f"Route außer GET {verändernd}: S4502 aus `ausnahmen` streichen, CSRF entscheiden"
@@ -162,6 +179,21 @@ def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
 )
 def testEineRouteAußerLesenIstEineRouteAußerLesen(quelltext):
     assert routenAußerLesen(quelltext)
+
+
+@pytest.mark.parametrize(
+    "quelltext",
+    [
+        "class Ansicht(MethodView):\n    def post(self): ...\n",
+        "class Ansicht(views.View):\n    methods = ['POST']\n",
+    ],
+)
+def testEineKlassenansichtIstEineMöglicheRouteAußerLesen(quelltext):
+    assert ansichtsKlassen(quelltext)
+
+
+def testEineKlasseOhneAnsichtIstKeineKlassenansicht():
+    assert ansichtsKlassen("class Probe(Basis):\n    pass\n") == []
 
 
 @pytest.mark.parametrize(

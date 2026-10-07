@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from gemeinsam.pfade import relativZurWurzel
+from rollenregeln.pfadsperren import ändertPfad
 
 dateiWerkzeuge = ("Write", "Edit", "NotebookEdit")
 
@@ -39,12 +40,16 @@ class AngefasstePfade:
             for name, eingabe in aufrufe
             if name in dateiWerkzeuge and eingabe.get("file_path")
         }
+        self.wurzel = wurzel
         self.befehle = [eingabe.get("command", "") for name, eingabe in aufrufe if name == "Bash"]
 
     def enthält(self, pfad: str) -> bool:
-        """Ob die Rolle den Pfad schrieb oder ihn oder seinen Ordner in einem Bash-Befehl nannte."""
+        """Ob die Rolle den Pfad schrieb oder ihn oder seinen Ordner per Bash änderte."""
         ordner = pfad.rpartition("/")[0]
-        nennungen = (pfad, f"{ordner}/") if ordner else (pfad,)
+
+        def gemeint(relativerPfad: str) -> bool:
+            return relativerPfad in (pfad, ordner)
+
         return pfad in self.dateien or any(
-            nennung in befehl for befehl in self.befehle for nennung in nennungen
+            ändertPfad(befehl, self.wurzel, gemeint) for befehl in self.befehle
         )

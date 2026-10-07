@@ -1,6 +1,6 @@
 # Schreibbilanz meldet Verstöße, die es nicht gibt
 
-300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+300 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 1071b6d (Anliegen 278). Fehlverhalten im Sinne von 296, F3:
@@ -33,4 +33,4 @@ für Pfade ohne gelesenen Ordner. Je wenige Zeilen.
 
 Erledigt, wenn beide Proben grün und `python3 -m pytest prozess/pruefungen` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, beide Punkte. `beimEnde` tut nichts ohne Stand-Datei (Test: zweiter Stopp mit uncommitteter Nachbardatei legt nichts ab). `AngefasstePfade.enthält` zählt den Ordner nur, wenn `pfadsperren.ändertPfad` den Befehl als schreibend erkennt (Test: `cat domaene/a.md` und fremde `domaene/b.md` steht unter „unklar“). 899 Tests grün.

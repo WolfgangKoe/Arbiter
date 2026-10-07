@@ -61,8 +61,10 @@ def pfadMeldungen(eingabe: HookEingabe, wurzel: Path, vorher: set[str]) -> list[
 
 def beimEnde(eingabe: HookEingabe, wurzel: Path) -> None:
     datei = standDatei(wurzel, eingabe.agentId)
-    zeilen = datei.read_text(encoding="utf-8").splitlines() if datei.exists() else []
-    datei.unlink(missing_ok=True)
+    if not datei.exists():
+        return  # Warum: Ohne Ausgangsstand (zweiter Stopp desselben Laufs) gibt es keine Aussage.
+    zeilen = datei.read_text(encoding="utf-8").splitlines()
+    datei.unlink()
     kopfVorher = next(
         (zeile.removeprefix(kopfPräfix) for zeile in zeilen if zeile.startswith(kopfPräfix)), None
     )

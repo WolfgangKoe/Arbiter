@@ -101,3 +101,32 @@ def testCommitEinerRolleWirdBeimEndeGemeldet(wurzel, gitRepo):
 @pytest.mark.parametrize("ereignis", ["SubagentStart", "SubagentStop"])
 def testOhneRolleMeldetDerHookNichts(wurzel, ereignis):
     assert entscheide({"hook_event_name": ereignis, "agent_id": "a9"}, wurzel) is None
+
+
+def testGelesenerOrdnerMachtFremdeÄnderungDarinNichtZurVerletzung(wurzel, tmp_path):
+    rahmen = {"agent_type": "probe", "agent_id": "a6"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    (wurzel / "domaene").mkdir()
+    (wurzel / "domaene" / "b.md").write_text("von einem anderen")
+    transkript = transkriptMit(tmp_path, ("Bash", {"command": "cat domaene/a.md"}))
+
+    entscheide(
+        {"hook_event_name": "SubagentStop", "agent_transcript_path": str(transkript), **rahmen},
+        wurzel,
+    )
+
+    verletzt, _, unklar = meldungVon(wurzel, "a6").partition("unklar, wer")
+    assert "domaene/b.md" not in verletzt
+    assert "domaene/b.md" in unklar
+
+
+def testZweiterStoppOhneAusgangsstandLegtKeineMeldungAb(wurzel):
+    rahmen = {"agent_type": "probe", "agent_id": "a7"}
+    entscheide({"hook_event_name": "SubagentStart", **rahmen}, wurzel)
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+    (wurzel / "domaene").mkdir()
+    (wurzel / "domaene" / "nachbar.md").write_text("uncommittet von einem Nachbarn")
+
+    entscheide({"hook_event_name": "SubagentStop", **rahmen}, wurzel)
+
+    assert not (meldungsOrdner(wurzel) / "a7.txt").exists()

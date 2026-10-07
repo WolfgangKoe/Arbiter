@@ -79,6 +79,9 @@ def webdatei(tmp_path, text, name="probe.py"):
         "import flask.templating\n",
         "import flask\nflask.render_template\n",
         "import flask as f\nf.render_template_string(x)\n",
+        "from flask import templating\ntemplating.render_template(x)\n",
+        "import flask\nflask.templating.render_template(x)\n",
+        "import flask.json\nflask.render_template(x)\n",
     ],
 )
 def testW1HtmlErzeugenInWebIstRot(tmp_path, text):

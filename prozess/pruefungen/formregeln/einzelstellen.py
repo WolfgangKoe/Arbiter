@@ -101,7 +101,7 @@ def docstrings(baum: ast.AST) -> set[ast.AST]:
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
             erste = knoten.body[0] if knoten.body else None
-            if isinstance(erste, ast.Expr):
+            if isinstance(erste, ast.Expr) and textVon(erste.value) is not None:
                 gefunden.add(erste.value)
     return gefunden
 

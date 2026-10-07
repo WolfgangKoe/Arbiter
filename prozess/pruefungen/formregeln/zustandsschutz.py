@@ -109,12 +109,47 @@ def schreibAufrufVerstöße(wurzel: Path) -> list[str]:
     ]
 
 
+def textKonstante(knoten: ast.expr | None) -> str:
+    wert = knoten.value if isinstance(knoten, ast.Constant) else None
+    return wert if isinstance(wert, str) else ""
+
+
+def versteckterZugriff(aufruf: ast.Call) -> bool:
+    """`getattr`/`hasattr` mit `_name` und `vars(x)` umgehen den `_`-Zugriff; `self` ist erlaubt."""
+    name = aufrufName(aufruf)
+    if name == "vars":
+        return not anSelfGerichtet(aufruf)
+    zweites = aufruf.args[1] if len(aufruf.args) > 1 else None
+    versteckt = textKonstante(zweites)
+    return name in ("getattr", "hasattr") and versteckt.startswith("_") and not istDunder(versteckt)
+
+
+def umwegVerstöße(wurzel: Path) -> list[str]:
+    """Lesen von `_`-Attributen ohne Punktzugriff: `getattr`, `hasattr`, `__dict__`, `vars`."""
+    gefunden = []
+    for ordner in lesenGesperrtOrdner:
+        for datei, baum in dateien(wurzel, ordner):
+            for knoten in ast.walk(baum):
+                umweg = isinstance(knoten, ast.Call) and versteckterZugriff(knoten)
+                wörterbuch = (
+                    isinstance(knoten, ast.Attribute)
+                    and knoten.attr == "__dict__"
+                    and not anSelf(knoten)
+                )
+                if umweg or wörterbuch:
+                    gefunden.append(
+                        f"{datei.relative_to(wurzel)}:{knoten.lineno} umgeht den _-Zugriff"
+                    )
+    return gefunden
+
+
 def verstöße(wurzel: Path) -> list[str]:
     return (
         veränderbareDataclasses(wurzel)
         + lesenVerstöße(wurzel)
         + schreibenVerstöße(wurzel)
         + schreibAufrufVerstöße(wurzel)
+        + umwegVerstöße(wurzel)
     )
 
 

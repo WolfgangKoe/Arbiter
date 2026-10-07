@@ -1,6 +1,6 @@
 # Web-Sperren: weitere Wege an W1, D3 und dem S4502-Wächter vorbei
 
-297 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+297 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von e724783 (Anliegen 286, dort erledigt: die Proben aus Runde 1
@@ -39,4 +39,4 @@ Ist dir das zu viel Mechanismus: die verbleibenden Wege in `regeln.md` als Grenz
 Text); dann bitte mit Begründung. Erledigt, wenn die Proben rot sind oder als Grenze genannt
 und `python3 -m pytest prozess/pruefungen` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, alle drei Punkte. 1: W1 prüft einen Maßstab, den vollen Namen (`importvertrag.istVorlagenName`), bei Importen und bei Attributketten, deren Wurzel ein Import bindet; die drei Proben sind rot. 2: `zustandsschutz.umwegVerstöße` meldet in `web/` und `katalog/` `getattr`/`hasattr` mit `_`-Text (kein Dunder), `__dict__` und `vars(…)` außer an `self`; Proben rot, `getattr(x, "name")` und `vars(self)` grün. Den Wortlaut von D3 entscheidet der Architekt. 3: `sonarlintTest.ansichtsKlassen`: Klassen von `View`/`MethodView` in `web/` lassen die S4502-Ausnahme fallen wie eine Route außer GET; Probe rot. `regeln.md` ergänzt.

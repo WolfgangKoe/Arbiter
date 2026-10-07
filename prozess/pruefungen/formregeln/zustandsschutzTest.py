@@ -87,3 +87,32 @@ def testD3ZuweisenInKatalogIstGrün(tmp_path):
 def testDerCodeDesReposHältDenZustandsschutz():
     assert (projektordner() / webOrdner).is_dir()
     assert verstöße(projektordner()) == []
+
+
+@pytest.mark.parametrize("ordner", [webOrdner, katalogOrdner])
+@pytest.mark.parametrize(
+    "text",
+    [
+        'getattr(aufstellung, "_stellen")\n',
+        'hasattr(aufstellung, "_stellen")\n',
+        'aufstellung.__dict__["_stellen"]\n',
+        "vars(aufstellung)\n",
+    ],
+)
+def testD3UmwegZumUnterstrichZugriffIstRot(tmp_path, ordner, text):
+    datei(tmp_path, ordner, text)
+    assert verstöße(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        'getattr(aufstellung, "name")\n',
+        'getattr(aufstellung, "__name__")\n',
+        "getattr(aufstellung, name)\n",
+        "self.__dict__\nvars(self)\n",
+    ],
+)
+def testD3GetattrOhneUnterstrichUndSelfSindGrün(tmp_path, text):
+    datei(tmp_path, webOrdner, text)
+    assert verstöße(tmp_path) == []

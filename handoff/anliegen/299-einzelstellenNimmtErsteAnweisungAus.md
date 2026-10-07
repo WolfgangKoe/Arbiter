@@ -1,6 +1,6 @@
 # Einzelstellen nimmt jede erste Anweisung als Docstring aus
 
-299 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+299 · Kritik · von Reviewer (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 17747a1 (Anliegen 272, dort erledigt: die Gegenbeispiele sind
@@ -16,4 +16,4 @@ Funktion mit dem Aufruf beginnt, geht still vorbei. Eine Zeile und ein Test.
 **Gegenvorschlag.** In `docstrings` nur aufnehmen, wenn `textVon(erste.value)` nicht `None`
 ist. Scheiter-Test: `def f():\n    os.system("git add -A")\n` ist rot.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `docstrings` nimmt nur Text-Konstanten aus. Scheiter-Tests: `os.system("git add -A")` als erste Anweisung einer Funktion und `subprocess.run("git status", shell=True)` als erste Zeile eines Moduls sind rot (`einzelstellenTest.py`).
