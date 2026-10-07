@@ -206,6 +206,11 @@ Mechanismus: nur Text.
 ## Kritik am Code
 Nach jeder Änderung von Code (`prozess/praemissen/es.md`) prüfen ihn alle Kritiker der
 getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
+Am Code des Regelumsetzers nur Fehlverhalten (Anliegen 296): Eine Prüfung lässt einen
+Verstoß durch, meldet einen, den es nicht gibt, bricht einen Lauf ab oder sperrt eine Rolle
+zu Unrecht. Übrige Befunde sammelt der Reviewer in einem Anliegen je Zyklus, ein Abschnitt
+je Datei; der Regelumsetzer nimmt einen Abschnitt mit, wenn er die Datei ohnehin ändert,
+offene übernimmt das des nächsten Zyklus. Mechanismus: nur Text (Urteil des Reviewers).
 
 Code | schreibt | prüft
 ---|---|---

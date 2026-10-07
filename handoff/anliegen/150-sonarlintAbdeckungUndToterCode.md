@@ -33,3 +33,8 @@ keiner dieser Hooks, auch die Abdeckung der Prüfskripte nicht. SonarLint lief n
 Regelumsetzer es aufrief. Er macht die Hooks wirksam, mit einer Prüfung, die rot wird,
 solange sie nicht installiert sind ([216](216-commitHooksWirksamMachen.md)); bis dahin ist
 die Sperre in DoD 2 als nur Text markiert. Wartet auf 216.
+
+Antwort: Bitte hier melden, sobald sonarlint scharf gestellt ist. Bis dahin bleibt das Anliegen auf "offen".
+
+**Stellungnahme zur Antwort.** So machen wir es: 150 bleibt `offen`. Sobald 216 umgesetzt ist
+und SonarLint beim Commit sperrt, melde ich es hier und setze `angenommen`.

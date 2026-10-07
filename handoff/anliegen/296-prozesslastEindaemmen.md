@@ -7,19 +7,15 @@ Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · a
 ## Runde 1
 **Befund.** Seit `Freigabe Retro 2` gingen 90 von 129 neuen Anliegen an den Regelumsetzer
 oder mich (70 %, Schwelle der [Prozesslast](../../prozess/kennzahlen.md) ein Drittel). Offen
-sind 38, alle in der Perspektive Prozess, 31 an den Regelumsetzer. Gut die Hälfte ist Kritik
-am Code der Prüfskripte, die wieder Kritik erzeugt (202 bis 206: Nachschliff am Nachschliff).
-Prüfskripte 367.500 Zeichen (Retro 2: 183.000), Produkt 29.100. Die Reaktion der Kennzahl
-(erst einen Mechanismus löschen) ist nur Text und griff nie. Die Fragen stellt die
-[Moderation](../moderation.md); sie beantworten deine Frage in [107](107-kritikAnDenPruefungen.md).
+sind 38, 31 an den Regelumsetzer, gut die Hälfte Kritik am Code der Prüfskripte (202 bis
+206: Nachschliff am Nachschliff). Die Reaktion der Kennzahl ist nur Text und griff nie.
+Fragen aus der [Moderation](../moderation.md), zu deiner Frage in [107](107-kritikAnDenPruefungen.md).
 
 **Kosten.** Plan 4 wartet auf eine Kette einer Rolle; Domäne und Technik sind frei.
 
-**Gegenvorschlag.** Keine neue Prüfung. Ich passe zwei bestehende Regeln an
-([ich.md](../../prozess/praemissen/ich.md) 4): die Reaktion der Prozesslast und
-[Ablauf, Kritik am Code](../../prozess/ablauf.md#kritik-am-code) („Befunde werden Anliegen an
-den Autor“). Der Deckel ersetzt 107 Punkt 2 (der Stand rechnet die Prozesslast); Punkt 3
-(Gesamtmaß der Prüfskripte) bleibt im [Backlog](../../prozess/backlog.md).
+**Gegenvorschlag.** Keine neue Prüfung; angepasst werden die Reaktion der Prozesslast und
+Kritik am Code ([ich.md](../../prozess/praemissen/ich.md) 4). Der Deckel ersetzt 107 Punkt 2;
+Punkt 3 bleibt im Backlog.
 
 **F1 · Deckel und Backlog.** Höchstens 10 offene Anliegen an den Regelumsetzer. Darüber legt
 niemand ein neues an ihn an, außer bei Fehlverhalten (F3) oder von dir, und der Koordinator
@@ -32,7 +28,7 @@ schon je Rolle (`Dran: Regelumsetzer (…)`).
   Mechanismus, vorher wird einer gelöscht.
 - C: kein Deckel, nur der Backlog.
 
-Antwort: .
+Antwort: A
 
 **F2 · Plan 4 vor der restlichen Kette.** Vorab nur 294 (Elementverbot, prüft das Frontend,
 das Plan 4 ändert) und 286, falls die laufende Nachprüfung eine Lücke findet. Retro 3 führt
@@ -43,7 +39,7 @@ Prüflauf der Rollen von Plan 4 ab (289). Mechanismus: `standregeln/phasenfolge.
 - A (empfohlen): so.
 - B: zusätzlich 287, 290, 295 vorab, wie die Moderation zuerst vorschlug.
 
-Antwort: .
+Antwort: A
 
 **F3 · Kritik am Code der Prüfskripte nur bei Fehlverhalten.** Fehlverhalten: Eine Prüfung
 lässt einen Verstoß durch, meldet einen, den es nicht gibt, bricht einen Lauf ab oder sperrt
@@ -59,8 +55,14 @@ des Regelumsetzers in der Tabelle. Übrige Befunde des Reviewers:
 
 Mechanismus: nur Text (Urteil des Reviewers, was Fehlverhalten ist).
 
-Antwort: .
+Antwort: A
 
 Nach deinen Antworten ändere ich Kennzahlen, Ablauf und Backlog (Retro 3, Nachkorrektur).
 
-**Stellungnahme.**
+**Stellungnahme.** Machen wir so, kann Anliegen 107 geschlossen werden?
+
+**Klärung.** Ja, 107 schließt du als Absender mit `erledigt`. Umgesetzt in
+[Kennzahlen](../../prozess/kennzahlen.md) (Deckel),
+[Ablauf, Kritik am Code](../../prozess/ablauf.md#kritik-am-code) (F3) und
+[Backlog](../../prozess/backlog.md) (202 bis 206, 221). F2 ist erfüllt: 286, 287, 290, 294, 295 sind erledigt,
+Retro 3 braucht kein P1. Setz bitte `angenommen`.

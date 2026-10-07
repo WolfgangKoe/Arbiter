@@ -2,16 +2,16 @@
 
 Zurückgestellt, bis ein Befund es auslöst. Was ausgelöst ist, wird ein Prozess-Item der Retro.
 
-Ausgelöst, ohne Wirkung auf Plan 3 (Anliegen 156); Auslöser: Prozessphase Zyklus 3.
+Neue Mechanismen, zurückgestellt wegen der Prozesslast (Retro 3); Auslöser: Retro 4 mit
+Prozesslast unter der Schwelle.
 - Höchstmaße in `formregeln/hoechstmassTest.py`: Code-Modul 12.000 (auch `conftest.py`,
-  Anliegen 251), Einheitstest-Datei 8.000; vorher `kriterienregeln/rueckverfolgung.py` (114 B 7), `kriterienregeln/rueckverfolgungTest.py` und
-  `standregeln/standTest.py` teilen (Retro 2, Befund 4).
-- `standregeln/kennzahlen.py` rechnet die Prozesslast; Gesamtmaß für `prozess/pruefungen/`,
-  damit Löschen wie Hinzufügen zählt (Anliegen 107).
-- Anliegen 114 (Prüfskripte ordnen) und 139 (Sandbox, nach der Entscheidung des Stakeholders).
+  Anliegen 251), Einheitstest-Datei 8.000; vorher zu große Dateien teilen (Retro 2, Befund 4).
+- Gesamtmaß für `prozess/pruefungen/`, damit Löschen wie Hinzufügen zählt (Anliegen 107).
+- Auslösezähler für Regeln, Rollen und Skills (E26), oder eine Regel steht im Verdacht, nie
+  zu greifen.
 
-- Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Retro 3, oder eine Regel
-  steht im Verdacht, nie zu greifen.
+- Nachschliff an Prüfskripten (Anliegen 202 bis 206, 221; Anliegen 296). Auslöser: Der
+  Regelumsetzer ändert die Datei ohnehin.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item
   geht mit einem dieser Mängel in die Technikphase.
 - Werkzeuge der DoD ([Ablauf](ablauf.md#dod-item-fertig)) außer complexipy, ruff,

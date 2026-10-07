@@ -9,6 +9,11 @@ für die Retro. Mechanismus: nur Text.
   Arbeit, die das Produkt bräuchte. Schwelle: ein Drittel. Reaktion: Die Retro löscht
   mindestens einen Mechanismus, bevor sie einen neuen beauftragt, der nicht auf ein Anliegen
   des Stakeholders zurückgeht. Mechanismus: nur Text.
+- Deckel: höchstens 10 offene Anliegen an den Regelumsetzer (Anliegen 296). Bedeutung: Die
+  Kette einer Rolle hält das Produkt nicht auf. Reaktion: Darüber legt niemand ein neues an
+  ihn an, außer bei Fehlverhalten ([Ablauf, Kritik am Code](ablauf.md#kritik-am-code)) oder
+  vom Stakeholder, und der Koordinator beauftragt keinen neuen Mechanismus. Mechanismus: nur
+  Text; der Stand nennt die offenen je Rolle (`standregeln/anliegenText.py`).
 
 ## Höchstmaße
 In Zeichen. Geprüft (`formregeln/hoechstmassTest.py`): Etappen, Agentendefinition, Beschreibung,
