@@ -1,6 +1,6 @@
 # Regeln: Stand der Komponentenseite überholt
 
-283 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+283 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Regeln](../../prozess/regeln.md), Zeile zu O3 (Anliegen 262), letzte Spalte:
