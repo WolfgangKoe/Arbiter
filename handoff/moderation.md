@@ -1,44 +1,51 @@
 # Moderation
 
-Stand: Zyklus 3, Prozessphase, 39 Anliegen-Dateien; nächster Schritt Retro 3.
+Stand: Zyklus 3, Prozessphase, 38 offene Anliegen; nächster Schritt Retro 3.
+
+## Befund: bestätigt
+- Offen: 38 von 38 in der Perspektive Prozess; Domäne 0, Technik 0 (294, 286 prüfen
+  Frontend und web, ändern aber nur Prüfskripte). Empfänger: Regelumsetzer 33,
+  Organisationsentwickler 5 (107, 138, 150, 219, 289); alle anderen Rollen 0.
+- Absender: Reviewer 19, Organisationsentwickler 12, Architekt 4, Stakeholder 3. Also
+  gut die Hälfte ist Kritik am Code der Prüfskripte, die selbst Kritik erzeugt (Nachschliff
+  202 bis 206 stammt von Kritik an Nachschliff).
+- Zufluss gegen Abfluss seit Freigabe Retro 2: 129 angelegt, 112 gelöscht, 243 Commits.
+  Der Abfluss hält kaum mit; 22 der 38 sind älter als 250. Die Last liegt auf einer Rolle.
+- Arbeit seit Freigabe Retro 2 (Dateien): prozess und .claude 499, technik 57, domaene 38.
+  Prozesslast ([Kennzahlen](../prozess/kennzahlen.md)): nahe 100 % gegen Schwelle ein Drittel.
+- Fehlt: ein Anliegen mit Frage zu dieser Lage. Die alten Fragen (279, 280) sind erledigt.
 
 ## Dran
-Blockiert das Inkrement: nichts. Plan 4 baut auf der Komponentenseite aus
-Anliegen 262 auf; dessen Nachprüfung ist fällig.
-- Organisationsentwickler: Retro 3; Anliegen 282; 107 (Antwort des
-  Stakeholders: noch keine Reaktion), 150 (Antwort: SonarLint scharfstellen), 138, 219.
-- Regelumsetzer (27): 253 Punkte 5, 7; 240 Runde 2; 268; 272 bis 276, 278; 281; 246, 247, 249;
-  215, 216, 218, 220, 221, 228 bis 232; 202 bis 206.
-- Architekt: Nachprüfung 262, 265. Reviewer: Nachprüfung 270, 279; Kritik an 9d6514a.
-- Stakeholder: Fragen unten. Testautor, Anforderungsautor, Planer: nichts offen.
+Blockiert Plan 4 (Komponentenseite): [286](anliegen/286-pruefungenZuWebUndKomponentenLuecken.md),
+[294](anliegen/294-elementverbotHatLuecken.md); Prüfung vor dem Frontend, sonst nichts.
+- Regelumsetzer: 33 an ihn, Kette siehe unten.
+- Organisationsentwickler: Retro 3; 107, 138, 150, 219, 289.
+- Reviewer, Architekt: Nachprüfungen, die fällig werden. Domäne, Technik-Rollen: frei.
 
 ## Vorschläge
-Stränge nach [Ablauf, Gleichzeitige Läufe](../prozess/ablauf.md#gleichzeitige-läufe). Vor jedem
-Start `git status` gegen die Dateien des Nachbarn prüfen.
-
-Regelumsetzer, drei Stränge gleichzeitig:
-1. Kette (Hook-Code, höchstens ein Lauf): 253 P5 → P7 → 281 → 272 → 278 → 273 → 274 → 276 (nach
-   268) → 275 mit 246; danach 215, 218, 220 (ebenfalls Hooks).
-   281 und 272 prüfen beide die Schichten; ein Lauf, wenn die Dateien dieselben sind.
-2. Linter, kein Hook: 268 (`eslint.config.mjs`, `frontendTest.py`; Schreibpfad hängt an F2 in 279),
-   240 Runde 2 (Status klären, Commit 973cb7b liegt vor). 276 wartet auf 268.
-3. Prüfskript-Werkzeug, kein Hook: 229 mit 232, dann 231 mit 247 (`konfigurationTest.py`), 228 mit
-   230, 249; daneben 221 und 202 bis 206 (204 mit 205), solange ihre Dateien frei sind. 216 erst
-   nach der Kette.
-
-Reviewer: Nachprüfung 270, 279 und Kritik 9d6514a gleichzeitig (nur Anliegen); danach je Lauf der
-Kette Kritik am Code. 279 wartet auf F1, F2.
-Architekt: Nachprüfung 262, 265 gleichzeitig mit allen anderen; später Kritik an
-Linter-Konfiguration aus Strang 2.
-Organisationsentwickler: Retro 3 (`retro.md`) und 282 (`ablauf.md`, `es.md`) gleichzeitig, Dateien
-getrennt. 282 deckt dieselben Pfadzeilen wie Anliegen 281
-Befund 1 und 2 in `regeln.md`; das Anliegen trägt je Rolle ihre Datei. Schließen: 107, 226 nach
-253; 138 nach 215; 219 nach 220; 150 nach 216 und Antwort auf 280.
-Ablegen: 267 ist erledigt, die Datei geht von selbst. 153 ist gelöscht und nicht mehr offen.
+Vor Plan 4 (Regelumsetzer): 286, 294, 287, 290, 295; danach Plan 4 starten, Rest parallel.
+Schließen (Organisationsentwickler, Absender): [107](anliegen/107-kritikAnDenPruefungen.md)
+(253 erledigt), 219 mit 220, 138 mit 215.
+Bündeln, ein Lauf des Regelumsetzers:
+- 215, 288, 138: Bash-Umgehung; 215 ist der Versuch, in den Backlog (139 steht dort).
+- 289 mit 290; 278 mit 287 (Hook-Meldung, Bilanz); 272 mit 292 (Schichten).
+- 228, 229, 230, 231, 232 (Starter, Wurzel, Unterordner); 247 mit 249 (Importvertrag).
+- 274, 275 mit 246 (Dashboard, Anliegenformen); 273, 276, 284, 240 einzeln, klein.
+Backlog (Reviewer als Absender, kein Fehlverhalten, Nachschliff): 202 bis 206, 221, 295.
+  Auslöser: Fund in einem Lauf. Behalten, weil Stakeholder oder Plan es trägt:
+  [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) mit 216, 246, 275.
+Regel (Organisationsentwickler, Retro 3, Kennzahl greift): Kritik am Code der Prüfskripte nur
+bei Fehlverhalten, Rest als Sammelanliegen je Datei und Zyklus; höchstens 10 offen an den
+Regelumsetzer. Bestehende Regel: Prozesslast, Reaktion „mindestens einen Mechanismus löschen“.
+Arbeitsteilung: Zyklus Domäne, Technik im Wechsel; Prozessphase nur Kette der Blocker.
+Stränge nach [Ablauf](../prozess/ablauf.md#gleichzeitige-läufe): Hook-Code (272, 278, 287,
+289, 290) höchstens ein Lauf; Linter (294) und Prüfskript-Werkzeug (228 bis 232, 247, 249)
+daneben.
 
 ## Fragen an dich
-- Anliegen 279 F1: Worktree je Lauf jetzt (Empfehlung: nein).
-- 279 F2: darf der Regelumsetzer `eslint.config.mjs`, `.stylelintrc.json`, `package.json`,
-  `package-lock.json` schreiben (Empfehlung: ja); blockiert 268 und 276.
-- Anliegen 280 F1: soll `sonarlint.py` das Frontend prüfen
-  (Empfehlung: nein, Node ≥ 22.12 wäre Voraussetzung).
+Offen ist keine; kein Anliegen stellt sie. Der Organisationsentwickler legt sie an, wenn du
+unten zustimmst:
+- Backlog und Deckel (höchstens 10 offene Anliegen an den Regelumsetzer) wie oben?
+- Plan 4 vor der restlichen Kette, nur 286, 294 vorab?
+- Kritik am Code der Prüfskripte nur bei Fehlverhalten?
+Kommentar:
