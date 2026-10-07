@@ -29,3 +29,5 @@ Danach werte ich das Protokoll aus, nehme die Verweise auf `es.md` aus den
 Agentendefinitionen, wenn sie laden, und ersetze „nur Text“.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

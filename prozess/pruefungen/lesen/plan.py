@@ -43,13 +43,3 @@ def offeneItemTexte(wurzel: Path) -> list[str]:
     return [
         (wurzel / itemsOrdner / name).read_text(encoding="utf-8") for name in offeneItems(wurzel)
     ]
-
-
-def itemsOhneLink(wurzel: Path) -> bool:
-    """Der Plan hat einen Abschnitt `## Item(s)`, aber keinen Link auf `domaene/items/`."""
-    plan = wurzel / planDatei
-    if not plan.is_file():
-        return False
-    text = plan.read_text(encoding="utf-8")
-    nenntItems = re.search(r"^## Items?\s*$", text, flags=re.MULTILINE) is not None
-    return nenntItems and f"](../{itemsOrdner}/" not in text

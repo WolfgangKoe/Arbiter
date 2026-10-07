@@ -12,10 +12,8 @@ handoffOrdner = "handoff"
 anliegenOrdner = f"{handoffOrdner}/anliegen"
 frontendOrdner = "technik/frontend"
 webOrdner = "technik/arbiter/web"
-katalogOrdner = "technik/arbiter/katalog"
 etappenOrdner = "domaene/etappen"
 itemsOrdner = "domaene/items"
-mockupOrdner = "domaene/mockups"
 
 nurLesbar = ("VORGEHEN.md", f"{handoffOrdner}/kritik-entwickler.md", "Arbiter-old/", "ArbiterMap/")
 # Warum: Ordner unter `nurLesbar` (Eintrag mit `/` am Ende) sind der Altbestand; ihn prüft nichts.

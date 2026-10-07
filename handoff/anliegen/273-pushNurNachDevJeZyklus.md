@@ -29,3 +29,5 @@ Den Push außerhalb des Zyklusendes sperre ich nicht: Der Stand nennt den Zeitpu
 Sperre daran hinge an derselben Herleitung. Danach ersetze ich „nur Text“ in Prozessphase 6.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

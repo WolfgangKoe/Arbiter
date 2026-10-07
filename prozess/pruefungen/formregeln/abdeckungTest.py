@@ -14,7 +14,6 @@ from formregeln.abdeckung import (
     verstoß,
 )
 from gemeinsam.pfade import akzeptanzOrdner, wurzel
-from standregeln.phasenfolge import Phase, lage
 
 vollständig = 100
 modulMitZweig = "def zeichen(wert):\n    if wert:\n        return 'ja'\n    return 'nein'\n"
@@ -142,23 +141,16 @@ def rotMessen(tmp_path) -> Abdeckung:
     )
 
 
-def testRoteTestsInDerTechnikphaseSetzenDieSchwelleAus(tmp_path):
+def testRoteTestsSetzenDieSchwelleAus(tmp_path):
     gemessen = rotMessen(tmp_path)
     assert gemessen.rote == 1
-    assert "1 Tests rot" in aussetzung(gemessen, Phase.technikphase)
+    assert "1 Tests rot" in aussetzung(gemessen)
 
 
-@pytest.mark.parametrize("phase", [Phase.domänenphase, Phase.prozessphase])
-def testRoteTestsAußerhalbDerTechnikphaseSindRot(tmp_path, phase):
-    gemessen = rotMessen(tmp_path)
-    assert aussetzung(gemessen, phase) is None
-    assert "1 Tests rot" in verstoß("probe", gemessen)
-
-
-def testGrüneTestsSetzenDieSchwelleInDerTechnikphaseNichtAus(tmp_path):
+def testGrüneTestsSetzenDieSchwelleNichtAus(tmp_path):
     gemessen = probeMessen(tmp_path, modulMitZweig, testDerNurJaProbt)
     assert gemessen.rote == 0
-    assert aussetzung(gemessen, Phase.technikphase) is None
+    assert aussetzung(gemessen) is None
     assert verstoß("probe", gemessen) is not None
 
 
@@ -174,16 +166,10 @@ def testRoteTestsBeiLeererAusgabeIstNull():
 @pytest.mark.stand
 def testDasProduktErreichtDieSchwelleMitSeinenTests():
     gemessen = abdeckungMessen(wurzel, "technik/arbiter", "technik/tests")
-    ausgesetzt = aussetzung(gemessen, lage(wurzel).phase)
+    ausgesetzt = aussetzung(gemessen)
     if ausgesetzt:
         pytest.skip(ausgesetzt)
     assert verstoß("technik/arbiter", gemessen) is None, verstoß("technik/arbiter", gemessen)
-
-
-@pytest.mark.stand
-def testPreCommitMisstDieAbdeckungDerPrüfskripte():
-    konfiguration = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
-    assert "formregeln.abdeckung" in konfiguration
 
 
 def vultureProbe(tmp_path, quelle: str, akzeptanz: str, einheit: str) -> list[str]:

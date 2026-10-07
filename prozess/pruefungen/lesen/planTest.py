@@ -1,4 +1,4 @@
-from lesen.plan import itemsOhneLink, offeneItems
+from lesen.plan import offeneItems
 
 
 def planSchreiben(wurzel, text):
@@ -8,15 +8,6 @@ def planSchreiben(wurzel, text):
 
 def testOhnePlanGibtEsKeineOffenenItems(tmp_path):
     assert offeneItems(tmp_path) == []
-
-
-def testOhnePlanFehltKeinLinkAufItems(tmp_path):
-    assert itemsOhneLink(tmp_path) is False
-
-
-def testEinAbschnittItemsOhneLinkAufItemsFälltAuf(tmp_path):
-    planSchreiben(tmp_path, "# Plan\n\n## Items\nnichts\n")
-    assert itemsOhneLink(tmp_path) is True
 
 
 def testEinOffenesItemIstDasMitDateiInItems(tmp_path):

@@ -40,3 +40,5 @@ anderen Themenordner, die nicht gesammelt wird; Modul ohne Test im Unterordner) 
 `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

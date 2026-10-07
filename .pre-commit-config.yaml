@@ -8,7 +8,7 @@ repos:
         pass_filenames: false
         always_run: true
       - id: pruefungen
-        name: Prüfungen (Hooks, Benennung, Höchstmaße, Anliegen, Kriterium zu Test)
+        name: Prüfungen (Benennung, Glossar, Importvertrag, Anliegen, Kriterium zu Test)
         entry: python3 -m pytest prozess/pruefungen -q
         language: system
         pass_filenames: false
@@ -19,12 +19,6 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-      - id: abdeckungPruefskripte
-        name: Abdeckung der Prüfskripte ohne Prüfungen über das Repo
-        entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.abdeckung
-        language: system
-        pass_filenames: false
-        files: ^(prozess/pruefungen/|pyproject\.toml$)
       - id: sonarlint
         name: SonarLint (Standardprofil ohne Namensregeln)
         entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint

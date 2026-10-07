@@ -57,7 +57,7 @@ def stoppEingabe(datei, rolle="planer"):
 
 
 def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
-    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
+    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt)
     assert eintrag.alsEintrag() == {
         "zeit": "2026-10-04T12:30:00+00:00",
         "rolle": "planer",
@@ -68,8 +68,8 @@ def testLaufMitRolleUndBelegungWirdEingetragen(tmp_path):
         "modell": "claude-opus-5-5",
         "koordinator": None,
         "dauer": None,
-        "zyklus": 1,
-        "phase": "Domänenphase",
+        "zyklus": None,
+        "phase": None,
         "stopp_wiederholt": False,
     }
 
@@ -82,14 +82,14 @@ def testKoordinatorStandKommtAusDemHauptTranskript(tmp_path):
         encoding="utf-8",
     )
     eingabe = stopp(transkript(tmp_path, 80_000)) | {"transcript_path": str(haupt)}
-    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path).koordinator == hauptstand
+    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt).koordinator == hauptstand
 
 
 @pytest.mark.parametrize(
     "eingabe", [{}, {"agent_type": "planer"}, {"agent_type": "planer", "agent_id": "a1"}]
 )
-def testLaufOhneRolleOderBelegungBleibtUnprotokolliert(eingabe, tmp_path):
-    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt, tmp_path) is None
+def testLaufOhneRolleOderBelegungBleibtUnprotokolliert(eingabe):
+    assert laufEintrag(HookEingabe.aus(eingabe), zeitpunkt) is None
 
 
 def testLogWächstUndLässtSichLesen(tmp_path):
@@ -168,7 +168,7 @@ def testJüngsterAuftragImTranskriptGiltUndKürztAmWort(tmp_path):
         {"message": {"role": "user", "content": langer}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    ziel = laufEintrag(stoppEingabe(datei), zeitpunkt, tmp_path).ziel
+    ziel = laufEintrag(stoppEingabe(datei), zeitpunkt).ziel
     assert ziel.endswith("wort…") and len(ziel) <= zielLänge + 1
 
 
@@ -190,7 +190,7 @@ def testHinweiseUndVorspannSindKeinAuftrag(tmp_path):
         {"message": {"role": "assistant", "usage": {"cache_read_input_tokens": 1}}},
     ]
     datei.write_text("\n".join(json.dumps(zeile) for zeile in zeilen), encoding="utf-8")
-    assert laufEintrag(stoppEingabe(datei), zeitpunkt, tmp_path).ziel == "Neuer Auftrag: zweiter"
+    assert laufEintrag(stoppEingabe(datei), zeitpunkt).ziel == "Neuer Auftrag: zweiter"
 
 
 def testKetteWiederholterStoppsGibtDenAuftragDesErstenWeiter(tmp_path):
@@ -254,24 +254,6 @@ def testDauerReichtVomJüngstenAuftragBisZurLetztenZeile(tmp_path):
     assert dauerSekunden(transkriptEinträge(datei)) == 150  # noqa: PLR2004
     assert "3 min" in seiteErzeugen([Lauf("a", "r", 1, dauer=180)])
     assert "45 s" in seiteErzeugen([Lauf("a", "r", 1, dauer=45)])
-
-
-def testZyklusUndPhaseKommenAusDerLage(tmp_path, monkeypatch):
-    from rollenregeln import laufLog
-
-    monkeypatch.setattr(laufLog, "zyklusUndPhase", lambda _ordner: (3, "Prozessphase"))
-    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
-    assert (eintrag.zyklus, eintrag.phase) == (3, "Prozessphase")
-
-
-def testZyklusUndPhaseLiestPhasenfolge(monkeypatch):
-    from rollenregeln import laufLog
-    from standregeln import phasenfolge
-
-    monkeypatch.setattr(
-        phasenfolge, "lage", lambda _ordner: phasenfolge.Lage(3, phasenfolge.Phase.prozessphase, "")
-    )
-    assert laufLog.zyklusUndPhase(None) == (3, "Prozessphase")
 
 
 def testDauerOhneZeitstempelIstLeer(tmp_path):
@@ -345,20 +327,9 @@ def testDauerBeimZusammenführenSummiertBeideTeile(tmp_path):
     assert dauerSumme(Lauf("a", "planer", 1, dauer=None), Lauf("a", "planer", 1, dauer=5)) is None
 
 
-def testFehlerInDerLageKostetDenEintragNicht(tmp_path, monkeypatch):
-    from standregeln import phasenfolge
-
-    def wirft(_ordner):
-        raise RuntimeError
-
-    monkeypatch.setattr(phasenfolge, "lage", wirft)
-    eintrag = laufEintrag(stoppEingabe(transkript(tmp_path, 80_000)), zeitpunkt, tmp_path)
-    assert eintrag.belegung and eintrag.zyklus is None
-
-
-def testHookWegTrägtZyklusEin(tmp_path):
+def testHookWegTrägtDenLaufEin(tmp_path):
     protokollieren(stoppEingabe(transkript(tmp_path, 80_000)), tmp_path)
-    assert läufeLesen(tmp_path)[0].zyklus == 1
+    assert läufeLesen(tmp_path)[0].belegung > 0
     assert (tmp_path / "dashboard.html").is_file()
 
 

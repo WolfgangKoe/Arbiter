@@ -27,3 +27,5 @@ der Lauf der Prüfungen rot; der Stand nennt nach jeder Freigabe den falschen Zu
 Danach ersetze ich „nur Text, bis Anliegen 274“ im Ablauf.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

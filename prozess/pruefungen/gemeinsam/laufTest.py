@@ -14,7 +14,7 @@ def ohnePythonpath() -> dict[str, str]:
 
 def testDerStarterFindetQuerimporteOhnePythonpath():
     lauf = subprocess.run(
-        [sys.executable, str(starter), "formregeln.einstellungen"],
+        [sys.executable, str(starter), "formregeln.kommentare"],
         cwd=wurzel,
         env={**ohnePythonpath(), "CLAUDE_PROJECT_DIR": str(wurzel)},
         capture_output=True,

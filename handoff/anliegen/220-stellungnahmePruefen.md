@@ -27,3 +27,5 @@ Reviewer den Code geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-
 „Nur Text“ im Ablauf ersetze ich danach.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

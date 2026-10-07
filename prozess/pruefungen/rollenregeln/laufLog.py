@@ -94,25 +94,12 @@ def dauerSekunden(alle: list[dict]) -> int | None:
     return round((max(ende) - beginn).total_seconds()) if beginn and ende else None
 
 
-def zyklusUndPhase(ordner: Path) -> tuple[int | None, str | None]:
-    """Zyklus und Phase; leer, wenn die Lage nicht zu lesen ist (der Titel ist nur Zugabe)."""
-    from standregeln.phasenfolge import (
-        lage,  # Warum: lädt git und die Plandateien nur beim Eintragen
-    )
-
-    try:
-        gefunden = lage(ordner)
-    except Exception:  # Warum: halb geschriebene Dateien dürfen den Eintrag nicht kosten
-        return None, None
-    return gefunden.zyklus, str(gefunden.phase)
-
-
 def koordinatorStand(eingabe: HookEingabe) -> int | None:
     haupt = eingabe.transkript
     return belegungAusTranskript(haupt) if eingabe.agentId and haupt else None
 
 
-def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> Lauf | None:
+def laufEintrag(eingabe: HookEingabe, zeit: datetime) -> Lauf | None:
     """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
     rolle = eingabe.rolle
     transkript = eigenesTranskript(eingabe)
@@ -121,7 +108,6 @@ def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> Lauf | No
         return None
     einträge = transkriptEinträge(transkript)
     ziel, modell = zielUndModell(einträge)
-    zyklus, phase = zyklusUndPhase(ordner)
     return Lauf(
         zeit=zeit.isoformat(timespec="seconds"),
         rolle=rolle,
@@ -132,8 +118,6 @@ def laufEintrag(eingabe: HookEingabe, zeit: datetime, ordner: Path) -> Lauf | No
         modell=modell,
         koordinator=koordinatorStand(eingabe),
         dauer=dauerSekunden(einträge),
-        zyklus=zyklus,
-        phase=phase,
         stoppWiederholt=eingabe.stoppWiederholt,
     )
 
@@ -147,7 +131,7 @@ def eintragAnhängen(wurzel: Path, lauf: Lauf) -> None:
 
 def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
     """Trägt den Lauf ein und schreibt das Dashboard neu."""
-    gefunden = laufEintrag(eingabe, jetzt(), ordner)
+    gefunden = laufEintrag(eingabe, jetzt())
     if gefunden:
         eintragAnhängen(ordner, gefunden)
         dashboardSchreiben(ordner)

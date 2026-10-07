@@ -37,3 +37,5 @@ Erledigt, wenn der Test am Gegenbeispiel oben (Import ohne Ordner in einem Hook-
 und `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

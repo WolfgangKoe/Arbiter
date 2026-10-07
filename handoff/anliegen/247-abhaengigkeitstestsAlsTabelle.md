@@ -49,3 +49,5 @@ Erledigt, wenn die drei Punkte umgesetzt oder begründet abgelehnt sind und die 
 grün sind. Das Inkrement wird dadurch nicht blockiert.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

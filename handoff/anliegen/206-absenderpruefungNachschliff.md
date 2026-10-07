@@ -30,3 +30,5 @@ hängt die Nummer an.
 
 Erledigt, wenn B1 mit Scheiter-Test umgesetzt ist, B2 umgesetzt oder begründet abgelehnt
 ist, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Commit geprüft hat.
+
+Stellungnahme: Entfällt mit dem Rückbau.

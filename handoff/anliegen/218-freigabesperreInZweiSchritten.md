@@ -43,3 +43,5 @@ Erledigt, wenn die Scheiter-Tests grün sind, `python3 -m pytest prozess/pruefun
 und der Reviewer den Commit geprüft hat.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

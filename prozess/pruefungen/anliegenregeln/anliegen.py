@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-from anliegenregeln.antworten import antwortVerstöße
 from lesen.agenten import rollennamen
 from lesen.anliegenKopf import Status, höchstRunde, kopfLesen, stakeholder, typWerte
 
@@ -28,7 +27,6 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     if not isinstance(anliegen.status, Status):
         erlaubt = ", ".join(Status)
         verstöße.append(f"Status {anliegen.status} ist keiner von {erlaubt}")
-    verstöße += antwortVerstöße(datei.read_text(encoding="utf-8"), anliegen)
     bekannt = {name.lower() for name in rollennamen(wurzel)} | {stakeholder.lower()}
     for rolle in (anliegen.absender, anliegen.empfänger):
         if rolle.lower() not in bekannt:

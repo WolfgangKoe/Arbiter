@@ -28,3 +28,5 @@ rot.
 Erledigt, wenn der Scheiter-Test grün läuft und `regeln.md` und Kennzahlen dasselbe sagen.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

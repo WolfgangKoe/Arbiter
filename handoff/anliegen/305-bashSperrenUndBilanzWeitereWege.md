@@ -45,3 +45,5 @@ Erledigt, wenn die Proben wie genannt rot und grün sind und `python3 -m pytest 
 grün ist.
 
 **Stellungnahme.**
+
+Stellungnahme: Entfällt mit dem Rückbau.

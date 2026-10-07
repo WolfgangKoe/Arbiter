@@ -1,4 +1,4 @@
-"""Zweigabdeckung und toter Code messen (ablauf.md, DoD 1 und 2)."""
+"""Zweigabdeckung und toter Code des Produkts messen."""
 
 import json
 import math
@@ -10,11 +10,7 @@ import tempfile
 from pathlib import Path
 from typing import NamedTuple
 
-from gemeinsam.pfade import wurzel
-from standregeln.phasenfolge import Phase
-
 schwelle = 95
-prüfskripte = "prozess/pruefungen"
 # Warum: vulture endet mit 0 ohne Fund und mit 3 bei totem Code; alles andere ist ein Fehler
 vultureGültig = (0, 3)
 
@@ -46,9 +42,9 @@ def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
     return f"{abdeckungText(name, abdeckung)}, verlangt {schwelle} %"
 
 
-def aussetzung(abdeckung: Abdeckung, phase: Phase) -> str | None:
-    """Meldung, wenn die Schwelle nicht gilt: rote Tests in der Technikphase (DoD 1)."""
-    if abdeckung.rote and phase == Phase.technikphase:
+def aussetzung(abdeckung: Abdeckung) -> str | None:
+    """Meldung, wenn die Schwelle nicht gilt: rote Tests, denn Tests entstehen vor dem Code."""
+    if abdeckung.rote:
         return f"{abdeckung.rote} Tests rot (Tests vor dem Code), Abdeckung nicht gemessen"
     return None
 
@@ -115,10 +111,3 @@ def unbenutzterCode(wurzel: Path, *pfade: str) -> list[str]:
     )
     assert lauf.returncode in vultureGültig, f"vulture ist gescheitert: {lauf.stderr}"
     return lauf.stdout.splitlines()
-
-
-if __name__ == "__main__":
-    gemessen = abdeckungMessen(wurzel, prüfskripte, prüfskripte, "not stand")
-    meldung = verstoß(prüfskripte, gemessen)
-    print(meldung or f"{abdeckungText(prüfskripte, gemessen)}, ausreichend")
-    sys.exit(1 if meldung else 0)

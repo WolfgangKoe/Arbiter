@@ -41,3 +41,5 @@ Erledigt, wenn der Test aus 2 an je einem Gegenbeispiel rot wird, der Probelauf 
 ausgeht (Ergebnis in deiner Stellungnahme), `python3 -m pytest prozess/pruefungen` grün ist
 und der Reviewer den Code geprüft hat
 ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)). Den Ablauf passe ich danach an.
+
+Stellungnahme: Entfällt mit dem Rückbau.

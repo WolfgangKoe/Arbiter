@@ -1,17 +1,7 @@
-import re
-import subprocess
-import sys
-from importlib.metadata import entry_points
-from pathlib import Path
-
 import pytest
 
-from formregeln.benennung import ausgeschlosseneOrdner
 from formregeln.werkzeugaufruf import pyproject, ruffAufrufen
-from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import altbestandOrdner, wurzel
-
-ordner = Path(__file__).resolve().parent
 
 
 def testRuffEnthältDenWerkzeugsatzAusDemAblauf():
@@ -23,31 +13,6 @@ def testRuffEnthältDenWerkzeugsatzAusDemAblauf():
 @pytest.mark.parametrize("regel", ["N802", "N803", "N806", "N815", "N816"])
 def testRuffLässtDieNamensregelnFürSnakeCaseAus(regel):
     assert regel in pyproject()["tool"]["ruff"]["lint"]["ignore"]
-
-
-def testPytestErkenntDateienNachDemSchemaNameTest():
-    assert "*Test.py" in pyproject()["tool"]["pytest"]["ini_options"]["python_files"]
-
-
-@pytest.mark.stand
-def testPytestFindetAlleTestdateienDerPrüfungen():
-    ausgabe = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q", str(ordner)],
-        cwd=wurzel,
-        capture_output=True,
-        text=True,
-        check=False,
-    ).stdout
-    gesucht = sorted(datei.name for datei in ordner.glob("*Test.py"))
-    fehlend = [name for name in gesucht if name not in ausgabe]
-    assert gesucht and fehlend == []
-
-
-@pytest.mark.stand
-def testPreCommitRuftDiePrüfungenAuf():
-    text = (wurzel / ".pre-commit-config.yaml").read_text(encoding="utf-8")
-    assert "python3 -m pytest prozess/pruefungen" in text
-    assert "formregeln.benennung" in text
 
 
 def testRuffMeldetEinenVerstoßGegenDenWerkzeugsatz(tmp_path):
@@ -86,86 +51,6 @@ def testRuffSchließtDenAltbestandAus(ordner):
 
 
 @pytest.mark.stand
-@pytest.mark.parametrize("ordner", altbestandOrdner)
-def testGitIgnoriertDenAltbestand(ordner):
-    assert gitAusgabe(wurzel, "check-ignore", f"{ordner}/alt.py").strip() == f"{ordner}/alt.py"
-
-
-@pytest.mark.parametrize("ordner", altbestandOrdner)
-def testDieBenennungÜbergehtDenAltbestand(ordner):
-    assert ordner in ausgeschlosseneOrdner
-
-
-@pytest.mark.stand
-def testPytestOhnePfadSammeltNurDieEigenenTests():
-    ausgabe = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
-        cwd=wurzel,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert ausgabe.returncode == 0, ausgabe.stdout[-500:]
-    zeilen = ausgabe.stdout.splitlines()
-    assert not any(
-        zeile.startswith(f"{ordner}/") for zeile in zeilen for ordner in altbestandOrdner
-    )
-
-
-@pytest.mark.stand
 def testDasRepoIstRuffSauber():
     ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout
-
-
-def testDerSuchpfadEnthältDasProduktAberNichtDiePrüfskripte():
-    suchpfad = pyproject()["tool"]["pytest"]["ini_options"]["pythonpath"]
-    assert "technik" in suchpfad
-    assert "prozess/pruefungen" not in suchpfad
-
-
-def testPyYamlIstLaufzeitAbhängigkeitMitFesterMinorVersion():
-    konfiguration = pyproject()
-    abhängigkeiten = konfiguration.get("project", {}).get("dependencies", [])
-    assert any(re.fullmatch(r"PyYAML==\d+\.\d+\.\*", eintrag) for eintrag in abhängigkeiten)
-    assert not any(
-        "PyYAML" in eintrag for eintrag in konfiguration["dependency-groups"]["entwicklung"]
-    )
-
-
-def testFlaskIstLaufzeitAbhängigkeitMitFesterMinorVersion():
-    konfiguration = pyproject()
-    abhängigkeiten = konfiguration.get("project", {}).get("dependencies", [])
-    assert any(re.fullmatch(r"Flask==\d+\.\d+\.\*", eintrag) for eintrag in abhängigkeiten)
-    entwicklung = konfiguration["dependency-groups"]["entwicklung"]
-    assert not any("Flask" in eintrag for eintrag in entwicklung)
-
-
-def testPlaywrightIstEntwicklungsAbhängigkeitMitFesterMinorVersion():
-    konfiguration = pyproject()
-    entwicklung = konfiguration["dependency-groups"]["entwicklung"]
-    assert any(re.fullmatch(r"playwright==\d+\.\d+\.\*", eintrag) for eintrag in entwicklung)
-    laufzeit = konfiguration.get("project", {}).get("dependencies", [])
-    assert not any("playwright" in eintrag for eintrag in laufzeit)
-
-
-def testEinBefehlStartetArbiterAusDemPaketInTechnik():
-    konfiguration = pyproject()
-    assert konfiguration["project"]["scripts"] == {"arbiter": "arbiter.__main__:starten"}
-    suche = konfiguration["tool"]["setuptools"]["packages"]["find"]
-    assert suche["where"] == ["technik"]
-    assert "arbiter*" in suche["include"]
-
-
-@pytest.mark.stand
-def testDerBefehlArbiterIstInDerUmgebungInstalliert():
-    eintraege = entry_points(group="console_scripts", name="arbiter")
-    assert [eintrag.value for eintrag in eintraege] == ["arbiter.__main__:starten"], (
-        "Einmal `.venv/bin/python -m pip install -e .` aus der Wurzel"
-    )
-
-
-def testDieMessungFolgtKindprozessenUndSigterm():
-    messung = pyproject()["tool"]["coverage"]["run"]
-    assert messung["patch"] == ["subprocess"]
-    assert messung["sigterm"] is True

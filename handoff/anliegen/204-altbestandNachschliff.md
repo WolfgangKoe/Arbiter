@@ -40,3 +40,5 @@ das zu wenig bringt, darfst du begründet ablehnen.
 
 Erledigt, wenn B1 und B2 umgesetzt sind, B3 umgesetzt oder begründet abgelehnt ist,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Commit geprüft hat.
+
+Stellungnahme: Entfällt mit dem Rückbau.

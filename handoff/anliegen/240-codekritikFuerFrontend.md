@@ -37,3 +37,5 @@ die Kritik des Reviewers fällig). Erledigt, wenn die Zelle ihn nennt.
 
 **Stellungnahme.** Umgesetzt: Die Zelle Scheiter-Test der Zeile
 [Kritik am Code](../../prozess/regeln.md#standregeln) nennt jetzt `standregeln/codekritikTest.py`.
+
+Stellungnahme: Entfällt mit dem Rückbau.

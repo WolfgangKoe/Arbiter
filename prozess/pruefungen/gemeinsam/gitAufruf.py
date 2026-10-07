@@ -36,26 +36,10 @@ def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
     return None
 
 
-def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
-    """Die Betreffzeilen aller Commits nach dem Commit `kennung`."""
-    return gitAusgabe(wurzel, "log", "--format=%s", f"{kennung}..HEAD").splitlines()
-
-
 def letzteFreigabe(wurzel: Path) -> str | None:
     """Der jüngste Commit `Freigabe …`, sonst `None`."""
     alle = freigaben(wurzel)
     return alle[0].kennung if alle else None
-
-
-def letzteFreigabeOhneReview(wurzel: Path) -> str | None:
-    """Der jüngste Commit `Freigabe …` außer `Freigabe Review …`, sonst `None`."""
-    # Warum: Die Freigabe des Reviews schließt keine Kritik am Code ab; das Fenster bleibt offen.
-    alle = [
-        freigabe.kennung
-        for freigabe in freigaben(wurzel)
-        if not freigabe.betreff.startswith("Freigabe Review ")
-    ]
-    return alle[0] if alle else None
 
 
 def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
@@ -63,19 +47,3 @@ def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
     pfad = relativZurWurzel(datei, wurzel)
     assert pfad is not None, f"{datei} liegt außerhalb von {wurzel}"
     return gitAusgabe(wurzel, "show", f"{kennung}:{pfad}")
-
-
-def geänderteDateien(wurzel: Path) -> set[str]:
-    """Pfade der geänderten und neuen Dateien (`git status --porcelain`)."""
-    ausgabe = gitAusgabe(wurzel, "status", "--porcelain", "--untracked-files=all")
-    return {zeile[3:].split(" -> ")[-1] for zeile in ausgabe.splitlines() if zeile}
-
-
-def kopfCommit(wurzel: Path) -> str:
-    return gitAusgabe(wurzel, "rev-parse", "HEAD").strip()
-
-
-def blobGröße(wurzel: Path, angabe: str) -> int | None:
-    """Größe von `<rev>:<pfad>` in Byte (mindestens die Zeichenzahl); `None`, wenn unbekannt."""
-    ausgabe = gitAusgabe(wurzel, "cat-file", "-s", angabe)
-    return int(ausgabe) if ausgabe.strip().isdigit() else None

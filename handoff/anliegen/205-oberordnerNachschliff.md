@@ -41,3 +41,5 @@ Gegenvorschlag: den Grün-Test über `altbestandOrdner` parametrisieren (Ordner 
 
 Erledigt, wenn B1 bis B3 umgesetzt sind, ein Probeordner `doku/` grün bleibt,
 `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Commit geprüft hat.
+
+Stellungnahme: Entfällt mit dem Rückbau.
