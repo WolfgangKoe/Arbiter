@@ -63,7 +63,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   Properties ohne Setter oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
   `modell.gesetzt = True` jede Sperre. Prüft: Python wirft bei der Zuweisung;
   `formregeln/zustandsschutz.py` (Dataclasses der Domäne `frozen`; `web/` und `katalog/` lesen
-  keine `_`-Felder, `web/` weist nur an `self` zu); der Rest nur Text.
+  keine `_`-Felder, `web/` ändert Attribute nur an `self`, auch per `setattr`, `delattr`, nie
+  per `object.__setattr__`, das `frozen` umgeht); der Rest nur Text.
 - **D4** Gründe, die zusammen gelten (AUF-3.5), stehen in einer Tabelle Grund → benannte
   Prüfung (`Aufstellung._prüfungen`); die Handlung sammelt ein, ein neuer Grund ist eine
   Zeile, keine geänderte Funktion; ein ausschließender Grund (AUF-3.6) bleibt Wächter.
