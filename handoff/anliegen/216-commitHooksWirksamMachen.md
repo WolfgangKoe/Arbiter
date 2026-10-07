@@ -18,7 +18,7 @@ gelangen. `regeln.md` nennt Mechanismen, die nicht greifen.
 **Gegenvorschlag.**
 1. `pre-commit` mit fester Minor-Version in `dependency-groups.entwicklung`, installiert in
    `.venv`, dann einmal `pre-commit install`. Sperrt dich die Bash-Positivliste oder die
-   Sandbox ([215](215-bashSandboxAlsVersuch.md)), führt der Stakeholder den Befehl aus; er
+   Sandbox (Anliegen 215), führt der Stakeholder den Befehl aus; er
    steht in der Meldung aus 2.
 2. Scheiter-Test im Lauf von `python3 -m pytest prozess/pruefungen`: rot, wenn
    `.git/hooks/pre-commit` fehlt oder nicht `pre-commit` aufruft.

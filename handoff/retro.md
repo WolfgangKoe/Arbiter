@@ -60,5 +60,5 @@ Davon sind 202, 203, 228, 229, 232 und 302 Kritik am Code der Prüfskripte; ich 
 sie wie die übrigen zu schließen und Wesentliches im Rundgang zu nennen.
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .

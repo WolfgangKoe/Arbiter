@@ -30,7 +30,7 @@ es klont die Vorlagen in `index.html`. `web/` liest nur Properties, wandelt `Fra
 für die Antwort in `float` und vergibt „Spieler 1“ und „Spieler 2“ aus der Reihenfolge (W2).
 Die Domäne kennt Flask nicht. `bildschirm.py` (Pfad des Testautors) hat eine richtige Zeile
 vom Implementierer außerhalb seiner Schreibpfade (248 Punkt 7); für Bash wirkt die Grenze
-nur als Text ([215](anliegen/215-bashSandboxAlsVersuch.md)).
+nur als Text (Anliegen 215).
 
 ## Offene Anliegen zur Technik
 - Regelumsetzer: Anliegen 262,

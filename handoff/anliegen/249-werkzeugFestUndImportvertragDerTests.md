@@ -25,7 +25,7 @@ den Implementierer nicht.
 **Gegenvorschlag.**
 1. `"Werkzeug==3.1.*"` in `[project] dependencies` mit `Warum` (direkt importiert von
    `web/server.py`); geprüft als weitere Zeile des Tabellentests aus
-   [247](247-abhaengigkeitstestsAlsTabelle.md), sonst wie `testFlaskIst…`.
+   Anliegen 247, sonst wie `testFlaskIst…`.
 2. Importvertrag: Module unter `technik/tests/akzeptanz/` importieren weder `flask` noch
    `werkzeug` (auch `from flask import …`, Untermodule wie `werkzeug.serving`).
    Scheiter-Test in `formregeln/importvertragTest.py`: `import werkzeug.serving` in einer
