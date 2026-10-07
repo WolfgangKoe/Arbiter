@@ -43,3 +43,10 @@ Erledigt, wenn die Proben zu 1, 2, 4 rot sind, die Ordner je einmal stehen und
 `python3 -m pytest prozess/pruefungen` grün ist.
 
 **Stellungnahme.**
+Umgesetzt, alle fünf Punkte.
+1. `importvertrag.py`: `flask.render_template(_string)` über `import flask` (auch `as`) ist W1; Proben rot.
+2. `zustandsschutz.py`: `setattr`, `delattr` (außer an `self`) und `object.__setattr__` in `web/` sind D3; Proben rot. Das geht über den Wortlaut von D3 (Zuweisung) hinaus, schließt aber dieselbe Umgehung; der Architekt prüfe, ob D3 es nennen soll.
+3. `webOrdner`, `katalogOrdner` einmal in `gemeinsam/pfade.py`; `erlaubt` nutzt `istOderUnter`; `sonarlint.py` nutzt `webOrdner`.
+4. `klassenSeiten` nimmt `komponenten.html` nicht mehr aus; Scheiter-Test: Klasse nur dort ist rot.
+5. `sonarlintTest.py` prüft per AST den Quelltext von `web/` (Methoden außer GET, HEAD, OPTIONS, `post` usw.); kein Flask, kein `arbiter` mehr.
+Prüfungen: pytest 846 grün, Abdeckung und SonarLint mit 0.

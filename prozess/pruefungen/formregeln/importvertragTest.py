@@ -1,8 +1,8 @@
 import pytest
 
 from formregeln.glossar import domaeneOrdner
-from formregeln.importvertrag import verstöße, webOrdner
-from gemeinsam.pfade import projektordner
+from formregeln.importvertrag import verstöße
+from gemeinsam.pfade import projektordner, webOrdner
 
 
 def domänendatei(tmp_path, text, name="phasen/probe.py"):
@@ -77,6 +77,8 @@ def webdatei(tmp_path, text, name="probe.py"):
         "import jinja2\n",
         "from markupsafe import Markup\n",
         "import flask.templating\n",
+        "import flask\nflask.render_template\n",
+        "import flask as f\nf.render_template_string(x)\n",
     ],
 )
 def testW1HtmlErzeugenInWebIstRot(tmp_path, text):
@@ -85,7 +87,7 @@ def testW1HtmlErzeugenInWebIstRot(tmp_path, text):
 
 
 def testW1FlaskJsonifyInWebIstGrün(tmp_path):
-    webdatei(tmp_path, "from flask import jsonify\n")
+    webdatei(tmp_path, "import flask\nflask.jsonify\nfrom flask import jsonify\n")
     assert verstöße(tmp_path) == []
 
 

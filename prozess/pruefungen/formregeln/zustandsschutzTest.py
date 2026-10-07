@@ -1,11 +1,8 @@
 import pytest
 
 from formregeln.glossar import domaeneOrdner
-from formregeln.zustandsschutz import lesenGesperrtOrdner, schreibenGesperrtOrdner, verstöße
-from gemeinsam.pfade import projektordner
-
-webOrdner = schreibenGesperrtOrdner
-katalogOrdner = "technik/arbiter/katalog"
+from formregeln.zustandsschutz import lesenGesperrtOrdner, verstöße
+from gemeinsam.pfade import katalogOrdner, projektordner, webOrdner
 
 
 def datei(tmp_path, ordner, text):
@@ -47,6 +44,30 @@ def testD3ZugriffAufUnterstrichAttributIstRot(tmp_path, ordner, text):
 def testD3ZuweisenAnAttributInWebIstRot(tmp_path, text):
     datei(tmp_path, webOrdner, text)
     assert verstöße(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        'setattr(aufstellung, "anDerReihe", spieler)\n',
+        'delattr(aufstellung, "anDerReihe")\n',
+        'object.__setattr__(aufstellung, "_stellen", {})\n',
+        'object.__setattr__(self, "_stellen", {})\n',
+    ],
+)
+def testD3SchreibenOhneZuweisungInWebIstRot(tmp_path, text):
+    datei(tmp_path, webOrdner, text)
+    assert verstöße(tmp_path)
+
+
+def testD3SetattrAnSelfInWebIstGrün(tmp_path):
+    datei(tmp_path, webOrdner, 'setattr(self, "name", 1)\n')
+    assert verstöße(tmp_path) == []
+
+
+def testD3SetattrInKatalogIstGrün(tmp_path):
+    datei(tmp_path, katalogOrdner, 'setattr(ding, "wert", 1)\n')
+    assert verstöße(tmp_path) == []
 
 
 @pytest.mark.parametrize(

@@ -5,11 +5,13 @@ import sys
 from pathlib import Path
 
 from formregeln.glossar import domaeneOrdner
-from gemeinsam.pfade import projektordner
+from gemeinsam.pfade import katalogOrdner, projektordner, webOrdner
 
-lesenGesperrtOrdner = ("technik/arbiter/web", "technik/arbiter/katalog")
-schreibenGesperrtOrdner = "technik/arbiter/web"
+lesenGesperrtOrdner = (webOrdner, katalogOrdner)
+schreibenGesperrtOrdner = webOrdner
 eigenerName = "self"
+schreibFunktionen = ("setattr", "delattr", "__setattr__", "__delattr__")
+anSelfErlaubt = ("setattr", "delattr")
 
 
 def dateien(wurzel: Path, ordner: str) -> list[tuple[Path, ast.AST]]:
@@ -82,8 +84,38 @@ def schreibenVerstöße(wurzel: Path) -> list[str]:
     ]
 
 
+def aufrufName(aufruf: ast.Call) -> str | None:
+    if isinstance(aufruf.func, ast.Name):
+        return aufruf.func.id
+    if isinstance(aufruf.func, ast.Attribute):
+        return aufruf.func.attr
+    return None
+
+
+def anSelfGerichtet(aufruf: ast.Call) -> bool:
+    ziel = aufruf.args[0] if aufruf.args else None
+    return isinstance(ziel, ast.Name) and ziel.id == eigenerName
+
+
+def schreibAufrufVerstöße(wurzel: Path) -> list[str]:
+    """`setattr`, `delattr`, `object.__setattr__` umgehen die Zuweisung; nur an `self` erlaubt."""
+    return [
+        f"{datei.relative_to(wurzel)}:{knoten.lineno} ruft {aufrufName(knoten)} auf"
+        for datei, baum in dateien(wurzel, schreibenGesperrtOrdner)
+        for knoten in ast.walk(baum)
+        if isinstance(knoten, ast.Call)
+        and aufrufName(knoten) in schreibFunktionen
+        and not (aufrufName(knoten) in anSelfErlaubt and anSelfGerichtet(knoten))
+    ]
+
+
 def verstöße(wurzel: Path) -> list[str]:
-    return veränderbareDataclasses(wurzel) + lesenVerstöße(wurzel) + schreibenVerstöße(wurzel)
+    return (
+        veränderbareDataclasses(wurzel)
+        + lesenVerstöße(wurzel)
+        + schreibenVerstöße(wurzel)
+        + schreibAufrufVerstöße(wurzel)
+    )
 
 
 if __name__ == "__main__":

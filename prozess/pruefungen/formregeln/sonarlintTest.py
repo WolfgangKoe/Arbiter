@@ -1,14 +1,13 @@
 """Scheiter-Test und Stand: SonarLint ohne VS Code."""
 
+import ast
 import io
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from flask import Flask
 
-from arbiter.web.anwendung import anwendungFür
 from formregeln import sonarlint
 from formregeln.sonarlint import (
     Sitzung,
@@ -24,7 +23,7 @@ from formregeln.sonarlint import (
     nachrichtSchreiben,
     öffnen,
 )
-from gemeinsam.pfade import wurzel
+from gemeinsam.pfade import webOrdner, wurzel
 
 ungenutzteVariable = "def zähle():\n    ergebnis = 1\n    return 2\n"
 camelCaseFunktion = "def meineFunktion(eingabeWert):\n    return eingabeWert\n"
@@ -104,24 +103,77 @@ def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(mon
     assert all(fund.startswith("anderswo.py:") for fund in mitAusnahme)
 
 
-def routenAußerLesen(anwendung: Flask) -> list[str]:
-    lesend = {"GET", "HEAD", "OPTIONS"}
-    return [regel.rule for regel in anwendung.url_map.iter_rules() if not regel.methods <= lesend]
+lesendeMethoden = {"GET", "HEAD", "OPTIONS"}
+verändernde = {"post", "put", "patch", "delete"}
+
+
+def methodenAußerLesen(wert: ast.expr) -> bool:
+    if not isinstance(wert, (ast.List, ast.Tuple, ast.Set)):
+        return True
+    return any(
+        not (isinstance(eintrag, ast.Constant) and str(eintrag.value).upper() in lesendeMethoden)
+        for eintrag in wert.elts
+    )
+
+
+def istRouteAußerLesen(aufruf: ast.Call) -> bool:
+    if not isinstance(aufruf.func, ast.Attribute):
+        return False
+    if aufruf.func.attr in verändernde:
+        return True
+    if aufruf.func.attr not in ("route", "add_url_rule"):
+        return False
+    return any(
+        schlüssel.arg == "methods" and methodenAußerLesen(schlüssel.value)
+        for schlüssel in aufruf.keywords
+    )
+
+
+def routenAußerLesen(quelltext: str) -> list[int]:
+    """Zeilen, in denen eine Route mit einer anderen Methode als GET, HEAD, OPTIONS steht."""
+    return [
+        knoten.lineno
+        for knoten in ast.walk(ast.parse(quelltext))
+        if isinstance(knoten, ast.Call) and istRouteAußerLesen(knoten)
+    ]
 
 
 def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
     # Regel: prozess/regeln.md, SonarLint, S4502 fällt mit der ersten Route außer GET
-    ausnahme = ("technik/arbiter/web/anwendung.py", "python:S4502")
-    verändernd = routenAußerLesen(anwendungFür(None))
+    ausnahme = (f"{webOrdner}/anwendung.py", "python:S4502")
+    verändernd = [
+        f"{datei.name}:{zeile}"
+        for datei in sorted((wurzel / webOrdner).rglob("*.py"))
+        for zeile in routenAußerLesen(datei.read_text(encoding="utf-8"))
+    ]
     assert ausnahme not in sonarlint.ausnahmen or not verändernd, (
         f"Route außer GET {verändernd}: S4502 aus `ausnahmen` streichen, CSRF entscheiden"
     )
 
 
-def testEineRouteMitPostIstEineRouteAußerLesen():
-    anwendung = Flask(__name__)
-    anwendung.add_url_rule("/wählen", endpoint="wählen", methods=["POST"])
-    assert routenAußerLesen(anwendung) == ["/wählen"]
+@pytest.mark.parametrize(
+    "quelltext",
+    [
+        'anwendung.add_url_rule("/wählen", endpoint="wählen", methods=["POST"])\n',
+        '@anwendung.route("/wählen", methods=("GET", "POST"))\ndef wählen(): ...\n',
+        '@anwendung.post("/wählen")\ndef wählen(): ...\n',
+        'anwendung.add_url_rule("/wählen", methods=methoden)\n',
+    ],
+)
+def testEineRouteAußerLesenIstEineRouteAußerLesen(quelltext):
+    assert routenAußerLesen(quelltext)
+
+
+@pytest.mark.parametrize(
+    "quelltext",
+    [
+        '@anwendung.route("/stand")\ndef stand(): ...\n',
+        'anwendung.add_url_rule("/stand", methods=["GET", "HEAD"])\n',
+        '@anwendung.get("/stand")\ndef stand(): ...\n',
+    ],
+)
+def testEineLesendeRouteIstKeineRouteAußerLesen(quelltext):
+    assert routenAußerLesen(quelltext) == []
 
 
 def testDerFundNenntPfadZeileRegelUndMeldung(tmp_path):

@@ -84,5 +84,12 @@ def testKlasseInEinerFrontendSeiteOhneStilIstNeu(tmp_path):
     ]
 
 
+def testKlasseNurAufDerKomponentenseiteOhneStilIstNeu(tmp_path):
+    wurzelOrdner = probe(tmp_path, seite=seiteProbe + '<p class="frisch">x</p>')
+    assert verstöße(wurzelOrdner) == [
+        f"{frontendOrdner}/{seitenDatei}: Klasse frisch fehlt in {stilDatei}, sie ist neu"
+    ]
+
+
 def testBekannteKlassenInMockupsSindGrün(tmp_path):
     assert verstöße(probe(tmp_path, mockup='<p class="einheitenKarte name">x</p>')) == []

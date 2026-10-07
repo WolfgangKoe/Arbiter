@@ -5,10 +5,9 @@ import sys
 from pathlib import Path
 
 from formregeln.glossar import domaeneOrdner
-from gemeinsam.pfade import projektordner
+from gemeinsam.pfade import projektordner, webOrdner
 
 eigenesPaket = "arbiter.domaene"
-webOrdner = "technik/arbiter/web"
 darstellungsDatei = "darstellung.py"
 vorlagenModule = ("jinja2", "markupsafe", "flask.templating")
 vorlagenFunktionen = ("render_template", "render_template_string")
@@ -41,14 +40,12 @@ def importierteModule(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
     return module
 
 
-def erlaubt(modul: str) -> bool:
-    if modul == eigenesPaket or modul.startswith(eigenesPaket + "."):
-        return True
-    return modul.split(".")[0] in sys.stdlib_module_names
-
-
 def istOderUnter(modul: str, name: str) -> bool:
     return modul == name or modul.startswith(name + ".")
+
+
+def erlaubt(modul: str) -> bool:
+    return istOderUnter(modul, eigenesPaket) or modul.split(".")[0] in sys.stdlib_module_names
 
 
 def vorlagenImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
@@ -65,7 +62,31 @@ def vorlagenImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
                 for alias in knoten.names
                 if alias.name in vorlagenFunktionen
             ]
-    return gefunden
+    return gefunden + flaskVorlagenAufrufe(baum)
+
+
+def flaskNamen(baum: ast.AST) -> set[str]:
+    """Die Namen, an die `import flask` das Modul bindet (`import flask as f` ergibt `f`)."""
+    return {
+        (alias.asname or alias.name)
+        for knoten in ast.walk(baum)
+        if isinstance(knoten, ast.Import)
+        for alias in knoten.names
+        if alias.name == "flask"
+    }
+
+
+def flaskVorlagenAufrufe(baum: ast.AST) -> list[tuple[str, int]]:
+    """Zugriffe wie `flask.render_template` über das Modul (W1) mit Zeile."""
+    namen = flaskNamen(baum)
+    return [
+        (f"flask.{knoten.attr}", knoten.lineno)
+        for knoten in ast.walk(baum)
+        if isinstance(knoten, ast.Attribute)
+        and knoten.attr in vorlagenFunktionen
+        and isinstance(knoten.value, ast.Name)
+        and knoten.value.id in namen
+    ]
 
 
 def serverImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:

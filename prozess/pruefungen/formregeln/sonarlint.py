@@ -8,7 +8,7 @@ import threading
 from pathlib import Path
 from typing import BinaryIO
 
-from gemeinsam.pfade import akzeptanzOrdner, wurzel
+from gemeinsam.pfade import akzeptanzOrdner, webOrdner, wurzel
 
 geprüfteOrdner = ("technik/arbiter", "technik/tests/einheit", akzeptanzOrdner, "prozess/pruefungen")
 erweiterungenOrdner = Path.home() / ".vscode" / "extensions"
@@ -34,8 +34,8 @@ abgeschalteteRegeln = (
 # Warum: In `web/` sind beide Funde unbegründet (nur GET-Routen, nur `127.0.0.1`).
 # Warum: Ausgenommen sind Datei und Regel, nicht der Ordner.
 ausnahmen = (
-    ("technik/arbiter/web/anwendung.py", "python:S4502"),
-    ("technik/arbiter/web/server.py", "python:S5332"),
+    (f"{webOrdner}/anwendung.py", "python:S4502"),
+    (f"{webOrdner}/server.py", "python:S5332"),
 )
 
 

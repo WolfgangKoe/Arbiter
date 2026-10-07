@@ -36,8 +36,7 @@ def klassenInSeite(html: str) -> set[str]:
 
 def klassenSeiten(wurzelOrdner: Path) -> list[Path]:
     ordner = [wurzelOrdner / frontendOrdner, wurzelOrdner / mockupOrdner]
-    seiten = [datei for eins in ordner if eins.is_dir() for datei in sorted(eins.glob("*.html"))]
-    return [datei for datei in seiten if datei.name != seitenDatei]
+    return [datei for eins in ordner if eins.is_dir() for datei in sorted(eins.glob("*.html"))]
 
 
 def verstöße(wurzelOrdner: Path = wurzel) -> list[str]:
