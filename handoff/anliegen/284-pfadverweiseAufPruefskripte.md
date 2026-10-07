@@ -19,4 +19,4 @@ Gefunden per Skript: jeder `<ordner>/<datei>.py` in `ablauf.md` und `regeln.md` 
 
 Erledigt, wenn die Prüfung über das Repo grün ist, ihr Scheiter-Test an je einem Gegenbeispiel rot wird und die Zeile in `regeln.md` steht. Den Ablauf ziehe ich bei roter Prüfung selbst nach. Reihenfolge: nach 253 P5 und P7 (dieselben Dateien, der Kopf kennt `wartet auf` erst mit 274).
 
-**Stellungnahme.**
+**Stellungnahme.** Ergänzung aus 253 P7 (b800ee7): `hoechstmassTest.py` ist zu `formregeln/hoechstmass.py` (Maße, Zählung), `ruffAufrufen`, `complexipyAufrufen`, `pyproject` zu `formregeln/werkzeugaufruf.py` umgezogen. `regeln.md` ist nachgezogen; in `ablauf.md` nennen die Zeilen 19, 102, 106, 181, 240, 311 noch alte Pfade oder Orte (`hoechstmassTest.py`, `konfigurationTest.py`). Der Organisationsentwickler zieht sie nach.
