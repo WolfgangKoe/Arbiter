@@ -39,7 +39,7 @@ abbricht oder der Ablauf den Abbruch regelt.
 nicht, pre-commit und SubagentStop erfüllen die Regel „ohne eigenen Lauf“ (Ablauf, Anliegen);
 der Satz für den Ablauf entfällt damit. Umsetzung liegt beim Regelumsetzer (`conftest.py`,
 `erledigteLoeschenTest.py`, Zeile in `regeln.md`):
-[290](290-pruefungenOhneErledigteLoeschen.md). `angenommen` nach 290 (Ablauf, Anliegen,
+Anliegen 290. `angenommen` nach 290 (Ablauf, Anliegen,
 Weiterreichen); `· wartet auf 290` fehlt im Kopf, bis Anliegen 274 ihn zulässt.
 Umgesetzt in `1071b6d`, 290 ist erledigt: `conftest.py` ruft keinen Hook mehr auf, die Zeile
 in `regeln.md` nennt nur pre-commit und SubagentStop. Ein halber Hook bricht nur noch seine

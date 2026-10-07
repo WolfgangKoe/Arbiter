@@ -17,7 +17,7 @@ Stand: Zyklus 3, Prozessphase, 38 offene Anliegen; nächster Schritt Retro 3.
 
 ## Dran
 Blockiert Plan 4 (Komponentenseite): Anliegen 286,
-[294](anliegen/294-elementverbotHatLuecken.md); Prüfung vor dem Frontend, sonst nichts.
+Anliegen 294; Prüfung vor dem Frontend, sonst nichts.
 - Regelumsetzer: 33 an ihn, Kette siehe unten.
 - Organisationsentwickler: Retro 3; 107, 138, 150, 219, 289.
 - Reviewer, Architekt: Nachprüfungen, die fällig werden. Domäne, Technik-Rollen: frei.
