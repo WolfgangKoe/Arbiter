@@ -22,7 +22,7 @@ Zweck: Die *Karte* zeigt das *Spielfeld* mit allem, was darauf steht, maßstäbl
 
 ### QUE-3 · Bedienung
 
-Zweck: Die *Spieler* bedienen Arbiter an einem Gerät mit Maus oder Finger, und Arbiter behält, was sie getan haben (`domaene/ziel.md`).
+Zweck: Die zwei *Spieler* teilen sich ein Gerät, mit Maus oder mit dem Finger auf dem Touchscreen; beides geht gleich. Was sie getan haben, behält Arbiter, auch wenn jemand die Seite neu lädt (`domaene/ziel.md`).
 
 - QUE-3.1 Was ein Klick auf der *Karte* oder in einer *Ablage* auslöst, löst ein Tippen mit dem Finger am selben Ort ebenso aus (`domaene/ziel.md`: „Maus und Touch“).
 - QUE-3.2 Öffnet ein *Spieler* die Adresse nach QUE-2.1 erneut, während Arbiter läuft, zeigen *Karte* und *Ablagen* dasselbe wie davor (`domaene/ziel.md`: „durch eine vollständige Partie“).

@@ -52,7 +52,13 @@ Zweck: Neben der *Karte* nach [QUE-2](../querschnitt.md) sehen die *Spieler*, we
 
 ### AUF-5 · Wählen am Bildschirm
 
-Zweck: Die *Spieler* wählen die *Einheit in Aufstellung* mit einem Klick in ihrer *Ablage*; eine Wahl, die eine *Sperre* trifft, ändert nichts.
+Zweck: Am Bildschirm bestimmt der *Spieler*, der *an der Reihe* ist, welche seiner *Einheiten* er als Nächstes aufstellt: Er klickt sie in seiner *Ablage* an, und sie wird *Einheit in Aufstellung*. Erlaubt AUF-1 die Wahl nicht, bleibt alles, wie es war.
 
 - AUF-5.1 Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie nach AUF-1.5 und AUF-1.6; gelingt die Wahl, kennzeichnet die *Ablage* sie danach nach AUF-4.5 (Vorbild `ArbiterMap/docs/spec/interaction_map.md:283`).
 - AUF-5.2 Trifft die Wahl nach AUF-5.1 eine *Sperre*, kennzeichnet die *Ablage* danach dieselbe *Einheit* wie davor oder weiterhin keine.
+
+### AUF-6 · Vorläufig: Start mit gewähltem Gewinner und gewählter Zone
+
+Zweck: Bis die *Spieler* *Gewinner* und *Aufstellungszone* am Bildschirm wählen können, trifft Arbiter beide Wahlen beim Start selbst, damit gleich eine *Einheit* wählbar ist. Die Anforderung ist eine Krücke: Sie entfällt mit der Wahl am Bildschirm und ihr Test mit ihr (Anliegen 308 F1 A, F2 A, git).
+
+- AUF-6.1 Nach dem Start nach QUE-2.1 ist „Spieler 1“ nach AUF-1.1 *Gewinner* und hat die *Aufstellungszone* gewählt, die auf dem Bildschirm seiner *Ablage* am nächsten liegt; nach AUF-1.3 ist „Spieler 2“ *an der Reihe*.

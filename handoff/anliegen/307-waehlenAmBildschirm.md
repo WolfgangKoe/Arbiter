@@ -1,6 +1,6 @@
 # Wählen am Bildschirm: Gewinner, Zone, Anzeige der Sperre, Neustart
 
-307 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · rückfrage
+307 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · erledigt
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -25,50 +25,31 @@ Empfehlung A: Beide sehen die Frage an einem Ort; bei B weiß keiner, dass er kl
 
 Antwort: .
 
-**F2 · Wie wird die Aufstellungszone gewählt?**
-- A: Nach F1 fordert der *Spielaktionsbereich* den *Gewinner* auf: „Spieler 1: Wähle deine
-  Aufstellungszone auf der Karte.“ Ein Klick auf eine *Aufstellungszone* der *Karte* wählt
-  sie, solange keine gewählt ist; danach ist ein Klick auf eine Zone keine Wahl mehr.
-- B: Zwei Knöpfe im *Spielaktionsbereich*.
-
-Empfehlung A: Only War gibt den Zonen keine Namen (`core_rules.txt:2322`, Glossar), ein
-Knopf bräuchte einen erfundenen. Ein Klick auf eine Zone vor F1 trifft die *Sperre*
-‚nicht wählbar‘ (AUF-1.2).
+**F2 · Wie wird die Aufstellungszone gewählt?** Klick auf die Zone der *Karte* oder zwei
+Knöpfe; Empfehlung Klick, weil Only War den Zonen keine Namen gibt.
 
 Antwort: 
 
-**F3 · Wo und wie lange steht die Sperre einer Wahl, mit welchem Satz?**
-- A: Im *Spielaktionsbereich*, bis zur nächsten Handlung. Sätze: ‚nicht wählbar‘ „Das ist
-  jetzt nicht wählbar.“, ‚Einheit begonnen‘ „Erst die begonnene Einheit fertig
-  aufstellen.“
-- B: Neben dem, was geklickt wurde (*Einheit* in der *Ablage*, Zone auf der *Karte*), sonst
-  wie A.
-- C: Du nennst andere Sätze.
-
-Empfehlung A: Ein Ort für alle Sperren einer Wahl. Das Ziel lässt jede *Sperre* übergehen;
-kommt „gemeinsam übergehen“ (Plan 3, Danach), bleibt sie dort stehen, bis die *Spieler*
-„zurück“ oder „gemeinsam übergehen“ wählen.
-
-Antwort: 
-
-**F4 · Was zeigt Arbiter nach einem Neustart?** QUE-3.2 gilt, solange Arbiter läuft.
-- A: Die *Ausgangslage*; frühere Partien bleiben gespeichert, aber nicht sichtbar.
-- B: Die letzte Partie; eine neue beginnt erst mit einer eigenen Handlung „Neue Partie“, die
-  eine eigene Anforderung wird.
-
-Empfehlung A: Etappe 1 kennt keine Handlung „Neue Partie“, und das Aufstellen dauert
-Minuten. B wird wichtig, wenn Partien Stunden dauern (Etappe 3); dann frage ich neu.
-
-Antwort: 
-
-**F5 · Neuer Begriff.** *Spielaktionsbereich* | – | `spielAktionsBereich` | Ort auf dem
-Bildschirm, an dem Arbiter fragt, was als Nächstes zu wählen ist, und eine *Sperre* einer
-Wahl mit *Grund* zeigt. Dein Name aus Anliegen 223 F1 (git), dort die `gameActionsArea` aus
-Arbiter-old (`Arbiter-old/docs/spec/ui_layout.md:307`). A: so freigeben, mit dem Plan.
-B: anderes Wort.
-
-Empfehlung A.
+**F3 · Wo steht die Sperre einer Wahl?** **F4 · Was zeigt ein Neustart?** **F5 · Begriff
+Spielaktionsbereich.** Ausführlicher und neu gefasst in Anliegen 309.
 
 Antwort: 
 
 **Stellungnahme.** Ich bin mir nicht sicher, ob ich das Problem aus deinen Fragen richtig verstanden habe. Deine Sätze und auch deine Ziele und auch der Zweck in den Anforderungen ist in Teilen sehr knapp, so dass scheinbar einige Informationen fehlen. Gehen wir nochmal ein Stück zurück. Was wäre aus deiner Sicht denn ein passender Start oder eine Voraussetzung, die wir schaffen sollten, bevor eine Einheit auswählbar ist? In Anbetracht dessen, dass wir irgendwo anfangen müssen, könnte man sich auch überlegen, dass Gewinner des Rolloff, Wahl der Aufstellungszone etc. bereits gewählt ist und es hier eine technische Krücke braucht, die das ermöglicht. Diese müsste durch ein entsprechenden Test kenntlich gemacht werden, dass man sie durch eine solide technische Lösung ersetzt. Dafür bräuchte es ggf. eine neue Anforderung. Denke nochmal darüber nach und bringe hier Vorschläge.
+
+**Klärung.** Deine Idee ist der Schnitt V1 aus [308](308-startDerAufstellung.md), dort
+angenommen: Arbiter beginnt mit gewähltem Gewinner und gewählter Zone, und Plan 4 bringt die
+Wahl der *Einheit* in der *Ablage*. Die Krücke steht als eigene Anforderung
+[AUF-6](../../domaene/anforderungen/phasen/aufstellen.md): Spieler 1 ist *Gewinner* mit der
+Zone neben seiner *Ablage*, Spieler 2 *an der Reihe*. Ihr Test zeigt sie als vorläufig: Er
+geht mit AUF-6, sobald ihr am Bildschirm wählt. Den Zweck von AUF-5 und QUE-3 habe ich
+ausführlicher gefasst.
+
+Was offen bleibt:
+- Für Plan 4: wo und wie lange die *Sperre* einer Wahl steht und wie der Satz lautet, und was
+  Arbiter nach einem Neustart zeigt. Beides neu gefasst, mit mehr Erklärung, in Anliegen 309.
+  Der Begriff aus F5 ist für Plan 4 nicht mehr nötig; ich frage danach mit Plan 6.
+- Für Plan 6 (Gewinner und Zone am Bildschirm): F1 hat deine Antwort „.“, also Empfehlung A;
+  sie gilt dann. F2 frage ich mit Plan 6 neu.
+
+Damit erledigt.
