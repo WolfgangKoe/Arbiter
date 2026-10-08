@@ -1,6 +1,6 @@
 # Kennzeichnung ohne gesetztes Modell
 
-315 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
+315 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu bc07344. Sonst treffen die Tests zu AUF-7 und AUF-3.8 ihr
