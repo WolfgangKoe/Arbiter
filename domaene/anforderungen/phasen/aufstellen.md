@@ -10,16 +10,12 @@ Die *Aufstellung* ist Schritt 4 der *Mission* Only War ([core_rules.txt:2321]): 
 
 ### AUF-1 · Reihenfolge der Aufstellung
 
-Zweck: Wer wann wählt und aufstellt ([core_rules.txt:2322]).
+Zweck: Wer wann wählt und *an der Reihe* ist ([core_rules.txt:2322]).
 
 - AUF-1.1 Vom *Roll-off* wird nur der *Gewinner* eingegeben; die gewählte *Aufstellungszone* gehört ihm, die andere dem anderen.
 - AUF-1.2 Erst wird der *Gewinner*, dann die *Aufstellungszone* gewählt, je einmal; sonst *Sperre* ‚nicht wählbar‘.
 - AUF-1.3 Bis zur Wahl der *Aufstellungszone* ist keiner *an der Reihe*, danach, wer nicht *Gewinner* ist.
 - AUF-1.7 Gelingt *Aufstellen der Einheit beenden*, ist die *Einheit* *aufgestellt*, keine *Einheit in Aufstellung* und der andere *Spieler* *an der Reihe*; hat er alle *aufgestellt*, derselbe; haben es beide, ist die *Aufstellung* beendet und keiner *an der Reihe*.
-- AUF-1.8 *Einheit in Aufstellung* ist die nicht *aufgestellte* *Einheit* mit *gesetztem* *Modell*, sonst keine.
-- AUF-1.9 Ein *Modell* einer *aufgestellten* *Einheit* oder eines *Spielers* nicht *an der Reihe* *setzen*: *Sperre* ‚nicht wählbar‘.
-- AUF-1.10 Sonst ein *Modell* *setzen*, wenn es eine andere *Einheit in Aufstellung* gibt: *Sperre* ‚Einheit begonnen‘.
-- AUF-1.11 Ohne *Einheit in Aufstellung* *Aufstellen der Einheit beenden*: *Sperre* ‚nicht in Aufstellung‘.
 
 ### AUF-2 · Ausgangslage von Only War
 
@@ -38,7 +34,7 @@ Zweck: Arbiter sperrt beim *Setzen* nach [QUE-1](../querschnitt.md) auch jede *S
 - AUF-3.4 Ist es an der *Stelle* in *Nahkampfreichweite* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Nahkampfreichweite‘ ([core_rules.txt:450]).
 - AUF-3.5 Sperrt an der *Stelle* mehr als eines von QUE-1.2, AUF-3.2 und AUF-3.4, nennt Arbiter den *Grund* jedes davon (Anliegen 100 F3 A, git).
 - AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft nach QUE-1.2, AUF-3.2 und AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).
-- AUF-3.8 Ist das *Setzen* nach AUF-1.9 oder AUF-1.10 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist der von dort.
+- AUF-3.8 Ist das *Setzen* nach AUF-7.2 oder AUF-7.3 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist der von dort.
 
 ### AUF-4 · Anzeige der Aufstellung
 
@@ -68,3 +64,12 @@ Zweck: Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie aus, gleich wer
 Zweck: Bis die *Spieler* *Gewinner* und *Aufstellungszone* am Bildschirm wählen können, trifft Arbiter beide Wahlen beim Start selbst, damit gleich ein *Modell* *gesetzt* werden kann. Die Anforderung ist eine Krücke: Sie entfällt mit der Wahl am Bildschirm und ihr Test mit ihr (Anliegen 308 F1 A, F2 A, git).
 
 - AUF-6.1 Nach dem Start nach QUE-2.1 ist „Spieler 1“ nach AUF-1.1 *Gewinner* und hat die *Aufstellungszone* gewählt, die auf dem Bildschirm seiner *Ablage* am nächsten liegt; nach AUF-1.3 ist „Spieler 2“ *an der Reihe*.
+
+### AUF-7 · Einheit in Aufstellung
+
+Zweck: Die *Spieler* stellen ihre *Einheiten* abwechselnd und einzeln auf ([core_rules.txt:2322]); Arbiter führt, welche *Einheit* gerade aufgestellt wird, und sperrt jedes *Setzen* außer der Reihe.
+
+- AUF-7.1 *Einheit in Aufstellung* ist die nicht *aufgestellte* *Einheit* mit *gesetztem* *Modell*, sonst keine.
+- AUF-7.2 Ein *Modell* einer *aufgestellten* *Einheit* oder eines *Spielers* nicht *an der Reihe* *setzen*: *Sperre* ‚nicht wählbar‘.
+- AUF-7.3 Sonst ein *Modell* *setzen*, wenn es eine andere *Einheit in Aufstellung* gibt: *Sperre* ‚Einheit begonnen‘.
+- AUF-7.4 Ohne *Einheit in Aufstellung* *Aufstellen der Einheit beenden*: *Sperre* ‚nicht in Aufstellung‘.

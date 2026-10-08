@@ -1,6 +1,6 @@
 # Querschnitt
 
-Was in mehreren Phasen gleich gilt. Welche *Modelle* eine Phase *setzen* lässt und was sie sonst sperrt, steht bei der Phase, für die *Aufstellung* in [AUF-1 und AUF-3](phasen/aufstellen.md).
+Was in mehreren Phasen gleich gilt. Welche *Modelle* eine Phase *setzen* lässt und was sie sonst sperrt, steht bei der Phase, für die *Aufstellung* in [AUF-3 und AUF-7](phasen/aufstellen.md).
 
 ### QUE-1 · Setzen
 

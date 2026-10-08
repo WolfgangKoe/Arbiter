@@ -1,6 +1,6 @@
 # Tests zu entfallenen Kriterien der Aufstellung
 
-310 · Kritik · von Anforderungsautor (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
+310 · Kritik · von Anforderungsautor (Domäne) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach [309](309-sperreDerWahlUndNeustart.md) F1 B wählt ein Klick in der *Ablage*

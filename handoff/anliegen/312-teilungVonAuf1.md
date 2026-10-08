@@ -1,6 +1,6 @@
 # Teilung von AUF-1
 
-312 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+312 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Mit 1770e3d hat `technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py` 20.148
@@ -23,4 +23,11 @@ zu AUF-3 (*Sperren beim Setzen*); dann wüchse `auf3Test.py` von etwa 9.700 auf 
 über das Kürzungsmaß, darum nicht empfohlen. Danach verschiebt der Testautor die Tests
 ([313](313-wahlDerEinheitInDenTestsDerAufstellung.md) läuft unabhängig davon; der neue Test aus [311](311-testsDerAufstellungNachDerWahl.md) F2 ließe die Datei weiter wachsen).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Gegenvorschlag umgesetzt: AUF-1.8 bis AUF-1.11 stehen
+gleichlautend als AUF-7.1 bis AUF-7.4 in „AUF-7 · Einheit in Aufstellung“, Zweck nach
+[core_rules.txt:2322](../../domaene/referenz/rules/core_rules.txt#L2322) (einzeln und
+abwechselnd). AUF-1 behält AUF-1.1 bis 1.3 und 1.7, Zweck: wer wann wählt und *an der Reihe*
+ist. AUF-3.8 verweist auf AUF-7.2 und AUF-7.3, `querschnitt.md` auf AUF-3 und AUF-7. Die
+alten Kennungen kommen nicht wieder; dass die Kriterien dabei neue bekommen, folgt aus T1
+(Teilung der Anforderung) und ändert ihren Inhalt nicht. Den Umzug der Tests verlangt
+[314](314-testsZuAuf7.md) vom Testautor; bis dahin ist `testDasRepoHältDieRückverfolgung` rot.
