@@ -49,7 +49,7 @@ Zweck: Neben der *Karte* nach [QUE-2](../querschnitt.md) sehen die *Spieler*, we
 
 ### AUF-5 · Auswählen am Bildschirm
 
-Zweck: Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie aus, gleich wer *an der Reihe* ist; das zeigt, welche *Einheit* gemeint ist, und erlaubt keine Handlung (Anliegen 309 F1 B, F2 B; Vorbild `ArbiterMap/docs/spec/interaction_map.md:282`).
+Zweck: Die *Spieler* zeigen per Klick, welche *Einheit* gemeint ist, ohne Handlung (Anliegen 309; Vorbild `ArbiterMap/docs/spec/interaction_map.md:282`).
 
 - AUF-5.3 Ein Klick auf eine nicht *ausgewählte* *Einheit* in einer *Ablage* macht sie *ausgewählt*, auch wenn ihr *Spieler* nicht *an der Reihe* ist.
 - AUF-5.4 Ein Klick auf eine *ausgewählte* *Einheit* in einer *Ablage* macht sie nicht *ausgewählt* (Vorbild `interaction_map.md:296`).
@@ -58,6 +58,7 @@ Zweck: Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie aus, gleich wer
 - AUF-5.7 Die *Karte* kennzeichnet jedes *gesetzte* *Modell* einer *ausgewählten* *Einheit*.
 - AUF-5.8 Ein Klick nach AUF-5.3 oder AUF-5.4 ändert weder, wer *an der Reihe* ist, noch die *Einheit in Aufstellung* oder ein *Modell*.
 - AUF-5.9 Nach dem Start nach QUE-2.1 ist keine *Einheit* *ausgewählt*.
+- AUF-5.10 Wird eine *ausgewählte* *Einheit* *aufgestellt*, ist sie nicht mehr *ausgewählt* (Anliegen 309).
 
 ### AUF-6 · Vorläufig: Start mit gewähltem Gewinner und gewählter Zone
 
