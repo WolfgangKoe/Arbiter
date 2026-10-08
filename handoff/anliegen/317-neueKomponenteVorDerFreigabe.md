@@ -5,7 +5,7 @@ Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · a
 
 ## Runde 1
 **Befund.** Die Kennzeichnung `ausgewählt` für AUF-5 ist in
-[316](316-kennzeichenAusgewaehlt.md) entschieden, steht aber noch nicht in
+Anliegen 316 entschieden, steht aber noch nicht in
 `technik/frontend/komponenten.css`. Das schreibt nur der Implementierer, und der arbeitet in
 der Technikphase. DoR 5 ([Ablauf](../../prozess/ablauf.md#dor-item-bereit)) verlangt ein
 „Mockup aus vorhandenen Komponenten“. Den Weg über `vorschlag.css` nennt die Regel nur für
