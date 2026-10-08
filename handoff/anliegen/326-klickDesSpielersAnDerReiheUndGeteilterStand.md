@@ -24,7 +24,7 @@
 
 **Kosten.** (1) Ein Klick, der die Boyz zur *Einheit in Aufstellung* macht, bliebe grün,
 entgegen 309. (2) Eine korrekte Umsetzung kann rot werden; der Implementierer müsste die
-Architektur nach dem Test statt nach dem Vertrag ([Anliegen 325](325-vertragFuerDenKlickFehlt.md))
+Architektur nach dem Test statt nach dem Vertrag (Anliegen 325)
 richten. (3) Fehlt das CSS, sieht der *Spieler* nichts und der Test ist grün.
 
 **Gegenvorschlag.**

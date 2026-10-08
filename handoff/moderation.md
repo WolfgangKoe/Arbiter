@@ -6,9 +6,9 @@ läuft; zu den Items von [Plan 4](plan.md) hängt kein offenes Anliegen (DoR 4).
 ## Dran
 Blockiert die Freigabe: nichts. Die Kritik an AUF-5.5 (Anliegen 318)
 ist `erledigt`, AUF-5.5 steht nicht im Umfang.
-- Architekt: [322](anliegen/322-beispielInT2GibtEsNicht.md) (Beispiel in T2; drei Kürzel).
+- Architekt: Anliegen 322 (Beispiel in T2; drei Kürzel).
 - Organisationsentwickler: [321](anliegen/321-dor5NeueKomponente.md) (ein Satz in DoR 5, Stellungnahme
-  leer); [296](anliegen/296-prozesslastEindaemmen.md) nachprüfen (angenommen, F1 bis F3 beantwortet);
+  leer); Anliegen 296 nachprüfen (angenommen, F1 bis F3 beantwortet);
   [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) warten auf 304 und 216.
 - Regelumsetzer: [216](anliegen/216-commitHooksWirksamMachen.md),

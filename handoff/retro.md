@@ -12,7 +12,7 @@ Etappe 1 · Aufstellen, Plan 3 mit zwei Items. Grundlage: [Review 3](review.md),
    Prüfskripte, 202 bis 206 Nachschliff am Nachschliff. Deckel und „Kritik nur bei
    Fehlverhalten“ griffen nicht.
 4. Belegung: 9 Läufe über 120.000 Token, keiner über 150.000.
-5. Dein Kommentar in [296](anliegen/296-prozesslastEindaemmen.md) und 306: Die Organisation
+5. Dein Kommentar in Anliegen 296 und 306: Die Organisation
    ist zum Produkt geworden; du willst Anforderungen, Akzeptanztests und grünen Produktcode
    sehen.
 
