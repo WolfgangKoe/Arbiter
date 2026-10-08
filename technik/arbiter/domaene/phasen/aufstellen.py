@@ -112,16 +112,6 @@ class Aufstellung:
             raise ValueError("Der Spieler gehört nicht zur Aufstellung")
         return self._zonen.get(spieler)
 
-    def einheitInAufstellungWählen(self, einheit: Einheit) -> None:
-        if self._anDerReihe is None or self.aufgestellt(einheit):
-            raise Sperre(Grund.nichtWählbar)
-        if einheit not in self._anDerReihe.armee.einheiten:
-            raise Sperre(Grund.nichtWählbar)
-        bisherige = self._einheitInAufstellung
-        if bisherige is not None and bisherige is not einheit and self._begonnen(bisherige):
-            raise Sperre(Grund.einheitBegonnen)
-        self._einheitInAufstellung = einheit
-
     def modellSetzen(self, modell: Modell, stelle: Stelle) -> None:
         einheit = self._einheitInAufstellung
         if einheit is None or modell not in einheit.modelle:
@@ -175,9 +165,6 @@ class Aufstellung:
         Grund.baseÜberdeckt: _baseÜberdeckt,
         Grund.nahkampfreichweite: _inNahkampfreichweiteVonGegnern,
     }
-
-    def _begonnen(self, einheit: Einheit) -> bool:
-        return any(self.gesetzt(modell) for modell in einheit.modelle)
 
     def _hatEinheitenZumAufstellen(self, spieler: Spieler) -> bool:
         return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
