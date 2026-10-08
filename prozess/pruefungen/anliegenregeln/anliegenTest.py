@@ -63,6 +63,16 @@ def testFalscherKopfIstRot(tmp_path, ersetzung, bis):
     assert kopfVerstöße(datei, tmp_path) != []
 
 
+def testRückfrageIstEinGültigerStatus(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "rückfrage"))
+    assert kopfVerstöße(datei, tmp_path) == []
+
+
+def testBeiRückfrageIstDerAbsenderDran(tmp_path):
+    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "rückfrage"))
+    assert dran(tmp_path) == {"Architekt": [12]}
+
+
 def testAnliegenOhneTitelIstRot(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf, titel="Kein Titel")
     assert kopfVerstöße(datei, tmp_path) != []

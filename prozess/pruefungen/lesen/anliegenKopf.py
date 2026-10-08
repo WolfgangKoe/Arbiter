@@ -12,6 +12,7 @@ class Status(StrEnum):
     offen = "offen"
     angenommen = "angenommen"
     abgelehnt = "abgelehnt"
+    rückfrage = "rückfrage"
     beantwortet = "beantwortet"
     eskaliert = "eskaliert"
     erledigt = "erledigt"

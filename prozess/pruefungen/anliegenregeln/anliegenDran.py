@@ -28,7 +28,12 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
     if anliegen.status == Status.offen:
         beantwortet = beantwortetDurchFreigabe(wurzel, anliegen, freigabe)
         return anliegen.absender if beantwortet else anliegen.empfänger
-    if anliegen.status in (Status.angenommen, Status.abgelehnt, Status.beantwortet):
+    if anliegen.status in (
+        Status.angenommen,
+        Status.abgelehnt,
+        Status.beantwortet,
+        Status.rückfrage,
+    ):
         return anliegen.absender
     if anliegen.status == Status.eskaliert:
         return stakeholder

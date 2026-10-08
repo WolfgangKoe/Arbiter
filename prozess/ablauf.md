@@ -235,8 +235,8 @@ Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
 `.claude/agents/` oder Stakeholder, dahinter darf die Perspektive in Klammern stehen.
-Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`),
-`rückfrage` und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); die Legende
+Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`)
+und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); die Legende
 nur Text.
 
 Form | der Empfänger soll | Absender
