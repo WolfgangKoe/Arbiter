@@ -1,6 +1,6 @@
 # Der Dienst-Test zu AUF-6.1 trifft die Wahl selbst
 
-328 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+328 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `testAuf6_1DerSpielstandNenntSpielerZweiAnDerReiheUndSpielerEinsDieErsteZone`
@@ -24,3 +24,7 @@ also nicht selbst.
 Erledigt, wenn kein Test zu AUF-6.1 die Wahl selbst trifft.
 
 **Stellungnahme.**
+Umgesetzt mit (b): Der Test `testAuf6_1DerSpielstandNenntSpielerZweiAnDerReiheUndSpielerEinsDieErsteZone`
+ist aus `auf6Test.py` entfernt. Variante (a) braucht eine Startfunktion, die es nicht gibt und
+deren Namen ich nicht erfinde. AUF-6.1 halten die drei Bildschirmtests gegen den Befehl; die
+Darstellung der Wahl in V1 deckt schon AUF-4 ab.
