@@ -103,38 +103,39 @@ def testEineAusgenommeneRegelEinerDateiIstKeinFundDieselbeRegelAnderswoSchon(mon
     assert all(fund.startswith("anderswo.py:") for fund in mitAusnahme)
 
 
-lesendeMethoden = {"GET", "HEAD", "OPTIONS"}
-verändernde = {"post", "put", "patch", "delete"}
+erlaubteMethoden = {"GET", "HEAD", "OPTIONS", "PUT", "DELETE"}
+nichtErlaubte = {"post", "patch"}
+corsMerkmale = ("Access-Control-Allow", "flask_cors", "flask-cors")
 
 
-def methodenAußerLesen(wert: ast.expr) -> bool:
+def methodenMitPost(wert: ast.expr) -> bool:
     if not isinstance(wert, (ast.List, ast.Tuple, ast.Set)):
         return True
     return any(
-        not (isinstance(eintrag, ast.Constant) and str(eintrag.value).upper() in lesendeMethoden)
+        not (isinstance(eintrag, ast.Constant) and str(eintrag.value).upper() in erlaubteMethoden)
         for eintrag in wert.elts
     )
 
 
-def istRouteAußerLesen(aufruf: ast.Call) -> bool:
+def istRouteMitPost(aufruf: ast.Call) -> bool:
     if not isinstance(aufruf.func, ast.Attribute):
         return False
-    if aufruf.func.attr in verändernde:
+    if aufruf.func.attr in nichtErlaubte:
         return True
     if aufruf.func.attr not in ("route", "add_url_rule"):
         return False
     return any(
-        schlüssel.arg == "methods" and methodenAußerLesen(schlüssel.value)
+        schlüssel.arg == "methods" and methodenMitPost(schlüssel.value)
         for schlüssel in aufruf.keywords
     )
 
 
-def routenAußerLesen(quelltext: str) -> list[int]:
-    """Zeilen, in denen eine Route mit einer anderen Methode als GET, HEAD, OPTIONS steht."""
+def routenMitPost(quelltext: str) -> list[int]:
+    """Zeilen, in denen eine Route eine andere Methode als GET, PUT, DELETE annimmt."""
     return [
         knoten.lineno
         for knoten in ast.walk(ast.parse(quelltext))
-        if isinstance(knoten, ast.Call) and istRouteAußerLesen(knoten)
+        if isinstance(knoten, ast.Call) and istRouteMitPost(knoten)
     ]
 
 
@@ -152,19 +153,25 @@ def ansichtsKlassen(quelltext: str) -> list[int]:
     ]
 
 
-def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
-    # Regel: prozess/regeln.md, SonarLint, S4502 fällt mit der ersten Route außer GET
+def corsFreigaben(quelltext: str) -> list[str]:
+    """Merkmale einer CORS-Freigabe, die im Quelltext vorkommen."""
+    return [merkmal for merkmal in corsMerkmale if merkmal in quelltext]
+
+
+def testDieAusnahmeVonS4502GiltNurSolangeWebKeinPostKeineAnsichtUndKeinCorsHat():
+    # Regel: technik/architektur/vertrag.md, V4
     ausnahme = (f"{webOrdner}/anwendung.py", "python:S4502")
-    verändernd = [
+    verstöße = [
         f"{datei.name}:{zeile}"
         for datei in sorted((wurzel / webOrdner).rglob("*.py"))
         for zeile in [
-            *routenAußerLesen(datei.read_text(encoding="utf-8")),
+            *routenMitPost(datei.read_text(encoding="utf-8")),
             *ansichtsKlassen(datei.read_text(encoding="utf-8")),
+            *corsFreigaben(datei.read_text(encoding="utf-8")),
         ]
     ]
-    assert ausnahme not in sonarlint.ausnahmen or not verändernd, (
-        f"Route außer GET {verändernd}: S4502 aus `ausnahmen` streichen, CSRF entscheiden"
+    assert ausnahme not in sonarlint.ausnahmen or not verstöße, (
+        f"V4 verletzt {verstöße}: S4502 aus `ausnahmen` streichen, CSRF neu entscheiden"
     )
 
 
@@ -177,8 +184,8 @@ def testDieAusnahmeVonS4502GiltNurSolangeDieAnwendungKeineRouteAußerGetHat():
         'anwendung.add_url_rule("/wählen", methods=methoden)\n',
     ],
 )
-def testEineRouteAußerLesenIstEineRouteAußerLesen(quelltext):
-    assert routenAußerLesen(quelltext)
+def testEineRouteMitPostIstEineRouteMitPost(quelltext):
+    assert routenMitPost(quelltext)
 
 
 @pytest.mark.parametrize(
@@ -188,7 +195,7 @@ def testEineRouteAußerLesenIstEineRouteAußerLesen(quelltext):
         "class Ansicht(views.View):\n    methods = ['POST']\n",
     ],
 )
-def testEineKlassenansichtIstEineMöglicheRouteAußerLesen(quelltext):
+def testEineKlassenansichtIstEineMöglicheRouteMitPost(quelltext):
     assert ansichtsKlassen(quelltext)
 
 
@@ -202,10 +209,29 @@ def testEineKlasseOhneAnsichtIstKeineKlassenansicht():
         '@anwendung.route("/stand")\ndef stand(): ...\n',
         'anwendung.add_url_rule("/stand", methods=["GET", "HEAD"])\n',
         '@anwendung.get("/stand")\ndef stand(): ...\n',
+        'anwendung.add_url_rule("/wahl", methods=["PUT"])\n',
+        'anwendung.add_url_rule("/wahl", methods=("DELETE",))\n',
+        '@anwendung.put("/wahl")\ndef wählen(): ...\n',
+        '@anwendung.delete("/wahl")\ndef abwählen(): ...\n',
     ],
 )
-def testEineLesendeRouteIstKeineRouteAußerLesen(quelltext):
-    assert routenAußerLesen(quelltext) == []
+def testEineErlaubteRouteIstKeineRouteMitPost(quelltext):
+    assert routenMitPost(quelltext) == []
+
+
+@pytest.mark.parametrize(
+    "quelltext",
+    [
+        'antwort.headers["Access-Control-Allow-Origin"] = "*"\n',
+        "from flask_cors import CORS\n",
+    ],
+)
+def testEineCorsFreigabeIstEineCorsFreigabe(quelltext):
+    assert corsFreigaben(quelltext)
+
+
+def testOhneCorsMerkmalIstKeineCorsFreigabe():
+    assert corsFreigaben("antwort.headers['Content-Type'] = 'x'\n") == []
 
 
 def testDerFundNenntPfadZeileRegelUndMeldung(tmp_path):
