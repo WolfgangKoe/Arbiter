@@ -1,6 +1,6 @@
 # Plan 4: Wo die Sperre einer Wahl steht, was ein Neustart zeigt
 
-309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 3/3 · offen
+309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 3/3 · angenommen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
