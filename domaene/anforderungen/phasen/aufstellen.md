@@ -10,15 +10,16 @@ Die *Aufstellung* ist Schritt 4 der *Mission* Only War ([core_rules.txt:2321]): 
 
 ### AUF-1 · Reihenfolge der Aufstellung
 
-Zweck: Zonenwahl, wer wann aufstellt. Kriterien: [core_rules.txt:2322].
+Zweck: Wer wann wählt und aufstellt ([core_rules.txt:2322]).
 
 - AUF-1.1 Vom *Roll-off* wird nur der *Gewinner* eingegeben; die gewählte *Aufstellungszone* gehört ihm, die andere dem anderen.
 - AUF-1.2 Erst wird der *Gewinner*, dann die *Aufstellungszone* gewählt, je einmal; sonst *Sperre* ‚nicht wählbar‘.
 - AUF-1.3 Bis zur Wahl der *Aufstellungszone* ist keiner *an der Reihe*, danach, wer nicht *Gewinner* ist.
-- AUF-1.4 Ein *Modell* außerhalb der *Einheit in Aufstellung* *setzen* oder ohne sie *Aufstellen der Einheit beenden*: *Sperre* ‚nicht in Aufstellung‘.
-- AUF-1.5 Wählbar als *Einheit in Aufstellung* ist nur eine nicht *aufgestellte* *Einheit* des *Spielers* *an der Reihe*; sonst *Sperre* ‚nicht wählbar‘.
-- AUF-1.6 Eine wählbare *Einheit* wird *Einheit in Aufstellung*, außer eine andere ist es und von ihr ist ein *Modell* *gesetzt*: *Sperre* ‚Einheit begonnen‘.
 - AUF-1.7 Gelingt *Aufstellen der Einheit beenden*, ist die *Einheit* *aufgestellt*, keine *Einheit in Aufstellung* und der andere *Spieler* *an der Reihe*; hat er alle *aufgestellt*, derselbe; haben es beide, ist die *Aufstellung* beendet und keiner *an der Reihe*.
+- AUF-1.8 *Einheit in Aufstellung* ist die nicht *aufgestellte* *Einheit* mit *gesetztem* *Modell*, sonst keine.
+- AUF-1.9 Ein *Modell* einer *aufgestellten* *Einheit* oder eines *Spielers* nicht *an der Reihe* *setzen*: *Sperre* ‚nicht wählbar‘.
+- AUF-1.10 Sonst ein *Modell* *setzen*, wenn es eine andere *Einheit in Aufstellung* gibt: *Sperre* ‚Einheit begonnen‘.
+- AUF-1.11 Ohne *Einheit in Aufstellung* *Aufstellen der Einheit beenden*: *Sperre* ‚nicht in Aufstellung‘.
 
 ### AUF-2 · Ausgangslage von Only War
 
@@ -36,8 +37,8 @@ Zweck: Arbiter sperrt beim *Setzen* nach [QUE-1](../querschnitt.md) auch jede *S
 - AUF-3.2 Liegt die *Base* des *Modells* an der *Stelle* nicht *ganz in* der *Aufstellungszone* seines *Spielers*: *Sperre* ‚nicht ganz in der Zone‘ ([core_rules.txt:2322]).
 - AUF-3.4 Ist es an der *Stelle* in *Nahkampfreichweite* eines *gesetzten* *Modells* des anderen *Spielers*: *Sperre* ‚Nahkampfreichweite‘ ([core_rules.txt:450]).
 - AUF-3.5 Sperrt an der *Stelle* mehr als eines von QUE-1.2, AUF-3.2 und AUF-3.4, nennt Arbiter den *Grund* jedes davon (Anliegen 100 F3 A, git).
-- AUF-3.6 Ist das *Setzen* nach AUF-1.4 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist ‚nicht in Aufstellung‘.
 - AUF-3.7 Auch ein *gesetztes* *Modell* der *Einheit in Aufstellung* lässt sich *setzen*, geprüft nach QUE-1.2, AUF-3.2 und AUF-3.4 (Etappe 1, Anliegen 16 F2 A, git).
+- AUF-3.8 Ist das *Setzen* nach AUF-1.9 oder AUF-1.10 gesperrt, prüft Arbiter die *Stelle* nicht; der einzige *Grund* ist der von dort.
 
 ### AUF-4 · Anzeige der Aufstellung
 
@@ -50,15 +51,20 @@ Zweck: Neben der *Karte* nach [QUE-2](../querschnitt.md) sehen die *Spieler*, we
 - AUF-4.6 Die *Karte* zeigt jede *Aufstellungszone* in der Farbe der *Modelle* des *Spielers*, dem sie gehört, vor der Wahl nach AUF-1.1 in keiner der beiden (Vorbild `ArbiterMap/docs/spec/design_colors.md:72` bis `:74`).
 - AUF-4.7 Die *Ablage* nennt ihren *Spieler* in der Farbe seiner *Modelle* auf der *Karte* (Anliegen 199).
 
-### AUF-5 · Wählen am Bildschirm
+### AUF-5 · Auswählen am Bildschirm
 
-Zweck: Am Bildschirm bestimmt der *Spieler*, der *an der Reihe* ist, welche seiner *Einheiten* er als Nächstes aufstellt: Er klickt sie in seiner *Ablage* an, und sie wird *Einheit in Aufstellung*. Erlaubt AUF-1 die Wahl nicht, bleibt alles, wie es war.
+Zweck: Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie aus, gleich wer *an der Reihe* ist; das zeigt, welche *Einheit* gemeint ist, und erlaubt keine Handlung (Anliegen 309 F1 B, F2 B; Vorbild `ArbiterMap/docs/spec/interaction_map.md:282`).
 
-- AUF-5.1 Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie nach AUF-1.5 und AUF-1.6; gelingt die Wahl, kennzeichnet die *Ablage* sie danach nach AUF-4.5 (Vorbild `ArbiterMap/docs/spec/interaction_map.md:283`).
-- AUF-5.2 Trifft die Wahl nach AUF-5.1 eine *Sperre*, kennzeichnet die *Ablage* danach dieselbe *Einheit* wie davor oder weiterhin keine.
+- AUF-5.3 Ein Klick auf eine nicht *ausgewählte* *Einheit* in einer *Ablage* macht sie *ausgewählt*, auch wenn ihr *Spieler* nicht *an der Reihe* ist.
+- AUF-5.4 Ein Klick auf eine *ausgewählte* *Einheit* in einer *Ablage* macht sie nicht *ausgewählt* (Vorbild `interaction_map.md:296`).
+- AUF-5.5 Macht AUF-5.3 eine dritte *Einheit* desselben *Spielers* *ausgewählt*, ist es die zuerst *ausgewählte* der beiden anderen nicht mehr (Vorbild `interaction_map.md:337`).
+- AUF-5.6 Die *Ablage* kennzeichnet jede *ausgewählte* *Einheit*, unterscheidbar von der Kennzeichnung nach AUF-4.5.
+- AUF-5.7 Die *Karte* kennzeichnet jedes *gesetzte* *Modell* einer *ausgewählten* *Einheit*.
+- AUF-5.8 Ein Klick nach AUF-5.3 oder AUF-5.4 ändert weder, wer *an der Reihe* ist, noch die *Einheit in Aufstellung* oder ein *Modell*.
+- AUF-5.9 Nach dem Start nach QUE-2.1 ist keine *Einheit* *ausgewählt*.
 
 ### AUF-6 · Vorläufig: Start mit gewähltem Gewinner und gewählter Zone
 
-Zweck: Bis die *Spieler* *Gewinner* und *Aufstellungszone* am Bildschirm wählen können, trifft Arbiter beide Wahlen beim Start selbst, damit gleich eine *Einheit* wählbar ist. Die Anforderung ist eine Krücke: Sie entfällt mit der Wahl am Bildschirm und ihr Test mit ihr (Anliegen 308 F1 A, F2 A, git).
+Zweck: Bis die *Spieler* *Gewinner* und *Aufstellungszone* am Bildschirm wählen können, trifft Arbiter beide Wahlen beim Start selbst, damit gleich ein *Modell* *gesetzt* werden kann. Die Anforderung ist eine Krücke: Sie entfällt mit der Wahl am Bildschirm und ihr Test mit ihr (Anliegen 308 F1 A, F2 A, git).
 
 - AUF-6.1 Nach dem Start nach QUE-2.1 ist „Spieler 1“ nach AUF-1.1 *Gewinner* und hat die *Aufstellungszone* gewählt, die auf dem Bildschirm seiner *Ablage* am nächsten liegt; nach AUF-1.3 ist „Spieler 2“ *an der Reihe*.

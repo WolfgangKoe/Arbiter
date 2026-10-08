@@ -1,6 +1,6 @@
 # Plan 4: Wo die Sperre einer Wahl steht, was ein Neustart zeigt
 
-309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 2/3 · angenommen
+309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 3/3 · offen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -23,44 +23,47 @@ Antwort: A
 **Stellungnahme.**
 
 ## Runde 2
-**Befund.** F2 steht als QUE-3.3 in
-[querschnitt.md](../../domaene/anforderungen/querschnitt.md). Zu F1: In ArbiterMap wählt ein
-Klick jede *Einheit* beider *Spieler* jederzeit aus; sie wird hervorgehoben, gesperrt wird erst
-die Handlung (`ArbiterMap/docs/spec/interaction_map.md:228`, `:282`). Bei uns macht der Klick
-die *Einheit* zur *Einheit in Aufstellung* und trifft darum eine *Sperre*, wenn AUF-1.5 oder
-AUF-1.6 es verbieten (AUF-5). Eine *Einheit in Aufstellung* gab es in ArbiterMap nicht; wie
-beides zusammengeht, sagen weder Regeln noch ArbiterMap.
+**Befund.** Ein Klick wählt in ArbiterMap jede *Einheit* aus, gesperrt wird erst die Handlung
+(`ArbiterMap/docs/spec/interaction_map.md:228`, `:282`).
 
-**Kosten.** Bis zur Antwort bleibt AUF-5, wie es ist, und zur Auswahl trage ich nichts ein.
-Bei F1 B entfällt AUF-5, bevor es einen Test hat.
+**Kosten.** Ohne Antwort blieb offen, wie Auswahl und *Einheit in Aufstellung* zusammengehen.
 
-**Gegenvorschlag.** Neuer Begriff für beide Wege: *ausgewählt* | – | `ausgewählt` | Zustand
-einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; erlaubt
-keine Handlung. Die *Ablage* kennzeichnet sie, die *Karte* ihre *gesetzten* *Modelle*.
+**Gegenvorschlag.** Neuer Begriff *ausgewählt*.
 
-**F1 · Was bewirkt ein Klick auf eine Einheit in einer Ablage?**
-- A: Er wählt sie immer aus. Ist sie nach AUF-1.5 und AUF-1.6 wählbar, wird sie zugleich
-  *Einheit in Aufstellung*; *setzen* lassen sich nur deren *Modelle* (AUF-1.4). AUF-1 und
-  AUF-5 bleiben, die *Ablage* kennzeichnet zwei Dinge.
-- B: Er wählt sie nur aus, wie in ArbiterMap. *Einheit in Aufstellung* wird eine *Einheit*,
-  sobald ihr erstes *Modell* *gesetzt* ist; ‚nicht wählbar‘ und ‚Einheit begonnen‘ sperren
-  dann das *Setzen* auf der *Karte*, wo das *Modell* mit *Grund* stehen bleibt (Etappe 1).
-  AUF-1.4 bis AUF-1.6 und AUF-5 werden neu gefasst, mit neuen Kennungen.
-
-Empfehlung B: Wählen ist frei, gesperrt wird die Handlung, wie in ArbiterMap; kein Klick wird
-abgelehnt, also braucht es keinen Satz dafür. Kosten: Die grünen Tests zu AUF-1.4 bis AUF-1.6
-werden ersetzt; nach QUE-3.2 behält Arbiter auch die Auswahl.
+**F1 · Was bewirkt ein Klick auf eine Einheit in einer Ablage?** A: Auswahl, und ist sie
+wählbar, zugleich *Einheit in Aufstellung*; B: nur Auswahl, *Einheit in Aufstellung* wird sie
+mit dem ersten *gesetzten* *Modell*. Empfehlung B.
 
 Antwort: .
 
-**F2 · Wie viele Einheiten sind zugleich ausgewählt?**
-- A: Höchstens eine; ein Klick auf eine andere ersetzt sie, auf dieselbe hebt er sie auf.
-- B: Wie ArbiterMap: je *Spieler* bis zu zwei, ein Klick fügt hinzu oder hebt auf, eine
-  dritte verdrängt die älteste (`interaction_map.md:296`, `:337`).
-
-Empfehlung A: In Etappe 1 zeigt die Auswahl nur, welche *Einheit* gemeint ist; braucht eine
-spätere Etappe mehrere, frage ich neu.
+**F2 · Wie viele Einheiten sind zugleich ausgewählt?** A: höchstens eine; B: wie ArbiterMap,
+je *Spieler* bis zu zwei, die dritte verdrängt die älteste.
 
 Antwort: B
+
+**Stellungnahme.**
+
+## Runde 3
+**Befund.** Eingetragen sind AUF-1.8 bis AUF-1.11, AUF-3.8, AUF-5.3 bis AUF-5.9
+([aufstellen.md](../../domaene/anforderungen/phasen/aufstellen.md)), QUE-3.3
+([querschnitt.md](../../domaene/anforderungen/querschnitt.md)) und *ausgewählt* im
+[Glossar](../../domaene/glossar.md). Eine Lücke bleibt: Abwählen geht nur per Klick in der
+*Ablage* (AUF-5.4). Ist eine *ausgewählte* *Einheit* *aufgestellt*, steht sie nicht mehr in der
+*Ablage* (AUF-4.3); die *Karte* kennzeichnet ihre *Modelle* weiter (AUF-5.7), und abwählen könnt
+ihr sie nur noch, indem ihr zwei andere *Einheiten* desselben *Spielers* auswählt (AUF-5.5).
+In ArbiterMap wählt man auf der *Karte* ab (Klick ins Leere, `interaction_map.md:260`); das
+kennt Etappe 1 nicht.
+
+**Kosten.** Ohne Antwort bleibt die Auswahl einer *aufgestellten* *Einheit* bestehen, wie oben;
+ein Kriterium dazu trage ich nicht ein.
+
+**F1 · Was wird aus der Auswahl einer Einheit, die aufgestellt ist?**
+- A: Sie endet; die *Karte* kennzeichnet ihre *Modelle* nicht mehr.
+- B: Sie bleibt, bis ein Klick auf der *Karte* abwählen kann (spätere Anforderung).
+
+Empfehlung A: In Etappe 1 könnt ihr sie sonst nicht gezielt abwählen; kommt das Auswählen auf
+der *Karte*, frage ich neu.
+
+Antwort: .
 
 **Stellungnahme.**
