@@ -1,6 +1,6 @@
 # Stand behalten braucht keine Datenbank
 
-319 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
+319 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Item 3 ([Stand behalten](../../domaene/items/standBehalten.md)) begründet sich
