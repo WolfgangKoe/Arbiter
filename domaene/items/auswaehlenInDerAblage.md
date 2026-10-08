@@ -2,8 +2,8 @@
 
 Umfang: AUF-5.3, AUF-5.4, AUF-5.6 bis 5.10
 ([Aufstellen](../anforderungen/phasen/aufstellen.md)), QUE-3.1
-([Querschnitt](../anforderungen/querschnitt.md)); AUF-5.5 erst ab drei *Einheiten* je *Armee*
-(320 B).
+([Querschnitt](../anforderungen/querschnitt.md)); ohne dritte *ausgewählte*
+*Einheit* (320 B).
 
 Warum jetzt: erste Handlung am Bildschirm (Review 3), Setzen baut darauf auf.
 
