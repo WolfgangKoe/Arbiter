@@ -1,6 +1,6 @@
 # Wahl der Einheit in den Tests der Aufstellung
 
-313 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · offen
+313 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu 1770e3d, Schnittstelle und Lesbarkeit.
@@ -38,4 +38,4 @@ Lesen, zwei Schreibweisen derselben *Stelle*.
 
 Die Größe von `auf1Test.py` ist ein eigenes Anliegen: [312](312-teilungVonAuf1.md).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. 1: In `auf4Test.py` setzt `modelleSetzen` das Modell; der Wander-Test ist gestrichen, kein Test ruft mehr `einheitInAufstellungWählen` auf (grep). 2: Fixture heißt `ersteEinheitDesSpielersAnDerReihe`, Docstrings sagen *an der Reihe*. 3: Konstante `stelleInDerZoneDesAnderenSpielers` in `auf7Test.py`.

@@ -8,17 +8,17 @@ from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.handgriffe import sperrgründe
 
 
-def testQue1_1VorDemSetzenIstDasModellNichtGesetzt(aufstellung, ersteEinheitAnDerReihe):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+def testQue1_1VorDemSetzenIstDasModellNichtGesetzt(aufstellung, ersteEinheitDesSpielersAnDerReihe):
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
 
     assert not aufstellung.gesetzt(erstesModell)
     assert aufstellung.stelle(erstesModell) is None
 
 
 def testQue1_1OhneSperreIstDasModellDanachAnDerStelleGesetzt(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     stelle = platz.stelle(3, platz.radius)
 
     aufstellung.modellSetzen(erstesModell, stelle)
@@ -33,9 +33,9 @@ def testQue1_1OhneSperreIstDasModellDanachAnDerStelleGesetzt(
     ids=["dieselbeStelle", "halbVersetzt", "knappInDerLänge", "knappSchräg"],
 )
 def testQue1_2ÜberdecktDieBaseDieEinesGesetztenModellsIstSieGesperrt(
-    aufstellung, ersteEinheitAnDerReihe, anteile, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, anteile, platz
 ):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     anteilX, anteilY = anteile
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3 + 2 * platz.radius * anteilX, platz.radius + 2 * platz.radius * anteilY)
@@ -52,9 +52,9 @@ def testQue1_2ÜberdecktDieBaseDieEinesGesetztenModellsIstSieGesperrt(
     ids=["berührendGerade", "berührendLängs", "berührendSchräg"],
 )
 def testQue1_2BerührenSichDieBasesIstDasSetzenNichtGesperrt(
-    aufstellung, ersteEinheitAnDerReihe, anteilX, anteilY, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, anteilX, anteilY, platz
 ):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3 + 2 * platz.radius * anteilX, platz.radius + 2 * platz.radius * anteilY)
 
@@ -63,8 +63,10 @@ def testQue1_2BerührenSichDieBasesIstDasSetzenNichtGesperrt(
     assert aufstellung.gesetzt(zweitesModell)
 
 
-def testQue1_2EinMillionstelZollZuNahIstGesperrt(aufstellung, ersteEinheitAnDerReihe, platz):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+def testQue1_2EinMillionstelZollZuNahIstGesperrt(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
+):
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(3, platz.radius))
     stelle = platz.stelle(3, 3 * platz.radius - platz.millionstel)
 

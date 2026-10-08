@@ -18,9 +18,9 @@ schräg = (Fraction(3, 5), Fraction(4, 5))
     ids=["überDieSpielfeldkante", "mitteDesSpielfelds", "zoneDesAnderenSpielers"],
 )
 def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
-    aufstellung, ersteEinheitAnDerReihe, lageInRadien, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, lageInRadien, platz
 ):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     tiefeInRadien, längeInRadien = lageInRadien
     stelle = platz.stelle(
         tiefeInRadien * platz.radius - platz.millionstel, längeInRadien * platz.radius
@@ -33,8 +33,10 @@ def testAuf3_2LiegtDieBaseNichtGanzInDerZoneSeinesSpielersIstSieGesperrt(
     assert aufstellung.stelle(erstesModell) is None
 
 
-def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(aufstellung, ersteEinheitAnDerReihe, platz):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
+):
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     stelle = platz.stelle(3, platz.radius - platz.millionstel)
 
     gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
@@ -43,8 +45,10 @@ def testAuf3_2ÜberDieKurzeKanteAmAnfangIstGesperrt(aufstellung, ersteEinheitAnD
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(aufstellung, ersteEinheitAnDerReihe, platz):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
+):
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     stelle = platz.stelle(3, platz.längeDerSpielfeldkante - platz.radius + platz.millionstel)
 
     gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
@@ -86,9 +90,9 @@ def testAuf3_4JenseitsVonEinemZollIstNichtInNahkampfreichweite(
 
 
 def testAuf3_4EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(2, platz.radius))
     stelle = platz.stelle(2, 3 * platz.radius + Fraction(1, 2))
 
@@ -97,8 +101,10 @@ def testAuf3_4EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
     assert aufstellung.gesetzt(zweitesModell)
 
 
-def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(aufstellung, ersteEinheitAnDerReihe, platz):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
+):
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(
         erstesModell, platz.stelle(platz.tiefeDerZone - platz.radius, platz.radius)
     )
@@ -134,7 +140,7 @@ def testAuf3_5AufDemModellDesAnderenSpielersNenntArbiterBaseNahkampfreichweiteUn
     assert not aufstellung.gesetzt(modell)
 
 
-@pytest.mark.usefixtures("ersteEinheitAnDerReihe")
+@pytest.mark.usefixtures("ersteEinheitDesSpielersAnDerReihe")
 def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAußerhalbDerZoneNicht(
     aufstellung, zweiterSpieler, platz
 ):
@@ -163,9 +169,9 @@ def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAufEinemModellNicht(
 
 
 def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAußerhalbDerZoneNicht(
-    aufstellung, ersteEinheitAnDerReihe, ersterSpieler, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
 ):
-    begonnenesModell, _ = ersteEinheitAnDerReihe.modelle
+    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     _, andereEinheit = ersterSpieler.armee.einheiten
     (modellDerAnderenEinheit,) = andereEinheit.modelle
     aufstellung.modellSetzen(begonnenesModell, platz.stelle(2, platz.radius))
@@ -177,9 +183,9 @@ def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAußerhalbDerZoneNicht(
 
 
 def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAufEinemModellNicht(
-    aufstellung, ersteEinheitAnDerReihe, ersterSpieler, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
 ):
-    begonnenesModell, _ = ersteEinheitAnDerReihe.modelle
+    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     _, andereEinheit = ersterSpieler.armee.einheiten
     (modellDerAnderenEinheit,) = andereEinheit.modelle
     stelle = platz.stelle(2, platz.radius)
@@ -191,9 +197,9 @@ def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAufEinemModellNicht(
 
 
 def testAuf3_7EinGesetztesModellLässtSichAnEineAndereStelleSetzen(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(2, platz.radius))
     neueStelle = platz.stelle(5, 4 * platz.radius)
 
@@ -203,9 +209,9 @@ def testAuf3_7EinGesetztesModellLässtSichAnEineAndereStelleSetzen(
 
 
 def testAuf3_7DieVorigeStelleDesModellsZähltNichtAlsÜberdeckung(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     aufstellung.modellSetzen(erstesModell, platz.stelle(2, platz.radius))
     verschobeneStelle = platz.stelle(2, 2 * platz.radius)
 
@@ -215,9 +221,9 @@ def testAuf3_7DieVorigeStelleDesModellsZähltNichtAlsÜberdeckung(
 
 
 def testAuf3_7NachDemÜberdeckenBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, zweitesModell = ersteEinheitAnDerReihe.modelle
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
     vorigeStelle = platz.stelle(2, platz.radius)
     aufstellung.modellSetzen(erstesModell, vorigeStelle)
     aufstellung.modellSetzen(zweitesModell, platz.stelle(2, 3 * platz.radius))
@@ -229,9 +235,9 @@ def testAuf3_7NachDemÜberdeckenBleibtDasModellAnSeinerVorigenStelle(
 
 
 def testAuf3_7NachDemVerlassenDerZoneBleibtDasModellAnSeinerVorigenStelle(
-    aufstellung, ersteEinheitAnDerReihe, platz
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
-    erstesModell, _ = ersteEinheitAnDerReihe.modelle
+    erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
     vorigeStelle = platz.stelle(2, platz.radius)
     aufstellung.modellSetzen(erstesModell, vorigeStelle)
 

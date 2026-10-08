@@ -47,7 +47,7 @@ def platz(zone: Aufstellungszone) -> Platz:
 
 
 @pytest.fixture
-def ersteEinheitAnDerReihe(
+def ersteEinheitDesSpielersAnDerReihe(
     aufstellung: Aufstellung, ersterSpieler: Spieler, zweiterSpieler: Spieler, zone
 ) -> Einheit:
     """Der erste Spieler ist mit der Zone an der Reihe; kein Modell ist gesetzt."""
@@ -62,7 +62,7 @@ def ersteEinheitAnDerReihe(
 def einheitNachDemAnderenSpieler(
     aufstellung: Aufstellung, ersterSpieler: Spieler, zweiterSpieler: Spieler, zone
 ) -> Einheit:
-    """Beide haben ihre erste Einheit aufgestellt; der erste Spieler ist mit seiner zweiten dran."""
+    """Beide haben ihre erste Einheit aufgestellt; der erste Spieler ist an der Reihe."""
     andereZone = next(kandidat for kandidat in Aufstellungszone if kandidat is not zone)
     ersteEinheit, zweiteEinheit = ersterSpieler.armee.einheiten
     einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
@@ -86,12 +86,6 @@ def spielerZwei(ausgangslage: Ausgangslage) -> Spieler:
 @pytest.fixture
 def boyz(spielerEins: Spieler) -> Einheit:
     einheit, _ = spielerEins.armee.einheiten
-    return einheit
-
-
-@pytest.fixture
-def warboss(spielerEins: Spieler) -> Einheit:
-    _, einheit = spielerEins.armee.einheiten
     return einheit
 
 

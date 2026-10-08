@@ -81,6 +81,11 @@ def einheitAufstellen(aufstellung: Aufstellung, einheit: Einheit) -> None:
     aufstellung.aufstellenDerEinheitBeenden()
 
 
+def nachDerWahlDerAufstellungszone(aufstellung: Aufstellung, gewinner: Spieler) -> None:
+    aufstellung.gewinnerWählen(gewinner)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+
+
 def sperrgründe(handlung, *argumente) -> frozenset[Grund]:
     with pytest.raises(Sperre) as sperre:
         handlung(*argumente)

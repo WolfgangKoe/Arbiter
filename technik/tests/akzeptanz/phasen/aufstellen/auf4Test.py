@@ -234,7 +234,7 @@ def testAuf4_5DieEinheitInAufstellungDesZweitenSpielersIstInSeinerAblageGekennze
     bildschirm, aufstellungNachDerZonenwahl, necronWarriors
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
-    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(necronWarriors)
+    modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 1)
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
@@ -244,25 +244,6 @@ def testAuf4_5DieEinheitInAufstellungDesZweitenSpielersIstInSeinerAblageGekennze
     assert ablageZwei.locator(".einheitenKartenAbzeichen").count() == 1
     assert (
         ablageZwei.locator(".einheitenKarte", has_text="Necron Warriors")
-        .locator(".einheitenKartenAbzeichen")
-        .count()
-        == 1
-    )
-
-
-def testAuf4_5MitDerWahlEinerAnderenEinheitWandertDieKennzeichnung(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, warboss
-):
-    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(boyz)
-    aufstellungNachDerZonenwahl.einheitInAufstellungWählen(warboss)
-
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-
-    ablage = ablageVon(seite, "Spieler 1")
-    abzeichen = ablage.locator(".einheitenKartenAbzeichen")
-    assert abzeichen.count() == 1
-    assert (
-        ablage.locator(".einheitenKarte", has_text="Warboss")
         .locator(".einheitenKartenAbzeichen")
         .count()
         == 1
