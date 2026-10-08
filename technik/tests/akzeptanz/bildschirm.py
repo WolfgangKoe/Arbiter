@@ -90,6 +90,17 @@ def umrissVon(element: Locator) -> str:
     return element.evaluate(_umrissLesen)
 
 
+_strichLesen = """element => {
+    const stil = getComputedStyle(element)
+    return [stil.stroke, stil.strokeWidth].join(' ')
+}"""
+
+
+def strichVon(element: Locator) -> str:
+    """Farbe und Breite des Rands eines Kreises, wie der Browser ihn zeichnet."""
+    return element.evaluate(_strichLesen)
+
+
 def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Locator:
     return ablageVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
 

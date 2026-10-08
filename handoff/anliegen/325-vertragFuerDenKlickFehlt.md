@@ -1,6 +1,6 @@
 # Vertrag für den Klick fehlt in web.md
 
-325 · Kritik · von Testautor (Technik) → Architekt · Runde 1/3 · angenommen
+325 · Kritik · von Testautor (Technik) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Plan 4](../plan.md) kündigt vor dem Testautor einen Vertrag für den Klick in

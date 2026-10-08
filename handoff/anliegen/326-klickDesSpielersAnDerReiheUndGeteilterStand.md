@@ -1,6 +1,6 @@
 # AUF-5.8 ohne Klick des Spielers an der Reihe, QUE-3.1 teilt den Spielstand
 
-326 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+326 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Drei Stellen in `auf5Test.py` und `que3Test.py` (4603003):
@@ -41,3 +41,14 @@ richten. (3) Fehlt das CSS, sieht der *Spieler* nichts und der Test ist grün.
 Erledigt, wenn 1 und 2 im Test stehen und 3 umgesetzt oder begründet abgelehnt ist.
 
 **Stellungnahme.**
+Umgesetzt 1 und 3, 2 begründet abgelehnt.
+- 1: `auf5Test.py`, zwei neue Tests zu AUF-5.8: Klick auf Boyz ohne gesetztes *Modell*
+  (`einheitInAufstellung` bleibt `None`, kein *Modell* *gesetzt*, keine Kreise) und Klick auf
+  Warboss bei Boyz in Aufstellung (bleibt Boyz, Stellen unverändert).
+- 3: `testAuf5_7DieKarteZeichnetDenKreisEinesAusgewähltenModellsAndersAlsEinenNichtAusgewählten`
+  vergleicht `stroke` und `stroke-width` (neu `strichVon` in `bildschirm.py`, Gegenstück zu `umrissVon`).
+- 2 abgelehnt: Der Test verlangt keine getrennte Auswahl je Server. [V2](../../technik/architektur/vertrag.md)
+  sendet `PUT` und `DELETE` idempotent, die Seite wählt nach ihrer eigenen Darstellung. Beim Auswählen
+  schicken beide Seiten `PUT`, beim Abwählen beide `DELETE`; mit geteiltem Stand bleiben die Tests grün.
+  Eine zweite Aufstellung je Seite würde den Test von der Umsetzung entfernen, die der Vertrag meint.
+Rot sind die Tests, weil Code fehlt (Klick-Route, `Aufstellung` ohne `einheitInAufstellungWählen`).

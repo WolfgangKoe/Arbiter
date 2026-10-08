@@ -10,6 +10,7 @@ from tests.akzeptanz.bildschirm import (
     ausgewählteModelle,
     einheitenKarteVon,
     elementeDerSeite,
+    strichVon,
     umrissVon,
 )
 from tests.akzeptanz.handgriffe import einheitAufstellen, modelleSetzen
@@ -202,6 +203,20 @@ def testAuf5_7DieKarteKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
     assert ausgewählteModelle(seite) == frozenset()
 
 
+def testAuf5_7DieKarteZeichnetDenKreisEinesAusgewähltenModellsAndersAlsEinenNichtAusgewählten(
+    bildschirm, aufstellungNachDerZonenwahl, boyz, necronWarriors
+):
+    einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
+    modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 2)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    klickenUndWarten(seite, "Spieler 2", "Necron Warriors")
+
+    ausgewähltesModell = seite.locator(".karte .modell.ausgewählt").first
+    nichtAusgewähltesModell = seite.locator(".karte .modell:not(.ausgewählt)").first
+    assert strichVon(ausgewähltesModell) != strichVon(nichtAusgewähltesModell)
+
+
 @pytest.mark.parametrize("vorherAusgewählt", [False, True], ids=["auswählen", "abwählen"])
 def testAuf5_8EinKlickÄndertWederDenSpielerAnDerReiheNochDieEinheitInAufstellungNochEinModell(
     bildschirm, aufstellungNachDerZonenwahl, spielerEins, boyz, vorherAusgewählt
@@ -220,6 +235,38 @@ def testAuf5_8EinKlickÄndertWederDenSpielerAnDerReiheNochDieEinheitInAufstellun
         assert aufstellungNachDerZonenwahl.stelle(modell) == erwartet
     markierte = seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
     assert "Spieler 1" in markierte.text_content()
+
+
+def testAuf5_8EinKlickAufEineEinheitOhneGesetztesModellMachtSieNichtZurEinheitInAufstellung(
+    bildschirm, aufstellungNachDerZonenwahl, spielerEins
+):
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    klickenUndWarten(seite, "Spieler 1", "Boyz")
+
+    aufstellung = aufstellungNachDerZonenwahl
+    gesetzteModelle = [
+        modell for modell in spielerEins.armee.modelle if aufstellung.gesetzt(modell)
+    ]
+    assert gesetzteModelle == []
+    assert aufstellung.einheitInAufstellung is None
+    assert aufstellung.anDerReihe is spielerEins
+    assert elementeDerSeite(seite, ".karte .modell") == ()
+
+
+def testAuf5_8EinKlickAufEineAndereEinheitLässtDieEinheitInAufstellungUndIhreModelle(
+    bildschirm, aufstellungNachDerZonenwahl, spielerEins, boyz
+):
+    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, 1)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    klickenUndWarten(seite, "Spieler 1", "Warboss")
+
+    aufstellung = aufstellungNachDerZonenwahl
+    assert aufstellung.einheitInAufstellung is boyz
+    assert aufstellung.anDerReihe is spielerEins
+    for modell in spielerEins.armee.modelle:
+        assert aufstellung.stelle(modell) == dict(gesetzte).get(modell)
 
 
 def testAuf5_8EinKlickAufDieAblageDesSpielersNichtAnDerReiheLässtSeineModelleUngesetzt(
