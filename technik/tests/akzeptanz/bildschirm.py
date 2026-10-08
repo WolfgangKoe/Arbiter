@@ -20,6 +20,7 @@ class Element:
     text: str
     breiteInPixeln: float
     höheInPixeln: float
+    mitteInPixeln: float
 
     def zahl(self, name: str) -> float:
         return float(self.attribute[name])
@@ -36,6 +37,7 @@ _elementeLesen = """elemente => elemente.map(element => {
         text: element.textContent.trim(),
         breiteInPixeln: rahmen.width,
         höheInPixeln: rahmen.height,
+        mitteInPixeln: rahmen.left + rahmen.width / 2,
     }
 })"""
 
@@ -58,6 +60,40 @@ def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> fro
     )
 
 
+def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
+    """Die Namen der Einheiten, deren Karte in einer Ablage als ausgewählt gekennzeichnet ist."""
+    namen = seite.locator(".einheitenKarte.ausgewählt .einheitenKartenName span:first-child")
+    return frozenset(namen.all_text_contents())
+
+
+def ausgewählteModelle(seite: Page) -> frozenset[tuple[float, float]]:
+    """Die Stellen der Kreise auf der Karte, die als ausgewählt gekennzeichnet sind."""
+    kreise = elementeDerSeite(seite, ".karte .modell.ausgewählt")
+    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
+
+
+def inhaltDerSeite(seite: Page) -> str:
+    """Kopfzeile, Ablagen und Karte, wie der Browser sie zeigt."""
+    return seite.evaluate(
+        "() => ['.kopfzeile', '.spielbereich'].map(a => document.querySelector(a).innerHTML).join()"
+    )
+
+
+_umrissLesen = """element => {
+    const stil = getComputedStyle(element)
+    return [stil.outlineStyle, stil.outlineWidth, stil.outlineColor].join(' ')
+}"""
+
+
+def umrissVon(element: Locator) -> str:
+    """Art, Breite und Farbe des Umrisses, wie der Browser ihn zeichnet."""
+    return element.evaluate(_umrissLesen)
+
+
+def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Locator:
+    return ablageVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
+
+
 def ablageVon(seite: Page, spielername: str) -> Locator:
     name = seite.locator(".armeeKartenName", has_text=spielername)
     return seite.locator(".armeeKarte").filter(has=name)
@@ -75,23 +111,23 @@ class Bildschirm:
         self._seiten: list[Page] = []
         self._server: list = []
 
-    def seiteBei(self, adresse: str) -> Page:
+    def seiteBei(self, adresse: str, *, berührbar: bool = False) -> Page:
         """Öffnet die Adresse und wartet auf das Spielfeld, erst dann gilt, was die Seite zeigt."""
-        seite = self._browser.new_page()
+        seite = self._browser.new_context(has_touch=berührbar).new_page()
         self._seiten.append(seite)
         seite.set_default_timeout(wartezeitInMillisekunden)
         seite.goto(adresse)
         seite.wait_for_selector(".karte .spielfeld")
         return seite
 
-    def seiteZu(self, aufstellung: Aufstellung) -> Page:
+    def seiteZu(self, aufstellung: Aufstellung, *, berührbar: bool = False) -> Page:
         """Startet den Server mit dem Spielstand im selben Prozess und öffnet seine Seite."""
         server = serverStarten(aufstellung)
         self._server.append(server)
-        return self.seiteBei(server.adresse)
+        return self.seiteBei(server.adresse, berührbar=berührbar)
 
     def beenden(self) -> None:
         for seite in self._seiten:
-            seite.close()
+            seite.context.close()
         for server in self._server:
             server.beenden()

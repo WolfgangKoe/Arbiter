@@ -1,10 +1,5 @@
 """QUE-2 · Karte."""
 
-import os
-import select
-import subprocess
-import sys
-from pathlib import Path
 from urllib.parse import urlparse
 
 import pytest
@@ -13,32 +8,9 @@ from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
 from tests.akzeptanz.handgriffe import einheitenAufstellen, radiusInZoll
 
-_technik = Path(__file__).parents[3]
-_sekundenBisZurAdresse = 15
 _anzahlGesetzterModelle = 3
 # Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.4 prüfen Zoll exakt
 _pixelgenauigkeit = 1e-4
-
-
-def _ersteZeile(prozess: subprocess.Popen) -> str:
-    bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
-    return prozess.stdout.readline().strip() if bereit else ""
-
-
-@pytest.fixture
-def adresseDesBefehls():
-    # Warum: Ungepuffert wie an einem Terminal, sonst käme die Adresse in der Pipe zu spät
-    umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
-    prozess = subprocess.Popen(
-        [sys.executable, "-m", "arbiter"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        env=umgebung,
-    )
-    yield _ersteZeile(prozess)
-    prozess.terminate()
-    prozess.wait(timeout=10)
 
 
 @pytest.fixture(params=[(1400, 500), (500, 1400)], ids=["breitesFenster", "hohesFenster"])

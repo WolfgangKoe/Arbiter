@@ -1,5 +1,11 @@
 """Fixtures der Akzeptanztests: Testdaten, Spielstände, Bildschirm."""
 
+import os
+import select
+import subprocess
+import sys
+from pathlib import Path
+
 import pytest
 from playwright.sync_api import Browser, sync_playwright
 
@@ -14,6 +20,48 @@ from tests.akzeptanz.handgriffe import (
     modelleSetzen,
     spielerMit,
 )
+
+_technik = Path(__file__).parents[2]
+_sekundenBisZurAdresse = 15
+
+
+class Befehl:
+    """Der Befehl `python3 -m arbiter` als eigener Prozess; beendet, was er gestartet hat."""
+
+    def __init__(self) -> None:
+        self._prozesse: list[subprocess.Popen] = []
+
+    def starten(self) -> str:
+        """Startet Arbiter neu und gibt die Adresse aus der ersten Zeile zurück."""
+        # Warum: Ungepuffert wie an einem Terminal, sonst käme die Adresse in der Pipe zu spät
+        umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
+        prozess = subprocess.Popen(
+            [sys.executable, "-m", "arbiter"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            env=umgebung,
+        )
+        self._prozesse.append(prozess)
+        bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
+        return prozess.stdout.readline().strip() if bereit else ""
+
+    def beenden(self) -> None:
+        for prozess in self._prozesse:
+            prozess.terminate()
+            prozess.wait(timeout=10)
+
+
+@pytest.fixture
+def befehl():
+    befehl = Befehl()
+    yield befehl
+    befehl.beenden()
+
+
+@pytest.fixture
+def adresseDesBefehls(befehl: Befehl) -> str:
+    return befehl.starten()
 
 
 @pytest.fixture
