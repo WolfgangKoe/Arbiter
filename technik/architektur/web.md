@@ -24,7 +24,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
   zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
-  (`Sperre.gründe`, Text aus `Grund`). Prüft: nur Text; Auslöser: erste Handlung über HTTP.
+  (`Sperre.gründe`, Text aus `Grund`). CSRF: [Vertrag, V4](vertrag.md). Prüft: nur Text;
+  Auslöser: erste Handlung über HTTP.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
   Reihenfolge der Ausgangslage: Spieler, Einheit, Modell. Prüft: wie W3.
 - **W5** Der Befehl `python3 -m arbiter` (`starten()` in `arbiter/__main__.py`) lädt die

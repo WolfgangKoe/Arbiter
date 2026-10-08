@@ -22,11 +22,21 @@ Pfade und JSON zwischen `web/` und `frontend/`
 - **V3** Die Auswahl hält die Domäne in `Aufstellung`: `auswählen(einheit)`,
   `abwählen(einheit)`, Abfrage `ausgewählt(einheit)`; AUF-5.10 gilt dort, nicht in `web/`.
   Auswählen ist keine Handlung (Glossar, *ausgewählt*): ohne Sperre, darum ohne D2.
+- **V4** Schutz vor fremden Seiten im selben Browser, statt eines CSRF-Tokens: Eine Route,
+  die etwas ändert, nimmt nur `PUT` oder `DELETE` an, nie `GET` oder `POST`; `web/` gibt kein
+  CORS frei (kein `Access-Control-Allow-*`, kein `flask-cors`). Dann schickt der Browser eine
+  fremde Anfrage erst nach einem Preflight, den `web/` nicht beantwortet; ein Formular kann nur
+  `GET` und `POST`. Gegen DNS-Rebinding nimmt `web/` nur die Hosts `127.0.0.1` und `localhost`
+  an (`TRUSTED_HOSTS`, sonst 400). Wegwerf-Versuch (Anliegen 329): Von einem fremden Ursprung
+  kommen `PUT` und `DELETE` nicht an, `POST` schon; ein fremder Host bekommt 400.
+  Prüft: die Ausnahme von `python:S4502` (`formregeln/sonarlint.py`) gilt, solange keine Route
+  `POST` annimmt und nichts CORS freigibt; `TRUSTED_HOSTS`: Unit-Test des Implementierers.
 
-Prüft: Der Testautor schreibt vor dem Code in die Akzeptanztests der Anforderung (T1), je
-Kriterium benannt: das Backend mit dem Flask-Testclient
-(`anwendungFür(aufstellung).test_client()`, ohne Import von `flask`) gegen V1 und V2, das Frontend mit einem Bildschirmtest, dem Playwright
-`spielstand.json` per `page.route` statt des Servers liefert; derselbe Ablauf gegen den echten
-Server ist der Akzeptanztest ([B1](web.md#bildschirmtests)). Tests lesen die Datei, statt sie
-zu kopieren. Die Antwort 404 gehört zu keinem Kriterium: Unit-Test des Implementierers in
+Prüft V1 bis V3: Der Testautor schreibt vor dem Code in die Akzeptanztests der Anforderung
+(T1), je Kriterium benannt: das Backend mit dem Flask-Testclient
+(`anwendungFür(aufstellung).test_client()`, ohne Import von `flask`) gegen V1 und V2, das
+Frontend mit einem Bildschirmtest, dem Playwright `spielstand.json` per `page.route` statt des
+Servers liefert; derselbe Ablauf gegen den echten Server ist der Akzeptanztest
+([B1](web.md#bildschirmtests)). Tests lesen die Datei, statt sie zu kopieren. Die Antwort 404
+gehört zu keinem Kriterium: Unit-Test des Implementierers in
 `tests/einheit/web/anwendungTest.py`. V3: die Akzeptanztests zu AUF-5.
