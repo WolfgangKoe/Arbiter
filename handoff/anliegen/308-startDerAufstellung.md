@@ -1,6 +1,6 @@
 # Start der Aufstellung: Vorbelegung oder Wahl von Gewinner und Zone
 
-308 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · offen
+308 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -64,4 +64,4 @@ Eingabe, die Plan 6 wieder wegwirft.
 
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Ich habe diesen Vorschlag angenommen. Bitte in 307 notieren, was davon noch offen bleibt. Ansonsten beides auf "erledigt" setzen.
