@@ -1,16 +1,17 @@
 ---
 name: akzeptanztest-schreiben
-description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau, Sperren. Beispiel und Gegenbeispiel aus AUF-1.
+description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau, Sperren. Beispiel und Gegenbeispiel aus AUF-7.
 ---
 # Akzeptanztest schreiben
 
 Benennung nach `prozess/praemissen/es.md`, Umfang nach `.claude/agents/testautor.md`.
 
 ## Datei
-Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1: AUF-1 →
-`technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py`. Heute steht AUF-1 als einzige
-Anforderung ihrer Datei in `phasen/aufstellenTest.py`; mit der zweiten wird geteilt.
-Erste Zeile ein einzeiliger Docstring mit Kürzel und Name: `"""AUF-1 · Reihenfolge der Aufstellung."""`.
+Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1: AUF-7 →
+`technik/tests/akzeptanz/phasen/aufstellen/auf7Test.py`.
+Erste Zeile ein einzeiliger Docstring mit Kürzel und Name: `"""AUF-7 · Einheit in Aufstellung."""`.
+Gemeinsame Handgriffe (`sperrgründe`, `nachDerWahlDerAufstellungszone`) stehen in
+`technik/tests/akzeptanz/handgriffe.py`.
 Fixtures in `conftest.py` heißen nach dem, was sie sind (`ersterSpieler`), nicht `a`, `b`.
 
 ## Aufbau eines Tests
@@ -23,41 +24,40 @@ Fixtures in `conftest.py` heißen nach dem, was sie sind (`ersterSpieler`), nich
   keine Schleife über Asserts.
 
 ## Beispiel
-AUF-1.6 aus `technik/tests/akzeptanz/phasen/aufstellenTest.py`:
+AUF-7.3 aus `technik/tests/akzeptanz/phasen/aufstellen/auf7Test.py`:
 
 ```python
-def sperrgrund(handlung, *argumente) -> Grund:
-    with pytest.raises(Sperre) as sperre:
-        handlung(*argumente)
-    return sperre.value.grund
-
-
-def testAuf1_6MitGesetztemModellIstDieEinheitBegonnen(aufstellung, ersterSpieler, zweiterSpieler):
-    nachDerWahl(aufstellung, gewinner=ersterSpieler)
+def testAuf7_3EinModellEinerAnderenEinheitIstEinheitBegonnen(
+    aufstellung, ersterSpieler, zweiterSpieler
+):
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
-    erstesModell, *_ = begonneneEinheit.modelle
-    aufstellung.einheitInAufstellungWählen(begonneneEinheit)
-    aufstellung.modellSetzen(erstesModell)
+    erstesModell, _ = begonneneEinheit.modelle
+    modellDerAnderenEinheit, *_ = andereEinheit.modelle
+    stelle = stelleDesErstenModells(aufstellung, zweiterSpieler, begonneneEinheit)
+    stelleDerAnderenEinheit = stelleDesErstenModells(aufstellung, zweiterSpieler, andereEinheit)
+    aufstellung.modellSetzen(erstesModell, stelle)
 
-    grund = sperrgrund(aufstellung.einheitInAufstellungWählen, andereEinheit)
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, stelleDerAnderenEinheit)
 
-    assert grund is Grund.einheitBegonnen
+    assert gründe == {Grund.einheitBegonnen}
+    assert not aufstellung.gesetzt(modellDerAnderenEinheit)
     assert aufstellung.einheitInAufstellung is begonneneEinheit
 ```
 
-Gut: Der Name sagt Kriterium und Aussage, die Handlung steht allein, geprüft werden Grund und
-unveränderter Zustand, jedes Fachobjekt hat einen Namen aus dem Glossar.
+Gut: Der Name sagt Kriterium und Aussage, die Handlung steht allein, geprüft werden die
+Gründe und der unveränderte Zustand, jedes Fachobjekt hat einen Namen aus dem Glossar.
 
 ## Gegenbeispiel
-AUF-1.5, wie es nicht stehen soll:
+AUF-7.2, wie es nicht stehen soll:
 
 ```python
-def test_auf_1_5_nach_der_aufstellung_ist_keine_einheit_wählbar(aufstellung, a, b):
+def test_auf_7_2_nach_der_aufstellung_ist_kein_modell_wählbar(aufstellung, a, b):
     ...
-    for einheit in a.armee.einheiten + b.armee.einheiten:
-        assert sperrgrund(lambda e=einheit: aufstellung.einheit_in_aufstellung_wählen(e)) is Grund.NICHT_WÄHLBAR
+    for modell in a.armee.einheiten[0].modelle + b.armee.einheiten[0].modelle:
+        assert sperrgründe(lambda m=modell: aufstellung.modell_setzen(m, stelle)) == {Grund.NICHT_WÄHLBAR}
 ```
 
-Schlecht: snake_case, Fixtures `a` und `b`, lambda mit Bindung per Standardargument, die
-Handlung steckt im Assert, die Schleife verschweigt, welche Einheit scheitert. Ebenso
-`b.armee.einheiten[0]` in AUF-1.4: Wer ist `[0]`?
+Schlecht: snake_case, Fixtures `a` und `b`, `einheiten[0]` statt eines Namens, lambda mit
+Bindung per Standardargument, die Handlung steckt im Assert, die Schleife verschweigt,
+welches Modell scheitert.

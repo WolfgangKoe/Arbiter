@@ -19,7 +19,7 @@ Etappe, Zyklus, Phase und nächsten Schritt nennt der Stand. Mechanismus:
    Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
    `[…](../domaene/items/<id>.md)`; daran erkennt die Rückverfolgung die Items des Plans
    (DoD 2). Mechanismus: `lesen/plan.py` (`offeneItems`). Jedes Item nennt Kriterien ohne
-   Test (`AUF-1.4`) oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit.
+   Test (`AUF-7.3`) oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit.
    Mechanismus: nur Text; der Stand nennt die Kriterien ohne Test.
 6. Kritik: Architekt an Anforderungen und Items, auch an Format und Größe. Am
    Mockup: Fachkritiker (gegen die Kriterien), Architekt (nur vorhandene Komponenten).

@@ -8,7 +8,7 @@ Code liest sich wie Fachtext; der Name trägt die Bedeutung ([Wir](wir.md)). Bez
 deutsch mit Umlauten, Dateinamen ASCII.
 
 1. Funktionen, Methoden, Variablen, Parameter, Fixtures, Konstanten und Enum-Werte in
-   camelCase (`einheitInAufstellungWählen`, `Grund.nichtWählbar`), Klassen und Typaliase in
+   camelCase (`aufstellenDerEinheitBeenden`, `Grund.nichtWählbar`), Klassen und Typaliase in
    PascalCase. Mechanismus: `formregeln/benennung.py`.
 2. Dateinamen in camelCase, ASCII; nummeriert `28-benennungOffenePunkte.md`; Test zu einem
    Modul `<modul>Test.py`. Namen, die ein Werkzeug vorgibt (`conftest.py`, `__init__`,
@@ -16,7 +16,7 @@ deutsch mit Umlauten, Dateinamen ASCII.
    Mechanismus: `formregeln/benennung.py`.
 3. Je Anforderung eine Akzeptanztest-Datei nach [Architektur, T1](../../technik/architektur.md).
    Mechanismus: `kriterienregeln/rueckverfolgung.py` (`<anforderungsdatei>Test.py`), sonst nur Text.
-4. Testfunktionen `test<Kürzel><n>_<m><Satz>`: `testAuf1_4EinModellDerEinheitInAufstellungLässtSichSetzen`
+4. Testfunktionen `test<Kürzel><n>_<m><Satz>`: `testAuf7_3EinModellEinerAnderenEinheitIstEinheitBegonnen`
    (Skill `akzeptanztest-schreiben`). Mechanismus: `formregeln/benennung.py`,
    `kriterienregeln/rueckverfolgung.py`.
 5. Selbst definierte Namen haben mindestens 3 Zeichen; Ausnahme `x` und `y` als Felder von
