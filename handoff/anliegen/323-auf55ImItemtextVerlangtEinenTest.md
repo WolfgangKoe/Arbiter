@@ -1,6 +1,6 @@
 # Itemtext nennt AUF-5.5 und verlangt damit einen Test
 
-323 · Kritik · von Testautor (Technik) → Planer · Runde 1/3 · angenommen
+323 · Kritik · von Testautor (Technik) → Planer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Auswählen in der Ablage](../../domaene/items/auswaehlenInDerAblage.md) schreibt
