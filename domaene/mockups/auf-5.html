@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Arbiter</title>
+  <link rel="stylesheet" href="vorschlag.css">
+</head>
+<body>
+  <header class="kopfzeile">
+    <div class="kopfzeileSpieler spieler1">Spieler 1</div>
+    <div class="kopfzeileTitel">ARBITER</div>
+    <div class="kopfzeileSpieler spieler2 anDerReihe">Spieler 2<span class="kopfzeileAnDerReihe">an der Reihe</span></div>
+  </header>
+  <main class="spielbereich">
+    <aside class="spalte">
+      <div class="armeeKarte spieler1">
+        <h2 class="armeeKartenName">Spieler 1</h2>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Boyz</span><span class="einheitenKartenModelle">10</span></div>
+        </section>
+        <section class="einheitenKarte ausgewählt">
+          <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+      </div>
+    </aside>
+    <div class="spalte spalteMitte">
+      <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
+        <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
+        <rect class="aufstellungszone spieler1" x="0" y="0" width="9" height="60"/>
+        <rect class="aufstellungszone spieler2" x="35" y="0" width="9" height="60"/>
+        <circle class="modell spieler2 ausgewählt" cx="36.0" cy="28" r="0.630"/>
+        <circle class="modell spieler2 ausgewählt" cx="37.4" cy="28" r="0.630"/>
+        <circle class="modell spieler2 ausgewählt" cx="38.8" cy="28" r="0.630"/>
+      </svg>
+    </div>
+    <aside class="spalte">
+      <div class="armeeKarte spieler2">
+        <h2 class="armeeKartenName">Spieler 2</h2>
+        <section class="einheitenKarte inAufstellung ausgewählt">
+          <div class="einheitenKartenName"><span>Necron Warriors</span>
+          <span class="einheitenKartenAbzeichen">in Aufstellung</span><span class="einheitenKartenModelle">7</span></div>
+        </section>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>
