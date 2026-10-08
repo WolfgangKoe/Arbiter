@@ -38,7 +38,10 @@ Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Wer gleichzeitig lä
 4. Abhängigkeiten erledigt, kein offenes Anliegen zum Item.
 5. Bei einer Oberfläche: Mockup aus vorhandenen Komponenten. Gibt es noch keine
    Komponentenseite, bringt das Mockup sein CSS als Vorschlag mit; die Technikphase baut
-   daraus die Komponentenseite.
+   daraus die Komponentenseite. Eine neue Komponente gilt als vorhanden, wenn der Architekt
+   sie in einem Anliegen entschieden und UX ihre Regeln wörtlich in
+   `domaene/mockups/vorschlag.css` übernommen hat; der Implementierer trägt sie in der
+   Technikphase in die Komponentenseite ein (Anliegen 317).
 
 Mechanismus für 1 bis 5: nur Text. Fachliche Vollständigkeit ist Urteil (Schritt 6) und
 zeigt sich spätestens an den roten Tests.

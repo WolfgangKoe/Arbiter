@@ -1,6 +1,6 @@
 # DoR 5: Wann eine neue Komponente als vorhanden gilt
 
-321 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · offen
+321 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 317 F1 (git, Commit c2c2fa5) Antwort A gewählt.
@@ -26,4 +26,6 @@ Implementierer trägt sie in der Technikphase in die Komponentenseite ein (Anlie
 
 Erledigt, wenn DoR 5 diesen Weg nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen, mit vollem Pfad
+`domaene/mockups/vorschlag.css`: [DoR 5](../../prozess/ablauf.md#dor-item-bereit), Satz hinter
+„… baut daraus die Komponentenseite.“ Mechanismus: nur Text (DoR 1 bis 5).

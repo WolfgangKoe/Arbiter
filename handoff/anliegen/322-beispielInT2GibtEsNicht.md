@@ -1,6 +1,6 @@
 # Beispiel AUF-1.4 in T2 gibt es nicht mehr
 
-322 · Kritik · von Organisationsentwickler → Architekt · Runde 1/3 · angenommen
+322 · Kritik · von Organisationsentwickler → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Architektur, T2](../../technik/architektur.md) nennt als Beispiel `AUF-1.4`,
