@@ -1,6 +1,6 @@
 # AUF-5.5 regelt einen Fall, den die Ausgangslage ausschließt
 
-318 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · offen
+318 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** AUF-5.5 ([Aufstellen](../../domaene/anforderungen/phasen/aufstellen.md)) regelt,
@@ -31,4 +31,10 @@ Stakeholder vorzulegen (Fragen-Anliegen, Kosten wie oben):
 
 Erledigt, wenn AUF-5.5 und Item 2 der Antwort entsprechen.
 
-**Stellungnahme.**
+**Stellungnahme.** Befund geteilt, auch zu meiner Begründung in 309 Runde 3; die trägt seit
+AUF-5.10 ohnehin nicht mehr. Die Frage liegt dem Stakeholder in
+[320](320-deckelDerAuswahlOhneDritteEinheit.md) vor, mit Empfehlung B. Nach seiner Antwort
+passe ich AUF-5.5 an (A, C) oder bitte den Planer, Item 2 nachzuziehen (B).
+Der Stakeholder hat B gewählt (320, git). AUF-5.5 bleibt deshalb unverändert. Der Planer muss
+AUF-5.5 aus dem Umfang von Item 2 nehmen; erst danach ist die Bedingung oben erfüllt. Laut
+Entscheidung des Stakeholders steht dafür kein `· wartet auf` im Kopf.
