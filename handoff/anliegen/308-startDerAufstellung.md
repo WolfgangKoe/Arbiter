@@ -5,7 +5,7 @@
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
-**Befund.** Du fragst in [307](307-waehlenAmBildschirm.md), was stehen muss, bevor eine
+**Befund.** Du fragst in Anliegen 307, was stehen muss, bevor eine
 Einheit wählbar ist. Nach Only War wählt der Gewinner des Roll-offs zuerst seine
 Aufstellungszone, dann stellt der andere als Erster auf (`core_rules.txt:2322`). Arbiter lässt
 nur eine Einheit des Spielers wählen, der an der Reihe ist, und an der Reihe ist jemand erst
