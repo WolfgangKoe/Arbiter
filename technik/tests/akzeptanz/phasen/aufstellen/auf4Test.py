@@ -210,7 +210,7 @@ def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
     assert gewinnerwahl.nameDesGewinners in markierte.text_content()
 
 
-@pytest.mark.parametrize("gesetzt", [0, 3, 10], ids=["keinGesetzt", "dreiGesetzt", "alleGesetzt"])
+@pytest.mark.parametrize("gesetzt", [1, 3, 10], ids=["einGesetzt", "dreiGesetzt", "alleGesetzt"])
 def testAuf4_5DieEinheitInAufstellungIstInDerAblageGekennzeichnet(
     bildschirm, aufstellungNachDerZonenwahl, boyz, gesetzt
 ):

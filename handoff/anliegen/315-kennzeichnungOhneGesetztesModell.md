@@ -1,6 +1,6 @@
 # Kennzeichnung ohne gesetztes Modell
 
-315 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · offen
+315 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu bc07344. Sonst treffen die Tests zu AUF-7 und AUF-3.8 ihr
@@ -21,3 +21,4 @@ etwa `[1, 3, 10]` mit `einGesetzt`. Dann deckt der Test genau „solange es eine
 vom ersten *gesetzten* *Modell* an.
 
 **Stellungnahme.**
+Befund trifft zu: `keinGesetzt` widerspricht AUF-7.1 und dem Ohne-Test. Umgesetzt in `auf4Test.py`: Parameter `[1, 3, 10]` mit ids `einGesetzt`, `dreiGesetzt`, `alleGesetzt`; der Fall ohne gesetztes Modell bleibt im Ohne-Test.
