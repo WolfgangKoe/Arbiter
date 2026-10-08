@@ -3,7 +3,8 @@
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
 Grundlage: Zyklusziel aus [Review 3](review.md), Wählen per Klick (Gewinner, Zone, Einheit) mit
-Speicher. Abweichung nach deiner Wahl in Anliegen 308 (F1 A, F2 A, git): Arbiter startet mit
+Speicher. Den Speicher braucht Plan 4 nicht: Neu laden und neu starten (QUE-3.2, QUE-3.3)
+erfüllt der laufende Server ohne Datenbank (Anliegen 319, git). Abweichung nach deiner Wahl in Anliegen 308 (F1 A, F2 A, git): Arbiter startet mit
 gewähltem Gewinner und gewählter Zone, Plan 4 bringt nur die Wahl der Einheit. Ein Klick wählt
 sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gesetzten Modell
 (Anliegen 309, git).
@@ -24,7 +25,8 @@ Technikphase.
 
 **Hindernis:** Ob das für DoR 5 genügt, fragt der Architekt dich in
 [317](anliegen/317-neueKomponenteVorDerFreigabe.md). Bis zu deiner Antwort sind Item 2 und
-damit Item 3 nicht bereit; Item 1 ist es.
+damit Item 3 nicht bereit; Item 1 ist es. Offen zu Item 2 ist auch
+[318](anliegen/318-dritteEinheitGibtEsNicht.md) (AUF-5.5, an den Anforderungsautor).
 
 ## Empfehlung
 Beantworte 317 mit A, wie der Architekt empfiehlt (Begründung dort). Dann sind alle drei Items
@@ -38,16 +40,14 @@ nichts. Neu laden zeigt dieselbe Auswahl, neu starten wieder den Start. Setzen k
 nicht.
 
 Reihenfolge nach Abhängigkeit: Item 1 legt fest, wer an der Reihe ist, und ändert das Bild,
-auf dem Item 2 klickt. Item 2 ist die erste Handlung am Bildschirm, Item 3 der Speicher dazu
-(Neuland, [speicher.md](../technik/architektur/speicher.md)). Reicht der Zyklus nicht, fällt
-Item 3: Die Auswahl ändert am Spielstand nichts (AUF-5.8), Neuladen verliert nur sie.
+auf dem Item 2 klickt. Item 2 ist die erste Handlung am Bildschirm, Item 3 prüft, dass Arbiter
+die Auswahl beim Neuladen behält und beim Neustart verwirft.
 
 Die Krücke: Solange AUF-6 steht, ist Etappe 1 nicht erreicht. Ihr Test geht mit ihr, wenn ihr
 Gewinner und Zone am Bildschirm wählt (Plan 6).
 
 Vor dem Testautor (Ablauf, Technikphase 1), Architekt: Vertrag für den Klick in
-[web.md](../technik/architektur/web.md), Wegwerf-Versuch zum Wiederholen der Handlungen
-(speicher.md, Neuland).
+[web.md](../technik/architektur/web.md).
 
 ## Danach, nach Abhängigkeit
 Plan 5: Setzen, Umsetzen und Zurücklegen durch Ziehen mit Maus und Touch, Sperre mit Grund ·

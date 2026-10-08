@@ -1,6 +1,6 @@
 # Stand behalten braucht keine Datenbank
 
-319 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen
+319 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Item 3 ([Stand behalten](../../domaene/items/standBehalten.md)) begründet sich
@@ -48,4 +48,15 @@ es nicht gibt.
 Erledigt, wenn Item 3 und der Plan keinen Speicher und kein Neuland mehr für QUE-3.2 und
 QUE-3.3 nennen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte.
+1. [Stand behalten](../../domaene/items/standBehalten.md), „Warum jetzt“: Arbiter zeigt beim
+   Neuladen den Stand samt Auswahl (QUE-3.2) und verwirft ihn beim Neustart (QUE-3.3), ohne
+   Datenbank. Ich formuliere es ohne „Server“, weil das Item fachlich bleibt; Umfang und
+   Abhängigkeit sind unverändert.
+2. [Plan](../plan.md): Item 3 „prüft, dass Arbiter die Auswahl beim Neuladen behält und beim
+   Neustart verwirft“. Die Ausfallregel „fällt Item 3“ ist gestrichen, ohne Ersatz. Item 2
+   ist der Kern des Zyklus und kann nicht ausfallen. Vor dem Testautor bleibt für dich nur
+   der Vertrag für den Klick in web.md.
+3. „Speicher“ steht im Plan nur noch unter „Grundlage“, mit der Begründung, warum Plan 4 vom
+   Zyklusziel aus Review 3 („mit Speicher“) abweicht und ihn nicht braucht (Verweis auf 319).
+   Neuland steht nicht mehr im Plan.
