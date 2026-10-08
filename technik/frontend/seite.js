@@ -33,8 +33,16 @@ function kopfzeile(spielstand) {
   ]
 }
 
-function einheitenKarte(einheit) {
+async function auswahlSenden(spieler, einheit) {
+  const pfad = `/api/spieler/${spieler.nummer}/einheiten/${einheit.nummer}/ausgewählt`
+  const antwort = await fetch(pfad, { method: einheit.ausgewählt ? "DELETE" : "PUT" })
+  zeichnen(await antwort.json())
+}
+
+function einheitenKarte(spieler, einheit) {
   const karte = ausVorlage("einheitenKarte")
+  karte.classList.toggle("ausgewählt", einheit.ausgewählt)
+  karte.addEventListener("click", () => auswahlSenden(spieler, einheit))
   karte.querySelector(".einheitenKartenName span").textContent = einheit.name
   if (!einheit.inAufstellung) {
     karte.classList.remove("inAufstellung")
@@ -51,7 +59,7 @@ function einheitenKarte(einheit) {
 function armeeKarte(spieler) {
   const karte = mitSpieler(ausVorlage("armeeKarte"), spieler.nummer)
   karte.querySelector(".armeeKartenName").textContent = spieler.name
-  karte.append(...spieler.ablage.map(einheitenKarte))
+  karte.append(...spieler.ablage.map(einheit => einheitenKarte(spieler, einheit)))
   return karte
 }
 
@@ -84,6 +92,7 @@ function karte(spielstand) {
     kreis.setAttribute("cx", modell.x)
     kreis.setAttribute("cy", modell.y)
     kreis.setAttribute("r", modell.radius)
+    kreis.classList.toggle("ausgewählt", modell.ausgewählt)
     zeichnung.append(kreis)
   }
   return mitte

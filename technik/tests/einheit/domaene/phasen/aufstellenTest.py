@@ -3,7 +3,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
-from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld
+from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld, Stelle
 
 
 def spielerMitEinerEinheit() -> Spieler:
@@ -93,3 +93,26 @@ def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
 
     with pytest.raises(ValueError):
         aufstellungVon(ersterSpieler, zweiterSpieler)
+
+
+def testEinFremdesModellSetzenIstEineVorbedingungsverletzung():
+    aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+    fremdes = Modell(base=Base(durchmesser=32))
+    stelle = Stelle(x=Fraction(1), y=Fraction(1))
+
+    with pytest.raises(ValueError):
+        aufstellung.modellSetzen(fremdes, stelle)
+
+
+def testAuswählenUndAbwählenMerktSichDieEinheit():
+    spieler = spielerMitEinerEinheit()
+    aufstellung = aufstellungVon(spieler, spielerMitEinerEinheit())
+    einheit, *_ = spieler.armee.einheiten
+
+    aufstellung.auswählen(einheit)
+    ausgewähltDanach = aufstellung.ausgewählt(einheit)
+    aufstellung.abwählen(einheit)
+    aufstellung.abwählen(einheit)
+
+    assert ausgewähltDanach
+    assert not aufstellung.ausgewählt(einheit)

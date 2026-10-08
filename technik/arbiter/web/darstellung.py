@@ -44,6 +44,7 @@ def _modelle(aufstellung: Aufstellung, spieler: tuple[Spieler, ...]) -> list[dic
             "y": float(stelle.y),
             "radius": float(radiusInZoll(modell.base)),
             "spieler": nummer,
+            "ausgewählt": aufstellung.ausgewählt(einheit),
         }
         for nummer, einer in enumerate(spieler, start=1)
         for einheit in einer.armee.einheiten
@@ -58,16 +59,18 @@ def _spieler(aufstellung: Aufstellung, nummer: int, spieler: Spieler) -> dict:
         "name": f"Spieler {nummer}",
         "anDerReihe": aufstellung.anDerReihe is spieler,
         "ablage": [
-            _einheit(aufstellung, einheit)
-            for einheit in spieler.armee.einheiten
+            _einheit(aufstellung, nummer, einheit)
+            for nummer, einheit in enumerate(spieler.armee.einheiten, start=1)
             if not aufstellung.aufgestellt(einheit)
         ],
     }
 
 
-def _einheit(aufstellung: Aufstellung, einheit: Einheit) -> dict:
+def _einheit(aufstellung: Aufstellung, nummer: int, einheit: Einheit) -> dict:
     return {
+        "nummer": nummer,
         "name": einheit.name,
         "nichtGesetzt": sum(1 for modell in einheit.modelle if not aufstellung.gesetzt(modell)),
         "inAufstellung": aufstellung.einheitInAufstellung is einheit,
+        "ausgewählt": aufstellung.ausgewählt(einheit),
     }

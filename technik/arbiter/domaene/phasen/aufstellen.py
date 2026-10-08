@@ -63,6 +63,7 @@ class Aufstellung:
         self._zonen: dict[Spieler, Aufstellungszone] = {}
         self._stellen: dict[Modell, Stelle] = {}
         self._aufgestellt: set[Einheit] = set()
+        self._ausgewählt: set[Einheit] = set()
 
     @property
     def ausgangslage(self) -> Ausgangslage:
@@ -93,6 +94,15 @@ class Aufstellung:
     def aufgestellt(self, einheit: Einheit) -> bool:
         return einheit in self._aufgestellt
 
+    def ausgewählt(self, einheit: Einheit) -> bool:
+        return einheit in self._ausgewählt
+
+    def auswählen(self, einheit: Einheit) -> None:
+        self._ausgewählt.add(einheit)
+
+    def abwählen(self, einheit: Einheit) -> None:
+        self._ausgewählt.discard(einheit)
+
     def gewinnerWählen(self, gewinner: Spieler) -> None:
         if gewinner not in self._spieler:
             raise ValueError("Der Gewinner gehört nicht zur Aufstellung")
@@ -113,13 +123,17 @@ class Aufstellung:
         return self._zonen.get(spieler)
 
     def modellSetzen(self, modell: Modell, stelle: Stelle) -> None:
-        einheit = self._einheitInAufstellung
-        if einheit is None or modell not in einheit.modelle:
-            raise Sperre(Grund.nichtInAufstellung)
+        einheit = self._einheitVon(modell)
+        # Regel: AUF-7.2 und AUF-7.3 sperren vor jeder Prüfung der Stelle (AUF-3.8)
+        if self.aufgestellt(einheit) or not self._gehörtDemSpielerAnDerReihe(einheit):
+            raise Sperre(Grund.nichtWählbar)
+        if self._einheitInAufstellung not in (None, einheit):
+            raise Sperre(Grund.einheitBegonnen)
         gründe = self._gründeGegenDieStelle(modell, stelle)
         if gründe:
             raise Sperre(*gründe)
         self._stellen[modell] = stelle
+        self._einheitInAufstellung = einheit
 
     def aufstellenDerEinheitBeenden(self) -> None:
         einheit = self._einheitInAufstellung
@@ -127,8 +141,19 @@ class Aufstellung:
             raise Sperre(Grund.nichtInAufstellung)
         spieler = self._spielerAnDerReihe
         self._aufgestellt.add(einheit)
+        self._ausgewählt.discard(einheit)
         self._einheitInAufstellung = None
         self._anDerReihe = self._nächsterAnDerReihe(spieler)
+
+    def _einheitVon(self, modell: Modell) -> Einheit:
+        for spieler in self._spieler:
+            for einheit in spieler.armee.einheiten:
+                if modell in einheit.modelle:
+                    return einheit
+        raise ValueError("Das Modell gehört nicht zur Aufstellung")
+
+    def _gehörtDemSpielerAnDerReihe(self, einheit: Einheit) -> bool:
+        return self._anDerReihe is not None and einheit in self._anDerReihe.armee.einheiten
 
     @property
     def _spielerAnDerReihe(self) -> Spieler:
