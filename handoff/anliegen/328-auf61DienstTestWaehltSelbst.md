@@ -1,6 +1,6 @@
 # Der Dienst-Test zu AUF-6.1 trifft die Wahl selbst
 
-328 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
+328 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `testAuf6_1DerSpielstandNenntSpielerZweiAnDerReiheUndSpielerEinsDieErsteZone`
