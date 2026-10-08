@@ -1,68 +1,61 @@
-# Plan · Zyklus 3
+# Plan · Zyklus 4
 
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
-Grundlage: Review 2 hat noch kein „Nächstes Vorgehen“; es gilt „Danach“ aus Plan 2. Abweichung:
-Die Ablage wird gezeigt, Ziehen und Zurücklegen kommen später. Sie brauchen Handlungen über
-HTTP und damit den Speicher (153 F1; Schnitt aus Anliegen 146, git).
+Grundlage: Zyklusziel aus [Review 3](review.md), Wählen per Klick (Gewinner, Zone, Einheit) mit
+Speicher. Abweichung nach deiner Wahl in Anliegen 308 (F1 A, F2 A, git): Arbiter startet mit
+gewähltem Gewinner und gewählter Zone, Plan 4 bringt nur die Wahl der Einheit. Ein Klick wählt
+sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gesetzten Modell
+(Anliegen 309, git).
 
 ## Items
-1. [Karte im Browser](../domaene/items/karte-im-browser.md): QUE-2.1 bis QUE-2.6,
-   [Mockup](../domaene/mockups/que-2.html)
-2. [Anzeige der Aufstellung](../domaene/items/anzeige-der-aufstellung.md): AUF-4.2 bis
-   AUF-4.7, nach Item 1, Mockups
-   [Ausgangslage](../domaene/mockups/auf-4-ausgangslage.html) und
-   [Spieler 1 an der Reihe](../domaene/mockups/auf-4.html)
+1. [Vorläufiger Start](../domaene/items/vorlaeufigerStart.md): AUF-6.1
+2. [Auswählen in der Ablage](../domaene/items/auswaehlenInDerAblage.md): AUF-5.3 bis
+   AUF-5.10, QUE-3.1, nach Item 1
+3. [Stand behalten](../domaene/items/standBehalten.md): QUE-3.2, QUE-3.3, nach Item 2
 
-Die Mockups folgen deinem Aufbau aus Anliegen 145 F1 (git), mit deinen Namen aus 223 F1: oben
-die kopfzeile, links und rechts je Spieler die armeeKarte mit einheitenKarten (Ablage), in der
-Mitte die Karte. Jede einheitenKarte zeigt die Anzahl ihrer nicht gesetzten Modelle, keinen
-Durchmesser (AUF-4.3 nach 239 F1 B). Der spielAktionsBereich fehlt, seine Knöpfe kommen mit dem
-Wählen. Die Ausgangslage ist das Bild, das du am Ende des Zyklus siehst; „Spieler 1 an der
-Reihe“ zeigt gesetzte Modelle, damit du Farben und Abzeichen siehst.
+Mockups fehlen noch (DoR 5); UX schreibt sie, danach ziehe ich den Plan nach. Aufbau wie
+Plan 3 (kopfzeile, zwei armeeKarten, Karte in der Mitte):
+- `auf-6.html`, der Start: linke Zone in der Farbe von Spieler 1, rechte in der von Spieler 2,
+  „Spieler 2 an der Reihe“, beide Ablagen voll, kein Modell auf der Karte.
+- `auf-5.html`, Auswahl: wie der Start, dazu Warboss von Spieler 1 ausgewählt (nicht an der
+  Reihe); Necron Warriors von Spieler 2 in Aufstellung mit drei gesetzten Modellen und
+  ausgewählt, beide Kennzeichen an einer einheitenKarte (AUF-5.6), die drei Modelle auf der
+  Karte gekennzeichnet (AUF-5.7). Ein Kennzeichen für „ausgewählt“ hat die Komponentenseite
+  nicht; die neue Komponente ist ein Anliegen von UX an den Architekten. Vorbild ArbiterMap.
 
 ## Empfehlung
-Beide Items wie freigegeben. Danach startest du Arbiter mit einem Befehl und siehst die
-Ausgangslage: Spielfeld, Zonen ohne Farbe, beide Ablagen, keinen an der Reihe, kein Modell auf
-der Karte; handeln kannst du noch nicht. Die Zustände aus den Mockups zeigen die Bilder des
-Bildschirmtests im Review; die Tests stellen sie mit den Handlungen der Domäne her (Anliegen
-198 A, git). Reihenfolge nach Abhängigkeit: AUF-4 steht neben der Karte und färbt ihre Zonen.
-Reicht der Zyklus nicht, fällt Item 2. Start, Komponentenseite und Bildschirmtest füllen allein
-einen Zyklus (146).
+Alle drei Items. Danach startest du Arbiter und siehst gefärbte Zonen und Spieler 2 an der
+Reihe; ihr klickt oder tippt Einheiten in beiden Ablagen an und ab; auf der Karte ändert sich
+nichts. Neu laden zeigt dieselbe Auswahl, neu starten wieder den Start. Setzen könnt ihr noch
+nicht.
 
-Offen, blockiert nicht: Die Kritik des Fachkritikers an den Mockups gegen QUE-2 und AUF-4
-(Ablauf, Domänenphase Schritt 6) fehlt, auch nach 223 und 239.
+Reihenfolge nach Abhängigkeit: Item 1 legt fest, wer an der Reihe ist, und ändert das Bild,
+auf dem Item 2 klickt. Item 2 ist die erste Handlung am Bildschirm, Item 3 der Speicher dazu
+(Neuland, [speicher.md](../technik/architektur/speicher.md)). Reicht der Zyklus nicht, fällt
+Item 3: Die Auswahl ändert am Spielstand nichts (AUF-5.8), Neuladen verliert nur sie.
 
-Vor dem Testautor (146 Punkt 4), in dieser Reihenfolge:
-1. Flask und Playwright in `pyproject.toml`, Regelumsetzer
-   (Anliegen 234, umgesetzt, Nachprüfung Architekt).
-2. Schreibrecht auf `technik/frontend/` für den Implementierer, Organisationsentwickler
-   (Anliegen 233, umgesetzt, Nachprüfung Architekt).
-3. Aufbau aus Anliegen 153 in `web.md` und
-   `speicher.md`, Wegwerf-Versuch zum Bildschirmtest, Architekt. Keine Datenbank (153 F1 A).
-   Er trägt dein „SOLID und lesbar“ für den Unterbau.
+Die Krücke: Solange AUF-6 steht, ist Etappe 1 nicht erreicht. Ihr Test geht mit ihr, wenn ihr
+Gewinner und Zone am Bildschirm wählt (Plan 6).
 
-Die Komponentenseite aus [vorschlag.css](../domaene/mockups/vorschlag.css) ist der erste
-Bildschirmtest: Der Testautor schreibt ihn, der Implementierer baut die Seite
-(`technik/architektur.md`, Oberfläche).
+Vor dem Testautor (Ablauf, Technikphase 1), Architekt: Vertrag für den Klick in
+[web.md](../technik/architektur/web.md), Wegwerf-Versuch zum Wiederholen der Handlungen
+(speicher.md, Neuland).
 
 ## Danach, nach Abhängigkeit
-Wählen per Klick (Gewinner, Zone, Einheit) mit Speicher · Setzen, Umsetzen und Zurücklegen
-durch Ziehen mit Maus und Touch, Sperre mit Grund · Zurück, gemeinsam übergehen und Protokoll
-(16 F4) · Beenden mit fehlenden Modellen und Kohärenz (16 F3). Damit ist Etappe 1 erreicht.
+Plan 5: Setzen, Umsetzen und Zurücklegen durch Ziehen mit Maus und Touch, Sperre mit Grund ·
+Plan 6: Gewinner und Zone am Bildschirm, AUF-6 entfällt; zurück, gemeinsam übergehen und
+Protokoll · Beenden mit fehlenden Modellen und Kohärenz. Damit ist Etappe 1 erreicht.
 
 ## Offene Anliegen
-Deine Antworten, eingearbeitet: Anliegen 223 F1 A mit
-deinen Namen · 153 F1 A · 151 F2 A (git) · Anliegen 238
-F1 A · Anliegen 239 F1 B, kein AUF-4.8.
+Deine Antworten, eingearbeitet: 308 F1 A, F2 A ·
+309 Runde 2 F1 B, F2 B, Runde 3 F1 A, Runde 1 F2 A (git, vom Anforderungsautor eingetragen).
+Vom Anforderungsautor steht kein Vorschlag offen; aus 307 bleiben F2 (Wahl der Zone) und der
+Begriff Spielaktionsbereich für Plan 6 (git).
 
-An dich: Anliegen 241 (Organisationsentwickler, aus deiner
-Stellungnahme in 238): Frontend und Backend parallel. Plan 3 ändert sich nur bei F1 B. Ich
-teile Empfehlung A: Item 2 baut auf Item 1, der Vertrag entsteht erst mit Schritt 3 oben.
-
-Die übrigen offenen Anliegen betreffen den Prozess.
+Die übrigen offenen Anliegen betreffen den Prozess
+([Moderation](moderation.md)).
 
 ## Freigabe
-Freigabe: ja
-Kommentar: Ich habe Anliegen kommentiert und Fragen beantwortet. Bitte systematisch durchgehen.
-Stellungnahme: Nachgezogen: Mockups (223, 239 B), Vor dem Testautor, Offene Anliegen (neu 241); Items gleich.
+Freigabe: offen
+Kommentar: .
