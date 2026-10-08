@@ -49,3 +49,10 @@ Zweck: Neben der *Karte* nach [QUE-2](../querschnitt.md) sehen die *Spieler*, we
 - AUF-4.5 In der *Ablage* ist die *Einheit in Aufstellung* gekennzeichnet, solange es eine gibt.
 - AUF-4.6 Die *Karte* zeigt jede *Aufstellungszone* in der Farbe der *Modelle* des *Spielers*, dem sie gehört, vor der Wahl nach AUF-1.1 in keiner der beiden (Vorbild `ArbiterMap/docs/spec/design_colors.md:72` bis `:74`).
 - AUF-4.7 Die *Ablage* nennt ihren *Spieler* in der Farbe seiner *Modelle* auf der *Karte* (Anliegen 199).
+
+### AUF-5 · Wählen am Bildschirm
+
+Zweck: Die *Spieler* wählen die *Einheit in Aufstellung* mit einem Klick in ihrer *Ablage*; eine Wahl, die eine *Sperre* trifft, ändert nichts.
+
+- AUF-5.1 Ein Klick auf eine *Einheit* in einer *Ablage* wählt sie nach AUF-1.5 und AUF-1.6; gelingt die Wahl, kennzeichnet die *Ablage* sie danach nach AUF-4.5 (Vorbild `ArbiterMap/docs/spec/interaction_map.md:283`).
+- AUF-5.2 Trifft die Wahl nach AUF-5.1 eine *Sperre*, kennzeichnet die *Ablage* danach dieselbe *Einheit* wie davor oder weiterhin keine.

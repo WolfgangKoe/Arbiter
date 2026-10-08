@@ -19,3 +19,10 @@ Zweck: Die *Karte* zeigt das *Spielfeld* mit allem, was darauf steht, maßstäbl
 - QUE-2.4 Die *Karte* zeigt jedes *gesetzte* *Modell* als Kreis mit dem *Durchmesser* seiner *Base* und dem Mittelpunkt an seiner *Stelle*, und kein anderes *Modell*.
 - QUE-2.5 Ein *Zoll* ist auf der *Karte* überall gleich lang: in den Seitenlängen des *Spielfelds*, der *Tiefe* der *Aufstellungszonen* und dem *Durchmesser* der *Bases*.
 - QUE-2.6 Die *Modelle* der zwei *Spieler* haben auf der *Karte* verschiedene Farben (Vorbild `ArbiterMap/docs/spec/design_colors.md:51`, `:53`; Anliegen 145 F1).
+
+### QUE-3 · Bedienung
+
+Zweck: Die *Spieler* bedienen Arbiter an einem Gerät mit Maus oder Finger, und Arbiter behält, was sie getan haben (`domaene/ziel.md`).
+
+- QUE-3.1 Was ein Klick auf der *Karte* oder in einer *Ablage* auslöst, löst ein Tippen mit dem Finger am selben Ort ebenso aus (`domaene/ziel.md`: „Maus und Touch“).
+- QUE-3.2 Öffnet ein *Spieler* die Adresse nach QUE-2.1 erneut, während Arbiter läuft, zeigen *Karte* und *Ablagen* dasselbe wie davor (`domaene/ziel.md`: „durch eine vollständige Partie“).
