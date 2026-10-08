@@ -1,6 +1,6 @@
 # Plan 4: Wo die Sperre einer Wahl steht, was ein Neustart zeigt
 
-309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+309 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -41,7 +41,7 @@ also auch dort, wo gehandelt wurde. Später, mit „gemeinsam übergehen“, ble
 stehen, bis die *Spieler* „zurück“ oder „gemeinsam übergehen“ wählen. Das Ziel lässt jede
 *Sperre* übergehen.
 
-Antwort: .
+Antwort: Eine Einheit kann immer angeklickt werden. Und zwar egal, welcher Spieler dran ist. Die Einheit eines Spielers, der NICHT an der Reihe ist, darf im Zug des Spielers, der an der Reihe ist, beispielswesie nicht in der Bewegungsphase bewegt werden. Schau nochmal in ArbiterMap, wie es gemacht wurde. Dort ist die Regelung in Ordnung gewesen.
 
 **F2 · Was seht ihr, wenn ihr Arbiter beendet und neu startet?** Arbiter ist ein Programm,
 das ihr mit einem Befehl startet (QUE-2.1). Neuladen der Seite behält den Stand (QUE-3.2).
@@ -54,6 +54,6 @@ Hier geht es darum, das Programm selbst zu beenden, etwa wenn der Rechner neu st
 Empfehlung A: Etappe 1 kennt keinen Knopf „Neue Partie“, und das Aufstellen dauert Minuten.
 Wichtig wird B, wenn eine Partie Stunden dauert (Etappe 3); dann frage ich neu.
 
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
