@@ -14,18 +14,25 @@ sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gese
    AUF-5.10, QUE-3.1, nach Item 1
 3. [Stand behalten](../domaene/items/standBehalten.md): QUE-3.2, QUE-3.3, nach Item 2
 
-Mockups fehlen noch (DoR 5); UX schreibt sie, danach ziehe ich den Plan nach. Aufbau wie
-Plan 3 (kopfzeile, zwei armeeKarten, Karte in der Mitte):
-- `auf-6.html`, der Start: linke Zone in der Farbe von Spieler 1, rechte in der von Spieler 2,
-  „Spieler 2 an der Reihe“, beide Ablagen voll, kein Modell auf der Karte.
-- `auf-5.html`, Auswahl: wie der Start, dazu Warboss von Spieler 1 ausgewählt (nicht an der
-  Reihe); Necron Warriors von Spieler 2 in Aufstellung mit drei gesetzten Modellen und
-  ausgewählt, beide Kennzeichen an einer einheitenKarte (AUF-5.6), die drei Modelle auf der
-  Karte gekennzeichnet (AUF-5.7). Ein Kennzeichen für „ausgewählt“ hat die Komponentenseite
-  nicht; die neue Komponente ist ein Anliegen von UX an den Architekten. Vorbild ArbiterMap.
+Mockups (DoR 5): [Start](../domaene/mockups/auf-6.html) zeigt gefärbte Zonen, „Spieler 2
+an der Reihe“, volle Ablagen, nur aus vorhandenen Komponenten. [Auswahl](../domaene/mockups/auf-5.html)
+zeigt dazu den Warboss von Spieler 1 ausgewählt und die Necron Warriors von Spieler 2 in
+Aufstellung und ausgewählt, mit drei gekennzeichneten Modellen. Das Kennzeichen „ausgewählt“
+(Umriss in Spielerfarbe an der Karte in der Ablage, heller Ring am Modell) hat der Architekt in
+Anliegen 316 entschieden (git); es steht in `vorschlag.css`, in den Komponenten erst nach der
+Technikphase.
+
+**Hindernis:** Ob das für DoR 5 genügt, fragt der Architekt dich in
+[317](anliegen/317-neueKomponenteVorDerFreigabe.md). Bis zu deiner Antwort sind Item 2 und
+damit Item 3 nicht bereit; Item 1 ist es.
 
 ## Empfehlung
-Alle drei Items. Danach startest du Arbiter und siehst gefärbte Zonen und Spieler 2 an der
+Beantworte 317 mit A, wie der Architekt empfiehlt (Begründung dort). Dann sind alle drei Items
+bereit und du gibst sie zusammen frei. Mit B startet
+der Koordinator vorher den Implementierer, danach Freigabe. Item 1 allein empfehle ich nicht:
+gefärbte Zonen ohne Handlung.
+
+Mit allen drei Items startest du Arbiter und siehst gefärbte Zonen und Spieler 2 an der
 Reihe; ihr klickt oder tippt Einheiten in beiden Ablagen an und ab; auf der Karte ändert sich
 nichts. Neu laden zeigt dieselbe Auswahl, neu starten wieder den Start. Setzen könnt ihr noch
 nicht.
@@ -48,6 +55,7 @@ Plan 6: Gewinner und Zone am Bildschirm, AUF-6 entfällt; zurück, gemeinsam üb
 Protokoll · Beenden mit fehlenden Modellen und Kohärenz. Damit ist Etappe 1 erreicht.
 
 ## Offene Anliegen
+An dich: [317](anliegen/317-neueKomponenteVorDerFreigabe.md), siehe Hindernis.
 Deine Antworten, eingearbeitet: 308 F1 A, F2 A ·
 309 Runde 2 F1 B, F2 B, Runde 3 F1 A, Runde 1 F2 A (git, vom Anforderungsautor eingetragen).
 Vom Anforderungsautor steht kein Vorschlag offen; aus 307 bleiben F2 (Wahl der Zone) und der
