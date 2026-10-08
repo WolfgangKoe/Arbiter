@@ -1,0 +1,32 @@
+{
+  "spielfeld": {"breite": 44.0, "länge": 60.0},
+  "zonen": [
+    {"x": 0.0, "y": 0.0, "breite": 9.0, "länge": 60.0, "spieler": 1},
+    {"x": 35.0, "y": 0.0, "breite": 9.0, "länge": 60.0, "spieler": 2}
+  ],
+  "modelle": [
+    {"x": 36.0, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true},
+    {"x": 37.4, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true},
+    {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true}
+  ],
+  "spieler": [
+    {
+      "nummer": 1,
+      "name": "Spieler 1",
+      "anDerReihe": false,
+      "ablage": [
+        {"nummer": 1, "name": "Boyz", "nichtGesetzt": 10, "inAufstellung": false, "ausgewählt": false},
+        {"nummer": 2, "name": "Warboss", "nichtGesetzt": 1, "inAufstellung": false, "ausgewählt": true}
+      ]
+    },
+    {
+      "nummer": 2,
+      "name": "Spieler 2",
+      "anDerReihe": true,
+      "ablage": [
+        {"nummer": 1, "name": "Necron Warriors", "nichtGesetzt": 7, "inAufstellung": true, "ausgewählt": true},
+        {"nummer": 2, "name": "Overlord", "nichtGesetzt": 1, "inAufstellung": false, "ausgewählt": false}
+      ]
+    }
+  ]
+}

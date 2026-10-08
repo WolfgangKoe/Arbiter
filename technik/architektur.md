@@ -15,7 +15,8 @@ technik/
   tests/        akzeptanz/, einheit/
 ```
 Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Zusammenspiel von `web/` und
-`frontend/`: [Web](architektur/web.md); die Datenbank: [Speicher](architektur/speicher.md).
+`frontend/`: [Web](architektur/web.md), [Vertrag](architektur/vertrag.md); die Datenbank:
+[Speicher](architektur/speicher.md).
 
 ## Abhängigkeiten zeigen nach innen
 - **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft:
@@ -58,8 +59,8 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
 - **D2** Eine Handlung prüft erst alle Sperren, dann ändert sie den Zustand; so kann ein
   Übergehen die Prüfung überspringen und protokollieren. Prüft: je Handlung und Grund ein
   Akzeptanztest auf den unveränderten Zustand.
-- **D3** Zustand ändern nur Handlungen. Spielobjekte sind `frozen`, Sammlungen Tupel oder
-  `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
+- **D3** Zustand ändern nur Handlungen und das Auswählen ([Vertrag, V3](architektur/vertrag.md)).
+  Spielobjekte sind `frozen`, Sammlungen Tupel oder `MappingProxyType`. Den Zustand einer Phase hält die Phase in `_`-Feldern, lesbar über
   Properties ohne Setter oder Abfragen (`aufstellung.gesetzt(modell)`); sonst umginge
   `modell.gesetzt = True` jede Sperre. `web/` und `katalog/` lesen keine `_`-Felder; `web/`
   ändert Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
@@ -83,9 +84,9 @@ Akzeptanztests; Spiegel im Code: nur Text (DoD 2).
   die Anforderung geteilt, nicht der Test. Prüft: `kriterienregeln/rueckverfolgung.py`,
   `formregeln/benennung.py`; das Höchstmaß nur Text.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
-  Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-1.4`,
-  `testAuf1_4…`). Spur:
-  `python3 prozess/pruefungen/gemeinsam/lauf.py kriterienregeln.rueckverfolgung AUF-1.4`.
+  Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
+  `testAuf7_3…`). Spur:
+  `python3 prozess/pruefungen/gemeinsam/lauf.py kriterienregeln.rueckverfolgung AUF-7.3`.
 - `tests/einheit/` spiegelt `arbiter/`, etwa `tests/einheit/domaene/phasen/aufstellenTest.py`.
   Jeder Ordner dort hat eine `__init__.py`; sonst kollidiert der Dateiname mit dem
   Akzeptanztest. Prüft: `pytest technik/tests` bricht ab.

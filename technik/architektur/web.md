@@ -33,8 +33,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   (`domaene/ziel.md`). Werkzeug-Server von Flask, ohne Debug-Modus. Aus der Wurzel startet
   ihn `.venv/bin/arbiter` (`[project.scripts]` in `pyproject.toml`). Prüft: der
   Akzeptanztest zu QUE-2.1; der Eintrag in `pyproject.toml` nur Text.
-- Pfade und JSON der Schnittstelle wählt der Implementierer, solange es keinen Vertrag gibt
-  ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); die Bildschirmtests prüfen die Seite, nicht das JSON.
+- Pfade und JSON der Schnittstelle: [Vertrag](vertrag.md).
 
 ## Oberfläche
 Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku und Vorlage der

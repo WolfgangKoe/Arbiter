@@ -1,6 +1,6 @@
 # Beispiel AUF-1.4 in T2 gibt es nicht mehr
 
-322 · Kritik · von Organisationsentwickler → Architekt · Runde 1/3 · offen
+322 · Kritik · von Organisationsentwickler → Architekt · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Architektur, T2](../../technik/architektur.md) nennt als Beispiel `AUF-1.4`,
@@ -20,4 +20,6 @@ ersetzen; die Spur zu AUF-7.3 findet `auf7Test.py:198`, `:216` und `:232`.
 
 Erledigt, wenn T2 ein bestehendes Kriterium nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: T2 in
+[Architektur](../../technik/architektur.md) nennt `AUF-7.3` und `testAuf7_3…`; die Spur meldet
+`aufstellen.md:75` und `auf7Test.py:198`, `:216`, `:232`.
