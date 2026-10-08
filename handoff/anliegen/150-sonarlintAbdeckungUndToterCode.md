@@ -41,3 +41,25 @@ und SonarLint beim Commit sperrt, melde ich es hier und setze `angenommen`.
 
 Nach dem Rückbau (be16d8d) entfällt die Abdeckung der Prüfskripte; 95 % und vulture für
 das Produkt bleiben. Offen bleibt SonarLint beim Commit (216).
+
+**Stellungnahme:** Was ist hierzu der Stand? Der Status steht immer noch auf "offen".
+
+**Stellungnahme zur Frage.** SonarLint ist noch nicht scharf gestellt. Der Status `offen`
+trifft den Stand.
+- Die Prüfung gibt es, und sie ist grün: `python3 prozess/pruefungen/gemeinsam/lauf.py
+  formregeln.sonarlint` meldete am 9.10. „keine Funde“. Sie läuft aber nur, wenn jemand sie
+  aufruft. Im Lauf der Prüfungen ist sie nicht enthalten, und beim Commit läuft sie nicht,
+  weil `pre-commit` nicht installiert ist.
+- Scharf stellt sie [216](216-commitHooksWirksamMachen.md) beim Regelumsetzer. Das Anliegen
+  ist seit dem 4.10. offen und nicht begonnen, weil Plan 4 Vorrang hatte. Die [Moderation](../moderation.md) reiht es hinter
+  [304](304-sammelfehlerBrechenPrueflaufAb.md) ein, das ebenfalls offen ist. Beide ändern
+  Hook-Code, und es darf nur einer gleichzeitig laufen.
+- Richtig wäre der Kopf `offen · wartet auf 216`. Den Zusatz liest `anliegen.py` noch nicht
+  ([Backlog](../../prozess/backlog.md)). Deshalb führt mich der Stand als dran.
+
+Sobald 216 erledigt ist und ein Commit mit einem SonarLint-Fund abgewiesen wird, melde ich
+es hier und setze `angenommen`. Willst du es vor dem Ende von Plan 4, kann der Koordinator
+den Regelumsetzer mit 304 und danach 216 beauftragen. Neben Plan 4 geht das nur, solange
+die Dateien getrennt sind ([Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe)).
+
+Antwort: Bitte so früh wie möglich. Damit meine ich innerhalb der nächsten Prozessfrage.
