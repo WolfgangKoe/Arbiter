@@ -1,6 +1,6 @@
 # Wahl der Einheit in den Tests der Aufstellung
 
-313 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · angenommen
+313 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu 1770e3d, Schnittstelle und Lesbarkeit.

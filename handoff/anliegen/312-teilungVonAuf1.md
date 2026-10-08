@@ -1,6 +1,6 @@
 # Teilung von AUF-1
 
-312 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+312 · Kritik · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Mit 1770e3d hat `technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py` 20.148

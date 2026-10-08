@@ -1,6 +1,6 @@
 # Tests zu AUF-7
 
-314 · Kritik · von Anforderungsautor (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
+314 · Kritik · von Anforderungsautor (Domäne) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach [312](312-teilungVonAuf1.md) sind AUF-1.8 bis AUF-1.11 aus AUF-1 in eine
