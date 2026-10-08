@@ -28,8 +28,10 @@ def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
     )
 
 
-def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitInAufstellung, platz):
-    erstesModell, _ = einheitInAufstellung.modelle
+def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
+    aufstellung, ersteEinheitAnDerReihe, platz
+):
+    erstesModell, _ = ersteEinheitAnDerReihe.modelle
     stelle = platz.stelle(platz.tiefeDerZone - platz.radius, 10)
 
     aufstellung.modellSetzen(erstesModell, stelle)
@@ -38,9 +40,9 @@ def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(aufstellung, einheitIn
 
 
 def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
-    aufstellung, einheitInAufstellung, platz
+    aufstellung, ersteEinheitAnDerReihe, platz
 ):
-    erstesModell, _ = einheitInAufstellung.modelle
+    erstesModell, _ = ersteEinheitAnDerReihe.modelle
     stelle = platz.stelle(platz.tiefeDerZone - platz.radius + platz.millionstel, 10)
 
     gründe = sperrgründe(aufstellung.modellSetzen, erstesModell, stelle)
@@ -49,8 +51,8 @@ def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(aufstellung, einheitInAufstellung, platz):
-    erstesModell, _ = einheitInAufstellung.modelle
+def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(aufstellung, ersteEinheitAnDerReihe, platz):
+    erstesModell, _ = ersteEinheitAnDerReihe.modelle
     stelle = platz.stelle(platz.radius, platz.radius)
 
     aufstellung.modellSetzen(erstesModell, stelle)
@@ -58,8 +60,8 @@ def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(aufstellung, einheitInAufs
     assert aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(aufstellung, einheitInAufstellung, platz):
-    erstesModell, _ = einheitInAufstellung.modelle
+def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(aufstellung, ersteEinheitAnDerReihe, platz):
+    erstesModell, _ = ersteEinheitAnDerReihe.modelle
     stelle = platz.stelle(platz.radius, platz.längeDerSpielfeldkante - platz.radius)
 
     aufstellung.modellSetzen(erstesModell, stelle)

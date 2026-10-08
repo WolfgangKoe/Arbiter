@@ -76,7 +76,6 @@ def stelleDesErstenModells(aufstellung: Aufstellung, spieler: Spieler, einheit: 
 
 def einheitAufstellen(aufstellung: Aufstellung, einheit: Einheit) -> None:
     spieler = aufstellung.anDerReihe
-    aufstellung.einheitInAufstellungWählen(einheit)
     for modell, stelle in stellenDerEinheit(aufstellung, spieler, einheit):
         aufstellung.modellSetzen(modell, stelle)
     aufstellung.aufstellenDerEinheitBeenden()
@@ -123,9 +122,8 @@ class Platz:
 def modelleSetzen(
     aufstellung: Aufstellung, einheit: Einheit, anzahl: int
 ) -> list[tuple[Modell, Stelle]]:
-    """Wählt die Einheit und setzt die ersten Modelle ihrer Reihe, ohne sie zu beenden."""
+    """Setzt die ersten Modelle der Reihe der Einheit, ohne das Aufstellen zu beenden."""
     spieler = aufstellung.anDerReihe
-    aufstellung.einheitInAufstellungWählen(einheit)
     gesetzt = stellenDerEinheit(aufstellung, spieler, einheit)[:anzahl]
     for modell, stelle in gesetzt:
         aufstellung.modellSetzen(modell, stelle)
