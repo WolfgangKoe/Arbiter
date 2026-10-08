@@ -1,6 +1,6 @@
 # Wählen am Bildschirm: Gewinner, Zone, Anzeige der Sperre, Neustart
 
-307 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+307 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · rückfrage
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -35,7 +35,7 @@ Empfehlung A: Only War gibt den Zonen keine Namen (`core_rules.txt:2322`, Glossa
 Knopf bräuchte einen erfundenen. Ein Klick auf eine Zone vor F1 trifft die *Sperre*
 ‚nicht wählbar‘ (AUF-1.2).
 
-Antwort: .
+Antwort: 
 
 **F3 · Wo und wie lange steht die Sperre einer Wahl, mit welchem Satz?**
 - A: Im *Spielaktionsbereich*, bis zur nächsten Handlung. Sätze: ‚nicht wählbar‘ „Das ist
@@ -49,7 +49,7 @@ Empfehlung A: Ein Ort für alle Sperren einer Wahl. Das Ziel lässt jede *Sperre
 kommt „gemeinsam übergehen“ (Plan 3, Danach), bleibt sie dort stehen, bis die *Spieler*
 „zurück“ oder „gemeinsam übergehen“ wählen.
 
-Antwort: .
+Antwort: 
 
 **F4 · Was zeigt Arbiter nach einem Neustart?** QUE-3.2 gilt, solange Arbiter läuft.
 - A: Die *Ausgangslage*; frühere Partien bleiben gespeichert, aber nicht sichtbar.
@@ -59,7 +59,7 @@ Antwort: .
 Empfehlung A: Etappe 1 kennt keine Handlung „Neue Partie“, und das Aufstellen dauert
 Minuten. B wird wichtig, wenn Partien Stunden dauern (Etappe 3); dann frage ich neu.
 
-Antwort: .
+Antwort: 
 
 **F5 · Neuer Begriff.** *Spielaktionsbereich* | – | `spielAktionsBereich` | Ort auf dem
 Bildschirm, an dem Arbiter fragt, was als Nächstes zu wählen ist, und eine *Sperre* einer
@@ -69,6 +69,6 @@ B: anderes Wort.
 
 Empfehlung A.
 
-Antwort: .
+Antwort: 
 
-**Stellungnahme.**
+**Stellungnahme.** Ich bin mir nicht sicher, ob ich das Problem aus deinen Fragen richtig verstanden habe. Deine Sätze und auch deine Ziele und auch der Zweck in den Anforderungen ist in Teilen sehr knapp, so dass scheinbar einige Informationen fehlen. Gehen wir nochmal ein Stück zurück. Was wäre aus deiner Sicht denn ein passender Start oder eine Voraussetzung, die wir schaffen sollten, bevor eine Einheit auswählbar ist? In Anbetracht dessen, dass wir irgendwo anfangen müssen, könnte man sich auch überlegen, dass Gewinner des Rolloff, Wahl der Aufstellungszone etc. bereits gewählt ist und es hier eine technische Krücke braucht, die das ermöglicht. Diese müsste durch ein entsprechenden Test kenntlich gemacht werden, dass man sie durch eine solide technische Lösung ersetzt. Dafür bräuchte es ggf. eine neue Anforderung. Denke nochmal darüber nach und bringe hier Vorschläge.
