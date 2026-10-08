@@ -1,6 +1,6 @@
 # AUF-5.5 regelt einen Fall, den die Ausgangslage ausschließt
 
-318 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · angenommen
+318 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** AUF-5.5 ([Aufstellen](../../domaene/anforderungen/phasen/aufstellen.md)) regelt,
