@@ -16,6 +16,7 @@ from tests.akzeptanz.bildschirm import Bildschirm
 from tests.akzeptanz.handgriffe import (
     Platz,
     aufstellungVon,
+    dienstFür,
     einheitAufstellen,
     modelleSetzen,
     spielerMit,
@@ -196,3 +197,9 @@ def boyzSetzen(aufstellungNachDerZonenwahl, boyz):
 def einGesetztesModell(aufstellungNachDerZonenwahl, boyzSetzen) -> tuple[Aufstellung, Modell]:
     [(modell, _)] = boyzSetzen(1)
     return aufstellungNachDerZonenwahl, modell
+
+
+@pytest.fixture
+def dienst(aufstellungNachDerZonenwahl: Aufstellung):
+    """Der Flask-Testclient der Anwendung über dem Spielstand der Zonenwahl."""
+    return dienstFür(aufstellungNachDerZonenwahl)

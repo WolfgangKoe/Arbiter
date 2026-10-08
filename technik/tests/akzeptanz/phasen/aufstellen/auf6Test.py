@@ -1,6 +1,8 @@
 """AUF-6 · Vorläufig: Start mit gewähltem Gewinner und gewählter Zone."""
 
+from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 from tests.akzeptanz.bildschirm import Element, elementeDerSeite
+from tests.akzeptanz.handgriffe import dienstFür, spielstandVon
 
 
 def farbeJeSpielername(seite) -> dict[str, str]:
@@ -48,3 +50,17 @@ def testAuf6_1NachDemStartGehörtSpielerZweiDieAndereZone(adresseDesBefehls, bil
     zone = zoneNebenDerAblage(seite, "Spieler 2")
 
     assert zone.fill == farbeJeSpielername(seite)["Spieler 2"]
+
+
+def testAuf6_1DerSpielstandNenntSpielerZweiAnDerReiheUndSpielerEinsDieErsteZone(
+    ausgangsaufstellung, spielerEins
+):
+    ausgangsaufstellung.gewinnerWählen(spielerEins)
+    ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+
+    spielstand = spielstandVon(dienstFür(ausgangsaufstellung))
+
+    anDerReihe = {einer["nummer"] for einer in spielstand["spieler"] if einer["anDerReihe"]}
+    besitzerJeZone = {zone["x"]: zone["spieler"] for zone in spielstand["zonen"]}
+    assert anDerReihe == {2}
+    assert besitzerJeZone == {0.0: 1, 35.0: 2}

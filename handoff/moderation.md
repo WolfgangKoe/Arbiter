@@ -7,7 +7,7 @@ läuft; zu den Items von [Plan 4](plan.md) hängt kein offenes Anliegen (DoR 4).
 Blockiert die Freigabe: nichts. Die Kritik an AUF-5.5 (Anliegen 318)
 ist `erledigt`, AUF-5.5 steht nicht im Umfang.
 - Architekt: Anliegen 322 (Beispiel in T2; drei Kürzel).
-- Organisationsentwickler: [321](anliegen/321-dor5NeueKomponente.md) (ein Satz in DoR 5, Stellungnahme
+- Organisationsentwickler: Anliegen 321 (ein Satz in DoR 5, Stellungnahme
   leer); Anliegen 296 nachprüfen (angenommen, F1 bis F3 beantwortet);
   [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) warten auf 304 und 216.

@@ -11,7 +11,7 @@ from tests.akzeptanz.bildschirm import (
     einheitenKarteVon,
     inhaltDerSeite,
 )
-from tests.akzeptanz.handgriffe import modelleSetzen
+from tests.akzeptanz.handgriffe import auswählen, modelleSetzen, spielstandVon
 
 ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
 anzahlGesetzterModelle = 3
@@ -117,3 +117,15 @@ def testQue3_3NachDemNeustartZeigenKarteUndAblagenDieAusgangslageStattDesStandsD
     assert standDavor != ausgangslageMitWahl
     assert inhaltDerSeite(danach) == ausgangslageMitWahl
     assert ausgewählteEinheiten(danach) == frozenset()
+
+
+def testQue3_2DerDienstLiefertAufJedeWeitereAnfrageDenselbenSpielstandWieDavor(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
+    davor = auswählen(dienst, 1, 1).get_json()
+
+    danach = spielstandVon(dienst)
+
+    assert danach == davor
+    assert spielstandVon(dienst) == davor

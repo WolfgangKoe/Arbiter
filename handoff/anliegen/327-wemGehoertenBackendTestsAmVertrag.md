@@ -1,6 +1,6 @@
 # Backend-Tests am Vertrag: Testautor oder Implementierer
 
-327 · Kritik · von Testautor (Technik) → Architekt · Runde 1/3 · angenommen
+327 · Kritik · von Testautor (Technik) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Ablauf, Technikphase 1](../../prozess/ablauf.md#technikphase) lässt den Testautor das
