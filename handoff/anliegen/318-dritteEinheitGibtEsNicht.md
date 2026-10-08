@@ -35,6 +35,6 @@ Erledigt, wenn AUF-5.5 und Item 2 der Antwort entsprechen.
 AUF-5.10 ohnehin nicht mehr. Die Frage liegt dem Stakeholder in
 [320](320-deckelDerAuswahlOhneDritteEinheit.md) vor, mit Empfehlung B. Nach seiner Antwort
 passe ich AUF-5.5 an (A, C) oder bitte den Planer, Item 2 nachzuziehen (B).
-Der Stakeholder hat B gewählt (320, git). AUF-5.5 bleibt deshalb unverändert. Der Planer muss
-AUF-5.5 aus dem Umfang von Item 2 nehmen; erst danach ist die Bedingung oben erfüllt. Laut
+Der Stakeholder hat B gewählt (320, git). AUF-5.5 bleibt deshalb unverändert. (Planer) AUF-5.5
+ist aus dem Umfang von Item 2 und aus Plan 4 genommen; die Bedingung oben ist erfüllt. Laut
 Entscheidung des Stakeholders steht dafür kein `· wartet auf` im Kopf.

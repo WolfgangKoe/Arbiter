@@ -11,8 +11,8 @@ sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gese
 
 ## Items
 1. [Vorläufiger Start](../domaene/items/vorlaeufigerStart.md): AUF-6.1
-2. [Auswählen in der Ablage](../domaene/items/auswaehlenInDerAblage.md): AUF-5.3 bis
-   AUF-5.10, QUE-3.1, nach Item 1
+2. [Auswählen in der Ablage](../domaene/items/auswaehlenInDerAblage.md): AUF-5.3, AUF-5.4,
+   AUF-5.6 bis AUF-5.10, QUE-3.1, nach Item 1
 3. [Stand behalten](../domaene/items/standBehalten.md): QUE-3.2, QUE-3.3, nach Item 2
 
 Mockups (DoR 5): [Start](../domaene/mockups/auf-6.html) zeigt gefärbte Zonen, „Spieler 2
@@ -23,16 +23,14 @@ Aufstellung und ausgewählt, mit drei gekennzeichneten Modellen. Das Kennzeichen
 Anliegen 316 entschieden (git); es steht in `vorschlag.css`, in den Komponenten erst nach der
 Technikphase.
 
-**Hindernis:** Ob das für DoR 5 genügt, fragt der Architekt dich in
-[317](anliegen/317-neueKomponenteVorDerFreigabe.md). Bis zu deiner Antwort sind Item 2 und
-damit Item 3 nicht bereit; Item 1 ist es. Offen zu Item 2 ist auch
-[318](anliegen/318-dritteEinheitGibtEsNicht.md) (AUF-5.5, an den Anforderungsautor).
+Das genügt für DoR 5 nach deiner Antwort in 317 (A, git); alle drei Items sind bereit.
+AUF-5.5 (eine dritte *Einheit* verdrängt die älteste) ist nach deiner Antwort in 320 (B, git)
+nicht im Umfang, bis eine *Armee* mehr als zwei *Einheiten* hat; die Kritik dazu
+([318](anliegen/318-dritteEinheitGibtEsNicht.md)) prüft der Fachkritiker nach.
 
 ## Empfehlung
-Beantworte 317 mit A, wie der Architekt empfiehlt (Begründung dort). Dann sind alle drei Items
-bereit und du gibst sie zusammen frei. Mit B startet
-der Koordinator vorher den Implementierer, danach Freigabe. Item 1 allein empfehle ich nicht:
-gefärbte Zonen ohne Handlung.
+Gib alle drei Items zusammen frei. Item 1 allein empfehle ich nicht: gefärbte Zonen ohne
+Handlung.
 
 Mit allen drei Items startest du Arbiter und siehst gefärbte Zonen und Spieler 2 an der
 Reihe; ihr klickt oder tippt Einheiten in beiden Ablagen an und ab; auf der Karte ändert sich
@@ -55,8 +53,8 @@ Plan 6: Gewinner und Zone am Bildschirm, AUF-6 entfällt; zurück, gemeinsam üb
 Protokoll · Beenden mit fehlenden Modellen und Kohärenz. Damit ist Etappe 1 erreicht.
 
 ## Offene Anliegen
-An dich: [317](anliegen/317-neueKomponenteVorDerFreigabe.md), siehe Hindernis.
-Deine Antworten, eingearbeitet: 308 F1 A, F2 A ·
+An dich: keins.
+Deine Antworten, eingearbeitet: 308 F1 A, F2 A · 317 A · 320 B ·
 309 Runde 2 F1 B, F2 B, Runde 3 F1 A, Runde 1 F2 A (git, vom Anforderungsautor eingetragen).
 Vom Anforderungsautor steht kein Vorschlag offen; aus 307 bleiben F2 (Wahl der Zone) und der
 Begriff Spielaktionsbereich für Plan 6 (git).
