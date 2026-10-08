@@ -51,8 +51,11 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
 - **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
   gebaut aus `domaene/mockups/vorschlag.css`. Jede Seite verlinkt `komponenten.css`;
   Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und
-  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Keine tote Klasse, keine neue
-  Klasse in Mockups und `technik/frontend/*.html`. Prüft: nur Text.
+  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Keine tote Klasse; eine neue
+  Klasse in Mockups und `technik/frontend/*.html` nur über DoR 5
+  ([Ablauf](../../prozess/ablauf.md#dor-item-bereit)): vom Architekten entschieden, in
+  `vorschlag.css` übernommen, vom Implementierer in `komponenten.css` eingetragen. Prüft: nur
+  Text.
 
 ## Bildschirmtests
 Entschieden nach einem Wegwerf-Versuch (Flask im Thread, Playwright, Chromium aus dem Cache;

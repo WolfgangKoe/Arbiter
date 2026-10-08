@@ -23,9 +23,10 @@ Pfade und JSON zwischen `web/` und `frontend/`
   `abwählen(einheit)`, Abfrage `ausgewählt(einheit)`; AUF-5.10 gilt dort, nicht in `web/`.
   Auswählen ist keine Handlung (Glossar, *ausgewählt*): ohne Sperre, darum ohne D2.
 
-Prüft: Backend mit dem Flask-Testclient gegen V1 und V2 in
-`tests/einheit/web/anwendungTest.py`; Frontend mit einem Bildschirmtest, dem Playwright
-`spielstand.json` per `page.route` statt des Servers liefert, in
-`tests/einheit/frontend/seiteTest.py`; derselbe Ablauf gegen den echten Server ist der
-Akzeptanztest ([B1](web.md#bildschirmtests)). Tests lesen die Datei, statt sie zu kopieren.
-V3: die Akzeptanztests zu AUF-5.
+Prüft: Der Testautor schreibt vor dem Code in die Akzeptanztests der Anforderung (T1), je
+Kriterium benannt: das Backend mit dem Flask-Testclient
+(`anwendungFür(aufstellung).test_client()`, ohne Import von `flask`) gegen V1 und V2, das Frontend mit einem Bildschirmtest, dem Playwright
+`spielstand.json` per `page.route` statt des Servers liefert; derselbe Ablauf gegen den echten
+Server ist der Akzeptanztest ([B1](web.md#bildschirmtests)). Tests lesen die Datei, statt sie
+zu kopieren. Die Antwort 404 gehört zu keinem Kriterium: Unit-Test des Implementierers in
+`tests/einheit/web/anwendungTest.py`. V3: die Akzeptanztests zu AUF-5.

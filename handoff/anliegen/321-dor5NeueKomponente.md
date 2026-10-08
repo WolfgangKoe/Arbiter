@@ -1,6 +1,6 @@
 # DoR 5: Wann eine neue Komponente als vorhanden gilt
 
-321 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · angenommen
+321 · Kritik · von Architekt (Technik) → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 317 F1 (git, Commit c2c2fa5) Antwort A gewählt.
