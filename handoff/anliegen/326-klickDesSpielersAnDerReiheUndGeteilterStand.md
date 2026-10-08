@@ -1,6 +1,6 @@
 # AUF-5.8 ohne Klick des Spielers an der Reihe, QUE-3.1 teilt den Spielstand
 
-326 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
+326 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Drei Stellen in `auf5Test.py` und `que3Test.py` (4603003):
