@@ -1,33 +1,37 @@
 # Moderation
 
-Stand bbc4ad9, vor Freigabe Retro 3: 14 Anliegen offen, alle Perspektive Prozess; Domäne und
-Technik 0. Kritikrunde der anderen Perspektiven entfällt (Stakeholder).
+Stand vor Freigabe Plan 4: 11 Anliegen offen, 318 `erledigt`. Kritikrunde der Domänenphase
+läuft; zu den Items von [Plan 4](plan.md) hängt kein offenes Anliegen (DoR 4).
 
 ## Dran
-Blockiert die Freigabe: nichts. [Retro 3](retro.md) nennt keine Prozess-Items, Plan 4 hängt an
-keinem offenen Anliegen.
-- Stakeholder: [296](anliegen/296-prozesslastEindaemmen.md) (F1 bis F3 beantwortet, A; setzt
-  `angenommen`, Organisationsentwickler hat umgesetzt).
+Blockiert die Freigabe: nichts. Die Kritik an AUF-5.5 (Anliegen 318)
+ist `erledigt`, AUF-5.5 steht nicht im Umfang.
+- Architekt: [322](anliegen/322-beispielInT2GibtEsNicht.md) (Beispiel in T2; drei Kürzel).
+- Organisationsentwickler: [321](anliegen/321-dor5NeueKomponente.md) (ein Satz in DoR 5, Stellungnahme
+  leer); [296](anliegen/296-prozesslastEindaemmen.md) nachprüfen (angenommen, F1 bis F3 beantwortet);
+  [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
+  [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) warten auf 304 und 216.
 - Regelumsetzer: [216](anliegen/216-commitHooksWirksamMachen.md),
   [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
   [275](anliegen/275-dashboardSichtDerAnliegen.md),
-  [304](anliegen/304-sammelfehlerBrechenPrueflaufAb.md); 5 von 5 am Deckel.
-- Organisationsentwickler: [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) wartet auf
-  216; [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) wartet auf 304.
-- Alle anderen Rollen: nichts.
+  [304](anliegen/304-sammelfehlerBrechenPrueflaufAb.md).
+- Testautor: AUF-5, AUF-6, QUE-3 nach Freigabe (Technikphase), kein Anliegen.
+- Stakeholder, Anforderungsautor, Fachkritiker: keins.
 
 ## Vorschläge
-- Löschen lassen (Kopf `erledigt`, Löschlauf, kein Zug nötig): 202, 203, 228, 229, 232, 302.
-  Retro 3 zählt sie noch als offen beim Regelumsetzer; die Dateien sind es nicht mehr.
-- Zusammen in einem Lauf des Regelumsetzers (Strang Prüfskript-Werkzeug und Dashboard):
-  246 mit 275 (dieselbe Datei `rollenregeln/dashboard.py`).
-- Strang Hook-Code, höchstens ein Lauf ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)):
-  304 zuerst (`pyproject.toml`), dann 216. 249 ändert `pyproject.toml` und den Importvertrag
-  und läuft nach 304, nicht daneben.
-- Nach 304 schließt der Organisationsentwickler 289; nach 216 meldet er 150 an den
-  Stakeholder. 150 und 289 sind reine Warteposten ohne eigene Arbeit.
-- Reihenfolge ohne Wirkung auf Plan 4: Die Kette läuft neben dem Produkt, Vorrang hat Plan 4.
+- Löschen: 318 (Kopf `erledigt`, Löschlauf, kein Zug nötig).
+- Zusammen in einem Lauf des Regelumsetzers: 246 mit 275 (dieselbe Datei
+  `rollenregeln/dashboard.py`).
+- Regelumsetzer, Strang Hook-Code, höchstens ein Lauf
+  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): 304 zuerst (`pyproject.toml`), dann 216,
+  dann 249 (ändert `pyproject.toml` und Importvertrag). 246 und 275 laufen als eigener Strang
+  daneben, wenn `dashboard.py` nicht von Hooks importiert wird.
+- Organisationsentwickler: 321 ist ein reiner Textstrang (`ablauf.md`) und läuft neben jedem
+  Strang; nach 304 schließt er 289, nach 216 meldet er 150 an den Stakeholder.
+- Architekt: 322 gleichzeitig; die Vertragsarbeit in
+  [web.md](../technik/architektur/web.md) (Plan 4) hat Vorrang, 321 verlangt dort O3 nachzuziehen.
+- Vorrang hat Plan 4; die Kette läuft daneben.
 
 ## Fragen an dich
-Keine offen. Retro 3 trägt `Freigabe: ja` und `Kommentar: .` schon.
+Keine offen.

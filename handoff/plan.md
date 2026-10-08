@@ -26,7 +26,7 @@ Technikphase.
 Das genügt für DoR 5 nach deiner Antwort in 317 (A, git); alle drei Items sind bereit.
 AUF-5.5 (eine dritte *Einheit* verdrängt die älteste) ist nach deiner Antwort in 320 (B, git)
 nicht im Umfang, bis eine *Armee* mehr als zwei *Einheiten* hat; die Kritik dazu
-([318](anliegen/318-dritteEinheitGibtEsNicht.md)) prüft der Fachkritiker nach.
+(Anliegen 318) prüft der Fachkritiker nach.
 
 ## Empfehlung
 Gib alle drei Items zusammen frei. Item 1 allein empfehle ich nicht: gefärbte Zonen ohne
