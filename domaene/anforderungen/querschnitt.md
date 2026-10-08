@@ -26,3 +26,4 @@ Zweck: Die zwei *Spieler* teilen sich ein Gerät, mit Maus oder mit dem Finger a
 
 - QUE-3.1 Was ein Klick auf der *Karte* oder in einer *Ablage* auslöst, löst ein Tippen mit dem Finger am selben Ort ebenso aus (`domaene/ziel.md`: „Maus und Touch“).
 - QUE-3.2 Öffnet ein *Spieler* die Adresse nach QUE-2.1 erneut, während Arbiter läuft, zeigen *Karte* und *Ablagen* dasselbe wie davor (`domaene/ziel.md`: „durch eine vollständige Partie“).
+- QUE-3.3 Wird Arbiter beendet und nach QUE-2.1 neu gestartet, zeigen *Karte* und *Ablagen* die *Ausgangslage* mit der Wahl nach AUF-6, nicht den Stand vor dem Beenden (Anliegen 309 F2 A).
