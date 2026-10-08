@@ -63,5 +63,5 @@ Die übrigen offenen Anliegen betreffen den Prozess
 ([Moderation](moderation.md)).
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
