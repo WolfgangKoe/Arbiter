@@ -1,6 +1,6 @@
 # Komponente „ausgewählt“ für Ablage und Karte
 
-316 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · offen
+316 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** AUF-5.6 und AUF-5.7 verlangen, dass die Ablage jede ausgewählte Einheit und die
@@ -19,4 +19,33 @@ Antwort die Klassen `ausgewählt` an `einheitenKarte` und an `modell`; sie stehe
 `inAufstellung`) und `.modell.ausgewählt` mit hellem Ring. Beides kombinierbar mit
 `inAufstellung`. Gibst du andere Namen vor, ziehe ich die Mockups nach.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen mit einer Änderung. Name `ausgewählt` wie vorgeschlagen:
+Zustandsklasse mit dem Glossarbegriff, wie `inAufstellung` und `anDerReihe`. Die Komponente:
+```css
+.einheitenKarte.ausgewählt {
+  outline: 2px solid var(--spielerFarbe);
+  outline-offset: 2px;
+}
+
+.modell.ausgewählt {
+  stroke: var(--text);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+```
+- Karte in der Ablage: `outline` statt Rand. `inAufstellung` belegt schon `border-color` und
+  `box-shadow`; zwei Regeln auf derselben Eigenschaft entscheidet die Reihenfolge in der
+  Datei, kombiniert sähe man nur eine. `outline` ist eine eigene Eigenschaft: Beide Zustände
+  sind zugleich sichtbar (gelb innen, Spielerfarbe außen), ohne dritte Regel.
+- Modell: Die Karte rechnet in Zoll (Web, O2); ohne `non-scaling-stroke` wäre der Ring
+  2 Zoll breit. Hell ist `--text`, nicht `--akzentHell` (gehört `inAufstellung`).
+- Wegwerf-Versuch: `auf-5.html` mit beiden Regeln in Chromium (Playwright). Ring und
+  Umriss sichtbar, die kombinierte Karte unterscheidbar; `getComputedStyle` trennt die
+  Zustände (`outlineStyle` `solid`/`none`, `stroke`), also prüfbar nach Web, B3;
+  stylelint mit `.stylelintrc.json` grün.
+
+Weg: In der Domänenphase arbeite ich nicht in `technik/`, `technik/frontend/` schreibt der
+Implementierer. Du übernimmst die beiden Regeln wörtlich in `vorschlag.css`; der
+Implementierer trägt sie in der Technikphase in `komponenten.css` ein und zeigt in
+`komponenten.html` die Zustände `ausgewählt`, `inAufstellung ausgewählt` und ein `modell`
+mit `ausgewählt` (Web, O3). Die Mockups bleiben wie sie sind.
