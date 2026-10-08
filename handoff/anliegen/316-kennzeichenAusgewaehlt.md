@@ -1,6 +1,6 @@
 # Komponente „ausgewählt“ für Ablage und Karte
 
-316 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · angenommen
+316 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** AUF-5.6 und AUF-5.7 verlangen, dass die Ablage jede ausgewählte Einheit und die
