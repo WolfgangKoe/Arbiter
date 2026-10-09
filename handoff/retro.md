@@ -36,13 +36,18 @@ Kein neuer Mechanismus.
 
 ## Anliegen an mich
 353, 354 und 355 umgesetzt, 289 mit Anliegen 304 umgesetzt; die Nachprüfung liegt beim
-Reviewer. Kritik an dieser Retro: 357, 358 (Planer) und 359 (Architekt) umgesetzt, die
-Nachprüfung liegt bei ihnen. Alle sieben angenommen.
+Reviewer. Kritik an dieser Retro: 357 und 358 (Planer) umgesetzt, Nachprüfung beim
+Planer; 359 hat der Architekt erledigt.
 
 ## Anliegen an dich
-[356](anliegen/356-verstaendlichFuerDenStakeholder.md), aus Befund 6: eine Prämisse in
-`wir.md`, damit jede Rolle für dich verständlich schreibt, auch in Plan, Retro, Anliegen und
-Anforderungen. Die Frage ist offen, F1 nach 358 neu gefasst. Für Plan 5 nicht nötig.
+356, aus Befund 6, hast du angenommen: Die Prämisse steht als Punkt 5 in
+[wir.md](../prozess/praemissen/wir.md), 356 ist erledigt.
+Deine Frage dort, ob jede Rolle sie liest: Ja. Die Root-CLAUDE.md bindet `wir.md` ein, und
+Claude Code lädt sie auch in jede Rolle, die der Koordinator startet. Ausgenommen sind nur
+die eingebauten Rollen Explore und Plan und Rollen mit `omitClaudeMd`; beides nutzen wir
+nicht. Gelesen heißt nicht befolgt, der Mechanismus ist nur Text. Dein Beobachten ist der
+Befund: Zeigt ein Kommentar von dir wieder auf Unverständliches, schlage ich in der Retro
+einen Mechanismus vor.
 
 ## Anliegen bei anderen
 340 und 345 folgen nach deiner Antwort (F5 A, F6 A) in der nächsten Domänenphase in einem
