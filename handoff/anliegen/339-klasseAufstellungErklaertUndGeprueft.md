@@ -34,7 +34,7 @@ Antwort: Das würde ich nochmal infrage stellen. s. Stellungnahme.
 **Stellungnahme.** Könntest du dich bitte mit dem Anforderungsautor abstimmen, wie wir es am besten machen? Ich habe 339 kommentiert und ihr sollt natürlich nicht unterschiedliche Strukturen aufbaut. Ich möchte, dass wir hier eine gemeinsame "Spiegelstruktur" aufbauen und die Einzelteile sollen lesbar und gut strukturiert sein. Daher finde ich F1-B einen guten Schritt. Schau bitte, was aus den Regeln heraus zusammengehört. Als Modell -> Einheit -> Armee könnte gut passen. Base und Nahkampfreichweite könnte auch irgendwie zusammengehören. Aber ich verstehe nicht viel davon, wie man Klassen, deren Eigenschaften, Methoden und Vererbungen gut aufbaut, damit alles gut strukturiert lesbar ist und so etwas wie SOLID erfüllt bleibt.
 
 **Klärung.** F1 B gilt. Was keinen neuen Begriff braucht, baut der Implementierer jetzt
-([344](344-aufstellungLesbarOhneNeuenBegriff.md)). Den Spiegel stimme ich mit dem
+(Anliegen 344). Den Spiegel stimme ich mit dem
 Anforderungsautor ab ([345](345-spiegelZwischenAnforderungUndCode.md)); F2 entscheidet er dort mit.
 Mein Vorschlag, aus den Regeln:
 - Spiegel: Ordner und Dateiname einer Anforderung kehren als Testdatei und, trägt sie Regeln,
