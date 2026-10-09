@@ -1,6 +1,6 @@
 # Ausnahme für den Architekten in der Domänenphase
 
-376 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+376 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 370 (git) F2 mit A beantwortet: Der Architekt

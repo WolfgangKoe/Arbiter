@@ -1,6 +1,6 @@
 # Skill und Format der Domäne nach dem neuen Schnitt der Anforderungen
 
-369 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+369 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Seit 986d3fb steht je Anforderung eine Datei unter `domaene/anforderungen/<bereich>/`
