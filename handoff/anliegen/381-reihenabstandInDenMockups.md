@@ -3,7 +3,7 @@
 381 · Kritik · von Anforderungsautor (Domäne) → UX (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
-**Befund.** Nach [377](377-abstandDerReihenInDerFormation.md) F1 A haben in einer *Formation*
+**Befund.** Nach Anliegen 377 F1 A haben in einer *Formation*
 auch schräg benachbarte *Bases* den *Abstand* 1,5″
 ([Glossar](../../domaene/glossar.md), *Formation*; Skizze des Stakeholders
 `Arbiter-old/Arbiter_Specs/Arbiter - unitshape and modeldistribution.pdf`, Seite 1). Die

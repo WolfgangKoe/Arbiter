@@ -4,7 +4,7 @@
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
-**Befund.** Der Architekt fragt in [378](378-ungeregelteFaelleBeimZiehenUndBeenden.md) F3, was
+**Befund.** Der Architekt fragt in Anliegen 378 F3, was
 beim Loslassen geschieht, wenn keine Anforderung ein Ziel dafür kennt. Regeln und Ziel sagen
 nichts. Geregelt ist bisher: ein *Modell* auf der *Karte* umsetzen
 ([AUF-8](../../domaene/anforderungen/phasen/aufstellen/ziehen.md)), auf die eigene *Ablage*
