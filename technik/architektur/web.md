@@ -14,20 +14,24 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
     `beenden()` zurück. `make_server` ohne `threaded`: Ein Thread beantwortet die Anfragen
     nacheinander, denn `Aufstellung` ist nicht threadsicher.
   - `anwendung.py`: Flask; Anfrage lesen, eine Handlung der Domäne aufrufen, Antwort schreiben.
-  - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte; kennt Flask nicht. „Spieler 1“
-    und „Spieler 2“ vergibt es aus der Reihenfolge der Ausgangslage (AUF-4.2, wie W4).
+  - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte. Den Namen „Spieler <n>“
+    (AUF-4.2) bildet es aus der Kennung, die `kennungen.py` vergibt.
+  - `kennungen.py`: Kennungen nach W4 ↔ *Spieler* und *Einheiten* der *Ablage*, für die
+    Antwort wie für die Anfrage; nur hier wird gezählt.
+  Flask und Werkzeug importieren nur `anwendung.py` und `server.py`.
   Regeln und Rechnen stehen nur in der Domäne: Längen in Zoll liefern `messen.py` und
   `Ausgangslage.grenzenDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
   Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
   `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
-  Prüft: Akzeptanztests zu QUE-2 und AUF-4; „`darstellung.py` kennt Flask nicht“
-  `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
-  zweite Route.
+  Prüft: Akzeptanztests zu QUE-2 und AUF-4; „nur `anwendung.py` und `server.py`“
+  `formregeln/importvertrag.py`, heute nur für `darstellung.py` (Anliegen 343); „nie
+  `_`-Felder“ wie D3; der Rest nur Text; Auslöser: zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`). CSRF: [Vertrag, V4](vertrag.md). Prüft: nur Text;
   Auslöser: erste Handlung über HTTP.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
-  Reihenfolge der Ausgangslage: Spieler, Einheit, Modell. Prüft: wie W3.
+  Reihenfolge der Ausgangslage: Spieler, Einheit, Modell, an einer Stelle (`kennungen.py`,
+  W2). Prüft: wie W3.
 - **W5** Der Befehl `python3 -m arbiter` (`starten()` in `arbiter/__main__.py`) lädt die
   Ausgangslage, startet den Server auf `127.0.0.1` mit einem freien Port und gibt die
   Adresse in der ersten Zeile aus (QUE-2.1). Nur `127.0.0.1`: zwei Spieler an einem Gerät
