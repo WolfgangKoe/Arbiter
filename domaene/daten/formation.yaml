@@ -1,0 +1,11 @@
+# Formation (Glossar) je Einheit der Ausgangslage: Modelle je Reihe, Reihen mittig
+# untereinander; abstand: Abstand benachbarter Bases in Zoll.
+# Quelle: Arbiter-old/Arbiter_Specs/Arbiter - unitshape and modeldistribution.pdf,
+# Seite 1, multiUnitShape (Reihen 3, 4, 3; Pfeile 1,5″); Stakeholder in Anliegen 374.
+
+abstand: 1.5
+formation:
+  Boyz: [3, 4, 3]
+  Warboss: [1]
+  Necron Warriors: [3, 4, 3]
+  Overlord: [1]

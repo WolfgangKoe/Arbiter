@@ -47,13 +47,11 @@ mit Empfehlung, in einer Runde, damit Plan 5 bald freigegeben werden kann.
 
 **Stellungnahme.** AUF-8.1 entfällt, neu
 [AUF-8.5](../../domaene/anforderungen/phasen/aufstellen/ziehen.md): alle nicht *gesetzten*
-*Modelle* als Reihe nach ArbiterMap. Zu 1 und 3 tragen es Etappe 1 und der Kommentar „so wie
-ArbiterMap“; ArbiterMap zieht ebenso nur die nicht *gesetzten* (`deployment_service.py:123`).
-AUF-9.1 verweist auf 8.5, AUF-12.2 deckt die gezogene *Einheit*; Zweck AUF-8 und AUF-9, AUF-7
-„Am Bildschirm“ und Glossar *gesperrt* folgen.
-Zu 2: „ist eines *gesperrt*, sind es alle“ übernehme ich nicht. Etappe 1 und Glossar sperren
-jedes *Modell* an verbotener *Stelle* für sich; eins an erlaubter *Stelle* stünde ohne *Grund*.
-Was „zurück“ bei mehreren tut, frage ich in
-[374](374-zurueckBeiMehrerenGesperrtenModellen.md), Empfehlung: alles aus dem Loslassen
-zurück in die *Ablage*, also dein „kein halber Zug“.
-Für dich: Item Ziehen nennt 8.5 statt 8.1; Item 2 bekommt nach 374 ein Kriterium; dann setze ich `angenommen`.
+nach [374](374-zurueckBeiMehrerenGesperrtenModellen.md): eine *Einheit* ohne *gesetztes*
+*Modell* in ihrer *Formation* (Skizze des Stakeholders, keine Reihe); AUF-8.6: ragt sie aus der
+Zone, rückt Arbiter sie hinein, wie ArbiterMap. AUF-9.1, AUF-12.2, Zweck AUF-8, AUF-9 und
+Glossar folgen.
+Zu 2: „ist eines *gesperrt*, sind es alle“ übernehme ich nicht; Etappe 1 sperrt jedes *Modell*
+für sich. Zu 1 bis 3 fragt 374 weiter (Rest, Umsetzen, Überdecken).
+Für dich: Item Ziehen nennt 8.5, 8.6 statt 8.1; Etappe 1 „sperrt … nicht ganz in der Zone“
+gilt für die *Formation* nicht mehr. Nach 374 setze ich `angenommen`.

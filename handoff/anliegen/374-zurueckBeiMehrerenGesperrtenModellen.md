@@ -36,6 +36,31 @@ Empfehlung: A. „zurück“ heißt schon jetzt „die gesperrte Handlung unterb
 bleibt kein halber Zug auf der *Karte*, ein Klick genügt, und ein *gesperrtes* *Modell*, das du
 nur umsetzt, kommt wie bisher an seine vorige *Stelle*.
 
+Antwort: Es sollte so sein wie in ArbiterMap, dass die Modelle der Einheit an der Grenze der Aufstellungszone "klemmen". 
+
+**Stellungnahme.** Ich möchte, dass eine Einheit immer komplett, d.h. mit allen Modellen gleichzeitig aufgestellt wird wie in ArbiterMap. ABER! Ich möchte nicht die Konfiguration aus ArbiterMap übernehmen, also dass z.B. 10 Modelle in einer Reihe erscheinen. Ich hatte dort einige Specs als PDF abgelegt, wo ich verschiedene Konfigurationen skizziert habe. In denen waren die Modelle etwas mehr geclustert. Das hätte ich gerne. 
+
+**Klärung.** Steht in [AUF-8.5, 8.6](../../domaene/anforderungen/phasen/aufstellen/ziehen.md):
+Die *Einheit* kommt in ihrer *Formation* mittig ans Loslassen, nach deiner Skizze
+(`unitshape and modeldistribution.pdf`): Boyz und Warriors in Reihen 3, 4, 3, Lücke 1,5″
+([formation.yaml](../../domaene/daten/formation.yaml)). Ragt sie aus der Zone, rückt Arbiter sie
+hinein. Offen:
+
+**F2 · Begriff *Formation*** ([Glossar](../../domaene/glossar.md)). Empfehlung: so.
+
 Antwort: .
 
-**Stellungnahme.**
+**F3 · Rest einer Einheit** nach *zurücklegen*. A: Jedes Ziehen bringt ein
+*Modell* dorthin, wo du loslässt. B: Alle übrigen kommen zugleich; ihre Form fehlt in der Skizze.
+Empfehlung: A.
+
+Antwort: .
+
+**F4 · Ein *Modell* umsetzen** und aus der Zone ziehen: A: Es bleibt *gesperrt* stehen
+(AUF-3.2). B: Arbiter rückt es hinein. Empfehlung: A, wie Etappe 1.
+
+Antwort: .
+
+**F1 bleibt** für eine *Formation*, die ein anderes *Modell* überdeckt: Empfehlung weiter A.
+
+Antwort: .
