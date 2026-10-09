@@ -1,6 +1,6 @@
 # Prämisse: verständlich für den Stakeholder
 
-356 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
+356 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -27,4 +27,4 @@ bleiben im Ablauf. B: keine Prämisse, die Einzelregeln genügen. Empfehlung A.
 
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Ich werde es weiter beobachten. Ich habe aktuell keine gute Idee, wie man dies nachhaltig gestalten kann, aber wenn es in wir.md steht, sollte es ja jeder Agent lesen, oder?
