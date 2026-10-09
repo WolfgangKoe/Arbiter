@@ -1,16 +1,16 @@
 # Moderation
 
 Stand vor Freigabe Retro 4: 9 Anliegen im Ordner. An den Items von [Plan 4](plan.md) hängt
-keins; Plan 5 braucht [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md).
+keins; Plan 5 braucht Anliegen 249.
 
 ## Dran
 Blockiert die Freigabe: nichts.
 - Anforderungsautor, erst in der nächsten Domänenphase (340 F5 A, F6 A):
   [340](anliegen/340-aufstellenSchwerZuPruefen.md),
-  [345](anliegen/345-spiegelZwischenAnforderungUndCode.md) (F1 bis F3 offen).
+  Anliegen 345 (F1 bis F3 offen).
 - Regelumsetzer: Anliegen 246,
   Anliegen 275 (Stellungnahme leer),
-  [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md) (vor Technikphase 5).
+  Anliegen 249 (vor Technikphase 5).
 - Reviewer, Nachprüfung der umgesetzten Stellungnahmen:
   Anliegen 289 (Runde 2),
   Anliegen 353,

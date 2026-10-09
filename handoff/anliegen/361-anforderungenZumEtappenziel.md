@@ -1,6 +1,6 @@
 # Weitere Anforderungen im Blick auf das Etappenziel
 
-361 · Anliegen · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+361 · Anliegen · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1

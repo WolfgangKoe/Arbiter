@@ -7,7 +7,7 @@
 sie Inhalt und Struktur der Akzeptanztests an denen der Anforderungen übernimmt. Der
 Regelumsetzer soll hier einen Test bauen, der den Spiegel prüft.“ Den Spiegel der Struktur
 (Anforderungsdatei ↔ Testdatei) habt ihr in
-[345](345-spiegelZwischenAnforderungUndCode.md) vereinbart; zum Inhalt sagt
+Anliegen 345 vereinbart; zum Inhalt sagt
 [Architektur, T1](../../technik/architektur.md) noch nichts.
 
 **Kosten.** Ohne Regel zum Inhalt hat der Regelumsetzer nichts, wogegen er prüfen kann, und

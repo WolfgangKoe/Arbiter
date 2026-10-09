@@ -46,8 +46,8 @@ kein Befund offen. V2 hält: `PUT` und `DELETE` idempotent, 404 außerhalb der *
 Wiederverwendung, Vereinfachung, Effizienz, Flughöhe: kein Befund.
 
 ## Offene Anliegen zur Technik
-[345](anliegen/345-spiegelZwischenAnforderungUndCode.md) (Spiegel, beim Anforderungsautor),
-[249](anliegen/249-werkzeugFestUndImportvertragDerTests.md) (Regelumsetzer).
+Anliegen 345 (Spiegel, beim Anforderungsautor),
+Anliegen 249 (Regelumsetzer).
 
 ## Empfehlung
 Freigeben: DoD 1 bis 4 und die Oberfläche erfüllt.
