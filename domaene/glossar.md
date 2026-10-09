@@ -41,6 +41,6 @@ Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an d
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
 vernichtet | destroyed | vernichtet | Zustand eines *Modells*, das aus dem Spiel ist (`core_rules.txt:441`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
-zurück | – | zurück | Handlung, mit der die *Spieler* ein *gesperrtes* *Modell* an seine vorige *Stelle* bringen, war es nicht *gesetzt*, in die *Ablage* (Etappe 1).
+zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt, ein *gesperrtes* *Modell* kommt an seine vorige *Stelle* oder in die *Ablage* (Etappe 1, Anliegen 362 F6 A).
 zurücklegen | – | zurücklegen | Handlung, die ein *gesetztes* *Modell* in die *Ablage* bringt; danach ist es nicht *gesetzt* (Etappe 1).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).
