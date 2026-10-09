@@ -1,9 +1,9 @@
 # Ziehen
 
-Umfang: [AUF-8.1 bis 8.3](../anforderungen/phasen/aufstellen/ziehen.md), 8.1 neu für die ganze
-*Einheit*; [QUE-3.4](../anforderungen/querschnitt/bedienung.md).
+Umfang: [AUF-8.2, 8.3, 8.5, 8.6](../anforderungen/phasen/aufstellen/ziehen.md),
+[AUF-14.1](../anforderungen/phasen/aufstellen/restDerEinheit.md), QUE-3.4.
 
 Warum jetzt: Zyklusziel aus Review 4; ohne Ziehen kommt keine *Einheit* auf die *Karte*.
 
-Abhängigkeit: [373](../../handoff/anliegen/373-aufstellenEinheitFuerEinheit.md).
+Abhängigkeit: [375](../../handoff/anliegen/375-mockupsZurFormation.md).
 Mockup: [auf-8](../mockups/auf-8.html).

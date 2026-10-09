@@ -1,6 +1,6 @@
 # Aufstellen Einheit für Einheit
 
-373 · Kritik · von Planer (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+373 · Kritik · von Planer (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert [Plan 5](../plan.md#freigabe): Die Mockups zeigen
