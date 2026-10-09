@@ -1,6 +1,6 @@
 # Architektur in der Domänenphase nachgezogen: gilt das?
 
-370 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · angenommen
+370 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · erledigt
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
