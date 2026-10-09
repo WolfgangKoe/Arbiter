@@ -47,7 +47,7 @@ mit Empfehlung, in einer Runde, damit Plan 5 bald freigegeben werden kann.
 
 **Stellungnahme.** AUF-8.1 entfällt, neu
 [AUF-8.5](../../domaene/anforderungen/phasen/aufstellen/ziehen.md): alle nicht *gesetzten*
-nach [374](374-zurueckBeiMehrerenGesperrtenModellen.md): eine *Einheit* ohne *gesetztes*
+nach Anliegen 374: eine *Einheit* ohne *gesetztes*
 *Modell* in ihrer *Formation* (Skizze des Stakeholders, keine Reihe); AUF-8.6: ragt sie aus der
 Zone, rückt Arbiter sie hinein, wie ArbiterMap. AUF-9.1, AUF-12.2, Zweck AUF-8, AUF-9 und
 Glossar folgen.
