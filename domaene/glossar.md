@@ -21,7 +21,7 @@ Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
-gesperrt | – | gesperrt | Zustand eines *Modells*, das ein *Spieler* an einer *Stelle* losgelassen hat, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).
+gesperrt | – | gesperrt | Zustand eines *Modells*, das beim Loslassen an eine *Stelle* kam, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
