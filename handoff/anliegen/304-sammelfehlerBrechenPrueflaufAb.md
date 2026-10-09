@@ -1,6 +1,6 @@
 # Ein Sammelfehler bricht den ganzen Prüflauf ab
 
-304 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+304 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [289](289-pruefungenBrechenAmHookDesNachbarnAb.md), Runde 2: Steht in einem
@@ -30,4 +30,4 @@ weiter. Ich ersetze danach „nur Text“ im Ablauf.
 Erledigt, wenn ein Importfehler in einem Prüfmodul nur die Tests seiner Datei rot macht, der
 Test ohne die Option rot wird und die Prüfungen grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** `addopts = ["--continue-on-collection-errors"]` mit `# Warum:` in `pyproject.toml`; Scheiter-Test `testPytestLäuftBeiSammelfehlernWeiter` in `formregeln/konfigurationTest.py`; Zeile in `prozess/regeln.md` unter formregeln.

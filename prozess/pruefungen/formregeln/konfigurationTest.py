@@ -4,6 +4,11 @@ from formregeln.werkzeugaufruf import pyproject, ruffAufrufen
 from gemeinsam.pfade import altbestandOrdner, wurzel
 
 
+def testPytestLäuftBeiSammelfehlernWeiter():
+    optionen = pyproject()["tool"]["pytest"]["ini_options"]["addopts"]
+    assert "--continue-on-collection-errors" in optionen
+
+
 def testRuffEnthältDenWerkzeugsatzAusDemAblauf():
     ausgewählt = pyproject()["tool"]["ruff"]["lint"]["select"]
     for regel in ("ARG", "PLR2004", "PLR0913", "FBT", "ERA"):

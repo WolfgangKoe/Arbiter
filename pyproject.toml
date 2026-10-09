@@ -8,6 +8,9 @@ python_files = ["*Test.py"]
 pythonpath = ["technik"]
 # Warum: `stand` kennzeichnet Prüfungen über das echte Repo; die Messung der Prüfskripte lässt sie aus
 # (abdeckung.py), denn sie proben nur den grünen Weg.
+# Warum: Ein halber Edit-Stand eines Nachbarn macht nur die Tests seiner Datei rot, die übrigen laufen
+# (Ablauf, Gleichzeitige Läufe); der Exit-Code bleibt 1.
+addopts = ["--continue-on-collection-errors"]
 markers = ["stand: prüft den Stand des Repos, keine Probe"]
 
 [tool.ruff]
