@@ -187,6 +187,14 @@ def testAkzeptanztestOhneSpiegelDerAnforderungIstRot(tmp_path, dateiname):
     assert any(dateiname in meldung for meldung in verstöße(tmp_path))
 
 
+def testAkzeptanztestDirektImAkzeptanzordnerIstRotStattAbsturz(tmp_path):
+    (tmp_path / "domaene" / "anforderungen").mkdir(parents=True)
+    ordner = tmp_path / "technik" / "tests" / "akzeptanz"
+    ordner.mkdir(parents=True)
+    (ordner / "spielobjekteTest.py").write_text("def testAuf1_1Probe(): ...\n", encoding="utf-8")
+    assert any("gehört in den Ordner" in meldung for meldung in verstöße(tmp_path))
+
+
 def aufbauGeteilt(tmp_path, dateiname: str) -> Path:
     anforderungen = tmp_path / "domaene" / "anforderungen" / "phasen"
     anforderungen.mkdir(parents=True)

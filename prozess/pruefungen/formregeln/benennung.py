@@ -201,6 +201,8 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
     )
     if anforderung.is_file():
         return None
+    if pfad.parent == ordner:
+        return "Akzeptanztest gehört in den Ordner seiner Anforderung"
     geteilt = geteilterTest.match(pfad.name)
     gebündelt = anforderungen / pfad.parent.relative_to(ordner).with_suffix(".md")
     if geteilt and gebündelt.is_file():

@@ -1,6 +1,6 @@
 # Dashboard: Anliegen ansehen, zurück und bearbeiten
 
-360 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 2/3 · offen
+360 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 2/3 · angenommen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
