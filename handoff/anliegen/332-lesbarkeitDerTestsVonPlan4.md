@@ -1,6 +1,6 @@
 # Akzeptanztests von Plan 4: Wiederholung, Zahlen statt Namen, Dienst in den Handgriffen
 
-332 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+332 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Geprüft: 4603003, 21493e2, d9ddabd, aad7540 nach

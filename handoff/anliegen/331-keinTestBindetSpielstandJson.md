@@ -1,6 +1,6 @@
 # Kein Test bindet spielstand.json an Backend und Frontend
 
-331 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+331 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Vertrag](../../technik/architektur/vertrag.md), Absatz „Prüft V1 bis V3“, verlangt
