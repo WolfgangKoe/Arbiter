@@ -1,6 +1,6 @@
 # Dashboard: Anliegen ansehen, zurück und bearbeiten
 
-360 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 1/3 · offen
+360 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 2/3 · offen
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -35,6 +35,8 @@ Antwort: .
 **F3 · Schutz.** Der Server ändert nur Anliegen, bei denen der Stakeholder Absender oder
 Empfänger ist, und keinen Kopf, der nicht zur Statustabelle passt. A: ja (Empfehlung).
 B: alle Anliegen frei.
-Antwort: .
+Antwort: Ja, bei diesen Anliegen auf jeden Fall. Bei den anderen möchte ich eine Kommentarfunktion, damit ich intervenieren kann.
 
-**Stellungnahme.**
+**Stellungnahme.** Was hier ggf. noch fehlt ist eine Art Skript, dass die Kommentare und das setzen der Status "abholt", wenn es in den Ablauf passt. Es gab ja immer mal wieder Probleme, dass ich in die Anliegen geschrieben habe und du ebenfalls und dann kam es zu einem Konflikt. Es braucht also noch etwas, das diese Sachen zu einem passenden Zeitpunkt in die Datei schreibt, damit du es dann lesen und commiten kannst. Dafür müssen die Informationen im Dashboard natürlich gehalten werden.
+Und was ebenfall noch gemacht werden muss. Die Anliegen und der Tokenbericht sollten voneinander getrennt, also auf zwei Seiten sein. So ähnlich, wie in ArbiterMap, dass Baklog über einen Reiter getrennt war.
+Und schließlich fehlt auch ein Aktualisierungszyklus in die andere Richtung. Jedes Mal, wenn es eine Änderung in Handoff gibt, sollte es im Dashboard angezeigt werden. 
