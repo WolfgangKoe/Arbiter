@@ -15,7 +15,7 @@ ist `erledigt`, AUF-5.5 steht nicht im Umfang.
   [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
   [275](anliegen/275-dashboardSichtDerAnliegen.md),
-  [304](anliegen/304-sammelfehlerBrechenPrueflaufAb.md).
+  Anliegen 304.
 - Testautor: AUF-5, AUF-6, QUE-3 nach Freigabe (Technikphase), kein Anliegen.
 - Stakeholder, Anforderungsautor, Fachkritiker: keins.
 

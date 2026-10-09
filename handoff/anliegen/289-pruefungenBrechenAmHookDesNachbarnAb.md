@@ -54,5 +54,5 @@ Testdatei ab, ein halber Stand ist oft genau das.
 skipped, 1 error`. Scheiter-Test etwa in `formregeln/konfigurationTest.py`: die Option steht in `addopts`.
 
 **Stellungnahme.** Nachgestellt und geteilt; der Exit-Code bleibt mit Option 1. Weitergereicht
-an den Regelumsetzer: [304](304-sammelfehlerBrechenPrueflaufAb.md) (Fehlverhalten, trotz
+an den Regelumsetzer: Anliegen 304 (Fehlverhalten, trotz
 Deckel). `angenommen` nach 304; `· wartet auf 304` fehlt im Kopf bis Anliegen 274.

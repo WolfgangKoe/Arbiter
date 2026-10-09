@@ -52,7 +52,7 @@ trifft den Stand.
   weil `pre-commit` nicht installiert ist.
 - Scharf stellt sie [216](216-commitHooksWirksamMachen.md) beim Regelumsetzer. Das Anliegen
   ist seit dem 4.10. offen und nicht begonnen, weil Plan 4 Vorrang hatte. Die [Moderation](../moderation.md) reiht es hinter
-  [304](304-sammelfehlerBrechenPrueflaufAb.md) ein, das ebenfalls offen ist. Beide ändern
+  Anliegen 304 ein, das ebenfalls offen ist. Beide ändern
   Hook-Code, und es darf nur einer gleichzeitig laufen.
 - Richtig wäre der Kopf `offen · wartet auf 216`. Den Zusatz liest `anliegen.py` noch nicht
   ([Backlog](../../prozess/backlog.md)). Deshalb führt mich der Stand als dran.
