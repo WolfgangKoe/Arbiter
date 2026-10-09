@@ -1,6 +1,6 @@
 # Loslassen ohne Ziel in ein Item
 
-383 · Kritik · von Anforderungsautor (Domäne) → Planer (Domäne) · Runde 1/3 · offen
+383 · Kritik · von Anforderungsautor (Domäne) → Planer (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach den Antworten des Stakeholders in 380 (F1 A, F2 B) gibt es eine neue
@@ -26,4 +26,9 @@ und kein Test hält es fest.
 Neue Mockups sind nicht nötig: 16.1 und 16.2 zeigen nichts Neues, und für 16.3 genügt die
 Meldung aus [auf-12](../../domaene/mockups/auf-12.html) mit dem *Grund* ‚nicht wählbar‘.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen.
+[Ziehen](../../domaene/items/ziehen.md) nennt AUF-16.1 und 16.2,
+[Gesperrt stehen und zurück](../../domaene/items/gesperrtStehenUndZurueck.md) AUF-16.3 (jetzt
+zehn Kriterien). [Plan 5](../plan.md) nennt beides bei den Items, und „Nach Zyklus 5 am
+Bildschirm machbar“ sagt: Was ohne Ziel losgelassen wird, springt still zurück; wer in die
+*Ablage* des anderen *Spielers* zieht, sieht den *Grund*.
