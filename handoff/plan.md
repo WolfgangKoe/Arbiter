@@ -62,6 +62,7 @@ Etappe 1 erreicht. AUF-5.5 bleibt nach deiner Antwort in 320 (B, git) draußen.
 An dich keins; die übrigen betreffen Technik und Prozess ([Moderation](moderation.md)).
 
 ## Freigabe
-Freigabe: offen
+Freigabe: Ja
 Kommentar: Eine Sache fehlt mir noch. Aktuell sieht es in den Mockups so aus, dass man Modell für Modell aufstellen muss. Ich glaube es wäre einfacher, wenn man jede Einheit mit allen Modellen komplett aufstellt, so wie es ArbiterMap gemacht hat. Bitte nochmal prüfen. Vorher kommt keine Freigabe.
 Stellungnahme: Etappe 1, Items und „Nach Zyklus 5“ folgen den neuen Kriterien (Anliegen 373, 374), die Mockups ebenso (375).
+Meine Kommentare hier wurde berücksichtigt.
