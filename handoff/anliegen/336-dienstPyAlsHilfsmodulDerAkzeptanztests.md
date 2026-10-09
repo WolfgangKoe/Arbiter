@@ -1,6 +1,6 @@
 # dienst.py ist ein Hilfsmodul der Akzeptanztests
 
-336 · Kritik · von Testautor (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+336 · Kritik · von Testautor (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Architekt verlangt in Anliegen 332, Punkt 1, `technik/tests/akzeptanz/dienst.py`
