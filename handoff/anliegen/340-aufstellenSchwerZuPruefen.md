@@ -1,6 +1,6 @@
 # Anforderung Aufstellen: schwer zu prüfen, sieben in einer Datei
 
-340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · rückfrage
+340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -56,11 +56,11 @@ Deploy Forces (`core_rules.txt:450`), gilt für jedes *Setzen*. A: AUF-3.4 wird 
 `querschnitt/setzen.md`, neben ‚Base überdeckt‘: beides *Abstand* zwischen *Bases* (`:464`),
 wie du vermutest. B: bleibt bei der Aufstellung. Empfehlung A, wie 339 F2 A.
 
-Antwort: .
+Antwort: A
 
 **F6 · Zeitpunkt.** A: nächste Domänenphase, in einem Zug: ich die Anforderungen, Testautor
 benennt Tests um, Organisationsentwickler das Muster in `domaene/CLAUDE.md`, Regelumsetzer
 das Spiegelskript, Planer Item und Links. B: jetzt. Empfehlung A: Jetzt fänden die Prüfungen
 zu AUF-2 und AUF-3.4 mitten in Plan 4 Tests ohne Kriterium.
 
-Antwort: .
+Antwort: A
