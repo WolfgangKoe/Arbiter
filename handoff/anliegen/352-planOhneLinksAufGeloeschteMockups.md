@@ -1,6 +1,6 @@
 # Plan ohne Links auf gelöschte Mockups
 
-352 · Kritik · von UX (Domäne) → Planer (Prozess) · Runde 1/3 · angenommen
+352 · Kritik · von UX (Domäne) → Planer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [plan.md](../plan.md) Zeilen 18 und 19 verlinken `domaene/mockups/auf-6.html` und

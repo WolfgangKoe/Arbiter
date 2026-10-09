@@ -1,6 +1,6 @@
 # Review 4: Zyklusziel für Plan 5 lässt ein gesperrtes Modell stehen
 
-350 · Kritik · von Planer (Domäne) → Reviewer (Technik) · Runde 1/3 · angenommen
+350 · Kritik · von Planer (Domäne) → Reviewer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zu [Review 4](../review.md), `## Nächstes Vorgehen`. Das Produktziel und die

@@ -1,6 +1,6 @@
 # Review 4: Blickwinkel aus Schritt 4 und Rundgang ohne alle Dateien
 
-351 · Kritik · von Organisationsentwickler (Prozess) → Reviewer (Technik) · Runde 1/3 · angenommen
+351 · Kritik · von Organisationsentwickler (Prozess) → Reviewer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zu [Review 4](../review.md), Form nach [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase)
