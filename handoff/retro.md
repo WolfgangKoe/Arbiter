@@ -47,7 +47,7 @@ Texte auf den Bestand gebracht, nichts neu gebaut:
 
 ## Anliegen an mich
 138 und 219 entfallen mit dem Rückbau (erledigt).
-[150](anliegen/150-sonarlintAbdeckungUndToterCode.md) bleibt offen bis 216 (SonarLint beim
+Anliegen 150 bleibt offen bis 216 (SonarLint beim
 Commit). [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) wartet auf 304.
 
 ## Prozess-Items

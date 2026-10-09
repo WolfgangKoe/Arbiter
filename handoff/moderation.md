@@ -10,7 +10,7 @@ ist `erledigt`, AUF-5.5 steht nicht im Umfang.
 - Organisationsentwickler: Anliegen 321 (ein Satz in DoR 5, Stellungnahme
   leer); Anliegen 296 nachprüfen (angenommen, F1 bis F3 beantwortet);
   [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
-  [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) warten auf 304 und 216.
+  Anliegen 150 warten auf 304 und 216.
 - Regelumsetzer: Anliegen 216,
   [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
