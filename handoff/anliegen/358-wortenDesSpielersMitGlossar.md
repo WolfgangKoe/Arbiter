@@ -1,6 +1,6 @@
 # „In Worten des Spielers“ nennt das Glossar nicht
 
-358 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+358 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Retro 4 führt „in Worten des Spielers“ zweimal ein: im

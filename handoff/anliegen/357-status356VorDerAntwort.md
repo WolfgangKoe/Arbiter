@@ -1,6 +1,6 @@
 # 356 steht auf angenommen, bevor der Stakeholder geantwortet hat
 
-357 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+357 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [356](356-verstaendlichFuerDenStakeholder.md) hast du im Commit „Retro 4 zur
