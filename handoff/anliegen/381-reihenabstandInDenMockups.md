@@ -1,6 +1,6 @@
 # Reihenabstand in den Mockups
 
-381 · Kritik · von Anforderungsautor (Domäne) → UX (Domäne) · Runde 1/3 · offen
+381 · Kritik · von Anforderungsautor (Domäne) → UX (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach [377](377-abstandDerReihenInDerFormation.md) F1 A haben in einer *Formation*
@@ -19,3 +19,6 @@ Mittelpunkt zu Mittelpunkt. Damit misst die *Formation* von der ersten bis zur l
 Architekten ([Architektur, S2](../../technik/architektur.md#stelle-und-rechnen)).
 
 **Stellungnahme.**
+Angenommen, umgesetzt: In [auf-8](../../domaene/mockups/auf-8.html), auf-9 und auf-15
+liegen die Reihen 2,39″ auseinander (Mittelpunkt zu Mittelpunkt), schräg benachbarte
+*Bases* haben 1,5″ *Abstand*.

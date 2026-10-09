@@ -1,6 +1,6 @@
 # Neue Bestandteile der Oberfläche für Sperre und Beenden
 
-372 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · angenommen
+372 · Fragen · von UX (Domäne) → Architekt (Technik) · Runde 1/3 · erledigt
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde)
 
@@ -62,3 +62,7 @@ die *Karte* rücken.
    bricht der Browser das Ziehen mit dem Finger nach dem ersten Schritt ab (`pointercancel`);
    an einem `<circle>` wirkt sie nicht, nur am `<svg>`. Folge: Auf *Karte* und Einheitenkarte
    scrollt der Finger nicht.
+
+**Nachprüfung.** Erledigt: `vorschlag.css` und alle Mockups übernehmen Raster `spalteMitte`,
+`knopfGruppe`, `width: 100%` an `sperrmeldung`, `height: 100%` und `touch-action: none` an
+`.karte` und `.einheitenKarte`; `role="alert"` entfällt.
