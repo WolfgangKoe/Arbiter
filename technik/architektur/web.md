@@ -5,8 +5,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
 ## Aufbau
 - **W1** Getrennt: `arbiter/web/` liefert die Dateien aus `technik/frontend/` unverändert aus
   und beantwortet Anfragen unter `/api/` mit JSON; es erzeugt kein HTML. Das Frontend kennt
-  nur diese Adressen. Gegenbeispiel `ArbiterMap/backend/app/routes/map.py`: Das Backend füllt
-  Jinja-Vorlagen, 40.000 Zeichen in einer Datei. Prüft: `formregeln/importvertrag.py`
+  nur diese Adressen. Gegenbeispiel `ArbiterMap/backend/app/routes/map.py`: Jinja-Vorlagen,
+  40.000 Zeichen in einer Datei. Prüft: `formregeln/importvertrag.py`
   (`webVerstöße`), die Fälle nennt [Regeln](../../prozess/regeln.md).
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
   - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
@@ -41,36 +41,14 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
 - Pfade und JSON der Schnittstelle: [Vertrag](vertrag.md).
 
 ## Oberfläche
-Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku und Vorlage der
-Mockups. Eine neue Komponente ist ein Anliegen an die Technik.
-Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfungen.
-- **O1** HTML, CSS mit Variablen in `.css`, JavaScript-Module in `.js`; kein `<style>`, kein
-  `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
-  Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Das Markup steht
-  in `<template>` der Seite; `seite.js` klont und füllt es und erzeugt keine Elemente.
-  Prüft: eslint und stylelint über `.js` und `.css` (`frontendregeln/frontend.py`), „keine
-  Elemente“ mit `no-restricted-properties` und `no-restricted-syntax`; sonst nur Text.
-- **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
-  Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
-  (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
-- **O3** Die Komponentenseite ist `technik/frontend/komponenten.html` mit `komponenten.css`,
-  gebaut aus `domaene/mockups/vorschlag.css`. Jede Seite verlinkt `komponenten.css`;
-  Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und
-  Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Keine tote Klasse; eine neue
-  Klasse in Mockups und `technik/frontend/*.html` nur über DoR 5
-  ([Ablauf](../../prozess/ablauf.md#dor-item-bereit)): vom Architekten entschieden, in
-  `vorschlag.css` übernommen, vom Implementierer in `komponenten.css` eingetragen. Prüft: nur
-  Text.
+Design-System, Komponentenseite und Leisten: [Oberfläche](oberflaeche.md).
 
 ## Bildschirmtests
-Entschieden nach einem Wegwerf-Versuch (Flask im Thread, Playwright, Chromium aus dem Cache;
-drei Tests in 2 s):
 - **B1** Ein Bildschirmtest steht bei den Akzeptanztests seiner Anforderung (T1). Er baut den
   Zustand mit Handlungen der Domäne, startet mit ihm `serverStarten` (W2) im selben Prozess
-  und liest die Seite mit Playwright. Er importiert weder
-  `flask` noch `werkzeug`; Browser je Sitzung, Seite je Test als Fixture in `conftest.py`.
-  Prüft: nur Text; Auslöser: erster Bildschirmtest, dann der Importvertrag auch für
-  `tests/akzeptanz/`.
+  und liest die Seite mit Playwright, Browser je Sitzung, Seite je Test als Fixture in
+  `conftest.py`. Kein Akzeptanztest importiert `flask` oder `werkzeug`. Prüft:
+  `formregeln/importvertrag.py` (`akzeptanzVerstöße`).
 - **B2** Elemente findet der Test über die Klassen der Komponentenseite und sichtbaren Text,
   nie über die Struktur (`nth-child`) oder eigene Test-Kennungen. Er wartet auf das Spielfeld
   und zählt erst dann: Vorher wäre „kein Modell“ grundlos grün.

@@ -1,6 +1,6 @@
 # Spiegel zwischen Anforderung und Domänencode
 
-345 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+345 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht in Anliegen 339

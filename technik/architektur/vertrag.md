@@ -17,11 +17,11 @@ Pfade und JSON zwischen `web/` und `frontend/`
   `/api/spieler/1/einheiten/2/ausgewählt` und `/api/spieler/2/einheiten/1/ausgewählt`. Nennt
   der Pfad keine *Einheit* in der *Ablage* des *Spielers*: 404. Die Seite schickt `PUT`, wenn
   sie die Karte nicht *ausgewählt* gezeichnet hat, sonst `DELETE`, und zeichnet die Antwort
-  ([O1](web.md#oberfläche)).
+  ([O1](oberflaeche.md)).
   Warum kein Umschalten: Beide Anfragen sind idempotent. Zwei Seiten auf einem Stand
   (QUE-3.1, QUE-3.2) oder ein doppelt gesendeter Klick schalteten sonst zurück.
-- **V3** Die Auswahl hält die Domäne in `Aufstellung`: `auswählen(einheit)`,
-  `abwählen(einheit)`, Abfrage `ausgewählt(einheit)`; AUF-5.10 gilt dort, nicht in `web/`.
+- **V3** Die Auswahl hält die Domäne in `Auswahl` ([Grundschnitt](../architektur.md)), die Tür
+  ist `Aufstellung`: `auswählen(einheit)`, `abwählen(einheit)`, Abfrage `ausgewählt(einheit)`; AUF-5.10 gilt dort, nicht in `web/`.
   Auswählen ist keine Handlung (Glossar, *ausgewählt*): ohne Sperre, darum ohne D2.
 - **V4** Schutz vor fremden Seiten im selben Browser, statt eines CSRF-Tokens: Eine Route,
   die etwas ändert, nimmt nur `PUT` oder `DELETE` an, nie `GET` oder `POST`; `web/` gibt kein

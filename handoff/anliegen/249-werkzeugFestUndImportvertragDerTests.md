@@ -1,6 +1,6 @@
 # Werkzeug fest und Importvertrag für die Akzeptanztests
 
-249 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+249 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 09a195e (schränkt `pyproject.toml` die Technik richtig ein?)
