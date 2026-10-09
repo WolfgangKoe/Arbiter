@@ -1,6 +1,6 @@
 # Dashboard: alle Sessions auffindbar, sechs je Seite
 
-246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · angenommen
+246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Das Dashboard (`dashboard.html`, erzeugt von `prozess/pruefungen/rollenregeln/dashboard.py`)
@@ -26,3 +26,9 @@ Dieses Feature war bereits im Dashboard von ArbiterMap implementiert.“
   oder als vorab erzeugte Seiten läuft; die Stellungnahme entscheidet.
 
 **Stellungnahme.** Umgesetzt, Browser-Variante wie ArbiterMap: `dashboard.html` enthält alle Sitzungskarten, neueste zuerst; ein kleines Skript in der Seite zeigt sechs je Seite und baut den Seitenschalter („‹ Zurück“, Seitenzahlen, „Weiter ›“, „Session 1–6 von n“). Bis sechs Sitzungen entfallen Schalter und Skript, ohne Skript sind alle Karten sichtbar. Konstante und Markup in `prozess/pruefungen/rollenregeln/dashboardSeiten.py`, Scheiter-Test `dashboardSeitenTest.py` (der alte Deckel von fünf ließe ihn rot werden), Zeile in [Regeln](../../prozess/regeln.md). Das Blättern im Browser selbst ist nicht automatisch getestet, nur Markup und Skripteinbindung.
+
+Die Umsetzung bisher gefällt mir recht gut. Folgendes Feedback
+1. Der Klick auf den Link einer Anliegenkarte führt auch zu dem Text in der Datei selbst. Was dort dann aber fehlt ist ein "Zurück"-Button. Ich muss das über den Browser machen. 
+2. Ich bin mir nicht sicher, ob die Karten-Ansicht nicht unübersichtlich wird, wenn es wieder viele Anliegen werden. Aber lassen wir es so.
+3. Mir fehlt noch komplett das Bearbeiten der Anliegen aus dem Dashboard heraus. Ich möchte den Status des Anliegens als Stakeholder bearbeiten können, wenn ich involviert bin. Ich möchte Kommentare und Antworten auf Fragen aus dem Dashboard heraus gegen können. Mir fehlt hier einfach die Bearbeitungsmöglichkeit. 
+Für diesen Zyklus würde ich das Dashboard erstmal so abnehmen. Öffne bitte ein neues Anliegen, in welchem du mein Feedback berücksichtigst und sinnvoll ergänzt, um eine Steuerbarkeit aus dem Dashboard heraus zu ermöglichen.
