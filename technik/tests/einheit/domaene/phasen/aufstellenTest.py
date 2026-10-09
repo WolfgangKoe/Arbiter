@@ -4,6 +4,7 @@ import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld, Stelle
+from tests.akzeptanz.handgriffe import alleEinheitenAufstellen
 
 
 def spielerMitEinerEinheit() -> Spieler:
@@ -116,3 +117,31 @@ def testAuswählenUndAbwählenMerktSichDieEinheit():
 
     assert ausgewähltDanach
     assert not aufstellung.ausgewählt(einheit)
+
+
+def testEineFremdeEinheitAuswählenIstEineVorbedingungsverletzung():
+    aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+    fremde = Einheit(name="Fremde", modelle=())
+
+    with pytest.raises(ValueError):
+        aufstellung.auswählen(fremde)
+
+
+def testEineFremdeEinheitAbwählenIstEineVorbedingungsverletzung():
+    aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
+    fremde = Einheit(name="Fremde", modelle=())
+
+    with pytest.raises(ValueError):
+        aufstellung.abwählen(fremde)
+
+
+def testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung():
+    spieler = spielerMitEinerEinheit()
+    aufstellung = aufstellungVon(spieler, spielerMitEinerEinheit())
+    aufstellung.gewinnerWählen(spieler)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    alleEinheitenAufstellen(aufstellung)
+    einheit, *_ = spieler.armee.einheiten
+
+    with pytest.raises(ValueError):
+        aufstellung.auswählen(einheit)

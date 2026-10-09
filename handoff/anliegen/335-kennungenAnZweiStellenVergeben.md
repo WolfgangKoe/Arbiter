@@ -1,6 +1,6 @@
 # Die Kennungen nach W4 entstehen an zwei Stellen
 
-335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit 6bea166 vergibt `web/` die Kennungen nach
@@ -25,3 +25,4 @@ haben. Jede weitere Route mit Kennung (Plan 5: *Modell*) kopiert die Zählung ei
 der Filter „in der *Ablage*“ steht dann einmal.
 
 **Stellungnahme.**
+Angenommen. Neues Modul `technik/arbiter/web/kennungen.py` (`spielerNachNummer`, `ablageNachNummer`); `darstellung.py` und `anwendung.py` nutzen beide.

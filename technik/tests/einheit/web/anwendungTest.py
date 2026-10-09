@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 import pytest
 
+from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 from arbiter.web.anwendung import anwendungFür
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, aufstellungVon, spielerMit
 
@@ -15,7 +16,7 @@ def aufstellung():
 
 @pytest.mark.parametrize(("spielernummer", "einheitennummer"), [(0, 1), (3, 1), (1, 0), (1, 3)])
 @pytest.mark.parametrize("methode", ["put", "delete"])
-def testEinePfadOhneEinheitInDerAblageIstNichtGefunden(
+def testEinPfadOhneEinheitInDerAblageIstNichtGefunden(
     aufstellung, spielernummer, einheitennummer, methode
 ):
     dienst = anwendungFür(aufstellung).test_client()
@@ -27,7 +28,7 @@ def testEinePfadOhneEinheitInDerAblageIstNichtGefunden(
 
 def testEineAufgestellteEinheitIstNichtMehrInDerAblageUndNichtGefunden(aufstellung):
     aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
-    aufstellung.aufstellungszoneWählen(next(iter(aufstellung.ausgangslage.tiefen)))
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     alleEinheitenAufstellen(aufstellung)
     dienst = anwendungFür(aufstellung).test_client()
 

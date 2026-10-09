@@ -1,4 +1,4 @@
-"""Flask: liefert die Dateien des Frontends und den Spielstand als JSON (web.md, W1, W2)."""
+"""Flask: liefert Frontend und Spielstand, nimmt die Auswahl an (web.md, W1, W2; vertrag.md, V2)."""
 
 from http import HTTPStatus
 from pathlib import Path
@@ -8,9 +8,10 @@ from flask import Flask, abort, jsonify, send_from_directory
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit
 from arbiter.web.darstellung import spielstand
+from arbiter.web.kennungen import ablageNachNummer, spielerNachNummer
 
 _frontend = Path(__file__).parents[2] / "frontend"
-# Regel: web.md, V4 (nur diese Hosts, gegen DNS-Rebinding)
+# Regel: vertrag.md, V4 (nur diese Hosts, gegen DNS-Rebinding)
 _erlaubteHosts = ["127.0.0.1", "localhost"]
 
 
@@ -25,15 +26,11 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         return jsonify(spielstand(aufstellung))
 
     def einheitInDerAblage(spielernummer: int, einheitennummer: int) -> Einheit:
-        ausgangslage = aufstellung.ausgangslage
-        spielerNachNummer = dict(
-            enumerate((ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler), start=1)
-        )
-        spieler = spielerNachNummer.get(spielernummer)
+        spieler = spielerNachNummer(aufstellung).get(spielernummer)
         if spieler is None:
             abort(HTTPStatus.NOT_FOUND)
-        einheit = dict(enumerate(spieler.armee.einheiten, start=1)).get(einheitennummer)
-        if einheit is None or aufstellung.aufgestellt(einheit):
+        einheit = ablageNachNummer(aufstellung, spieler).get(einheitennummer)
+        if einheit is None:
             abort(HTTPStatus.NOT_FOUND)
         return einheit
 

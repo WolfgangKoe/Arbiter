@@ -1,6 +1,6 @@
 # Auswählen schützt AUF-5.10 nicht in der Domäne
 
-334 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+334 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** `Aufstellung.auswählen` ([aufstellen.py](../../technik/arbiter/domaene/phasen/aufstellen.py),
@@ -28,3 +28,4 @@ abzuwählen schadet nicht. Hält der Architekt die Grenze für eine Frage von V3
 Teil an ihn weiter.
 
 **Stellungnahme.**
+Angenommen. `auswählen` wirft `ValueError` für fremde und aufgestellte, `abwählen` für fremde *Einheiten*; je ein Unit-Test in `aufstellenTest.py`. `web/` behält die 404 über die *Ablage*.

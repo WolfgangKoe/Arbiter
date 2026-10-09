@@ -1,6 +1,6 @@
 # Lesbarkeit im Commit zu Plan 4
 
-333 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+333 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Fünf kleine Stellen aus 6bea166, nach [Es](../../prozess/praemissen/es.md):
@@ -34,3 +34,4 @@ voraussetzt, die nirgends zugesichert ist.
 5. `Aufstellungszone.erste`.
 
 **Stellungnahme.**
+Angenommen, alle fünf. 1 `spielernummer`/`einheitennummer` in `_spieler`; 2 Fundstelle und Docstring; 3 die Seite zeichnet nur bei `antwort.ok` die Antwort, sonst den neu geholten Spielstand (V1); 4 und 5 im Test.

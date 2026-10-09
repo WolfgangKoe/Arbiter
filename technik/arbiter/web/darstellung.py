@@ -3,18 +3,21 @@
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.spielobjekte import Einheit, Spieler
+from arbiter.web.kennungen import ablageNachNummer, spielerNachNummer
 
 
 def spielstand(aufstellung: Aufstellung) -> dict:
     ausgangslage = aufstellung.ausgangslage
-    spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    spielerNummern = spielerNachNummer(aufstellung)
+    spieler = tuple(spielerNummern.values())
     breite, länge = ausgangslage.spielfeld.seitenlängen
     return {
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
         "zonen": [_zone(aufstellung, zone, spieler) for zone in Aufstellungszone],
         "modelle": _modelle(aufstellung, spieler),
         "spieler": [
-            _spieler(aufstellung, nummer, einer) for nummer, einer in enumerate(spieler, start=1)
+            _spieler(aufstellung, spielernummer, einer)
+            for spielernummer, einer in spielerNummern.items()
         ],
     }
 
@@ -53,22 +56,21 @@ def _modelle(aufstellung: Aufstellung, spieler: tuple[Spieler, ...]) -> list[dic
     ]
 
 
-def _spieler(aufstellung: Aufstellung, nummer: int, spieler: Spieler) -> dict:
+def _spieler(aufstellung: Aufstellung, spielernummer: int, spieler: Spieler) -> dict:
     return {
-        "nummer": nummer,
-        "name": f"Spieler {nummer}",
+        "nummer": spielernummer,
+        "name": f"Spieler {spielernummer}",
         "anDerReihe": aufstellung.anDerReihe is spieler,
         "ablage": [
-            _einheit(aufstellung, nummer, einheit)
-            for nummer, einheit in enumerate(spieler.armee.einheiten, start=1)
-            if not aufstellung.aufgestellt(einheit)
+            _einheit(aufstellung, einheitennummer, einheit)
+            for einheitennummer, einheit in ablageNachNummer(aufstellung, spieler).items()
         ],
     }
 
 
-def _einheit(aufstellung: Aufstellung, nummer: int, einheit: Einheit) -> dict:
+def _einheit(aufstellung: Aufstellung, einheitennummer: int, einheit: Einheit) -> dict:
     return {
-        "nummer": nummer,
+        "nummer": einheitennummer,
         "name": einheit.name,
         "nichtGesetzt": sum(1 for modell in einheit.modelle if not aufstellung.gesetzt(modell)),
         "inAufstellung": aufstellung.einheitInAufstellung is einheit,

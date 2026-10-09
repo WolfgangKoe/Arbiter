@@ -98,10 +98,18 @@ class Aufstellung:
         return einheit in self._ausgewählt
 
     def auswählen(self, einheit: Einheit) -> None:
+        self._prüfenDassZurAufstellung(einheit)
+        if einheit in self._aufgestellt:
+            raise ValueError("Eine aufgestellte Einheit ist nicht auswählbar")
         self._ausgewählt.add(einheit)
 
     def abwählen(self, einheit: Einheit) -> None:
+        self._prüfenDassZurAufstellung(einheit)
         self._ausgewählt.discard(einheit)
+
+    def _prüfenDassZurAufstellung(self, einheit: Einheit) -> None:
+        if not any(einheit in spieler.armee.einheiten for spieler in self._spieler):
+            raise ValueError("Die Einheit gehört nicht zur Aufstellung")
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
         if gewinner not in self._spieler:

@@ -36,7 +36,8 @@ function kopfzeile(spielstand) {
 async function auswahlSenden(spieler, einheit) {
   const pfad = `/api/spieler/${spieler.nummer}/einheiten/${einheit.nummer}/ausgewählt`
   const antwort = await fetch(pfad, { method: einheit.ausgewählt ? "DELETE" : "PUT" })
-  zeichnen(await antwort.json())
+  // Warum: Bei einer Ablehnung (404) liefert Flask HTML; die Seite holt dann den Spielstand neu
+  zeichnen(await (antwort.ok ? antwort : await fetch("/api/spielstand")).json())
 }
 
 function einheitenKarte(spieler, einheit) {
