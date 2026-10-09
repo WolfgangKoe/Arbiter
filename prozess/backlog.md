@@ -6,8 +6,9 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
 - Höchstmaße der [Kennzahlen](kennzahlen.md) als Prüfung. Auslöser: Eine zu große Datei hält
   eine Rolle auf (Belegung über 120.000 beim Lesen) oder fällt im Review auf.
 - Kopf der Anliegen nach Anliegen 254 in `anliegenregeln/anliegen.py` und `anliegenDran.py`:
-  `Auftrag`, `· wartet auf`; `beantwortetDurchFreigabe` entfällt. Auslöser: Eine
-  Rolle oder der Stakeholder braucht eins davon.
+  `Auftrag`, `· wartet auf`; `beantwortetDurchFreigabe` entfällt. Dazu im Dashboard die
+  Spalte der wartenden Anliegen und „wartet auf“ auf der Karte (Anliegen 275). Auslöser:
+  Eine Rolle oder der Stakeholder braucht eins davon.
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Eine Regel steht im Verdacht,
   nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item

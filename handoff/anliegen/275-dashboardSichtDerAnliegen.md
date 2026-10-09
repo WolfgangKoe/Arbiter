@@ -1,6 +1,6 @@
 # Dashboard: Sicht auf die Anliegen
 
-275 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+275 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder will die Anliegen im Dashboard beobachten und steuern
