@@ -1,6 +1,6 @@
 # Mockups zur Formation
 
-375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 2/3 · angenommen
+375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach dem Kommentar des Stakeholders zu [Plan 5](../plan.md#freigabe) kommt eine

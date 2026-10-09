@@ -37,12 +37,10 @@ QUE-5), *Gewinner* und Zone wählen (AUF-11), *Leisten* (QUE-6); die *Einheit* a
 *Karte* als Block verschieben (Komfort).
 
 ## Für die Freigabe fehlt
-[375](anliegen/375-mockupsZurFormation.md): Die Mockups zeigen die *Formation*, neu
-[auf-15](../domaene/mockups/auf-15.html); UX berichtigt noch Anzahlen in der *Ablage* und den
-Warboss (DoR 5). Knopf, Anzeige des *Grundes* und Kennzeichen *gesperrt*
-entscheidet der Architekt in
-[372](anliegen/372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md). Sonst ist
-jedes Item bereit.
+Die Mockups zeigen die *Formation*, neu [auf-15](../domaene/mockups/auf-15.html) (Anliegen
+375, git). Knopf, Anzeige des *Grundes* und Kennzeichen *gesperrt* entscheidet der Architekt
+in [372](anliegen/372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md) (DoR 5).
+Sonst ist jedes Item bereit.
 
 ## Empfehlung
 Gib alle drei Items zusammen frei: Danach stellt ihr eine ganze Partie regelkonform auf, nur
@@ -65,4 +63,4 @@ Prozess ([Moderation](moderation.md)).
 ## Freigabe
 Freigabe: offen
 Kommentar: Eine Sache fehlt mir noch. Aktuell sieht es in den Mockups so aus, dass man Modell für Modell aufstellen muss. Ich glaube es wäre einfacher, wenn man jede Einheit mit allen Modellen komplett aufstellt, so wie es ArbiterMap gemacht hat. Bitte nochmal prüfen. Vorher kommt keine Freigabe.
-Stellungnahme: Etappe 1, Items und „Nach Zyklus 5“ folgen den neuen Kriterien (Anliegen 373, 374); Mockups in 375.
+Stellungnahme: Etappe 1, Items und „Nach Zyklus 5“ folgen den neuen Kriterien (Anliegen 373, 374), die Mockups ebenso (375).
