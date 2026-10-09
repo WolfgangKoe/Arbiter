@@ -11,13 +11,14 @@ bei einer *Einheit* je *Spieler*. Nach deinem Kommentar unten kommt jede *Einhei
 ## Items
 1. [Ziehen](../domaene/items/ziehen.md): AUF-8.2, 8.3, 8.5, 8.6, AUF-14.1, QUE-3.4
 2. [Gesperrt stehen und zurück](../domaene/items/gesperrtStehenUndZurueck.md): AUF-9.1,
-   9.3, 9.4, AUF-15.1, nach Item 1
-3. [Beenden und Sperre ohne Stelle](../domaene/items/beendenUndSperreOhneStelle.md):
-   AUF-10.1 bis 10.4, QUE-4, AUF-8.4, AUF-12, nach Item 1 und 2
+   9.3, 9.4, AUF-15.1, AUF-8.4, AUF-12.1 bis 12.3, nach Item 1
+3. [Beenden mit Kohärenz](../domaene/items/beendenUndSperreOhneStelle.md):
+   AUF-10.1 bis 10.4, QUE-4, AUF-12.4, nach Item 1 und 2
 
 Reihenfolge nach Abhängigkeit: Ohne Ziehen steht kein *Modell* auf der *Karte*, also auch
-keins *gesperrt*. Item 3 braucht beide: AUF-8.4 eine *aufgestellte* *Einheit*, AUF-12.1 ein
-*gesperrtes* *Modell* und den Knopf zum Beenden.
+keins *gesperrt*. Item 2 sperrt jedes weitere Ziehen, solange eins *gesperrt* steht, und
+außer der Reihe (AUF-12, Anliegen 379); Beenden dazu prüft der Test, bis Item 3 den Knopf
+bringt.
 
 ## Nach Zyklus 5 am Bildschirm machbar
 Mit Maus oder Finger: eine *Einheit* aus der *Ablage* auf die *Karte* ziehen; alle ihre
@@ -45,7 +46,7 @@ Sonst ist jedes Item bereit.
 ## Empfehlung
 Gib alle drei Items zusammen frei: Danach stellt ihr eine ganze Partie regelkonform auf, nur
 *Gewinner* und Zone setzt noch AUF-6. Reicht die Technikphase nicht für drei, rückt Item 3
-in Plan 6; Item 1 und 2 sind das Zyklusziel aus Review 4.
+in Plan 6; Item 1 und 2 sind das Zyklusziel aus Review 4 und sperren für sich regelkonform.
 
 Vor dem Testautor: Architekt, Vertrag fürs Ziehen und Beenden mit der Antwort bei *Sperre*
 (W3) in [web.md](../technik/architektur/web.md). In derselben Technikphase: Anliegen 368

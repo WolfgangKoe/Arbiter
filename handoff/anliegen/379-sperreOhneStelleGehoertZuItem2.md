@@ -1,6 +1,6 @@
 # Sperre ohne Stelle gehört zu Item 2
 
-379 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · offen
+379 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Plan 5](../plan.md), Empfehlung: „Reicht die Technikphase nicht für drei, rückt
@@ -25,4 +25,11 @@ nur zusammen. Empfehlung A: Ein kleinerer Schnitt und ein Rückfall, der trägt.
 
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** A, mit einer Ausnahme: AUF-12.4 (neu aus 378 F1 A) bleibt in Item 3, denn
+es nennt den *Grund* der *Sperren* nach AUF-10.2 und 10.3, die erst Item 3 bringt. AUF-8.4
+prüft wie AUF-12.1 zum Beenden der Test über die Domäne, bis Item 3 den Knopf bringt.
+Umgesetzt: [Item 2](../../domaene/items/gesperrtStehenUndZurueck.md) AUF-9.1, 9.3, 9.4,
+AUF-15.1, AUF-8.4, AUF-12.1 bis 12.3, Mockup auf-12 (acht Kriterien);
+[Item 3](../../domaene/items/beendenUndSperreOhneStelle.md) heißt „Beenden mit Kohärenz“,
+AUF-10.1 bis 10.4, QUE-4, AUF-12.4 (neun); [Plan 5](../plan.md) Items, Reihenfolge und
+Empfehlung: Der Rückfall auf Item 1 und 2 sperrt regelkonform.
