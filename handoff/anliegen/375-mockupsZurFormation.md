@@ -1,6 +1,6 @@
 # Mockups zur Formation
 
-375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 1/3 · offen
+375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach dem Kommentar des Stakeholders zu [Plan 5](../plan.md#freigabe) kommt eine
@@ -32,3 +32,15 @@ Anforderung ein Mockup“ verlangt. auf-9 zeigt ‚nicht ganz in der Zone‘ an 
 [372](372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md).
 
 **Stellungnahme.**
+Angenommen, umgesetzt:
+- [auf-8](../../domaene/mockups/auf-8.html): Boyz in Reihen 3, 4, 3 mittig in der
+  *Aufstellungszone*, *Ablage* 0.
+- [auf-9](../../domaene/mockups/auf-9.html): *Formation* mit zwei Lücken, ein einzeln
+  geholtes *Modell* (AUF-14.1) ‚nicht ganz in der Zone‘, „zurück“ und „gemeinsam übergehen“.
+- [auf-15](../../domaene/mockups/auf-15.html) neu: *gesperrte* *Formation*, ein *Modell* über
+  dem Warboss ‚Base überdeckt‘; „zurück“ nimmt alle *Modelle* dieses Loslassens.
+- auf-10, auf-12 unverändert: Stände mit 2 und 8 *Modellen* in der *Ablage* entstehen nach
+  *zurücklegen*.
+Die Items [Ziehen](../../domaene/items/ziehen.md) und
+[Gesperrt stehen und zurück](../../domaene/items/gesperrtStehenUndZurueck.md) verlinken die
+Mockups. Der *Abstand* 1,5″ ist zwischen den Rändern der *Bases* gemessen (Glossar).
