@@ -64,11 +64,12 @@ dependencies = ["PyYAML==6.0.*", "Flask==3.1.*"]
 arbiter = "arbiter.__main__:starten"
 
 [dependency-groups]
-# Warum: ruff, complexipy, coverage und vulture mit fester Minor-Version, damit ein Update nicht still neue Regeln
+# Warum: pre-commit (Hooks beim Commit), ruff, complexipy, coverage und vulture mit fester Minor-Version, damit ein Update nicht still neue Regeln
 # oder eine andere Zählweise bringt. Playwright (Bildschirmtests) ebenso: 1.60 gehört zum Chromium-Build
 # 1223 unter ~/.cache/ms-playwright; sonst lädt `playwright install chromium` den passenden.
 entwicklung = [
     "pytest",
+    "pre-commit==4.6.*",
     "ruff==0.16.*",
     "complexipy==8.0.*",
     "coverage==7.16.*",

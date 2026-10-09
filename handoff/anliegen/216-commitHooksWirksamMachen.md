@@ -1,6 +1,6 @@
 # Commit-Hooks wirksam machen, damit SonarLint sperrt
 
-216 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+216 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder verlangt SonarLint scharf
@@ -35,3 +35,13 @@ Erledigt, wenn der Test aus 2 ohne Installation rot und mit ihr grün ist, die P
 so ausgeht, `python3 -m pytest prozess/pruefungen` grün ist und der Reviewer den Code
 geprüft hat ([Kritik am Code](../../prozess/ablauf.md#kritik-am-code)). DoD 2 im Ablauf
 setze ich danach von „nur Text“ zurück.
+Punkt 1: `pre-commit==4.6.*` steht in `pyproject.toml` (`dependency-groups.entwicklung`), ist in
+`.venv` installiert und `.git/hooks/pre-commit` ist angelegt. Wer ein neues Klon einrichtet:
+`.venv/bin/pre-commit install`. Punkt 2: `testDasRepoHatDenCommitHookInstalliert` und drei Proben
+in `formregeln/konfigurationTest.py`. Punkt 3, Probe in einem Klon mit eigener Installation:
+Ein Commit mit `unbenutzt = 5` in einer `.py`-Datei wurde vom Hook `sonarlint` abgewiesen
+(`python:S1481`, Exit 1, kein Commit). Rote Akzeptanztests sperren nichts: der Hook `pruefungen`
+läuft nur `prozess/pruefungen`, `technik/tests` nicht. Dauer eines Commits mit allen Hooks: gut 3
+Minuten (Prüfungen etwa 2,5 Minuten, SonarLint der Rest). Im Klon scheiterte `pruefungen` zusätzlich
+an fehlendem `node_modules` (Frontend), im Arbeitsbaum nicht. Punkt 4: Zeile in `prozess/regeln.md`
+unter formregeln. Der Koordinator muss nichts tun.

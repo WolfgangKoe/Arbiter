@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import pytest
 
 from formregeln.werkzeugaufruf import pyproject, ruffAufrufen
+from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import altbestandOrdner, wurzel
 
 
@@ -59,3 +62,32 @@ def testRuffSchließtDenAltbestandAus(ordner):
 def testDasRepoIstRuffSauber():
     ergebnis = ruffAufrufen(".")
     assert ergebnis.returncode == 0, ergebnis.stdout
+
+
+def hookVerstoß(hooksOrdner: Path) -> str | None:
+    hook = hooksOrdner / "pre-commit"
+    if not hook.is_file():
+        return "`.git/hooks/pre-commit` fehlt: `.venv/bin/pre-commit install` ausführen"
+    if "pre_commit" not in hook.read_text(encoding="utf-8"):
+        return "`.git/hooks/pre-commit` ruft pre-commit nicht auf"
+    return None
+
+
+def testHookFehltIstRot(tmp_path):
+    assert hookVerstoß(tmp_path)
+
+
+def testHookOhnePreCommitAufrufIstRot(tmp_path):
+    (tmp_path / "pre-commit").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    assert hookVerstoß(tmp_path)
+
+
+def testHookVonPreCommitIstGrün(tmp_path):
+    (tmp_path / "pre-commit").write_text("exec python -mpre_commit hook-impl\n", encoding="utf-8")
+    assert hookVerstoß(tmp_path) is None
+
+
+@pytest.mark.stand
+def testDasRepoHatDenCommitHookInstalliert():
+    hooks = gitAusgabe(wurzel, "rev-parse", "--path-format=absolute", "--git-path", "hooks")
+    assert hookVerstoß(Path(hooks.strip())) is None
