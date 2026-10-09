@@ -64,5 +64,5 @@ Freigeben, dann Domänenphase 5: zuerst 340 und 345, dann die Kriterien zum Zieh
 dem Zyklusziel aus Review 4; 249 vor der Technikphase 5.
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .

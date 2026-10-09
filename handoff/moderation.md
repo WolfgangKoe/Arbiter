@@ -12,10 +12,10 @@ Blockiert die Freigabe: nichts.
   [275](anliegen/275-dashboardSichtDerAnliegen.md) (Stellungnahme leer),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md) (vor Technikphase 5).
 - Reviewer, Nachprüfung der umgesetzten Stellungnahmen:
-  [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) (Runde 2),
-  [353](anliegen/353-startbefehlImReview.md),
-  [354](anliegen/354-commitsMitBetreffNennen.md),
-  [355](anliegen/355-klickpfadUndZyklusziel.md).
+  Anliegen 289 (Runde 2),
+  Anliegen 353,
+  Anliegen 354,
+  Anliegen 355.
 - Testautor: AUF-5.5 wartet (Plan 5, nicht jetzt). Organisationsentwickler, Planer, UX,
   Architekt, Fachkritiker: keins.
 
