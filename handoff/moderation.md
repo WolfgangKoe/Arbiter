@@ -8,7 +8,7 @@ Blockiert die Freigabe: nichts.
 - Anforderungsautor, erst in der nächsten Domänenphase (340 F5 A, F6 A):
   [340](anliegen/340-aufstellenSchwerZuPruefen.md),
   [345](anliegen/345-spiegelZwischenAnforderungUndCode.md) (F1 bis F3 offen).
-- Regelumsetzer: [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
+- Regelumsetzer: Anliegen 246,
   Anliegen 275 (Stellungnahme leer),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md) (vor Technikphase 5).
 - Reviewer, Nachprüfung der umgesetzten Stellungnahmen:

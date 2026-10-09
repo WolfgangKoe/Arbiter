@@ -5,7 +5,7 @@
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
-**Befund.** Aus [246](246-dashboardAlleSessionsMitSeitenzaehler.md), Rückmeldung des
+**Befund.** Aus Anliegen 246, Rückmeldung des
 Stakeholders: (1) Die Datei hinter dem Link einer Karte hat keinen Weg zurück zum Dashboard.
 (2) Die Karten könnten bei vielen Anliegen unübersichtlich werden; vorerst bleibt es so.
 (3) Status, Kommentare und Antworten auf Fragen lassen sich nicht aus dem Dashboard geben.
