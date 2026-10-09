@@ -56,6 +56,6 @@ A: Hook nach 3 für alle Rollen. Empfehlung: ein Mechanismus für alle; jede Rol
 Prüfungen und `git log` weiter selbst auf.
 B: zusätzlich Bash aus Anforderungsautor, Planer, UX und Moderator nehmen (geänderte Rechte):
 dichter, aber sie prüfen Länge und Form nicht mehr selbst.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**

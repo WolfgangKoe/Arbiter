@@ -1,37 +1,40 @@
 # Moderation
 
-Stand vor Freigabe Retro 4: 9 Anliegen im Ordner. An den Items von [Plan 4](plan.md) hängt
-keins; Plan 5 braucht Anliegen 249.
+Stand vor Freigabe Plan 5: 7 Anliegen im Ordner. Dein Kommentar im Plan (Einheit komplett
+aufstellen) ist kein Anliegen; er liegt beim Planer und in [Plan](plan.md).
 
 ## Dran
-Blockiert die Freigabe: nichts.
-- Anforderungsautor, erst in der nächsten Domänenphase (340 F5 A, F6 A):
-  Anliegen 340,
-  Anliegen 345 (F1 bis F3 offen).
-- Regelumsetzer: Anliegen 246,
-  Anliegen 275 (Stellungnahme leer),
-  Anliegen 249 (vor Technikphase 5).
-- Reviewer, Nachprüfung der umgesetzten Stellungnahmen:
-  Anliegen 289 (Runde 2),
-  Anliegen 353,
-  Anliegen 354,
-  Anliegen 355.
-- Testautor: AUF-5.5 wartet (Plan 5, nicht jetzt). Organisationsentwickler, Planer, UX,
-  Architekt, Fachkritiker: keins.
+Blockiert Plan 5 (Items 1 bis 3): [368](anliegen/368-akzeptanztestsInDerFolgeDerKriterien.md),
+denn der Testautor ordnet die Tests, bevor die neuen entstehen. Sonst hängt kein Anliegen
+an einem Item.
+- Testautor: [368](anliegen/368-akzeptanztestsInDerFolgeDerKriterien.md) (Technikphase 5,
+  mit den neuen Tests); Nachprüfung von
+  [363](anliegen/363-spiegelpruefungStuerztBeiTestImAkzeptanzordnerAb.md).
+- Regelumsetzer: [367](anliegen/367-spiegelpruefungInhaltUndDomaene.md) (Teil 3 erst nach
+  368); Nachprüfung von [360](anliegen/360-dashboardAnliegenBearbeiten.md); danach der Teil
+  des Regelumsetzers aus 384.
+- Organisationsentwickler: [384](anliegen/384-schreibgrenzeAuchFuerBash.md) (F1 A, Antwort
+  liegt vor, noch uncommittet), [369](anliegen/369-skillUndDomaenenformatNachDemNeuenSchnitt.md),
+  [376](anliegen/376-ausnahmeFuerDenArchitektenInDerDomaenenphase.md).
+- Planer, Architekt, UX, Reviewer, Fachkritiker, Anforderungsautor: keins.
 
 ## Vorschläge
-- Zusammen: 340 und 345 in einem Zug des Anforderungsautors (gleiche Dateien); 353, 354,
-  355 in einer Nachprüfung des Reviewers (alle ändern Schritt 6 in `ablauf.md`), 289 dazu.
-- Schließen: 289, 353, 354, 355 sind umgesetzt (Stellungnahme, Retro 4); der Reviewer setzt
-  `erledigt`, wenn die Nachprüfung stimmt.
-- Reihenfolge: nach Retro 4 erst 340 und 345, dann die Kriterien, dann Plan 5; 249 vor der
-  Technikphase 5.
+- Zusammen: 369 und 376 in einem Zug des Organisationsentwicklers (gleiche Art, Texte der
+  Rollen und des Formats); 384 ändert Ich 2 und Ablauf, eigener Zug.
+- Schließen: 363 ist umgesetzt (Stellungnahme); der Testautor setzt `erledigt`, wenn die
+  Nachprüfung stimmt. 360 ebenso, der Regelumsetzer, sobald F4 beantwortet ist.
+- Reihenfolge: erst 368, dann Teil 3 aus 367, dann Plan-5-Tests; 369 vor dem nächsten
+  Akzeptanztest, damit der Skill stimmt.
 - Stränge Regelumsetzer, höchstens ein Hook-Code-Lauf
-  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): 246 mit 275 zuerst (`dashboard.py`,
-  von `laufLog.py` als Hook importiert), danach 249 (`pyproject.toml`, Importvertrag). Das
-  Spiegelskript aus 340 kommt nach 345, im Zug der Domänenphase.
-- Der Reviewer läuft neben dem Regelumsetzer und dem Anforderungsautor: eigene Dateien,
-  keiner wartet.
+  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): zuerst 360 (`dashboard.py`, von
+  `laufLog.py` als Hook importiert), dann 384 (`schreibgrenze.py`, Hook), 367 daneben nur,
+  wenn `benennung.py` frei ist: erst 363 nachprüfen, sie ändern dieselbe Datei.
+- Stränge Organisationsentwickler: 369 und 376 gleichzeitig mit 384 möglich, wenn die
+  Dateien getrennt sind (Skill und `domaene/CLAUDE.md`, `architekt.md`, `ich.md`).
+- Testautor (368) läuft neben dem Regelumsetzer: eigene Dateien, keiner wartet; 367 Teil 3
+  wartet auf 368.
 
 ## Fragen an dich
-Keine offen. 345 F1 bis F3 liegen beim Anforderungsautor, nicht bei dir.
+- [360](anliegen/360-dashboardAnliegenBearbeiten.md) F4: Zeitpunkt, an dem deine Züge aus
+  dem Dashboard in die Dateien kommen. A Hook vor Rollenstart und Commit, B nur auf Knopfdruck.
+  Antwort steht auf `.`, also Empfehlung A; bitte bestätigen oder B.

@@ -6,7 +6,7 @@ Grundlage: Zyklusziel aus [Review 4](review.md): *Modelle* ziehen, gesperrt steh
 *Grund*, „zurück“. Abweichung nach deinem Auftrag in Anliegen 361 (git), Etappe 1 möglichst
 schnell: Plan 5 bringt dazu „Aufstellen der Einheit beenden“ mit *Kohärenz*; sonst bliebe es
 bei einer *Einheit* je *Spieler*. Nach deinem Kommentar unten kommt jede *Einheit* in ihrer
-*Formation* (Anliegen 373, 374, git).
+*Formation* (Anliegen 373 und 374, git).
 
 ## Items
 1. [Ziehen](../domaene/items/ziehen.md): AUF-8.2, 8.3, 8.5, 8.6, AUF-14.1, QUE-3.4,
