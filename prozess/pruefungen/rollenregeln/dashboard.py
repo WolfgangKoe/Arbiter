@@ -5,14 +5,15 @@ import sys
 from pathlib import Path
 
 from gemeinsam.pfade import wurzel
+from rollenregeln.dashboardAnliegen import anliegenAbschnitt, filterStil
 from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
+from rollenregeln.dashboardSeiten import schalterSkriptFür, schalterStil, seitenschalter
 from rollenregeln.dashboardStil import legende, stil
 from rollenregeln.laufLesen import Lauf, läufeLesen
 from standregeln.phasenfolge import lage
 
 dashboardDatei = "dashboard.html"
-sichtbareSitzungen = 5
 minute = 60
 fehlt = "–"  # Warum: Wert fehlt im Eintrag
 
@@ -76,28 +77,33 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
+def seiteErzeugen(läufe: list[Lauf], lageText: str = "", anliegen: str = "") -> str:
     if läufe:
-        sitzungen = list(nachSitzung(läufe).items())[-sichtbareSitzungen:]
-        karten = "".join(sitzungsKarte(name, gruppe) for name, gruppe in reversed(sitzungen))
+        sitzungen = list(nachSitzung(läufe).items())
+        neuesteZuerst = reversed(sitzungen)
+        karten = seitenschalter(len(sitzungen)) + "".join(
+            sitzungsKarte(name, gruppe) for name, gruppe in neuesteZuerst
+        )
         verteilung = histogramm(läufe) + rollenZeilen(läufe)
     else:
+        sitzungen = []
         karten = verteilung = "<p>Noch kein Lauf protokolliert.</p>"
     return (
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
         "<title>Arbiter · Prozess-Dashboard</title>"
-        f"<style>{stil}</style></head><body><h1>Prozess-Dashboard</h1>"
+        f"<style>{stil}{schalterStil}{filterStil}</style></head><body><h1>Prozess-Dashboard</h1>"
         f'<p class="muted">{html.escape(lageText)}</p>'
-        '<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
+        f'{anliegen}<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
         f'<div class="karten-spalte">{karten}</div><aside class="seiten-spalte">'
         f'<section class="kasten"><h3>Verteilung der Tokenstände</h3>{verteilung}</section>'
-        f"{legendeErzeugen()}</aside></div></body></html>\n"
+        f"{legendeErzeugen()}</aside></div>{schalterSkriptFür(len(sitzungen))}</body></html>\n"
     )
 
 
 def dashboardSchreiben(ordner: Path) -> Path:
     ziel = ordner / dashboardDatei
-    ziel.write_text(seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText()), encoding="utf-8")
+    seite = seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText(), anliegenAbschnitt(ordner))
+    ziel.write_text(seite, encoding="utf-8")
     return ziel
 
 

@@ -1,6 +1,6 @@
 # Dashboard: alle Sessions auffindbar, sechs je Seite
 
-246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · offen
+246 · Anliegen · von Stakeholder → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Das Dashboard (`dashboard.html`, erzeugt von `prozess/pruefungen/rollenregeln/dashboard.py`)
@@ -25,4 +25,4 @@ Dieses Feature war bereits im Dashboard von ArbiterMap implementiert.“
 - Offen für den Regelumsetzer: ob der Zähler im Browser (wie ArbiterMap, Skript in der HTML)
   oder als vorab erzeugte Seiten läuft; die Stellungnahme entscheidet.
 
-**Stellungnahme.** Ich warte auf Umsetzung.
+**Stellungnahme.** Umgesetzt, Browser-Variante wie ArbiterMap: `dashboard.html` enthält alle Sitzungskarten, neueste zuerst; ein kleines Skript in der Seite zeigt sechs je Seite und baut den Seitenschalter („‹ Zurück“, Seitenzahlen, „Weiter ›“, „Session 1–6 von n“). Bis sechs Sitzungen entfallen Schalter und Skript, ohne Skript sind alle Karten sichtbar. Konstante und Markup in `prozess/pruefungen/rollenregeln/dashboardSeiten.py`, Scheiter-Test `dashboardSeitenTest.py` (der alte Deckel von fünf ließe ihn rot werden), Zeile in [Regeln](../../prozess/regeln.md). Das Blättern im Browser selbst ist nicht automatisch getestet, nur Markup und Skripteinbindung.

@@ -1,6 +1,6 @@
 # Dashboard: Sicht auf die Anliegen
 
-275 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+275 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder will die Anliegen im Dashboard beobachten und steuern
@@ -20,4 +20,4 @@ Mit Anliegen 246 (dieselbe Datei) in einem Lauf möglich; die Formen und `wartet
 die Sicht erst nach Anliegen 274. Knöpfe für die Züge stehen im
 [Backlog](../../prozess/backlog.md).
 
-**Stellungnahme.**
+**Stellungnahme.** Teilweise umgesetzt: Punkte 1 (ohne die Spalte der wartenden), 2 (ohne `wartet auf`) und 3. `dashboard.html` zeigt oben den Abschnitt Anliegen mit einer Spalte je Zuständigem (`dran` und `nachprüfungen`), Karten mit Nummer als Link, Titel, Form und Runde, und Filter nach Rolle und Form im Browser. Code `rollenregeln/dashboardAnliegen.py`, Scheiter-Test `dashboardAnliegenTest.py`, Zeile in [Regeln](../../prozess/regeln.md). Offen bleibt die Spalte der wartenden und `wartet auf` auf der Karte: Anliegen 274 gibt es noch nicht, `kopfLesen` überspringt Köpfe mit `· wartet auf`. Sobald 274 liest, ergänze ich beides in einer neuen Runde.
