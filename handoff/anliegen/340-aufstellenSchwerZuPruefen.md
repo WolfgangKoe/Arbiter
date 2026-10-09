@@ -1,6 +1,6 @@
 # Anforderung Aufstellen: schwer zu prüfen, sieben in einer Datei
 
-340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · rückfrage
+340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -52,7 +52,7 @@ bleiben. B: Gegeben/Wenn/Dann in drei Zeilen; bricht „je ein Satz“, etwa dop
 Empfehlung A. Kosten: ein Lauf von mir; ändert sich eine Bedeutung, ist es ein neues
 Kriterium mit neuem Test.
 
-Antwort: .
+Antwort: Ich gehe mit deiner Empfehlung mit, aber so eine Struktur wie Gegeben/Wenn/Dann sollte dennoch aus den Sätzen hervorgehen und sichtbar sein. Dein Beispiel hier finde ich aus irgendeinem Grund immer noch nicht leicht zu verstehen. Eine Zeilenstruktur wie in B würde alles vielleicht unnötig aufblähen. Aber ich möchte an jedem Kriterium eine Art Use Case sehen und verstehen können. Ich finde ja schon den Zweck schwer verständlich. Ist der Zweck hier: "Ein Spieler, der an der Reihe ist, kann eine Einheit aufstellen" Akzeptanzkritierium 1: "Ein Spieler ist an der Reihe und hat noch eine Einheit aufzustellen. Er wählt diese Einheit aus und die Einheit ist ausgewählt." Und so weiter... Du kannst bestimmt verständlich fomrulieren. ABer das wäre der Anspruch.
 
 **F4 · Bedienung des Setzens.** Etappe 1 verlangt Setzen aus der *Ablage*, Umsetzen,
 Zurücklegen, „zurück“, „gemeinsam übergehen“, „Aufstellen der Einheit beenden“; keine
@@ -61,3 +61,5 @@ auf Anforderung des Planers.
 Empfehlung A: Erst dann zeigt die Anforderung, wie die Aufstellung in der App geht.
 
 Antwort: .
+
+**Stellungnahme:** Ich finde die Ansätze gut. In der Domäne vollziehen wir die Ordnerstruktur, die wir bereits in der Technik angefangen haben. In der Technik setzen wir einen lesbarere Umbenennung um. Wir spiegeln hier jetzt also die Ordnerstruktur und die Dateibenennung zwischen Domäne und Technik. Damit bleiben die einzelnen Dateien auch klein. Das heißt, die Anforderungen spiegeln sich strukturell, inhaltlich und in der Bezeichnung in der Technik wieder. Hierfür soll der Regelumsetzer eine Skript implementieren, der diesen "Spiegel" prüft und diesen einfordert. Wir müssen aber schauen, ab wann wir eine Übersichtsdatei brauchen, die uns hilft den Wald zu überblicken.

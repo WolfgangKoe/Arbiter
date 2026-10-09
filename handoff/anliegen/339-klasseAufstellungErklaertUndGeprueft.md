@@ -1,6 +1,6 @@
 # Die Klasse Aufstellung: Gedanke, Prüfung, Umbau
 
-339 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · offen
+339 · Fragen · von Architekt (Technik) → Stakeholder · Runde 1/3 · rückfrage
 
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
@@ -62,6 +62,6 @@ Antwort: .
 ihm vorschlagen, AUF-3.4 als allgemeine Regel des *Setzens* nach QUE-1 zu verschieben?
 A ja (Empfehlung), B nein, sie bleibt bei der Aufstellung.
 
-Antwort: .
+Antwort: Das würde ich nochmal infrage stellen. s. Stellungnahme.
 
-**Stellungnahme.**
+**Stellungnahme.** Könntest du dich bitte mit dem Anforderungsautor abstimmen, wie wir es am besten machen? Ich habe 339 kommentiert und ihr sollt natürlich nicht unterschiedliche Strukturen aufbaut. Ich möchte, dass wir hier eine gemeinsame "Spiegelstruktur" aufbauen und die Einzelteile sollen lesbar und gut strukturiert sein. Daher finde ich F1-B einen guten Schritt. Schau bitte, was aus den Regeln heraus zusammengehört. Als Modell -> Einheit -> Armee könnte gut passen. Base und Nahkampfreichweite könnte auch irgendwie zusammengehören. Aber ich verstehe nicht viel davon, wie man Klassen, deren Eigenschaften, Methoden und Vererbungen gut aufbaut, damit alles gut strukturiert lesbar ist und so etwas wie SOLID erfüllt bleibt.
