@@ -1,6 +1,6 @@
 # Loslassen ohne Ziel in ein Item
 
-383 · Kritik · von Anforderungsautor (Domäne) → Planer (Domäne) · Runde 1/3 · angenommen
+383 · Kritik · von Anforderungsautor (Domäne) → Planer (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach den Antworten des Stakeholders in 380 (F1 A, F2 B) gibt es eine neue
