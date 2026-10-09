@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from formregeln.benennung import (
+    akzeptanzHilfsmodule,
     dateinamenVerstoß,
     geprüfteDateien,
     nameVerstoß,
@@ -218,10 +219,12 @@ def testPytestHookAußerhalbVonConftestBleibtRot():
     assert grundZu("def pytest_irgendwas(config):\n    pass\n", "conftest.py") == []
 
 
-def hilfsmodulAufbauen(tmp_path, ordnername: str, quelltext: str) -> Path:
+def hilfsmodulAufbauen(
+    tmp_path, ordnername: str, quelltext: str, dateiname: str = "handgriffe.py"
+) -> Path:
     ordner = tmp_path / "technik" / "tests" / "akzeptanz" / ordnername
     ordner.mkdir(parents=True)
-    datei = ordner / "handgriffe.py"
+    datei = ordner / dateiname
     datei.write_text(quelltext, encoding="utf-8")
     return datei
 
@@ -241,3 +244,16 @@ def testHilfsmodulMitTestfunktionIstRot(tmp_path):
 def testHilfsmodulInEinemUnterordnerBleibtRot(tmp_path):
     hilfsmodulAufbauen(tmp_path, "phasen", "def stelleSetzen(): ...\n")
     assert any("handgriffe.py" in meldung for meldung in verstöße(tmp_path))
+
+
+@pytest.mark.parametrize("dateiname", sorted(akzeptanzHilfsmodule))
+def testJedesHilfsmodulIstGrünUndMitTestfunktionRot(tmp_path, dateiname):
+    hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", dateiname)
+    assert verstöße(tmp_path) == []
+    hilfsmodulAufbauen(tmp_path / "zweit", "", "def testAuf1_1Probe(): ...\n", dateiname)
+    assert any(dateiname in meldung for meldung in verstöße(tmp_path / "zweit"))
+
+
+def testDienstPyOhneListeneintragBliebeRot(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", "unbekannt.py")
+    assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))
