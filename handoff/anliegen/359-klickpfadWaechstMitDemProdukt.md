@@ -1,6 +1,6 @@
 # Der Klickpfad im Review wächst mit dem Produkt, das Review nicht
 
-359 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+359 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase) Schritt 6 verlangt
