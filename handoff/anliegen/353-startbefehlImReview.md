@@ -1,6 +1,6 @@
 # Startbefehl der App in jedem Review
 
-353 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+353 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht im Kommentar zu [Review 4](../review.md) (`## Freigabe`):
@@ -19,4 +19,4 @@ Startbefehl der App mit Link auf [Web, W5](../technik/architektur/web.md)“. Di
 selbst steht weiter in W5; das Review wiederholt sie auf Wunsch des Stakeholders (Ausnahme
 von wir.md 3, die nur er geben kann; seine Bitte verstehe ich so).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 6: unter der ersten Zeile der Startbefehl mit Link auf W5, als Ausnahme auf Wunsch des Stakeholders kenntlich.

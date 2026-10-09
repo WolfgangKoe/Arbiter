@@ -1,6 +1,6 @@
 # Klickpfad und Zyklusziel am Bildschirm in jedem Review
 
-355 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+355 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert [Review 4](../review.md) (`## Freigabe`): „Mir fehlt
@@ -23,4 +23,4 @@ der Stakeholder gibt frei, ohne das Inkrement selbst bedient zu haben. Drei Zeil
 2. Das Zyklusziel nennt zuerst, was nach dem nächsten Zyklus am Bildschirm machbar ist und
    was noch nicht, in Worten des Spielers; danach Voraussetzungen und Schulden.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 6: der Abschnitt `## Am Bildschirm prüfen` nach dem Startbefehl, und das Zyklusziel nennt zuerst das Machbare am Bildschirm in Worten des Spielers.

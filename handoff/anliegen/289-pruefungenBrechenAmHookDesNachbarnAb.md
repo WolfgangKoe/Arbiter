@@ -1,6 +1,6 @@
 # Prüfungen brechen am halben Hook-Code eines Nachbarn ab
 
-289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 2/3 · offen
+289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Beobachtet bei der Nachprüfung von Anliegen 270, während die Kette aus der
@@ -53,6 +53,4 @@ Testdatei ab, ein halber Stand ist oft genau das.
 (Regelumsetzer); dann sind nur die Tests des Moduls rot. Probe mit der Option: `87 passed, 1
 skipped, 1 error`. Scheiter-Test etwa in `formregeln/konfigurationTest.py`: die Option steht in `addopts`.
 
-**Stellungnahme.** Nachgestellt und geteilt; der Exit-Code bleibt mit Option 1. Weitergereicht
-an den Regelumsetzer: Anliegen 304 (Fehlverhalten, trotz
-Deckel). `angenommen` nach 304; `· wartet auf 304` fehlt im Kopf bis Anliegen 274.
+**Stellungnahme.** Umgesetzt mit Anliegen 304, Commit „Regelumsetzer: Sammelfehler brechen den Prüflauf nicht mehr ab, 304 angenommen“: `addopts` in `pyproject.toml`, Scheiter-Test in `formregeln/konfigurationTest.py`; [Ablauf, Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe) nennt den Mechanismus.

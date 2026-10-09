@@ -1,6 +1,6 @@
 # Commits mit Betreff statt Kennung nennen
 
-354 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+354 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in Anliegen 351:
@@ -20,4 +20,4 @@ oder [Anliegen](../../prozess/ablauf.md#anliegen) sagt: „Ein Commit heißt in 
 seinem Betreff in Anführung (Commit „Freigabe Plan 4“), nicht mit der Kennung; `git log
 --grep` findet ihn.“ Folge für alle Rollen: Betreffe, die für sich verständlich sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Ablauf, Freigabe und Kommentare](../../prozess/ablauf.md#freigabe-und-kommentare), wörtlich nach deinem Gegenvorschlag; der Betreff `Kritik <kurze Hashes>` bleibt, `handoff/` nennt solche Commits nicht.

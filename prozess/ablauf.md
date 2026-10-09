@@ -71,13 +71,19 @@ Organisationsentwickler sie vor.
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
    die abgenommenen Items. Mechanismus: nur Text.
-6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, vor dem Abschnitt
+6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
+   Startbefehl der App mit Link auf [Web, W5](../technik/architektur/web.md#aufbau) (auf
+   Wunsch des Stakeholders auch hier, Anliegen 353). Danach der Abschnitt
+   `## Am Bildschirm prüfen`: was jetzt per Maus oder Finger machbar ist, als nummerierter
+   Klickpfad mit dem erwarteten Bild je Schritt, vom Reviewer am laufenden Arbiter
+   durchgegangen; was nur ein Test zeigt, steht dabei (Anliegen 355). Vor dem Abschnitt
    `## Freigabe` der Abschnitt `## Nächstes Vorgehen` mit drei Punkten, je mit Beleg:
    - Produktziel: welche Etappen erreicht sind, was dem Ziel am meisten fehlt.
    - Etappenziel: was zur aktuellen Etappe fehlt, nach der Abnahme des Fachkritikers und dem
      Abschnitt „Danach“ des Plans; in wie vielen Zyklen sie erreichbar ist.
-   - Zyklusziel: Empfehlung für Plan n+1, mit den technischen Voraussetzungen und Schulden,
-     die vorher weg müssen.
+   - Zyklusziel: Empfehlung für Plan n+1. Zuerst, was danach am Bildschirm machbar ist und
+     was noch nicht, in Worten des Spielers; dann die technischen Voraussetzungen und
+     Schulden, die vorher weg müssen.
    Der Reviewer fasst zusammen und empfiehlt; der Stakeholder entscheidet mit Freigabe und
    Kommentaren, der Planer schneidet die Items. Davor der Abschnitt `## Rundgang Prüfcode`:
    Einmal je Zyklus geht der Reviewer mit dem Stakeholder durch den Prüfcode, der seit dem
@@ -181,6 +187,9 @@ Kommentar: .
   Koordinator `Freigabe <Plan|Review|Retro> <n>`, auch wenn Kommentare offen sind; die
   Nachkorrektur folgt danach. Steht `Freigabe: offen`, beauftragt er den Autor und legt die
   Datei danach wieder vor. Mechanismus: nur Text.
+- In `handoff/` heißt ein Commit mit seinem Betreff in Anführung (Commit „Freigabe Plan
+  4“), nicht mit der Kennung; `git log --grep` findet ihn. Betreffe sind daher für sich
+  verständlich (Anliegen 354). Mechanismus: nur Text.
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
 - Die Etappe gibt der Stakeholder mit „.“ im Chat frei.
