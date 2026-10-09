@@ -146,3 +146,25 @@ def testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung():
 
     with pytest.raises(ValueError):
         aufstellung.auswählen(einheit)
+
+
+def testEineAusgangslageMitDemselbenSpielerIstEineVorbedingungsverletzung():
+    spieler = spielerMitEinerEinheit()
+    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
+
+    tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
+
+    with pytest.raises(ValueError):
+        Ausgangslage(spieler, spieler, spielfeld, tiefen)
+
+
+def testEineAusgangslageMitGemeinsamemModellIstEineVorbedingungsverletzung():
+    gemeinsam = Modell(base=Base(durchmesser=32))
+    ersterSpieler = Spieler(armee=Armee(einheiten=(Einheit(name="Erste", modelle=(gemeinsam,)),)))
+    zweiterSpieler = Spieler(armee=Armee(einheiten=(Einheit(name="Zweite", modelle=(gemeinsam,)),)))
+    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
+
+    tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
+
+    with pytest.raises(ValueError):
+        Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen)

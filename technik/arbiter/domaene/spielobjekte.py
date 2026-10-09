@@ -41,6 +41,10 @@ class Armee:
     def modelle(self) -> frozenset[Modell]:
         return frozenset(modell for einheit in self.einheiten for modell in einheit.modelle)
 
+    def einheitVon(self, modell: Modell) -> Einheit | None:
+        """Die Einheit der Armee, zu der das Modell gehört, sonst None."""
+        return next((einheit for einheit in self.einheiten if modell in einheit.modelle), None)
+
 
 @dataclass(frozen=True, eq=False)
 class Spieler:

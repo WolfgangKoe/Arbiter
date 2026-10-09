@@ -1,6 +1,6 @@
 # Aufstellung lesbar: Landkarte, Fragen an Armee und Ausgangslage
 
-344 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · offen
+344 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Aus [339](339-klasseAufstellungErklaertUndGeprueft.md) (F1 B, Stakeholder):
@@ -41,3 +41,4 @@ die Mischung. Jetzt: ein Lauf, keine neuen Akzeptanztests.
   Glossar (345, F3); sie kommt als eigenes Anliegen.
 
 **Stellungnahme.**
+Angenommen und umgesetzt. Docstrings, Gliederung nach AUF-1, AUF-7 und AUF-3, AUF-5; `Ausgangslage.__post_init__` prüft die Spieler; `Armee.einheitVon`; `inNahkampfreichweite` als Funktion des Moduls (Ziel nach 345). Einheitstests in `aufstellenTest.py` und `spielobjekteTest.py`. Akzeptanztests unverändert.

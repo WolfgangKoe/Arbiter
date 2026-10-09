@@ -1,4 +1,6 @@
-from collections.abc import Callable, Mapping
+"""Die Phase Aufstellen: Wahlen, Setzen der Modelle und Auswählen der Einheiten (AUF)."""
+
+from collections.abc import Callable, Collection, Mapping
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
@@ -25,6 +27,12 @@ class Ausgangslage:
     spielfeld: Spielfeld
     tiefen: Mapping[Aufstellungszone, Fraction]
 
+    def __post_init__(self) -> None:
+        if self.ersterSpieler is self.zweiterSpieler:
+            raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
+        if _teilenSichArmeeOderModell(self.ersterSpieler, self.zweiterSpieler):
+            raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
+
     def grenzenDerZone(
         self, zone: Aufstellungszone
     ) -> tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]:
@@ -48,15 +56,25 @@ def _teilenSichArmeeOderModell(ersterSpieler: Spieler, zweiterSpieler: Spieler) 
     )
 
 
+# Regel: Nahkampfreichweite, ein Gegner höchstens 1″ entfernt (core_rules.txt:450)
+def inNahkampfreichweite(
+    modell: Modell, stelle: Stelle, stellen: Mapping[Modell, Stelle], eigene: Collection[Modell]
+) -> bool:
+    return any(
+        anderes not in eigene
+        and messen.abstandHöchstens(
+            modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
+        )
+        for anderes, andereStelle in stellen.items()
+    )
+
+
 class Aufstellung:
+    """Der Schiedsrichter der Phase: Abfragen, dann AUF-1, AUF-7 und AUF-3, AUF-5."""
+
     def __init__(self, ausgangslage: Ausgangslage) -> None:
-        ersterSpieler, zweiterSpieler = ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler
-        if ersterSpieler is zweiterSpieler:
-            raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
-        if _teilenSichArmeeOderModell(ersterSpieler, zweiterSpieler):
-            raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
         self._ausgangslage = ausgangslage
-        self._spieler = (ersterSpieler, zweiterSpieler)
+        self._spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
         self._gewinner: Spieler | None = None
         self._einheitInAufstellung: Einheit | None = None
         self._anDerReihe: Spieler | None = None
@@ -97,19 +115,10 @@ class Aufstellung:
     def ausgewählt(self, einheit: Einheit) -> bool:
         return einheit in self._ausgewählt
 
-    def auswählen(self, einheit: Einheit) -> None:
-        self._prüfenDassZurAufstellung(einheit)
-        if einheit in self._aufgestellt:
-            raise ValueError("Eine aufgestellte Einheit ist nicht auswählbar")
-        self._ausgewählt.add(einheit)
-
-    def abwählen(self, einheit: Einheit) -> None:
-        self._prüfenDassZurAufstellung(einheit)
-        self._ausgewählt.discard(einheit)
-
-    def _prüfenDassZurAufstellung(self, einheit: Einheit) -> None:
-        if not any(einheit in spieler.armee.einheiten for spieler in self._spieler):
-            raise ValueError("Die Einheit gehört nicht zur Aufstellung")
+    def aufstellungszone(self, spieler: Spieler) -> Aufstellungszone | None:
+        if spieler not in self._spieler:
+            raise ValueError("Der Spieler gehört nicht zur Aufstellung")
+        return self._zonen.get(spieler)
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
         if gewinner not in self._spieler:
@@ -125,10 +134,18 @@ class Aufstellung:
         self._zonen = {self._gewinner: zone, self._gegnerVon(self._gewinner): andere}
         self._anDerReihe = self._nächsterAnDerReihe(self._gewinner)
 
-    def aufstellungszone(self, spieler: Spieler) -> Aufstellungszone | None:
-        if spieler not in self._spieler:
-            raise ValueError("Der Spieler gehört nicht zur Aufstellung")
-        return self._zonen.get(spieler)
+    def _gegnerVon(self, spieler: Spieler) -> Spieler:
+        return next(andere for andere in self._spieler if andere is not spieler)
+
+    def _nächsterAnDerReihe(self, bisher: Spieler) -> Spieler | None:
+        gegner = self._gegnerVon(bisher)
+        for kandidat in (gegner, bisher):
+            if self._hatEinheitenZumAufstellen(kandidat):
+                return kandidat
+        return None
+
+    def _hatEinheitenZumAufstellen(self, spieler: Spieler) -> bool:
+        return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
 
     def modellSetzen(self, modell: Modell, stelle: Stelle) -> None:
         einheit = self._einheitVon(modell)
@@ -155,9 +172,9 @@ class Aufstellung:
 
     def _einheitVon(self, modell: Modell) -> Einheit:
         for spieler in self._spieler:
-            for einheit in spieler.armee.einheiten:
-                if modell in einheit.modelle:
-                    return einheit
+            einheit = spieler.armee.einheitVon(modell)
+            if einheit is not None:
+                return einheit
         raise ValueError("Das Modell gehört nicht zur Aufstellung")
 
     def _gehörtDemSpielerAnDerReihe(self, einheit: Einheit) -> bool:
@@ -183,15 +200,8 @@ class Aufstellung:
         return baseÜberdeckt(modell, stelle, self._stellen)
 
     def _inNahkampfreichweiteVonGegnern(self, modell: Modell, stelle: Stelle) -> bool:
-        spieler = self._spielerAnDerReihe
-        eigene = spieler.armee.modelle
-        return any(
-            anderes not in eigene
-            and messen.abstandHöchstens(
-                modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
-            )
-            for anderes, andereStelle in self._stellen.items()
-        )
+        eigene = self._spielerAnDerReihe.armee.modelle
+        return inNahkampfreichweite(modell, stelle, self._stellen, eigene)
 
     _prüfungen: ClassVar[dict[Grund, Callable[["Aufstellung", Modell, Stelle], bool]]] = {
         Grund.nichtGanzInDerZone: _nichtGanzInDerZone,
@@ -199,15 +209,16 @@ class Aufstellung:
         Grund.nahkampfreichweite: _inNahkampfreichweiteVonGegnern,
     }
 
-    def _hatEinheitenZumAufstellen(self, spieler: Spieler) -> bool:
-        return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
+    def auswählen(self, einheit: Einheit) -> None:
+        self._prüfenDassZurAufstellung(einheit)
+        if einheit in self._aufgestellt:
+            raise ValueError("Eine aufgestellte Einheit ist nicht auswählbar")
+        self._ausgewählt.add(einheit)
 
-    def _gegnerVon(self, spieler: Spieler) -> Spieler:
-        return next(andere for andere in self._spieler if andere is not spieler)
+    def abwählen(self, einheit: Einheit) -> None:
+        self._prüfenDassZurAufstellung(einheit)
+        self._ausgewählt.discard(einheit)
 
-    def _nächsterAnDerReihe(self, bisher: Spieler) -> Spieler | None:
-        gegner = self._gegnerVon(bisher)
-        for kandidat in (gegner, bisher):
-            if self._hatEinheitenZumAufstellen(kandidat):
-                return kandidat
-        return None
+    def _prüfenDassZurAufstellung(self, einheit: Einheit) -> None:
+        if not any(einheit in spieler.armee.einheiten for spieler in self._spieler):
+            raise ValueError("Die Einheit gehört nicht zur Aufstellung")
