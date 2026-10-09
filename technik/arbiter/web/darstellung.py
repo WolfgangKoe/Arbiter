@@ -9,12 +9,11 @@ from arbiter.web.kennungen import ablageNachNummer, spielerNachNummer
 def spielstand(aufstellung: Aufstellung) -> dict:
     ausgangslage = aufstellung.ausgangslage
     spielerNummern = spielerNachNummer(aufstellung)
-    spieler = tuple(spielerNummern.values())
     breite, länge = ausgangslage.spielfeld.seitenlängen
     return {
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
-        "zonen": [_zone(aufstellung, zone, spieler) for zone in Aufstellungszone],
-        "modelle": _modelle(aufstellung, spieler),
+        "zonen": [_zone(aufstellung, zone, spielerNummern) for zone in Aufstellungszone],
+        "modelle": _modelle(aufstellung, spielerNummern),
         "spieler": [
             _spieler(aufstellung, spielernummer, einer)
             for spielernummer, einer in spielerNummern.items()
@@ -22,34 +21,37 @@ def spielstand(aufstellung: Aufstellung) -> dict:
     }
 
 
-def _nummer(spieler: tuple[Spieler, ...], gesucht: Spieler | None) -> int | None:
-    return spieler.index(gesucht) + 1 if gesucht in spieler else None
-
-
-def _zone(aufstellung: Aufstellung, zone: Aufstellungszone, spieler: tuple[Spieler, ...]) -> dict:
+def _zone(
+    aufstellung: Aufstellung, zone: Aufstellungszone, spielerNummern: dict[int, Spieler]
+) -> dict:
     (anfangX, endeX), (anfangY, endeY) = aufstellung.ausgangslage.grenzenDerZone(zone)
     besitzer = next(
-        (einer for einer in spieler if aufstellung.aufstellungszone(einer) is zone), None
+        (
+            nummer
+            for nummer, einer in spielerNummern.items()
+            if aufstellung.aufstellungszone(einer) is zone
+        ),
+        None,
     )
     return {
         "x": float(anfangX),
         "y": float(anfangY),
         "breite": float(endeX - anfangX),
         "länge": float(endeY - anfangY),
-        "spieler": _nummer(spieler, besitzer),
+        "spieler": besitzer,
     }
 
 
-def _modelle(aufstellung: Aufstellung, spieler: tuple[Spieler, ...]) -> list[dict]:
+def _modelle(aufstellung: Aufstellung, spielerNummern: dict[int, Spieler]) -> list[dict]:
     return [
         {
             "x": float(stelle.x),
             "y": float(stelle.y),
             "radius": float(radiusInZoll(modell.base)),
-            "spieler": nummer,
+            "spieler": spielernummer,
             "ausgewählt": aufstellung.ausgewählt(einheit),
         }
-        for nummer, einer in enumerate(spieler, start=1)
+        for spielernummer, einer in spielerNummern.items()
         for einheit in einer.armee.einheiten
         for modell in einheit.modelle
         if (stelle := aufstellung.stelle(modell))

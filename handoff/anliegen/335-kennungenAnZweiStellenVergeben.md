@@ -1,6 +1,6 @@
 # Die Kennungen nach W4 entstehen an zwei Stellen
 
-335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · offen
+335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit 6bea166 vergibt `web/` die Kennungen nach
@@ -48,3 +48,4 @@ derselben Zuordnung (etwa `next((nummer for nummer, einer in spielerNummern.item
 Erledigt, wenn `grep -n "enumerate\|index(" technik/arbiter/web/darstellung.py` leer ist.
 
 **Stellungnahme.**
+Angenommen. `spielstand` reicht `spielerNummern` an `_zone` und `_modelle`; `_nummer` und das Tupel entfallen, `grep` ist leer.

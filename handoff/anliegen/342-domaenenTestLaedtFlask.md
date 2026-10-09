@@ -1,6 +1,6 @@
 # Ein Unit-Test der Domäne lädt Flask über die Handgriffe
 
-342 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+342 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Geprüft: c1416e2. `testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung`
@@ -25,3 +25,4 @@ aus `tests.akzeptanz` entfällt.
 Erledigt, wenn `grep -n "tests.akzeptanz" technik/tests/einheit/domaene/` leer ist.
 
 **Stellungnahme.**
+Angenommen. Der Test stellt die Einheit mit `modellSetzen` und `aufstellenDerEinheitBeenden` selbst auf; kein Import aus `tests.akzeptanz` mehr.
