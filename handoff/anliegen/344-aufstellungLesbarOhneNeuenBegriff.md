@@ -1,6 +1,6 @@
 # Aufstellung lesbar: Landkarte, Fragen an Armee und Ausgangslage
 
-344 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · angenommen
+344 · Kritik · von Architekt (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus [339](339-klasseAufstellungErklaertUndGeprueft.md) (F1 B, Stakeholder):
