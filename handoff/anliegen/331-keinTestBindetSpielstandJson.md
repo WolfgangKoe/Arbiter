@@ -1,6 +1,6 @@
 # Kein Test bindet spielstand.json an Backend und Frontend
 
-331 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+331 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Vertrag](../../technik/architektur/vertrag.md), Absatz „Prüft V1 bis V3“, verlangt
@@ -41,4 +41,16 @@ hat; mit AUF-5.5 wird die Datei ohnehin zu groß.
 Erledigt, wenn ein Test die Antwort des Dienstes mit der Datei vergleicht, einer das Frontend
 aus der Datei zeichnet und `auf5Test.py` mit den Tests zu AUF-5.5 unter 20.000 Zeichen bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte umgesetzt.
+1. `testAuf5_6DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags` baut den Stand
+   (Spieler 1 Gewinner mit erster Zone, Spieler 2 an der Reihe, drei Necron Warriors an den Stellen
+   aus `spielstand.json`, Fixture `aufstellungDesBeispiels`) und vergleicht die Antwort nach
+   `PUT` auf Warboss und Necron Warriors sowie `GET` mit `spielstandDesVertrags()`. Alle Stellen
+   des Beispiels sind erreichbar.
+2. `testAuf5_6DieSeiteKennzeichnet...` und `testAuf5_7DieSeiteZeichnet...` laden die Seite mit
+   `Bildschirm.seiteMitSpielstand` (`page.route`) und vergleichen mit der Datei.
+3. Helfer sind in `dienst.py` und `bildschirm.py` (Anliegen 332); `auf5Test.py` hat 19.770 von
+   20.000 Zeichen.
+Zu AUF-5.5: Es steht nicht im Umfang von Plan 4 (Anliegen 320 B, 323), also gibt es dazu
+keinen Test. Kommt er mit einer dritten *Einheit*, braucht `auf5Test.py` Platz: dann teilt der
+Anforderungsautor AUF-5 (dein Gegenvorschlag 3, letzter Satz).

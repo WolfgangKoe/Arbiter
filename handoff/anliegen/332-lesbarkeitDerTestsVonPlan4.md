@@ -1,6 +1,6 @@
 # Akzeptanztests von Plan 4: Wiederholung, Zahlen statt Namen, Dienst in den Handgriffen
 
-332 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+332 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Geprüft: 4603003, 21493e2, d9ddabd, aad7540 nach
@@ -53,4 +53,8 @@ woanders.
 
 Erledigt, wenn die sechs Punkte umgesetzt oder einzeln begründet abgelehnt sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle sechs Punkte umgesetzt: `dienst.py` mit den acht
+Funktionen; in `bildschirm.py` die fünf Helfer (`tippenUndWarten` als Gegenstück zum Tippen);
+`anzahlGesetzterModelle` in `handgriffe.py`; `auswählen(dienst, "Warboss")` mit der Tabelle
+`kennungenDerEinheiten`; `anfrage`; die Fixtures `spielerEins`, `boyz`, neu `warboss`; die Tests
+zu AUF-5.10 bauen den Zustand vor `seiteZu`, ohne Klick und Neuladen.

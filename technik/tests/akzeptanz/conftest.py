@@ -13,11 +13,12 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Aus
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from tests.akzeptanz.bildschirm import Bildschirm
+from tests.akzeptanz.dienst import dienstFür
 from tests.akzeptanz.handgriffe import (
     Platz,
     aufstellungVon,
-    dienstFür,
     einheitAufstellen,
+    modelleAnDenStellenDesVertragsSetzen,
     modelleSetzen,
     spielerMit,
 )
@@ -139,6 +140,12 @@ def boyz(spielerEins: Spieler) -> Einheit:
 
 
 @pytest.fixture
+def warboss(spielerEins: Spieler) -> Einheit:
+    _, einheit = spielerEins.armee.einheiten
+    return einheit
+
+
+@pytest.fixture
 def necronWarriors(spielerZwei: Spieler) -> Einheit:
     einheit, _ = spielerZwei.armee.einheiten
     return einheit
@@ -156,6 +163,17 @@ def aufstellungNachDerZonenwahl(
     """Spieler 2 hat gewonnen und die erste Zone gewählt; Spieler 1 ist an der Reihe."""
     ausgangsaufstellung.gewinnerWählen(spielerZwei)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    return ausgangsaufstellung
+
+
+@pytest.fixture
+def aufstellungDesBeispiels(
+    ausgangsaufstellung: Aufstellung, spielerEins: Spieler, necronWarriors: Einheit
+) -> Aufstellung:
+    """Der Start nach AUF-6.1 mit den gesetzten Modellen des Beispiels im Vertrag (V1)."""
+    ausgangsaufstellung.gewinnerWählen(spielerEins)
+    ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    modelleAnDenStellenDesVertragsSetzen(ausgangsaufstellung, necronWarriors)
     return ausgangsaufstellung
 
 
@@ -203,3 +221,9 @@ def einGesetztesModell(aufstellungNachDerZonenwahl, boyzSetzen) -> tuple[Aufstel
 def dienst(aufstellungNachDerZonenwahl: Aufstellung):
     """Der Flask-Testclient der Anwendung über dem Spielstand der Zonenwahl."""
     return dienstFür(aufstellungNachDerZonenwahl)
+
+
+@pytest.fixture
+def dienstDesBeispiels(aufstellungDesBeispiels: Aufstellung):
+    """Der Flask-Testclient der Anwendung über dem Stand des Beispiels im Vertrag."""
+    return dienstFür(aufstellungDesBeispiels)

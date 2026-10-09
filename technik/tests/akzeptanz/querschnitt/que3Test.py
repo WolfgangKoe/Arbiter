@@ -1,20 +1,17 @@
 """QUE-3 · Bedienung."""
 
-import re
-
 import pytest
-from playwright.sync_api import expect
 
 from tests.akzeptanz.bildschirm import (
     ausgewählteEinheiten,
     ausgewählteModelle,
-    einheitenKarteVon,
     inhaltDerSeite,
+    klickenUndWarten,
+    neuLaden,
+    tippenUndWarten,
 )
-from tests.akzeptanz.handgriffe import auswählen, modelleSetzen, spielstandVon
-
-ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
-anzahlGesetzterModelle = 3
+from tests.akzeptanz.dienst import auswählen, spielstandVon
+from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, modelleSetzen
 
 
 def kreisAufDerKarte(seite):
@@ -27,14 +24,10 @@ def testQue3_1EinTippenAufEineKarteInDerAblageMachtDieEinheitAusgewähltWieEinKl
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
 
-    einheitenKarteVon(mitMaus, "Spieler 2", "Necron Warriors").click()
-    einheitenKarteVon(mitFinger, "Spieler 2", "Necron Warriors").tap()
+    klickenUndWarten(mitMaus, "Spieler 2", "Necron Warriors")
+    tippenUndWarten(mitFinger, "Spieler 2", "Necron Warriors")
 
-    for seite in (mitMaus, mitFinger):
-        expect(einheitenKarteVon(seite, "Spieler 2", "Necron Warriors")).to_have_class(
-            ausgewähltGekennzeichnet
-        )
-    assert ausgewählteEinheiten(mitFinger) == ausgewählteEinheiten(mitMaus)
+    assert ausgewählteEinheiten(mitFinger) == ausgewählteEinheiten(mitMaus) == {"Necron Warriors"}
 
 
 def testQue3_1EinTippenAufEineAusgewählteEinheitMachtSieNichtAusgewähltWieEinKlick(
@@ -42,20 +35,12 @@ def testQue3_1EinTippenAufEineAusgewählteEinheitMachtSieNichtAusgewähltWieEinK
 ):
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
-    einheitenKarteVon(mitMaus, "Spieler 1", "Boyz").click()
-    einheitenKarteVon(mitFinger, "Spieler 1", "Boyz").tap()
-    expect(einheitenKarteVon(mitMaus, "Spieler 1", "Boyz")).to_have_class(ausgewähltGekennzeichnet)
-    expect(einheitenKarteVon(mitFinger, "Spieler 1", "Boyz")).to_have_class(
-        ausgewähltGekennzeichnet
-    )
+    klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
+    tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 
-    einheitenKarteVon(mitMaus, "Spieler 1", "Boyz").click()
-    einheitenKarteVon(mitFinger, "Spieler 1", "Boyz").tap()
+    klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
+    tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 
-    for seite in (mitMaus, mitFinger):
-        expect(einheitenKarteVon(seite, "Spieler 1", "Boyz")).not_to_have_class(
-            ausgewähltGekennzeichnet
-        )
     assert ausgewählteEinheiten(mitFinger) == ausgewählteEinheiten(mitMaus) == frozenset()
 
 
@@ -65,12 +50,8 @@ def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
-    einheitenKarteVon(mitMaus, "Spieler 1", "Boyz").click()
-    einheitenKarteVon(mitFinger, "Spieler 1", "Boyz").tap()
-    expect(einheitenKarteVon(mitMaus, "Spieler 1", "Boyz")).to_have_class(ausgewähltGekennzeichnet)
-    expect(einheitenKarteVon(mitFinger, "Spieler 1", "Boyz")).to_have_class(
-        ausgewähltGekennzeichnet
-    )
+    klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
+    tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 
     kreisAufDerKarte(mitMaus).click()
     kreisAufDerKarte(mitFinger).tap()
@@ -85,12 +66,10 @@ def testQue3_2ÖffnetEinSpielerDieAdresseErneutZeigenKarteUndAblagenDasselbeWieD
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
     davor = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    einheitenKarteVon(davor, "Spieler 1", "Boyz").click()
-    expect(einheitenKarteVon(davor, "Spieler 1", "Boyz")).to_have_class(ausgewähltGekennzeichnet)
+    klickenUndWarten(davor, "Spieler 1", "Boyz")
 
     if erneut == "neuLaden":
-        davor.reload()
-        davor.wait_for_selector(".karte .spielfeld")
+        neuLaden(davor)
         danach = davor
     else:
         danach = bildschirm.seiteBei(davor.url)
@@ -106,8 +85,7 @@ def testQue3_3NachDemNeustartZeigenKarteUndAblagenDieAusgangslageStattDesStandsD
     adresseDavor = befehl.starten()
     davor = bildschirm.seiteBei(adresseDavor)
     ausgangslageMitWahl = inhaltDerSeite(davor)
-    einheitenKarteVon(davor, "Spieler 1", "Boyz").click()
-    expect(einheitenKarteVon(davor, "Spieler 1", "Boyz")).to_have_class(ausgewähltGekennzeichnet)
+    klickenUndWarten(davor, "Spieler 1", "Boyz")
     standDavor = inhaltDerSeite(davor)
     befehl.beenden()
 
@@ -123,7 +101,7 @@ def testQue3_2DerDienstLiefertAufJedeWeitereAnfrageDenselbenSpielstandWieDavor(
     dienst, aufstellungNachDerZonenwahl, boyz
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
-    davor = auswählen(dienst, 1, 1).get_json()
+    davor = auswählen(dienst, "Boyz").get_json()
 
     danach = spielstandVon(dienst)
 

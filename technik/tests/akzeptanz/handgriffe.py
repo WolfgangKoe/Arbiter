@@ -1,4 +1,4 @@
-"""Handgriffe der Akzeptanztests: Armeen bauen, Stellen berechnen, aufstellen, Dienst fragen."""
+"""Handgriffe der Akzeptanztests: Armeen bauen, Stellen berechnen, aufstellen."""
 
 from dataclasses import replace
 from fractions import Fraction
@@ -9,7 +9,7 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
-from arbiter.web.anwendung import anwendungFür
+from tests.akzeptanz.dienst import spielstandDesVertrags
 
 # Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
@@ -22,6 +22,7 @@ tiefeDerZone = 9
 abstandDerReihen = Fraction(5, 2)
 tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
+anzahlGesetzterModelle = 3
 
 
 def spielerMit(*modellzahlen: int) -> Spieler:
@@ -156,38 +157,11 @@ def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
     )
 
 
-def dienstFür(aufstellung: Aufstellung):
-    return anwendungFür(aufstellung).test_client()
-
-
-def pfadDerAuswahl(spielernummer: int, einheitennummer: int) -> str:
-    return f"/api/spieler/{spielernummer}/einheiten/{einheitennummer}/ausgewählt"
-
-
-def auswählen(dienst, spielernummer: int, einheitennummer: int):
-    return dienst.put(pfadDerAuswahl(spielernummer, einheitennummer))
-
-
-def abwählen(dienst, spielernummer: int, einheitennummer: int):
-    return dienst.delete(pfadDerAuswahl(spielernummer, einheitennummer))
-
-
-def spielstandVon(dienst) -> dict:
-    return dienst.get("/api/spielstand").get_json()
-
-
-def einheitenDerAblagen(spielstand: dict) -> dict[str, dict]:
-    return {
-        einheit["name"]: einheit for einer in spielstand["spieler"] for einheit in einer["ablage"]
-    }
-
-
-def ausgewählteEinheitenIm(spielstand: dict) -> frozenset[str]:
-    einheiten = einheitenDerAblagen(spielstand)
-    return frozenset(name for name, einheit in einheiten.items() if einheit["ausgewählt"])
-
-
-def ausgewählteModelleIm(spielstand: dict) -> frozenset[tuple[float, float]]:
-    return frozenset(
-        (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell["ausgewählt"]
-    )
+def modelleAnDenStellenDesVertragsSetzen(aufstellung: Aufstellung, einheit: Einheit) -> None:
+    """Setzt die ersten Modelle der Einheit an die Stellen der Modelle im Beispiel des Vertrags."""
+    stellen = [
+        Stelle(x=Fraction(str(modell["x"])), y=Fraction(str(modell["y"])))
+        for modell in spielstandDesVertrags()["modelle"]
+    ]
+    for modell, stelle in zip(einheit.modelle, stellen, strict=False):
+        aufstellung.modellSetzen(modell, stelle)

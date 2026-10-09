@@ -1,8 +1,10 @@
 """Bildschirm der Akzeptanztests: Browser, Server und das Lesen der Seite."""
 
+import re
+from collections.abc import Callable
 from dataclasses import dataclass
 
-from playwright.sync_api import Browser, Locator, Page
+from playwright.sync_api import Browser, Locator, Page, expect
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Spieler
@@ -105,6 +107,45 @@ def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Loca
     return ablageVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
 
 
+ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
+
+
+def spielerAnDerReihe(seite: Page) -> Locator:
+    """Die Kopfzeile des Spielers, die „an der Reihe“ zeigt."""
+    return seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
+
+
+def neuLaden(seite: Page) -> None:
+    seite.reload()
+    _aufDasSpielfeldWarten(seite)
+
+
+def _aufDasSpielfeldWarten(seite: Page) -> None:
+    seite.wait_for_selector(".karte .spielfeld")
+
+
+def _berührenUndWarten(
+    seite: Page, spielername: str, einheitenname: str, berühren: Callable[[Locator], None]
+) -> None:
+    karte = einheitenKarteVon(seite, spielername, einheitenname)
+    warAusgewählt = einheitenname in ausgewählteEinheiten(seite)
+    berühren(karte)
+    if warAusgewählt:
+        expect(karte).not_to_have_class(ausgewähltGekennzeichnet)
+    else:
+        expect(karte).to_have_class(ausgewähltGekennzeichnet)
+
+
+def klickenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
+    """Klickt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
+    _berührenUndWarten(seite, spielername, einheitenname, Locator.click)
+
+
+def tippenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
+    """Tippt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
+    _berührenUndWarten(seite, spielername, einheitenname, Locator.tap)
+
+
 def ablageVon(seite: Page, spielername: str) -> Locator:
     name = seite.locator(".armeeKartenName", has_text=spielername)
     return seite.locator(".armeeKarte").filter(has=name)
@@ -124,11 +165,29 @@ class Bildschirm:
 
     def seiteBei(self, adresse: str, *, berührbar: bool = False) -> Page:
         """Öffnet die Adresse und wartet auf das Spielfeld, erst dann gilt, was die Seite zeigt."""
+        seite = self._neueSeite(berührbar=berührbar)
+        seite.goto(adresse)
+        _aufDasSpielfeldWarten(seite)
+        return seite
+
+    def seiteMitSpielstand(self, aufstellung: Aufstellung, spielstand: dict) -> Page:
+        """Öffnet die Seite des Servers, der Spielstand kommt statt vom Dienst aus dem Argument."""
+        seite = self._neueSeite(berührbar=False)
+
+        def spielstandLiefern(anfrage) -> None:
+            anfrage.fulfill(json=spielstand)
+
+        seite.route("**/api/spielstand", spielstandLiefern)
+        server = serverStarten(aufstellung)
+        self._server.append(server)
+        seite.goto(server.adresse)
+        _aufDasSpielfeldWarten(seite)
+        return seite
+
+    def _neueSeite(self, *, berührbar: bool) -> Page:
         seite = self._browser.new_context(has_touch=berührbar).new_page()
         self._seiten.append(seite)
         seite.set_default_timeout(wartezeitInMillisekunden)
-        seite.goto(adresse)
-        seite.wait_for_selector(".karte .spielfeld")
         return seite
 
     def seiteZu(self, aufstellung: Aufstellung, *, berührbar: bool = False) -> Page:

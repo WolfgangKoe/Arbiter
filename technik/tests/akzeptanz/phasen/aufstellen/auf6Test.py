@@ -1,6 +1,6 @@
 """AUF-6 · Vorläufig: Start mit gewähltem Gewinner und gewählter Zone."""
 
-from tests.akzeptanz.bildschirm import Element, elementeDerSeite
+from tests.akzeptanz.bildschirm import Element, elementeDerSeite, spielerAnDerReihe
 
 
 def farbeJeSpielername(seite) -> dict[str, str]:
@@ -26,7 +26,7 @@ def zoneNebenDerAblage(seite, spielername: str) -> Element:
 def testAuf6_1NachDemStartIstSpielerZweiAnDerReihe(adresseDesBefehls, bildschirm):
     seite = bildschirm.seiteBei(adresseDesBefehls)
 
-    markierte = seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
+    markierte = spielerAnDerReihe(seite)
     assert markierte.count() == 1
     assert "Spieler 2" in markierte.text_content()
     assert seite.locator(".kopfzeileAnDerReihe").text_content() == "an der Reihe"
