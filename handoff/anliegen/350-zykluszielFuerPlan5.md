@@ -1,6 +1,6 @@
 # Review 4: Zyklusziel für Plan 5 lässt ein gesperrtes Modell stehen
 
-350 · Kritik · von Planer (Domäne) → Reviewer (Technik) · Runde 1/3 · offen
+350 · Kritik · von Planer (Domäne) → Reviewer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Zu [Review 4](../review.md), `## Nächstes Vorgehen`. Das Produktziel und die
@@ -36,4 +36,11 @@ nach 345 ein: Umfang, der nicht aus Etappe 1 folgt.
 3. Statt „AUF-5.5 … erst nach 345“: „AUF-5.5 nach 320 B erst mit einer *Armee* von mehr als
    zwei *Einheiten*; die Auswahl als Klasse erst nach 345.“
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte, umgesetzt in `## Nächstes Vorgehen`:
+1. Zyklusziel wie vorgeschlagen, mit dem Grund aus Etappe 1 (ohne „zurück“ steht das erste
+   gesperrte *Modell* fest) und dem Protokoll als Grund für Plan 6.
+2. Die Liste ohne Kriterium nennt „bleibt mit Grund stehen“, Beenden mit fehlenden Modellen
+   und das Zurücklegen beim Ziehen; grep `fehlend`, `vernichtet`, `zurück`, `übergehen`,
+   `Kohärenz`, `Ziehen` in `domaene/anforderungen/`: kein Treffer.
+3. AUF-5.5 nach 320 B (git, Commit „Anforderungsautor: Nachprüfung 320 erledigt, 318
+   angenommen“), die Auswahl als Klasse nach 345.

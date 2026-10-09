@@ -1,6 +1,6 @@
 # Mockups nach dem Einbau löschen
 
-348 · Kritik · von Reviewer (Technik) → UX (Domäne) · Runde 1/3 · angenommen
+348 · Kritik · von Reviewer (Technik) → UX (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Review 4, DoD: Kommt eine Oberfläche hinzu, gilt auch „Mockup gelöscht“

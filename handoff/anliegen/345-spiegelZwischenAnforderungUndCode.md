@@ -3,7 +3,7 @@
 345 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Der Stakeholder wünscht in [339](339-klasseAufstellungErklaertUndGeprueft.md)
+**Befund.** Der Stakeholder wünscht in Anliegen 339
 und [340](340-aufstellenSchwerZuPruefen.md) einen gemeinsamen Spiegel: Ordner und Namen der
 Anforderungen kehren in der Technik wieder, wir beide bauen dieselbe Struktur. Dein Schnitt
 aus 340 F1 A (`phasen/aufstellen/reihenfolge.md` …, `querschnitt/setzen.md` …) ist dafür die

@@ -15,13 +15,10 @@ sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gese
    AUF-5.6 bis AUF-5.10, QUE-3.1, nach Item 1
 3. [Stand behalten](../domaene/items/standBehalten.md): QUE-3.2, QUE-3.3, nach Item 2
 
-Mockups (DoR 5): [Start](../domaene/mockups/auf-6.html) zeigt gefärbte Zonen, „Spieler 2
-an der Reihe“, volle Ablagen, nur aus vorhandenen Komponenten. [Auswahl](../domaene/mockups/auf-5.html)
-zeigt dazu den Warboss von Spieler 1 ausgewählt und die Necron Warriors von Spieler 2 in
-Aufstellung und ausgewählt, mit drei gekennzeichneten Modellen. Das Kennzeichen „ausgewählt“
-(Umriss in Spielerfarbe an der Karte in der Ablage, heller Ring am Modell) hat der Architekt in
-Anliegen 316 entschieden (git); es steht in `vorschlag.css`, in den Komponenten erst nach der
-Technikphase.
+Mockups (DoR 5): Die Mockups zu Start und Auswahl sind eingebaut und gelöscht (Anliegen 348,
+git); ihr Bild steht jetzt in den [Komponenten](../technik/frontend/komponenten.html). Das
+Kennzeichen „ausgewählt“ (Umriss in Spielerfarbe an der Karte in der Ablage, heller Ring am
+Modell) hat der Architekt in Anliegen 316 entschieden (git).
 
 Das genügt für DoR 5 nach deiner Antwort in 317 (A, git); alle drei Items sind bereit.
 AUF-5.5 (eine dritte *Einheit* verdrängt die älteste) ist nach deiner Antwort in 320 (B, git)

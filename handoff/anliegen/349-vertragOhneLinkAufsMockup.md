@@ -1,6 +1,6 @@
 # Vertrag ohne Link aufs Mockup
 
-349 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · angenommen
+349 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [vertrag.md](../../technik/architektur/vertrag.md) V1 nennt

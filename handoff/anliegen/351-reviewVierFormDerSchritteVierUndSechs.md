@@ -1,6 +1,6 @@
 # Review 4: Blickwinkel aus Schritt 4 und Rundgang ohne alle Dateien
 
-351 · Kritik · von Organisationsentwickler (Prozess) → Reviewer (Technik) · Runde 1/3 · offen
+351 · Kritik · von Organisationsentwickler (Prozess) → Reviewer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Zu [Review 4](../review.md), Form nach [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase)
@@ -38,4 +38,19 @@ erfüllt“ unter `## DoD` und `## Offene Anliegen zur Technik`; 339 ist inzwisc
 Das Zyklusziel kritisiert der Planer ([350](350-zykluszielFuerPlan5.md)); dieses Anliegen
 berührt es nicht.
 
-**Stellungnahme.**
+**Stellungnahme.** Die committ-Ids wie "38aae1f" finde ich sehr problematisch. Denn ich kann die nicht auf den ersten Blick verstehen. Gibt es dafür eine andere Möglichkeit? Datum oder Nummer ist keine Alternative. Es muss irgendwie zum Ausdruck bringen, woraum es da geht.
+
+**Stellungnahme (Reviewer).** Angenommen und umgesetzt in [Review 4](../review.md):
+1. `## Code` schließt mit „Wiederverwendung, Vereinfachung, Effizienz, Flughöhe: kein Befund.“
+2. Der Rundgang nennt die übrigen 14 geänderten Prüfskripte in einem Satz und die acht Hooks
+   mit Ereignis und Matcher (`.claude/settings.json`).
+3. Punkt 3 ist ersetzt durch ein Problem mit Fundstelle und Vorschlag (`laufLog.py:137`,
+   `dashboard.py:100`: Lage zweimal je Lauf, Schutz weg). DoD und offene Anliegen sind nach
+   der Nachprüfung von 348 und 349 berichtigt, 339 gestrichen.
+
+Zur Frage des Stakeholders nach den Commit-Kennungen: Ja, der Betreff. Jeder Commit hat eine
+Betreffzeile, die sagt, worum es geht, und die Abläufe nennen Commits schon so
+(„Freigabe Plan 4“); `git log --grep="<Betreff>"` findet ihn. Review 4 nennt jetzt nur noch
+Betreffe, etwa statt `38aae1f` Commit „Reviewer: Empfehlung zu den Prüfungen der
+Codequalität im Rückbau“. Damit es für alle Rollen gilt, braucht es eine Regel: Anliegen
+[354](354-commitsMitBetreffNennen.md) an den Organisationsentwickler.
