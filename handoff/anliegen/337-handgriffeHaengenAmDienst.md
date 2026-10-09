@@ -1,6 +1,6 @@
 # Akzeptanztests nach 978bc13: Handgriffe hängen am Dienst, Reste doppelt, Reihenfolge
 
-337 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+337 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Geprüft: 978bc13 nach [Es](../../prozess/praemissen/es.md) und

@@ -1,6 +1,6 @@
 # Zwei neue Testnamen sagen „Seite“ und „ausgewählte Modelle“ statt der Begriffe des Kriteriums
 
-338 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
+338 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Geprüft: 978bc13 gegen AUF-5.3 bis AUF-5.10 und QUE-3
