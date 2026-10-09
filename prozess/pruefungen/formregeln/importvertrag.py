@@ -8,7 +8,7 @@ from formregeln.glossar import domaeneOrdner
 from gemeinsam.pfade import projektordner, webOrdner
 
 eigenesPaket = "arbiter.domaene"
-darstellungsDatei = "darstellung.py"
+flaskModule = ("anwendung.py", "server.py")
 vorlagenModule = ("jinja2", "markupsafe", "flask.templating")
 vorlagenFunktionen = ("render_template", "render_template_string", "*")
 serverModule = ("flask", "werkzeug")
@@ -133,7 +133,7 @@ def webVerstöße(wurzel: Path) -> list[str]:
         baum = ast.parse(datei.read_text(encoding="utf-8"))
         paket = paketDerDatei(datei, wurzel)
         verboten = [(*treffer, "W1") for treffer in vorlagenImporte(baum, paket)]
-        if datei.name == darstellungsDatei:
+        if datei.name not in flaskModule:
             verboten += [(*treffer, "W2") for treffer in serverImporte(baum, paket)]
         pfad = datei.relative_to(wurzel)
         gefunden += [

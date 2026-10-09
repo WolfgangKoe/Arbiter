@@ -91,7 +91,7 @@ def testW1HtmlErzeugenInWebIstRot(tmp_path, text):
 
 
 def testW1FlaskJsonifyInWebIstGrün(tmp_path):
-    webdatei(tmp_path, "import flask\nflask.jsonify\nfrom flask import jsonify\n")
+    webdatei(tmp_path, "import flask\nflask.jsonify\nfrom flask import jsonify\n", "anwendung.py")
     assert verstöße(tmp_path) == []
 
 
@@ -108,8 +108,15 @@ def testW2FlaskInDarstellungIstRot(tmp_path, text):
     assert verstöße(tmp_path)
 
 
-def testW2FlaskInAnderemWebModulIstGrün(tmp_path):
-    webdatei(tmp_path, "from flask import Flask\n", "anwendung.py")
+@pytest.mark.parametrize("datei", ["darstellung.py", "kennungen.py", "unbekannt.py"])
+def testW2FlaskInJedemAnderenWebModulIstRot(tmp_path, datei):
+    webdatei(tmp_path, "from flask import abort\n", datei)
+    assert verstöße(tmp_path)
+
+
+@pytest.mark.parametrize("datei", ["anwendung.py", "server.py"])
+def testW2FlaskInAnwendungUndServerIstGrün(tmp_path, datei):
+    webdatei(tmp_path, "from flask import Flask\n", datei)
     assert verstöße(tmp_path) == []
 
 

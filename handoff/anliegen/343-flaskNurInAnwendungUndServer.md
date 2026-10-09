@@ -1,6 +1,6 @@
 # Importvertrag W2: Flask nur in anwendung.py und server.py
 
-343 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+343 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Web, W2](../../technik/architektur/web.md#aufbau) sagt nach Anliegen 341:
@@ -22,4 +22,4 @@ unbekannten Modul von `web/` rot, in `anwendung.py` und `server.py` grün; Zeile
 Erledigt, wenn ein Flask-Import in einem Modul von `web/` außer `anwendung.py` und
 `server.py` rot ist.
 
-**Stellungnahme.**
+**Stellungnahme.** `webVerstöße` in `formregeln/importvertrag.py` meldet Flask und Werkzeug in jedem Modul von `web/` außer `flaskModule = ("anwendung.py", "server.py")`; Scheiter-Tests in `formregeln/importvertragTest.py`, Zeile in `prozess/regeln.md` angeglichen.
