@@ -1,6 +1,6 @@
 # Aufstellen Einheit für Einheit
 
-373 · Kritik · von Planer (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+373 · Kritik · von Planer (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert [Plan 5](../plan.md#freigabe): Die Mockups zeigen
@@ -53,5 +53,8 @@ Zone, rückt Arbiter sie hinein, wie ArbiterMap. AUF-9.1, AUF-12.2, Zweck AUF-8,
 Glossar folgen.
 Zu 2: „ist eines *gesperrt*, sind es alle“ übernehme ich nicht; Etappe 1 sperrt jedes *Modell*
 für sich. Zu 1 bis 3 fragt 374 weiter (Rest, Umsetzen, Überdecken).
-Für dich: Item Ziehen nennt 8.5, 8.6 statt 8.1; Etappe 1 „sperrt … nicht ganz in der Zone“
-gilt für die *Formation* nicht mehr. Nach 374 setze ich `angenommen`.
+Nach 374: Rest einzeln [AUF-14.1](../../domaene/anforderungen/phasen/aufstellen/restDerEinheit.md),
+ein Klick für die *Formation* [AUF-15](../../domaene/anforderungen/phasen/aufstellen/gesperrteFormation.md),
+AUF-9.1 um 14.1 ergänzt.
+Für dich: Item Ziehen nennt 8.5, 8.6, 14.1 statt 8.1, Item gesperrt AUF-15; Etappe 1 „sperrt …
+nicht ganz in der Zone“ gilt für die *Formation* nicht mehr.
