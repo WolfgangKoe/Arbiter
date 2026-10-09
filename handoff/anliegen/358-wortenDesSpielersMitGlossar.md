@@ -1,6 +1,6 @@
 # „In Worten des Spielers“ nennt das Glossar nicht
 
-358 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+358 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Retro 4 führt „in Worten des Spielers“ zweimal ein: im
@@ -26,4 +26,4 @@ weicht sie in Anforderungen vom Glossar ab.
    Werkzeug: in Worten des Spielers mit den Begriffen des Glossars, was am Bildschirm
    geschieht; Commits mit Betreff, Dateien als Link.“ („ohne Vorwissen“ entfällt.)
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt: [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 6, Zyklusziel „in Worten des Spielers mit den Begriffen des Glossars“; [356](356-verstaendlichFuerDenStakeholder.md) F1 A in deiner Fassung, „ohne Vorwissen“ entfällt, die Prämisse verweist auf wir.md 2.

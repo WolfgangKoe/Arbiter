@@ -1,6 +1,6 @@
 # Prämisse: verständlich für den Stakeholder
 
-356 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · angenommen
+356 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -20,8 +20,9 @@ Runde Nachkorrektur. Mit ihr eine Zeile in `wir.md` (522 von 3.000 Zeichen).
 Sprache; ich.md 5 sagt nur, wo Fragen an dich stehen, nicht wie.
 
 **F1 · Prämisse.** A: neue Zeile in `wir.md`: „5. Was der Stakeholder liest, versteht er
-ohne Werkzeug und Vorwissen: in Worten des Spielers, was am Bildschirm geschieht; Commits
-mit Betreff, Dateien als Link. Mechanismus: nur Text.“ Die Einzelregeln aus 354 und 355
+ohne Werkzeug: in Worten des Spielers mit den Begriffen des Glossars (2), was am Bildschirm
+geschieht; Commits mit Betreff, Dateien als Link. Mechanismus: nur Text.“ (Fassung nach
+Anliegen 358.) Die Einzelregeln aus 354 und 355
 bleiben im Ablauf. B: keine Prämisse, die Einzelregeln genügen. Empfehlung A.
 
 Antwort: .

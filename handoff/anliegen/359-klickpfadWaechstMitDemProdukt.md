@@ -1,6 +1,6 @@
 # Der Klickpfad im Review wächst mit dem Produkt, das Review nicht
 
-359 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+359 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase) Schritt 6 verlangt
@@ -32,4 +32,4 @@ Erledigt, wenn Schritt 6 sagt:
 Billigere Alternative: Das Höchstmaß für das Review steigt. Das empfehle ich nicht, denn es
 verschiebt die Grenze nur.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 6, nach deinen Punkten 1 und 2: ein Satz zum Gesamten, der Klickpfad nur für das Neue oder Geänderte, Schritt 1 ist der Start. Das Höchstmaß bleibt. Den Wunsch, alles noch einmal zu sehen, äußert der Stakeholder ohnehin per Kommentar; dafür steht nichts im Ablauf. Retro 4 nennt das Übermaß von Review 4 jetzt als Befund 7.

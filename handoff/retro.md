@@ -18,12 +18,16 @@ Commit „Freigabe Retro 3“, Anliegen, Belegung je Lauf (`prozess/dashboard/la
 6. Dreimal in einem Zyklus dieselbe Entscheidung: Du willst verstehen, ohne nachzuschlagen.
    Kriterien als Anwendungsfall (340), Commits mit Betreff statt Kennung (351), im Review
    Startbefehl, Klickpfad und ein Zyklusziel in Worten des Spielers (Kommentare zu Review 4).
+7. Review 4 hat über 7.000 Zeichen vor dem Abschnitt Freigabe, Höchstmaß 4.000; ein voller
+   Klickpfad wüchse mit jedem Zyklus (Anliegen 359). Die Prüfung der Höchstmaße bleibt im
+   [Backlog](../prozess/backlog.md); Schritt 6 schneidet den Klickpfad aufs Neue.
 
 ## Geändert
 - [Ablauf, Technikphase](../prozess/ablauf.md#technikphase), Schritt 6: Unter der ersten
-  Zeile steht der Startbefehl, dann der Abschnitt „Am Bildschirm prüfen“ mit Klickpfad und
-  erwartetem Bild; das Zyklusziel nennt zuerst, was danach am Bildschirm machbar ist und
-  was noch nicht (Anliegen 353, 355). Mechanismus: nur Text.
+  Zeile steht der Startbefehl, dann der Abschnitt „Am Bildschirm prüfen“: ein Satz zum
+  Gesamten, ein Klickpfad mit erwartetem Bild nur für das Neue; das Zyklusziel nennt
+  zuerst, was danach am Bildschirm machbar ist und was noch nicht, mit den Begriffen des
+  Glossars (Anliegen 353, 355, 358, 359). Mechanismus: nur Text.
 - [Ablauf, Freigabe und Kommentare](../prozess/ablauf.md#freigabe-und-kommentare): In
   `handoff/` heißt ein Commit mit seinem Betreff, nicht mit der Kennung (354). Mechanismus:
   nur Text.
@@ -31,13 +35,14 @@ Commit „Freigabe Retro 3“, Anliegen, Belegung je Lauf (`prozess/dashboard/la
 Kein neuer Mechanismus.
 
 ## Anliegen an mich
-353, 354 und 355 umgesetzt, 289 mit Anliegen 304 umgesetzt; alle vier angenommen, die
-Nachprüfung liegt beim Reviewer.
+353, 354 und 355 umgesetzt, 289 mit Anliegen 304 umgesetzt; die Nachprüfung liegt beim
+Reviewer. Kritik an dieser Retro: 357, 358 (Planer) und 359 (Architekt) umgesetzt, die
+Nachprüfung liegt bei ihnen. Alle sieben angenommen.
 
 ## Anliegen an dich
 [356](anliegen/356-verstaendlichFuerDenStakeholder.md), aus Befund 6: eine Prämisse in
 `wir.md`, damit jede Rolle für dich verständlich schreibt, auch in Plan, Retro, Anliegen und
-Anforderungen. Für Plan 5 nicht nötig.
+Anforderungen. Die Frage ist offen, F1 nach 358 neu gefasst. Für Plan 5 nicht nötig.
 
 ## Anliegen bei anderen
 340 und 345 folgen nach deiner Antwort (F5 A, F6 A) in der nächsten Domänenphase in einem

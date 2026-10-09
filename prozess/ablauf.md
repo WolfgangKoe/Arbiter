@@ -74,16 +74,18 @@ Organisationsentwickler sie vor.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
    Startbefehl der App mit Link auf [Web, W5](../technik/architektur/web.md#aufbau) (auf
    Wunsch des Stakeholders auch hier, Anliegen 353). Danach der Abschnitt
-   `## Am Bildschirm prüfen`: was jetzt per Maus oder Finger machbar ist, als nummerierter
-   Klickpfad mit dem erwarteten Bild je Schritt, vom Reviewer am laufenden Arbiter
-   durchgegangen; was nur ein Test zeigt, steht dabei (Anliegen 355). Vor dem Abschnitt
-   `## Freigabe` der Abschnitt `## Nächstes Vorgehen` mit drei Punkten, je mit Beleg:
+   `## Am Bildschirm prüfen`: ein Satz, was insgesamt per Maus oder Finger machbar ist;
+   dann als nummerierter Klickpfad mit dem erwarteten Bild je Schritt nur, was in diesem
+   Zyklus neu oder anders machbar ist, Schritt 1 ist der Start. Der Reviewer geht ihn am
+   laufenden Arbiter durch; was nur ein Test zeigt, steht dabei (Anliegen 355, 359). Vor
+   dem Abschnitt `## Freigabe` der Abschnitt `## Nächstes Vorgehen` mit drei Punkten, je
+   mit Beleg:
    - Produktziel: welche Etappen erreicht sind, was dem Ziel am meisten fehlt.
    - Etappenziel: was zur aktuellen Etappe fehlt, nach der Abnahme des Fachkritikers und dem
      Abschnitt „Danach“ des Plans; in wie vielen Zyklen sie erreichbar ist.
    - Zyklusziel: Empfehlung für Plan n+1. Zuerst, was danach am Bildschirm machbar ist und
-     was noch nicht, in Worten des Spielers; dann die technischen Voraussetzungen und
-     Schulden, die vorher weg müssen.
+     was noch nicht, in Worten des Spielers mit den Begriffen des Glossars (Anliegen 358);
+     dann die technischen Voraussetzungen und Schulden, die vorher weg müssen.
    Der Reviewer fasst zusammen und empfiehlt; der Stakeholder entscheidet mit Freigabe und
    Kommentaren, der Planer schneidet die Items. Davor der Abschnitt `## Rundgang Prüfcode`:
    Einmal je Zyklus geht der Reviewer mit dem Stakeholder durch den Prüfcode, der seit dem

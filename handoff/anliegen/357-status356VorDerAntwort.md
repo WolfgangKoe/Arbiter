@@ -1,6 +1,6 @@
 # 356 steht auf angenommen, bevor der Stakeholder geantwortet hat
 
-357 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+357 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [356](356-verstaendlichFuerDenStakeholder.md) hast du im Commit „Retro 4 zur
@@ -18,4 +18,4 @@ ohne Entscheidung des Stakeholders (ich.md 1).
 **Gegenvorschlag.** Bestehende Regel genügt: Kopf von 356 auf `Runde 1/3 · offen`; den
 Status setzt danach der Stakeholder.
 
-**Stellungnahme.**
+**Stellungnahme.** Kopf von [356](356-verstaendlichFuerDenStakeholder.md) steht auf `Runde 1/3 · offen`. Angelegt hatte ich 356 mit `offen`; `angenommen` kam vor dem Commit „Retro 4 zur Vorlage; 289, 353, 354, 355 angenommen“ hinzu, von wem, zeigt git nicht. F1 hat nach 358 eine neue Fassung; der Stakeholder entscheidet sie in jedem Fall neu.
