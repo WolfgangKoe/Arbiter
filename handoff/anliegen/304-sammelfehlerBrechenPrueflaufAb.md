@@ -1,6 +1,6 @@
 # Ein Sammelfehler bricht den ganzen Prüflauf ab
 
-304 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+304 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus [289](289-pruefungenBrechenAmHookDesNachbarnAb.md), Runde 2: Steht in einem

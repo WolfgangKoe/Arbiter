@@ -228,7 +228,8 @@ Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Ke
 Der Koordinator committet jeden Lauf nach seinen Pfaden, damit die Kritik am Code je Commit
 bleibt; die Zeile eines Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien
 eines laufenden Nachbarn rot, nennt der Lauf sie und meldet fertig; committet wird, wenn
-die Prüfungen grün sind. Mechanismus: nur Text.
+die Prüfungen grün sind. Mechanismus: Ein Importfehler im Prüfmodul eines Nachbarn macht nur
+dessen Tests rot, `pyproject.toml` ([Regeln](regeln.md#formregeln), Anliegen 304); sonst nur Text.
 
 ## Anliegen
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
