@@ -7,8 +7,9 @@ description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau
 Benennung nach `prozess/praemissen/es.md`, Umfang nach `.claude/agents/testautor.md`.
 
 ## Datei
-Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1: AUF-7 →
-`technik/tests/akzeptanz/phasen/aufstellen/auf7Test.py`.
+Eine Testdatei je Anforderung, Name und Ort nach `technik/architektur.md`, T1:
+`domaene/anforderungen/phasen/aufstellen/einheitInAufstellung.md` →
+`technik/tests/akzeptanz/phasen/aufstellen/einheitInAufstellungTest.py`.
 Erste Zeile ein einzeiliger Docstring mit Kürzel und Name: `"""AUF-7 · Einheit in Aufstellung."""`.
 Gemeinsame Handgriffe (`sperrgründe`, `nachDerWahlDerAufstellungszone`) stehen in
 `technik/tests/akzeptanz/handgriffe.py`.
@@ -24,7 +25,7 @@ Fixtures in `conftest.py` heißen nach dem, was sie sind (`ersterSpieler`), nich
   keine Schleife über Asserts.
 
 ## Beispiel
-AUF-7.3 aus `technik/tests/akzeptanz/phasen/aufstellen/auf7Test.py`:
+AUF-7.3 aus `einheitInAufstellungTest.py`:
 
 ```python
 def testAuf7_3EinModellEinerAnderenEinheitIstEinheitBegonnen(

@@ -1,6 +1,6 @@
 # Skill und Format der Domäne nach dem neuen Schnitt der Anforderungen
 
-369 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+369 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit 986d3fb steht je Anforderung eine Datei unter `domaene/anforderungen/<bereich>/`
@@ -43,4 +43,13 @@ Sammeldatei. 3: zwei Höchstmaße für dieselbe Datei. Berichtigen: je ein paar 
 Erledigt, wenn Skill und `domaene/CLAUDE.md` nur Pfade nennen, die es gibt, und das Format
 beschreiben, das die Dateien unter `domaene/anforderungen/` haben.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen:
+1. [Skill](../../.claude/skills/akzeptanztest-schreiben/SKILL.md): Abschnitt Datei nennt T1
+   mit dem Beispiel `einheitInAufstellung.md` → `…/einheitInAufstellungTest.py`, das
+   Beispiel AUF-7.3 verweist auf diese Datei.
+2. [domaene/CLAUDE.md](../../domaene/CLAUDE.md): `anforderungen/<bereich>/<name>.md`, die
+   vier Bereiche mit Kürzel, eine Anforderung je Datei, `Am Bildschirm:` bei einer Handlung,
+   Kriterium mit **Gegeben**, **wenn**, **dann** wie AUF-7. Ohne Link auf AUF-7 und mit
+   kürzeren Sätzen zu Etappen, Kennungen und Quellen, damit die Datei unter 1.500 Zeichen
+   bleibt; „Widerspruch oder Lücke“ verweist auf Ich 1.
+3. [Kennzahlen](../../prozess/kennzahlen.md): Anforderungsdatei gestrichen.

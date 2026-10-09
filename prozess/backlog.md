@@ -8,7 +8,8 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
 - Kopf der Anliegen nach Anliegen 254 in `anliegenregeln/anliegen.py` und `anliegenDran.py`:
   `Auftrag`, `· wartet auf`; `beantwortetDurchFreigabe` entfällt. Dazu im Dashboard die
   Spalte der wartenden Anliegen und „wartet auf“ auf der Karte (Anliegen 275). Auslöser:
-  Eine Rolle oder der Stakeholder braucht eins davon.
+  Eine Rolle oder der Stakeholder braucht eins davon; eingetreten (384 wartet auf 385), in
+  die Retro 5.
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Eine Regel steht im Verdacht,
   nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item

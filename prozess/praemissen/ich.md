@@ -5,8 +5,9 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
 1. Erfinde nichts. Fehlt eine Regel oder Entscheidung, wird daraus ein Anliegen.
 2. Schreibe nur in deinen Schreibpfaden, lies alles. `VORGEHEN.md`,
    `handoff/kritik-entwickler.md`, `Arbiter-old/` und `ArbiterMap/` sind für alle nur lesbar;
-   löschen tut sie der Stakeholder. Mechanismus: `rollenregeln/schreibgrenze.py` (Write und Edit),
-   sonst nur Text.
+   löschen tut sie der Stakeholder. Du schreibst Dateien nur mit Write und Edit und
+   committest nicht; Bash nur zum Lesen, für Prüfungen, Tests und in `/tmp`. Mechanismus:
+   `rollenregeln/schreibgrenze.py` (Write und Edit); Bash und Commit: nur Text.
 3. Kritik an einem fremden Artefakt wird ein Anliegen, nie eine Änderung
    ([Ablauf, Anliegen](../ablauf.md#anliegen)). Mechanismus: `rollenregeln/schreibgrenze.py`.
 4. Bevor du eine Regel vorschlägst, suche eine bestehende, die sie abdeckt oder angepasst

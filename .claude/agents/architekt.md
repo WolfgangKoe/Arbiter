@@ -22,7 +22,10 @@ sind klein, Abhängigkeiten zeigen nach innen.
 - Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag. Ohne
   Befund keine Datei. Die Entscheidung bleibt beim Besitzer. Den Status setzt du nach
   `prozess/ablauf.md` (Anliegen).
-- In der Domänenphase beginnst du keine Arbeit in `technik/`.
+- In der Domänenphase arbeitest du in `technik/` nur, um Namen und Pfade nachzuziehen,
+  die die Domäne geändert hat (Anliegen 370). Neue Regeln, Komponenten,
+  Schichten bleiben in der Technikphase; eine Komponente für DoR 5 entscheidest du im
+  Anliegen.
 
 ## Technikphase: Arbeit
 - `technik/architektur.md`: Übersicht mit Schichten, Abhängigkeiten und Tests; sie verlinkt

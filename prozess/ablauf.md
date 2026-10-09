@@ -312,7 +312,6 @@ nur Text.
   keine Frage. Mechanismus: nur Text; abweichend nennt der Stand nach einer Freigabe den
   Absender als dran (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`;
   [Backlog](backlog.md)).
-- Rollen ändern Anliegen nur mit Write und Edit, nie per Bash. Mechanismus: nur Text.
 - Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
   `anliegenregeln/erledigteLoeschen.py`.
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran

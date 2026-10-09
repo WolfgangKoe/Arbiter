@@ -1,6 +1,6 @@
 # Ausnahme für den Architekten in der Domänenphase
 
-376 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+376 · Kritik · von Architekt (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 370 (git) F2 mit A beantwortet: Der Architekt
@@ -18,4 +18,7 @@ Neue Regeln, Komponenten und Schichten bleiben in der Technikphase; eine Kompone
 DoR 5 entscheidest du im Anliegen.“ Bestehende Regel, die angepasst wird: diese Zeile; DoR 5
 in [Ablauf](../../prozess/ablauf.md#dor-item-bereit) bleibt, wie sie ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Architekt](../../.claude/agents/architekt.md), Abschnitt
+Kritik, mit deinem Wortlaut bis auf zwei Kürzungen fürs Höchstmaß von 2.500 Zeichen: „arbeitest
+du in `technik/` nur, um … nachzuziehen“ statt „beginnst keine Arbeit …, außer …“, und
+„Komponenten, Schichten“ ohne „und“. DoR 5 unverändert.

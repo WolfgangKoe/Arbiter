@@ -35,13 +35,9 @@ statt eine Regel hinzuzufügen:
    Bash nur zum Lesen, für Prüfungen, Tests und in `/tmp`.“ Mechanismus:
    `schreibgrenze.py` (Write, Edit, Bash).
 2. Die Zeile in Ablauf, Anliegen fällt weg, Ich 2 deckt sie ab.
-3. Der Regelumsetzer erweitert `schreibgrenze.py` auf Bash (Matcher `Write|Edit|Bash`). Einer
-   Rolle verweigert er `sed -i`, `tee`, Umleitung `>` und `>>` außer nach `/dev/null` und
-   `/tmp`, `rm`, `mv`, `cp`, `touch`, Python mit Skript in der Eingabe (`python3 -`,
-   `python3 -c`) und git-Befehle, die Index, Arbeitsbaum oder Verlauf ändern (`add`,
-   `commit`, `checkout`, `restore`, `reset`, `stash`, `rm`, `mv`), außer in einem Repo unter
-   `/tmp`. Die Meldung nennt Write und Edit. Den Koordinator betrifft das nicht.
-   Lücke: ein Skript aus `/tmp`, das selbst Dateien öffnet.
+3. Der Regelumsetzer erweitert `schreibgrenze.py` auf Bash (Matcher `Write|Edit|Bash`);
+   was er einer Rolle verweigert: [385](385-schreibgrenzeHoertAufBash.md). Den Koordinator
+   betrifft das nicht.
 
 Bordmittel geprüft ([Berechtigungen](https://code.claude.com/docs/en/permissions),
 [Sandbox](https://code.claude.com/docs/en/sandboxing),
@@ -58,4 +54,8 @@ B: zusätzlich Bash aus Anforderungsautor, Planer, UX und Moderator nehmen (geä
 dichter, aber sie prüfen Länge und Form nicht mehr selbst.
 Antwort: A
 
-**Stellungnahme.**
+**Stellungnahme.** 1 und 2 umgesetzt in [Ich 2](../../prozess/praemissen/ich.md) (bis zum
+Umbau: Bash und Commit nur Text) und [Ablauf](../../prozess/ablauf.md#anliegen). 3 samt
+Befehlsliste nur noch in [385](385-schreibgrenzeHoertAufBash.md); `angenommen` nach 385.
+`· wartet auf` fehlt im Kopf, `anliegen.py` meldet es rot: Auslöser im
+[Backlog](../../prozess/backlog.md), Item für Retro 5.

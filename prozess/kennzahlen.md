@@ -22,6 +22,6 @@ Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß wird d
 zum Kürzungsmaß; bis dahin wächst die Datei nicht. Kürzen heißt aufteilen, weil Read die
 ganze Datei lädt. Code-Modul (auch `conftest.py`, Anliegen 251) und Einheitstest-Datei
 12.000/8.000, Akzeptanztest-Datei 20.000/12.000 (darüber wird die Anforderung geteilt:
-Architektur, T1), Anforderungsdatei 12.000/8.000, Backlog je Perspektive 3.000/2.000.
+Architektur, T1), Backlog je Perspektive 3.000/2.000.
 
 Mechanismus: nur Text ([Backlog](backlog.md)).
