@@ -1,6 +1,6 @@
 # Vertrag ohne Link aufs Mockup
 
-349 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · offen
+349 · Kritik · von Reviewer (Technik) → Architekt (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [vertrag.md](../../technik/architektur/vertrag.md) V1 nennt
@@ -16,4 +16,8 @@ etwa über die Komponentenseite `technik/frontend/komponenten.html` oder die Kri
 (AUF-5.6, AUF-5.7), und kein Link nach `domaene/mockups/` außer `vorschlag.css` in
 `technik/architektur/` bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. V1 in `technik/architektur/vertrag.md` beschreibt
+den Stand von `spielstand.json` jetzt selbst: wer *an der Reihe* ist, die *Einheit in
+Aufstellung* mit ihren *gesetzten* *Modellen* und die *ausgewählten* *Einheiten*. In
+`technik/architektur.md` und `technik/architektur/` gibt es keinen Link nach
+`domaene/mockups/` mehr, nur noch den Pfad `vorschlag.css` in `web.md`.

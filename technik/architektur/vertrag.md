@@ -5,8 +5,9 @@ Pfade und JSON zwischen `web/` und `frontend/`
 [Web](web.md). Eine neue Route ist ein Anliegen an den Architekten.
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:
-  [spielstand.json](vertrag/spielstand.json), der Stand des
-  [Mockups](../../domaene/mockups/auf-5.html). Kennungen nach [W4](web.md#aufbau), je ab 1:
+  [spielstand.json](vertrag/spielstand.json): Spieler 2 ist *an der Reihe*, seine erste
+  *Einheit* ist *Einheit in Aufstellung* mit drei *gesetzten* *Modellen*; je *Spieler* ist eine
+  *Einheit* *ausgewählt*. Kennungen nach [W4](web.md#aufbau), je ab 1:
   `spieler[].nummer` in der Reihenfolge der Ausgangslage, `ablage[].nummer` in der
   Reihenfolge der *Armee*, auch wenn eine frühere *Einheit* nicht mehr in der *Ablage* liegt.
   `ausgewählt` an der *Einheit* nach AUF-5.6, am *Modell* nach AUF-5.7.
