@@ -1,6 +1,6 @@
 # Mockups zur Formation
 
-375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 2/3 · offen
+375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Nach dem Kommentar des Stakeholders zu [Plan 5](../plan.md#freigabe) kommt eine
@@ -63,3 +63,7 @@ Mockups. Der *Abstand* 1,5″ ist zwischen den Rändern der *Bases* gemessen (Gl
 den Anforderungsautor.
 
 **Stellungnahme.**
+Angenommen, berichtigt: [auf-8](../../domaene/mockups/auf-8.html) ohne Anzahl;
+[auf-9](../../domaene/mockups/auf-9.html) mit 2; [auf-15](../../domaene/mockups/auf-15.html)
+ohne Warboss in der *Ablage*, Warboss-*Base* r 0,787, Overlord von Spieler 2 *aufgestellt*
+auf der *Karte* und nicht mehr in der *Ablage*.
