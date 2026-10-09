@@ -1,6 +1,6 @@
 # Lesbarkeit im Commit zu Plan 4
 
-333 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+333 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Fünf kleine Stellen aus 6bea166, nach [Es](../../prozess/praemissen/es.md):

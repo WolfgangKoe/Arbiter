@@ -1,6 +1,6 @@
 # Auswählen schützt AUF-5.10 nicht in der Domäne
 
-334 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+334 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `Aufstellung.auswählen` ([aufstellen.py](../../technik/arbiter/domaene/phasen/aufstellen.py),

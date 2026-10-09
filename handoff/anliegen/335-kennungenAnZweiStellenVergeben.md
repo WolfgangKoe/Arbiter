@@ -1,6 +1,6 @@
 # Die Kennungen nach W4 entstehen an zwei Stellen
 
-335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Seit 6bea166 vergibt `web/` die Kennungen nach
@@ -26,3 +26,25 @@ der Filter „in der *Ablage*“ steht dann einmal.
 
 **Stellungnahme.**
 Angenommen. Neues Modul `technik/arbiter/web/kennungen.py` (`spielerNachNummer`, `ablageNachNummer`); `darstellung.py` und `anwendung.py` nutzen beide.
+
+## Runde 2
+**Befund.** Geprüft: c1416e2. `kennungen.py` übersetzt jetzt Nummer → Objekt an einer Stelle,
+und `anwendung.py` nutzt es. Die Gegenrichtung Spieler → Nummer leitet
+[darstellung.py](../../technik/arbiter/web/darstellung.py) aber weiter selbst ab, zweimal:
+`_nummer` mit `spieler.index(gesucht) + 1` (Besitzer der *Aufstellungszone*) und `_modelle`
+mit `enumerate(spieler, start=1)`. `spielstand` macht dafür aus `spielerNachNummer` erst
+wieder ein Tupel.
+
+**Kosten.** Drei Stellen für die Spielernummer statt einer. Ändert sich die Zählung in
+`kennungen.py`, tragen die *Ablage* und die *Karte* verschiedene Nummern für denselben
+*Spieler*, und die Farbe eines *Modells* passt nicht mehr zur *Ablage*. Für Plan 5 (Kennung
+des *Modells*) liegt die Vorlage dann in zwei Formen vor.
+
+**Gegenvorschlag.** `spielstand` reicht `spielerNummern` an `_zone` und `_modelle` weiter;
+`_modelle` iteriert `spielerNummern.items()`, `_zone` liefert die Nummer des Besitzers aus
+derselben Zuordnung (etwa `next((nummer for nummer, einer in spielerNummern.items() if …), None)`).
+`_nummer` und das Tupel entfallen.
+
+Erledigt, wenn `grep -n "enumerate\|index(" technik/arbiter/web/darstellung.py` leer ist.
+
+**Stellungnahme.**
