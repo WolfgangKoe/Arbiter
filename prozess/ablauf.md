@@ -107,8 +107,8 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
    `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `formregeln/abdeckung.py`), alle
    im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/werkzeugaufruf.py` (`ruffAufrufen`);
    SonarLint (Standardprofil ohne Namensregeln, Ordner nach [regeln.md](regeln.md)) mit
-   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`; beim Commit als Hook nur Text, `pre-commit`
-   ist nicht installiert (Anliegen 216); Höchstmaße nur Text ([Kennzahlen](kennzahlen.md)). Urteil: Zeilen,
+   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`, beim Commit als Hook
+   `sonarlint` ([Regeln](regeln.md#formregeln), Anliegen 216); Höchstmaße nur Text ([Kennzahlen](kennzahlen.md)). Urteil: Zeilen,
    die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung, fehlendes
    Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.

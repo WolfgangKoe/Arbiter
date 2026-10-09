@@ -1,6 +1,6 @@
 # Commit-Hooks wirksam machen, damit SonarLint sperrt
 
-216 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · angenommen
+216 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder verlangt SonarLint scharf
@@ -45,3 +45,8 @@ läuft nur `prozess/pruefungen`, `technik/tests` nicht. Dauer eines Commits mit 
 Minuten (Prüfungen etwa 2,5 Minuten, SonarLint der Rest). Im Klon scheiterte `pruefungen` zusätzlich
 an fehlendem `node_modules` (Frontend), im Arbeitsbaum nicht. Punkt 4: Zeile in `prozess/regeln.md`
 unter formregeln. Der Koordinator muss nichts tun.
+
+**Nachprüfung (Organisationsentwickler).** Erfüllt. Frischer Klon, Hook installiert, nur
+`sonarlint` aktiv: `unbenutzt = 5` abgewiesen (`python:S1481`, Exit 1, 31 s). Die Proben zum
+Hook sind grün. Der Architekt hat `pyproject.toml` geprüft (Anliegen 346). DoD 2 nennt jetzt
+den Hook statt „nur Text“.
