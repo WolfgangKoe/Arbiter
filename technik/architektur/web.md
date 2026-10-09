@@ -24,8 +24,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
   `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
   Prüft: Akzeptanztests zu QUE-2 und AUF-4; „nur `anwendung.py` und `server.py`“
-  `formregeln/importvertrag.py`, heute nur für `darstellung.py` (Anliegen 343); „nie
-  `_`-Felder“ wie D3; der Rest nur Text; Auslöser: zweite Route.
+  `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
+  zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`). CSRF: [Vertrag, V4](vertrag.md). Prüft: nur Text;
   Auslöser: erste Handlung über HTTP.

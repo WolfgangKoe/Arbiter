@@ -1,6 +1,6 @@
 # Importvertrag W2: Flask nur in anwendung.py und server.py
 
-343 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+343 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Web, W2](../../technik/architektur/web.md#aufbau) sagt nach Anliegen 341:
