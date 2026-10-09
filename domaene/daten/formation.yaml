@@ -1,7 +1,8 @@
 # Formation (Glossar) je Einheit der Ausgangslage: Modelle je Reihe, Reihen mittig
 # untereinander; abstand: Abstand benachbarter Bases in Zoll.
 # Quelle: Arbiter-old/Arbiter_Specs/Arbiter - unitshape and modeldistribution.pdf,
-# Seite 1, multiUnitShape (Reihen 3, 4, 3; Pfeile 1,5″); Stakeholder in Anliegen 374.
+# Seite 1, multiUnitShape (Reihen 3, 4, 3; Pfeile 1,5″ auch zwischen schräg benachbarten
+# Bases); Stakeholder in Anliegen 374; Abstand der Reihen nach Anliegen 377 F1 A.
 
 abstand: 1.5
 formation:

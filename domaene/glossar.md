@@ -19,7 +19,7 @@ Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Milli
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die zusammen bewegen und kämpfen (`core_rules.txt:420`).
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
-Formation | – | formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, je zwei benachbarte *Bases* im *Abstand* 1,5″; Werte in `domaene/daten/formation.yaml` (Anliegen 374 F2 A).
+Formation | – | formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, je zwei benachbarte *Bases*, auch schräg, im *Abstand* 1,5″; Werte in `domaene/daten/formation.yaml` (Anliegen 374 F2 A, 377 F1 A).
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
 gesperrt | – | gesperrt | Zustand eines *Modells*, das beim Loslassen an eine *Stelle* kam, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).

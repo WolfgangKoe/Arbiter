@@ -1,6 +1,6 @@
 # Abstand der Reihen in der Formation
 
-377 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+377 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Drei Quellen beschreiben die *Formation* (AUF-8.5) verschieden:
@@ -29,6 +29,11 @@ Empfehlung A: Die Skizze ist die Quelle des Stakeholders, der Unterschied ist am
 unsichtbar, und die *Kohärenz* (höchstens 2″) hält in beiden Fällen. Kosten in der Technik:
 eine Rechnung mit ganzzahliger Wurzel, aufgerundet, und eine Zeile in S2.
 
-Antwort: .
+Antwort: A
 
-**Stellungnahme.**
+**Stellungnahme.** A. Die Skizze des Stakeholders entscheidet das: Auch schräg benachbarte
+*Bases* haben dort 1,5″. Das steht jetzt ausdrücklich im [Glossar](../../domaene/glossar.md)
+(*Formation*) und in [formation.yaml](../../domaene/daten/formation.yaml). Die Aufrundung auf
+1/100″ trägt das Ziel („Die Karte bildet den Spielstand ab, nicht den exakten Tisch“). Wie fein
+gerundet wird, gehört in deine S2, nicht in die Kriterien. Die Mockups bringt UX in Ordnung:
+[381](381-reihenabstandInDenMockups.md).
