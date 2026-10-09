@@ -5,38 +5,43 @@
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
-**Befund.** Aus Anliegen 246, Rückmeldung des
-Stakeholders: (1) Die Datei hinter dem Link einer Karte hat keinen Weg zurück zum Dashboard.
-(2) Die Karten könnten bei vielen Anliegen unübersichtlich werden; vorerst bleibt es so.
-(3) Status, Kommentare und Antworten auf Fragen lassen sich nicht aus dem Dashboard geben.
-`dashboard.html` ist eine statische Datei und schreibt nichts; die Züge setzt er heute in
-der Datei ([Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)).
+**Befund.** Aus 246: Die Datei hinter einer Karte hat keinen Weg zurück; Status, Kommentare
+und Antworten lassen sich nicht aus dem Dashboard geben (`dashboard.html` ist statisch).
 
-**Kosten.** Ohne Weg zurück und ohne Bearbeiten steuert er nur über Editor und Browser-Zurück.
-Ein Schreibweg birgt das Risiko, dass das Dashboard Dateien ändert, die ihm nicht gehören.
+**Kosten.** Ohne beides steuert er nur über Editor und Browser-Zurück.
 
-**Gegenvorschlag.** Ein Mini-Server nur mit Standardbibliothek (`http.server`) in
-`rollenregeln/`, gebunden an 127.0.0.1, gestartet von Hand. Er zeigt das Dashboard und je
-Anliegen eine Seite mit „‹ Dashboard“ oben und Formular. Er schreibt nur in
-`handoff/anliegen/*.md`, nur die Züge des Stakeholders, mit Scheiter-Test je Zug und Zeile in
-[Regeln](../../prozess/regeln.md). Die Karten aus 275 behalten Filter; ergänzt wird oben
-ein Zähler „Du bist dran: n“ und die Spalte Stakeholder zuerst.
+**Gegenvorschlag.** Mini-Server (`http.server`, 127.0.0.1, von Hand gestartet) in
+`rollenregeln/`: Dashboard, je Anliegen eine Seite mit „‹ Dashboard“ und Formular; schreibt nur
+Züge des Stakeholders in `handoff/anliegen/*.md`; Zähler „Du bist dran: n“.
 
-**F1 · Weg zum Schreiben.** A: lokaler Mini-Server (Empfehlung). B: keine Schreibfunktion,
-nur „Datei öffnen“ und „‹ Dashboard“ als statische Seite je Anliegen.
+**F1 · Weg zum Schreiben.** A: lokaler Mini-Server (Empfehlung). B: nur statische Seiten.
 Antwort: .
 
-**F2 · Welche Züge.** A: Status nur aus der Tabelle des Ablaufs, die dem Stakeholder je nach
-Rolle (Empfänger oder Absender) zustehen; Runde senken und `eskaliert` ändern; Textfeld
-`Kommentar:` und `Antwort:` unter jeder Frage (Empfehlung). B: nur Antwort und Kommentar,
-Status weiter in der Datei.
+**F2 · Welche Züge.** A: Status aus der Tabelle des Ablaufs je nach Rolle, Runde senken,
+`eskaliert` ändern, `Kommentar:` und `Antwort:` (Empfehlung). B: nur Antwort und Kommentar.
 Antwort: .
 
-**F3 · Schutz.** Der Server ändert nur Anliegen, bei denen der Stakeholder Absender oder
-Empfänger ist, und keinen Kopf, der nicht zur Statustabelle passt. A: ja (Empfehlung).
-B: alle Anliegen frei.
+**F3 · Schutz.** A: nur Anliegen mit ihm als Absender oder Empfänger (Empfehlung). B: alle.
 Antwort: Ja, bei diesen Anliegen auf jeden Fall. Bei den anderen möchte ich eine Kommentarfunktion, damit ich intervenieren kann.
 
 **Stellungnahme.** Was hier ggf. noch fehlt ist eine Art Skript, dass die Kommentare und das setzen der Status "abholt", wenn es in den Ablauf passt. Es gab ja immer mal wieder Probleme, dass ich in die Anliegen geschrieben habe und du ebenfalls und dann kam es zu einem Konflikt. Es braucht also noch etwas, das diese Sachen zu einem passenden Zeitpunkt in die Datei schreibt, damit du es dann lesen und commiten kannst. Dafür müssen die Informationen im Dashboard natürlich gehalten werden.
 Und was ebenfall noch gemacht werden muss. Die Anliegen und der Tokenbericht sollten voneinander getrennt, also auf zwei Seiten sein. So ähnlich, wie in ArbiterMap, dass Baklog über einen Reiter getrennt war.
 Und schließlich fehlt auch ein Aktualisierungszyklus in die andere Richtung. Jedes Mal, wenn es eine Änderung in Handoff gibt, sollte es im Dashboard angezeigt werden. 
+
+## Runde 2
+**Befund.** F1 bis F3 gelten wie empfohlen. Offen ist der Zeitpunkt, an dem die Züge in die
+Dateien kommen; das ist ein Eingriff in den Ablauf, den der Organisationsentwickler setzt.
+
+**Kosten.** Schreibt der Server sofort, trifft er eine Rolle mitten im Edit (der Konflikt von früher).
+
+**Gegenvorschlag.** Der Server schreibt Züge nur in `prozess/dashboard/eingang.jsonl`, das
+Dashboard zeigt sie als „vorgemerkt“. Ein Skript legt sie in die Dateien, sobald keine Rolle
+läuft (Hook vor dem nächsten Rollenstart, danach vor dem Commit); es verwirft Züge, die nicht
+mehr zum Status passen, und meldet sie im Dashboard. Zwei Seiten: Anliegen und Tokenbericht
+(Reiter), Anliegen nach Änderung in `handoff/` neu geladen. Kommentare zu fremden Anliegen:
+Feld `Kommentar:` am Ende der Stellungnahme.
+
+**F4 · Zeitpunkt.** A: wie beschrieben (Empfehlung). B: nur auf Knopfdruck „Jetzt übernehmen“.
+Antwort: .
+
+**Stellungnahme.**

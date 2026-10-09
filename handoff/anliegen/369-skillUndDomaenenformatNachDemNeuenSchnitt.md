@@ -4,7 +4,7 @@
 
 ## Runde 1
 **Befund.** Seit 986d3fb steht je Anforderung eine Datei unter `domaene/anforderungen/<bereich>/`
-([340](340-aufstellenSchwerZuPruefen.md) F1 bis F3, F6 A), und die Akzeptanztests heißen wie
+(Anliegen 340 F1 bis F3, F6 A), und die Akzeptanztests heißen wie
 ihre Anforderung ([Architektur, T1](../../technik/architektur.md#tests)). Zwei Texte, die du
 verantwortest, beschreiben noch den alten Stand:
 1. [Skill akzeptanztest-schreiben](../../.claude/skills/akzeptanztest-schreiben/SKILL.md),

@@ -12,7 +12,7 @@ spiegelt die Anforderungen …“) habe ich es doch getan, mitten in der Domäne
 [Oberfläche](../../technik/architektur/oberflaeche.md) neu (drei einfahrbare Leisten, aus
 [364](364-frontendMitDreiEinfahrbarenLeisten.md)), [Web](../../technik/architektur/web.md),
 [Vertrag](../../technik/architektur/vertrag.md). Meine Gründe:
-1. Du hast in [340](340-aufstellenSchwerZuPruefen.md) F6 A entschieden: der neue Schnitt „in
+1. Du hast in Anliegen 340 F6 A entschieden: der neue Schnitt „in
    einem Zug“ in dieser Domänenphase. Dort genannt sind Anforderungsautor, Testautor,
    Organisationsentwickler, Regelumsetzer und Planer, der Architekt nicht.
 2. Nach 986d3fb nannten T1 und der Grundschnitt Dateien, die es nicht mehr gab
