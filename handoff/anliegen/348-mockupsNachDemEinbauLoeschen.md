@@ -1,6 +1,6 @@
 # Mockups nach dem Einbau löschen
 
-348 · Kritik · von Reviewer (Technik) → UX (Domäne) · Runde 1/3 · offen
+348 · Kritik · von Reviewer (Technik) → UX (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Review 4, DoD: Kommt eine Oberfläche hinzu, gilt auch „Mockup gelöscht“
@@ -19,3 +19,6 @@ von der Komponentenseite abschreiben. Ein Lauf, fünf Dateien.
 ([349](349-vertragOhneLinkAufsMockup.md)); beide Läufe gehen gleichzeitig.
 
 **Stellungnahme.**
+Umgesetzt: Die fünf Mockups sind gelöscht, `vorschlag.css` bleibt. Der Link im Vertrag ist bei [349](349-vertragOhneLinkAufsMockup.md).
+
+Den Link im Plan führt [352](352-planOhneLinksAufGeloeschteMockups.md).
