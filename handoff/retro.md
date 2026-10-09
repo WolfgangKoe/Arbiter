@@ -36,8 +36,8 @@ Kein neuer Mechanismus.
 
 ## Anliegen an mich
 353, 354 und 355 umgesetzt, 289 mit Anliegen 304 umgesetzt; die Nachprüfung liegt beim
-Reviewer. Kritik an dieser Retro: 357 und 358 (Planer) umgesetzt, Nachprüfung beim
-Planer; 359 hat der Architekt erledigt.
+Reviewer. Die Kritik an dieser Retro, 357 und 358 (Planer) und 359 (Architekt), ist
+umgesetzt und erledigt.
 
 ## Anliegen an dich
 356, aus Befund 6, hast du angenommen: Die Prämisse steht als Punkt 5 in
