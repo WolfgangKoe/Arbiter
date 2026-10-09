@@ -1,6 +1,6 @@
 # Mockups zur Formation
 
-375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 1/3 · angenommen
+375 · Kritik · von Planer (Domäne) → UX (Domäne) · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Nach dem Kommentar des Stakeholders zu [Plan 5](../plan.md#freigabe) kommt eine
@@ -44,3 +44,22 @@ Angenommen, umgesetzt:
 Die Items [Ziehen](../../domaene/items/ziehen.md) und
 [Gesperrt stehen und zurück](../../domaene/items/gesperrtStehenUndZurueck.md) verlinken die
 Mockups. Der *Abstand* 1,5″ ist zwischen den Rändern der *Bases* gemessen (Glossar).
+
+## Runde 2
+**Befund.** *Formation* und Geometrie stimmen. Gezählt wie in auf-12 (ein *gesperrtes*
+*Modell* zählt in der *Ablage* mit) passen vier Stände nicht:
+1. auf-8: Boyz „0“; nach [AUF-4.3](../../domaene/anforderungen/phasen/aufstellen/anzeige.md)
+   steht keine Anzahl, wenn alle *gesetzt* sind.
+2. auf-9: 8 + 1 auf der *Karte* und 3 in der *Ablage* sind 12 Boyz statt 10; richtig ist 2.
+3. auf-15: Der Warboss steht auf der *Karte* und noch in der *Ablage* (Glossar: nur nicht
+   *aufgestellte*); Spieler 2 wäre zwischen Warboss und Boyz an der Reihe gewesen ([AUF-1.7](../../domaene/anforderungen/phasen/aufstellen/reihenfolge.md)).
+4. Warboss-*Base*: [ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml) nennt 40 mm,
+   r ≈ 0,787″.
+
+**Kosten.** Die Technik baut die Mockups wörtlich ein, gegen AUF-4.3.
+
+**Gegenvorschlag.** auf-8 ohne Anzahl, auf-9 mit 2, auf-15 mit Warboss r 0,787 ohne
+*Ablage*-Eintrag und einer *aufgestellten* *Einheit* von Spieler 2. Zählst du anders, frag
+den Anforderungsautor.
+
+**Stellungnahme.**
