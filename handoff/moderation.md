@@ -13,12 +13,12 @@ Blockiert die Freigabe: nichts. Offen zur Technik sind nur 345 und 249, beide be
   [354](anliegen/354-commitsMitBetreffNennen.md) (Stellungnahme leer);
   [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) (Runde 2; 304 ist erledigt,
   die Wartebedingung entfällt); Nachprüfung
-  [351](anliegen/351-reviewVierFormDerSchritteVierUndSechs.md).
+  Anliegen 351.
 - Regelumsetzer: [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [275](anliegen/275-dashboardSichtDerAnliegen.md),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md).
-- Planer: Nachprüfung [350](anliegen/350-zykluszielFuerPlan5.md).
-- UX: Nachprüfung [352](anliegen/352-planOhneLinksAufGeloeschteMockups.md).
+- Planer: Nachprüfung Anliegen 350.
+- UX: Nachprüfung Anliegen 352.
 - Reviewer, Testautor, Architekt, Fachkritiker: keins. AUF-5.5 wartet auf den Testautor
   (Plan 5, nicht jetzt).
 

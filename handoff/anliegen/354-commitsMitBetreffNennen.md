@@ -3,7 +3,7 @@
 354 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
 
 ## Runde 1
-**Befund.** Der Stakeholder schreibt in [351](351-reviewVierFormDerSchritteVierUndSechs.md):
+**Befund.** Der Stakeholder schreibt in Anliegen 351:
 „Die committ-Ids wie "38aae1f" finde ich sehr problematisch. Denn ich kann die nicht auf den
 ersten Blick verstehen. […] Datum oder Nummer ist keine Alternative. Es muss irgendwie zum
 Ausdruck bringen, woraum es da geht.“ Plan, Review, Retro und Anliegen nennen Commits bisher

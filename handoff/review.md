@@ -81,7 +81,8 @@ Hooks in `.claude/settings.json` von 18 auf 8: SessionStart `standregeln.stand`;
   nach 345.
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: Den Startbefehl für die lokale App bitte dauerhaft in die Review schreiben und dort auch anpassen, wenn er geändert wird. Aktuell scheint es dieser hier zu sein
 .venv/bin/arbiter
 Stellungnahme: Der Befehl stimmt (W5, `[project.scripts]` in `pyproject.toml`); er steht jetzt unter der ersten Zeile mit Link auf W5. Dass jedes Review ihn trägt, regelt der Ablauf, Schritt 6: Anliegen [353](anliegen/353-startbefehlImReview.md) an den Organisationsentwickler. Commits nenne ich mit ihrem Betreff statt der Kennung (Frage in 351, Regel für alle: [354](anliegen/354-commitsMitBetreffNennen.md)).
+Weiterer Kommentar: Mir fehlt hier im Review noch eine manuelle Prüfungkomponente am Frontend für den Stakeholder. Idealerweise auch mit einem klaren Klickpfad. Und es fehlt auch eine Steuerungskomponente für die Fachlichkeit. Es ist ja nett, dass du immer schon Produkt- und Etappenziel benennst. Aber Zyklusziel Setzen, Umsetzen und Zurücklegen blablabla... ist irgendwie nicht wirklich verständlich. Was ist denn jetzt wirklich im Frontend per Maus machbar? Und was soll nach dem nächsten Zyklus machbar sein?
