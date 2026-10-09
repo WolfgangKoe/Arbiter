@@ -1,64 +1,65 @@
-# Plan · Zyklus 4
+# Plan · Zyklus 5
 
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md)
 
-Grundlage: Zyklusziel aus [Review 3](review.md), Wählen per Klick (Gewinner, Zone, Einheit) mit
-Speicher. Den Speicher braucht Plan 4 nicht: Neu laden und neu starten (QUE-3.2, QUE-3.3)
-erfüllt der laufende Server ohne Datenbank (Anliegen 319, git). Abweichung nach deiner Wahl in Anliegen 308 (F1 A, F2 A, git): Arbiter startet mit
-gewähltem Gewinner und gewählter Zone, Plan 4 bringt nur die Wahl der Einheit. Ein Klick wählt
-sie aus, ohne Handlung; Einheit in Aufstellung wird sie erst mit dem ersten gesetzten Modell
-(Anliegen 309, git).
+Grundlage: Zyklusziel aus [Review 4](review.md): *Modelle* ziehen, gesperrt stehen mit
+*Grund*, „zurück“. Abweichung nach deinem Auftrag in Anliegen 361 (git), Etappe 1 möglichst
+schnell: Plan 5 bringt dazu „Aufstellen der Einheit beenden“ mit *Kohärenz*; sonst bliebe es
+bei einer *Einheit* je *Spieler*.
 
 ## Items
-1. [Vorläufiger Start](../domaene/items/vorlaeufigerStart.md): AUF-6.1
-2. [Auswählen in der Ablage](../domaene/items/auswaehlenInDerAblage.md): AUF-5.3, AUF-5.4,
-   AUF-5.6 bis AUF-5.10, QUE-3.1, nach Item 1
-3. [Stand behalten](../domaene/items/standBehalten.md): QUE-3.2, QUE-3.3, nach Item 2
+1. [Ziehen](../domaene/items/ziehen.md): AUF-8.1 bis 8.3, QUE-3.4
+2. [Gesperrt stehen und zurück](../domaene/items/gesperrtStehenUndZurueck.md): AUF-9.1,
+   9.3, 9.4, nach Item 1
+3. [Beenden und Sperre ohne Stelle](../domaene/items/beendenUndSperreOhneStelle.md):
+   AUF-10.1 bis 10.4, QUE-4, AUF-8.4, AUF-12, nach Item 1 und 2
 
-Mockups (DoR 5): Die Mockups zu Start und Auswahl sind eingebaut und gelöscht (Anliegen 348,
-git); ihr Bild steht jetzt in den [Komponenten](../technik/frontend/komponenten.html). Das
-Kennzeichen „ausgewählt“ (Umriss in Spielerfarbe an der Karte in der Ablage, heller Ring am
-Modell) hat der Architekt in Anliegen 316 entschieden (git).
+Reihenfolge nach Abhängigkeit: Ohne Ziehen steht kein *Modell* auf der *Karte*, also auch
+keins *gesperrt*. Item 3 braucht beide: AUF-8.4 eine *aufgestellte* *Einheit*, AUF-12.1 ein
+*gesperrtes* *Modell* und den Knopf zum Beenden.
 
-Das genügt für DoR 5 nach deiner Antwort in 317 (A, git); alle drei Items sind bereit.
-AUF-5.5 (eine dritte *Einheit* verdrängt die älteste) ist nach deiner Antwort in 320 (B, git)
-nicht im Umfang, bis eine *Armee* mehr als zwei *Einheiten* hat; die Kritik dazu
-(Anliegen 318) prüft der Fachkritiker nach.
+## Nach Zyklus 5 am Bildschirm machbar
+Mit Maus oder Finger: ein *Modell* aus der *Ablage* auf die *Karte* ziehen (die Zahl in der
+*Ablage* sinkt), es verschieben und zurück in die *Ablage* ziehen. Außerhalb der eigenen
+Zone, auf einem anderen *Modell* oder zu nah am Gegner losgelassen, bleibt es *gesperrt*
+stehen, mit *Grund*; „zurück“ stellt es an die vorige *Stelle*, sonst in die *Ablage*.
+„Aufstellen der Einheit beenden“ klicken: Fehlt ein *Modell* oder ist die *Einheit* nicht in
+*Kohärenz*, nennt Arbiter den *Grund*; sonst ist der andere *Spieler* *an der Reihe*. So
+stellt ihr alle vier *Einheiten* auf. Wer außer der Reihe zieht, sieht den *Grund*, das
+*Modell* springt zurück.
+Noch nicht: „gemeinsam übergehen“ und *Protokoll* (AUF-9.2, 9.5, 10.5, AUF-13, QUE-5),
+*Gewinner* und Zone wählen (AUF-11), *Leisten* (QUE-6).
+
+## Für die Freigabe fehlt
+Mockups nach DoR 5 ([Ablauf](../prozess/ablauf.md#dor-item-bereit)) zu AUF-8, AUF-9, AUF-10
+und AUF-12, vom UX; die Items verlinken sie danach. Neu sind Knopf („zurück“, „Aufstellen
+der Einheit beenden“), Anzeige des *Grundes* und Kennzeichen *gesperrt* an der *Karte*
+(AUF-9.1): Das entscheidet der Architekt im Anliegen, UX übernimmt es in
+`domaene/mockups/vorschlag.css`. Die Mockups bauen auf dem Bild von heute; die *Leisten*
+kommen mit QUE-6.
+Sonst ist jedes Item bereit: Format, Glossar, Fundstellen geprüft, kein offenes Anliegen dazu.
 
 ## Empfehlung
-Gib alle drei Items zusammen frei. Item 1 allein empfehle ich nicht: gefärbte Zonen ohne
-Handlung.
+Gib alle drei Items zusammen frei: Danach stellt ihr eine ganze Partie regelkonform auf, nur
+*Gewinner* und Zone setzt noch AUF-6. Reicht die Technikphase nicht für drei, rückt Item 3
+in Plan 6; Item 1 und 2 sind das Zyklusziel aus Review 4.
 
-Mit allen drei Items startest du Arbiter und siehst gefärbte Zonen und Spieler 2 an der
-Reihe; ihr klickt oder tippt Einheiten in beiden Ablagen an und ab; auf der Karte ändert sich
-nichts. Neu laden zeigt dieselbe Auswahl, neu starten wieder den Start. Setzen könnt ihr noch
-nicht.
-
-Reihenfolge nach Abhängigkeit: Item 1 legt fest, wer an der Reihe ist, und ändert das Bild,
-auf dem Item 2 klickt. Item 2 ist die erste Handlung am Bildschirm, Item 3 prüft, dass Arbiter
-die Auswahl beim Neuladen behält und beim Neustart verwirft.
-
-Die Krücke: Solange AUF-6 steht, ist Etappe 1 nicht erreicht. Ihr Test geht mit ihr, wenn ihr
-Gewinner und Zone am Bildschirm wählt (Plan 6).
-
-Vor dem Testautor (Ablauf, Technikphase 1), Architekt: Vertrag für den Klick in
-[web.md](../technik/architektur/web.md).
+Vor dem Testautor: Architekt, Vertrag fürs Ziehen und Beenden mit der Antwort bei *Sperre*
+(W3) in [web.md](../technik/architektur/web.md). In derselben Technikphase: Anliegen 368
+(Testautor, Folge der Tests).
 
 ## Danach, nach Abhängigkeit
-Plan 5: Setzen, Umsetzen und Zurücklegen durch Ziehen mit Maus und Touch, Sperre mit Grund ·
-Plan 6: Gewinner und Zone am Bildschirm, AUF-6 entfällt; zurück, gemeinsam übergehen und
-Protokoll · Beenden mit fehlenden Modellen und Kohärenz. Damit ist Etappe 1 erreicht.
+Plan 6: „gemeinsam übergehen“ mit *Protokoll* (AUF-9.2, 9.5, 10.5, AUF-13, QUE-5) ·
+*Gewinner* und Zone am Bildschirm (AUF-11), AUF-6 entfällt · *Leisten* (QUE-6). Damit ist
+Etappe 1 erreicht. AUF-5.5 bleibt nach deiner Antwort in 320 (B, git) draußen.
 
 ## Offene Anliegen
-An dich: keins.
-Deine Antworten, eingearbeitet: 308 F1 A, F2 A · 317 A · 320 B ·
-309 Runde 2 F1 B, F2 B, Runde 3 F1 A, Runde 1 F2 A (git, vom Anforderungsautor eingetragen).
-Vom Anforderungsautor steht kein Vorschlag offen; aus 307 bleiben F2 (Wahl der Zone) und der
-Begriff Spielaktionsbereich für Plan 6 (git).
-
-Die übrigen offenen Anliegen betreffen den Prozess
+An dich: [371](anliegen/371-begriffeZuDenLeisten.md), Vorschlag des Anforderungsautors zu den
+Begriffen *Leiste*, *Griff*, *eingefahren*; mit deiner Antwort ist QUE-6 bereit für Plan 6.
+Empfehlung: dreimal „.“.
+Die übrigen offenen Anliegen betreffen Technik und Prozess
 ([Moderation](moderation.md)).
 
 ## Freigabe
-Freigabe: ja
+Freigabe: offen
 Kommentar: .

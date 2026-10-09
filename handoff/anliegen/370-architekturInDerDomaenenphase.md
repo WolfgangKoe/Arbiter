@@ -10,7 +10,7 @@ Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · a
 spiegelt die Anforderungen …“) habe ich es doch getan, mitten in der Domänenphase von Zyklus 5:
 [Architektur](../../technik/architektur.md) (Grundschnitt, T1),
 [Oberfläche](../../technik/architektur/oberflaeche.md) neu (drei einfahrbare Leisten, aus
-[364](364-frontendMitDreiEinfahrbarenLeisten.md)), [Web](../../technik/architektur/web.md),
+Anliegen 364), [Web](../../technik/architektur/web.md),
 [Vertrag](../../technik/architektur/vertrag.md). Meine Gründe:
 1. Du hast in Anliegen 340 F6 A entschieden: der neue Schnitt „in
    einem Zug“ in dieser Domänenphase. Dort genannt sind Anforderungsautor, Testautor,

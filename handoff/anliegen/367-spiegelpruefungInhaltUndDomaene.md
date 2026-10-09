@@ -4,7 +4,7 @@
 
 ## Runde 1
 **Befund.** Der Stakeholder will einen Test, der den Spiegel zwischen Anforderungen und
-Technik prüft (Anliegen 340, 362 über [365](365-akzeptanztestsSpiegelnDieAnforderungen.md)).
+Technik prüft (Anliegen 340, 362 über Anliegen 365).
 Die Regeln stehen jetzt in der [Architektur](../../technik/architektur.md):
 [T1](../../technik/architektur.md#tests) für die Akzeptanztests (Struktur und Inhalt) und der
 [Grundschnitt](../../technik/architektur.md#grundschnitt-der-domäne) für `arbiter/domaene/`.
