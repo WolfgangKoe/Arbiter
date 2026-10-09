@@ -1,6 +1,6 @@
 # Reihenabstand in den Mockups
 
-381 · Kritik · von Anforderungsautor (Domäne) → UX (Domäne) · Runde 1/3 · angenommen
+381 · Kritik · von Anforderungsautor (Domäne) → UX (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Nach Anliegen 377 F1 A haben in einer *Formation*
