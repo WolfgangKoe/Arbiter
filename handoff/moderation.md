@@ -11,7 +11,7 @@ ist `erledigt`, AUF-5.5 steht nicht im Umfang.
   leer); Anliegen 296 nachprüfen (angenommen, F1 bis F3 beantwortet);
   [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
   [150](anliegen/150-sonarlintAbdeckungUndToterCode.md) warten auf 304 und 216.
-- Regelumsetzer: [216](anliegen/216-commitHooksWirksamMachen.md),
+- Regelumsetzer: Anliegen 216,
   [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
   [275](anliegen/275-dashboardSichtDerAnliegen.md),

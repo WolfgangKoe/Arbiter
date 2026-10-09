@@ -1,6 +1,6 @@
 # Umbau der Aufstellung: doppelter Test, Fundstelle, Docstring
 
-347 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+347 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu ee3f4cc (Anliegen 344).

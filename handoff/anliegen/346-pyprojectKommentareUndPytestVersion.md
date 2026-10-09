@@ -1,9 +1,9 @@
 # pyproject.toml: Warum-Kommentare an ihrer Stelle, pytest mit fester Minor-Version
 
-346 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
+346 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
-**Befund.** Kritik am Code zu 814e21e ([216](216-commitHooksWirksamMachen.md)), dazu d3012e2
+**Befund.** Kritik am Code zu 814e21e (Anliegen 216), dazu d3012e2
 (Anliegen 304), weil der Organisationsentwickler die Stelle angemerkt hat.
 1. `[tool.pytest.ini_options]`: Der Kommentar zu `stand` steht über dem zu `addopts`, die
    Zeile `markers`, die er erklärt, erst unter `addopts`. Zwei Warum stehen gestapelt über
