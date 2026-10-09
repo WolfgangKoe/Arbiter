@@ -6,7 +6,12 @@ import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.spielobjekte import Spieler
-from tests.akzeptanz.bildschirm import ablageVon, elementeDerSeite, modellfarben
+from tests.akzeptanz.bildschirm import (
+    ablageVon,
+    elementeDerSeite,
+    modellfarben,
+    spielerAnDerReihe,
+)
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, einheitenAufstellen, modelleSetzen
 
 
@@ -190,7 +195,7 @@ def testAuf4_4ArbiterZeigtDenSpielerAnDerReihe(bildschirm, ausgangsaufstellung, 
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    markierte = seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
+    markierte = spielerAnDerReihe(seite)
     assert markierte.count() == 1
     assert gewinnerwahl.nameDesAnderen in markierte.text_content()
     assert seite.locator(".kopfzeileAnDerReihe").text_content() == "an der Reihe"
@@ -205,7 +210,7 @@ def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    markierte = seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
+    markierte = spielerAnDerReihe(seite)
     assert markierte.count() == 1
     assert gewinnerwahl.nameDesGewinners in markierte.text_content()
 

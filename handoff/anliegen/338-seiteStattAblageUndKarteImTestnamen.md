@@ -1,6 +1,6 @@
 # Zwei neue Testnamen sagen „Seite“ und „ausgewählte Modelle“ statt der Begriffe des Kriteriums
 
-338 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · offen
+338 · Kritik · von Fachkritiker (Domäne) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Geprüft: 978bc13 gegen AUF-5.3 bis AUF-5.10 und QUE-3
@@ -36,4 +36,4 @@ Die Datei hat 19.717 Zeichen; die drei Namen kosten zusammen etwa 30 mehr, sie b
 
 Erledigt, wenn die drei Testnamen die Begriffe von AUF-5.6 und AUF-5.7 tragen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, die drei Tests heißen wie vorgeschlagen.

@@ -13,12 +13,12 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Aus
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from tests.akzeptanz.bildschirm import Bildschirm
-from tests.akzeptanz.dienst import dienstFür
+from tests.akzeptanz.dienst import dienstFür, stellenDesVertrags
 from tests.akzeptanz.handgriffe import (
     Platz,
     aufstellungVon,
     einheitAufstellen,
-    modelleAnDenStellenDesVertragsSetzen,
+    modelleAnStellenSetzen,
     modelleSetzen,
     spielerMit,
 )
@@ -173,7 +173,7 @@ def aufstellungDesBeispiels(
     """Der Start nach AUF-6.1 mit den gesetzten Modellen des Beispiels im Vertrag (V1)."""
     ausgangsaufstellung.gewinnerWählen(spielerEins)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
-    modelleAnDenStellenDesVertragsSetzen(ausgangsaufstellung, necronWarriors)
+    modelleAnStellenSetzen(ausgangsaufstellung, necronWarriors, stellenDesVertrags(2))
     return ausgangsaufstellung
 
 

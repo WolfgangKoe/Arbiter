@@ -1,9 +1,11 @@
 """Dienst der Akzeptanztests: Anfragen nach dem Vertrag und das Lesen des Spielstands."""
 
 import json
+from fractions import Fraction
 from pathlib import Path
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.spielobjekte import Stelle
 from arbiter.web.anwendung import anwendungFür
 
 _vertrag = Path(__file__).parents[2] / "architektur" / "vertrag"
@@ -25,6 +27,15 @@ def spielstandDesVertrags() -> dict:
     """Das Beispiel von V1 aus `spielstand.json`, nicht kopiert."""
     with (_vertrag / "spielstand.json").open(encoding="utf-8") as datei:
         return json.load(datei)
+
+
+def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
+    """Die Stellen der Modelle des Spielers im Beispiel, in der Reihenfolge der Datei."""
+    return [
+        Stelle(x=Fraction(str(modell["x"])), y=Fraction(str(modell["y"])))
+        for modell in spielstandDesVertrags()["modelle"]
+        if modell["spieler"] == spielernummer
+    ]
 
 
 def pfadDerAuswahl(einheitenname: str) -> str:

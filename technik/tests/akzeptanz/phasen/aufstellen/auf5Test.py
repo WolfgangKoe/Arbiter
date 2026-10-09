@@ -156,6 +156,16 @@ def testAuf5_6DieEinheitInAufstellungKannZugleichAusgewähltSeinUndZeigtBeides(
     assert karte.locator(".einheitenKartenAbzeichen").count() == 1
 
 
+def testAuf5_6DieAblageKennzeichnetImBeispielDesVertragsJedeAusgewählteEinheit(
+    bildschirm, ausgangsaufstellung
+):
+    spielstand = spielstandDesVertrags()
+
+    seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstand)
+
+    assert ausgewählteEinheiten(seite) == ausgewählteEinheitenIm(spielstand)
+
+
 def testAuf5_7DieKarteKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
     bildschirm, aufstellungNachDerZonenwahl, boyz
 ):
@@ -204,7 +214,7 @@ def testAuf5_7DieKarteKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
     assert ausgewählteModelle(seite) == frozenset()
 
 
-def testAuf5_7DieKarteZeichnetDenKreisEinesAusgewähltenModellsAndersAlsEinenNichtAusgewählten(
+def testAuf5_7DieKarteZeichnetDenKreisEinesModellsDerAusgewähltenEinheitAndersAlsDieAnderen(
     bildschirm, aufstellungNachDerZonenwahl, boyz, necronWarriors
 ):
     einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
@@ -216,6 +226,16 @@ def testAuf5_7DieKarteZeichnetDenKreisEinesAusgewähltenModellsAndersAlsEinenNic
     ausgewähltesModell = seite.locator(".karte .modell.ausgewählt").first
     nichtAusgewähltesModell = seite.locator(".karte .modell:not(.ausgewählt)").first
     assert strichVon(ausgewähltesModell) != strichVon(nichtAusgewähltesModell)
+
+
+def testAuf5_7DieKarteKennzeichnetImBeispielDesVertragsJedesGesetzteModellDerAusgewähltenEinheiten(
+    bildschirm, ausgangsaufstellung
+):
+    spielstand = spielstandDesVertrags()
+
+    seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstand)
+
+    assert ausgewählteModelle(seite) == ausgewählteModelleIm(spielstand)
 
 
 @pytest.mark.parametrize("vorherAusgewählt", [False, True], ids=["auswählen", "abwählen"])
@@ -317,26 +337,6 @@ def testAuf5_10DieAndereAusgewählteEinheitBleibtNachDemAufstellenAusgewählt(
     assert ausgewählteModelle(seite) == frozenset()
 
 
-def testAuf5_6DieSeiteKennzeichnetImBeispielDesVertragsDieAusgewähltenEinheiten(
-    bildschirm, ausgangsaufstellung
-):
-    spielstand = spielstandDesVertrags()
-
-    seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstand)
-
-    assert ausgewählteEinheiten(seite) == ausgewählteEinheitenIm(spielstand)
-
-
-def testAuf5_7DieSeiteZeichnetImBeispielDesVertragsDieAusgewähltenModelleAusgewählt(
-    bildschirm, ausgangsaufstellung
-):
-    spielstand = spielstandDesVertrags()
-
-    seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstand)
-
-    assert ausgewählteModelle(seite) == ausgewählteModelleIm(spielstand)
-
-
 @pytest.mark.parametrize(
     "einheitenname",
     ["Boyz", "Warboss", "Necron Warriors", "Overlord"],
@@ -415,6 +415,15 @@ def testAuf5_6DerSpielstandKennzeichnetDieEinheitInAufstellungAuchWennSieAusgew�
     einheit = einheitenDerAblagen(antwort.get_json())["Boyz"]
     assert einheit["ausgewählt"] is True
     assert einheit["inAufstellung"] is True
+
+
+def testAuf5_6DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags(dienstDesBeispiels):
+    auswählen(dienstDesBeispiels, "Warboss")
+
+    antwort = auswählen(dienstDesBeispiels, "Necron Warriors")
+
+    assert antwort.get_json() == spielstandDesVertrags()
+    assert spielstandVon(dienstDesBeispiels) == spielstandDesVertrags()
 
 
 def testAuf5_7DerSpielstandKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
@@ -540,12 +549,3 @@ def testAuf5_10DerSpielstandBehältDieAndereAusgewählteEinheitNachDemAufstellen
 
     assert ausgewählteEinheitenIm(spielstand) == {"Warboss"}
     assert ausgewählteModelleIm(spielstand) == frozenset()
-
-
-def testAuf5_6DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags(dienstDesBeispiels):
-    auswählen(dienstDesBeispiels, "Warboss")
-
-    antwort = auswählen(dienstDesBeispiels, "Necron Warriors")
-
-    assert antwort.get_json() == spielstandDesVertrags()
-    assert spielstandVon(dienstDesBeispiels) == spielstandDesVertrags()

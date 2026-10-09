@@ -1,6 +1,6 @@
 # Akzeptanztests nach 978bc13: Handgriffe hängen am Dienst, Reste doppelt, Reihenfolge
 
-337 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+337 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Geprüft: 978bc13 nach [Es](../../prozess/praemissen/es.md) und
@@ -45,4 +45,4 @@ Erledigt, wenn `grep -n "akzeptanz.dienst" technik/tests/akzeptanz/handgriffe.py
 die Stellen des Beispiels nach `spieler` gelesen werden und die Punkte 2 und 3 umgesetzt oder
 einzeln begründet abgelehnt sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte umgesetzt: `stellenDesVertrags(spielernummer)` in `dienst.py` liest nach `spieler`, `modelleAnStellenSetzen` in `handgriffe.py`, die Fixture verbindet beide; `handgriffe.py` importiert `dienst.py` nicht mehr. `spielerAnDerReihe` in `auf4Test.py`, `anzahlGesetzterModelle` in `que2Test.py`. Die drei Tests stehen bei ihrem Kriterium.

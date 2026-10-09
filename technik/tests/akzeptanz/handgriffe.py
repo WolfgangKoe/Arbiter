@@ -9,7 +9,6 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
-from tests.akzeptanz.dienst import spielstandDesVertrags
 
 # Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
@@ -157,11 +156,9 @@ def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
     )
 
 
-def modelleAnDenStellenDesVertragsSetzen(aufstellung: Aufstellung, einheit: Einheit) -> None:
-    """Setzt die ersten Modelle der Einheit an die Stellen der Modelle im Beispiel des Vertrags."""
-    stellen = [
-        Stelle(x=Fraction(str(modell["x"])), y=Fraction(str(modell["y"])))
-        for modell in spielstandDesVertrags()["modelle"]
-    ]
+def modelleAnStellenSetzen(
+    aufstellung: Aufstellung, einheit: Einheit, stellen: list[Stelle]
+) -> None:
+    """Setzt die ersten Modelle der Einheit an die Stellen, ein Modell je Stelle."""
     for modell, stelle in zip(einheit.modelle, stellen, strict=False):
         aufstellung.modellSetzen(modell, stelle)

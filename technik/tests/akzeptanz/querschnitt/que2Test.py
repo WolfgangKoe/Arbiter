@@ -6,9 +6,8 @@ import pytest
 
 from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
-from tests.akzeptanz.handgriffe import einheitenAufstellen, radiusInZoll
+from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, einheitenAufstellen, radiusInZoll
 
-_anzahlGesetzterModelle = 3
 # Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.4 prüfen Zoll exakt
 _pixelgenauigkeit = 1e-4
 
@@ -104,7 +103,7 @@ def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAn
 def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
 ):
-    gesetzte = boyzSetzen(_anzahlGesetzterModelle)
+    gesetzte = boyzSetzen(anzahlGesetzterModelle)
     erwartet = sorted(
         (float(stelle.x), float(stelle.y), float(radiusInZoll(modell)))
         for modell, stelle in gesetzte
@@ -115,7 +114,7 @@ def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
     kreise = elementeDerSeite(seite, ".karte .modell")
     gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
     assert gezeigt == erwartet
-    assert len(gezeigt) == _anzahlGesetzterModelle
+    assert len(gezeigt) == anzahlGesetzterModelle
 
 
 def testQue2_5EinZollIstInBeidenAchsenDerKarteGleichLang(bildschirm, ausgangsaufstellung, fenster):
