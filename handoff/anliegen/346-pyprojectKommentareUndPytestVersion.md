@@ -1,6 +1,6 @@
 # pyproject.toml: Warum-Kommentare an ihrer Stelle, pytest mit fester Minor-Version
 
-346 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+346 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu 814e21e ([216](216-commitHooksWirksamMachen.md)), dazu d3012e2
@@ -38,4 +38,6 @@ Erledigt, wenn die drei Punkte in `pyproject.toml` stehen und
 `python3 -m pytest prozess/pruefungen` sowie `python3 -m pytest technik/tests` grün sind.
 Einen Test dafür verlange ich nicht.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle drei Punkte umgesetzt wie vorgeschlagen. Das System-Python hat pytest
+9.0.3, `.venv` 9.1.1; die Datei verlangt nun 9.1.*, das System-Python bleibt bis zu einem
+Update davon abweichend.
