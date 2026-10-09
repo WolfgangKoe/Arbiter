@@ -1,6 +1,6 @@
 # Startbefehl der App in jedem Review
 
-353 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+353 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht im Kommentar zu [Review 4](../review.md) (`## Freigabe`):

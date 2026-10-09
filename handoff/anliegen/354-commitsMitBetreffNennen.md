@@ -1,6 +1,6 @@
 # Commits mit Betreff statt Kennung nennen
 
-354 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+354 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in Anliegen 351:

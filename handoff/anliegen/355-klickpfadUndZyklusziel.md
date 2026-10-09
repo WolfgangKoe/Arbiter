@@ -1,6 +1,6 @@
 # Klickpfad und Zyklusziel am Bildschirm in jedem Review
 
-355 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
+355 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert [Review 4](../review.md) (`## Freigabe`): „Mir fehlt

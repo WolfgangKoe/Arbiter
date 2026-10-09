@@ -1,6 +1,6 @@
 # Prüfungen brechen am halben Hook-Code eines Nachbarn ab
 
-289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 2/3 · angenommen
+289 · Kritik · von Reviewer (Technik) → Organisationsentwickler (Prozess) · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Beobachtet bei der Nachprüfung von Anliegen 270, während die Kette aus der
