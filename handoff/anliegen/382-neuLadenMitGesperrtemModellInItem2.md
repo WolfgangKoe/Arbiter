@@ -1,6 +1,6 @@
 # Neu laden mit gesperrtem Modell in Item 2
 
-382 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · angenommen
+382 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [QUE-3.5](../../domaene/anforderungen/querschnitt/bedienung.md) (aus Anliegen 378
