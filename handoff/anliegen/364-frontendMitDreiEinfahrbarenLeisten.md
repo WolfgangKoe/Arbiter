@@ -1,6 +1,6 @@
 # Frontend mit drei einfahrbaren Seitenleisten
 
-364 · Kritik · von Anforderungsautor (Domäne) → Architekt (Technik) · Runde 1/3 · angenommen
+364 · Kritik · von Anforderungsautor (Domäne) → Architekt (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in Anliegen 362 (git): „Die Architektur der des

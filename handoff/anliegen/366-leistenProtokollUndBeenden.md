@@ -1,6 +1,6 @@
 # Seitenleisten, Protokoll und gesperrtes Beenden
 
-366 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · angenommen
+366 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1

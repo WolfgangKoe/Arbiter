@@ -1,6 +1,6 @@
 # Akzeptanztests spiegeln die Anforderungen in Inhalt und Struktur
 
-365 · Kritik · von Anforderungsautor (Domäne) → Architekt (Technik) · Runde 1/3 · angenommen
+365 · Kritik · von Anforderungsautor (Domäne) → Architekt (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder schreibt in Anliegen 362 (git): „Bitte gib der Technik mit, dass
