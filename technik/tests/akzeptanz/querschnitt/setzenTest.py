@@ -5,7 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.handgriffe import sperrgründe
+from tests.akzeptanz.handgriffe import gerade, schräg, sperrgründe
 
 
 def testQue1_1VorDemSetzenIstDasModellNichtGesetzt(aufstellung, ersteEinheitDesSpielersAnDerReihe):
@@ -87,3 +87,47 @@ def testQue1_2AuchDasModellEinerAufgestelltenEinheitWirdÜberdeckt(
 
     assert gründe == {Grund.baseÜberdeckt}
     assert not aufstellung.gesetzt(modell)
+
+
+@pytest.mark.parametrize(
+    "lage",
+    [(1, gerade), (1, schräg), (Fraction(1, 2), gerade), (0, gerade), (-Fraction(1, 2), gerade)],
+    ids=["einZoll", "einZollSchräg", "halberZoll", "berührend", "überdeckend"],
+)
+def testQue1_3InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesperrt(
+    aufstellung, einheitNachDemAnderenSpieler, lage, platz
+):
+    (modell,) = einheitNachDemAnderenSpieler.modelle
+    abstand, richtung = lage
+    mittelpunkte = 2 * platz.radius + abstand
+    stelle = platz.stelleBeimAnderenSpieler(mittelpunkte, richtung)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, modell, stelle)
+
+    assert Grund.nahkampfreichweite in gründe
+    assert not aufstellung.gesetzt(modell)
+
+
+@pytest.mark.parametrize("richtung", [gerade, schräg], ids=["gerade", "schräg"])
+def testQue1_3JenseitsVonEinemZollIstNichtInNahkampfreichweite(
+    aufstellung, einheitNachDemAnderenSpieler, richtung, platz
+):
+    (modell,) = einheitNachDemAnderenSpieler.modelle
+    mittelpunkte = 2 * platz.radius + 1 + platz.millionstel
+    stelle = platz.stelleBeimAnderenSpieler(mittelpunkte, richtung)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, modell, stelle)
+
+    assert Grund.nahkampfreichweite not in gründe
+
+
+def testQue1_3EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
+):
+    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
+    aufstellung.modellSetzen(erstesModell, platz.stelle(2, platz.radius))
+    stelle = platz.stelle(2, 3 * platz.radius + Fraction(1, 2))
+
+    aufstellung.modellSetzen(zweitesModell, stelle)
+
+    assert aufstellung.gesetzt(zweitesModell)

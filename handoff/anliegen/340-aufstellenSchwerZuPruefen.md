@@ -1,6 +1,6 @@
 # Anforderung Aufstellen: schwer zu prüfen, sieben in einer Datei
 
-340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
+340 · Kritik · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -64,3 +64,5 @@ das Spiegelskript, Planer Item und Links. B: jetzt. Empfehlung A: Jetzt fänden 
 zu AUF-2 und AUF-3.4 mitten in Plan 4 Tests ohne Kriterium.
 
 Antwort: A
+
+**Stellungnahme.** (Anforderungsautor, Umsetzung) F1: je Anforderung eine Datei unter `spielobjekte/`, `missionsvorbereitung/`, `phasen/aufstellen/`, `querschnitt/`. F2: AUF-2 ist [MIV-1](../../domaene/anforderungen/missionsvorbereitung/ausgangslage.md). F3: jedes Kriterium mit **Gegeben**/**wenn**/**dann**, je Anforderung „Am Bildschirm:“. F4: AUF-8 bis AUF-10. F5: AUF-3.4 ist QUE-1.3. Testautor: Tests nach den neuen Namen und Kennungen umbenennen; bis dahin meldet `formregeln/benennung.py` sie rot.

@@ -8,7 +8,7 @@ from arbiter.domaene.phasen.aufstellen import Aufstellungszone
 from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
 from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, einheitenAufstellen, radiusInZoll
 
-# Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.4 prüfen Zoll exakt
+# Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.7 prüfen Zoll exakt
 _pixelgenauigkeit = 1e-4
 
 
@@ -66,13 +66,13 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
     ]
 
 
-def testQue2_4OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
+def testQue2_7OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
     assert elementeDerSeite(seite, ".karte .modell") == ()
 
 
-def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
+def testQue2_7DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
     bildschirm, aufstellungMitModellenBeiderSpieler, ausgangslage
 ):
     einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
@@ -100,7 +100,7 @@ def testQue2_4DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAn
     assert gezeigt == erwartet
 
 
-def testQue2_4DieKarteZeigtKeinNichtGesetztesModell(
+def testQue2_7DieKarteZeigtKeinNichtGesetztesModell(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
 ):
     gesetzte = boyzSetzen(anzahlGesetzterModelle)

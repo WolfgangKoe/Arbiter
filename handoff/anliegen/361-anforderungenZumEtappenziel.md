@@ -1,6 +1,6 @@
 # Weitere Anforderungen im Blick auf das Etappenziel
 
-361 · Anliegen · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · offen
+361 · Anliegen · von Stakeholder → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -16,4 +16,4 @@ Etappe 1 noch fehlen, in [anforderungen/](../../domaene/anforderungen/), damit d
 einplant. Was Regeln und Ziel offenlassen, fragt er nach; Form und Schnitt folgen
 [340](340-aufstellenSchwerZuPruefen.md).
 
-**Stellungnahme.**
+**Stellungnahme.** (Anforderungsautor) Neu: [AUF-8 Ziehen](../../domaene/anforderungen/phasen/aufstellen/ziehen.md), [AUF-9 Gesperrtes Modell](../../domaene/anforderungen/phasen/aufstellen/gesperrtesModell.md), [AUF-10 Beenden](../../domaene/anforderungen/phasen/aufstellen/beenden.md), [QUE-4 Kohärenz](../../domaene/anforderungen/querschnitt/kohaerenz.md), [QUE-5 Übergehen](../../domaene/anforderungen/querschnitt/uebergehen.md), QUE-2.7 (statt QUE-2.4), QUE-3.4. Das Zyklusziel aus Review 4 (ziehen, gesperrt stehen, „zurück“) ist damit ganz beschrieben. Was offen bleibt (Wahl von Gewinner und Zone, Protokoll, Kohärenz als Gruppe), frage ich in [362](362-offenesZumEtappenziel.md).

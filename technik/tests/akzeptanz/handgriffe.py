@@ -23,6 +23,10 @@ tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
 anzahlGesetzterModelle = 3
 
+# Regel: Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
+gerade = (1, 0)
+schräg = (Fraction(3, 5), Fraction(4, 5))
+
 
 def spielerMit(*modellzahlen: int) -> Spieler:
     """Ein Spieler, dessen Armee je Zahl eine Einheit mit so vielen Modellen hat."""

@@ -1,4 +1,4 @@
-"""AUF-2 · Ausgangslage von Only War."""
+"""MIV-1 · Ausgangslage."""
 
 from fractions import Fraction
 
@@ -28,7 +28,7 @@ def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
     )
 
 
-def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
+def testMiv1_1EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
     erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
@@ -39,7 +39,7 @@ def testAuf2_4EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
     assert aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
+def testMiv1_1EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
     erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
@@ -51,7 +51,7 @@ def testAuf2_4EineBaseJenseitsDerTiefeLiegtNichtGanzInDerZone(
     assert not aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(
+def testMiv1_1DieZoneBeginntAmAnfangDerSpielfeldkante(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
     erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
@@ -62,7 +62,7 @@ def testAuf2_4DieZoneBeginntAmAnfangDerSpielfeldkante(
     assert aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(
+def testMiv1_1DieZoneReichtBisZumEndeDerSpielfeldkante(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
     erstesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
@@ -73,7 +73,7 @@ def testAuf2_4DieZoneReichtBisZumEndeDerSpielfeldkante(
     assert aufstellung.gesetzt(erstesModell)
 
 
-def testAuf2_5InDerAusgangslageIstKeinModellGesetzt(ausgangslage):
+def testMiv1_2InDerAusgangslageIstKeinModellGesetzt(ausgangslage):
     aufstellung = Aufstellung(ausgangslage)
     modelle = modelleDerArmeen(ausgangslage)
 
@@ -82,7 +82,7 @@ def testAuf2_5InDerAusgangslageIstKeinModellGesetzt(ausgangslage):
     assert gesetzteModelle == []
 
 
-def testAuf2_5InDerAusgangslageIstKeineEinheitAufgestellt(ausgangslage):
+def testMiv1_2InDerAusgangslageIstKeineEinheitAufgestellt(ausgangslage):
     aufstellung = Aufstellung(ausgangslage)
     einheiten = einheitenDerArmeen(ausgangslage)
 
@@ -91,7 +91,7 @@ def testAuf2_5InDerAusgangslageIstKeineEinheitAufgestellt(ausgangslage):
     assert aufgestellteEinheiten == []
 
 
-def testAuf2_6DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
+def testMiv1_3DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
     einheitenJeArmee = [
         len(ausgangslage.ersterSpieler.armee.einheiten),
         len(ausgangslage.zweiterSpieler.armee.einheiten),
@@ -100,7 +100,7 @@ def testAuf2_6DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
     assert einheitenJeArmee == [2, 2]
 
 
-def testAuf2_6JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
+def testMiv1_3JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
     # Regel: je Eintrag unter `durchmesser` in ausgangslage.yaml ein Modell
     zahlenDerModelle = sorted(
         tuple(len(einheit.modelle) for einheit in spieler.armee.einheiten)
@@ -110,7 +110,7 @@ def testAuf2_6JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
     assert zahlenDerModelle == [(10, 1), (10, 1)]
 
 
-def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
+def testMiv1_3DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
     # Regel: Durchmesser in mm je Modell, ausgangslage.yaml
     orks = ((32,) * 10, (40,))
     necrons = ((32,) * 10, (32,))
@@ -120,7 +120,7 @@ def testAuf2_6DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
     assert durchmesser == sorted([orks, necrons])
 
 
-def testAuf2_7DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
+def testMiv1_4DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
     # Regel: Spielfeld 44″ × 60″ (onlyWar.yaml)
     seitenlängen = ausgangslage.spielfeld.seitenlängen
 

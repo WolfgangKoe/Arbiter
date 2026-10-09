@@ -1,6 +1,6 @@
 # Spiegel zwischen Anforderung und Domänencode
 
-345 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+345 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht in Anliegen 339
@@ -50,4 +50,4 @@ Umsetzung mit 340 in der nächsten Domänenphase. Einigen wir uns, schreibe ich 
 die Architektur und gebe die Prüfung an den Regelumsetzer; sonst geht es an den Stakeholder
 zurück (339).
 
-**Stellungnahme.**
+**Stellungnahme.** (Anforderungsautor) F1 A, F2 A (wie 340 F5 A, umgesetzt als QUE-1.3), F3 A: *Auswahl* steht im [Glossar](../../domaene/glossar.md) und in [AUF-5](../../domaene/anforderungen/phasen/aufstellen/auswahl.md). Die Dateien folgen deinem Muster: AUF-5 heißt `auswahl.md`.

@@ -5,11 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.handgriffe import sperrgründe
-
-# Regel: Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
-gerade = (1, 0)
-schräg = (Fraction(3, 5), Fraction(4, 5))
+from tests.akzeptanz.handgriffe import gerade, sperrgründe
 
 
 @pytest.mark.parametrize(
@@ -55,50 +51,6 @@ def testAuf3_2ÜberDieKurzeKanteAmEndeIstGesperrt(
 
     assert gründe == {Grund.nichtGanzInDerZone}
     assert not aufstellung.gesetzt(erstesModell)
-
-
-@pytest.mark.parametrize(
-    "lage",
-    [(1, gerade), (1, schräg), (Fraction(1, 2), gerade), (0, gerade), (-Fraction(1, 2), gerade)],
-    ids=["einZoll", "einZollSchräg", "halberZoll", "berührend", "überdeckend"],
-)
-def testAuf3_4InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesperrt(
-    aufstellung, einheitNachDemAnderenSpieler, lage, platz
-):
-    (modell,) = einheitNachDemAnderenSpieler.modelle
-    abstand, richtung = lage
-    mittelpunkte = 2 * platz.radius + abstand
-    stelle = platz.stelleBeimAnderenSpieler(mittelpunkte, richtung)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, modell, stelle)
-
-    assert Grund.nahkampfreichweite in gründe
-    assert not aufstellung.gesetzt(modell)
-
-
-@pytest.mark.parametrize("richtung", [gerade, schräg], ids=["gerade", "schräg"])
-def testAuf3_4JenseitsVonEinemZollIstNichtInNahkampfreichweite(
-    aufstellung, einheitNachDemAnderenSpieler, richtung, platz
-):
-    (modell,) = einheitNachDemAnderenSpieler.modelle
-    mittelpunkte = 2 * platz.radius + 1 + platz.millionstel
-    stelle = platz.stelleBeimAnderenSpieler(mittelpunkte, richtung)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, modell, stelle)
-
-    assert Grund.nahkampfreichweite not in gründe
-
-
-def testAuf3_4EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
-    aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
-):
-    erstesModell, zweitesModell = ersteEinheitDesSpielersAnDerReihe.modelle
-    aufstellung.modellSetzen(erstesModell, platz.stelle(2, platz.radius))
-    stelle = platz.stelle(2, 3 * platz.radius + Fraction(1, 2))
-
-    aufstellung.modellSetzen(zweitesModell, stelle)
-
-    assert aufstellung.gesetzt(zweitesModell)
 
 
 def testAuf3_5ZweiGründeAnEinerStelleNenntArbiterBeide(
