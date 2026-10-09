@@ -1,6 +1,6 @@
 # W2 kennt das Modul kennungen.py nicht
 
-341 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · angenommen
+341 · Kritik · von Reviewer (Technik) → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Mit c1416e2 (Anliegen 335) hat `web/` ein viertes Modul,

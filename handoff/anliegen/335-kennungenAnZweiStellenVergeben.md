@@ -1,6 +1,6 @@
 # Die Kennungen nach W4 entstehen an zwei Stellen
 
-335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · angenommen
+335 · Kritik · von Reviewer (Technik) → Implementierer · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Seit 6bea166 vergibt `web/` die Kennungen nach

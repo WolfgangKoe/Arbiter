@@ -1,6 +1,6 @@
 # Ein Unit-Test der Domäne lädt Flask über die Handgriffe
 
-342 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
+342 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Geprüft: c1416e2. `testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung`
