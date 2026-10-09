@@ -1,6 +1,6 @@
 # Sperre ohne Stelle gehört zu Item 2
 
-379 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · angenommen
+379 · Fragen · von Architekt (Technik) → Planer (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Plan 5](../plan.md), Empfehlung: „Reicht die Technikphase nicht für drei, rückt

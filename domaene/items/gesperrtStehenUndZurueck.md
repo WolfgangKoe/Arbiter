@@ -5,5 +5,5 @@ Umfang: AUF-9.1, 9.3, 9.4, AUF-15.1, AUF-8.4,
 
 Warum jetzt: Review 4; AUF-12 nach 379.
 
-Abhängigkeit: Ziehen, [372](../../handoff/anliegen/372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md).
+Abhängigkeit: Ziehen, Anliegen 372.
 Mockup: [auf-9](../mockups/auf-9.html), auf-15, auf-12.

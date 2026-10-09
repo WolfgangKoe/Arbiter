@@ -40,7 +40,7 @@ QUE-5), *Gewinner* und Zone wählen (AUF-11), *Leisten* (QUE-6); die *Einheit* a
 ## Für die Freigabe fehlt
 Die Mockups zeigen die *Formation*, neu [auf-15](../domaene/mockups/auf-15.html) (Anliegen
 375, git). Knopf, Anzeige des *Grundes* und Kennzeichen *gesperrt* entscheidet der Architekt
-in [372](anliegen/372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md) (DoR 5).
+in Anliegen 372 (DoR 5).
 Sonst ist jedes Item bereit.
 
 ## Empfehlung

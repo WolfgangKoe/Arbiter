@@ -1,6 +1,6 @@
 # Abstand der Reihen in der Formation
 
-377 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+377 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Drei Quellen beschreiben die *Formation* (AUF-8.5) verschieden:

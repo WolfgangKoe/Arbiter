@@ -5,5 +5,5 @@ Umfang: [AUF-10.1 bis 10.4](../anforderungen/phasen/aufstellen/beenden.md), QUE-
 
 Warum jetzt: Anliegen 361.
 
-Abhängigkeit: Items davor, [372](../../handoff/anliegen/372-bestandteileDerOberflaecheFuerZiehenSperreUndBeenden.md).
+Abhängigkeit: Items davor, Anliegen 372.
 Mockup: [auf-10](../mockups/auf-10.html).

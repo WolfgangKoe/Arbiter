@@ -1,6 +1,6 @@
 # Ungeregelte Fälle beim Ziehen und Beenden
 
-378 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+378 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** In den Kriterien von Plan 5 fehlen drei Fälle, die Bildschirm und Vertrag
