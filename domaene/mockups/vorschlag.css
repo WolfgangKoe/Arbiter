@@ -89,6 +89,8 @@ body {
 .spalteMitte {
   grid-column: 2;
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   justify-content: center;
   align-items: flex-start;
 }
@@ -174,4 +176,44 @@ body {
   stroke: var(--text);
   stroke-width: 2px;
   vector-effect: non-scaling-stroke;
+}
+
+.modell.gesperrt {
+  fill-opacity: 0.35;
+  stroke: var(--akzentHell);
+  stroke-width: 2px;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.sperrmeldung {
+  flex-basis: 100%;
+  max-width: 34rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  list-style: none;
+  background: var(--fläche);
+  border: 1px solid var(--akzentHell);
+  border-radius: 0.375rem;
+}
+
+.sperrmeldungGrund {
+  color: var(--akzentHell);
+  font-weight: 600;
+}
+
+.knopf {
+  padding: 0.5rem 1rem;
+  background: var(--fläche);
+  border: 1px solid var(--akzent);
+  border-radius: 0.375rem;
+  color: var(--akzent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.knopf:hover {
+  border-color: var(--akzentHell);
+  color: var(--akzentHell);
 }
