@@ -1,37 +1,42 @@
 # Moderation
 
-Stand vor Freigabe Plan 4: 11 Anliegen offen, 318 `erledigt`. Kritikrunde der Domänenphase
-läuft; zu den Items von [Plan 4](plan.md) hängt kein offenes Anliegen (DoR 4).
+Stand vor Freigabe Review 4: 13 Anliegen im Ordner, 348 und 349 `erledigt`. An den Items von
+[Plan 4](plan.md) hängt keins; [Review 4](review.md) hat DoD 1 bis 4 erfüllt.
 
 ## Dran
-Blockiert die Freigabe: nichts. Die Kritik an AUF-5.5 (Anliegen 318)
-ist `erledigt`, AUF-5.5 steht nicht im Umfang.
-- Architekt: Anliegen 322 (Beispiel in T2; drei Kürzel).
-- Organisationsentwickler: Anliegen 321 (ein Satz in DoR 5, Stellungnahme
-  leer); Anliegen 296 nachprüfen (angenommen, F1 bis F3 beantwortet);
-  [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) und
-  Anliegen 150 warten auf 304 und 216.
-- Regelumsetzer: Anliegen 216,
-  [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
-  [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md),
+Blockiert die Freigabe: nichts. Offen zur Technik sind nur 345 und 249, beide betreffen Plan 5.
+- Anforderungsautor, erst in der nächsten Domänenphase (340 F6 A):
+  [340](anliegen/340-aufstellenSchwerZuPruefen.md) (F5 A entschieden; F3: deine Antwort
+  verlangt Kriterien als Anwendungsfall, den Zweck klarer),
+  [345](anliegen/345-spiegelZwischenAnforderungUndCode.md) (F1 bis F3 offen).
+- Organisationsentwickler: [353](anliegen/353-startbefehlImReview.md),
+  [354](anliegen/354-commitsMitBetreffNennen.md) (Stellungnahme leer);
+  [289](anliegen/289-pruefungenBrechenAmHookDesNachbarnAb.md) (Runde 2; 304 ist erledigt,
+  die Wartebedingung entfällt); Nachprüfung
+  [351](anliegen/351-reviewVierFormDerSchritteVierUndSechs.md).
+- Regelumsetzer: [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
   [275](anliegen/275-dashboardSichtDerAnliegen.md),
-  Anliegen 304.
-- Testautor: AUF-5, AUF-6, QUE-3 nach Freigabe (Technikphase), kein Anliegen.
-- Stakeholder, Anforderungsautor, Fachkritiker: keins.
+  [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md).
+- Planer: Nachprüfung [350](anliegen/350-zykluszielFuerPlan5.md).
+- UX: Nachprüfung [352](anliegen/352-planOhneLinksAufGeloeschteMockups.md).
+- Reviewer, Testautor, Architekt, Fachkritiker: keins. AUF-5.5 wartet auf den Testautor
+  (Plan 5, nicht jetzt).
 
 ## Vorschläge
-- Löschen: 318 (Kopf `erledigt`, Löschlauf, kein Zug nötig).
-- Zusammen in einem Lauf des Regelumsetzers: 246 mit 275 (dieselbe Datei
-  `rollenregeln/dashboard.py`).
-- Regelumsetzer, Strang Hook-Code, höchstens ein Lauf
-  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): 304 zuerst (`pyproject.toml`), dann 216,
-  dann 249 (ändert `pyproject.toml` und Importvertrag). 246 und 275 laufen als eigener Strang
-  daneben, wenn `dashboard.py` nicht von Hooks importiert wird.
-- Organisationsentwickler: 321 ist ein reiner Textstrang (`ablauf.md`) und läuft neben jedem
-  Strang; nach 304 schließt er 289, nach 216 meldet er 150 an den Stakeholder.
-- Architekt: 322 gleichzeitig; die Vertragsarbeit in
-  [web.md](../technik/architektur/web.md) (Plan 4) hat Vorrang, 321 verlangt dort O3 nachzuziehen.
-- Vorrang hat Plan 4; die Kette läuft daneben.
+- Löschen: 348 und 349 (Kopf `erledigt`, Löschlauf, kein Zug nötig).
+- Schließen: 350, 351, 352 sind `angenommen` und umgesetzt (Review 4 und Plan 4 zeigen es);
+  Planer, Organisationsentwickler und UX dürfen `erledigt` setzen, wenn die Nachprüfung stimmt.
+- Zusammen: 340 und 345 in einem Zug des Anforderungsautors (gleiche Dateien, beide
+  F6 A); 353 mit 354 in einem Lauf (beide ändern Schritt 6 in `ablauf.md`).
+- Reihenfolge nach 340 F6 A und Review 4: erst 340 und 345, dann die Kriterien, dann Plan 5.
+- Stränge Regelumsetzer, höchstens ein Hook-Code-Lauf
+  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): 246 mit 275 zuerst (`dashboard.py`,
+  von `laufLog.py` als SubagentStop-Hook importiert), danach 249 (`pyproject.toml`,
+  Importvertrag). Die Funde 1 bis 3 im Rundgang Prüfcode sind noch kein Anliegen; sie
+  entstehen nach deinem Kommentar im Review.
+- Organisationsentwickler: 353 mit 354 und 289 sind Text und `regeln.md`, sie laufen
+  nebeneinander und neben dem Regelumsetzer; die Nachprüfung 351 ist ein eigener kurzer Lauf.
+- Planer und UX: Nachprüfungen sind getrennte Dateien und laufen gleichzeitig.
 
 ## Fragen an dich
-Keine offen.
+Keine offen. Deine Antwort zu 340 F3 liegt beim Anforderungsautor, nicht bei dir.
