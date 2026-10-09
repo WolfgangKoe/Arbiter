@@ -56,7 +56,7 @@ def _teilenSichArmeeOderModell(ersterSpieler: Spieler, zweiterSpieler: Spieler) 
     )
 
 
-# Regel: Nahkampfreichweite, ein Gegner höchstens 1″ entfernt (core_rules.txt:450)
+# Regel: Nahkampfreichweite (core_rules.txt:447)
 def inNahkampfreichweite(
     modell: Modell, stelle: Stelle, stellen: Mapping[Modell, Stelle], eigene: Collection[Modell]
 ) -> bool:
@@ -70,7 +70,7 @@ def inNahkampfreichweite(
 
 
 class Aufstellung:
-    """Der Schiedsrichter der Phase: Abfragen, dann AUF-1, AUF-7 und AUF-3, AUF-5."""
+    """Der Schiedsrichter der Aufstellung: ändert den Stand nur nach Prüfung der Sperren."""
 
     def __init__(self, ausgangslage: Ausgangslage) -> None:
         self._ausgangslage = ausgangslage
@@ -199,6 +199,7 @@ class Aufstellung:
     def _baseÜberdeckt(self, modell: Modell, stelle: Stelle) -> bool:
         return baseÜberdeckt(modell, stelle, self._stellen)
 
+    # Regel: Aufstellen nicht in Nahkampfreichweite (core_rules.txt:450)
     def _inNahkampfreichweiteVonGegnern(self, modell: Modell, stelle: Stelle) -> bool:
         eigene = self._spielerAnDerReihe.armee.modelle
         return inNahkampfreichweite(modell, stelle, self._stellen, eigene)

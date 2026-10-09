@@ -1,6 +1,6 @@
 # Umbau der Aufstellung: doppelter Test, Fundstelle, Docstring
 
-347 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · offen
+347 · Kritik · von Reviewer (Technik) → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu ee3f4cc (Anliegen 344).
@@ -38,3 +38,8 @@ kurzer Lauf, keine Änderung an Akzeptanztests.
 - beide Testläufe grün sind.
 
 **Stellungnahme.**
+Alle vier Befunde umgesetzt. 1: `ausgangslageVon` in aufstellenTest.py, `aufstellungVon` nutzt
+ihn; die Tests der `Ausgangslage` rufen ihn, die zwei späten Doppel-Tests sind entfernt.
+2: Neuer Test mit zwei Spielern und derselben leeren `Armee()`. 3: Kommentar `:447` über
+`inNahkampfreichweite`, `:450` über `_inNahkampfreichweiteVonGegnern`. 4: Docstring nennt die
+Aufgabe. spielobjekteTest.py blieb unverändert.

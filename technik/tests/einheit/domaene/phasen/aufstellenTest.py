@@ -11,23 +11,21 @@ def spielerMitEinerEinheit() -> Spieler:
     return Spieler(armee=Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),)))
 
 
-def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
+def ausgangslageVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Ausgangslage:
     spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
-    return Aufstellung(
-        Ausgangslage(
-            ersterSpieler,
-            zweiterSpieler,
-            spielfeld,
-            {zone: Fraction(9) for zone in Aufstellungszone},
-        )
-    )
+    tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
+    return Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen)
+
+
+def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
+    return Aufstellung(ausgangslageVon(ersterSpieler, zweiterSpieler))
 
 
 def testDerselbeSpielerAlsBeideSpielerIstEineVorbedingungsverletzung():
     spieler = spielerMitEinerEinheit()
 
     with pytest.raises(ValueError):
-        aufstellungVon(spieler, spieler)
+        ausgangslageVon(spieler, spieler)
 
 
 def testEinFremderSpielerAlsGewinnerIstEineVorbedingungsverletzung():
@@ -68,7 +66,7 @@ def testZweiSpielerMitDerselbenArmeeSindEineVorbedingungsverletzung():
     zweiterSpieler = Spieler(armee=armee)
 
     with pytest.raises(ValueError):
-        aufstellungVon(ersterSpieler, zweiterSpieler)
+        ausgangslageVon(ersterSpieler, zweiterSpieler)
 
 
 def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
@@ -79,7 +77,7 @@ def testZweiSpielerMitEinerGemeinsamenEinheitSindEineVorbedingungsverletzung():
     zweiterSpieler = Spieler(armee=Armee(einheiten=(*gemeinsam, eigene)))
 
     with pytest.raises(ValueError):
-        aufstellungVon(ersterSpieler, zweiterSpieler)
+        ausgangslageVon(ersterSpieler, zweiterSpieler)
 
 
 def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
@@ -92,7 +90,17 @@ def testZweiSpielerMitEinemGemeinsamenModellSindEineVorbedingungsverletzung():
     zweiterSpieler = Spieler(armee=zweiteArmee)
 
     with pytest.raises(ValueError):
-        aufstellungVon(ersterSpieler, zweiterSpieler)
+        ausgangslageVon(ersterSpieler, zweiterSpieler)
+
+
+def testZweiSpielerMitDerselbenLeerenArmeeSindEineVorbedingungsverletzung():
+    leer = Armee()
+
+    ersterSpieler = Spieler(armee=leer)
+    zweiterSpieler = Spieler(armee=leer)
+
+    with pytest.raises(ValueError):
+        ausgangslageVon(ersterSpieler, zweiterSpieler)
 
 
 def testEinFremdesModellSetzenIstEineVorbedingungsverletzung():
@@ -146,25 +154,3 @@ def testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung():
 
     with pytest.raises(ValueError):
         aufstellung.auswählen(einheit)
-
-
-def testEineAusgangslageMitDemselbenSpielerIstEineVorbedingungsverletzung():
-    spieler = spielerMitEinerEinheit()
-    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
-
-    tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
-
-    with pytest.raises(ValueError):
-        Ausgangslage(spieler, spieler, spielfeld, tiefen)
-
-
-def testEineAusgangslageMitGemeinsamemModellIstEineVorbedingungsverletzung():
-    gemeinsam = Modell(base=Base(durchmesser=32))
-    ersterSpieler = Spieler(armee=Armee(einheiten=(Einheit(name="Erste", modelle=(gemeinsam,)),)))
-    zweiterSpieler = Spieler(armee=Armee(einheiten=(Einheit(name="Zweite", modelle=(gemeinsam,)),)))
-    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
-
-    tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
-
-    with pytest.raises(ValueError):
-        Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen)
