@@ -91,3 +91,8 @@ def testHookVonPreCommitIstGrün(tmp_path):
 def testDasRepoHatDenCommitHookInstalliert():
     hooks = gitAusgabe(wurzel, "rev-parse", "--path-format=absolute", "--git-path", "hooks")
     assert hookVerstoß(Path(hooks.strip())) is None
+
+
+@pytest.mark.parametrize("paket", ["Flask==3.1.*", "Werkzeug==3.1.*"])
+def testWebpaketeHabenFesteMinorVersion(paket):
+    assert paket in pyproject()["project"]["dependencies"]

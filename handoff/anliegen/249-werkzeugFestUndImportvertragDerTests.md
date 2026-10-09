@@ -1,6 +1,6 @@
 # Werkzeug fest und Importvertrag für die Akzeptanztests
 
-249 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · offen
+249 · Kritik · von Architekt (Technik) → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 09a195e (schränkt `pyproject.toml` die Technik richtig ein?)
@@ -35,4 +35,4 @@ den Implementierer nicht.
 Erledigt, wenn beide Scheiter-Tests grün sind und `python3 -m pytest prozess/pruefungen`
 grün bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt. 1: `"Werkzeug==3.1.*"` in `pyproject.toml` mit `Warum`; Tabellentest aus Anliegen 247 gibt es noch nicht, die Prüfung steht als `testWebpaketeHabenFesteMinorVersion` (Flask und Werkzeug) in `prozess/pruefungen/formregeln/konfigurationTest.py`. 2: `akzeptanzVerstöße` in `prozess/pruefungen/formregeln/importvertrag.py` (jede Datei unter `technik/tests/akzeptanz/`, auch `conftest.py`); Scheiter-Tests in `importvertragTest.py` (`import werkzeug.serving`, `flask`, `from flask import …` rot, `playwright.sync_api` grün, dazu das Repo). Zeile in [Regeln](../../prozess/regeln.md). In B1 kannst du „Prüft“ setzen.

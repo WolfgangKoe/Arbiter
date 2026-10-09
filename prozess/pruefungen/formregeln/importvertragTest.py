@@ -2,7 +2,7 @@ import pytest
 
 from formregeln.glossar import domaeneOrdner
 from formregeln.importvertrag import verstöße
-from gemeinsam.pfade import projektordner, webOrdner
+from gemeinsam.pfade import akzeptanzOrdner, projektordner, webOrdner
 
 
 def domänendatei(tmp_path, text, name="phasen/probe.py"):
@@ -123,4 +123,36 @@ def testW2FlaskInAnwendungUndServerIstGrün(tmp_path, datei):
 @pytest.mark.stand
 def testDasWebDesReposHältDenVertrag():
     assert (projektordner() / webOrdner).is_dir()
+    assert verstöße(projektordner()) == []
+
+
+def akzeptanzdatei(tmp_path, text, name="probe.py"):
+    datei = tmp_path / akzeptanzOrdner / name
+    datei.parent.mkdir(parents=True, exist_ok=True)
+    datei.write_text(text, encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "import werkzeug.serving\n",
+        "import flask\n",
+        "from flask import Flask\n",
+        "from werkzeug.serving import make_server\n",
+    ],
+)
+def testB1FlaskOderWerkzeugInAkzeptanztestsIstRot(tmp_path, text):
+    akzeptanzdatei(tmp_path, text, "phasen/probeTest.py")
+    akzeptanzdatei(tmp_path, text, "conftest.py")
+    assert len(verstöße(tmp_path)) == 2  # noqa: PLR2004
+
+
+def testB1PlaywrightUndStandardbibliothekInAkzeptanztestsSindGrün(tmp_path):
+    akzeptanzdatei(tmp_path, "from playwright.sync_api import sync_playwright\nimport json\n")
+    assert verstöße(tmp_path) == []
+
+
+@pytest.mark.stand
+def testDieAkzeptanztestsDesReposHaltenB1():
+    assert (projektordner() / akzeptanzOrdner).is_dir()
     assert verstöße(projektordner()) == []

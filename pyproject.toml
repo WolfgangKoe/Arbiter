@@ -55,9 +55,10 @@ name = "arbiter"
 version = "0"
 requires-python = ">=3.12"
 # Warum: `arbiter.katalog` liest die Ausgangslage aus YAML (technik/architektur.md, A2); Flask trägt
-# das Backend (CLAUDE.md, Technik-Rahmen). Feste Minor-Version, damit ein Update nicht still das
-# Verhalten ändert.
-dependencies = ["PyYAML==6.0.*", "Flask==3.1.*"]
+# das Backend (CLAUDE.md, Technik-Rahmen). Werkzeug importiert `web/server.py` selbst
+# (`make_server`); Flask verlangt es nur ohne obere Grenze. Feste Minor-Version, damit ein Update
+# nicht still das Verhalten ändert.
+dependencies = ["PyYAML==6.0.*", "Flask==3.1.*", "Werkzeug==3.1.*"]
 
 [project.scripts]
 # Warum: W5 (technik/architektur/web.md): `arbiter` ruft `arbiter.__main__:starten`.

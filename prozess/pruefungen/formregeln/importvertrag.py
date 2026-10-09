@@ -1,11 +1,11 @@
-"""Importvertrag A1, A2 (`technik/architektur.md`) und W1, W2 (`technik/architektur/web.md`)."""
+"""Importvertrag A1, A2 (`technik/architektur.md`) und W1, W2, B1 (`technik/architektur/web.md`)."""
 
 import ast
 import sys
 from pathlib import Path
 
 from formregeln.glossar import domaeneOrdner
-from gemeinsam.pfade import projektordner, webOrdner
+from gemeinsam.pfade import akzeptanzOrdner, projektordner, webOrdner
 
 eigenesPaket = "arbiter.domaene"
 flaskModule = ("anwendung.py", "server.py")
@@ -143,8 +143,21 @@ def webVerstöße(wurzel: Path) -> list[str]:
     return gefunden
 
 
+def akzeptanzVerstöße(wurzel: Path) -> list[str]:
+    """B1: Tests unter `tests/akzeptanz/` importieren weder Flask noch Werkzeug."""
+    gefunden = []
+    for datei in sorted((wurzel / akzeptanzOrdner).rglob("*.py")):
+        baum = ast.parse(datei.read_text(encoding="utf-8"))
+        pfad = datei.relative_to(wurzel)
+        gefunden += [
+            f"{pfad}:{zeile} importiert {modul}, verboten nach B1"
+            for modul, zeile in serverImporte(baum, [])
+        ]
+    return gefunden
+
+
 def verstöße(wurzel: Path) -> list[str]:
-    gefunden = webVerstöße(wurzel)
+    gefunden = webVerstöße(wurzel) + akzeptanzVerstöße(wurzel)
     for datei in sorted((wurzel / domaeneOrdner).rglob("*.py")):
         baum = ast.parse(datei.read_text(encoding="utf-8"))
         for modul, zeile in importierteModule(baum, paketDerDatei(datei, wurzel)):

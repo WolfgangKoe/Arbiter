@@ -9,7 +9,7 @@ Blockiert die Freigabe: nichts.
   [340](anliegen/340-aufstellenSchwerZuPruefen.md),
   [345](anliegen/345-spiegelZwischenAnforderungUndCode.md) (F1 bis F3 offen).
 - Regelumsetzer: [246](anliegen/246-dashboardAlleSessionsMitSeitenzaehler.md),
-  [275](anliegen/275-dashboardSichtDerAnliegen.md) (Stellungnahme leer),
+  Anliegen 275 (Stellungnahme leer),
   [249](anliegen/249-werkzeugFestUndImportvertragDerTests.md) (vor Technikphase 5).
 - Reviewer, Nachprüfung der umgesetzten Stellungnahmen:
   Anliegen 289 (Runde 2),
