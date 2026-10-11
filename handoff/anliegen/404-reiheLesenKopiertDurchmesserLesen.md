@@ -1,6 +1,6 @@
 # Die Prüfung einer Reihe kopiert die des Durchmessers
 
-404 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+404 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu 34acf30, `katalog/`. In
