@@ -58,3 +58,4 @@ Antwort: A
 und [Ablauf](../../prozess/ablauf.md#anliegen), 3 in Anliegen 385.
 Schreibt eine Rolle per Bash im Projekt oder committet, wird sie gesperrt; die Meldung nennt
 Write und Edit. Lücke: [Regeln](../../prozess/regeln.md#rollenregeln).
+Kommentar: Bitte hier melden, sobald alles umgesetzt ist, damit ich das Anliegen auf "erledigt" setzen kann.

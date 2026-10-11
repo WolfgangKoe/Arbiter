@@ -47,6 +47,13 @@ def testAnliegenSeiteZähltWasDemStakeholderBleibtUndVerlinktDieEinzelseite(ordn
     assert '<a href="/anliegen/10">10</a>' in text
 
 
+def testTokenberichtZeigtGelbenHinweisBisDerStatusGesetztIst(ordner):
+    anlegen(ordner)
+    assert 'class="offene-frage"' in holen(ordner, "/tokens").inhalt.decode()
+    anlegen(ordner, status="angenommen")
+    assert 'class="offene-frage"' not in holen(ordner, "/tokens").inhalt.decode()
+
+
 def testEinzelseiteHatWegZurückFormularMitStatusAntwortfeldUndKommentar(ordner):
     anlegen(ordner)
     text = holen(ordner, "/anliegen/10").inhalt.decode()

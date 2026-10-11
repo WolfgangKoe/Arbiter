@@ -15,6 +15,10 @@ __pycache__/
 /dashboard.html
 /prozess/dashboard/laeufe.jsonl
 
+# Warum: Zwischenstand bis zur Übernahme durch den Hook, keine Historie
+/prozess/dashboard/eingang.jsonl
+/prozess/dashboard/verworfen.jsonl
+
 # Warum: Abdruck von `pip install -e .`, keine Quelle
 *.egg-info/
 

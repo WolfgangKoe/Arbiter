@@ -54,6 +54,7 @@ def testStakeholderAlsRolleIstErlaubt(tmp_path):
         pytest.param("Runde 1/3", "Runde 4/3", id="Runde über 3"),
         pytest.param("Runde 1/3", "Runde 0/3", id="Runde 0"),
         pytest.param("Architekt (Technik)", "Gärtner", id="unbekannte Rolle"),
+        pytest.param("Planer", "planer", id="Rolle klein geschrieben"),
         pytest.param("12 ·", "13 ·", id="falsche Nummer"),
         pytest.param(guterKopf, "Von Architekt an Planer · Runde 1/3", id="freier Text"),
     ],

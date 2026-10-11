@@ -31,4 +31,6 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     for rolle in (anliegen.absender, anliegen.empfänger):
         if rolle.lower() not in bekannt:
             verstöße.append(f"Rolle {rolle} gibt es nicht in .claude/agents/")
+        elif rolle != rolle.capitalize():
+            verstöße.append(f"Rolle {rolle} wird groß geschrieben: {rolle.capitalize()}")
     return verstöße

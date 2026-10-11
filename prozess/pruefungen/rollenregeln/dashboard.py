@@ -7,6 +7,7 @@ from pathlib import Path
 from gemeinsam.pfade import wurzel
 from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
+from rollenregeln.dashboardHinweise import hinweise, hinweisStil
 from rollenregeln.dashboardSeiten import schalterSkriptFür, schalterStil, seitenschalter
 from rollenregeln.dashboardStil import legende, stil
 from rollenregeln.laufLesen import Lauf, läufeLesen
@@ -76,7 +77,7 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
+def seiteErzeugen(läufe: list[Lauf], lageText: str = "", hinweisText: str = "") -> str:
     if läufe:
         sitzungen = list(nachSitzung(läufe).items())
         neuesteZuerst = reversed(sitzungen)
@@ -90,8 +91,9 @@ def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
     return (
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
         "<title>Arbiter · Prozess-Dashboard</title>"
-        f"<style>{stil}{schalterStil}</style></head><body><h1>Prozess-Dashboard</h1>"
-        f'<p class="muted">{html.escape(lageText)}</p>'
+        f"<style>{stil}{schalterStil}{hinweisStil}</style></head>"
+        "<body><h1>Prozess-Dashboard</h1>"
+        f'<p class="muted">{html.escape(lageText)}</p>{hinweisText}'
         '<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
         f'<div class="karten-spalte">{karten}</div><aside class="seiten-spalte">'
         f'<section class="kasten"><h3>Verteilung der Tokenstände</h3>{verteilung}</section>'
@@ -101,7 +103,7 @@ def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
 
 def dashboardSchreiben(ordner: Path) -> Path:
     ziel = ordner / dashboardDatei
-    seite = seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText())
+    seite = seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText(), hinweise(ordner))
     ziel.write_text(seite, encoding="utf-8")
     return ziel
 

@@ -9,7 +9,7 @@ from urllib.parse import parse_qs
 from wsgiref.simple_server import WSGIServer, make_server
 
 from gemeinsam.pfade import projektordner
-from rollenregeln.dashboard import dashboardDatei, dashboardSchreiben
+from rollenregeln.dashboard import dashboardSchreiben
 from rollenregeln.dashboardAnliegenSeiten import (
     anliegenNach,
     anliegenSeite,
@@ -19,11 +19,9 @@ from rollenregeln.dashboardAnliegenSeiten import (
     seitenStil,
     stand,
 )
+from rollenregeln.dashboardHinweise import adresse, lokalesSchema, vorgabePort
 from rollenregeln.eingang import Zug, verworfeneLeeren, zugVormerken
 
-adresse = "127.0.0.1"
-lokalesSchema = "http"  # Warum: nur auf dieser Maschine, ohne Netz; TLS hätte hier keinen Sinn
-vorgabePort = 8765
 htmlTyp = "text/html; charset=utf-8"
 anliegenPfad = "/anliegen/"
 
@@ -45,9 +43,7 @@ def weiterleitung(ort: str) -> Antwort:
 
 
 def tokenbericht(ordner: Path) -> Antwort:
-    datei = ordner / dashboardDatei
-    if not datei.is_file():
-        dashboardSchreiben(ordner)
+    datei = dashboardSchreiben(ordner)  # Warum: der Hinweis auf offene Fragen soll aktuell sein
     zusatz = (
         f"<style>{seitenStil}</style>{navigation('Tokenbericht')}<script>{neuladenSkript}</script>"
     )

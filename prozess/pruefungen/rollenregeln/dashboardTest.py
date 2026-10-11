@@ -4,10 +4,18 @@ from datetime import UTC, datetime
 import pytest
 
 from gemeinsam.hookProtokoll import HookEingabe
+from gemeinsam.pfade import wurzel
 from rollenregeln import dashboard
 from rollenregeln.dashboard import dashboardSchreiben, modellName, seiteErzeugen
 from rollenregeln.dashboardDiagramm import kilo
 from rollenregeln.dashboardGruppen import sitzungsTitel
+from rollenregeln.dashboardHinweise import (
+    befehlHinweis,
+    hinweise,
+    retroNenntBefehl,
+    öffnenAdresse,
+    öffnenBefehl,
+)
 from rollenregeln.dashboardStil import legende
 from rollenregeln.laufLesen import Lauf, dauerSumme, logPfad, läufeLesen
 from rollenregeln.laufLog import (
@@ -21,6 +29,7 @@ from rollenregeln.laufLog import (
 )
 
 höchstwörter = 5
+tabellenJeSeite = 2  # Warum: Läufe der Sitzung und Verteilung je Rolle
 zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
 
 
@@ -369,3 +378,40 @@ def testDashboardUndLogNennenEtappeZyklusPhaseUndNächstenSchritt(tmp_path):
     seite = (tmp_path / "dashboard.html").read_text(encoding="utf-8")
     assert "Zyklus 1 · Domänenphase · Nächster Schritt: Planer: Plan 1" in seite
     assert "Etappe 1 · Aufstellen" in seite
+
+
+def testTabellenPassenSichDemKastenAnStattZuScrollen():
+    lauf = Lauf(zeit="t", rolle="planer", belegung=84_000, dauer=660, ziel="Reihenfolge")
+    seite = seiteErzeugen([lauf])
+    assert seite.count('<table class="auftraege">') == tabellenJeSeite
+    assert "tabellen-hülle" not in seite
+    assert "td.stand{white-space:nowrap" in seite
+    assert "overflow-wrap:anywhere" in seite
+    assert ".sitzungs-karte{min-width:0}" in seite
+
+
+def testTokenberichtNenntDenBefehlZumÖffnenDesServers():
+    seite = seiteErzeugen([], hinweisText=befehlHinweis())
+    assert öffnenBefehl in seite
+    assert öffnenAdresse in seite
+
+
+def testGelberHinweisErscheintBeiOffenerFrageUndVerschwindetMitDerAntwort(tmp_path):
+    ordner = tmp_path / "handoff" / "anliegen"
+    ordner.mkdir(parents=True)
+    anliegen = ordner / "10-frage.md"
+    kopf = "# Frage\n\n10 · Fragen · von planer → Stakeholder · Runde 1/3 · {status}\n"
+    anliegen.write_text(kopf.format(status="offen"), encoding="utf-8")
+    assert 'class="offene-frage"' in hinweise(tmp_path)
+    assert "(10)" in hinweise(tmp_path)
+    anliegen.write_text(kopf.format(status="angenommen"), encoding="utf-8")
+    assert 'class="offene-frage"' not in hinweise(tmp_path)
+
+
+def testRetroDesRepoNenntDenBefehl():
+    assert retroNenntBefehl((wurzel / "handoff" / "retro.md").read_text(encoding="utf-8"))
+
+
+def testRetroOhneBefehlWirdErkannt():
+    assert retroNenntBefehl(f"# Retro\n\n`{öffnenBefehl}`\n")
+    assert not retroNenntBefehl("# Retro · Zyklus 5\n")

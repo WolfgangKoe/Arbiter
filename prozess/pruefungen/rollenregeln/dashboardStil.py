@@ -44,7 +44,10 @@ table.auftraege th,table.auftraege td{border:1px solid var(--border);
 padding:4px 8px;text-align:left}
 table.auftraege th{background:var(--panel-2);color:var(--accent-text);font-weight:600}
 table.auftraege td.rolle{color:var(--c-subagent)}
-table.auftraege td.stand{text-align:right;font-variant-numeric:tabular-nums}
+.karten-spalte,.seiten-spalte,.kasten,.sitzungs-karte{min-width:0}
+table.auftraege{max-width:100%}
+table.auftraege td,table.auftraege th{overflow-wrap:anywhere}
+table.auftraege td.stand{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
 .legende ul{list-style:none;margin:0;padding:0}
 .legende li{display:flex;gap:8px;margin-bottom:9px}
 .legende .marke{flex:0 0 18px;height:12px;margin-top:3px;border-radius:2px}
