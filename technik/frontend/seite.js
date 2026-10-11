@@ -88,6 +88,10 @@ function einheitLoslassen(karte, stelle) {
   return handlungSenden(`${einheitenPfad(karte)}/stelle`, "PUT", stelle)
 }
 
+function einheitAufAblageLoslassen(karte, ablage) {
+  return handlungSenden(`${einheitenPfad(karte)}/stelle?ablage=${ablage.dataset.spieler}`, "DELETE")
+}
+
 function punktAufDerKarte(ereignis) {
   const zeichnung = document.querySelector(".karte")
   return new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(zeichnung.getScreenCTM().inverse())
@@ -157,6 +161,8 @@ function ziehenBeenden(ereignis) {
   const istModell = start.classList.contains("modell")
   if (stelle) return istModell ? modellLoslassen(start, stelle) : einheitLoslassen(start, stelle)
   if (ablage && istModell) return modellZurücklegen(start, ablage)
+  // Regel: AUF-16.4, auf der eigenen Ablage keine Anfrage
+  if (ablage && ablage.dataset.spieler !== start.dataset.spieler) return einheitAufAblageLoslassen(start, ablage)
   // Regel: Ohne Ziel keine Anfrage, die Seite zeichnet den letzten Stand (V8)
   zeichnen(letzterSpielstand)
 }

@@ -1,6 +1,6 @@
 # Offener Rest der Umsetzung von Plan 5
 
-392 · Fragen · von Implementierer (Technik) → Koordinator · Runde 1/3 · offen
+392 · Fragen · von Implementierer (Technik) → Koordinator · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Token-Schwelle kam vor dem ersten Code. Der Arbeitsbaum ist der des vorigen
@@ -45,9 +45,15 @@ zusätzlich „gemeinsam übergehen“; V7 nennt den Knopf nicht, die Seite zeig
 gilt jetzt [V5 und V8](../../technik/architektur/handlungen.md): auf der *Ablage* des anderen
 *Spielers* `DELETE /api/spieler/<s>/einheiten/<e>/stelle?ablage=<a>` mit
 `einheitAufAblageLoslassen`, auf der eigenen weiter keine Anfrage. Offen bleibt AUF-16.5,
-sobald der Stakeholder in [Anliegen 394](394-ablageAlsZielInPlan5.md) A wählt:
+sobald der Stakeholder in Anliegen 394 A wählt:
 - Testautor: Akzeptanztest zu AUF-16.5 nach V5 und V8; bis dahin ist die Rückverfolgung rot.
 - Implementierer: `einheitAufAblageLoslassen` (eigene *Ablage*: nichts, AUF-16.4; andere:
   *Sperre* ‚nicht wählbar‘), die Route und `ziehenBeenden` in `seite.js`; erst nach dem
   Schnitt aus Anliegen 399, denn `aufstellen.py`
   liegt über dem Höchstmaß.
+
+**Stellungnahme (Implementierer).** Umgesetzt: `Aufstellung.einheitAufAblageLoslassen`
+([Aufstellung](../../technik/arbiter/domaene/phasen/aufstellen/__init__.py)), die Route
+`DELETE …/einheiten/<e>/stelle?ablage=<a>` ([anwendung.py](../../technik/arbiter/web/anwendung.py))
+und `ziehenBeenden` in [seite.js](../../technik/frontend/seite.js). `python3 -m pytest technik/tests`
+ist grün (410 Tests), Ruff sauber. Nichts mehr offen.

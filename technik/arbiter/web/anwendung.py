@@ -94,6 +94,14 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         aufstellung.einheitLoslassen(einheit, _stelleDerAnfrage())
         return spielstandLiefern()
 
+    def einheitAufAblageLoslassen(spielernummer: int, einheitennummer: int):
+        einheit = einheitInDerAblage(spielernummer, einheitennummer)
+        ablage = request.args.get("ablage", type=int)
+        if ablage is None:
+            abort(HTTPStatus.BAD_REQUEST)
+        aufstellung.einheitAufAblageLoslassen(einheit, spielerMit(ablage))
+        return spielstandLiefern()
+
     def zurück():
         aufstellung.zurück()
         return spielstandLiefern()
@@ -118,6 +126,9 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
     anwendung.add_url_rule(pfadDesModells, view_func=modellLoslassen, methods=["PUT"])
     anwendung.add_url_rule(pfadDesModells, view_func=modellZurücklegen, methods=["DELETE"])
     anwendung.add_url_rule(f"{pfadDerEinheit}/stelle", view_func=einheitLoslassen, methods=["PUT"])
+    anwendung.add_url_rule(
+        f"{pfadDerEinheit}/stelle", view_func=einheitAufAblageLoslassen, methods=["DELETE"]
+    )
     anwendung.add_url_rule("/api/zurück", view_func=zurück, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]

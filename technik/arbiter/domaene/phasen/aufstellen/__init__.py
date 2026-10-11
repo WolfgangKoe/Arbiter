@@ -130,6 +130,11 @@ class Aufstellung:
         for modell, ort in orte.items():
             self._loslassen(modell, einheit, ort, frozenset(orte))
 
+    def einheitAufAblageLoslassen(self, einheit: Einheit, ablage: Spieler) -> None:
+        # Regel: AUF-16.4 eigene Ablage, nichts; AUF-16.5 die des anderen Spielers ist nicht wählbar
+        if einheit not in ablage.armee.einheiten:
+            raise Sperre(Grund.nichtWählbar)
+
     def modellZurücklegen(self, modell: Modell, spieler: Spieler) -> None:
         self._prüfenDassNichtsGesperrtIst()
         prüfenDassZurückzulegen(einheitVon(self._spieler, modell), self._aufgestellt, spieler)
