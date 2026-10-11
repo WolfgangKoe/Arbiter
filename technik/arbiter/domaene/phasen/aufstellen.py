@@ -1,59 +1,17 @@
 """Die Phase Aufstellen: Wahlen, Setzen der Modelle und Auswählen der Einheiten (AUF)."""
 
 from collections.abc import Callable, Collection, Mapping
-from dataclasses import dataclass
-from enum import Enum
 from fractions import Fraction
 from typing import ClassVar
 
 from arbiter.domaene import messen
-from arbiter.domaene.querschnitt import baseÜberdeckt
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.querschnitt import baseÜberdeckt, inKohärenz
 from arbiter.domaene.sperre import Grund, Sperre
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Spielfeld, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 # Regel: Nahkampfreichweite ist ein Abstand von höchstens 1″ (domaene/glossar.md)
 _nahkampfreichweite = Fraction(1)
-
-
-class Aufstellungszone(Enum):
-    erste = 1
-    zweite = 2
-
-
-@dataclass(frozen=True, eq=False)
-class Ausgangslage:
-    ersterSpieler: Spieler
-    zweiterSpieler: Spieler
-    spielfeld: Spielfeld
-    tiefen: Mapping[Aufstellungszone, Fraction]
-
-    def __post_init__(self) -> None:
-        if self.ersterSpieler is self.zweiterSpieler:
-            raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
-        if _teilenSichArmeeOderModell(self.ersterSpieler, self.zweiterSpieler):
-            raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
-
-    def grenzenDerZone(
-        self, zone: Aufstellungszone
-    ) -> tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]:
-        """Die Fläche der Zone als Grenzen in x und in y, die Form von `messen.ganzIn`."""
-        breite, länge = self.spielfeld.seitenlängen
-        return _grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
-
-
-def _grenzenInXDerZone(
-    zone: Aufstellungszone, breite: Fraction, tiefe: Fraction
-) -> tuple[Fraction, Fraction]:
-    if zone is Aufstellungszone.erste:
-        return Fraction(0), tiefe
-    return breite - tiefe, breite
-
-
-def _teilenSichArmeeOderModell(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> bool:
-    return (
-        ersterSpieler.armee is zweiterSpieler.armee
-        or not ersterSpieler.armee.modelle.isdisjoint(zweiterSpieler.armee.modelle)
-    )
 
 
 # Regel: Nahkampfreichweite (core_rules.txt:447)
@@ -80,6 +38,10 @@ class Aufstellung:
         self._anDerReihe: Spieler | None = None
         self._zonen: dict[Spieler, Aufstellungszone] = {}
         self._stellen: dict[Modell, Stelle] = {}
+        # Warum: je gesperrtem Modell die Stelle, die Gründe, die vorige Stelle und sein Loslassen
+        self._gesperrte: dict[
+            Modell, tuple[Stelle, frozenset[Grund], Stelle | None, frozenset]
+        ] = {}
         self._aufgestellt: set[Einheit] = set()
         self._ausgewählt: set[Einheit] = set()
 
@@ -108,6 +70,27 @@ class Aufstellung:
 
     def stelle(self, modell: Modell) -> Stelle | None:
         return self._stellen.get(modell)
+
+    def gesperrt(self, modell: Modell) -> bool:
+        return modell in self._gesperrte
+
+    def stelleDesGesperrten(self, modell: Modell) -> Stelle | None:
+        if modell not in self._gesperrte:
+            return None
+        stelle, _, _, _ = self._gesperrte[modell]
+        return stelle
+
+    def gründeDesGesperrten(self, modell: Modell) -> frozenset[Grund]:
+        if modell not in self._gesperrte:
+            return frozenset()
+        _, gründe, _, _ = self._gesperrte[modell]
+        return gründe
+
+    def inKohärenz(self, einheit: Einheit) -> bool:
+        gesetzte = {
+            modell: self._stellen[modell] for modell in einheit.modelle if modell in self._stellen
+        }
+        return inKohärenz(gesetzte)
 
     def aufgestellt(self, einheit: Einheit) -> bool:
         return einheit in self._aufgestellt
@@ -148,22 +131,102 @@ class Aufstellung:
         return any(not self.aufgestellt(einheit) for einheit in spieler.armee.einheiten)
 
     def modellSetzen(self, modell: Modell, stelle: Stelle) -> None:
-        einheit = self._einheitVon(modell)
-        # Regel: AUF-7.2 und AUF-7.3 sperren vor jeder Prüfung der Stelle (AUF-3.8)
-        if self.aufgestellt(einheit) or not self._gehörtDemSpielerAnDerReihe(einheit):
-            raise Sperre(Grund.nichtWählbar)
-        if self._einheitInAufstellung not in (None, einheit):
-            raise Sperre(Grund.einheitBegonnen)
+        einheit = self._wählbareEinheitVon(modell)
         gründe = self._gründeGegenDieStelle(modell, stelle)
         if gründe:
             raise Sperre(*gründe)
         self._stellen[modell] = stelle
         self._einheitInAufstellung = einheit
 
+    def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
+        einheit = self._wählbareEinheitVon(modell)
+        self._loslassen(modell, einheit, stelle, frozenset({modell}))
+
+    def einheitLoslassen(self, einheit: Einheit, stelle: Stelle) -> None:
+        ungesetzte = [modell for modell in einheit.modelle if not self.gesetzt(modell)]
+        # Regel: AUF-16.1, sind alle Modelle gesetzt, geschieht nichts
+        if not ungesetzte:
+            return
+        erstes, *_ = ungesetzte
+        self._wählbareEinheitVon(erstes)
+        if len(ungesetzte) < len(einheit.modelle):
+            # Regel: AUF-14.1, der Rest einer Einheit kommt einzeln
+            stellen = [stelle]
+            modelle = [erstes]
+        else:
+            modelle = ungesetzte
+            stellen = self._stellenDerFormation(einheit, stelle)
+        gruppe = frozenset(modelle)
+        for modell, ort in zip(modelle, stellen, strict=True):
+            self._loslassen(modell, einheit, ort, gruppe)
+
+    def modellZurücklegen(self, modell: Modell, spieler: Spieler) -> None:
+        self._prüfenDassNichtsGesperrtIst()
+        einheit = self._einheitVon(modell)
+        # Regel: AUF-8.4 und AUF-16.3, nur in die eigene Ablage, nie aus einer aufgestellten Einheit
+        if self.aufgestellt(einheit) or einheit not in spieler.armee.einheiten:
+            raise Sperre(Grund.nichtWählbar)
+        self._stellen.pop(modell, None)
+        self._einheitInAufstellungPrüfen()
+
+    def zurück(self) -> None:
+        gesperrte, self._gesperrte = self._gesperrte, {}
+        for modell, (_, _, vorige, gruppe) in gesperrte.items():
+            if vorige is not None:
+                self._stellen[modell] = vorige
+                continue
+            for aus in gruppe:
+                self._stellen.pop(aus, None)
+        self._einheitInAufstellungPrüfen()
+
+    def _einheitInAufstellungPrüfen(self) -> None:
+        einheit = self._einheitInAufstellung
+        if einheit is not None and not any(self.gesetzt(modell) for modell in einheit.modelle):
+            self._einheitInAufstellung = None
+
+    def _stellenDerFormation(self, einheit: Einheit, mitte: Stelle) -> list[Stelle]:
+        formation = self._ausgangslage.formationen[einheit.name]
+        zone = self._zonen[self._spielerAnDerReihe]
+        grenzenInX, grenzenInY = self._ausgangslage.grenzenDerZone(zone)
+        erstes, *_ = einheit.modelle
+        return formation.stellen(erstes.base, mitte, grenzenInX, grenzenInY)
+
+    def _loslassen(
+        self, modell: Modell, einheit: Einheit, stelle: Stelle, gruppe: frozenset[Modell]
+    ) -> None:
+        gründe = self._gründeGegenDieStelle(modell, stelle)
+        if not gründe:
+            self._stellen[modell] = stelle
+            self._einheitInAufstellung = einheit
+            return
+        vorige = self._stellen.pop(modell, None)
+        self._gesperrte[modell] = (stelle, frozenset(gründe), vorige, gruppe)
+
+    def _prüfenDassNichtsGesperrtIst(self) -> None:
+        if self._gesperrte:
+            raise Sperre(Grund.modellGesperrt)
+
+    def _wählbareEinheitVon(self, modell: Modell) -> Einheit:
+        """Die Einheit des Modells, wenn es jetzt dran ist; sonst die Sperre ohne Stelle."""
+        self._prüfenDassNichtsGesperrtIst()
+        einheit = self._einheitVon(modell)
+        # Regel: AUF-7.2 und AUF-7.3 sperren vor jeder Prüfung der Stelle (AUF-3.8)
+        if self.aufgestellt(einheit) or not self._gehörtDemSpielerAnDerReihe(einheit):
+            raise Sperre(Grund.nichtWählbar)
+        if self._einheitInAufstellung not in (None, einheit):
+            raise Sperre(Grund.einheitBegonnen)
+        return einheit
+
     def aufstellenDerEinheitBeenden(self) -> None:
+        self._prüfenDassNichtsGesperrtIst()
         einheit = self._einheitInAufstellung
         if einheit is None:
             raise Sperre(Grund.nichtInAufstellung)
+        gründe = {
+            grund for grund, fehlt in self._gründeGegenDasBeenden.items() if fehlt(self, einheit)
+        }
+        if gründe:
+            raise Sperre(*gründe)
         spieler = self._spielerAnDerReihe
         self._aufgestellt.add(einheit)
         self._ausgewählt.discard(einheit)
@@ -208,6 +271,17 @@ class Aufstellung:
         Grund.nichtGanzInDerZone: _nichtGanzInDerZone,
         Grund.baseÜberdeckt: _baseÜberdeckt,
         Grund.nahkampfreichweite: _inNahkampfreichweiteVonGegnern,
+    }
+
+    def _modelleFehlen(self, einheit: Einheit) -> bool:
+        return not all(self.gesetzt(modell) for modell in einheit.modelle)
+
+    def _ohneKohärenz(self, einheit: Einheit) -> bool:
+        return not self.inKohärenz(einheit)
+
+    _gründeGegenDasBeenden: ClassVar[dict[Grund, Callable[["Aufstellung", Einheit], bool]]] = {
+        Grund.modelleFehlen: _modelleFehlen,
+        Grund.keineKohärenz: _ohneKohärenz,
     }
 
     def auswählen(self, einheit: Einheit) -> None:

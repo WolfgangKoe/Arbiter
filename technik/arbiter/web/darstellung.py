@@ -1,9 +1,16 @@
 """Der Spielstand der Aufstellung als JSON-fähige Werte (technik/architektur/web.md, W2, W4)."""
 
 from arbiter.domaene.messen import radiusInZoll
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Spieler
-from arbiter.web.kennungen import ablageNachNummer, spielerNachNummer
+from arbiter.web.kennungen import (
+    ablageNachNummer,
+    einheitenNachNummer,
+    modelleNachNummer,
+    spielerNachNummer,
+)
 
 
 def spielstand(aufstellung: Aufstellung) -> dict:
@@ -14,6 +21,7 @@ def spielstand(aufstellung: Aufstellung) -> dict:
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
         "zonen": [_zone(aufstellung, zone, spielerNummern) for zone in Aufstellungszone],
         "modelle": _modelle(aufstellung, spielerNummern),
+        "gründeDerGesperrten": _gründeDerGesperrten(aufstellung, spielerNummern),
         "spieler": [
             _spieler(aufstellung, spielernummer, einer)
             for spielernummer, einer in spielerNummern.items()
@@ -49,13 +57,26 @@ def _modelle(aufstellung: Aufstellung, spielerNummern: dict[int, Spieler]) -> li
             "y": float(stelle.y),
             "radius": float(radiusInZoll(modell.base)),
             "spieler": spielernummer,
+            "einheit": einheitennummer,
+            "nummer": modellnummer,
             "ausgewählt": aufstellung.ausgewählt(einheit),
+            "gesperrt": aufstellung.gesperrt(modell),
         }
         for spielernummer, einer in spielerNummern.items()
-        for einheit in einer.armee.einheiten
-        for modell in einheit.modelle
-        if (stelle := aufstellung.stelle(modell))
+        for einheitennummer, einheit in einheitenNachNummer(einer).items()
+        for modellnummer, modell in modelleNachNummer(einheit).items()
+        if (stelle := aufstellung.stelle(modell) or aufstellung.stelleDesGesperrten(modell))
     ]
+
+
+def _gründeDerGesperrten(aufstellung: Aufstellung, spielerNummern: dict[int, Spieler]) -> list[str]:
+    genannte = {
+        grund
+        for einer in spielerNummern.values()
+        for modell in einer.armee.modelle
+        for grund in aufstellung.gründeDesGesperrten(modell)
+    }
+    return [grund.value for grund in Grund if grund in genannte]
 
 
 def _spieler(aufstellung: Aufstellung, spielernummer: int, spieler: Spieler) -> dict:

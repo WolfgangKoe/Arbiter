@@ -1,10 +1,12 @@
+from collections.abc import Mapping
 from fractions import Fraction
 from pathlib import Path
 from types import MappingProxyType
 
 import yaml
 
-from arbiter.domaene.phasen.aufstellen import Aufstellungszone, Ausgangslage
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.querschnitt import Formation
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld
 
 _datenordner = Path(__file__).parents[3] / "domaene" / "daten"
@@ -38,10 +40,24 @@ def _armeeLesen(einheiten: list[dict]) -> Armee:
 
 
 def ausgangslageLaden() -> Ausgangslage:
-    return ausgangslageAus(_laden("ausgangslage.yaml"), _laden("onlyWar.yaml"))
+    return ausgangslageAus(
+        _laden("ausgangslage.yaml"), _laden("onlyWar.yaml"), _laden("formation.yaml")
+    )
 
 
-def ausgangslageAus(ausgangslage: dict, onlyWar: dict) -> Ausgangslage:
+def _formationenLesen(formation: dict) -> Mapping[str, Formation]:
+    abstand = Fraction(str(formation["abstand"]))
+    return MappingProxyType(
+        {
+            name: Formation(reihen=tuple(reihen), abstand=abstand)
+            for name, reihen in formation["formation"].items()
+        }
+    )
+
+
+def ausgangslageAus(
+    ausgangslage: dict, onlyWar: dict, formation: dict | None = None
+) -> Ausgangslage:
     ersteArmee, zweiteArmee = ausgangslage["Armee"]
     breite, länge = onlyWar["Spielfeld"]
     tiefen = {}
@@ -59,4 +75,5 @@ def ausgangslageAus(ausgangslage: dict, onlyWar: dict) -> Ausgangslage:
         zweiterSpieler=Spieler(armee=_armeeLesen(zweiteArmee)),
         spielfeld=Spielfeld(seitenlängen=(Fraction(breite), Fraction(länge))),
         tiefen=MappingProxyType(tiefen),
+        formationen=_formationenLesen(formation) if formation else MappingProxyType({}),
     )

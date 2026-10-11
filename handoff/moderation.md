@@ -4,14 +4,14 @@ Stand vor Freigabe Plan 5: 7 Anliegen im Ordner. Dein Kommentar im Plan (Einheit
 aufstellen) ist kein Anliegen; er liegt beim Planer und in [Plan](plan.md).
 
 ## Dran
-Blockiert Plan 5 (Items 1 bis 3): [368](anliegen/368-akzeptanztestsInDerFolgeDerKriterien.md),
+Blockiert Plan 5 (Items 1 bis 3): Anliegen 368,
 denn der Testautor ordnet die Tests, bevor die neuen entstehen. Sonst hängt kein Anliegen
 an einem Item.
-- Testautor: [368](anliegen/368-akzeptanztestsInDerFolgeDerKriterien.md) (Technikphase 5,
+- Testautor: Anliegen 368 (Technikphase 5,
   mit den neuen Tests); Nachprüfung von
-  [363](anliegen/363-spiegelpruefungStuerztBeiTestImAkzeptanzordnerAb.md).
-- Regelumsetzer: [367](anliegen/367-spiegelpruefungInhaltUndDomaene.md) (Teil 3 erst nach
-  368); Nachprüfung von [360](anliegen/360-dashboardAnliegenBearbeiten.md); danach der Teil
+  Anliegen 363.
+- Regelumsetzer: Anliegen 367 (Teil 3 erst nach
+  368); Nachprüfung von Anliegen 360; danach der Teil
   des Regelumsetzers aus 384.
 - Organisationsentwickler: [384](anliegen/384-schreibgrenzeAuchFuerBash.md) (F1 A, Antwort
   liegt vor, noch uncommittet), Anliegen 369,
@@ -35,6 +35,6 @@ an einem Item.
   wartet auf 368.
 
 ## Fragen an dich
-- [360](anliegen/360-dashboardAnliegenBearbeiten.md) F4: Zeitpunkt, an dem deine Züge aus
+- Anliegen 360 F4: Zeitpunkt, an dem deine Züge aus
   dem Dashboard in die Dateien kommen. A Hook vor Rollenstart und Commit, B nur auf Knopfdruck.
   Antwort steht auf `.`, also Empfehlung A; bitte bestätigen oder B.

@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.web.anwendung import anwendungFür
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, aufstellungVon, spielerMit
 
@@ -35,6 +35,67 @@ def testEineAufgestellteEinheitIstNichtMehrInDerAblageUndNichtGefunden(aufstellu
     antwort = dienst.put(pfadDerAuswahl.format(1, 1))
 
     assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
+pfadDesModells = "/api/spieler/{}/einheiten/{}/modelle/{}/stelle"
+pfadDerStelle = "/api/spieler/{}/einheiten/{}/stelle"
+eineStelle = {"x": 3, "y": 20}
+
+
+@pytest.mark.parametrize(
+    ("spielernummer", "einheitennummer", "modellnummer"), [(3, 1, 1), (1, 3, 1), (1, 1, 3)]
+)
+@pytest.mark.parametrize("methode", ["put", "delete"])
+def testEinModellOhneKennungIstNichtGefunden(
+    aufstellung, spielernummer, einheitennummer, modellnummer, methode
+):
+    dienst = anwendungFür(aufstellung).test_client()
+    pfad = pfadDesModells.format(spielernummer, einheitennummer, modellnummer)
+
+    antwort = getattr(dienst, methode)(pfad, json=eineStelle)
+
+    assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
+@pytest.mark.parametrize("körper", [None, {}, {"x": 3}, {"x": "3", "y": 2}, {"x": True, "y": 2}])
+def testEinModellOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung, körper):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.put(pfadDesModells.format(1, 1, 1), json=körper)
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+def testEinModellOhneAblageZumZurücklegenIstEineFehlerhafteAnfrage(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.delete(pfadDesModells.format(1, 1, 1))
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+def testEinModellAufDieAblageEinesUnbekanntenSpielersIstNichtGefunden(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.delete(pfadDesModells.format(1, 1, 1) + "?ablage=3")
+
+    assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
+def testEineEinheitOhneKennungInDerAblageIstBeimLoslassenNichtGefunden(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.put(pfadDerStelle.format(1, 3), json=eineStelle)
+
+    assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
+def testEineEinheitOhneZahlenFürXUndYIstBeimLoslassenEineFehlerhafteAnfrage(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.put(pfadDerStelle.format(1, 1), json={"y": 2})
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
 def testEinFremderHostBekommtBadRequest(aufstellung):

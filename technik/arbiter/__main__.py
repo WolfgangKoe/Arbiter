@@ -1,6 +1,7 @@
 """Der Befehl `arbiter` (technik/architektur/web.md, W5)."""
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from arbiter.web.server import serverStarten
 

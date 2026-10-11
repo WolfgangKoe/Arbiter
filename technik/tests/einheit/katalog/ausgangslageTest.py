@@ -2,7 +2,7 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.katalog.ausgangslage import ausgangslageAus, ausgangslageLaden
 
 einheitMitDurchmesser = {"Einheit": "Boyz", "durchmesser": [32]}

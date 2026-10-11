@@ -2,7 +2,8 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld, Stelle
 
 

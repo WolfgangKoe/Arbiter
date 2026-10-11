@@ -35,6 +35,12 @@ def stellenDerModelle(gesetzte) -> frozenset[tuple[float, float]]:
     return frozenset((float(stelle.x), float(stelle.y)) for _, stelle in gesetzte)
 
 
+class Auswahlfall(NamedTuple):
+    einheitenname: str
+    gesetzteModelle: int
+    anfrage: Callable
+
+
 @pytest.mark.parametrize(
     ("spielername", "einheitenname"),
     [
@@ -48,49 +54,6 @@ def stellenDerModelle(gesetzte) -> frozenset[tuple[float, float]]:
         "warbossAnDerReihe",
         "necronWarriorsNichtAnDerReihe",
         "overlordNichtAnDerReihe",
-    ],
-)
-@pytest.mark.parametrize(
-    ("spielername", "einheitenname"),
-    [("Spieler 1", "Boyz"), ("Spieler 2", "Necron Warriors")],
-    ids=["einheitDesSpielersAnDerReihe", "einheitDesSpielersNichtAnDerReihe"],
-)
-@pytest.mark.parametrize(
-    ("spielername", "einheitenname"),
-    [("Spieler 1", "Warboss"), ("Spieler 2", "Necron Warriors")],
-    ids=["ablageVonSpielerEins", "ablageVonSpielerZwei"],
-)
-@pytest.mark.parametrize(
-    "einheitenname",
-    ["Boyz", "Warboss", "Necron Warriors", "Overlord"],
-    ids=["boyz", "warboss", "necronWarriors", "overlord"],
-)
-@pytest.mark.parametrize(
-    "einheitenname", ["Boyz", "Necron Warriors"], ids=["boyz", "necronWarriors"]
-)
-class Auswahlfall(NamedTuple):
-    einheitenname: str
-    gesetzteModelle: int
-    anfrage: Callable
-
-
-@pytest.mark.parametrize(
-    "fall",
-    [
-        Auswahlfall("Boyz", 0, auswählen),
-        Auswahlfall("Boyz", 0, abwählen),
-        Auswahlfall("Warboss", 1, auswählen),
-        Auswahlfall("Warboss", 1, abwählen),
-        Auswahlfall("Necron Warriors", 1, auswählen),
-        Auswahlfall("Necron Warriors", 1, abwählen),
-    ],
-    ids=[
-        "boyzOhneGesetztesModellAuswählen",
-        "boyzOhneGesetztesModellAbwählen",
-        "warbossBeiBoyzInAufstellungAuswählen",
-        "warbossBeiBoyzInAufstellungAbwählen",
-        "necronWarriorsNichtAnDerReiheAuswählen",
-        "necronWarriorsNichtAnDerReiheAbwählen",
     ],
 )
 def testAuf5_3EinKlickAufEineNichtAusgewählteEinheitMachtSieAusgewählt(
@@ -125,6 +88,11 @@ def testAuf5_3EinKlickAufEineEinheitDesAnderenSpielersLässtDieAusgewählteDesEr
     assert ausgewählteEinheiten(seite) == {"Boyz", "Necron Warriors"}
 
 
+@pytest.mark.parametrize(
+    "einheitenname",
+    ["Boyz", "Warboss", "Necron Warriors", "Overlord"],
+    ids=["boyz", "warboss", "necronWarriors", "overlord"],
+)
 def testAuf5_3DerDienstMachtEineNichtAusgewählteEinheitAusgewählt(dienst, einheitenname):
     antwort = auswählen(dienst, einheitenname)
 
@@ -151,6 +119,11 @@ def testAuf5_3DerDienstLässtDieAusgewählteEinheitDesAnderenSpielersAusgewählt
     assert ausgewählteEinheitenIm(antwort.get_json()) == {"Boyz", "Necron Warriors"}
 
 
+@pytest.mark.parametrize(
+    ("spielername", "einheitenname"),
+    [("Spieler 1", "Boyz"), ("Spieler 2", "Necron Warriors")],
+    ids=["einheitDesSpielersAnDerReihe", "einheitDesSpielersNichtAnDerReihe"],
+)
 def testAuf5_4EinKlickAufEineAusgewählteEinheitMachtSieNichtAusgewählt(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
@@ -174,6 +147,9 @@ def testAuf5_4EinKlickAufEineAusgewählteEinheitLässtDieAndereAusgewählteEinhe
     assert ausgewählteEinheiten(seite) == {"Warboss"}
 
 
+@pytest.mark.parametrize(
+    "einheitenname", ["Boyz", "Necron Warriors"], ids=["boyz", "necronWarriors"]
+)
 def testAuf5_4DerDienstMachtEineAusgewählteEinheitNichtAusgewählt(dienst, einheitenname):
     auswählen(dienst, einheitenname)
 
@@ -194,6 +170,11 @@ def testAuf5_4DerDienstLässtDieAndereAusgewählteEinheitAusgewählt(dienst):
     assert ausgewählteEinheitenIm(antwort.get_json()) == {"Warboss"}
 
 
+@pytest.mark.parametrize(
+    ("spielername", "einheitenname"),
+    [("Spieler 1", "Warboss"), ("Spieler 2", "Necron Warriors")],
+    ids=["ablageVonSpielerEins", "ablageVonSpielerZwei"],
+)
 def testAuf5_6DieAblageKennzeichnetJedeAusgewählteEinheit(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
@@ -467,6 +448,25 @@ def testAuf5_8EinKlickAufDieAblageDesSpielersNichtAnDerReiheLässtSeineModelleUn
     assert elementeDerSeite(seite, ".karte .modell") == ()
 
 
+@pytest.mark.parametrize(
+    "fall",
+    [
+        Auswahlfall("Boyz", 0, auswählen),
+        Auswahlfall("Boyz", 0, abwählen),
+        Auswahlfall("Warboss", 1, auswählen),
+        Auswahlfall("Warboss", 1, abwählen),
+        Auswahlfall("Necron Warriors", 1, auswählen),
+        Auswahlfall("Necron Warriors", 1, abwählen),
+    ],
+    ids=[
+        "boyzOhneGesetztesModellAuswählen",
+        "boyzOhneGesetztesModellAbwählen",
+        "warbossBeiBoyzInAufstellungAuswählen",
+        "warbossBeiBoyzInAufstellungAbwählen",
+        "necronWarriorsNichtAnDerReiheAuswählen",
+        "necronWarriorsNichtAnDerReiheAbwählen",
+    ],
+)
 def testAuf5_8DerDienstÄndertBeiAuswählenUndAbwählenNurDieAuswahl(
     dienst, aufstellungNachDerZonenwahl, spielerEins, boyz, fall
 ):
