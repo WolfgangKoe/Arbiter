@@ -1,6 +1,6 @@
 # Gründe zweimal geordnet, Ziehen ohne Bewegung
 
-398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 2/3 · angenommen
+398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, `web/` und `frontend/`.

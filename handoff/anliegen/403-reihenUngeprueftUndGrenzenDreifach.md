@@ -1,6 +1,6 @@
 # Reihen der Formation ungeprüft, Grenzen dreifach
 
-403 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+403 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu b43abff. Den Kreis um `Formation` behandelt Anliegen 402.

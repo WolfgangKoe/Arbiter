@@ -1,6 +1,6 @@
 # Formation im Kreis zwischen Ausgangslage und Aufstellen
 
-402 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+402 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zu b43abff, Folge von Punkt 4 meines Gegenvorschlags in Anliegen 399: `Formation`
