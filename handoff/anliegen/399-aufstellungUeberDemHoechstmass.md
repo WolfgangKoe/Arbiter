@@ -48,4 +48,4 @@ kommen: `reihenfolge.py` (wer dran ist, Zonen, Einheit eines Modells) und
 `Ausgangslage` importiert `Formation` nur unter `TYPE_CHECKING`, sonst Kreis mit dem Paket.
 Die alten `aufstellen.py` und `querschnitt.py` sind leer, ich darf nicht löschen: bitte der
 Stakeholder. Rot bleibt allein die Rückverfolgung zu AUF-16.5 und die Glossarprüfung wegen
-`Gesperrtes` ([401](401-glossarGesperrtesFuerDieSperreEinesModells.md)).
+`Gesperrtes` (Anliegen 401).

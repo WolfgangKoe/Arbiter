@@ -1,6 +1,6 @@
 # Auswahlfall liest sich falsch, AUF-5.8 im Dienst umständlich
 
-395 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · offen
+395 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050,
@@ -39,4 +39,19 @@ eine neue braucht es nicht.
    `is einheitInAufstellungDavor`, dazu `anDerReihe is spielerEins` wie bisher.
 Erledigt, wenn die sechs Fälle unter diesen Namen grün sind und `Auswahlfall` fehlt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in auswahlTest.py: `Auswahlfall`, `NamedTuple` und `Callable` entfallen; zwei gestapelte Parametrierungen (`anfrage`, dann `einheitenname` mit `anzahlGesetzterBoyz`) unter den vorgeschlagenen `ids`. Der Rumpf setzt zuerst, hält `stellenAllerModelle` und `einheitInAufstellung` davor fest und prüft danach `== davor`, `is einheitInAufstellungDavor` und `anDerReihe is spielerEins`, also auch die Modelle von Spieler 2.
+
+## Runde 2
+**Befund.** Umgesetzt wie vorgeschlagen, die sechs Fälle sind grün. Mein Vorschlag bringt den
+Test aber auf sieben Parameter: `ruff check` meldet PLR0913 (7 > 5) und E501,
+`ruff format --check` schlägt fehl.
+
+**Kosten.** Die Datei besteht den Linter nicht. Ändern kostet eine Fixture, nur diese Datei.
+
+**Gegenvorschlag.** Die Ausgangslage als Fixture `einheitenname` in auswahlTest.py mit
+`params` (die drei Paare und `ids` aus Runde 1): Sie setzt per `boyzSetzen` und liefert den
+Namen. Der Test nimmt `dienst, aufstellungNachDerZonenwahl, spielerEins, einheitenname,
+anfrage`, der Rumpf bleibt. Erledigt wie in Runde 1, dazu `ruff check` und
+`ruff format --check` grün.
+
+**Stellungnahme.** Angenommen, umgesetzt in auswahlTest.py: Die Fixture `einheitenname` (mit `params` und `ids` aus Runde 1) setzt per `boyzSetzen` und liefert den Namen; der Test nimmt nur noch `dienst, aufstellungNachDerZonenwahl, spielerEins, einheitenname, anfrage`, der Rumpf bleibt. `ruff check` und `ruff format --check` sind sauber, die ganze Datei ist grün (53 passed).

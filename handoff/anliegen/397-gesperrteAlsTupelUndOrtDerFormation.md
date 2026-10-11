@@ -45,4 +45,4 @@ grün sind.
 **Stellungnahme.** Angenommen, Punkte 2 bis 4 umgesetzt (`kohaerenz.py`, `ziehen.py`, `radius`
 einmal, Docstrings). Punkt 1: Der Typ `Gesperrtes` ist eine `@dataclass(frozen=True)`; die
 Formregel verlangt für ihn einen Glossareintrag, siehe
-[401](401-glossarGesperrtesFuerDieSperreEinesModells.md); der Eintrag steht, `glossarTest` ist grün.
+Anliegen 401; der Eintrag steht, `glossarTest` ist grün.

@@ -1,8 +1,6 @@
 """AUF-5 · Auswählen am Bildschirm."""
 
-from collections.abc import Callable
 from http import HTTPStatus
-from typing import NamedTuple
 
 import pytest
 from playwright.sync_api import expect
@@ -28,17 +26,16 @@ from tests.akzeptanz.dienst import (
     spielstandDesVertrags,
     spielstandVon,
 )
-from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, einheitAufstellen, modelleSetzen
+from tests.akzeptanz.handgriffe import (
+    anzahlGesetzterModelle,
+    einheitAufstellen,
+    modelleSetzen,
+    stellenAllerModelle,
+)
 
 
 def stellenDerModelle(gesetzte) -> frozenset[tuple[float, float]]:
     return frozenset((float(stelle.x), float(stelle.y)) for _, stelle in gesetzte)
-
-
-class Auswahlfall(NamedTuple):
-    einheitenname: str
-    gesetzteModelle: int
-    anfrage: Callable
 
 
 @pytest.mark.parametrize(
@@ -448,40 +445,32 @@ def testAuf5_8EinKlickAufDieAblageDesSpielersNichtAnDerReiheLässtSeineModelleUn
     assert elementeDerSeite(seite, ".karte .modell") == ()
 
 
-@pytest.mark.parametrize(
-    "fall",
-    [
-        Auswahlfall("Boyz", 0, auswählen),
-        Auswahlfall("Boyz", 0, abwählen),
-        Auswahlfall("Warboss", 1, auswählen),
-        Auswahlfall("Warboss", 1, abwählen),
-        Auswahlfall("Necron Warriors", 1, auswählen),
-        Auswahlfall("Necron Warriors", 1, abwählen),
-    ],
-    ids=[
-        "boyzOhneGesetztesModellAuswählen",
-        "boyzOhneGesetztesModellAbwählen",
-        "warbossBeiBoyzInAufstellungAuswählen",
-        "warbossBeiBoyzInAufstellungAbwählen",
-        "necronWarriorsNichtAnDerReiheAuswählen",
-        "necronWarriorsNichtAnDerReiheAbwählen",
-    ],
+@pytest.fixture(
+    params=[("Boyz", 0), ("Warboss", 1), ("Necron Warriors", 1)],
+    ids=["boyzOhneGesetztesModell", "warbossBeiBoyzInAufstellung", "necronWarriorsNichtAnDerReihe"],
 )
-def testAuf5_8DerDienstÄndertBeiAuswählenUndAbwählenNurDieAuswahl(
-    dienst, aufstellungNachDerZonenwahl, spielerEins, boyz, fall
-):
-    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, fall.gesetzteModelle)
-    erwartetInAufstellung = boyz if gesetzte else None
-    if fall.anfrage is abwählen:
-        auswählen(dienst, fall.einheitenname)
+def einheitenname(request, boyzSetzen):
+    """Der Name der angefragten Einheit, nachdem Spieler 1 die Boyz so weit gesetzt hat."""
+    name, anzahlGesetzterBoyz = request.param
+    boyzSetzen(anzahlGesetzterBoyz)
+    return name
 
-    antwort = fall.anfrage(dienst, fall.einheitenname)
+
+@pytest.mark.parametrize("anfrage", [auswählen, abwählen], ids=["auswählen", "abwählen"])
+def testAuf5_8DerDienstÄndertBeiAuswählenUndAbwählenNurDieAuswahl(
+    dienst, aufstellungNachDerZonenwahl, spielerEins, einheitenname, anfrage
+):
+    if anfrage is abwählen:
+        auswählen(dienst, einheitenname)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    einheitInAufstellungDavor = aufstellungNachDerZonenwahl.einheitInAufstellung
+
+    antwort = anfrage(dienst, einheitenname)
 
     assert antwort.status_code == HTTPStatus.OK
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
     assert aufstellungNachDerZonenwahl.anDerReihe is spielerEins
-    assert aufstellungNachDerZonenwahl.einheitInAufstellung is erwartetInAufstellung
-    for modell in spielerEins.armee.modelle:
-        assert aufstellungNachDerZonenwahl.stelle(modell) == dict(gesetzte).get(modell)
 
 
 def testAuf5_9NachDemStartIstKeineEinheitAusgewählt(adresseDesBefehls, bildschirm):
