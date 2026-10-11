@@ -48,8 +48,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   zweite an x = 44. Prüft: die Fixture `zone`.
 - **S2** Gerechnet wird exakt mit `fractions.Fraction`, ohne Toleranz und ohne Wurzel:
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
-  übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz;
-  `ArbiterMap/backend/app/domain/geometry.py` rundet 16 mm auf 0,63″.
+  übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz.
   Prüft: die Grenzfälle der Akzeptanztests.
 
 ## Regeln im Domänencode
@@ -64,11 +63,11 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   (`aufstellung.gesetzt(modell)`); `modell.gesetzt = True` umginge jede Sperre. `web/` und `katalog/` lesen keine `_`-Felder; `web/`
   ändert Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
   Prüft: Python wirft bei der Zuweisung; der Rest nur Text.
-- **D4** Gründe, die zusammen gelten (AUF-3.5), stehen in einer Tabelle Grund → benannte
-  Prüfung (`Aufstellung._prüfungen`); die Handlung sammelt ein, ein neuer Grund ist eine
-  Zeile; ein ausschließender Grund (AUF-3.8) bleibt Wächter.
-  Vorbild: `check_rules` in `ArbiterMap/backend/app/domain/rule_checks.py`. Prüft: nur
-  Text; Auslöser: zweite Tabelle.
+- **D4** Gründe, die zusammen gelten (AUF-3.5, 10.2 und 10.3), stehen in einer Tabelle
+  Grund → Prüfung im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
+  Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund (AUF-3.8)
+  bleibt Wächter. Vorbild: `check_rules` in ArbiterMap (`domain/rule_checks.py`). Prüft:
+  nur Text; Mechanismus angefragt (Anliegen 400).
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
   einer Fläche. In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite

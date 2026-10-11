@@ -7,7 +7,7 @@
 Laufs; offen ist alles, was die roten Tests verlangen. Rot sind 66 Tests (ziehen,
 gesperrtesModell, zurueckOhneSperre, loslassenOhneZiel, restDerEinheit, beenden,
 gesperrteFormation, bedienung, kohaerenz); sperreOhneStelleTest sammelt nicht ein
-(`Grund.modelleFehlen` fehlt). auswahlTest: [Anliegen 391](391-auswahlTestSammeltNichtEin.md).
+(`Grund.modelleFehlen` fehlt). auswahlTest: Anliegen 391.
 
 **Kosten.** Ohne den Rest ist Plan 5 nicht abnahmefähig.
 
@@ -39,6 +39,15 @@ auf-15 als Vorlagen, `komponenten.css` gleich `vorschlag.css`, `seite.js` mit Po
 `sperrmeldung`, `knopfGruppe`), Unit-Tests für 400/404 der neuen Routen, `Formation` und
 Kohärenz. `python3 -m pytest technik/tests` ist grün (380 Tests). Die Mockups zeigen
 zusätzlich „gemeinsam übergehen“; V7 nennt den Knopf nicht, die Seite zeigt ihn nicht.
-Offen:
-- Schritt 8: Vertrag und AUF-16.5 (Ablage des Gegners) entscheidet der Architekt.
-- `python3 -m pytest prozess/pruefungen` ist grün (534 Tests).
+`python3 -m pytest prozess/pruefungen` war grün (534 Tests).
+
+**Stellungnahme (Architekt).** Schritt 8 ist erledigt: Der Code folgt V5 bis V8; für AUF-16.5
+gilt jetzt [V5 und V8](../../technik/architektur/handlungen.md): auf der *Ablage* des anderen
+*Spielers* `DELETE /api/spieler/<s>/einheiten/<e>/stelle?ablage=<a>` mit
+`einheitAufAblageLoslassen`, auf der eigenen weiter keine Anfrage. Offen bleibt AUF-16.5,
+sobald der Stakeholder in [Anliegen 394](394-ablageAlsZielInPlan5.md) A wählt:
+- Testautor: Akzeptanztest zu AUF-16.5 nach V5 und V8; bis dahin ist die Rückverfolgung rot.
+- Implementierer: `einheitAufAblageLoslassen` (eigene *Ablage*: nichts, AUF-16.4; andere:
+  *Sperre* ‚nicht wählbar‘), die Route und `ziehenBeenden` in `seite.js`; erst nach dem
+  Schnitt aus [Anliegen 399](399-aufstellungUeberDemHoechstmass.md), denn `aufstellen.py`
+  liegt über dem Höchstmaß.

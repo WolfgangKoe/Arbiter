@@ -1,6 +1,6 @@
 # Einheit auf einer Ablage, zurück ohne gesperrtes Modell
 
-389 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · offen
+389 · Fragen · von Architekt (Technik) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zwei Fälle regelt keine Anforderung:
@@ -24,7 +24,8 @@ das kein Akzeptanztest.
 davor, ohne *Grund* (wie 380 F1 A). Die Sperre beim Beenden nehme ich aus, weil dort *zurück*
 nach AUF-13.2 wirkt. 1 teilweise: Für die eigene *Ablage*
 [AUF-16.4](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md), still zurück.
-Für die *Ablage* des anderen *Spielers* sprechen 380 F1 A (still) und 380 F2 B (*Sperre*, wie
-AUF-16.3); das frage ich den Stakeholder in [Anliegen 390](390-einheitAufDerAblageDesGegners.md).
-Bis zur Antwort bleibt dein Vertrag dort bei „keine Anfrage“. 389 wartet auf 390; danach
-setze ich `angenommen`.
+Für die *Ablage* des anderen *Spielers* hat der Stakeholder in Anliegen 390 F1 B entschieden:
+[AUF-16.5](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md), *Sperre*
+‚nicht wählbar‘ wie AUF-16.3, mit den Folgen aus AUF-12.2 und 12.3. AUF-12.2 zählt 16.5 nicht
+auf, weil 12.2 schon getestet ist; 16.5 verweist selbst darauf. Dein Vertrag braucht dort eine
+Anfrage mit *Grund* statt „keine Anfrage“.
