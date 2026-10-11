@@ -1,16 +1,22 @@
 """AUF-16 · Loslassen ohne Ziel."""
 
+from http import HTTPStatus
+
 import pytest
 
 from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import (
     ablageVon,
     amKopfDerSeite,
+    aufDieHandlungWarten,
     einheitenKarteVon,
+    gründeAlsText,
     inhaltDerSeite,
+    mitDerMausZiehen,
     mitteVon,
     punktAufDerKarte,
     sperrmeldungenDerSeite,
+    sperrmeldungWarten,
     ziehenOhneAnfrage,
 )
 from tests.akzeptanz.handgriffe import (
@@ -95,3 +101,35 @@ def testAuf16_4EineEinheitAufDerAblageIhresSpielersStehtNachDemLoslassenWieDavor
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
     assert sperrmeldungenDerSeite(seite) == []
+
+
+@pytest.mark.parametrize("gesetzt", [0, 3], ids=["keinModellGesetzt", "dreiModelleGesetzt"])
+def testAuf16_5EineEinheitAufDerAblageDesAnderenSpielersIstNichtWählbar(
+    aufstellungNachDerZonenwahl, boyz, boyzSetzen, spielerZwei, gesetzt
+):
+    boyzSetzen(gesetzt)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    einheitInAufstellungDavor = aufstellungNachDerZonenwahl.einheitInAufstellung
+
+    gründe = sperrgründe(aufstellungNachDerZonenwahl.einheitAufAblageLoslassen, boyz, spielerZwei)
+
+    assert gründe == {Grund.nichtWählbar}
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
+
+
+def testAuf16_5DieSeiteNenntBeiEinerEinheitAufDerAblageDesAnderenSpielersDenGrund(
+    bildschirm, aufstellungNachDerZonenwahl
+):
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    start = mitteVon(einheitenKarteVon(seite, "Spieler 1", "Boyz"))
+    ziel = mitteVon(ablageVon(seite, "Spieler 2").locator(".armeeKartenName"))
+
+    with aufDieHandlungWarten(seite) as antwort:
+        mitDerMausZiehen(seite, start, ziel)
+    genannt = sperrmeldungWarten(seite, {Grund.nichtWählbar})
+
+    assert antwort.value.status == HTTPStatus.CONFLICT
+    assert genannt == gründeAlsText({Grund.nichtWählbar})
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor

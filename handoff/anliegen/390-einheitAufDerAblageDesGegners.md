@@ -1,10 +1,10 @@
 # Einheit auf der Ablage des Gegners
 
-390 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · offen
+390 · Fragen · von Anforderungsautor (Domäne) → Stakeholder · Runde 1/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
-**Befund.** Der Architekt fragt in [Anliegen 389](389-einheitAufAblageUndZurueckOhneGesperrtes.md),
+**Befund.** Der Architekt fragt in Anliegen 389,
 was geschieht, wenn jemand eine *Einheit* aus der *Ablage* auf eine *Ablage* zieht. Für die
 eigene *Ablage* ist es klar: Sie liegt schon dort, es gibt kein Ziel, also springt sie still
 zurück wie in Anliegen 380 F1 A ([AUF-16.4](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md)).
@@ -22,7 +22,7 @@ Empfehlung: B. Eine eigene *Einheit* gehört so wenig in die *Ablage* des Gegner
 *Modell*, und „was nicht erlaubt ist, wird gesperrt“ ([Ziel](../../domaene/ziel.md)). Mit A
 würde dieselbe Geste beim *Modell* gesperrt, bei der *Einheit* nicht.
 
-Antwort: .
+Antwort: Wir nehmen B. Das Setzen eigener Einheiten sollte auf die eigene AUfstellungszone beschränkt sein. Bei ArbiterMap war es so.
 
 **Kosten.** Bis zur Antwort fehlt das Kriterium; der Vertrag des Architekten nimmt A an
 (keine Anfrage, kein *Grund*), und kein Akzeptanztest prüft den Fall.
