@@ -10,10 +10,10 @@ bei einer *Einheit* je *Spieler*. Nach deinem Kommentar unten kommt jede *Einhei
 
 ## Items
 1. [Ziehen](../domaene/items/ziehen.md): AUF-8.2, 8.3, 8.5, 8.6, AUF-14.1, QUE-3.4,
-   AUF-16.1, 16.2
+   AUF-16.1, 16.2, 16.4
 2. [Gesperrt stehen und zurück](../domaene/items/gesperrtStehenUndZurueck.md): AUF-9.1,
-   9.3, 9.4, AUF-15.1, AUF-8.4, AUF-16.3, AUF-12.1 bis 12.3, QUE-3.5, AUF-17.1
-   (Anliegen 389), nach Item 1
+   9.3, 9.4, AUF-15.1, AUF-8.4, AUF-16.3, 16.5, AUF-12.1 bis 12.3, QUE-3.5, AUF-17.1
+   (Anliegen 389, 394), nach Item 1
 3. [Beenden mit Kohärenz](../domaene/items/beendenUndSperreOhneStelle.md):
    AUF-10.1 bis 10.4, QUE-4, AUF-12.4, nach Item 1 und 2
 
@@ -56,8 +56,7 @@ Plan 6: „gemeinsam übergehen“ mit *Protokoll* (AUF-9.2, 9.5, 10.5, AUF-13, 
 Etappe 1 erreicht. AUF-5.5 bleibt nach deiner Antwort in 320 (B, git) draußen.
 
 ## Offene Anliegen
-An dich: [394](anliegen/394-ablageAlsZielInPlan5.md), AUF-16.4 und 16.5 noch in Plan 5?
-Die übrigen: Technik und Prozess ([Moderation](moderation.md)).
+An dich: keins offen. Die übrigen: Technik und Prozess ([Moderation](moderation.md)).
 
 ## Freigabe
 Freigabe: Ja

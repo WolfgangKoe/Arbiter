@@ -1,11 +1,11 @@
 # Einheit auf einer Ablage loslassen: in Plan 5?
 
-394 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · offen
+394 · Fragen · von Planer (Domäne) → Stakeholder · Runde 1/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
 **Befund.** Nach Anliegen 389 und deiner Antwort B in
-[Anliegen 390](390-einheitAufDerAblageDesGegners.md) gibt es zwei neue Kriterien in
+Anliegen 390 gibt es zwei neue Kriterien in
 [Loslassen ohne Ziel](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md):
 - AUF-16.4: Du lässt deine *Einheit* auf deiner eigenen *Ablage* los; sie springt still
   zurück, ohne *Grund*.
