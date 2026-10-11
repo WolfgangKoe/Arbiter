@@ -5,15 +5,33 @@ from pathlib import Path
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
+from rollenregeln.bashSchreiben import verbotenesSchreiben, weg
 from rollenregeln.pfadsperren import pfadsperren
 
 schreibwerkzeuge = ("Write", "Edit")
+koordinator = "koordinator"
+
+
+def vorBash(eingabe: HookEingabe) -> dict | None:
+    # Warum: Der Hauptchat läuft als Koordinator (`agent` in settings.json) und committet.
+    if eingabe.rolle == koordinator:
+        return None
+    gefunden = verbotenesSchreiben(str(eingabe.angaben.get("command") or ""))
+    if gefunden is None:
+        return None
+    return verweigerung(
+        f"Schreibgrenze: {eingabe.rolle} darf per Bash nicht schreiben ({gefunden}). {weg}"
+    )
 
 
 def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     # Warum: Ohne Rolle spricht die Hauptsitzung, für sie gilt keine Grenze.
     rolle = eingabe.rolle
-    if not rolle or eingabe.werkzeug not in schreibwerkzeuge:
+    if not rolle:
+        return None
+    if eingabe.werkzeug == "Bash":
+        return vorBash(eingabe)
+    if eingabe.werkzeug not in schreibwerkzeuge:
         return None
     angaben = eingabe.angaben
     ziel = Path(angaben.get("file_path") or "")

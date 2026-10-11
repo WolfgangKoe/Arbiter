@@ -7,7 +7,7 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
    `handoff/kritik-entwickler.md`, `Arbiter-old/` und `ArbiterMap/` sind für alle nur lesbar;
    löschen tut sie der Stakeholder. Du schreibst Dateien nur mit Write und Edit und
    committest nicht; Bash nur zum Lesen, für Prüfungen, Tests und in `/tmp`. Mechanismus:
-   `rollenregeln/schreibgrenze.py` (Write und Edit); Bash und Commit: nur Text.
+   `rollenregeln/schreibgrenze.py` (Write, Edit und Bash; Lücke: [Regeln](../regeln.md#rollenregeln)).
 3. Kritik an einem fremden Artefakt wird ein Anliegen, nie eine Änderung
    ([Ablauf, Anliegen](../ablauf.md#anliegen)). Mechanismus: `rollenregeln/schreibgrenze.py`.
 4. Bevor du eine Regel vorschlägst, suche eine bestehende, die sie abdeckt oder angepasst

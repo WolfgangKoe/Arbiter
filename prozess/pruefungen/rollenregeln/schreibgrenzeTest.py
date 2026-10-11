@@ -107,3 +107,74 @@ def testSchreibpfadeEndenBeimNächstenSchlüsselDesKopfs(wurzel):
 def testEineRolleOhneKopfHatKeineSchreibpfade(wurzel):
     (wurzel / ".claude" / "agents" / "probe.md").write_text("Text ohne Kopf.\n", encoding="utf-8")
     assert schreibpfade("probe", wurzel) == ()
+
+
+def bash(befehl, rolle="probe"):
+    return {
+        "hook_event_name": "PreToolUse",
+        "agent_type": rolle,
+        "tool_name": "Bash",
+        "tool_input": {"command": befehl},
+    }
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param("sed -i 's/a/b/' domaene/ziel.md", id="sed -i"),
+        pytest.param("sed -n 1p x.md | tee prozess/x.md", id="tee"),
+        pytest.param("echo a > prozess/x.md", id="Umleitung"),
+        pytest.param("echo a >> prozess/x.md", id="Anhängen"),
+        pytest.param("rm handoff/anliegen/1-a.md", id="rm"),
+        pytest.param("mv a.md b.md", id="mv"),
+        pytest.param("cp a.md b.md", id="cp"),
+        pytest.param("touch prozess/neu.md", id="touch"),
+        pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
+        pytest.param("python3 -c 'print(1)'", id="python3 -c"),
+        pytest.param("git add prozess/x.md", id="git add"),
+        pytest.param("ls && git commit -m x", id="git commit nach &&"),
+        pytest.param("git checkout -- prozess/x.md", id="git checkout"),
+        pytest.param("git restore x", id="git restore"),
+        pytest.param("git reset --hard", id="git reset"),
+        pytest.param("git stash", id="git stash"),
+        pytest.param("git rm x", id="git rm"),
+        pytest.param("git mv x y", id="git mv"),
+        pytest.param("echo a > /tmp/../prozess/x.md", id="Umweg über /tmp/.."),
+    ],
+)
+def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
+    antwort = entscheide(bash(befehl), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert "Write und Edit" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param("python3 -m pytest prozess/pruefungen", id="pytest"),
+        pytest.param("python3 prozess/pruefungen/gemeinsam/lauf.py x.y", id="Prüfskript"),
+        pytest.param("git log --oneline", id="git log"),
+        pytest.param("git status", id="git status"),
+        pytest.param("git diff | head", id="git diff"),
+        pytest.param("echo a > /tmp/probe.md", id="Umleitung nach /tmp"),
+        pytest.param("ls 2>/dev/null", id="nach /dev/null"),
+        pytest.param("ls 2>&1 | grep a", id="Fehlerkanal"),
+        pytest.param("grep '>' prozess/ablauf.md", id="Größerzeichen in Anführungszeichen"),
+        pytest.param("sed -n 1,5p prozess/ablauf.md", id="sed lesend"),
+        pytest.param("rm /tmp/probe.md", id="rm in /tmp"),
+        pytest.param("cp prozess/ablauf.md /tmp/ablauf.md", id="cp nach /tmp"),
+        pytest.param("git -C /tmp/repo commit -m x", id="git -C /tmp"),
+        pytest.param("cd /tmp/repo && git add x", id="cd /tmp"),
+    ],
+)
+def testBashLesenPrüfenUndTmpBleibenFrei(wurzel, befehl):
+    assert entscheide(bash(befehl), wurzel) is None
+
+
+def testBashGiltNichtFürDenKoordinator(wurzel):
+    assert entscheide(bash("git commit -m x", rolle=None), wurzel) is None
+
+
+def testDerHauptchatKoordinatorDarfPerBashAddenUndCommitten(wurzel):
+    befehl = "git add prozess/x.md && git commit -m x && git push"
+    assert entscheide(bash(befehl, rolle="koordinator"), wurzel) is None

@@ -1,6 +1,6 @@
 # Schreibgrenze hört auf Bash
 
-385 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · offen
+385 · Kritik · von Organisationsentwickler (Prozess) → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [384](384-schreibgrenzeAuchFuerBash.md) F1 mit A
@@ -31,4 +31,11 @@ Erledigt, wenn die Tests grün sind und eine Rolle mit `sed -i` auf eine Datei i
 verweigert wird. Danach ersetze ich bei Ich 2 „Bash und Commit: nur Text“ und setze 384
 auf `angenommen`.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: Matcher `Write|Edit|Bash` in
+`.claude/settings.json`, die Erkennung steht in
+[bashSchreiben.py](../../prozess/pruefungen/rollenregeln/bashSchreiben.py), der Hook in
+[schreibgrenze.py](../../prozess/pruefungen/rollenregeln/schreibgrenze.py), die Meldung nennt Write
+und Edit. Scheiter-Test mit je einem Fall und erlaubten Aufrufen:
+[schreibgrenzeTest.py](../../prozess/pruefungen/rollenregeln/schreibgrenzeTest.py). Zeile in
+[Regeln](../../prozess/regeln.md#rollenregeln) angepasst. Zusätzlich erlaubt: `cd /tmp/…` und
+`git -C /tmp/…` als Repo unter `/tmp`. Der Hook sperrte mich beim Test selbst bei einer Umleitung.

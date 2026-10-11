@@ -1,6 +1,6 @@
 # Schreibgrenze auch für Bash
 
-384 · Anliegen · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+384 · Anliegen · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -54,8 +54,7 @@ B: zusätzlich Bash aus Anforderungsautor, Planer, UX und Moderator nehmen (geä
 dichter, aber sie prüfen Länge und Form nicht mehr selbst.
 Antwort: A
 
-**Stellungnahme.** 1 und 2 umgesetzt in [Ich 2](../../prozess/praemissen/ich.md) (bis zum
-Umbau: Bash und Commit nur Text) und [Ablauf](../../prozess/ablauf.md#anliegen). 3 samt
-Befehlsliste nur noch in [385](385-schreibgrenzeHoertAufBash.md); `angenommen` nach 385.
-`· wartet auf` fehlt im Kopf, `anliegen.py` meldet es rot: Auslöser im
-[Backlog](../../prozess/backlog.md), Item für Retro 5.
+**Stellungnahme.** Nach A umgesetzt: 1 und 2 in [Ich 2](../../prozess/praemissen/ich.md)
+und [Ablauf](../../prozess/ablauf.md#anliegen), 3 in [385](385-schreibgrenzeHoertAufBash.md).
+Schreibt eine Rolle per Bash im Projekt oder committet, wird sie gesperrt; die Meldung nennt
+Write und Edit. Lücke: [Regeln](../../prozess/regeln.md#rollenregeln).
