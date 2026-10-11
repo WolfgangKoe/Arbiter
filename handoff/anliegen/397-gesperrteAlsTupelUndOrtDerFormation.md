@@ -1,6 +1,6 @@
 # Gesperrte als Tupel, Formation und Kohärenz am falschen Ort
 
-397 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+397 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, Lesbarkeit und Ort in der Domäne.

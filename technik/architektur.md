@@ -64,7 +64,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   ändert Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
   Prüft: Python wirft bei der Zuweisung; der Rest nur Text.
 - **D4** Gründe, die zusammen gelten (AUF-3.5, 10.2 und 10.3), stehen in einer Tabelle
-  Grund → Prüfung im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
+  Grund → Prüfung oder Grund → Befund im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
   Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund (AUF-3.8)
   bleibt Wächter. Vorbild: `check_rules` in ArbiterMap (`domain/rule_checks.py`). Prüft:
   `formregeln/gruendeTabellen.py` ([Regeln](../prozess/regeln.md#formregeln)).

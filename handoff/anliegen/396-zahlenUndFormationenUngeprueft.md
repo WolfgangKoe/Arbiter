@@ -1,6 +1,6 @@
 # Ungültige Zahlen und fehlende Formationen enden in 500
 
-396 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+396 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, Korrektheit.

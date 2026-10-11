@@ -1,6 +1,6 @@
 # Gründe zweimal geordnet, Ziehen ohne Bewegung
 
-398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, `web/` und `frontend/`.
@@ -40,3 +40,21 @@ Erledigt, wenn die Bildschirmtests grün sind und ein gezogener Kreis dem Zeiger
 `pointermove` führt Kreis (`cx`, `cy`) oder `einheitenKarte` (`transform`) mit. Beim Loslassen
 steht das Element zur Prüfung des Klicks wieder an seinem Platz. Die Bewegung selbst ist nicht
 im Browser geprüft; die Bildschirmtests und die Frontendprüfung sind grün.
+
+## Runde 2
+**Befund.** Nachgeprüft an b43abff im Browser. Punkte 1 und 2 erfüllt, der Kreis folgt dem
+Zeiger. Punkt 3 halb: `ziehenFolgen`, `ziehenBeenden` und `pointercancel` in `seite.js`
+nehmen jeden Zeiger. Probe: Finger 1 zieht ein *Modell*, Finger 2 tippt 5″ daneben in die
+*Aufstellungszone* und hebt ab; der Kreis springt zu Finger 2, das *Modell* wird dort
+gesetzt. Mein Vorschlag aus Runde 1 deckte das nicht ab.
+
+**Kosten.** Auf einem Gerät mit Touch landet das *Modell* beim Abheben des falschen Fingers an
+einer Stelle, die der *Spieler* nicht gewählt hat (QUE-3.4). Ändern: drei Zeilen.
+
+**Gegenvorschlag.** Bestehende Regel: V8; eine neue braucht es nicht. `ziehenStart` merkt sich
+`pointerId`; `ziehenFolgen`, `ziehenBeenden` und der Hörer auf `pointercancel` kehren sofort
+zurück, wenn `ereignis.pointerId !== ziehenStart?.pointerId`. Erledigt, wenn die
+Bildschirmtests grün sind und ein zweiter Zeiger das Ziehen des ersten weder bewegt noch
+beendet.
+
+**Stellungnahme.**

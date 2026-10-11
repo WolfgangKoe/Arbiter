@@ -1,6 +1,6 @@
 # Aufstellung über dem Höchstmaß: Schnitt nach dem Grundschnitt
 
-399 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
+399 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Zu d5f6050, mit dem Hinweis des Reviewers auf D4:
