@@ -4,11 +4,10 @@ from collections.abc import Collection, Mapping
 from fractions import Fraction
 
 from arbiter.domaene import messen
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Grenzen
 from arbiter.domaene.querschnitt import baseÜberdeckt
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
-
-Grenzen = tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]
 
 # Regel: Nahkampfreichweite ist ein Abstand von höchstens 1″ (domaene/glossar.md)
 _nahkampfreichweite = Fraction(1)

@@ -1,6 +1,6 @@
 # Reihen der Formation ungeprüft, Grenzen dreifach
 
-403 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+403 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu b43abff. Den Kreis um `Formation` behandelt Anliegen 402.
@@ -41,4 +41,9 @@ landet. Ändern: je wenige Zeilen, (1) mit einem Unit-Test.
 Erledigt, wenn der neue Test grün ist und `python3 -m pytest technik/tests prozess/pruefungen`
 grün bleibt, bis auf die Rückverfolgung zu AUF-16.5.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte umgesetzt. (1) `_reiheLesen` in
+[katalog/ausgangslage.py](../../technik/arbiter/katalog/ausgangslage.py) wirft `ValueError`
+für jede Reihe, die keine ganze Zahl über 0 ist; zwei Unit-Tests (leere und negative Reihe) in
+[ausgangslageTest.py](../../technik/tests/einheit/katalog/ausgangslageTest.py). (2) `Grenzen`
+steht einmal in `missionsvorbereitung/ausgangslage.py`; `sperrenBeimSetzen.py`, `ziehen.py` und
+`_zoneAnDerReihe` nehmen es. (3) `punktAufDerKarte` in [seite.js](../../technik/frontend/seite.js).

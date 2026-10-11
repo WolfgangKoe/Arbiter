@@ -7,8 +7,11 @@ from types import MappingProxyType
 
 import yaml
 
-from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
-from arbiter.domaene.phasen.aufstellen.ziehen import Formation
+from arbiter.domaene.missionsvorbereitung.ausgangslage import (
+    Aufstellungszone,
+    Ausgangslage,
+    Formation,
+)
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld
 
 _datenordner = Path(__file__).parents[3] / "domaene" / "daten"
@@ -23,6 +26,12 @@ def _durchmesserLesen(zahl: object) -> int:
     # Warum: gerechnet wird mit ganzen mm (technik/architektur.md, S2)
     if type(zahl) is not int or zahl <= 0:
         raise ValueError(f"Der Durchmesser muss eine ganze Zahl über 0 in mm sein: {zahl!r}")
+    return zahl
+
+
+def _reiheLesen(zahl: object) -> int:
+    if type(zahl) is not int or zahl <= 0:
+        raise ValueError(f"Eine Reihe muss eine ganze Zahl über 0 an Modellen sein: {zahl!r}")
     return zahl
 
 
@@ -62,6 +71,8 @@ def _formationenPrüfen(armee: Armee, formationen: Mapping[str, Formation]) -> N
         formation = formationen.get(einheit.name)
         if formation is None:
             raise ValueError(f"Die Einheit {einheit.name} hat keine Formation")
+        for reihe in formation.reihen:
+            _reiheLesen(reihe)
         if sum(formation.reihen) != len(einheit.modelle):
             raise ValueError(f"Die Reihen der Formation von {einheit.name} zählen andere Modelle")
 

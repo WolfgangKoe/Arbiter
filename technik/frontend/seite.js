@@ -88,9 +88,14 @@ function einheitLoslassen(karte, stelle) {
   return handlungSenden(`${einheitenPfad(karte)}/stelle`, "PUT", stelle)
 }
 
+function punktAufDerKarte(ereignis) {
+  const zeichnung = document.querySelector(".karte")
+  return new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(zeichnung.getScreenCTM().inverse())
+}
+
 function stelleAufDerKarte(ereignis) {
   const zeichnung = document.querySelector(".karte")
-  const punkt = new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(zeichnung.getScreenCTM().inverse())
+  const punkt = punktAufDerKarte(ereignis)
   const { width, height } = zeichnung.querySelector(".spielfeld").getBBox()
   const imSpielfeld = punkt.x >= 0 && punkt.x <= width && punkt.y >= 0 && punkt.y <= height
   return imSpielfeld ? { x: punkt.x, y: punkt.y } : null
@@ -106,7 +111,7 @@ let ziehenStart = null
 function ziehenBeginnen(ereignis) {
   if (!ereignis.isPrimary || ereignis.button !== 0) return
   gezogen = ereignis.target.closest(".karte .modell, .einheitenKarte")
-  ziehenStart = { x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy") }
+  ziehenStart = { pointerId: ereignis.pointerId, x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy") }
   gezogen?.setPointerCapture(ereignis.pointerId)
 }
 
@@ -119,10 +124,10 @@ function ziehenZurücknehmen(element) {
 }
 
 function ziehenFolgen(ereignis) {
-  if (!gezogen) return
+  if (!gezogen || ereignis.pointerId !== ziehenStart.pointerId) return
   if (gezogen.classList.contains("modell")) {
     // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
-    const punkt = new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(gezogen.ownerSVGElement.getScreenCTM().inverse())
+    const punkt = punktAufDerKarte(ereignis)
     gezogen.setAttribute("cx", punkt.x)
     gezogen.setAttribute("cy", punkt.y)
   } else {
@@ -130,7 +135,14 @@ function ziehenFolgen(ereignis) {
   }
 }
 
+function ziehenAbbrechen(ereignis) {
+  if (!gezogen || ereignis.pointerId !== ziehenStart.pointerId) return
+  ziehenZurücknehmen(gezogen)
+  gezogen = null
+}
+
 function ziehenBeenden(ereignis) {
+  if (ereignis.pointerId !== ziehenStart?.pointerId) return
   const start = gezogen
   gezogen = null
   if (!start) return
@@ -152,10 +164,7 @@ function ziehenBeenden(ereignis) {
 document.addEventListener("pointerdown", ziehenBeginnen)
 document.addEventListener("pointermove", ziehenFolgen)
 document.addEventListener("pointerup", ziehenBeenden)
-document.addEventListener("pointercancel", () => {
-  if (gezogen) ziehenZurücknehmen(gezogen)
-  gezogen = null
-})
+document.addEventListener("pointercancel", ziehenAbbrechen)
 
 function einheitenKarte(spieler, einheit) {
   const karte = ausVorlage("einheitenKarte")

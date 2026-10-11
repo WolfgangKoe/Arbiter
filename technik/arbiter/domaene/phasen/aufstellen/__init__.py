@@ -1,6 +1,10 @@
 """Die Phase Aufstellen: Wahlen, Setzen und Auswählen (AUF)."""
 
-from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.missionsvorbereitung.ausgangslage import (
+    Aufstellungszone,
+    Ausgangslage,
+    Grenzen,
+)
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.beenden import gesetzteModelle, gründeGegenDasBeenden
 from arbiter.domaene.phasen.aufstellen.einheitInAufstellung import (
@@ -183,7 +187,7 @@ class Aufstellung:
         assert spieler is not None  # Warum: Mit einer Einheit in Aufstellung ist jemand dran
         return spieler
 
-    def _zoneAnDerReihe(self):
+    def _zoneAnDerReihe(self) -> Grenzen:
         return self._ausgangslage.grenzenDerZone(self._zonen[self._spielerAnDerReihe])
 
     def _gründeGegenDieStelle(self, modell: Modell, stelle: Stelle) -> set[Grund]:

@@ -49,5 +49,5 @@ sobald der Stakeholder in [Anliegen 394](394-ablageAlsZielInPlan5.md) A wählt:
 - Testautor: Akzeptanztest zu AUF-16.5 nach V5 und V8; bis dahin ist die Rückverfolgung rot.
 - Implementierer: `einheitAufAblageLoslassen` (eigene *Ablage*: nichts, AUF-16.4; andere:
   *Sperre* ‚nicht wählbar‘), die Route und `ziehenBeenden` in `seite.js`; erst nach dem
-  Schnitt aus [Anliegen 399](399-aufstellungUeberDemHoechstmass.md), denn `aufstellen.py`
+  Schnitt aus Anliegen 399, denn `aufstellen.py`
   liegt über dem Höchstmaß.

@@ -1,6 +1,6 @@
 # Formation im Kreis zwischen Ausgangslage und Aufstellen
 
-402 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+402 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Zu b43abff, Folge von Punkt 4 meines Gegenvorschlags in Anliegen 399: `Formation`
@@ -28,4 +28,7 @@ Erledigt, wenn `TYPE_CHECKING` unter `technik/arbiter/domaene` fehlt und
 `python3 -m pytest technik/tests prozess/pruefungen` grün ist, bis auf die Rückverfolgung zu
 AUF-16.5.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `Formation` liegt ohne Methoden in
+[ausgangslage.py](../../technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py),
+`stellenDerFormation` in [ziehen.py](../../technik/arbiter/domaene/phasen/aufstellen/ziehen.py);
+`TYPE_CHECKING` fehlt unter `technik/arbiter/domaene`. Die Prüfungen sind grün bis auf AUF-16.5.

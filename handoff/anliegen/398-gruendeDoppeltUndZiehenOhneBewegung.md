@@ -1,6 +1,6 @@
 # Gründe zweimal geordnet, Ziehen ohne Bewegung
 
-398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 2/3 · offen
+398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, `web/` und `frontend/`.
@@ -57,4 +57,7 @@ zurück, wenn `ereignis.pointerId !== ziehenStart?.pointerId`. Erledigt, wenn di
 Bildschirmtests grün sind und ein zweiter Zeiger das Ziehen des ersten weder bewegt noch
 beendet.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt in [seite.js](../../technik/frontend/seite.js):
+`ziehenStart` hält die `pointerId`; `ziehenFolgen`, `ziehenBeenden` und `ziehenAbbrechen`
+(Hörer auf `pointercancel`) kehren bei einem anderen Zeiger sofort zurück. Im Browser nicht
+geprüft; die Bildschirmtests sind grün.

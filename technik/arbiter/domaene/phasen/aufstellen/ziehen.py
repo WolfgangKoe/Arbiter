@@ -1,50 +1,37 @@
 """Das Ziehen einer Einheit aus der Ablage: ihre Formation (AUF-8.5)."""
 
 from collections.abc import Mapping
-from dataclasses import dataclass
 from fractions import Fraction
 from math import isqrt
 
 from arbiter.domaene import messen
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Formation, Grenzen
 from arbiter.domaene.spielobjekte import Base, Einheit, Modell, Stelle
 
 # Regel: AUF-8.5, die Mittelpunkte benachbarter Reihen liegen auf 1/100″ genau
 _hundertstel = 100
 
 
-@dataclass(frozen=True)
-class Formation:
-    """Modelle je Reihe und der Abstand benachbarter Bases in Zoll (AUF-8.5)."""
-
-    reihen: tuple[int, ...]
-    abstand: Fraction
-
-    def stellen(
-        self,
-        base: Base,
-        mitte: Stelle,
-        grenzenInX: tuple[Fraction, Fraction],
-        grenzenInY: tuple[Fraction, Fraction],
-    ) -> list[Stelle]:
-        """Die Stellen mittig an `mitte`, in die Grenzen gerückt, Reihe für Reihe."""
-        radius = messen.radiusInZoll(base)
-        schritt = 2 * radius + self.abstand
-        versätze = self._versätzeDerReihen(schritt)
-        mittelpunkt = (versätze[0] + versätze[-1]) / 2
-        stellen = [
-            Stelle(x=mitte.x + versatz - mittelpunkt, y=mitte.y + lage)
-            for versatz, anzahl in zip(versätze, self.reihen, strict=True)
-            for lage in _lagenDerReihe(anzahl, schritt)
-        ]
-        rückungX = _rückung([stelle.x for stelle in stellen], radius, grenzenInX)
-        rückungY = _rückung([stelle.y for stelle in stellen], radius, grenzenInY)
-        return [Stelle(x=stelle.x + rückungX, y=stelle.y + rückungY) for stelle in stellen]
-
-    def _versätzeDerReihen(self, schritt: Fraction) -> list[Fraction]:
-        versätze = [Fraction(0)]
-        for vordere, hintere in zip(self.reihen, self.reihen[1:], strict=False):
-            versätze.append(versätze[-1] + _reihenabstand(vordere, hintere, schritt))
-        return versätze
+def stellenDerFormation(
+    formation: Formation,
+    base: Base,
+    mitte: Stelle,
+    grenzenInX: tuple[Fraction, Fraction],
+    grenzenInY: tuple[Fraction, Fraction],
+) -> list[Stelle]:
+    """Die Stellen mittig an `mitte`, in die Grenzen gerückt, Reihe für Reihe."""
+    radius = messen.radiusInZoll(base)
+    schritt = 2 * radius + formation.abstand
+    versätze = _versätzeDerReihen(formation.reihen, schritt)
+    mittelpunkt = (versätze[0] + versätze[-1]) / 2
+    stellen = [
+        Stelle(x=mitte.x + versatz - mittelpunkt, y=mitte.y + lage)
+        for versatz, anzahl in zip(versätze, formation.reihen, strict=True)
+        for lage in _lagenDerReihe(anzahl, schritt)
+    ]
+    rückungX = _rückung([stelle.x for stelle in stellen], radius, grenzenInX)
+    rückungY = _rückung([stelle.y for stelle in stellen], radius, grenzenInY)
+    return [Stelle(x=stelle.x + rückungX, y=stelle.y + rückungY) for stelle in stellen]
 
 
 def stellenDerUngesetzten(
@@ -52,15 +39,22 @@ def stellenDerUngesetzten(
     ungesetzte: list[Modell],
     mitte: Stelle,
     formationen: Mapping[str, Formation],
-    zone: tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]],
+    zone: Grenzen,
 ) -> dict[Modell, Stelle]:
     """Die Stellen der Ungesetzten beim Loslassen der Einheit an `mitte`."""
     erstes, *_ = ungesetzte
     # Regel: AUF-14.1, der Rest einer Einheit kommt einzeln
     if len(ungesetzte) < len(einheit.modelle):
         return {erstes: mitte}
-    stellen = formationen[einheit.name].stellen(erstes.base, mitte, *zone)
+    stellen = stellenDerFormation(formationen[einheit.name], erstes.base, mitte, *zone)
     return dict(zip(ungesetzte, stellen, strict=True))
+
+
+def _versätzeDerReihen(reihen: tuple[int, ...], schritt: Fraction) -> list[Fraction]:
+    versätze = [Fraction(0)]
+    for vordere, hintere in zip(reihen, reihen[1:], strict=False):
+        versätze.append(versätze[-1] + _reihenabstand(vordere, hintere, schritt))
+    return versätze
 
 
 def _reihenabstand(vordere: int, hintere: int, schritt: Fraction) -> Fraction:

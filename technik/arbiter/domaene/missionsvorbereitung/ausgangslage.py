@@ -4,18 +4,23 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
-from typing import TYPE_CHECKING
 
 from arbiter.domaene.spielobjekte import Spieler, Spielfeld
 
-if TYPE_CHECKING:
-    # Warum: Das Paket der Aufstellung importiert diese Datei; zur Laufzeit wäre das ein Kreis
-    from arbiter.domaene.phasen.aufstellen.ziehen import Formation
+Grenzen = tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]
 
 
 class Aufstellungszone(Enum):
     erste = 1
     zweite = 2
+
+
+@dataclass(frozen=True)
+class Formation:
+    """Modelle je Reihe und der Abstand benachbarter Bases in Zoll (AUF-8.5)."""
+
+    reihen: tuple[int, ...]
+    abstand: Fraction
 
 
 @dataclass(frozen=True, eq=False)
@@ -24,7 +29,7 @@ class Ausgangslage:
     zweiterSpieler: Spieler
     spielfeld: Spielfeld
     tiefen: Mapping[Aufstellungszone, Fraction]
-    formationen: Mapping[str, "Formation"]
+    formationen: Mapping[str, Formation]
 
     def __post_init__(self) -> None:
         if self.ersterSpieler is self.zweiterSpieler:
@@ -32,9 +37,7 @@ class Ausgangslage:
         if _teilenSichArmeeOderModell(self.ersterSpieler, self.zweiterSpieler):
             raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
 
-    def grenzenDerZone(
-        self, zone: Aufstellungszone
-    ) -> tuple[tuple[Fraction, Fraction], tuple[Fraction, Fraction]]:
+    def grenzenDerZone(self, zone: Aufstellungszone) -> Grenzen:
         """Die Fläche der Zone als Grenzen in x und in y, die Form von `messen.ganzIn`."""
         breite, länge = self.spielfeld.seitenlängen
         return _grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
