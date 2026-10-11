@@ -23,6 +23,7 @@ Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Ein
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
 gesperrt | – | gesperrt | Zustand eines *Modells*, das beim Loslassen an eine *Stelle* kam, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).
+Gesperrtes | – | Gesperrtes | Was Arbiter zu einem *gesperrten* *Modell* festhält: die *Stelle*, an der es steht, jeden *Grund*, seine vorige *Stelle*, wenn es *gesetzt* war, und die *Modelle* desselben Loslassens, die *zurück* mit ihm in die *Ablage* bringt (AUF-9.1, 9.3, 9.4, 15.1).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.

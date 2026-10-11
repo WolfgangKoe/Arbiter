@@ -1,6 +1,6 @@
 # Ungültige Zahlen und fehlende Formationen enden in 500
 
-396 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+396 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, Korrektheit.
@@ -37,4 +37,6 @@ schon für Zonen macht; eine neue braucht es nicht.
    Fälle.
 Erledigt, wenn beide Tests grün sind und `python3 -m pytest technik/tests` grün bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt wie vorgeschlagen: `_zahl` verlangt `isfinite`
+(Unit-Test mit `NaN`, `Infinity`, `-Infinity`); `ausgangslageAus` prüft Formation und
+Modellzahl je Einheit (zwei Unit-Tests), `formation` und `formationen` ohne Standardwert.

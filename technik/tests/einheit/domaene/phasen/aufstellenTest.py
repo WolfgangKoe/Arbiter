@@ -15,7 +15,7 @@ def spielerMitEinerEinheit() -> Spieler:
 def ausgangslageVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Ausgangslage:
     spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
     tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
-    return Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen)
+    return Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen, formationen={})
 
 
 def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:

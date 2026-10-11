@@ -101,15 +101,41 @@ function darunter(ereignis) {
 }
 
 let gezogen = null
+let ziehenStart = null
 
 function ziehenBeginnen(ereignis) {
+  if (!ereignis.isPrimary || ereignis.button !== 0) return
   gezogen = ereignis.target.closest(".karte .modell, .einheitenKarte")
+  ziehenStart = { x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy") }
+  gezogen?.setPointerCapture(ereignis.pointerId)
+}
+
+function ziehenZurücknehmen(element) {
+  element.style.transform = ""
+  if (ziehenStart.kreisX !== null) {
+    element.setAttribute("cx", ziehenStart.kreisX)
+    element.setAttribute("cy", ziehenStart.kreisY)
+  }
+}
+
+function ziehenFolgen(ereignis) {
+  if (!gezogen) return
+  if (gezogen.classList.contains("modell")) {
+    // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
+    const punkt = new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(gezogen.ownerSVGElement.getScreenCTM().inverse())
+    gezogen.setAttribute("cx", punkt.x)
+    gezogen.setAttribute("cy", punkt.y)
+  } else {
+    gezogen.style.transform = `translate(${ereignis.clientX - ziehenStart.x}px, ${ereignis.clientY - ziehenStart.y}px)`
+  }
 }
 
 function ziehenBeenden(ereignis) {
   const start = gezogen
   gezogen = null
   if (!start) return
+  // Warum: Der gezogene Kreis liegt unter dem Zeiger; zum Prüfen steht er wieder an seinem Platz
+  ziehenZurücknehmen(start)
   if (darunter(ereignis)?.closest(".karte .modell, .einheitenKarte") === start) {
     // Regel: Endet das Ziehen über dem Element, an dem es begann, ist es ein Klick (V8)
     return start.klicken?.()
@@ -124,8 +150,12 @@ function ziehenBeenden(ereignis) {
 }
 
 document.addEventListener("pointerdown", ziehenBeginnen)
+document.addEventListener("pointermove", ziehenFolgen)
 document.addEventListener("pointerup", ziehenBeenden)
-document.addEventListener("pointercancel", () => { gezogen = null })
+document.addEventListener("pointercancel", () => {
+  if (gezogen) ziehenZurücknehmen(gezogen)
+  gezogen = null
+})
 
 function einheitenKarte(spieler, einheit) {
   const karte = ausVorlage("einheitenKarte")

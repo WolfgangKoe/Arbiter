@@ -1,6 +1,6 @@
 # Gesperrte als Tupel, Formation und Kohärenz am falschen Ort
 
-397 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+397 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, Lesbarkeit und Ort in der Domäne.
@@ -42,4 +42,7 @@ die Regel über den Spiegel der Anforderungen, und `querschnitt.py` wächst mit 
 Erledigt, wenn die Akzeptanztests und `python3 -m pytest prozess/pruefungen/formregeln`
 grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Punkte 2 bis 4 umgesetzt (`kohaerenz.py`, `ziehen.py`, `radius`
+einmal, Docstrings). Punkt 1: Der Typ `Gesperrtes` ist eine `@dataclass(frozen=True)`; die
+Formregel verlangt für ihn einen Glossareintrag, siehe
+[401](401-glossarGesperrtesFuerDieSperreEinesModells.md); der Eintrag steht, `glossarTest` ist grün.

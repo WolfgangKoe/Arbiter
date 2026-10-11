@@ -36,7 +36,7 @@ statt eine Regel hinzuzufügen:
    `schreibgrenze.py` (Write, Edit, Bash).
 2. Die Zeile in Ablauf, Anliegen fällt weg, Ich 2 deckt sie ab.
 3. Der Regelumsetzer erweitert `schreibgrenze.py` auf Bash (Matcher `Write|Edit|Bash`);
-   was er einer Rolle verweigert: [385](385-schreibgrenzeHoertAufBash.md). Den Koordinator
+   was er einer Rolle verweigert: Anliegen 385. Den Koordinator
    betrifft das nicht.
 
 Bordmittel geprüft ([Berechtigungen](https://code.claude.com/docs/en/permissions),
@@ -55,6 +55,6 @@ dichter, aber sie prüfen Länge und Form nicht mehr selbst.
 Antwort: A
 
 **Stellungnahme.** Nach A umgesetzt: 1 und 2 in [Ich 2](../../prozess/praemissen/ich.md)
-und [Ablauf](../../prozess/ablauf.md#anliegen), 3 in [385](385-schreibgrenzeHoertAufBash.md).
+und [Ablauf](../../prozess/ablauf.md#anliegen), 3 in Anliegen 385.
 Schreibt eine Rolle per Bash im Projekt oder committet, wird sie gesperrt; die Meldung nennt
 Write und Edit. Lücke: [Regeln](../../prozess/regeln.md#rollenregeln).

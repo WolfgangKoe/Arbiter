@@ -7,6 +7,7 @@ from arbiter.katalog.ausgangslage import ausgangslageAus, ausgangslageLaden
 
 einheitMitDurchmesser = {"Einheit": "Boyz", "durchmesser": [32]}
 armeen = [[einheitMitDurchmesser], [einheitMitDurchmesser]]
+formation = {"abstand": 1.5, "formation": {"Boyz": [1]}}
 
 
 def onlyWarMitKante(kante: int) -> dict:
@@ -18,7 +19,7 @@ def testEineSpielfeldkanteAußerhalbDerZweitenSeitenlängeIstEinFehlerBeimLaden(
     onlyWar = onlyWarMitKante(44)
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar)
+        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
 
 
 def testEinDurchmesserMitKommaIstEinFehlerBeimLaden():
@@ -27,7 +28,7 @@ def testEinDurchmesserMitKommaIstEinFehlerBeimLaden():
     onlyWar = onlyWarMitKante(60)
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWar)
+        ausgangslageAus({"Armee": kaputt}, onlyWar, formation)
 
 
 def testDieDatenVonOnlyWarLaden():
@@ -41,7 +42,7 @@ def testEinDurchmesserKeinePositiveGanzeZahlIstEinFehlerBeimLaden(durchmesser):
     onlyWar = onlyWarMitKante(60)
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWar)
+        ausgangslageAus({"Armee": kaputt}, onlyWar, formation)
 
 
 def testEineFehlendeAufstellungszoneIstEinFehlerBeimLaden():
@@ -49,7 +50,7 @@ def testEineFehlendeAufstellungszoneIstEinFehlerBeimLaden():
     onlyWar = {"Spielfeld": [44, 60], "Aufstellungszone": {"erste": zone}}
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar)
+        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
 
 
 def testEineUnbekannteAufstellungszoneIstEinFehlerBeimLaden():
@@ -57,7 +58,23 @@ def testEineUnbekannteAufstellungszoneIstEinFehlerBeimLaden():
     onlyWar = {"Spielfeld": [44, 60], "Aufstellungszone": {"erste": zone, "dritte": zone}}
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar)
+        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
+
+
+def testEineEinheitOhneFormationIstEinFehlerBeimLaden():
+    ohne = {"abstand": 1.5, "formation": {"Warboss": [1]}}
+    onlyWar = onlyWarMitKante(60)
+
+    with pytest.raises(ValueError):
+        ausgangslageAus({"Armee": armeen}, onlyWar, ohne)
+
+
+def testReihenMitAndererModellzahlAlsDieEinheitIstEinFehlerBeimLaden():
+    falsch = {"abstand": 1.5, "formation": {"Boyz": [2]}}
+    onlyWar = onlyWarMitKante(60)
+
+    with pytest.raises(ValueError):
+        ausgangslageAus({"Armee": armeen}, onlyWar, falsch)
 
 
 def testDieTiefenDerAusgangslageLassenSichNichtÄndern():

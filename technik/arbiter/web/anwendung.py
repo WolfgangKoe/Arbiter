@@ -2,14 +2,15 @@
 
 from fractions import Fraction
 from http import HTTPStatus
+from math import isfinite
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
-from arbiter.domaene.sperre import Grund, Sperre
+from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
-from arbiter.web.darstellung import spielstand
+from arbiter.web.darstellung import spielstand, texteDerGründe
 from arbiter.web.kennungen import (
     ablageNachNummer,
     einheitenNachNummer,
@@ -24,7 +25,7 @@ _erlaubteHosts = ["127.0.0.1", "localhost"]
 
 def _zahl(körper: dict, name: str) -> Fraction:
     wert = körper.get(name)
-    if isinstance(wert, bool) or not isinstance(wert, int | float):
+    if isinstance(wert, bool) or not isinstance(wert, int | float) or not isfinite(wert):
         abort(HTTPStatus.BAD_REQUEST)
     # Regel: architektur.md, S2, die Dezimalzahl wie gesendet
     return Fraction(str(wert))
@@ -102,7 +103,7 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         return spielstandLiefern()
 
     def sperreMelden(sperre: Sperre):
-        gründe = [grund.value for grund in Grund if grund in sperre.gründe]
+        gründe = texteDerGründe(sperre.gründe)
         antwort = jsonify({"gründe": gründe, "spielstand": spielstand(aufstellung)})
         antwort.status_code = HTTPStatus.CONFLICT
         return antwort

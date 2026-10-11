@@ -1,6 +1,6 @@
 # Gründe zweimal geordnet, Ziehen ohne Bewegung
 
-398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+398 · Kritik · von Reviewer (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu d5f6050, `web/` und `frontend/`.
@@ -35,4 +35,8 @@ einmal), [V8](../../technik/architektur/handlungen.md); eine neue braucht es nic
    `ziehenBeginnen`.
 Erledigt, wenn die Bildschirmtests grün sind und ein gezogener Kreis dem Zeiger folgt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `texteDerGründe` in `darstellung.py`;
+`ziehenBeginnen` prüft `isPrimary` und die linke Taste und hält den Zeiger fest;
+`pointermove` führt Kreis (`cx`, `cy`) oder `einheitenKarte` (`transform`) mit. Beim Loslassen
+steht das Element zur Prüfung des Klicks wieder an seinem Platz. Die Bewegung selbst ist nicht
+im Browser geprüft; die Bildschirmtests und die Frontendprüfung sind grün.

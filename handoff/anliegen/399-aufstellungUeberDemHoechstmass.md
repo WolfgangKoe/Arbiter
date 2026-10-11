@@ -1,6 +1,6 @@
 # Aufstellung über dem Höchstmaß: Schnitt nach dem Grundschnitt
 
-399 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · offen
+399 · Kritik · von Architekt (Technik) → Implementierer (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Zu d5f6050, mit dem Hinweis des Reviewers auf D4:
@@ -39,4 +39,13 @@ Erledigt, wenn `__init__.py` höchstens 8.000 Zeichen hat, jedes neue Modul unte
 `python3 -m pytest technik/tests prozess/pruefungen` grün ist, bis auf die Rückverfolgung zu
 AUF-16.5.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `phasen/aufstellen` und `querschnitt` sind
+Pakete. `__init__.py` hat 7.989 Zeichen; neue Module `sperrenBeimSetzen`, `beenden`,
+`gesperrtesModell`, `auswahl`, `ziehen`, `querschnitt/kohaerenz`. Zusätzlich, um unter 8.000 zu
+kommen: `reihenfolge.py` (wer dran ist, Zonen, Einheit eines Modells) und
+`einheitInAufstellung.py` (Wählbarkeit, Zurücklegen). Die Tabellen sind als Ergebnistabelle
+`{Grund: trifft}` geschrieben, weil gleiche Signaturen ungenutzte Parameter ergaben (ruff ARG001).
+`Ausgangslage` importiert `Formation` nur unter `TYPE_CHECKING`, sonst Kreis mit dem Paket.
+Die alten `aufstellen.py` und `querschnitt.py` sind leer, ich darf nicht löschen: bitte der
+Stakeholder. Rot bleibt allein die Rückverfolgung zu AUF-16.5 und die Glossarprüfung wegen
+`Gesperrtes` ([401](401-glossarGesperrtesFuerDieSperreEinesModells.md)).

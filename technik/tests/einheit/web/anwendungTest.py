@@ -66,6 +66,17 @@ def testEinModellOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung, körp
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
+@pytest.mark.parametrize("zahl", ["NaN", "Infinity", "-Infinity"])
+def testEineStelleMitUnendlicherOderUnbestimmterZahlIstEineFehlerhafteAnfrage(aufstellung, zahl):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.put(
+        pfadDerStelle.format(1, 1), data=f'{{"x": {zahl}, "y": 2}}', content_type="application/json"
+    )
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
 def testEinModellOhneAblageZumZurücklegenIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 

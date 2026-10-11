@@ -1,5 +1,7 @@
 """Der Spielstand der Aufstellung als JSON-fähige Werte (technik/architektur/web.md, W2, W4)."""
 
+from collections.abc import Collection
+
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
@@ -76,7 +78,12 @@ def _gründeDerGesperrten(aufstellung: Aufstellung, spielerNummern: dict[int, Sp
         for modell in einer.armee.modelle
         for grund in aufstellung.gründeDesGesperrten(modell)
     }
-    return [grund.value for grund in Grund if grund in genannte]
+    return texteDerGründe(genannte)
+
+
+def texteDerGründe(gründe: Collection[Grund]) -> list[str]:
+    """Die Texte der Gründe in der Reihenfolge von `Grund` (V1, V6)."""
+    return [grund.value for grund in Grund if grund in gründe]
 
 
 def _spieler(aufstellung: Aufstellung, spielernummer: int, spieler: Spieler) -> dict:

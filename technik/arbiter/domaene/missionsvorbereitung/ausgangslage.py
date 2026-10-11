@@ -4,10 +4,13 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
-from types import MappingProxyType
+from typing import TYPE_CHECKING
 
-from arbiter.domaene.querschnitt import Formation
 from arbiter.domaene.spielobjekte import Spieler, Spielfeld
+
+if TYPE_CHECKING:
+    # Warum: Das Paket der Aufstellung importiert diese Datei; zur Laufzeit wäre das ein Kreis
+    from arbiter.domaene.phasen.aufstellen.ziehen import Formation
 
 
 class Aufstellungszone(Enum):
@@ -21,7 +24,7 @@ class Ausgangslage:
     zweiterSpieler: Spieler
     spielfeld: Spielfeld
     tiefen: Mapping[Aufstellungszone, Fraction]
-    formationen: Mapping[str, Formation] = MappingProxyType({})
+    formationen: Mapping[str, "Formation"]
 
     def __post_init__(self) -> None:
         if self.ersterSpieler is self.zweiterSpieler:
