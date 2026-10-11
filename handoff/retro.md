@@ -1,5 +1,9 @@
 # Retro · Zyklus 4
 
+Dashboard öffnen: im Projektordner
+`python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten, im
+Browser `http://127.0.0.1:8765/` öffnen, beenden mit Strg+C.
+
 Etappe 1 · Aufstellen, Plan 4 mit drei Items. Grundlage: [Review 4](review.md), git seit
 Commit „Freigabe Retro 3“, Anliegen, Belegung je Lauf (`prozess/dashboard/laeufe.jsonl`).
 

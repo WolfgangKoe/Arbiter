@@ -136,7 +136,8 @@ ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
 Auslöser: `Freigabe Review <n>`.
-1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`) aus Anliegen an den
+1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
+   „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
    Prozess-Items nur aus einem Befund. Ein Mechanismus entsteht wie eine Rolle erst bei
    beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
