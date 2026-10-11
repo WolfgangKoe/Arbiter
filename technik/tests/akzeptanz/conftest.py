@@ -9,7 +9,8 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import Browser, sync_playwright
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone, Ausgangslage
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from tests.akzeptanz.bildschirm import Bildschirm

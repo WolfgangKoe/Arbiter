@@ -2,7 +2,8 @@
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Spieler
 from tests.akzeptanz.handgriffe import (

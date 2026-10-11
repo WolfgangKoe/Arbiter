@@ -50,6 +50,49 @@ def stellenDerModelle(gesetzte) -> frozenset[tuple[float, float]]:
         "overlordNichtAnDerReihe",
     ],
 )
+@pytest.mark.parametrize(
+    ("spielername", "einheitenname"),
+    [("Spieler 1", "Boyz"), ("Spieler 2", "Necron Warriors")],
+    ids=["einheitDesSpielersAnDerReihe", "einheitDesSpielersNichtAnDerReihe"],
+)
+@pytest.mark.parametrize(
+    ("spielername", "einheitenname"),
+    [("Spieler 1", "Warboss"), ("Spieler 2", "Necron Warriors")],
+    ids=["ablageVonSpielerEins", "ablageVonSpielerZwei"],
+)
+@pytest.mark.parametrize(
+    "einheitenname",
+    ["Boyz", "Warboss", "Necron Warriors", "Overlord"],
+    ids=["boyz", "warboss", "necronWarriors", "overlord"],
+)
+@pytest.mark.parametrize(
+    "einheitenname", ["Boyz", "Necron Warriors"], ids=["boyz", "necronWarriors"]
+)
+class Auswahlfall(NamedTuple):
+    einheitenname: str
+    gesetzteModelle: int
+    anfrage: Callable
+
+
+@pytest.mark.parametrize(
+    "fall",
+    [
+        Auswahlfall("Boyz", 0, auswählen),
+        Auswahlfall("Boyz", 0, abwählen),
+        Auswahlfall("Warboss", 1, auswählen),
+        Auswahlfall("Warboss", 1, abwählen),
+        Auswahlfall("Necron Warriors", 1, auswählen),
+        Auswahlfall("Necron Warriors", 1, abwählen),
+    ],
+    ids=[
+        "boyzOhneGesetztesModellAuswählen",
+        "boyzOhneGesetztesModellAbwählen",
+        "warbossBeiBoyzInAufstellungAuswählen",
+        "warbossBeiBoyzInAufstellungAbwählen",
+        "necronWarriorsNichtAnDerReiheAuswählen",
+        "necronWarriorsNichtAnDerReiheAbwählen",
+    ],
+)
 def testAuf5_3EinKlickAufEineNichtAusgewählteEinheitMachtSieAusgewählt(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
@@ -82,11 +125,32 @@ def testAuf5_3EinKlickAufEineEinheitDesAnderenSpielersLässtDieAusgewählteDesEr
     assert ausgewählteEinheiten(seite) == {"Boyz", "Necron Warriors"}
 
 
-@pytest.mark.parametrize(
-    ("spielername", "einheitenname"),
-    [("Spieler 1", "Boyz"), ("Spieler 2", "Necron Warriors")],
-    ids=["einheitDesSpielersAnDerReihe", "einheitDesSpielersNichtAnDerReihe"],
-)
+def testAuf5_3DerDienstMachtEineNichtAusgewählteEinheitAusgewählt(dienst, einheitenname):
+    antwort = auswählen(dienst, einheitenname)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(antwort.get_json()) == {einheitenname}
+    assert ausgewählteEinheitenIm(spielstandVon(dienst)) == {einheitenname}
+
+
+def testAuf5_3DerDienstLässtDieAndereAusgewählteEinheitDesSpielersAusgewählt(dienst):
+    auswählen(dienst, "Boyz")
+
+    antwort = auswählen(dienst, "Warboss")
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Boyz", "Warboss"}
+
+
+def testAuf5_3DerDienstLässtDieAusgewählteEinheitDesAnderenSpielersAusgewählt(dienst):
+    auswählen(dienst, "Boyz")
+
+    antwort = auswählen(dienst, "Necron Warriors")
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Boyz", "Necron Warriors"}
+
+
 def testAuf5_4EinKlickAufEineAusgewählteEinheitMachtSieNichtAusgewählt(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
@@ -110,11 +174,26 @@ def testAuf5_4EinKlickAufEineAusgewählteEinheitLässtDieAndereAusgewählteEinhe
     assert ausgewählteEinheiten(seite) == {"Warboss"}
 
 
-@pytest.mark.parametrize(
-    ("spielername", "einheitenname"),
-    [("Spieler 1", "Warboss"), ("Spieler 2", "Necron Warriors")],
-    ids=["ablageVonSpielerEins", "ablageVonSpielerZwei"],
-)
+def testAuf5_4DerDienstMachtEineAusgewählteEinheitNichtAusgewählt(dienst, einheitenname):
+    auswählen(dienst, einheitenname)
+
+    antwort = abwählen(dienst, einheitenname)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(antwort.get_json()) == frozenset()
+    assert ausgewählteEinheitenIm(spielstandVon(dienst)) == frozenset()
+
+
+def testAuf5_4DerDienstLässtDieAndereAusgewählteEinheitAusgewählt(dienst):
+    auswählen(dienst, "Boyz")
+    auswählen(dienst, "Warboss")
+
+    antwort = abwählen(dienst, "Boyz")
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Warboss"}
+
+
 def testAuf5_6DieAblageKennzeichnetJedeAusgewählteEinheit(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
@@ -164,6 +243,41 @@ def testAuf5_6DieAblageKennzeichnetImBeispielDesVertragsJedeAusgewählteEinheit(
     seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstand)
 
     assert ausgewählteEinheiten(seite) == ausgewählteEinheitenIm(spielstand)
+
+
+def testAuf5_6DerSpielstandKennzeichnetDieAusgewählteEinheitUnabhängigVonDerEinheitInAufstellung(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 1)
+
+    antwort = auswählen(dienst, "Warboss")
+
+    einheiten = einheitenDerAblagen(antwort.get_json())
+    assert einheiten["Warboss"]["ausgewählt"] is True
+    assert einheiten["Warboss"]["inAufstellung"] is False
+    assert einheiten["Boyz"]["ausgewählt"] is False
+    assert einheiten["Boyz"]["inAufstellung"] is True
+
+
+def testAuf5_6DerSpielstandKennzeichnetDieEinheitInAufstellungAuchWennSieAusgewähltIst(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 1)
+
+    antwort = auswählen(dienst, "Boyz")
+
+    einheit = einheitenDerAblagen(antwort.get_json())["Boyz"]
+    assert einheit["ausgewählt"] is True
+    assert einheit["inAufstellung"] is True
+
+
+def testAuf5_6DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags(dienstDesBeispiels):
+    auswählen(dienstDesBeispiels, "Warboss")
+
+    antwort = auswählen(dienstDesBeispiels, "Necron Warriors")
+
+    assert antwort.get_json() == spielstandDesVertrags()
+    assert spielstandVon(dienstDesBeispiels) == spielstandDesVertrags()
 
 
 def testAuf5_7DieKarteKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
@@ -238,6 +352,54 @@ def testAuf5_7DieKarteKennzeichnetImBeispielDesVertragsJedesGesetzteModellDerAus
     assert ausgewählteModelle(seite) == ausgewählteModelleIm(spielstand)
 
 
+def testAuf5_7DerSpielstandKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
+
+    antwort = auswählen(dienst, "Boyz")
+
+    spielstand = antwort.get_json()
+    assert ausgewählteModelleIm(spielstand) == stellenDerModelle(gesetzte)
+    assert len(spielstand["modelle"]) == anzahlGesetzterModelle
+
+
+def testAuf5_7DerSpielstandKennzeichnetNurDieGesetztenModelleDerAusgewähltenEinheit(
+    dienst, aufstellungNachDerZonenwahl, boyz, necronWarriors
+):
+    einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
+    gesetzteDerNecrons = modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 2)
+
+    antwort = auswählen(dienst, "Necron Warriors")
+
+    spielstand = antwort.get_json()
+    assert ausgewählteModelleIm(spielstand) == stellenDerModelle(gesetzteDerNecrons)
+    assert len(spielstand["modelle"]) == len(boyz.modelle) + 2
+
+
+def testAuf5_7DerSpielstandKennzeichnetKeinModellEinerNichtAusgewähltenEinheit(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
+
+    antwort = auswählen(dienst, "Warboss")
+
+    spielstand = antwort.get_json()
+    assert ausgewählteModelleIm(spielstand) == frozenset()
+    assert len(spielstand["modelle"]) == anzahlGesetzterModelle
+
+
+def testAuf5_7DerSpielstandKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
+    auswählen(dienst, "Boyz")
+
+    antwort = abwählen(dienst, "Boyz")
+
+    assert ausgewählteModelleIm(antwort.get_json()) == frozenset()
+
+
 @pytest.mark.parametrize("vorherAusgewählt", [False, True], ids=["auswählen", "abwählen"])
 def testAuf5_8EinKlickÄndertWederDenSpielerAnDerReiheNochDieEinheitInAufstellungNochEinModell(
     bildschirm, aufstellungNachDerZonenwahl, spielerEins, boyz, vorherAusgewählt
@@ -305,11 +467,36 @@ def testAuf5_8EinKlickAufDieAblageDesSpielersNichtAnDerReiheLässtSeineModelleUn
     assert elementeDerSeite(seite, ".karte .modell") == ()
 
 
+def testAuf5_8DerDienstÄndertBeiAuswählenUndAbwählenNurDieAuswahl(
+    dienst, aufstellungNachDerZonenwahl, spielerEins, boyz, fall
+):
+    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, fall.gesetzteModelle)
+    erwartetInAufstellung = boyz if gesetzte else None
+    if fall.anfrage is abwählen:
+        auswählen(dienst, fall.einheitenname)
+
+    antwort = fall.anfrage(dienst, fall.einheitenname)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert aufstellungNachDerZonenwahl.anDerReihe is spielerEins
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is erwartetInAufstellung
+    for modell in spielerEins.armee.modelle:
+        assert aufstellungNachDerZonenwahl.stelle(modell) == dict(gesetzte).get(modell)
+
+
 def testAuf5_9NachDemStartIstKeineEinheitAusgewählt(adresseDesBefehls, bildschirm):
     seite = bildschirm.seiteBei(adresseDesBefehls)
 
     assert seite.locator(".einheitenKarte").count() > 0
     assert seite.locator(".ausgewählt").count() == 0
+
+
+def testAuf5_9DerSpielstandNachDemStartKenntKeineAusgewählteEinheit(ausgangsaufstellung):
+    spielstand = spielstandVon(dienstFür(ausgangsaufstellung))
+
+    assert einheitenDerAblagen(spielstand)
+    assert ausgewählteEinheitenIm(spielstand) == frozenset()
+    assert ausgewählteModelleIm(spielstand) == frozenset()
 
 
 def testAuf5_10WirdEineAusgewählteEinheitAufgestelltIstSieNichtMehrAusgewählt(
@@ -335,193 +522,6 @@ def testAuf5_10DieAndereAusgewählteEinheitBleibtNachDemAufstellenAusgewählt(
 
     assert ausgewählteEinheiten(seite) == {"Warboss"}
     assert ausgewählteModelle(seite) == frozenset()
-
-
-@pytest.mark.parametrize(
-    "einheitenname",
-    ["Boyz", "Warboss", "Necron Warriors", "Overlord"],
-    ids=["boyz", "warboss", "necronWarriors", "overlord"],
-)
-def testAuf5_3DerDienstMachtEineNichtAusgewählteEinheitAusgewählt(dienst, einheitenname):
-    antwort = auswählen(dienst, einheitenname)
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == {einheitenname}
-    assert ausgewählteEinheitenIm(spielstandVon(dienst)) == {einheitenname}
-
-
-def testAuf5_3DerDienstLässtDieAndereAusgewählteEinheitDesSpielersAusgewählt(dienst):
-    auswählen(dienst, "Boyz")
-
-    antwort = auswählen(dienst, "Warboss")
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Boyz", "Warboss"}
-
-
-def testAuf5_3DerDienstLässtDieAusgewählteEinheitDesAnderenSpielersAusgewählt(dienst):
-    auswählen(dienst, "Boyz")
-
-    antwort = auswählen(dienst, "Necron Warriors")
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Boyz", "Necron Warriors"}
-
-
-@pytest.mark.parametrize(
-    "einheitenname", ["Boyz", "Necron Warriors"], ids=["boyz", "necronWarriors"]
-)
-def testAuf5_4DerDienstMachtEineAusgewählteEinheitNichtAusgewählt(dienst, einheitenname):
-    auswählen(dienst, einheitenname)
-
-    antwort = abwählen(dienst, einheitenname)
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == frozenset()
-    assert ausgewählteEinheitenIm(spielstandVon(dienst)) == frozenset()
-
-
-def testAuf5_4DerDienstLässtDieAndereAusgewählteEinheitAusgewählt(dienst):
-    auswählen(dienst, "Boyz")
-    auswählen(dienst, "Warboss")
-
-    antwort = abwählen(dienst, "Boyz")
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == {"Warboss"}
-
-
-def testAuf5_6DerSpielstandKennzeichnetDieAusgewählteEinheitUnabhängigVonDerEinheitInAufstellung(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 1)
-
-    antwort = auswählen(dienst, "Warboss")
-
-    einheiten = einheitenDerAblagen(antwort.get_json())
-    assert einheiten["Warboss"]["ausgewählt"] is True
-    assert einheiten["Warboss"]["inAufstellung"] is False
-    assert einheiten["Boyz"]["ausgewählt"] is False
-    assert einheiten["Boyz"]["inAufstellung"] is True
-
-
-def testAuf5_6DerSpielstandKennzeichnetDieEinheitInAufstellungAuchWennSieAusgewähltIst(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 1)
-
-    antwort = auswählen(dienst, "Boyz")
-
-    einheit = einheitenDerAblagen(antwort.get_json())["Boyz"]
-    assert einheit["ausgewählt"] is True
-    assert einheit["inAufstellung"] is True
-
-
-def testAuf5_6DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags(dienstDesBeispiels):
-    auswählen(dienstDesBeispiels, "Warboss")
-
-    antwort = auswählen(dienstDesBeispiels, "Necron Warriors")
-
-    assert antwort.get_json() == spielstandDesVertrags()
-    assert spielstandVon(dienstDesBeispiels) == spielstandDesVertrags()
-
-
-def testAuf5_7DerSpielstandKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
-
-    antwort = auswählen(dienst, "Boyz")
-
-    spielstand = antwort.get_json()
-    assert ausgewählteModelleIm(spielstand) == stellenDerModelle(gesetzte)
-    assert len(spielstand["modelle"]) == anzahlGesetzterModelle
-
-
-def testAuf5_7DerSpielstandKennzeichnetNurDieGesetztenModelleDerAusgewähltenEinheit(
-    dienst, aufstellungNachDerZonenwahl, boyz, necronWarriors
-):
-    einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
-    gesetzteDerNecrons = modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 2)
-
-    antwort = auswählen(dienst, "Necron Warriors")
-
-    spielstand = antwort.get_json()
-    assert ausgewählteModelleIm(spielstand) == stellenDerModelle(gesetzteDerNecrons)
-    assert len(spielstand["modelle"]) == len(boyz.modelle) + 2
-
-
-def testAuf5_7DerSpielstandKennzeichnetKeinModellEinerNichtAusgewähltenEinheit(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
-
-    antwort = auswählen(dienst, "Warboss")
-
-    spielstand = antwort.get_json()
-    assert ausgewählteModelleIm(spielstand) == frozenset()
-    assert len(spielstand["modelle"]) == anzahlGesetzterModelle
-
-
-def testAuf5_7DerSpielstandKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
-    auswählen(dienst, "Boyz")
-
-    antwort = abwählen(dienst, "Boyz")
-
-    assert ausgewählteModelleIm(antwort.get_json()) == frozenset()
-
-
-class Auswahlfall(NamedTuple):
-    einheitenname: str
-    gesetzteModelle: int
-    anfrage: Callable
-
-
-@pytest.mark.parametrize(
-    "fall",
-    [
-        Auswahlfall("Boyz", 0, auswählen),
-        Auswahlfall("Boyz", 0, abwählen),
-        Auswahlfall("Warboss", 1, auswählen),
-        Auswahlfall("Warboss", 1, abwählen),
-        Auswahlfall("Necron Warriors", 1, auswählen),
-        Auswahlfall("Necron Warriors", 1, abwählen),
-    ],
-    ids=[
-        "boyzOhneGesetztesModellAuswählen",
-        "boyzOhneGesetztesModellAbwählen",
-        "warbossBeiBoyzInAufstellungAuswählen",
-        "warbossBeiBoyzInAufstellungAbwählen",
-        "necronWarriorsNichtAnDerReiheAuswählen",
-        "necronWarriorsNichtAnDerReiheAbwählen",
-    ],
-)
-def testAuf5_8DerDienstÄndertBeiAuswählenUndAbwählenNurDieAuswahl(
-    dienst, aufstellungNachDerZonenwahl, spielerEins, boyz, fall
-):
-    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, fall.gesetzteModelle)
-    erwartetInAufstellung = boyz if gesetzte else None
-    if fall.anfrage is abwählen:
-        auswählen(dienst, fall.einheitenname)
-
-    antwort = fall.anfrage(dienst, fall.einheitenname)
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert aufstellungNachDerZonenwahl.anDerReihe is spielerEins
-    assert aufstellungNachDerZonenwahl.einheitInAufstellung is erwartetInAufstellung
-    for modell in spielerEins.armee.modelle:
-        assert aufstellungNachDerZonenwahl.stelle(modell) == dict(gesetzte).get(modell)
-
-
-def testAuf5_9DerSpielstandNachDemStartKenntKeineAusgewählteEinheit(ausgangsaufstellung):
-    spielstand = spielstandVon(dienstFür(ausgangsaufstellung))
-
-    assert einheitenDerAblagen(spielstand)
-    assert ausgewählteEinheitenIm(spielstand) == frozenset()
-    assert ausgewählteModelleIm(spielstand) == frozenset()
 
 
 def testAuf5_10DerSpielstandKenntEineAufgestellteEinheitNichtMehrAlsAusgewählt(

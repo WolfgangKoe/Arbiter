@@ -1,6 +1,6 @@
 # Spiegelprüfung: Inhalt der Akzeptanztests und Module der Domäne
 
-367 · Kritik · von Architekt (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · offen
+367 · Kritik · von Architekt (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder will einen Test, der den Spiegel zwischen Anforderungen und
@@ -43,4 +43,8 @@ Scheiter-Test und schaltest die Prüfung am Repo danach zu. Erledigt, wenn 1 bis
 Scheiter-Test am Repo grün sind, 5 erledigt ist und `python3 -m pytest prozess/pruefungen`
 grün bleibt; ich setze dann in T1 und im Grundschnitt „Prüft“ auf die Prüfung.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [spiegel.py](../../prozess/pruefungen/formregeln/spiegel.py) (Teile 1 bis 4, eine Funktion je Regel: `docstringVerstoß`, `kennungVerstöße`, `folgeVerstöße`, `modulVerstöße`). Sie ist am Repo grün (`python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.spiegel` endet mit 0, `testDasRepoHältDenSpiegel`) und läuft im Lauf von `python3 -m pytest prozess/pruefungen`. Scheiter-Tests in [spiegelTest.py](../../prozess/pruefungen/formregeln/spiegelTest.py) auf Proben in `tmp_path`: Docstring anders, ohne Punkt oder fehlend; Kennung einer anderen Anforderung; `7_3, 7_1`, `7_1, 7_3, 7_1`, `7_5, 7_3`; Modul ohne Datei, ohne Ordner, Paket ohne Ordner (grün: Spiegel vorhanden, `messen.py`, `sperre.py`, Lücke in der Folge). Ein Modul `x.py` gilt als gespiegelt, wenn Ordner `x/` oder Datei `x.md` besteht. Teil 5: Der Zweig `geteilt`/`gebündelt` ist aus `spiegelVerstoß` samt Tests entfernt, in [Regeln](../../prozess/regeln.md) verweist die Frontend-Zeile auf [Oberfläche](../../technik/architektur/oberflaeche.md) O1 und die Benennungszeile nennt den geteilten Test nicht mehr; neue Zeile zum Spiegel dort. Rot im Lauf der Prüfungen bleibt nur Fremdes: Kopf von 386 und 389 (Architekt) und fehlende Tests zu AUF-16.2 und vier weiteren Kriterien (Rückverfolgung, Testautor). SonarLint ohne Funde. Der Architekt setzt „Prüft“ in T1 und im Grundschnitt: Nachprüfung fällig.
+
+**Nachprüfung.** Teile 1 bis 5 wie verlangt, `spiegelTest.py` außer dem Repo-Test grün.
+Rot am Repo nur `loslassenOhneZielTest.py` (AUF-16.3 nach 16.4), in Arbeit beim Testautor:
+Die Prüfung greift. „Prüft“ in T1 und Grundschnitt nennt `spiegel.py`. Erledigt.

@@ -5,7 +5,7 @@ from fractions import Fraction
 from pathlib import Path
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
-from arbiter.domaene.spielobjekte import Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from arbiter.web.anwendung import anwendungFür
 
 _vertrag = Path(__file__).parents[2] / "architektur" / "vertrag"
@@ -36,6 +36,53 @@ def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
         for modell in spielstandDesVertrags()["modelle"]
         if modell["spieler"] == spielernummer
     ]
+
+
+def sperreDesVertrags() -> dict:
+    """Das Beispiel von V6 aus `sperre.json`, nicht kopiert."""
+    with (_vertrag / "sperre.json").open(encoding="utf-8") as datei:
+        return json.load(datei)
+
+
+def pfadDerEinheit(aufstellung: Aufstellung, einheit: Einheit) -> str:
+    ausgangslage = aufstellung.ausgangslage
+    spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    for spielernummer, einer in enumerate(spieler, start=1):
+        for einheitennummer, kandidat in enumerate(einer.armee.einheiten, start=1):
+            if kandidat is einheit:
+                return f"/api/spieler/{spielernummer}/einheiten/{einheitennummer}"
+    raise LookupError(einheit)
+
+
+def pfadDesModells(aufstellung: Aufstellung, einheit: Einheit, modell: Modell) -> str:
+    modellnummer = next(
+        nummer for nummer, kandidat in enumerate(einheit.modelle, start=1) if kandidat is modell
+    )
+    return f"{pfadDerEinheit(aufstellung, einheit)}/modelle/{modellnummer}"
+
+
+def körperDerStelle(stelle: Stelle) -> dict[str, float]:
+    return {"x": float(stelle.x), "y": float(stelle.y)}
+
+
+def modellLoslassen(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, stelle: Stelle
+):
+    pfad = pfadDesModells(aufstellung, einheit, modell)
+    return dienst.put(f"{pfad}/stelle", json=körperDerStelle(stelle))
+
+
+def modellZurücklegen(dienst, aufstellung, einheit: Einheit, modell: Modell, spielernummer: int):
+    pfad = pfadDesModells(aufstellung, einheit, modell)
+    return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
+
+
+def aufstellenDerEinheitBeenden(dienst):
+    return dienst.put("/api/aufstellenDerEinheitBeenden")
+
+
+def zurück(dienst):
+    return dienst.put("/api/zurück")
 
 
 def pfadDerAuswahl(einheitenname: str) -> str:

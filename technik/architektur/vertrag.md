@@ -10,7 +10,12 @@ Pfade und JSON zwischen `web/` und `frontend/`
   *Einheit* *ausgewählt*. Kennungen nach [W4](web.md#aufbau), je ab 1:
   `spieler[].nummer` in der Reihenfolge der Ausgangslage, `ablage[].nummer` in der
   Reihenfolge der *Armee*, auch wenn eine frühere *Einheit* nicht mehr in der *Ablage* liegt.
-  `ausgewählt` an der *Einheit* nach AUF-5.6, am *Modell* nach AUF-5.7.
+  `ausgewählt` an der *Einheit* nach AUF-5.6, am *Modell* nach AUF-5.7. `modelle[]` nennt
+  *gesetzte* und *gesperrte* *Modelle* mit Kennung `einheit` (Reihenfolge der *Armee*) und
+  `nummer` (Reihenfolge der *Einheit*), `gesperrt` nach AUF-9.1, ein *gesperrtes* an
+  `stelleDesGesperrten`. `gründeDerGesperrten`: jeder *Grund* aller *gesperrten* einmal, Text
+  aus `Grund`, in dessen Reihenfolge. `nichtGesetzt` zählt *gesperrte* mit (Glossar).
+  Handlungen: [V5 bis V8](handlungen.md).
 - **V2** `PUT /api/spieler/<nummer>/einheiten/<nummer>/ausgewählt` macht die *Einheit*
   *ausgewählt* (AUF-5.3), `DELETE` auf denselben Pfad nicht (AUF-5.4). Beide antworten 200
   mit dem Spielstand wie V1; das Beispiel ist der Stand nach `PUT` auf

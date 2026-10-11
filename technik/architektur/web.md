@@ -27,8 +27,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
   zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
-  (`Sperre.gründe`, Text aus `Grund`). CSRF: [Vertrag, V4](vertrag.md). Prüft: nur Text;
-  Auslöser: erste Handlung über HTTP.
+  (`Sperre.gründe`, Text aus `Grund`) und dem Spielstand ([V6](handlungen.md)). CSRF:
+  [Vertrag, V4](vertrag.md). Prüft: die Dienst-Tests zu AUF-12.3 und 12.4 gegen `sperre.json`.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
   Reihenfolge der Ausgangslage: Spieler, Einheit, Modell, an einer Stelle (`kennungen.py`,
   W2). Prüft: wie W3.
@@ -59,3 +59,8 @@ Design-System, Komponentenseite und Leisten: [Oberfläche](oberflaeche.md).
 - **B4** QUE-2.1 startet `sys.executable -m arbiter` als eigenen Prozess und öffnet die
   Adresse aus der ersten Zeile. Seine Abdeckung misst coverage im Kindprozess
   (`[tool.coverage.run]`, `formregeln/abdeckung.py`).
+- **B5** Ziehen: mit der Maus über `page.mouse` (drücken, `move` mit `steps`, loslassen), mit
+  dem Finger über CDP `Input.dispatchTouchEvent` in einem Kontext mit `has_touch` (Anliegen
+  372). Den Punkt rechnet der Test aus Zoll über `getScreenCTM()` der `.karte`; die *Stelle*
+  danach gilt auf einen Pixel genau (`1 / a` Zoll), denn der Zeiger kennt nur Pixel. Exakt
+  prüfen die Domänentests (S2).

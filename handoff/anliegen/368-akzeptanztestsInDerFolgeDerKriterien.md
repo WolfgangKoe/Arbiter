@@ -1,6 +1,6 @@
 # Akzeptanztests in der Folge der Kriterien, Ausgangslage aus der Missionsvorbereitung
 
-368 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · offen
+368 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 986d3fb (Schnittstelle, Lesbarkeit). Der neue Schnitt ist gut:
@@ -30,4 +30,10 @@ Code). Ohne 2 bleibt eine Regel der Missionsvorbereitung im Modul der Aufstellun
 Erledigt, wenn `python3 -m pytest technik/tests` nur an diesem Import rot ist und Teil 3 aus
 367 am Repo grün wäre. Beides in der Technikphase von Plan 5, mit den neuen Tests.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt. Teil 1: In allen Akzeptanztests stehen die Tests eines Kriteriums beisammen, die Kriterien in der Folge der Anforderung (geprüft je Datei). Teil 2: Alle Akzeptanztests und Hilfsmodule importieren `Ausgangslage` und `Aufstellungszone` aus `arbiter.domaene.missionsvorbereitung.ausgangslage`. `python3 -m pytest technik/tests/akzeptanz` bricht deshalb in `conftest.py` am fehlenden Modul ab (gewollt, bis der Implementierer es anlegt); Teil 3 aus 367 und `formregeln` sind am Repo grün.
+
+**Nachprüfung.** Erledigt: kein Test importiert `Ausgangslage` oder `Aufstellungszone` mehr aus
+der Aufstellung, die Kriterien stehen in Folge (Stichprobe `karteTest.py`). `reihenDerFormation`
+in `handgriffe.py` liest `formation.yaml` selbst: passt zu A3, die das Produkt bindet; der Test
+liest die Daten als Erwartung wie `spielstand.json`, über `katalog/` prüfte er den Code mit
+sich selbst.

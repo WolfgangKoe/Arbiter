@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
 from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, einheitenAufstellen, radiusInZoll
 
@@ -64,57 +64,6 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
         (0, 0, float(tiefeErste), float(länge)),
         (float(breite - tiefeZweite), 0, float(tiefeZweite), float(länge)),
     ]
-
-
-def testQue2_7OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
-    seite = bildschirm.seiteZu(ausgangsaufstellung)
-
-    assert elementeDerSeite(seite, ".karte .modell") == ()
-
-
-def testQue2_7DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
-    bildschirm, aufstellungMitModellenBeiderSpieler, ausgangslage
-):
-    einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
-    aufstellung = aufstellungMitModellenBeiderSpieler
-    gesetzte = [
-        modell
-        for modell in ausgangslage.ersterSpieler.armee.modelle
-        | ausgangslage.zweiterSpieler.armee.modelle
-        if aufstellung.gesetzt(modell)
-    ]
-    erwartet = sorted(
-        (
-            float(aufstellung.stelle(modell).x),
-            float(aufstellung.stelle(modell).y),
-            float(radiusInZoll(modell)),
-        )
-        for modell in gesetzte
-    )
-
-    seite = bildschirm.seiteZu(aufstellung)
-
-    kreise = elementeDerSeite(seite, ".karte .modell")
-    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
-    assert len(gezeigt) == len(gesetzte)
-    assert gezeigt == erwartet
-
-
-def testQue2_7DieKarteZeigtKeinNichtGesetztesModell(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
-):
-    gesetzte = boyzSetzen(anzahlGesetzterModelle)
-    erwartet = sorted(
-        (float(stelle.x), float(stelle.y), float(radiusInZoll(modell)))
-        for modell, stelle in gesetzte
-    )
-
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-
-    kreise = elementeDerSeite(seite, ".karte .modell")
-    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
-    assert gezeigt == erwartet
-    assert len(gezeigt) == anzahlGesetzterModelle
 
 
 def testQue2_5EinZollIstInBeidenAchsenDerKarteGleichLang(bildschirm, ausgangsaufstellung, fenster):
@@ -198,3 +147,54 @@ def testQue2_6DieModelleDerZweiSpielerHabenAufDerKarteVerschiedeneFarben(
     farbenZwei = modellfarben(seite, aufstellungMitModellenBeiderSpieler, spielerZwei)
 
     assert farbenEins.isdisjoint(farbenZwei)
+
+
+def testQue2_7OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
+    seite = bildschirm.seiteZu(ausgangsaufstellung)
+
+    assert elementeDerSeite(seite, ".karte .modell") == ()
+
+
+def testQue2_7DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
+    bildschirm, aufstellungMitModellenBeiderSpieler, ausgangslage
+):
+    einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
+    aufstellung = aufstellungMitModellenBeiderSpieler
+    gesetzte = [
+        modell
+        for modell in ausgangslage.ersterSpieler.armee.modelle
+        | ausgangslage.zweiterSpieler.armee.modelle
+        if aufstellung.gesetzt(modell)
+    ]
+    erwartet = sorted(
+        (
+            float(aufstellung.stelle(modell).x),
+            float(aufstellung.stelle(modell).y),
+            float(radiusInZoll(modell)),
+        )
+        for modell in gesetzte
+    )
+
+    seite = bildschirm.seiteZu(aufstellung)
+
+    kreise = elementeDerSeite(seite, ".karte .modell")
+    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
+    assert len(gezeigt) == len(gesetzte)
+    assert gezeigt == erwartet
+
+
+def testQue2_7DieKarteZeigtKeinNichtGesetztesModell(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
+):
+    gesetzte = boyzSetzen(anzahlGesetzterModelle)
+    erwartet = sorted(
+        (float(stelle.x), float(stelle.y), float(radiusInZoll(modell)))
+        for modell, stelle in gesetzte
+    )
+
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+
+    kreise = elementeDerSeite(seite, ".karte .modell")
+    gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
+    assert gezeigt == erwartet
+    assert len(gezeigt) == anzahlGesetzterModelle

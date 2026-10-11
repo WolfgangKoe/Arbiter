@@ -1,0 +1,97 @@
+"""AUF-16 · Loslassen ohne Ziel."""
+
+import pytest
+
+from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.bildschirm import (
+    ablageVon,
+    amKopfDerSeite,
+    einheitenKarteVon,
+    inhaltDerSeite,
+    mitteVon,
+    punktAufDerKarte,
+    sperrmeldungenDerSeite,
+    ziehenOhneAnfrage,
+)
+from tests.akzeptanz.handgriffe import (
+    einheitAufstellen,
+    modelleSetzen,
+    nachDerWahlDerAufstellungszone,
+    sperrgründe,
+    stelleInDerZoneVon,
+    stellenAllerModelle,
+    stellenDerEinheit,
+)
+
+
+@pytest.mark.parametrize("einheitenwahl", ["inAufstellung", "aufgestellt", "desAnderenSpielers"])
+def testAuf16_1EineEinheitMitAllenGesetztenModellenStehtNachDemLoslassenWieDavor(
+    aufstellungNachDerZonenwahl, boyz, necronWarriors, spielerEins, einheitenwahl
+):
+    modelleSetzen(aufstellungNachDerZonenwahl, boyz, len(boyz.modelle))
+    if einheitenwahl == "aufgestellt":
+        aufstellungNachDerZonenwahl.aufstellenDerEinheitBeenden()
+    if einheitenwahl == "desAnderenSpielers":
+        aufstellungNachDerZonenwahl.aufstellenDerEinheitBeenden()
+        einheitAufstellen(aufstellungNachDerZonenwahl, necronWarriors)
+    einheit = necronWarriors if einheitenwahl == "desAnderenSpielers" else boyz
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    irgendwo = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 8, 50)
+
+    aufstellungNachDerZonenwahl.einheitLoslassen(einheit, irgendwo)
+
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+
+
+@pytest.mark.parametrize("gezogenes", ["einheit", "modell"])
+def testAuf16_2EineEinheitOderEinModellNebenKarteUndAblagenStehtNachDemLoslassenWieDavor(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, gezogenes
+):
+    (_, stelleDesModells), *_ = boyzSetzen(3)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    seiteDavor = inhaltDerSeite(seite)
+    if gezogenes == "einheit":
+        start = mitteVon(einheitenKarteVon(seite, "Spieler 1", "Boyz"))
+    else:
+        start = punktAufDerKarte(seite, stelleDesModells)
+
+    anfragen = ziehenOhneAnfrage(seite, start, amKopfDerSeite(seite))
+
+    assert anfragen == []
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert sperrmeldungenDerSeite(seite) == []
+    assert inhaltDerSeite(seite) == seiteDavor
+
+
+def testAuf16_3EinGesetztesModellAufDerAblageDesAnderenSpielersIstNichtWählbar(
+    aufstellung, ersterSpieler, zweiterSpieler
+):
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
+    einheit, _ = zweiterSpieler.armee.einheiten
+    (modell, stelle), _ = stellenDerEinheit(aufstellung, zweiterSpieler, einheit)
+    aufstellung.modellSetzen(modell, stelle)
+
+    gründe = sperrgründe(aufstellung.modellZurücklegen, modell, ersterSpieler)
+
+    assert gründe == {Grund.nichtWählbar}
+    assert aufstellung.stelle(modell) == stelle
+    assert aufstellung.einheitInAufstellung is einheit
+
+
+@pytest.mark.parametrize("gesetzt", [0, 3], ids=["keinModellGesetzt", "dreiModelleGesetzt"])
+def testAuf16_4EineEinheitAufDerAblageIhresSpielersStehtNachDemLoslassenWieDavor(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, gesetzt
+):
+    boyzSetzen(gesetzt)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    einheitInAufstellungDavor = aufstellungNachDerZonenwahl.einheitInAufstellung
+    start = mitteVon(einheitenKarteVon(seite, "Spieler 1", "Boyz"))
+    ziel = mitteVon(ablageVon(seite, "Spieler 1").locator(".armeeKartenName"))
+
+    ziehenOhneAnfrage(seite, start, ziel)
+
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
+    assert sperrmeldungenDerSeite(seite) == []

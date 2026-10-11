@@ -92,62 +92,6 @@ def testAuf3_5AufDemModellDesAnderenSpielersNenntArbiterBaseNahkampfreichweiteUn
     assert not aufstellung.gesetzt(modell)
 
 
-@pytest.mark.usefixtures("ersteEinheitDesSpielersAnDerReihe")
-def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAußerhalbDerZoneNicht(
-    aufstellung, zweiterSpieler, platz
-):
-    einheitDesSpielersNichtAnDerReihe, _ = zweiterSpieler.armee.einheiten
-    modellDesSpielersNichtAnDerReihe, *_ = einheitDesSpielersNichtAnDerReihe.modelle
-    stelle = platz.stelle(22, 30)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, modellDesSpielersNichtAnDerReihe, stelle)
-
-    assert gründe == {Grund.nichtWählbar}
-
-
-@pytest.mark.usefixtures("einheitNachDemAnderenSpieler")
-def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAufEinemModellNicht(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
-    einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
-    aufgestelltesModell, *_ = aufgestellteEinheit.modelle
-    modellDesAnderenSpielers, *_ = einheitDesAnderenSpielers.modelle
-    stelle = aufstellung.stelle(modellDesAnderenSpielers)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, aufgestelltesModell, stelle)
-
-    assert gründe == {Grund.nichtWählbar}
-
-
-def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAußerhalbDerZoneNicht(
-    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
-):
-    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
-    _, andereEinheit = ersterSpieler.armee.einheiten
-    (modellDerAnderenEinheit,) = andereEinheit.modelle
-    aufstellung.modellSetzen(begonnenesModell, platz.stelle(2, platz.radius))
-    stelle = platz.stelle(22, 30)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, stelle)
-
-    assert gründe == {Grund.einheitBegonnen}
-
-
-def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAufEinemModellNicht(
-    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
-):
-    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
-    _, andereEinheit = ersterSpieler.armee.einheiten
-    (modellDerAnderenEinheit,) = andereEinheit.modelle
-    stelle = platz.stelle(2, platz.radius)
-    aufstellung.modellSetzen(begonnenesModell, stelle)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, stelle)
-
-    assert gründe == {Grund.einheitBegonnen}
-
-
 def testAuf3_7EinGesetztesModellLässtSichAnEineAndereStelleSetzen(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, platz
 ):
@@ -211,3 +155,59 @@ def testAuf3_7NachDerNahkampfreichweiteBleibtDasModellAnSeinerVorigenStelle(
 
     assert Grund.nahkampfreichweite in gründe
     assert aufstellung.stelle(modell) == vorigeStelle
+
+
+@pytest.mark.usefixtures("ersteEinheitDesSpielersAnDerReihe")
+def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAußerhalbDerZoneNicht(
+    aufstellung, zweiterSpieler, platz
+):
+    einheitDesSpielersNichtAnDerReihe, _ = zweiterSpieler.armee.einheiten
+    modellDesSpielersNichtAnDerReihe, *_ = einheitDesSpielersNichtAnDerReihe.modelle
+    stelle = platz.stelle(22, 30)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDesSpielersNichtAnDerReihe, stelle)
+
+    assert gründe == {Grund.nichtWählbar}
+
+
+@pytest.mark.usefixtures("einheitNachDemAnderenSpieler")
+def testAuf3_8BeiNichtWählbarPrüftArbiterDieStelleAufEinemModellNicht(
+    aufstellung, ersterSpieler, zweiterSpieler
+):
+    aufgestellteEinheit, _ = ersterSpieler.armee.einheiten
+    einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
+    aufgestelltesModell, *_ = aufgestellteEinheit.modelle
+    modellDesAnderenSpielers, *_ = einheitDesAnderenSpielers.modelle
+    stelle = aufstellung.stelle(modellDesAnderenSpielers)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, aufgestelltesModell, stelle)
+
+    assert gründe == {Grund.nichtWählbar}
+
+
+def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAußerhalbDerZoneNicht(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
+):
+    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
+    _, andereEinheit = ersterSpieler.armee.einheiten
+    (modellDerAnderenEinheit,) = andereEinheit.modelle
+    aufstellung.modellSetzen(begonnenesModell, platz.stelle(2, platz.radius))
+    stelle = platz.stelle(22, 30)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, stelle)
+
+    assert gründe == {Grund.einheitBegonnen}
+
+
+def testAuf3_8BeiEinheitBegonnenPrüftArbiterDieStelleAufEinemModellNicht(
+    aufstellung, ersteEinheitDesSpielersAnDerReihe, ersterSpieler, platz
+):
+    begonnenesModell, _ = ersteEinheitDesSpielersAnDerReihe.modelle
+    _, andereEinheit = ersterSpieler.armee.einheiten
+    (modellDerAnderenEinheit,) = andereEinheit.modelle
+    stelle = platz.stelle(2, platz.radius)
+    aufstellung.modellSetzen(begonnenesModell, stelle)
+
+    gründe = sperrgründe(aufstellung.modellSetzen, modellDerAnderenEinheit, stelle)
+
+    assert gründe == {Grund.einheitBegonnen}

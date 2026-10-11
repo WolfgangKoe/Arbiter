@@ -26,7 +26,6 @@ testName = re.compile(r"^test[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
 akzeptanzTestName = re.compile(r"^test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[A-ZÄÖÜ][a-zA-Z0-9äöüÄÖÜß]*$")
 pythonDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.py$")
 markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
-geteilterTest = re.compile(r"^(?P<kürzel>[a-z]+)(?P<nummer>\d+)Test\.py$")
 frontendDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.(js|css|html)$")
 anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 
@@ -186,7 +185,7 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
 
 
 def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
-    """Akzeptanztest `<anforderung>Test.py`, geteilt `<kürzel><n>Test.py` im Ordner `<datei>/`."""
+    """Akzeptanztest `<anforderung>Test.py` im Ordner seiner Anforderung."""
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None
@@ -203,14 +202,6 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
         return None
     if pfad.parent == ordner:
         return "Akzeptanztest gehört in den Ordner seiner Anforderung"
-    geteilt = geteilterTest.match(pfad.name)
-    gebündelt = anforderungen / pfad.parent.relative_to(ordner).with_suffix(".md")
-    if geteilt and gebündelt.is_file():
-        kennung = f"{geteilt['kürzel'].upper()}-{geteilt['nummer']}"
-        if re.search(rf"^#+ {kennung}\b", gebündelt.read_text(encoding="utf-8"), re.MULTILINE):
-            return None
-        datei = gebündelt.relative_to(wurzel).as_posix()
-        return f"keine Anforderung {kennung} in {datei} zum Spiegeln"
     return f"keine Anforderung {anforderung.relative_to(wurzel).as_posix()} zum Spiegeln"
 
 

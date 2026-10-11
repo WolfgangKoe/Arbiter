@@ -195,27 +195,6 @@ def testAkzeptanztestDirektImAkzeptanzordnerIstRotStattAbsturz(tmp_path):
     assert any("gehört in den Ordner" in meldung for meldung in verstöße(tmp_path))
 
 
-def aufbauGeteilt(tmp_path, dateiname: str) -> Path:
-    anforderungen = tmp_path / "domaene" / "anforderungen" / "phasen"
-    anforderungen.mkdir(parents=True)
-    (anforderungen / "aufstellen.md").write_text("### AUF-1 · Probe\n", encoding="utf-8")
-    ordner = tmp_path / "technik" / "tests" / "akzeptanz" / "phasen" / "aufstellen"
-    ordner.mkdir(parents=True)
-    datei = ordner / dateiname
-    datei.write_text("def testAuf1_1Probe(): ...\n", encoding="utf-8")
-    return datei
-
-
-def testGeteilterAkzeptanztestZurAnforderungInDerDateiIstGrün(tmp_path):
-    aufbauGeteilt(tmp_path, "auf1Test.py")
-    assert verstöße(tmp_path) == []
-
-
-def testGeteilterAkzeptanztestOhneAnforderungInDerDateiIstRot(tmp_path):
-    aufbauGeteilt(tmp_path, "auf2Test.py")
-    assert any("auf2Test.py" in meldung and "AUF-2" in meldung for meldung in verstöße(tmp_path))
-
-
 def testPytestHookInConftestIstEinWerkzeugname():
     quelltext = "def pytest_configure(config):\n    pass\n"
     assert grundZu(quelltext, "conftest.py") == []

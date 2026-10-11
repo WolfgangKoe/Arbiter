@@ -5,10 +5,11 @@
     {"x": 35.0, "y": 0.0, "breite": 9.0, "länge": 60.0, "spieler": 2}
   ],
   "modelle": [
-    {"x": 36.0, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true},
-    {"x": 37.4, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true},
-    {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "ausgewählt": true}
+    {"x": 36.0, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 1, "ausgewählt": true, "gesperrt": false},
+    {"x": 37.4, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 2, "ausgewählt": true, "gesperrt": false},
+    {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 3, "ausgewählt": true, "gesperrt": false}
   ],
+  "gründeDerGesperrten": [],
   "spieler": [
     {
       "nummer": 1,

@@ -2,10 +2,13 @@
 
 from dataclasses import replace
 from fractions import Fraction
+from pathlib import Path
 
 import pytest
+import yaml
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
@@ -166,3 +169,47 @@ def modelleAnStellenSetzen(
     """Setzt die ersten Modelle der Einheit an die Stellen, ein Modell je Stelle."""
     for modell, stelle in zip(einheit.modelle, stellen, strict=False):
         aufstellung.modellSetzen(modell, stelle)
+
+
+def stelleInDerZoneVon(
+    aufstellung: Aufstellung, spieler: Spieler, tiefe: Fraction | int, länge: Fraction | int
+) -> Stelle:
+    return stelleInZone(aufstellung.aufstellungszone(spieler), tiefe, länge)
+
+
+def stellenAllerModelle(aufstellung: Aufstellung) -> dict[Modell, Stelle | None]:
+    ausgangslage = aufstellung.ausgangslage
+    spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    return {
+        modell: aufstellung.stelle(modell) for einer in spieler for modell in einer.armee.modelle
+    }
+
+
+def einGesperrtesModell(
+    aufstellung: Aufstellung, spieler: Spieler
+) -> tuple[Modell, Modell, Stelle]:
+    """Das erste Modell der ersten Einheit steht, das zweite liegt auf ihm und ist gesperrt."""
+    ersteEinheit, _ = spieler.armee.einheiten
+    gesetztesModell, gesperrtesModell = ersteEinheit.modelle
+    stelle = stelleInDerZoneVon(aufstellung, spieler, tiefeDerErstenReihe, 3)
+    aufstellung.modellSetzen(gesetztesModell, stelle)
+    aufstellung.modellLoslassen(gesperrtesModell, stelle)
+    return gesetztesModell, gesperrtesModell, stelle
+
+
+def reihenDerFormation(einheitenname: str) -> list[int]:
+    """Die Modelle je Reihe aus `formation.yaml`, nicht kopiert."""
+    pfad = Path(__file__).parents[3] / "domaene" / "daten" / "formation.yaml"
+    with pfad.open(encoding="utf-8") as datei:
+        return yaml.safe_load(datei)["formation"][einheitenname]
+
+
+def eineGesperrteFormation(aufstellung: Aufstellung, einheiten: tuple[Einheit, Einheit]) -> Stelle:
+    """Der Warboss steht in der Mitte der Zone, die Boyz werden darauf gezogen."""
+    boyz, warboss = einheiten
+    mitte = stelleInZone(Aufstellungszone.zweite, 4, 30)
+    modelleAnStellenSetzen(aufstellung, warboss, [mitte])
+    aufstellung.aufstellenDerEinheitBeenden()
+    einheitenAufstellen(aufstellung, 1)
+    aufstellung.einheitLoslassen(boyz, mitte)
+    return mitte

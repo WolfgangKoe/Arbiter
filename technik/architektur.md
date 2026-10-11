@@ -39,7 +39,7 @@ Ordner entstehen mit dem ersten Item, das sie braucht. Zusammenspiel von `web/` 
 - Ohne Anforderung nur die Werkzeuge `sperre.py` (`Sperre`, `Grund`) und `messen.py` (M1).
 
 Wird ein Modul zum Paket, bleiben die Importe dessen, was im Ordnermodul bleibt. Prüft:
-kein Modul ohne Spiegel Anliegen 367; was wohin gehört der Reviewer.
+kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
 
 ## Stelle und Rechnen
 - **S1** Eine *Stelle* ist der Mittelpunkt der *Base*, `Stelle(x, y)` in Zoll, Ursprung in
@@ -81,8 +81,9 @@ kein Modul ohne Spiegel Anliegen 367; was wohin gehört der Reviewer.
   Kriterien (`testAuf7_<m>…`), (3) deren Reihenfolge: die Tests eines Kriteriums beisammen,
   in der Folge der Kriterien, (4) Gegeben, wenn, dann als Aufbau, Handlung, Prüfung, durch
   Leerzeilen getrennt; ohne **wenn** keine Handlung. Über dem Höchstmaß
-  (`prozess/kennzahlen.md`) wird die Anforderung geteilt. Prüft: `formregeln/benennung.py`;
-  1 bis 3 Anliegen 367; 4 Kritik am Code; Höchstmaß nur Text.
+  (`prozess/kennzahlen.md`) wird die Anforderung geteilt. Prüft: der Ort
+  `formregeln/benennung.py`, 1 bis 3 `formregeln/spiegel.py`; 4 Kritik am Code; Höchstmaß
+  nur Text.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
   `testAuf7_3…`). Spur: [Regeln](../prozess/regeln.md).

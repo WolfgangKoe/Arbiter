@@ -1,10 +1,13 @@
 """Sicht auf die Anliegen im Dashboard: Spalte je Zuständigem, Karten, Filter im Browser."""
 
 import html
+from collections.abc import Callable
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen
 from lesen.anliegenKopf import Anliegen, gelesene
+
+Verweis = Callable[[Anliegen, Path], str]
 
 filterStil = """
 .anliegen-filter{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
@@ -49,8 +52,12 @@ def zuständige(ordner: Path) -> dict[str, list[int]]:
     return spalten
 
 
-def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path) -> str:
-    pfad = anliegen.datei.relative_to(ordner).as_posix()
+def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
+    return anliegen.datei.relative_to(ordner).as_posix()
+
+
+def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:
+    pfad = verweis(anliegen, ordner)
     return (
         f'<div class="anliegen-karte" data-rolle="{html.escape(rolle)}" '
         f'data-form="{html.escape(anliegen.typ)}">'
@@ -66,7 +73,7 @@ def optionen(werte: list[str]) -> str:
     )
 
 
-def anliegenAbschnitt(ordner: Path) -> str:
+def anliegenAbschnitt(ordner: Path, verweis: Verweis = dateiVerweis) -> str:
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
     spalten = zuständige(ordner)
     if not spalten:
@@ -74,7 +81,9 @@ def anliegenAbschnitt(ordner: Path) -> str:
     formen = sorted({nachNummer[nummer].typ for nummern in spalten.values() for nummer in nummern})
     spaltenHtml = "".join(
         f'<div class="anliegen-spalte"><h3>{html.escape(rolle)} ({len(nummern)})</h3>'
-        + "".join(anliegenKarte(nachNummer[nummer], rolle, ordner) for nummer in sorted(nummern))
+        + "".join(
+            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis) for nummer in sorted(nummern)
+        )
         + "</div>"
         for rolle, nummern in sorted(spalten.items())
     )

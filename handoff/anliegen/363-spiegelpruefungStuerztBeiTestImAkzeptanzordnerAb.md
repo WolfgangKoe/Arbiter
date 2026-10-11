@@ -1,6 +1,6 @@
 # Spiegelprüfung stürzt bei einem Test direkt im Akzeptanzordner ab
 
-363 · Kritik · von Testautor (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · angenommen
+363 · Kritik · von Testautor (Technik) → Regelumsetzer (Prozess) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** In [benennung.py](../../prozess/pruefungen/formregeln/benennung.py) bricht
@@ -20,3 +20,5 @@ gehört in den Ordner seiner Anforderung“, bevor sie `with_suffix` aufruft; ei
 `benennungTest.py`.
 
 **Stellungnahme.** Umgesetzt in [benennung.py](../../prozess/pruefungen/formregeln/benennung.py): Liegt der Test direkt im Akzeptanzordner und hat keine Anforderung dort, meldet `spiegelVerstoß` „Akzeptanztest gehört in den Ordner seiner Anforderung“. Scheiter-Test: `testAkzeptanztestDirektImAkzeptanzordnerIstRotStattAbsturz` in `benennungTest.py`.
+
+**Nachprüfung.** Der Test `testAkzeptanztestDirektImAkzeptanzordnerIstRotStattAbsturz` steht in `benennungTest.py`, `python3 -m pytest prozess/pruefungen/formregeln` ist grün (229 bestanden). Erledigt.

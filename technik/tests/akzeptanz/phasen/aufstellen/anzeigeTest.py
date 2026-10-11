@@ -4,7 +4,8 @@ from dataclasses import dataclass
 
 import pytest
 
-from arbiter.domaene.phasen.aufstellen import Aufstellung, Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Spieler
 from tests.akzeptanz.bildschirm import (
     ablageVon,

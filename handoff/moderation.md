@@ -14,8 +14,8 @@ an einem Item.
   368); Nachprüfung von [360](anliegen/360-dashboardAnliegenBearbeiten.md); danach der Teil
   des Regelumsetzers aus 384.
 - Organisationsentwickler: [384](anliegen/384-schreibgrenzeAuchFuerBash.md) (F1 A, Antwort
-  liegt vor, noch uncommittet), [369](anliegen/369-skillUndDomaenenformatNachDemNeuenSchnitt.md),
-  [376](anliegen/376-ausnahmeFuerDenArchitektenInDerDomaenenphase.md).
+  liegt vor, noch uncommittet), Anliegen 369,
+  Anliegen 376.
 - Planer, Architekt, UX, Reviewer, Fachkritiker, Anforderungsautor: keins.
 
 ## Vorschläge

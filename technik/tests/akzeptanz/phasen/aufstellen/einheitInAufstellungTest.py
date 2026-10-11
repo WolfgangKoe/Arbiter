@@ -2,7 +2,7 @@
 
 from fractions import Fraction
 
-from arbiter.domaene.phasen.aufstellen import Aufstellungszone
+from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.handgriffe import (

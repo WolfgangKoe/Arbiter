@@ -1,11 +1,10 @@
-"""Erzeugt `dashboard.html` aus dem Lauf-Log, im Aussehen der Vorlage in `ArbiterMap`."""
+"""Erzeugt den Tokenbericht `dashboard.html` aus dem Lauf-Log, im Aussehen der `ArbiterMap`."""
 
 import html
 import sys
 from pathlib import Path
 
 from gemeinsam.pfade import wurzel
-from rollenregeln.dashboardAnliegen import anliegenAbschnitt, filterStil
 from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
 from rollenregeln.dashboardSeiten import schalterSkriptFür, schalterStil, seitenschalter
@@ -77,7 +76,7 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[Lauf], lageText: str = "", anliegen: str = "") -> str:
+def seiteErzeugen(läufe: list[Lauf], lageText: str = "") -> str:
     if läufe:
         sitzungen = list(nachSitzung(läufe).items())
         neuesteZuerst = reversed(sitzungen)
@@ -91,9 +90,9 @@ def seiteErzeugen(läufe: list[Lauf], lageText: str = "", anliegen: str = "") ->
     return (
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
         "<title>Arbiter · Prozess-Dashboard</title>"
-        f"<style>{stil}{schalterStil}{filterStil}</style></head><body><h1>Prozess-Dashboard</h1>"
+        f"<style>{stil}{schalterStil}</style></head><body><h1>Prozess-Dashboard</h1>"
         f'<p class="muted">{html.escape(lageText)}</p>'
-        f'{anliegen}<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
+        '<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
         f'<div class="karten-spalte">{karten}</div><aside class="seiten-spalte">'
         f'<section class="kasten"><h3>Verteilung der Tokenstände</h3>{verteilung}</section>'
         f"{legendeErzeugen()}</aside></div>{schalterSkriptFür(len(sitzungen))}</body></html>\n"
@@ -102,7 +101,7 @@ def seiteErzeugen(läufe: list[Lauf], lageText: str = "", anliegen: str = "") ->
 
 def dashboardSchreiben(ordner: Path) -> Path:
     ziel = ordner / dashboardDatei
-    seite = seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText(), anliegenAbschnitt(ordner))
+    seite = seiteErzeugen(läufeLesen(ordner), lage(ordner).alsText())
     ziel.write_text(seite, encoding="utf-8")
     return ziel
 
