@@ -22,17 +22,15 @@ def _laden(dateiname: str) -> dict:
         return yaml.safe_load(datei)
 
 
+def _ganzeZahlÜberNull(zahl: object, was: str) -> int:
+    if type(zahl) is not int or zahl <= 0:
+        raise ValueError(f"{was} muss eine ganze Zahl über 0 sein: {zahl!r}")
+    return zahl
+
+
 def _durchmesserLesen(zahl: object) -> int:
     # Warum: gerechnet wird mit ganzen mm (technik/architektur.md, S2)
-    if type(zahl) is not int or zahl <= 0:
-        raise ValueError(f"Der Durchmesser muss eine ganze Zahl über 0 in mm sein: {zahl!r}")
-    return zahl
-
-
-def _reiheLesen(zahl: object) -> int:
-    if type(zahl) is not int or zahl <= 0:
-        raise ValueError(f"Eine Reihe muss eine ganze Zahl über 0 an Modellen sein: {zahl!r}")
-    return zahl
+    return _ganzeZahlÜberNull(zahl, "Der Durchmesser in mm")
 
 
 def _armeeLesen(einheiten: list[dict]) -> Armee:
@@ -60,7 +58,10 @@ def _formationenLesen(formation: dict) -> Mapping[str, Formation]:
     abstand = Fraction(str(formation["abstand"]))
     return MappingProxyType(
         {
-            name: Formation(reihen=tuple(reihen), abstand=abstand)
+            name: Formation(
+                reihen=tuple(_ganzeZahlÜberNull(reihe, "Die Reihe") for reihe in reihen),
+                abstand=abstand,
+            )
             for name, reihen in formation["formation"].items()
         }
     )
@@ -71,8 +72,6 @@ def _formationenPrüfen(armee: Armee, formationen: Mapping[str, Formation]) -> N
         formation = formationen.get(einheit.name)
         if formation is None:
             raise ValueError(f"Die Einheit {einheit.name} hat keine Formation")
-        for reihe in formation.reihen:
-            _reiheLesen(reihe)
         if sum(formation.reihen) != len(einheit.modelle):
             raise ValueError(f"Die Reihen der Formation von {einheit.name} zählen andere Modelle")
 
