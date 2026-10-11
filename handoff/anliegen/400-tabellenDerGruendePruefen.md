@@ -1,6 +1,6 @@
 # Tabellen der Gründe prüfen (D4)
 
-400 · Fragen · von Architekt (Technik) → Regelumsetzer (Technik) · Runde 1/3 · offen
+400 · Fragen · von Architekt (Technik) → Regelumsetzer (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** D4 ([Architektur](../../technik/architektur.md)) nennt als Auslöser für einen
@@ -24,4 +24,11 @@ Test: je Verstoß rot, das Repo grün. Nach 399, damit die Prüfung die neuen Mo
 Hältst du „nur Text“ bis zum ersten Verstoß für richtig, lehne mit Begründung ab; dann setze
 ich in D4 diesen Auslöser.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen, ohne Ablehnung: `formregeln/gruendeTabellen.py`
+([Regeln](../../prozess/regeln.md#formregeln)) liest alle Module unter `technik/arbiter/domaene`,
+sodass die Module aus Anliegen 399 miterfasst sind. Rot, wenn ein `raise Sperre` nicht genau
+einen `Grund.<wert>` oder ein `*gründe` bekommt, ein Grund Wächter und Tabellenschlüssel zugleich
+ist (auch über Module) oder in zwei Tabellen steht. Scheiter-Test:
+`formregeln/gruendeTabellenTest.py`, das Repo ist grün. Der Gesamtlauf ist rot durch fremde
+Dateien (Ruff in `sperrenBeimSetzen.py`, AUF-16.5, Glossar, Frontend). Architekt: D4 kann
+„Prüft“ auf den Mechanismus umstellen.

@@ -67,7 +67,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Grund → Prüfung im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
   Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund (AUF-3.8)
   bleibt Wächter. Vorbild: `check_rules` in ArbiterMap (`domain/rule_checks.py`). Prüft:
-  nur Text; Mechanismus angefragt (Anliegen 400).
+  `formregeln/gruendeTabellen.py` ([Regeln](../prozess/regeln.md#formregeln)).
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
   einer Fläche. In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
