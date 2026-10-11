@@ -12,7 +12,8 @@ bei einer *Einheit* je *Spieler*. Nach deinem Kommentar unten kommt jede *Einhei
 1. [Ziehen](../domaene/items/ziehen.md): AUF-8.2, 8.3, 8.5, 8.6, AUF-14.1, QUE-3.4,
    AUF-16.1, 16.2
 2. [Gesperrt stehen und zurück](../domaene/items/gesperrtStehenUndZurueck.md): AUF-9.1,
-   9.3, 9.4, AUF-15.1, AUF-8.4, AUF-16.3, AUF-12.1 bis 12.3, QUE-3.5, nach Item 1
+   9.3, 9.4, AUF-15.1, AUF-8.4, AUF-16.3, AUF-12.1 bis 12.3, QUE-3.5, AUF-17.1
+   (Anliegen 389), nach Item 1
 3. [Beenden mit Kohärenz](../domaene/items/beendenUndSperreOhneStelle.md):
    AUF-10.1 bis 10.4, QUE-4, AUF-12.4, nach Item 1 und 2
 
@@ -29,7 +30,7 @@ still zurück.
 Überdeckt ein *Modell* eine andere *Base*, ist es zu nah am Gegner oder steht ein einzeln
 gezogenes nicht ganz in der Zone, bleibt es *gesperrt* stehen, mit *Grund*, auch nach dem
 Neuladen. „zurück“ stellt es an die vorige *Stelle*, sonst in die *Ablage*; kam es mit der
-*Formation*, geht sie ganz zurück.
+*Formation*, geht sie ganz zurück. Ohne *gesperrtes* *Modell* ändert „zurück“ nichts.
 „Aufstellen der Einheit beenden“ klicken: Fehlt ein *Modell* oder ist die *Einheit* nicht in
 *Kohärenz*, nennt Arbiter den *Grund*; sonst ist der andere *Spieler* *an der Reihe*. So
 stellt ihr alle vier *Einheiten* auf. Wer außer der Reihe oder in die *Ablage* des anderen
@@ -49,17 +50,14 @@ Gib alle drei Items zusammen frei: Danach stellt ihr eine ganze Partie regelkonf
 *Gewinner* und Zone setzt noch AUF-6. Reicht die Technikphase nicht für drei, rückt Item 3
 in Plan 6; Item 1 und 2 (Zyklusziel aus Review 4) sperren für sich regelkonform.
 
-Vor dem Testautor: Architekt, Vertrag fürs Ziehen und Beenden mit der Antwort bei *Sperre*
-(W3) in [web.md](../technik/architektur/web.md). Dazu Anliegen 368
-(Testautor, Folge der Tests).
-
 ## Danach, nach Abhängigkeit
 Plan 6: „gemeinsam übergehen“ mit *Protokoll* (AUF-9.2, 9.5, 10.5, AUF-13, AUF-15.2, QUE-5)
 · *Gewinner* und Zone am Bildschirm (AUF-11), AUF-6 entfällt · *Leisten* (QUE-6). Damit ist
 Etappe 1 erreicht. AUF-5.5 bleibt nach deiner Antwort in 320 (B, git) draußen.
 
 ## Offene Anliegen
-An dich keins; die übrigen betreffen Technik und Prozess ([Moderation](moderation.md)).
+An dich: [394](anliegen/394-ablageAlsZielInPlan5.md), AUF-16.4 und 16.5 noch in Plan 5?
+Die übrigen: Technik und Prozess ([Moderation](moderation.md)).
 
 ## Freigabe
 Freigabe: Ja
