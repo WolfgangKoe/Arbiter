@@ -1,6 +1,6 @@
 # AUF-16.5: „am Zug“ im Testnamen statt „an der Reihe“
 
-411 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
+411 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Commit 5bd9757 trifft AUF-16.5 jetzt für beide *Spieler*, auch im Vertrag, und

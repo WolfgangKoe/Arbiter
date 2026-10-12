@@ -49,3 +49,5 @@ sie bis zu „Gelesen“ unter „verworfen“. `eingang.jsonl` und `verworfen.j
 
 **Stellungnahme.** Es wäre noch gut, wenn im Tokenbericht eine gelber Hinweis erschiene, wenn es eine offene Frage an mich gibt. Sobald ich Antwort und Status zu diesem Anliegen gesetzt habe, soll dieser Hinweis verschwinden. Auf diese Weise bekomme ich an mich gerichtete Anliegen mit, wenn ich mal nicht reinschaue.
 Der Fehler in den Tabellen ist immer noch nicht behoben. Diese einfach wegzublenden, statt die Tabellengörße an die Kästen zu hängen, ist keine Lösung.
+Kommentar: Das Dashboard für die Anliegen sortiert offensichtlich nur nach "Absender" nicht nach Empfänger. So erkenne ich hier beispielsweise nicht, dass ich adressiert bin. Das braucht eine bessere Lösung!
+Kommentar: Das Dashboard für die Anliegen sortiert offensichtlich nur nach "Absender" nicht nach Empfänger. So erkenne ich hier beispielsweise nicht, dass ich adressiert bin. Das braucht eine bessere Lösung!
