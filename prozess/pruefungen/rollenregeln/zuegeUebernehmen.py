@@ -28,6 +28,7 @@ statusZüge = (
 statusInKopf = re.compile(r"(Runde \d+/\d+ · )\w+")
 rundeInKopf = re.compile(r"Runde (\d+)/")
 commitBefehl = "git commit"
+befehlsTrenner = re.compile(r"&&|\|\||[;|\n]")
 keineFrage = "Die Frage steht nicht mehr im Anliegen."
 
 
@@ -133,7 +134,8 @@ def übernehmen(ordner: Path) -> tuple[int, int]:
     """Legt alle vorgemerkten Züge in die Dateien; gibt (übernommen, verworfen) zurück."""
     züge = vorgemerkte(ordner)
     verworfen = 0
-    for zug in züge:
+    # Warum: das Formular merkt den Status vor die Antwort; nach dem Status gälte sie nicht mehr
+    for zug in sorted(züge, key=lambda eintrag: eintrag.art != "antwort"):
         abgelehnt = einzelnenÜbernehmen(ordner, zug)
         if abgelehnt:
             verworfenVermerken(ordner, abgelehnt)
@@ -146,12 +148,12 @@ def löstAus(eingabe: HookEingabe) -> bool:
     """Vor jedem Rollenstart und vor dem Commit des Koordinators."""
     if eingabe.ereignis == "SubagentStart":
         return True
-    befehl = str(eingabe.angaben.get("command") or "").strip()
+    befehl = str(eingabe.angaben.get("command") or "")
     return (
         eingabe.ereignis == "PreToolUse"
         and eingabe.werkzeug == "Bash"
         and not eingabe.rolle
-        and befehl.startswith(commitBefehl)
+        and any(teil.strip().startswith(commitBefehl) for teil in befehlsTrenner.split(befehl))
     )
 
 

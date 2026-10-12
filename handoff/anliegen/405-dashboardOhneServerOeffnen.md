@@ -1,6 +1,6 @@
 # Dashboard ohne Server zeigt keine Anliegen
 
-405 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 2/3 · offen
+405 · Fragen · von Regelumsetzer (Prozess) → Stakeholder · Runde 2/3 · erledigt
 Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
@@ -27,6 +27,6 @@ A) Ja, 405 ist erledigt.
 B) Nein, ich schreibe, was fehlt.
 C) Zusätzlich eine eigene Spalte „an dich“ ganz links.
 Empfehlung: A.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**

@@ -106,6 +106,14 @@ def testSpätereZügeWerdenGegenDenNeuenStatusGeprüft(ordner):
     assert übernehmen(ordner) == (1, 1)
 
 
+def testAntwortKommtAnAuchWennDerStatusDavorVorgemerktWurde(ordner):
+    datei = anlegen(ordner)
+    zugVormerken(ordner, Zug(10, "status", "angenommen"))
+    zugVormerken(ordner, Zug(10, "antwort", "A", frage="F1"))
+    assert übernehmen(ordner) == (2, 0)
+    assert "Antwort: A" in datei.read_text(encoding="utf-8").splitlines()
+
+
 def testUnbekanntesAnliegenWirdVerworfen(ordner):
     zugVormerken(ordner, Zug(99, "kommentar", "x"))
     assert übernehmen(ordner) == (0, 1)
@@ -134,6 +142,17 @@ def hook(ereignis, rolle=None, befehl=""):
             hook("PreToolUse", "planer", "git commit -m x"), False, id="Commit einer Rolle"
         ),
         pytest.param(hook("PreToolUse", None, "git status"), False, id="anderer Befehl"),
+        pytest.param(
+            hook("PreToolUse", None, "cd /tmp/x && git add a && git commit -m y"),
+            True,
+            id="Commit nach cd und add",
+        ),
+        pytest.param(
+            hook("PreToolUse", "planer", "cd x && git commit -m y"),
+            False,
+            id="verketteter Commit einer Rolle",
+        ),
+        pytest.param(hook("PreToolUse", None, "echo git commit"), False, id="nur erwähnt"),
     ],
 )
 def testDieÜbernahmeLöstNurBeiRollenstartUndCommitAus(eingabe, löst):
