@@ -251,9 +251,10 @@ Mechanismus: nur Text.
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
-`.claude/agents/` oder Stakeholder, dahinter darf die Perspektive in Klammern stehen.
+`.claude/agents/` oder Stakeholder, ohne Perspektive (Anliegen 420).
 Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`)
-und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)).
+und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); eine Perspektive in
+Klammern lässt es durch, ohne Perspektive: nur Text.
 
 Form | der Empfänger soll | Absender
 ---|---|---

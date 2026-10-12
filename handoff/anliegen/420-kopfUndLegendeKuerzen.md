@@ -1,6 +1,6 @@
 # Kopf und Legende im Anliegen kürzen
 
-420 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+420 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Kommentar in Anliegen 418: Kopf und Legende braucht es in dieser Form nicht
@@ -26,6 +26,6 @@ Empfehlung: Die Zeile sagt, wer wem schreibt, die wievielte Runde und den Stand;
 B: Zusätzlich zeigt die Seite im Dashboard den Kopf als Satz über dem Formular, etwa „Frage vom
 Organisationsentwickler an dich · Runde 1 von 3 · du bist dran“, und die Datei ab dem ersten
 Absatz. Braucht Code vom Regelumsetzer, das Dashboard wird dafür geändert.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**

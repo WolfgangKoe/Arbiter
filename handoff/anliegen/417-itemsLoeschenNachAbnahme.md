@@ -1,6 +1,6 @@
 # Abgenommene Items kann der Planer nicht löschen
 
-417 · Kritik · von Planer (Domäne) → Organisationsentwickler (Prozess) · Runde 1/3 · offen
+417 · Kritik · von Planer → Organisationsentwickler · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Der Fachkritiker hat alle drei Items von Plan 5 abgenommen (Commit „Fachkritiker:
@@ -31,5 +31,8 @@ löschen oder umbenennen, auch nicht Mockups, Anforderungen, Testdateien, Module
 benannte Anliegen. Weil die Lösung Ich 2 oder die Rechte des Koordinators ändert, entscheidet
 der Stakeholder: Anliegen 418, dein Gegenvorschlag ist dort Option C, meine Empfehlung A
 (Ich 2 angepasst, `rm` und `mv` in den eigenen Schreibpfaden); die drei Items von Plan 5 sind
-F2. 417 wartet auf 418; der Kopf kann `· wartet auf` noch nicht tragen
-([Backlog](../../prozess/backlog.md)), daher bleibt der Status offen bis zur Antwort.
+F2. Entschieden in 418: Abgenommene Items löschst du künftig selbst mit `rm`, nur in deinen
+Schreibpfaden (F1 A); die drei Items von Plan 5 löscht der Koordinator einmalig (F2 A).
+`angenommen` setze ich, wenn die Sperre `rm` erlaubt und Ich 2 es sagt; bis dahin bleibt der
+Status offen, weil der Kopf `· wartet auf` noch nicht tragen kann
+([Backlog](../../prozess/backlog.md)).

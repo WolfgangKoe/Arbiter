@@ -1,6 +1,6 @@
 # Wer darf Dateien löschen und umbenennen?
 
-418 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+418 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Seit deinem Auftrag 384 (Commit „Regelumsetzer und Organisationsentwickler:
@@ -30,13 +30,13 @@ sind die Prüfungen der Rolle rot, bis er es ausführt.
 C: Wie B, nur für Items (Vorschlag des Planers in 417). Risiko: Alles andere bleibt gesperrt.
 Empfehlung: A. Ein Weg für alle Fälle, nur wo die Rolle ohnehin schreibt, und die Sperre prüft
 ihn.
-Antwort: .
+Antwort: A
 
 **F2 · Die drei Items von Plan 5 jetzt?**
 A: Der Koordinator löscht sie einmalig, als deine Ausnahme. Empfehlung: Das Review wartet nicht,
 bis F1 gebaut ist.
 B: Der Planer löscht sie, sobald F1 umgesetzt ist.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
 Kommentar: Mir sind die potentiellen Risiken nicht klar. Ich habe erstmal verstanden, dass manche Anliegen "an den Regeln vorbei löschen können". Gerade das sollte ja ausgeschlossen sein. Auf der anderen Seite ist der Ablauf geblockt, weil etwas gelöscht werden soll, dass eigentlich durch einen automatischen Prozess gelöscht wird, der dann nicht läuft. Ich bin hier sehr unschlüssig über die Antworten zu deinen Fragen. Bei Frage F1 fehlt mir auch eine Empfehlung deinerseits. Außerdem verstehe ich nicht, was Plan 5 damit zu tun haben soll.... Und eine weitere Kleinigkeit: Den Kopf im Anliegen "418 · Fragen · von Organisationsentwickler (Prozess) → Stakeholder · Runde 1/3 · offen Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`" braucht es in dieser Form nicht mehr, weil das Formular im Dashboard das erledigt. Das könnten wir etwas reduzieren. Wirklich übersichtlich war es nie.
