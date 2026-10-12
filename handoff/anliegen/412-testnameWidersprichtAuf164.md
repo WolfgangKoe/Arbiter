@@ -1,6 +1,6 @@
 # AUF-16.5: Der neue Testname liest sich wie das Gegenteil von AUF-16.4
 
-412 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · angenommen
+412 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Commit 83a9901 benennt den zweiten Domänentest zu AUF-16.5 in
