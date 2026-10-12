@@ -1,6 +1,6 @@
 # AUF-16.5: „am Zug“ im Testnamen statt „an der Reihe“
 
-411 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · offen
+411 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Commit 5bd9757 trifft AUF-16.5 jetzt für beide *Spieler*, auch im Vertrag, und
@@ -22,4 +22,7 @@ prüft nur Klassen und Enum-Werte der Domäne und findet das nicht.
 `testAuf16_5EineEinheitAufDerAblageDesSpielersAnDerReiheIstNichtWählbar`. Aufbau und Prüfungen
 bleiben, wie sie sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: Der Test heißt jetzt
+`testAuf16_5EineEinheitAufDerAblageDesSpielersAnDerReiheIstNichtWählbar` in
+[loslassenOhneZielTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/loslassenOhneZielTest.py);
+Aufbau und Prüfungen unverändert.
