@@ -3,7 +3,10 @@
 import os
 import shlex
 import tempfile
+from collections.abc import Callable
 from pathlib import PurePosixPath
+
+Entfernen = Callable[[str, list[str]], str | None]
 
 ablage = PurePosixPath(tempfile.gettempdir())
 trennzeichen = {";", "&&", "||", "|", "&", "(", ")", "|&"}
@@ -12,6 +15,7 @@ umhüllungen = {"sudo", "env", "command", "time", "nohup", "nice"}
 gitÄnderungen = {"add", "commit", "checkout", "restore", "reset", "stash", "rm", "mv"}
 alleZieleFrei = {"rm", "mv", "touch", "tee"}
 nurZielFrei = {"cp"}
+löschenUndUmbenennen = {"rm", "mv"}
 pythonMitSkriptInDerEingabe = {"-", "-c"}
 weg = "Nimm Write und Edit; Bash nur zum Lesen, für Prüfungen und Tests und in /tmp."
 
@@ -89,6 +93,29 @@ def ändertInPlace(wort: str) -> bool:
     return wort.startswith("--in-place") or kurz
 
 
+def entfernenName(wörter: list[str]) -> str:
+    """`rm` oder `mv`, sonst leer."""
+    wörter = ohneUmhüllung(wörter)
+    name = PurePosixPath(wörter[0]).name if wörter else ""
+    return name if name in löschenUndUmbenennen else ""
+
+
+def grundGegenEntfernen(wörter: list[str], entfernen: Entfernen, *, gewechselt: bool) -> str | None:
+    wörter = ohneUmhüllung(wörter)
+    name = PurePosixPath(wörter[0]).name
+    # Warum: Nach einem `cd` ins Projekt sind relative Pfade nicht mehr prüfbar.
+    return f"{name} nach cd" if gewechselt else entfernen(name, wörter[1:])
+
+
+def urteilenÜber(
+    wörter: list[str], *, inTmp: bool, gewechselt: bool, entfernen: Entfernen | None
+) -> str | None:
+    umleitung = umleitungImProjekt(wörter)
+    if umleitung or not (entfernen and entfernenName(wörter) and not inTmp):
+        return umleitung or befehlImProjekt(wörter, inTmp=inTmp)
+    return grundGegenEntfernen(wörter, entfernen, gewechselt=gewechselt)
+
+
 def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
     wörter = ohneUmhüllung(wörter)
     if not wörter:
@@ -109,17 +136,19 @@ def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
     return None
 
 
-def verbotenesSchreiben(befehl: str) -> str | None:
+def verbotenesSchreiben(befehl: str, entfernen: Entfernen | None = None) -> str | None:
     """Der Teil des Befehls, der im Projekt schreibt oder committet; sonst `None`."""
     try:
         teile = zerlegen(befehl)
     except ValueError:
         return "Befehl nicht lesbar"
     inTmp = False
+    gewechselt = False
     for wörter in teile:
-        gefunden = umleitungImProjekt(wörter) or befehlImProjekt(wörter, inTmp=inTmp)
+        gefunden = urteilenÜber(wörter, inTmp=inTmp, gewechselt=gewechselt, entfernen=entfernen)
         if gefunden:
             return gefunden
         if wörter[0] == "cd" and len(wörter) > 1:
             inTmp = liegtInTmp(wörter[1])
+            gewechselt = gewechselt or not inTmp
     return None

@@ -6,17 +6,22 @@ from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, 
 from gemeinsam.pfade import projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
 from rollenregeln.bashSchreiben import verbotenesSchreiben, weg
+from rollenregeln.entfernen import urteil
 from rollenregeln.pfadsperren import pfadsperren
 
 schreibwerkzeuge = ("Write", "Edit")
 koordinator = "koordinator"
 
 
-def vorBash(eingabe: HookEingabe) -> dict | None:
+def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     # Warum: Der Hauptchat läuft als Koordinator (`agent` in settings.json) und committet.
     if eingabe.rolle == koordinator:
         return None
-    gefunden = verbotenesSchreiben(str(eingabe.angaben.get("command") or ""))
+
+    def entfernenDerRolle(name: str, wörter: list[str]) -> str | None:
+        return urteil(name, wörter, eingabe.rolle, wurzel)
+
+    gefunden = verbotenesSchreiben(str(eingabe.angaben.get("command") or ""), entfernenDerRolle)
     if gefunden is None:
         return None
     return verweigerung(
@@ -30,7 +35,7 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     if not rolle:
         return None
     if eingabe.werkzeug == "Bash":
-        return vorBash(eingabe)
+        return vorBash(eingabe, wurzel)
     if eingabe.werkzeug not in schreibwerkzeuge:
         return None
     angaben = eingabe.angaben
