@@ -38,6 +38,15 @@ def testKarteNenntNummerAlsLinkTitelFormUndRunde(ordner):
     assert "planer (1)" in abschnitt
 
 
+def testKarteNenntAbsenderUndEmpfängerUndMarkiertAnliegenAnDenStakeholder(ordner):
+    anliegenAnlegen(ordner, 10, "Fragen", ("planer", "Stakeholder"), "offen")
+    anliegenAnlegen(ordner, 11, "Kritik", ("architekt", "planer"), "offen")
+    abschnitt = anliegenAbschnitt(ordner)
+    assert "planer → Stakeholder (an dich)" in abschnitt
+    assert "architekt → planer</p>" in abschnitt
+    assert abschnitt.count("an-stakeholder") == 1
+
+
 def testFilterNachRolleUndFormBieteteNurVorhandeneWerteAn(ordner):
     anliegenAnlegen(ordner, 10, "Kritik", ("architekt", "planer"), "offen")
     anliegenAnlegen(ordner, 11, "Fragen", ("planer", "architekt"), "offen")

@@ -5,7 +5,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen
-from lesen.anliegenKopf import Anliegen, gelesene
+from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
 
 Verweis = Callable[[Anliegen, Path], str]
 
@@ -18,6 +18,7 @@ border-radius:5px;padding:4px 8px;font-family:inherit}
 .anliegen-spalte h3{color:var(--accent-text)}
 .anliegen-karte{background:var(--panel-2);border:1px solid var(--border);border-radius:6px;
 padding:6px 8px;margin-bottom:8px;font-size:.82rem}
+.anliegen-karte.an-stakeholder{border-left:3px solid var(--c-peak)}
 .anliegen-karte a{color:var(--accent-text);font-weight:600}
 .anliegen-karte p{margin:2px 0 0;color:var(--text-muted)}
 """
@@ -58,12 +59,16 @@ def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
 
 def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:
     pfad = verweis(anliegen, ordner)
+    anDich = anliegen.empfänger == stakeholder
+    klasse = "anliegen-karte an-stakeholder" if anDich else "anliegen-karte"
+    richtung = f"{anliegen.absender} → {anliegen.empfänger}" + (" (an dich)" if anDich else "")
     return (
-        f'<div class="anliegen-karte" data-rolle="{html.escape(rolle)}" '
+        f'<div class="{klasse}" data-rolle="{html.escape(rolle)}" '
         f'data-form="{html.escape(anliegen.typ)}">'
         f'<a href="{html.escape(pfad)}">{anliegen.nummer}</a> '
         f"{html.escape(titelLesen(anliegen.datei))}"
-        f"<p>{html.escape(anliegen.typ)} · Runde {anliegen.runde}</p></div>"
+        f"<p>{html.escape(anliegen.typ)} · Runde {anliegen.runde} · "
+        f"{html.escape(richtung)}</p></div>"
     )
 
 

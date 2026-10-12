@@ -238,7 +238,7 @@ def testAltbestandOhneSitzungHatLesbarenTitel(tmp_path):
     eintragRoh(tmp_path, {"zeit": "2026-10-04T12:17:11+00:00", "rolle": "a", "belegung": 1})
     seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
     assert "<h3>Altbestand, ohne Sitzung</h3>" in seite
-    assert '<td>–</td><td>–</td><td class="stand">–</td>' in seite
+    assert '<td>–</td><td class="auftrag">–</td><td class="stand">–</td>' in seite
 
 
 def testTitelNenntZyklusUndPhase(tmp_path):
@@ -386,7 +386,9 @@ def testTabellenPassenSichDemKastenAnStattZuScrollen():
     assert seite.count('<table class="auftraege">') == tabellenJeSeite
     assert "tabellen-hülle" not in seite
     assert "td.stand{white-space:nowrap" in seite
-    assert "overflow-wrap:anywhere" in seite
+    assert "td.auftrag{white-space:normal;overflow-wrap:anywhere}" in seite
+    assert "th{white-space:nowrap}" in seite
+    assert '<td class="auftrag">Reihenfolge</td>' in seite
     assert ".sitzungs-karte{min-width:0}" in seite
 
 

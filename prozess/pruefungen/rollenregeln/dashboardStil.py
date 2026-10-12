@@ -46,7 +46,8 @@ table.auftraege th{background:var(--panel-2);color:var(--accent-text);font-weigh
 table.auftraege td.rolle{color:var(--c-subagent)}
 .karten-spalte,.seiten-spalte,.kasten,.sitzungs-karte{min-width:0}
 table.auftraege{max-width:100%}
-table.auftraege td,table.auftraege th{overflow-wrap:anywhere}
+table.auftraege td,table.auftraege th{white-space:nowrap}
+table.auftraege td.rolle,table.auftraege td.auftrag{white-space:normal;overflow-wrap:anywhere}
 table.auftraege td.stand{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
 .legende ul{list-style:none;margin:0;padding:0}
 .legende li{display:flex;gap:8px;margin-bottom:9px}

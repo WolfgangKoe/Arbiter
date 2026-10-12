@@ -33,7 +33,7 @@ def tabelle(läufe: list[Lauf]) -> str:
     zeilen = "".join(
         f'<tr><td class="rolle">{html.escape(lauf.rolle)}</td>'
         f"<td>{html.escape(modellName(lauf.modell or fehlt))}</td>"
-        f"<td>{html.escape(lauf.ziel or fehlt)}</td>"
+        f'<td class="auftrag">{html.escape(lauf.ziel or fehlt)}</td>'
         f'<td class="stand">{dauerText(lauf.dauer)}</td>'
         f'<td class="stand">{kilo(lauf.belegung)}</td></tr>'
         for lauf in läufe
