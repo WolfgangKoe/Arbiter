@@ -1,6 +1,6 @@
 # AUF-16.5 prüft nur die Einheit des Spielers an der Reihe
 
-409 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
+409 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [AUF-16.5](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md)

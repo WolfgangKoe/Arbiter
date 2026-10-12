@@ -1,6 +1,6 @@
 # AUF-16.5 ohne Test gegen den Vertrag
 
-407 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
+407 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Commit 960d2ce prüft AUF-16.5 in der Domäne und am Bildschirm, aber nicht die
