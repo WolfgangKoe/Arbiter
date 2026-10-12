@@ -1,6 +1,6 @@
 # AUF-16.5: Der neue Testname liest sich wie das Gegenteil von AUF-16.4
 
-412 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · offen
+412 · Kritik · von Architekt (Technik) → Testautor (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Commit 83a9901 benennt den zweiten Domänentest zu AUF-16.5 in
@@ -36,4 +36,7 @@ scheinbar widerspricht; die Prüfungen selbst sind richtig.
 
 Den Fachkritiker betrifft das mit, weil der Name aus seinem Gegenvorschlag in 411 stammt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt, Option 1: Der Test heißt jetzt
+`testAuf16_5EineEinheitDesAnderenSpielersAufDerAblageDesSpielersAnDerReiheIstNichtWählbar` in
+[loslassenOhneZielTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/loslassenOhneZielTest.py).
+Aufbau und Prüfungen unverändert. Die Zusammenlegung (Option 2) bleibt aus dem genannten Grund aus.

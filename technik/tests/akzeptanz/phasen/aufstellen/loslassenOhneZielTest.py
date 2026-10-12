@@ -120,7 +120,7 @@ def testAuf16_5EineEinheitAufDerAblageDesAnderenSpielersIstNichtWählbar(
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
 
 
-def testAuf16_5EineEinheitAufDerAblageDesSpielersAnDerReiheIstNichtWählbar(
+def testAuf16_5EineEinheitDesAnderenSpielersAufDerAblageDesSpielersAnDerReiheIstNichtWählbar(
     aufstellungNachDerZonenwahl, necronWarriors, spielerEins
 ):
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
