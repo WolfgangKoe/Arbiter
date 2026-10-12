@@ -161,7 +161,7 @@ function ziehenBeenden(ereignis) {
   const istModell = start.classList.contains("modell")
   if (stelle) return istModell ? modellLoslassen(start, stelle) : einheitLoslassen(start, stelle)
   if (ablage && istModell) return modellZurücklegen(start, ablage)
-  // Regel: AUF-16.4, auf der eigenen Ablage keine Anfrage
+  // Regel: AUF-16.5 auf der Ablage des anderen Spielers, auf der eigenen keine Anfrage (AUF-16.4)
   if (ablage && ablage.dataset.spieler !== start.dataset.spieler) return einheitAufAblageLoslassen(start, ablage)
   // Regel: Ohne Ziel keine Anfrage, die Seite zeichnet den letzten Stand (V8)
   zeichnen(letzterSpielstand)

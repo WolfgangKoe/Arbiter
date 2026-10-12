@@ -54,6 +54,12 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
             abort(HTTPStatus.NOT_FOUND)
         return spieler
 
+    def ablageDerAnfrage() -> Spieler:
+        ablage = request.args.get("ablage", type=int)
+        if ablage is None:
+            abort(HTTPStatus.BAD_REQUEST)
+        return spielerMit(ablage)
+
     def einheitInDerAblage(spielernummer: int, einheitennummer: int) -> Einheit:
         spieler = spielerMit(spielernummer)
         einheit = ablageNachNummer(aufstellung, spieler).get(einheitennummer)
@@ -83,10 +89,7 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
 
     def modellZurücklegen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        ablage = request.args.get("ablage", type=int)
-        if ablage is None:
-            abort(HTTPStatus.BAD_REQUEST)
-        aufstellung.modellZurücklegen(modell, spielerMit(ablage))
+        aufstellung.modellZurücklegen(modell, ablageDerAnfrage())
         return spielstandLiefern()
 
     def einheitLoslassen(spielernummer: int, einheitennummer: int):
@@ -96,10 +99,7 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
 
     def einheitAufAblageLoslassen(spielernummer: int, einheitennummer: int):
         einheit = einheitInDerAblage(spielernummer, einheitennummer)
-        ablage = request.args.get("ablage", type=int)
-        if ablage is None:
-            abort(HTTPStatus.BAD_REQUEST)
-        aufstellung.einheitAufAblageLoslassen(einheit, spielerMit(ablage))
+        aufstellung.einheitAufAblageLoslassen(einheit, ablageDerAnfrage())
         return spielstandLiefern()
 
     def zurück():

@@ -109,6 +109,25 @@ def testEineEinheitOhneZahlenFürXUndYIstBeimLoslassenEineFehlerhafteAnfrage(auf
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
+def testEineEinheitOhneAblageZumLoslassenAufDieAblageIstEineFehlerhafteAnfrage(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.delete(pfadDerStelle.format(1, 1))
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+@pytest.mark.parametrize(("einheitennummer", "ablage"), [(1, 3), (3, 2)])
+def testEineEinheitAufDieAblageEinesUnbekanntenSpielersOderOhneKennungIstNichtGefunden(
+    aufstellung, einheitennummer, ablage
+):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.delete(pfadDerStelle.format(1, einheitennummer) + f"?ablage={ablage}")
+
+    assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
 def testEinFremderHostBekommtBadRequest(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 
