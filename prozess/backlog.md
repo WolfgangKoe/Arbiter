@@ -10,6 +10,10 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
   Spalte der wartenden Anliegen und „wartet auf“ auf der Karte (Anliegen 275). Auslöser:
   Eine Rolle oder der Stakeholder braucht eins davon; eingetreten (384 wartet auf 385), in
   die Retro 5.
+- Stand und Dashboard nennen bei einem `Kommentar:` des Stakeholders ohne `Stellungnahme:`
+  darunter die andere Rolle des Anliegens als dran (`anliegenDran.py`,
+  [Ablauf](ablauf.md#anliegen)). Auslöser: Ein Kommentar bleibt liegen; eingetreten (384), in
+  die Retro 5.
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Eine Regel steht im Verdacht,
   nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item

@@ -1,7 +1,6 @@
 # Schreibgrenze auch für Bash
 
 384 · Anliegen · von Stakeholder → Organisationsentwickler (Prozess) · Runde 1/3 · angenommen
-Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
 
 ## Runde 1
 **Befund.** Auftrag des Stakeholders: Die Schreibgrenze greift nur bei Write und Edit; Rollen
@@ -44,8 +43,6 @@ Bordmittel geprüft ([Berechtigungen](https://code.claude.com/docs/en/permission
 [Subagenten](https://code.claude.com/docs/en/sub-agents)): Edit-Verbote in `permissions.deny`
 greifen auch für sed, tee und Umleitungen, aber für alle Rollen gleich, nicht für Python. Die
 Sandbox gilt auch für alle gleich und träfe Pytest-Caches und das Löschen erledigter Anliegen.
-`disallowedTools: Bash(git commit *)` nimmt der Rolle ganz Bash; `permissionMode` gilt im
-Auto-Modus nicht.
 
 **F1 · Wie weit sperren?**
 A: Hook nach 3 für alle Rollen. Empfehlung: ein Mechanismus für alle; jede Rolle ruft
@@ -59,3 +56,6 @@ und [Ablauf](../../prozess/ablauf.md#anliegen), 3 in Anliegen 385.
 Schreibt eine Rolle per Bash im Projekt oder committet, wird sie gesperrt; die Meldung nennt
 Write und Edit. Lücke: [Regeln](../../prozess/regeln.md#rollenregeln).
 Kommentar: Bitte hier melden, sobald alles umgesetzt ist, damit ich das Anliegen auf "erledigt" setzen kann.
+Stellungnahme: Alles umgesetzt (oben), du kannst `erledigt` setzen. Dass seitdem keine Rolle
+löschen kann, klärt Anliegen 418. Die Meldung kommt spät, weil ein Kommentar im Anliegen bisher niemanden dran
+machte; das regelt jetzt [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen).

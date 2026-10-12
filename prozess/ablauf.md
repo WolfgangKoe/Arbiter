@@ -179,7 +179,8 @@ Kommentar: .
 ```
 - Der Stakeholder kommentiert überall in der Datei: eine eigene Zeile `Kommentar: <Text>`
   unter der Stelle, die er meint; die letzte Zeile ist für Allgemeines. Zu anderen Dateien
-  kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:`. Er gibt frei mit
+  kommentiert er neben ihrem Link in Plan, Review oder Retro, in Anliegen mit `Antwort:` oder
+`Kommentar:` ([Anliegen](#anliegen)). Er gibt frei mit
   `Freigabe: ja`. Diese Zeilen ändert nur er. Mechanismus: nur Text.
 - Nachkorrektur: Der Autor (Plan: Planer, Review: Reviewer, Retro: Organisationsentwickler)
   ändert die Datei nach dem Kommentar und schreibt darunter eine Zeile `Stellungnahme: <was,
@@ -252,8 +253,7 @@ Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
 `.claude/agents/` oder Stakeholder, dahinter darf die Perspektive in Klammern stehen.
 Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`)
-und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); die Legende
-nur Text.
+und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)).
 
 Form | der Empfänger soll | Absender
 ---|---|---
@@ -279,12 +279,13 @@ widersprechen, Frage verwerfen | Empfänger, mit Begründung | abgelehnt | Absen
 nach Runde 3/3 weiter uneins | Absender | eskaliert | Stakeholder: entscheidet
 abschließen | Absender | erledigt | niemand: `anliegenregeln/erledigteLoeschen.py` löscht die Datei
 
-Ist der Stakeholder Empfänger oder Absender, steht unter dem Kopf die Legende, die der
-Absender beim Anlegen kopiert; der Stakeholder ersetzt den Status im Kopf durch einen Wert
-daraus:
-```
-Legende: Status im Kopf · als Empfänger angenommen, rückfrage, abgelehnt · als Absender erledigt, offen (neue Runde) · unter einer Frage `Antwort: .` (Empfehlung), `Antwort: B` oder `Antwort: <Text>`
-```
+Seine Züge in einem Anliegen setzt der Stakeholder im Formular des Dashboards: Es bietet nur
+die Status an, die ihm die Tabelle zuweist, und je Frage ein Feld für die Antwort; eine
+Legende im Anliegen entfällt (Anliegen 420). Mechanismus: `rollenregeln/dashboardAnliegenSeiten.py`
+(`formular`), `rollenregeln/zuegeUebernehmen.py` ([Regeln](regeln.md#rollenregeln)).
+Ein `Kommentar:` von ihm, der den Status nicht ändert, geht an die andere Rolle des Anliegens:
+Sie antwortet mit einer Zeile `Stellungnahme:` darunter und ist bis dahin dran (Anliegen
+384). Mechanismus: nur Text; der Stand nennt es noch nicht ([Backlog](backlog.md)).
 Die Moderation verlinkt Fragen, er antwortet im Anliegen; ihre Vorschläge korrigiert er mit
 einer Zeile `Kommentar:` darunter ([Moderator](../.claude/agents/moderator.md)). Mechanismus:
 nur Text.
