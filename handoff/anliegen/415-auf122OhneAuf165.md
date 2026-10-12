@@ -1,6 +1,6 @@
 # AUF-12.2 zählt AUF-16.5 nicht auf, obwohl AUF-16.5 sich darauf beruft
 
-415 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · angenommen
+415 · Kritik · von Fachkritiker (Domäne) → Anforderungsautor (Domäne) · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Bei der Abnahme von Plan 5 stimmt das Gebaute mit AUF-16.5 überein: Lässt jemand
