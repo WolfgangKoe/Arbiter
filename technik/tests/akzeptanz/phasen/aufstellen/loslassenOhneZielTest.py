@@ -12,6 +12,7 @@ from tests.akzeptanz.bildschirm import (
     einheitenKarteVon,
     gründeAlsText,
     inhaltDerSeite,
+    knopfDerSeite,
     mitDerMausZiehen,
     mitteVon,
     punktAufDerKarte,
@@ -19,6 +20,7 @@ from tests.akzeptanz.bildschirm import (
     sperrmeldungWarten,
     ziehenOhneAnfrage,
 )
+from tests.akzeptanz.dienst import einheitAufAblageLoslassen, spielstandVon
 from tests.akzeptanz.handgriffe import (
     einheitAufstellen,
     modelleSetzen,
@@ -118,6 +120,38 @@ def testAuf16_5EineEinheitAufDerAblageDesAnderenSpielersIstNichtWählbar(
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
 
 
+def testAuf16_5EineEinheitAufDerAblageDesAnderenSpielersAmZugIstNichtWählbar(
+    aufstellungNachDerZonenwahl, necronWarriors, spielerEins
+):
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    einheitInAufstellungDavor = aufstellungNachDerZonenwahl.einheitInAufstellung
+
+    gründe = sperrgründe(
+        aufstellungNachDerZonenwahl.einheitAufAblageLoslassen, necronWarriors, spielerEins
+    )
+
+    assert gründe == {Grund.nichtWählbar}
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
+
+
+@pytest.mark.parametrize(
+    ("einheitenname", "spielernummer"),
+    [("boyz", 2), ("necronWarriors", 1)],
+    ids=["boyzAufAblageVonSpielerZwei", "necronWarriorsAufAblageVonSpielerEins"],
+)
+def testAuf16_5DerDienstSperrtEineEinheitAufDerAblageDesAnderenSpielersMitNichtWählbar(
+    dienst, aufstellungNachDerZonenwahl, request, einheitenname, spielernummer
+):
+    einheit = request.getfixturevalue(einheitenname)
+    davor = spielstandVon(dienst)
+
+    antwort = einheitAufAblageLoslassen(dienst, aufstellungNachDerZonenwahl, einheit, spielernummer)
+
+    assert antwort.status_code == HTTPStatus.CONFLICT
+    assert antwort.get_json() == {"gründe": [Grund.nichtWählbar.value], "spielstand": davor}
+
+
 def testAuf16_5DieSeiteNenntBeiEinerEinheitAufDerAblageDesAnderenSpielersDenGrund(
     bildschirm, aufstellungNachDerZonenwahl
 ):
@@ -132,4 +166,5 @@ def testAuf16_5DieSeiteNenntBeiEinerEinheitAufDerAblageDesAnderenSpielersDenGrun
 
     assert antwort.value.status == HTTPStatus.CONFLICT
     assert genannt == gründeAlsText({Grund.nichtWählbar})
+    assert knopfDerSeite(seite, "gemeinsam übergehen").count() == 0
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor

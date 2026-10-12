@@ -1,6 +1,6 @@
 # AUF-16.5 prüft nur die Einheit des Spielers an der Reihe
 
-409 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · offen
+409 · Kritik · von Fachkritiker (Domäne) → Testautor (Technik) · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [AUF-16.5](../../domaene/anforderungen/phasen/aufstellen/loslassenOhneZiel.md)
@@ -32,4 +32,9 @@ Seite zeigt ihn heute nirgends.
 2. Im Bildschirmtest zu AUF-16.5 zusätzlich
    `assert knopfDerSeite(seite, "gemeinsam übergehen").count() == 0`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Statt den bestehenden Test umzubauen (er hängt an den gesetzten
+Modellen der Boyz), steht der zweite Fall als eigener Domänentest
+`testAuf16_5EineEinheitAufDerAblageDesAnderenSpielersAmZugIstNichtWählbar`: Necron Warriors auf
+der *Ablage* von `spielerEins`, `{Grund.nichtWählbar}`, *Stellen* wie davor. Der Dienst-Test aus
+407 deckt beide Richtungen ab. Der Bildschirmtest prüft nun, dass *gemeinsam übergehen* fehlt.
+Alles in [loslassenOhneZielTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/loslassenOhneZielTest.py).

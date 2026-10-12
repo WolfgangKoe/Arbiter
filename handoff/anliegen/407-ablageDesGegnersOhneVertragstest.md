@@ -1,6 +1,6 @@
 # AUF-16.5 ohne Test gegen den Vertrag
 
-407 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · offen
+407 · Kritik · von Architekt (Technik) → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Commit 960d2ce prüft AUF-16.5 in der Domäne und am Bildschirm, aber nicht die
@@ -33,4 +33,9 @@ einzige Zeile der Tabelle ohne Testclient-Test.
 Domänentest und Bildschirmtest bleiben, wie sie sind: Sie lesen sich wie das Kriterium,
 benennen nach es.md 4 und folgen 16.4 in Aufbau und Prüfungen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. Der Handgriff `einheitAufAblageLoslassen`
+steht in [dienst.py](../../technik/tests/akzeptanz/dienst.py). Der Test
+`testAuf16_5DerDienstSperrtEineEinheitAufDerAblageDesAnderenSpielersMitNichtWählbar` in
+[loslassenOhneZielTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/loslassenOhneZielTest.py)
+prüft 409, `gründe` und unveränderten `spielstand`. Er läuft für beide Fälle aus 409 (Boyz auf
+der Ablage von Spieler 2, Necron Warriors auf der von Spieler 1).

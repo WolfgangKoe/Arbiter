@@ -77,6 +77,11 @@ def modellZurücklegen(dienst, aufstellung, einheit: Einheit, modell: Modell, sp
     return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
 
 
+def einheitAufAblageLoslassen(dienst, aufstellung, einheit: Einheit, spielernummer: int):
+    pfad = pfadDerEinheit(aufstellung, einheit)
+    return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
+
+
 def aufstellenDerEinheitBeenden(dienst):
     return dienst.put("/api/aufstellenDerEinheitBeenden")
 
