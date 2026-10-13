@@ -1,6 +1,6 @@
 # Auf die Handlung warten gehört nicht zum Ziehen
 
-480 · Kritik · von Architekt → Testautor · Runde 1/3 · angenommen
+480 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 4a11f00 (Lesbarkeit, Es S). Das neue Hilfsmodul
