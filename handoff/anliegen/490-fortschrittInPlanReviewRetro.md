@@ -43,5 +43,7 @@ SubagentStop, PostToolUse) nutzen wir schon.
 **Stellungnahme (Regelumsetzer).** Teil 1 gebaut: `standregeln/fortschritt.py` (SubagentStop,
 PostToolUse Bash), Test `standregeln/fortschrittTest.py`, Zeile in [Regeln](../../prozess/regeln.md#standregeln).
 Haken, `Hindernis:` und `Kommentar:` bleiben beim Neuschreiben stehen (Grundlage für Teil 2
-und 3). Offen: Teil 2 (Befehl, Hindernis als Anliegen) und Teil 3 (Dashboard), je ein Lauf;
+und 3). Nach deinem Kommentar: Ist ein Item gelöscht, gelten auch Kritik an den Tests,
+„grün“, Kritik am Code und „abgenommen“ als geschehen, und „DoD über das Inkrement“, sobald
+kein Item mehr offen ist (Test `testEinFaktHaktSelbstAb`, `testEinOffenesItem…`). Offen: Teil 2 (Befehl, Hindernis als Anliegen) und Teil 3 (Dashboard), je ein Lauf;
 Status bleibt `offen`, bis alle drei stehen.

@@ -60,27 +60,27 @@ An dich: keins offen. Die übrigen: Technik und Prozess ([Moderation](moderation
 
 ## Fortschritt
 - [x] Testautor: Tests zu Item ziehen
-- [ ] Fachkritiker: Kritik an den Tests zu Item ziehen
-- [ ] Architekt: Kritik an den Tests zu Item ziehen
-- [ ] Implementierer: Tests zu Item ziehen grün
-- [ ] Reviewer: Kritik am Code zu Item ziehen
-- [ ] Fachkritiker: Item ziehen abgenommen
+- [x] Fachkritiker: Kritik an den Tests zu Item ziehen
+- [x] Architekt: Kritik an den Tests zu Item ziehen
+- [x] Implementierer: Tests zu Item ziehen grün
+- [x] Reviewer: Kritik am Code zu Item ziehen
+- [x] Fachkritiker: Item ziehen abgenommen
 - [x] Planer: Item ziehen gelöscht
 - [x] Testautor: Tests zu Item gesperrtStehenUndZurueck
-- [ ] Fachkritiker: Kritik an den Tests zu Item gesperrtStehenUndZurueck
-- [ ] Architekt: Kritik an den Tests zu Item gesperrtStehenUndZurueck
-- [ ] Implementierer: Tests zu Item gesperrtStehenUndZurueck grün
-- [ ] Reviewer: Kritik am Code zu Item gesperrtStehenUndZurueck
-- [ ] Fachkritiker: Item gesperrtStehenUndZurueck abgenommen
+- [x] Fachkritiker: Kritik an den Tests zu Item gesperrtStehenUndZurueck
+- [x] Architekt: Kritik an den Tests zu Item gesperrtStehenUndZurueck
+- [x] Implementierer: Tests zu Item gesperrtStehenUndZurueck grün
+- [x] Reviewer: Kritik am Code zu Item gesperrtStehenUndZurueck
+- [x] Fachkritiker: Item gesperrtStehenUndZurueck abgenommen
 - [x] Planer: Item gesperrtStehenUndZurueck gelöscht
 - [x] Testautor: Tests zu Item beendenUndSperreOhneStelle
-- [ ] Fachkritiker: Kritik an den Tests zu Item beendenUndSperreOhneStelle
-- [ ] Architekt: Kritik an den Tests zu Item beendenUndSperreOhneStelle
-- [ ] Implementierer: Tests zu Item beendenUndSperreOhneStelle grün
-- [ ] Reviewer: Kritik am Code zu Item beendenUndSperreOhneStelle
-- [ ] Fachkritiker: Item beendenUndSperreOhneStelle abgenommen
+- [x] Fachkritiker: Kritik an den Tests zu Item beendenUndSperreOhneStelle
+- [x] Architekt: Kritik an den Tests zu Item beendenUndSperreOhneStelle
+- [x] Implementierer: Tests zu Item beendenUndSperreOhneStelle grün
+- [x] Reviewer: Kritik am Code zu Item beendenUndSperreOhneStelle
+- [x] Fachkritiker: Item beendenUndSperreOhneStelle abgenommen
 - [x] Planer: Item beendenUndSperreOhneStelle gelöscht
-- [ ] Reviewer: DoD über das Inkrement
+- [x] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Stakeholder: Freigabe Review 5
 

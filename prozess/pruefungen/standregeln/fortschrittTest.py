@@ -49,7 +49,23 @@ def testEinFaktHaktSelbstAb(tmp_path, gitRepo):
     text = plan.read_text(encoding="utf-8")
     assert "- [x] Testautor: Tests zu Item stellen\n" in text
     assert "- [x] Planer: Item stellen gelöscht\n" in text
+    for zeile in (
+        "Fachkritiker: Kritik an den Tests zu Item stellen",
+        "Architekt: Kritik an den Tests zu Item stellen",
+        "Implementierer: Tests zu Item stellen grün",
+        "Reviewer: Kritik am Code zu Item stellen",
+        "Fachkritiker: Item stellen abgenommen",
+        "Reviewer: DoD über das Inkrement",
+    ):
+        assert f"- [x] {zeile}\n" in text
+
+
+def testEinOffenesItemLässtDieSchritteDavorOffen(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
     assert "- [ ] Fachkritiker: Item stellen abgenommen\n" in text
+    assert "- [ ] Reviewer: DoD über das Inkrement\n" in text
 
 
 def testEinKriteriumOhneTestLässtDieZeileOffen(tmp_path, gitRepo):

@@ -9,7 +9,7 @@ from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
 from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, projektordner
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import anforderungUmfasst, umfasst, zuordnungen
-from lesen.plan import itemNamen, zyklus
+from lesen.plan import itemNamen, offeneItems, zyklus
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
@@ -72,12 +72,14 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
 def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
     name = itemName.removesuffix(".md")
     gelöscht = not (wurzel / itemsOrdner / itemName).is_file()
+    # Regel: Ablauf, Technikphase 5 (gelöscht wird erst nach der Abnahme)
+    folge = gelöscht or None
     return [
         Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName)),
-        *(Zeile(rolle, f"Kritik an den Tests zu Item {name}") for rolle in kritiker),
-        Zeile("Implementierer", f"Tests zu Item {name} grün"),
-        Zeile("Reviewer", f"Kritik am Code zu Item {name}"),
-        Zeile("Fachkritiker", f"Item {name} abgenommen"),
+        *(Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker),
+        Zeile("Implementierer", f"Tests zu Item {name} grün", folge),
+        Zeile("Reviewer", f"Kritik am Code zu Item {name}", folge),
+        Zeile("Fachkritiker", f"Item {name} abgenommen", folge),
         Zeile("Planer", f"Item {name} gelöscht", gelöscht),
     ]
 
@@ -88,7 +90,7 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     zeilen = [zeile for name in itemNamen(wurzel) for zeile in itemzeilen(wurzel, name)]
     return [
         *zeilen,
-        Zeile("Reviewer", "DoD über das Inkrement"),
+        Zeile("Reviewer", "DoD über das Inkrement", review or not offeneItems(wurzel)),
         Zeile("Reviewer", "Review geschrieben", review),
         Zeile("Stakeholder", f"Freigabe Review {aktuell.zyklus}", freigegeben),
     ]
