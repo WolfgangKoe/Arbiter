@@ -109,13 +109,15 @@ function darunter(ereignis) {
   return document.elementFromPoint(ereignis.clientX, ereignis.clientY)
 }
 
+// Regel: V8, ein Zug beginnt erst bei mehr als 4 px Abweichung in x oder y
+const zugschwelle = 4
 let gezogen = null
 let ziehenStart = null
 
 function ziehenBeginnen(ereignis) {
   if (!ereignis.isPrimary || ereignis.button !== 0) return
   gezogen = ereignis.target.closest(".karte .modell, .einheitenKarte")
-  ziehenStart = { pointerId: ereignis.pointerId, x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy") }
+  ziehenStart = { pointerId: ereignis.pointerId, x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy"), begonnen: false }
   gezogen?.setPointerCapture(ereignis.pointerId)
 }
 
@@ -129,6 +131,9 @@ function ziehenZurücknehmen(element) {
 
 function ziehenFolgen(ereignis) {
   if (!gezogen || ereignis.pointerId !== ziehenStart.pointerId) return
+  const weite = Math.max(Math.abs(ereignis.clientX - ziehenStart.x), Math.abs(ereignis.clientY - ziehenStart.y))
+  ziehenStart.begonnen ||= weite > zugschwelle
+  if (!ziehenStart.begonnen) return
   if (gezogen.classList.contains("modell")) {
     // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
     const punkt = punktAufDerKarte(ereignis)
@@ -152,10 +157,8 @@ function ziehenBeenden(ereignis) {
   if (!start) return
   // Warum: Der gezogene Kreis liegt unter dem Zeiger; zum Prüfen steht er wieder an seinem Platz
   ziehenZurücknehmen(start)
-  if (darunter(ereignis)?.closest(".karte .modell, .einheitenKarte") === start) {
-    // Regel: Endet das Ziehen über dem Element, an dem es begann, ist es ein Klick (V8)
-    return start.klicken?.()
-  }
+  // Regel: Ohne Zug ist es ein Klick (V8)
+  if (!ziehenStart.begonnen) return start.klicken?.()
   const stelle = stelleAufDerKarte(ereignis)
   const ablage = darunter(ereignis)?.closest(".armeeKarte")
   const istModell = start.classList.contains("modell")

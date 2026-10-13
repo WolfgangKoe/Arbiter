@@ -74,6 +74,8 @@ def _formationenPrüfen(armee: Armee, formationen: Mapping[str, Formation]) -> N
             raise ValueError(f"Die Einheit {einheit.name} hat keine Formation")
         if sum(formation.reihen) != len(einheit.modelle):
             raise ValueError(f"Die Reihen der Formation von {einheit.name} zählen andere Modelle")
+        if len({modell.base.durchmesser for modell in einheit.modelle}) > 1:
+            raise ValueError(f"Die Modelle von {einheit.name} haben verschiedene Durchmesser")
 
 
 def ausgangslageAus(ausgangslage: dict, onlyWar: dict, formation: dict) -> Ausgangslage:

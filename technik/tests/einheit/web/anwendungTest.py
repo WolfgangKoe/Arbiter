@@ -77,6 +77,17 @@ def testEineStelleMitUnendlicherOderUnbestimmterZahlIstEineFehlerhafteAnfrage(au
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
+def testEineSehrGroßeGanzeZahlIstKeinÜberlaufSondernEineGültigeStelle(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+    groß = "1" + "0" * 400
+
+    antwort = dienst.put(
+        pfadDerStelle.format(1, 1), data=f'{{"x": {groß}, "y": 2}}', content_type="application/json"
+    )
+
+    assert antwort.status_code == HTTPStatus.CONFLICT
+
+
 def testEinModellOhneAblageZumZurücklegenIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 

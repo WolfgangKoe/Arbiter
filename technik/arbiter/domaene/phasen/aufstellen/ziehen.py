@@ -8,7 +8,7 @@ from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Formation, Grenzen
 from arbiter.domaene.spielobjekte import Base, Einheit, Modell, Stelle
 
-# Regel: AUF-8.5, die Mittelpunkte benachbarter Reihen liegen auf 1/100″ genau
+# Regel: domaene/daten/formation.yaml, die Mittelpunkte benachbarter Reihen liegen auf 1/100″ genau
 _hundertstel = 100
 
 

@@ -25,7 +25,9 @@ _erlaubteHosts = ["127.0.0.1", "localhost"]
 
 def _zahl(körper: dict, name: str) -> Fraction:
     wert = körper.get(name)
-    if isinstance(wert, bool) or not isinstance(wert, int | float) or not isfinite(wert):
+    if isinstance(wert, bool) or not isinstance(wert, int | float):
+        abort(HTTPStatus.BAD_REQUEST)
+    if isinstance(wert, float) and not isfinite(wert):
         abort(HTTPStatus.BAD_REQUEST)
     # Regel: architektur.md, S2, die Dezimalzahl wie gesendet
     return Fraction(str(wert))

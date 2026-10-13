@@ -77,6 +77,15 @@ def testReihenMitAndererModellzahlAlsDieEinheitIstEinFehlerBeimLaden():
         ausgangslageAus({"Armee": armeen}, onlyWar, falsch)
 
 
+def testEineEinheitMitVerschiedenenDurchmessernIstEinFehlerBeimLaden():
+    gemischt = {"Einheit": "Boyz", "durchmesser": [32, 40]}
+    zwei = {"abstand": 1.5, "formation": {"Boyz": [2]}}
+    onlyWar = onlyWarMitKante(60)
+
+    with pytest.raises(ValueError):
+        ausgangslageAus({"Armee": [[gemischt], [gemischt]]}, onlyWar, zwei)
+
+
 def testEineReiheOhneModellIstEinFehlerBeimLaden():
     zweiModelle = {"Einheit": "Boyz", "durchmesser": [32, 32]}
     leer = {"abstand": 1.5, "formation": {"Boyz": [2, 0]}}
