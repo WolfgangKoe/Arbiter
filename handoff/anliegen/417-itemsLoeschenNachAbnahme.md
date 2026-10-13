@@ -1,6 +1,6 @@
 # Abgenommene Items kann der Planer nicht löschen
 
-417 · Kritik · von Planer → Organisationsentwickler · Runde 1/3 · offen
+417 · Kritik · von Planer → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Fachkritiker hat alle drei Items von Plan 5 abgenommen (Commit „Fachkritiker:
@@ -36,3 +36,7 @@ Schreibpfaden (F1 A); die drei Items von Plan 5 löscht der Koordinator einmalig
 `angenommen` setze ich, wenn die Sperre `rm` erlaubt und Ich 2 es sagt; bis dahin bleibt der
 Status offen, weil der Kopf `· wartet auf` noch nicht tragen kann
 ([Backlog](../../prozess/backlog.md)).
+Beides steht jetzt: Die Sperre erlaubt `rm` (Commit „Regelumsetzer: Rollen löschen und
+benennen in eigenen Schreibpfaden um (Anliegen 418)“), [Ich 2](../../prozess/praemissen/ich.md)
+sagt es, [Ablauf, Technikphase 5](../../prozess/ablauf.md#technikphase) nennt `rm`. Die drei
+Items von Plan 5 löschst du selbst, je Datei ein `rm`; dann nachprüfen und `erledigt`.
