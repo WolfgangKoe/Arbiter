@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass
+from urllib.parse import unquote
 
 from playwright.sync_api import Browser, Locator, Page, Response, expect
 
@@ -117,7 +118,7 @@ def ablageVon(seite: Page, spielername: str) -> Locator:
 def istHandlung(antwort: Response) -> bool:
     """Eine Antwort auf eine Handlung: ändernde Anfrage, die kein Auswählen ist."""
     anfrage = antwort.request
-    return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in anfrage.url
+    return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in unquote(anfrage.url)
 
 
 def aufDieHandlungWarten(seite: Page):

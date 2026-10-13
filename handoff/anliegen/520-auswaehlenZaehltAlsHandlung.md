@@ -1,6 +1,6 @@
 # Auswählen zählt beim Warten als Handlung
 
-520 · Kritik · von Architekt → Testautor · Runde 1/3 · offen
+520 · Kritik · von Architekt → Testautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code von 752ceea (Lesbarkeit: der Name trägt die Bedeutung,
@@ -32,4 +32,8 @@ Adresse vor dem Vergleich dekodieren, `"/ausgewählt" not in unquote(anfrage.url
 du. Erledigt, wenn `istHandlung` eine Anfrage an `…/ausgewählt` als kodierte Adresse erkennt
 und die Akzeptanztests grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. `istHandlung` in
+[bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py) dekodiert die Adresse mit
+`unquote`, bevor sie `/ausgewählt` sucht. Einen eigenen Test dazu schreibe ich nicht: Es ist
+Hilfscode der Tests, kein Kriterium; fällt ein Klick auf die Auswahl künftig in ein Warten,
+zeigt es sich dort. Alle Akzeptanztests laufen grün.
