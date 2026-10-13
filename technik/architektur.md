@@ -27,14 +27,13 @@ Ordner entstehen mit dem ersten Item, das sie braucht. Zusammenspiel von `web/` 
   (`yaml.safe_load`). Prüft: nur Text; Auslöser: erstes Modul in `speicher/`.
 
 ## Grundschnitt der Domäne
-`arbiter/domaene/` spiegelt `domaene/anforderungen/` (Anliegen 345):
+`arbiter/domaene/` spiegelt `domaene/anforderungen/`:
 - Ein Ordner der Anforderungen ist ein Modul (`spielobjekte.py`), ein Paket
   (`phasen/aufstellen/__init__.py`), sobald eine seiner Anforderungen ein Modul hat. Darin
   liegt, was mehrere seiner Anforderungen brauchen: `Aufstellung`, die eine Tür zum Stand der
   Phase, oder die Spielobjekte.
 - Eine Anforderung mit eigenen Regeln der Domäne wird ein gleichnamiges Modul:
-  `phasen/aufstellen/auswahl.md` → `phasen/aufstellen/auswahl.py` (`Auswahl`),
-  `missionsvorbereitung/ausgangslage.py` (`Ausgangslage`, `Aufstellungszone`). Anzeige und
+  `phasen/aufstellen/auswahl.md` → `phasen/aufstellen/auswahl.py` (`Auswahl`). Anzeige und
   Bedienung (`karte.md`) liegen in `web/` und `frontend/`.
 - Ohne Anforderung nur die Werkzeuge `sperre.py` (`Sperre`, `Grund`) und `messen.py` (M1).
 

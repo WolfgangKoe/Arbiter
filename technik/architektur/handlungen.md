@@ -42,8 +42,12 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
   `armeeKarte` darunter, sonst keins: keine Anfrage, die Seite zeichnet den letzten Stand
   (AUF-16.2). Eine *Einheit* auf der *Ablage* ihres *Spielers*: keine Anfrage (AUF-16.4), auf
   der des anderen: V5 (AUF-16.5). Warum: Eine Antwort 200 beendete die `sperrmeldung` (V7),
-  doch Loslassen ohne Ziel ist keine Handlung (AUF-12.3). Endet das
-  Ziehen über dem Element, an dem es begann, ist es ein Klick (V2), sonst wählt es nicht aus.
+  doch Loslassen ohne Ziel ist keine Handlung (AUF-12.3).
+  Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr als 4 px (`zugschwelle`) von seinem
+  Startpunkt abweicht; erst dann folgt das Element dem Zeiger. Vorbild: `dragStartThresholdPx`
+  in ArbiterMap (`interaction_profile.js`). Ohne Zug ist es ein Klick: auf einer *Einheit* der
+  *Ablage* V2, sonst nichts. Mit Zug ist es Loslassen wie oben, auch über dem Element, an dem
+  er begann (AUF-8.2), und wählt nie aus.
 
 Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5 und V6 (409 gleich
 `sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
