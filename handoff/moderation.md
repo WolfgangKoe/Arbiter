@@ -13,7 +13,7 @@ an einem Item.
 - Regelumsetzer: Anliegen 367 (Teil 3 erst nach
   368); Nachprüfung von Anliegen 360; danach der Teil
   des Regelumsetzers aus 384.
-- Organisationsentwickler: [384](anliegen/384-schreibgrenzeAuchFuerBash.md) (F1 A, Antwort
+- Organisationsentwickler: Anliegen 384 (F1 A, Antwort
   liegt vor, noch uncommittet), Anliegen 369,
   Anliegen 376.
 - Planer, Architekt, UX, Reviewer, Fachkritiker, Anforderungsautor: keins.
