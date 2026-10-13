@@ -1,5 +1,6 @@
-"""Mini-Server des Dashboards (WSGI): zeigt die Anliegen, merkt Züge des Stakeholders vor."""
+"""Mini-Server des Dashboards (WSGI): zeigt die Anliegen, legt Züge des Stakeholders sofort ab."""
 
+import os
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -21,9 +22,12 @@ from rollenregeln.dashboardAnliegenSeiten import (
 )
 from rollenregeln.dashboardHinweise import adresse, lokalesSchema, vorgabePort
 from rollenregeln.eingang import Zug, verworfeneLeeren, zugVormerken
+from rollenregeln.zuegeUebernehmen import übernehmen
 
 htmlTyp = "text/html; charset=utf-8"
 anliegenPfad = "/anliegen/"
+prüfskripteOrdner = "prozess/pruefungen"
+neustartPrüfIntervall = 1
 
 
 @dataclass(frozen=True)
@@ -76,6 +80,7 @@ def zugsendung(ordner: Path, nummer: int, körper: bytes) -> Antwort:
     felder = parse_qs(körper.decode("utf-8"))
     for zug in zügeAusFormular(nummer, felder):
         zugVormerken(ordner, zug)
+    übernehmen(ordner)
     return weiterleitung(f"{anliegenPfad}{nummer}")
 
 
@@ -145,16 +150,28 @@ def serverErzeugen(ordner: Path, port: int) -> WSGIServer:
     return make_server(adresse, port, anwendung(ordner))
 
 
-def hauptlauf(argumente: list[str]) -> int:
+def quellenStand(ordner: Path) -> tuple[tuple[str, int], ...]:
+    """Änderungszeiten aller Prüfskripte; ändern sie sich, läuft der Server mit altem Code."""
+    skripte = sorted((ordner / prüfskripteOrdner).rglob("*.py"))
+    return tuple((str(skript), skript.stat().st_mtime_ns) for skript in skripte)
+
+
+def hauptlauf(argumente: list[str]) -> None:
     port = int(argumente[0]) if argumente else vorgabePort
-    server = serverErzeugen(projektordner(), port)
+    ordner = projektordner()
+    server = serverErzeugen(ordner, port)
+    server.timeout = neustartPrüfIntervall
+    anfang = quellenStand(ordner)
     print(f"{lokalesSchema}://{adresse}:{port}/  (beenden mit Strg+C)")
     try:
-        server.serve_forever()
+        while quellenStand(ordner) == anfang:
+            server.handle_request()
     except KeyboardInterrupt:
-        pass
-    return 0
+        return
+    # Warum: Der Stakeholder startet den Server nicht neu, wenn sich der Code geändert hat
+    server.server_close()
+    os.execv(sys.executable, [sys.executable, *sys.argv])
 
 
 if __name__ == "__main__":
-    sys.exit(hauptlauf(sys.argv[1:]))
+    hauptlauf(sys.argv[1:])

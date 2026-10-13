@@ -39,7 +39,7 @@ werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 # Warum: Diese Hilfsmodule haben keine Anforderung hinter sich (Anliegen 257).
-akzeptanzHilfsmodule = {"handgriffe.py", "bildschirm.py", "dienst.py"}
+akzeptanzHilfsmodule = {"handgriffe.py", "bildschirm.py", "dienst.py", "ziehen.py"}
 ausgeschlosseneOrdner = {
     *altbestandOrdner,
     ".git",

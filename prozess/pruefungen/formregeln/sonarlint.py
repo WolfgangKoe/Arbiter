@@ -15,7 +15,7 @@ erweiterungenOrdner = Path.home() / ".vscode" / "extensions"
 umgebungsvariable = "SONARLINT_ERWEITERUNG"
 wartezeitSekunden = 120
 # Warum: Ein Update der Erweiterung brächte still neue Regeln; die Version hebt man bewusst.
-erwarteteVersion = "6.0."
+erwarteteVersion = "6.1."
 dateiAnfrage = "sonarlint/listFilesInFolder"
 offenAnfrage = "sonarlint/isOpenInEditor"
 konfigurationAnfrage = "workspace/configuration"

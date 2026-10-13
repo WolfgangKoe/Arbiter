@@ -1,6 +1,6 @@
 # Schreibgrenze auch für Bash
 
-384 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
+384 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Auftrag des Stakeholders: Die Schreibgrenze greift nur bei Write und Edit; Rollen

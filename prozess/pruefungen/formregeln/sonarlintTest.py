@@ -283,7 +283,7 @@ def testGesammeltWerdenPythonDateienOhnePycache(tmp_path):
 
 
 def testDieErweiterungKommtAusDerUmgebungsvariable(monkeypatch, tmp_path):
-    ordner = erweiterungAnlegen(tmp_path / "sonarlint", "6.0.3")
+    ordner = erweiterungAnlegen(tmp_path / "sonarlint", "6.1.3")
     monkeypatch.setenv(sonarlint.umgebungsvariable, str(ordner))
     assert erweiterungFinden() == ordner
 
@@ -291,17 +291,17 @@ def testDieErweiterungKommtAusDerUmgebungsvariable(monkeypatch, tmp_path):
 def testDieNeuesteErweiterungAusVsCodeGewinnt(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
-    for version in ("6.0.1", "6.0.2"):
+    for version in ("6.1.1", "6.1.2"):
         erweiterungAnlegen(tmp_path / f"sonarsource.sonarlint-vscode-{version}-linux-x64", version)
-    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.2-linux-x64"
+    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.1.2-linux-x64"
 
 
 def testEinAlterOrdnerOhnePackageJsonStörtDieNeuesteNicht(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
     (tmp_path / "sonarsource.sonarlint-vscode-6.0.0-linux-x64").mkdir()
-    erweiterungAnlegen(tmp_path / "sonarsource.sonarlint-vscode-6.0.1-linux-x64", "6.0.1")
-    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.0.1-linux-x64"
+    erweiterungAnlegen(tmp_path / "sonarsource.sonarlint-vscode-6.1.1-linux-x64", "6.1.1")
+    assert erweiterungFinden().name == "sonarsource.sonarlint-vscode-6.1.1-linux-x64"
 
 
 def testOhneErweiterungIstDiePrüfungRotUndNenntDieUmgebungsvariable(monkeypatch, tmp_path):
@@ -342,7 +342,7 @@ def testEineAndereVersionAlsErwartetIstRotUndNenntBeide(monkeypatch, tmp_path):
     monkeypatch.delenv(sonarlint.umgebungsvariable, raising=False)
     monkeypatch.setattr(sonarlint, "erweiterungenOrdner", tmp_path)
     erweiterungAnlegen(tmp_path / "sonarsource.sonarlint-vscode-7.0.0-linux-x64", "7.0.0")
-    with pytest.raises(AssertionError, match=r"7\.0\.0.*6\.0\."):
+    with pytest.raises(AssertionError, match=r"7\.0\.0.*6\.1\."):
         erweiterungFinden()
 
 

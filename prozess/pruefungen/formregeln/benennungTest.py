@@ -241,6 +241,11 @@ def testJedesHilfsmodulIstGrünUndMitTestfunktionRot(tmp_path, dateiname):
     assert any(dateiname in meldung for meldung in verstöße(tmp_path / "zweit"))
 
 
+def testZiehenPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def ziehen(): ...\n", "ziehen.py")
+    assert verstöße(tmp_path) == []
+
+
 def testDienstPyOhneListeneintragBliebeRot(tmp_path):
     hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", "unbekannt.py")
     assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))

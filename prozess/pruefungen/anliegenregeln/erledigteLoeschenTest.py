@@ -1,7 +1,20 @@
+import json
 from pathlib import Path
 
 from anliegenregeln.anliegenTest import anliegenAnlegen, guterKopf
 from anliegenregeln.erledigteLoeschen import erledigteLöschen
+
+
+def testNachJedemBashBefehlLöschtEinHookDasCommittete():
+    einstellungen = json.loads(
+        (Path(__file__).parents[3] / ".claude" / "settings.json").read_text(encoding="utf-8")
+    )
+    treffer = [
+        eintrag
+        for eintrag in einstellungen["hooks"]["PostToolUse"]
+        if eintrag.get("matcher") == "Bash" and "anliegenregeln.erledigteLoeschen" in str(eintrag)
+    ]
+    assert treffer
 
 
 def testErledigtesAnliegenWirdGelöscht(tmp_path, gitRepo):

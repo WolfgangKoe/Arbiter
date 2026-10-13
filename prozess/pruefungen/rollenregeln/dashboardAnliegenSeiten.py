@@ -11,7 +11,7 @@ from lesen.anliegenKopf import Anliegen, Status, gelesene, stakeholder
 from rollenregeln.dashboardAnliegen import anliegenAbschnitt, filterStil, titelLesen
 from rollenregeln.dashboardStil import stil
 from rollenregeln.eingang import eingangDatei, verworfenDatei, verworfene, vorgemerkte
-from rollenregeln.zuegeUebernehmen import dateiZu, zulässigeStatus
+from rollenregeln.zuegeUebernehmen import dateiZu, fragtStakeholder, zulässigeStatus
 
 frageKopf = re.compile(r"^\*\*(F\d+) ·", re.MULTILINE)
 neuladenIntervall = 3000
@@ -95,7 +95,7 @@ def vermerke(ordner: Path) -> str:
         for zug in vorgemerkte(ordner)
     )
     abgelehnt = "".join(
-        f'<div class="verworfen">verworfen · {html.escape(eintrag.zug.beschreibung())}: '
+        f'<div class="verworfen">nicht übernommen · {html.escape(eintrag.zug.beschreibung())}: '
         f"{html.escape(eintrag.grund)}</div>"
         for eintrag in verworfene(ordner)
     )
@@ -136,7 +136,7 @@ def formular(anliegen: Anliegen, text: str) -> str:
         felder.append(
             '<label><input type="checkbox" name="runde" value="senken"> Runde senken</label>'
         )
-    if anliegen.empfänger == stakeholder and anliegen.status == Status.offen:
+    if fragtStakeholder(anliegen):
         felder += [
             f'<label>Antwort auf {frage}<input type="text" name="antwort_{frage}"></label>'
             for frage in frageKopf.findall(text)
@@ -144,7 +144,7 @@ def formular(anliegen: Anliegen, text: str) -> str:
     felder.append('<label>Kommentar<textarea name="kommentar" rows="3"></textarea></label>')
     return (
         f'<form class="zug" method="post" action="/anliegen/{anliegen.nummer}">'
-        f'{"".join(felder)}<button type="submit">Vormerken</button></form>'
+        f'{"".join(felder)}<button type="submit">Abschicken</button></form>'
     )
 
 

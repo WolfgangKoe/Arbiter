@@ -16,8 +16,13 @@ class Zug:
     frage: str = ""
 
     def beschreibung(self) -> str:
-        ziel = f"{self.art} {self.frage}".strip()
-        return f"{self.nummer}: {ziel} {self.wert}".strip()
+        inhalt = {
+            "status": f"Status {self.wert}",
+            "runde": "Runde senken",
+            "antwort": f"Antwort auf {self.frage}: {self.wert}",
+            "kommentar": f"Kommentar: {self.wert}",
+        }
+        return f"Anliegen {self.nummer} · {inhalt.get(self.art, self.art)}"
 
 
 @dataclass(frozen=True)

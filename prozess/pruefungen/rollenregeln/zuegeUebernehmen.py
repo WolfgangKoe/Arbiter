@@ -1,5 +1,6 @@
 """Hook (SubagentStart, PreToolUse): legt die vorgemerkten Züge des Stakeholders in die Anliegen."""
 
+import fcntl
 import re
 from collections.abc import Callable
 from pathlib import Path
@@ -10,6 +11,7 @@ from lesen.anliegenKopf import Anliegen, Status, kopfAusText, stakeholder
 from rollenregeln.eingang import (
     Verworfen,
     Zug,
+    eingangDatei,
     ersteVorgemerkteEntfernen,
     verworfenVermerken,
     vorgemerkte,
@@ -29,6 +31,7 @@ statusInKopf = re.compile(r"(Runde \d+/\d+ · )\w+")
 rundeInKopf = re.compile(r"Runde (\d+)/")
 commitBefehl = "git commit"
 befehlsTrenner = re.compile(r"&&|\|\||[;|\n]")
+sperrDatei = f"{eingangDatei}.sperre"
 keineFrage = "Die Frage steht nicht mehr im Anliegen."
 
 
@@ -65,8 +68,13 @@ def rundeSenken(text: str, zug: Zug) -> str:  # noqa: ARG001
 
 def antwortSetzen(text: str, zug: Zug) -> str | None:
     zeilen = text.splitlines(keepends=True)
+    # Warum: Nach einer Rückfrage kehrt dieselbe Frage in einer späteren Runde wieder
     start = next(
-        (stelle for stelle, zeile in enumerate(zeilen) if zeile.startswith(f"**{zug.frage} ·")),
+        (
+            stelle
+            for stelle in reversed(range(len(zeilen)))
+            if zeilen[stelle].startswith(f"**{zug.frage} ·")
+        ),
         None,
     )
     if start is None:
@@ -97,18 +105,32 @@ def grundDagegen(anliegen: Anliegen | None, zug: Zug) -> str | None:
     if anliegen is None:
         return "Das Anliegen gibt es nicht mehr."
     if zug.art not in anwender:
-        return f"Unbekannte Art: {zug.art}."
+        return f"Diese Art von Eingabe kennt das Dashboard nicht: {zug.art}."
     if zug.art == "kommentar":
-        return None if einzeiler(zug.wert) else "Der Kommentar ist leer."
+        return None if einzeiler(zug.wert) else "Der Kommentar war leer."
     if zug.art == "status" and zug.wert not in zulässigeStatus(anliegen):
-        return f"Status {anliegen.status} erlaubt {zug.wert} nicht."
+        return f"Das Anliegen steht auf {anliegen.status}; von dort geht es nicht auf {zug.wert}."
     if zug.art == "runde" and not (anliegen.status == Status.eskaliert and anliegen.runde > 1):
-        return "Die Runde lässt sich nur bei `eskaliert` senken."
-    if zug.art == "antwort" and not (
-        anliegen.empfänger == stakeholder and anliegen.status == Status.offen
-    ):
-        return "Antworten gibt es nur auf offene Fragen an den Stakeholder."
+        return "Die Runde lässt sich nur senken, wenn das Anliegen eskaliert ist."
+    if zug.art == "antwort" and not fragtStakeholder(anliegen):
+        return "Das Anliegen wartet nicht mehr auf deine Antwort."
     return None
+
+
+def fragtStakeholder(anliegen: Anliegen) -> bool:
+    """Ob das Anliegen jetzt auf Antworten des Stakeholders auf seine Fragen wartet."""
+    if anliegen.status == Status.offen:
+        return anliegen.empfänger == stakeholder
+    return anliegen.status == Status.rückfrage and anliegen.absender == stakeholder
+
+
+def bereitsAngekommen(anliegen: Anliegen | None, zug: Zug, text: str) -> bool:
+    """Ob der Zug schon im Anliegen steht, etwa weil er zweimal abgeschickt wurde."""
+    if anliegen is None:
+        return False
+    if zug.art == "status":
+        return anliegen.status == zug.wert
+    return zug.art == "antwort" and antwortSetzen(text, zug) == text
 
 
 def dateiZu(ordner: Path, nummer: int) -> Path | None:
@@ -120,6 +142,8 @@ def einzelnenÜbernehmen(ordner: Path, zug: Zug) -> Verworfen | None:
     datei = dateiZu(ordner, zug.nummer)
     text = datei.read_text(encoding="utf-8") if datei else ""
     anliegen = kopfAusText(text, datei) if datei else None
+    if bereitsAngekommen(anliegen, zug, text):
+        return None
     grund = grundDagegen(anliegen, zug)
     if grund:
         return Verworfen(zug, grund)
@@ -132,6 +156,15 @@ def einzelnenÜbernehmen(ordner: Path, zug: Zug) -> Verworfen | None:
 
 def übernehmen(ordner: Path) -> tuple[int, int]:
     """Legt alle vorgemerkten Züge in die Dateien; gibt (übernommen, verworfen) zurück."""
+    sperre = ordner / sperrDatei
+    sperre.parent.mkdir(parents=True, exist_ok=True)
+    # Warum: Dashboard und Hook übernehmen sonst denselben Zug zweimal
+    with sperre.open("a", encoding="utf-8") as griff:
+        fcntl.flock(griff, fcntl.LOCK_EX)
+        return unterSperreÜbernehmen(ordner)
+
+
+def unterSperreÜbernehmen(ordner: Path) -> tuple[int, int]:
     züge = vorgemerkte(ordner)
     verworfen = 0
     # Warum: das Formular merkt den Status vor die Antwort; nach dem Status gälte sie nicht mehr

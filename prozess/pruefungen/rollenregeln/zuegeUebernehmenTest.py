@@ -53,12 +53,38 @@ def testStatusDesEmpfängersLandetImKopfUndDerZugIstAusDemEingang(ordner):
 
 
 def testStatusDerNichtMehrZumAnliegenPasstWirdVerworfenUndGemeldet(ordner):
-    datei = anlegen(ordner, status="angenommen")
+    datei = anlegen(ordner, status="erledigt")
     vorher = datei.read_text(encoding="utf-8")
     zugVormerken(ordner, Zug(10, "status", "angenommen"))
     assert übernehmen(ordner) == (0, 1)
     assert datei.read_text(encoding="utf-8") == vorher
-    assert "erlaubt angenommen nicht" in verworfene(ordner).pop().grund
+    assert verworfene(ordner).pop().grund == (
+        "Das Anliegen steht auf erledigt; von dort geht es nicht auf angenommen."
+    )
+
+
+def testWasSchonImAnliegenStehtMeldetDasDashboardNichtAlsFehler(ordner):
+    datei = anlegen(ordner)
+    zugVormerken(ordner, Zug(10, "status", "angenommen"))
+    zugVormerken(ordner, Zug(10, "antwort", "B", frage="F1"))
+    übernehmen(ordner)
+    gesehen = datei.read_text(encoding="utf-8")
+    zugVormerken(ordner, Zug(10, "antwort", "B", frage="F1"))
+    zugVormerken(ordner, Zug(10, "status", "angenommen"))
+    assert übernehmen(ordner) == (2, 0)
+    assert verworfene(ordner) == [] and datei.read_text(encoding="utf-8") == gesehen
+
+
+def testAufEineRückfrageAnDenStakeholderAntwortetErUnterDerFrageDerLetztenRunde(ordner):
+    datei = anlegen(ordner, richtung=("Stakeholder", "organisationsentwickler"), status="rückfrage")
+    datei.write_text(
+        datei.read_text(encoding="utf-8") + "\n## Runde 2\n**F1 · Wieder.** A oder B.\nAntwort:\n",
+        encoding="utf-8",
+    )
+    zugVormerken(ordner, Zug(10, "antwort", "A", frage="F1"))
+    assert übernehmen(ordner) == (1, 0)
+    zeilen = datei.read_text(encoding="utf-8").splitlines()
+    assert zeilen[-1] == "Antwort: A" and "Antwort:" in zeilen
 
 
 def testStatusFremderAnliegenWirdVerworfenKommentarAberÜbernommen(ordner):

@@ -1,3 +1,4 @@
+import os
 import threading
 import urllib.request
 from http import HTTPStatus
@@ -6,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from rollenregeln.dashboardAnliegenSeiten import stand
-from rollenregeln.dashboardServer import antworten, serverErzeugen
+from rollenregeln.dashboardServer import antworten, quellenStand, serverErzeugen
 from rollenregeln.eingang import Verworfen, Zug, verworfenVermerken, vorgemerkte
 
 kopf = {"Origin": None, "Host": "127.0.0.1:8765"}
@@ -73,20 +74,44 @@ def testUnbekanntesAnliegenGibtNichtGefunden(ordner):
     assert holen(ordner, "/anliegen/99").status == HTTPStatus.NOT_FOUND
 
 
-def testFormularMerktZügeVorUndSchreibtNichtInDieAnliegen(ordner):
+def testFormularLegtDieZügeSofortInsAnliegen(ordner):
     anlegen(ordner)
-    vorher = (ordner / "handoff" / "anliegen" / "10-titel.md").read_bytes()
     antwort = senden(
         ordner, "/anliegen/10", "status=angenommen&antwort_F1=B&kommentar=Hallo&runde="
     )
     assert antwort.status == HTTPStatus.SEE_OTHER and antwort.ort == "/anliegen/10"
-    assert vorgemerkte(ordner) == [
-        Zug(10, "status", "angenommen"),
-        Zug(10, "antwort", "B", "F1"),
-        Zug(10, "kommentar", "Hallo"),
-    ]
-    assert (ordner / "handoff" / "anliegen" / "10-titel.md").read_bytes() == vorher
-    assert "vorgemerkt" in holen(ordner, "/").inhalt.decode()
+    text = (ordner / "handoff" / "anliegen" / "10-titel.md").read_text(encoding="utf-8")
+    assert "Runde 1/3 · angenommen" in text and "Antwort: B" in text
+    assert text.endswith("Kommentar: Hallo\n")
+    assert vorgemerkte(ordner) == []
+
+
+def testNachDemAbsendenStehtNichtsMehrAlsVorgemerktUndKeinFormularBietetDieAntwortNoch(ordner):
+    anlegen(ordner)
+    senden(ordner, "/anliegen/10", "status=angenommen&antwort_F1=B")
+    assert "vorgemerkt ·" not in holen(ordner, "/").inhalt.decode()
+    assert 'name="antwort_F1"' not in holen(ordner, "/anliegen/10").inhalt.decode()
+
+
+def testWerBeiEinerRückfrageDranIstBekommtAntwortfelderUndDasDashboardNenntDieZügeInKlartext(
+    ordner,
+):
+    anlegen(ordner, richtung=("Stakeholder", "organisationsentwickler"), status="rückfrage")
+    assert 'name="antwort_F1"' in holen(ordner, "/anliegen/10").inhalt.decode()
+    verworfenVermerken(ordner, Verworfen(Zug(10, "antwort", "A", "F1"), "Passt nicht mehr."))
+    text = holen(ordner, "/").inhalt.decode()
+    assert "Anliegen 10 · Antwort auf F1: A" in text and "antwort F1" not in text
+
+
+def testGeänderterCodeFälltAufDamitDerServerSichNeuStartenKann(ordner):
+    skript = ordner / "prozess" / "pruefungen" / "rollenregeln" / "probe.py"
+    skript.parent.mkdir(parents=True)
+    skript.write_text("a = 1\n", encoding="utf-8")
+    vorher = quellenStand(ordner)
+    assert quellenStand(ordner) == vorher
+    skript.write_text("a = 2\n", encoding="utf-8")
+    os.utime(skript, ns=(1, 1))
+    assert quellenStand(ordner) != vorher
 
 
 def testFormularVonEinerFremdenSeiteWirdAbgewiesen(ordner):
