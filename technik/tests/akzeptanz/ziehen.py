@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from playwright.sync_api import Locator, Page, Request, Response
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.bildschirm import ablageVon, einheitenKarteVon
+from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten, einheitenKarteVon
 
 
 @dataclass(frozen=True)
@@ -81,16 +81,6 @@ def mitDemFingerZiehen(seite: Page, von: Bildpunkt, nach: Bildpunkt) -> None:
 
 
 eingaben = {"maus": mitDerMausZiehen, "finger": mitDemFingerZiehen}
-
-
-def istHandlung(antwort: Response) -> bool:
-    """Eine Antwort auf eine Handlung: ändernde Anfrage, die kein Auswählen ist."""
-    anfrage = antwort.request
-    return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in anfrage.url
-
-
-def aufDieHandlungWarten(seite: Page):
-    return seite.expect_response(istHandlung)
 
 
 def _ziehenBisZurAntwort(seite: Page, eingabe: str, von: Bildpunkt, nach: Bildpunkt) -> Response:

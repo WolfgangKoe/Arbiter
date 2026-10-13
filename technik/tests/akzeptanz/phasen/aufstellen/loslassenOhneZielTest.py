@@ -7,6 +7,7 @@ import pytest
 from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import (
     ablageVon,
+    aufDieHandlungWarten,
     einheitenKarteVon,
     gründeAlsText,
     inhaltDerSeite,
@@ -26,7 +27,6 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import (
     amKopfDerSeite,
-    aufDieHandlungWarten,
     mitDerMausZiehen,
     mitteVon,
     punktAufDerKarte,

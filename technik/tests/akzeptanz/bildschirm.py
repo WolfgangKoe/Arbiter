@@ -4,7 +4,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from playwright.sync_api import Browser, Locator, Page, expect
+from playwright.sync_api import Browser, Locator, Page, Response, expect
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
@@ -150,6 +150,16 @@ def tippenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
 def ablageVon(seite: Page, spielername: str) -> Locator:
     name = seite.locator(".armeeKartenName", has_text=spielername)
     return seite.locator(".armeeKarte").filter(has=name)
+
+
+def istHandlung(antwort: Response) -> bool:
+    """Eine Antwort auf eine Handlung: ändernde Anfrage, die kein Auswählen ist."""
+    anfrage = antwort.request
+    return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in anfrage.url
+
+
+def aufDieHandlungWarten(seite: Page):
+    return seite.expect_response(istHandlung)
 
 
 def gesperrteModelle(seite: Page) -> frozenset[tuple[float, float]]:

@@ -8,6 +8,7 @@ import pytest
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
+    aufDieHandlungWarten,
     gründeAlsText,
     klickenUndWarten,
     knopfDerSeite,
@@ -31,7 +32,7 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
-from tests.akzeptanz.ziehen import aufDieHandlungWarten, einheitZiehen
+from tests.akzeptanz.ziehen import einheitZiehen
 
 beenden = "Aufstellen der Einheit beenden"
 
