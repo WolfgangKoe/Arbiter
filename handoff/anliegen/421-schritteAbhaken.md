@@ -1,6 +1,6 @@
 # Schritte des Zyklus abhaken
 
-421 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 2/3 · rückfrage
+421 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** Auftrag des Stakeholders: Die Schritte von Technik- und Prozessphase stehen im
@@ -58,3 +58,8 @@ Antwort: .
 A: Nein, er wächst mit dem Zyklus. B: Ja, der übrige Plan wird kürzer.
 Empfehlung: A. Der Plan hat heute schon 4.000.
 Antwort: .
+Kommentar: F1: A und F2: A Bitte für alle Artefakte, in denen ein Plan umgesetzt wird. Also plan.md, retro.md, etc.
+Stellungnahme: [Ablauf, Fortschritt](../../prozess/ablauf.md#fortschritt): Domänenphase im
+Review (sie setzt sein Zyklusziel um), Technik im Plan, Prozess in der Retro; dazu Kennzahlen
+und Ich 2. Code: Regelumsetzer, Anliegen 490; danach `angenommen`. Meinst du mit „etc.“ noch
+etwas, etwa die Etappe, nenne es hier.

@@ -8,7 +8,8 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
    löschen tut sie der Stakeholder. Du schreibst Dateien nur mit Write und Edit, löschst und
    benennst um nur mit `rm` und `mv`, je Datei einzeln in deinen Schreibpfaden, in
    `handoff/anliegen/` nur Uncommittetes (Anliegen 418), und committest nicht; sonst Bash nur
-   zum Lesen, für Prüfungen, Tests und in `/tmp`. Mechanismus: `rollenregeln/schreibgrenze.py`
+   zum Lesen, für Prüfungen, Tests, den Befehl des [Fortschritts](../ablauf.md#fortschritt)
+   (Anliegen 421) und in `/tmp`. Mechanismus: `rollenregeln/schreibgrenze.py`
    (Write, Edit und Bash), `rollenregeln/entfernen.py` (`rm`, `mv`; Lücke:
    [Regeln](../regeln.md#rollenregeln)).
 3. Kritik an einem fremden Artefakt wird ein Anliegen, nie eine Änderung

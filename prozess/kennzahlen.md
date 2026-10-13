@@ -13,7 +13,8 @@ für die Retro. Mechanismus: nur Text.
 ## Höchstmaße
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,
 `handoff/moderation.md` (4.000), Plan, Review, Retro je 4.000 (jede Zeile `Kommentar:` zählt
-als `Kommentar: .`, Anliegen 167), je Datei in `domaene/mockups/` 8.000, Architektur
+als `Kommentar: .`, Anliegen 167; ohne den Abschnitt
+[Fortschritt](ablauf.md#fortschritt), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur
 (`technik/architektur.md` und je Datei in `technik/architektur/`) 6.000, zusammen 24.000
 (Anliegen 159, 211), Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
 `prozess/praemissen/` 3.000.

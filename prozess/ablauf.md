@@ -198,6 +198,47 @@ Kommentar: .
   schreibt; Höchstmaß: [Kennzahlen](kennzahlen.md).
 - Die Etappe gibt der Stakeholder mit „.“ im Chat frei.
 
+## Fortschritt
+Wo ein Plan umgesetzt wird, zeigt der Abschnitt `## Fortschritt` vor `## Freigabe`, wie weit
+die Phase ist und was sie aufhält (Anliegen 421): im Review für die Domänenphase danach (sie
+setzt sein Zyklusziel um; ohne Review, in Zyklus 1, entfällt er), im Plan für die
+Technikphase, in der Retro für die Prozessphase. Er wächst mit der Phase und zählt nicht zum
+Höchstmaß. Ihn schreibt nur das Skript, der Autor lässt ihn beim Ändern stehen. Keine Rolle
+liest ihn für ihre Arbeit: Ihre offenen Schritte nennt ihr der Hook beim Start.
+
+Eine Zeile je Schritt nach der Tabelle, `- [ ] <Rolle>: <Schritt>`, abgehakt `- [x]`.
+Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, angenommen mit
+`; beseitigt: Commit „<Betreff>“`, und ein Kommentar des Stakeholders
+`Kommentar: <Text> (Anliegen <nr>)`.
+- Fakt: Ein Hook hakt nach jedem Rollenlauf ab, was die Tabelle als Fakt nennt.
+- Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs mit dem Befehl ab, als Kritiker,
+  wenn seine Kritik umgesetzt ist. Hält sie etwas auf, meldet sie es mit dem Befehl und nennt
+  die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
+  Stakeholder Fragen) und schreibt die Zeile `Hindernis:`.
+- Dashboard: Der Stakeholder hakt jede Zeile ab oder kommentiert sie; der Kommentar wird ein
+  Anliegen von ihm an die Rolle der Zeile.
+
+Phase · Schritt | Zeile | abgehakt durch
+---|---|---
+Domäne 1 bis 3, nur ohne Etappe | Planer: Etappe · Architekt: Kritik an der Etappe · Stakeholder: Freigabe Etappe | Fakt: Etappendatei neu · Befehl · Fakt: Commit
+Domäne 4 | Anforderungsautor: Anforderungen zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
+Domäne 5 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
+Domäne 6 | je Kritiker: Kritik an Anforderungen, Items und Mockups | Befehl
+Domäne 7 | Stakeholder: Freigabe Plan | Fakt: Commit
+Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
+Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Reviewer: Kritik am Code | Befehl
+Technik 4 | Reviewer: DoD über das Inkrement | Befehl
+Technik 5 je Item | Fachkritiker: Item <k> abgenommen · Planer: Item <k> gelöscht | Befehl · Fakt: Datei weg
+Technik 6, 7 | Reviewer: Review geschrieben · Stakeholder: Freigabe Review | Fakt: `# Review · Zyklus <n>` · Fakt: Commit
+Prozess 1 | Organisationsentwickler: Retro geschrieben | Fakt: `# Retro · Zyklus <n>`
+Prozess 2, 3 | je Kritiker: Kritik an Regeländerungen · Organisationsentwickler: Nachkorrektur | Befehl
+Prozess 4 | Stakeholder: Freigabe Retro | Fakt: Commit
+Prozess 5 je Prozess-Item | Regelumsetzer: P<k> | Fakt: Commit `P<k>:`
+Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
+
+Mechanismus: nur Text; Skript, Hook, Befehl und Dashboard baut der Regelumsetzer (Anliegen
+490). Bis dahin fehlt der Abschnitt.
+
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
 Mechanismus: nur Text.
