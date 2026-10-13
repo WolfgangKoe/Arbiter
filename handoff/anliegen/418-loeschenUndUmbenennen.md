@@ -1,6 +1,6 @@
 # Wer darf Dateien löschen und umbenennen?
 
-418 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+418 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Seit deinem Auftrag 384 (Commit „Regelumsetzer und Organisationsentwickler:

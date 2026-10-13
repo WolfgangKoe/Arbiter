@@ -70,7 +70,7 @@ Organisationsentwickler sie vor.
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
-   die abgenommenen Items. Mechanismus: nur Text.
+   die abgenommenen Items mit `rm` ([Ich 2](praemissen/ich.md)). Mechanismus: nur Text.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
    Startbefehl der App mit Link auf [Web, W5](../technik/architektur/web.md#aufbau) (auf
    Wunsch des Stakeholders auch hier, Anliegen 353). Danach der Abschnitt
@@ -315,8 +315,9 @@ nur Text.
   keine Frage. Mechanismus: nur Text; abweichend nennt der Stand nach einer Freigabe den
   Absender als dran (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`;
   [Backlog](backlog.md)).
-- Niemand löscht ein Anliegen von Hand; git ist das Archiv. Mechanismus:
-  `anliegenregeln/erledigteLoeschen.py`.
+- Niemand löscht ein committetes Anliegen von Hand; git ist das Archiv. Mechanismus:
+  `anliegenregeln/erledigteLoeschen.py` (löscht erledigte), `rollenregeln/entfernen.py`
+  (sperrt `rm` und `mv` committeter).
 - Nach jedem Rollenlauf meldet ein Hook dem Koordinator die geänderten Status und wer dran
   ist, mit dessen Belegung. Mechanismus: `standregeln/stand.py` (PostToolUse auf Agent)
   nennt, wer dran ist und welche Nachprüfung fällig ist; geänderte Status und Belegung nur
