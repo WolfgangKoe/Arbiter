@@ -1,6 +1,6 @@
 # AUF-16.4 ohne Test in der Domäne, bildschirm.py über dem Höchstmaß
 
-442 · Kritik · von Reviewer → Testautor · Runde 2/3 · angenommen
+442 · Kritik · von Reviewer → Testautor · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** DoD über das Inkrement von Plan 5.

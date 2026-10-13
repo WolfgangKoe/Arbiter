@@ -1,6 +1,6 @@
 # Eine riesige Zahl macht den Spielstand unlesbar
 
-475 · Kritik · von Reviewer → Implementierer · Runde 2/3 · angenommen
+475 · Kritik · von Reviewer → Implementierer · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Commit „Implementierer: Zugschwelle im Frontend, Eingaben und Formation

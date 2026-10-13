@@ -1,6 +1,6 @@
 # Auswählen zählt beim Warten als Handlung
 
-520 · Kritik · von Architekt → Testautor · Runde 1/3 · angenommen
+520 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 752ceea (Lesbarkeit: der Name trägt die Bedeutung,
