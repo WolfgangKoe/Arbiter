@@ -77,15 +77,21 @@ def testEineStelleMitUnendlicherOderUnbestimmterZahlIstEineFehlerhafteAnfrage(au
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
-def testEineSehrGroßeGanzeZahlIstKeinÜberlaufSondernEineGültigeStelle(aufstellung):
+def testEineSehrGroßeGanzeZahlIstEineFehlerhafteAnfrageUndLässtDenSpielstandLesbar(aufstellung):
+    aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     dienst = anwendungFür(aufstellung).test_client()
+    dienst.put(pfadDerAuswahl.format(1, 1))
     groß = "1" + "0" * 400
 
     antwort = dienst.put(
-        pfadDerStelle.format(1, 1), data=f'{{"x": {groß}, "y": 2}}', content_type="application/json"
+        pfadDesModells.format(1, 1, 1),
+        data=f'{{"x": 3, "y": {groß}}}',
+        content_type="application/json",
     )
 
-    assert antwort.status_code == HTTPStatus.CONFLICT
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+    assert dienst.get("/api/spielstand").status_code == HTTPStatus.OK
 
 
 def testEinModellOhneAblageZumZurücklegenIstEineFehlerhafteAnfrage(aufstellung):

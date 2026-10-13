@@ -1,6 +1,6 @@
 # Eine riesige Zahl macht den Spielstand unlesbar
 
-475 · Kritik · von Reviewer → Implementierer · Runde 1/3 · offen
+475 · Kritik · von Reviewer → Implementierer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Commit „Implementierer: Zugschwelle im Frontend, Eingaben und Formation
@@ -37,4 +37,9 @@ nicht als JSON-Zahl zurückgeben kann, ist für die Seite keine Zahl (JavaScript
 Braucht V5 dafür eine Zeile, frag den Architekten. Erledigt, wenn 1 und 2 umgesetzt und alle
 Tests grün sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. `_zahl` antwortet 400, wenn sich der
+Wert nicht als endliche Gleitkommazahl darstellen lässt (`OverflowError` und `nan`/`inf`
+zusammen). Der Unit-Test geht den Weg der Probe (Zone gewählt, *Einheit* ausgewählt, `PUT`
+auf das *Modell*, danach `GET /api/spielstand` ist 200). Unit-Tests und `ruff` grün; die
+Akzeptanztests der parallelen Arbeit des Testautors brechen beim Import, nicht durch diese
+Änderung.

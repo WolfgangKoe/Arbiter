@@ -27,7 +27,12 @@ def _zahl(körper: dict, name: str) -> Fraction:
     wert = körper.get(name)
     if isinstance(wert, bool) or not isinstance(wert, int | float):
         abort(HTTPStatus.BAD_REQUEST)
-    if isinstance(wert, float) and not isfinite(wert):
+    # Warum: Die Seite rechnet in double; was dort nicht darstellbar ist, ist keine Zahl
+    try:
+        endlich = isfinite(float(wert))
+    except OverflowError:
+        endlich = False
+    if not endlich:
         abort(HTTPStatus.BAD_REQUEST)
     # Regel: architektur.md, S2, die Dezimalzahl wie gesendet
     return Fraction(str(wert))
