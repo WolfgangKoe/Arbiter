@@ -14,7 +14,7 @@ also nie: Für `aufDieHandlungWarten` ist jedes PUT und DELETE eine Handlung, au
 Klick, der eine *Einheit* *ausgewählt* macht (`auswahlSenden` in
 [seite.js](../../technik/frontend/seite.js)). Heute fällt kein solcher Klick in ein solches
 Warten, deshalb sind alle 349 Akzeptanztests grün (geprüft am Stand 752ceea). Der Code stammt
-aus 4a11f00; meine Kritik daran ([480](480-aufDieHandlungWartenGehoertNichtZumZiehen.md)) hat
+aus 4a11f00; meine Kritik daran (Anliegen 480) hat
 es übersehen.
 
 **Kosten.** Der Code sagt etwas anderes, als er tut. Sobald ein Test innerhalb von
