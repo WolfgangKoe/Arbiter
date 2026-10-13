@@ -9,14 +9,10 @@ from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
     ausgewählteEinheiten,
     ausgewählteModelle,
-    einheitZiehen,
     gesperrteModelle,
     gründeAlsText,
     inhaltDerSeite,
     klickenUndWarten,
-    liegtEinPixelGenauAn,
-    modellAufDieAblageZiehen,
-    modellZiehen,
     neuLaden,
     seiteMitEingabe,
     sperrmeldungWarten,
@@ -30,6 +26,12 @@ from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     stelleInDerZoneVon,
     stellenDerEinheit,
+)
+from tests.akzeptanz.ziehen import (
+    einheitZiehen,
+    liegtEinPixelGenauAn,
+    modellAufDieAblageZiehen,
+    modellZiehen,
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])

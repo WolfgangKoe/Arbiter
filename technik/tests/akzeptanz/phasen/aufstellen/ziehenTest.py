@@ -18,7 +18,10 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
+from tests.akzeptanz.ziehen import liegtEinPixelGenauAn, modellZiehen, zollJePixel
 
+# Regel: Architektur V8, ab dieser Abweichung beginnt ein Zug
+zugschwelleInPixeln = 4
 # Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
 millionstel = Fraction(1, 1_000_000)
 abstandInDerFormation = Fraction(3, 2)
@@ -55,6 +58,23 @@ def testAuf8_2EinGesetztesModellIstNachDemLoslassenAnDerStelleDesLoslassensGeset
     assert aufstellung.gesetzt(modell)
     assert aufstellung.stelle(modell) == stelleDesLoslassens
     assert not aufstellung.gesperrt(modell)
+
+
+@pytest.mark.parametrize("eingabe", ["maus", "finger"])
+def testAuf8_2EinModellWirdUmWenigerAlsSeinenRadiusGezogenUndAnDerStelleDesLoslassensGesetzt(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
+):
+    [(modell, stelleDavor)] = boyzSetzen(1)
+    ziel = Stelle(x=stelleDavor.x, y=stelleDavor.y + Fraction(1, 2))
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
+    zugInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
+    radiusInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite)
+    assert zugschwelleInPixeln < zugInPixeln < radiusInPixeln
+
+    modellZiehen(seite, stelleDavor, ziel, eingabe)
+
+    assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(modell), ziel)
+    assert not aufstellungNachDerZonenwahl.gesperrt(modell)
 
 
 def testAuf8_3EinGesetztesModellDerEinheitInAufstellungIstNachDemZurücklegenNichtGesetzt(

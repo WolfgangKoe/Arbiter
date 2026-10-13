@@ -7,18 +7,12 @@ import pytest
 from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import (
     ablageVon,
-    amKopfDerSeite,
-    aufDieHandlungWarten,
     einheitenKarteVon,
     gründeAlsText,
     inhaltDerSeite,
     knopfDerSeite,
-    mitDerMausZiehen,
-    mitteVon,
-    punktAufDerKarte,
     sperrmeldungenDerSeite,
     sperrmeldungWarten,
-    ziehenOhneAnfrage,
 )
 from tests.akzeptanz.dienst import einheitAufAblageLoslassen, spielstandVon
 from tests.akzeptanz.handgriffe import (
@@ -29,6 +23,14 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenAllerModelle,
     stellenDerEinheit,
+)
+from tests.akzeptanz.ziehen import (
+    amKopfDerSeite,
+    aufDieHandlungWarten,
+    mitDerMausZiehen,
+    mitteVon,
+    punktAufDerKarte,
+    ziehenOhneAnfrage,
 )
 
 
@@ -103,6 +105,33 @@ def testAuf16_4EineEinheitAufDerAblageIhresSpielersStehtNachDemLoslassenWieDavor
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
     assert sperrmeldungenDerSeite(seite) == []
+
+
+@pytest.mark.parametrize("gesetzt", [0, 3], ids=["keinModellGesetzt", "dreiModelleGesetzt"])
+def testAuf16_4EineEinheitAufDerAblageIhresSpielersStehtNachDemLoslassenInDerDomäneWieDavor(
+    aufstellungNachDerZonenwahl, boyz, boyzSetzen, spielerEins, gesetzt
+):
+    boyzSetzen(gesetzt)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
+    einheitInAufstellungDavor = aufstellungNachDerZonenwahl.einheitInAufstellung
+
+    aufstellungNachDerZonenwahl.einheitAufAblageLoslassen(boyz, spielerEins)
+
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+    assert aufstellungNachDerZonenwahl.einheitInAufstellung is einheitInAufstellungDavor
+
+
+@pytest.mark.parametrize("gesetzt", [0, 3], ids=["keinModellGesetzt", "dreiModelleGesetzt"])
+def testAuf16_4DerDienstAntwortetBeiEinerEinheitAufDerEigenenAblageOhneGrundUndÄndertNichts(
+    dienst, aufstellungNachDerZonenwahl, boyz, boyzSetzen, gesetzt
+):
+    boyzSetzen(gesetzt)
+    davor = spielstandVon(dienst)
+
+    antwort = einheitAufAblageLoslassen(dienst, aufstellungNachDerZonenwahl, boyz, 1)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert spielstandVon(dienst) == davor
 
 
 @pytest.mark.parametrize("gesetzt", [0, 3], ids=["keinModellGesetzt", "dreiModelleGesetzt"])

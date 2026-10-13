@@ -5,7 +5,7 @@ from http import HTTPStatus
 from playwright.sync_api import expect
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import aufDieHandlungWarten, knopfDerSeite, spielerAnDerReihe
+from tests.akzeptanz.bildschirm import knopfDerSeite, spielerAnDerReihe
 from tests.akzeptanz.dienst import aufstellenDerEinheitBeenden, dienstFür
 from tests.akzeptanz.handgriffe import (
     aufstellungVon,
@@ -16,6 +16,7 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
+from tests.akzeptanz.ziehen import aufDieHandlungWarten
 
 
 def aufstellungMitEinerEinheitAusDreiModellen():

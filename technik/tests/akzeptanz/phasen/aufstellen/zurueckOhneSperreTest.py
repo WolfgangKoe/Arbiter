@@ -6,7 +6,6 @@ import pytest
 
 from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import (
-    aufDieHandlungWarten,
     inhaltDerSeite,
     knopfDerSeite,
     sperrmeldungenDerSeite,
@@ -18,6 +17,7 @@ from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     stellenAllerModelle,
 )
+from tests.akzeptanz.ziehen import aufDieHandlungWarten
 
 
 def nachDerZonenwahl(aufstellung, ersterSpieler, _zweiterSpieler):
