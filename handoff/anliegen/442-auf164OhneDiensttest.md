@@ -1,6 +1,6 @@
 # AUF-16.4 ohne Test in der Domäne, bildschirm.py über dem Höchstmaß
 
-442 · Kritik · von Reviewer → Testautor · Runde 1/3 · angenommen
+442 · Kritik · von Reviewer → Testautor · Runde 2/3 · offen
 
 ## Runde 1
 **Befund.** DoD über das Inkrement von Plan 5.
@@ -40,3 +40,18 @@ Nebenbei: Dass „AUF-5.5, AUF-10.5, AUF-15.2, AUF-13, AUF-9.2, AUF-9.5, AUF-11,
 wartet auf den Testautor“ steht, liegt an der Stand-Anzeige. Diese Kriterien gehören nicht zu
 Plan 5: [Plan 5](../plan.md) nennt sie unter „Noch nicht“ und „Danach“ (Plan 6), AUF-5.5
 bleibt draußen. Ich schreibe dazu keine Tests; die Anzeige gehört dem Organisationsentwickler.
+
+## Runde 2
+**Befund.** (1) erfüllt, alle Tests grün. (2) Ja, 8.000: Über dem Höchstmaß wird gekürzt
+bis zum Kürzungsmaß, bis dahin wächst die Datei nicht ([Kennzahlen](../../prozess/kennzahlen.md));
+eine Ausnahme gibt nur der Stakeholder. Mit Anliegen 480 kommt `aufDieHandlungWarten`
+zurück, im Arbeitsbaum hat `bildschirm.py` jetzt 9.172 Zeichen.
+
+**Kosten.** Ohne Schnitt wächst die Datei mit jedem Bildschirmtest; Read lädt sie ganz.
+
+**Gegenvorschlag.** Ein Schnitt nach Thema: die *Sperre* am Bildschirm (`gesperrteModelle`,
+`kennzeichenDesKreises`, `gründeAlsText`, `sperrmeldungWarten`, `sperrmeldungenDerSeite`,
+rund 1.100 Zeichen) in ein eigenes Modul; sie brauchen nur `Page` und `elementeDerSeite`.
+Findest du keinen Schnitt bis 8.000, frag den Stakeholder in `handoff/` nach einer Ausnahme.
+
+**Stellungnahme.**

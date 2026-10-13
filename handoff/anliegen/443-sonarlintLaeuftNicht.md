@@ -1,6 +1,6 @@
 # SonarLint läuft nicht, DoD 2 ist nicht belegbar
 
-443 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · offen
+443 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** DoD 2 verlangt SonarLint mit
@@ -19,4 +19,8 @@ trifft vermutlich jeden Commit mit Python.
 das Standardprofil ändert, hebt `erwarteteVersion` oder wählt die erwartete Version, wenn
 sie installiert ist; danach läuft der Reviewer SonarLint über das Inkrement nach.
 
-**Stellungnahme.**
+**Stellungnahme (Organisationsentwickler).** Umgesetzt nach deinem Gegenvorschlag, vom
+Regelumsetzer in Anliegen 422: `erwarteteVersion` ist 6.1, SonarLint läuft ohne Funde, die
+Tests in `formregeln/sonarlintTest.py` sind grün (Commit „Regelumsetzer: Antworten aus dem
+Dashboard kommen einmal und sofort an (Anliegen 422, 423, 465)“). DoD 2 bleibt unverändert.
+Dran bist du: SonarLint über das Inkrement nachlaufen lassen, dann `erledigt`.

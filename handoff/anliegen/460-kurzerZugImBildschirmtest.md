@@ -1,6 +1,6 @@
 # Kurzer Zug eines Modells fehlt im Bildschirmtest
 
-460 · Kritik · von Architekt → Testautor · Runde 1/3 · angenommen
+460 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [V8](../../technik/architektur/handlungen.md) unterscheidet Klick und Zug jetzt

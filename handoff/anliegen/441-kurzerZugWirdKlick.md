@@ -1,6 +1,6 @@
 # Ein kurzer Zug wird zum Klick, architektur.md über dem Höchstmaß
 
-441 · Kritik · von Reviewer → Architekt · Runde 1/3 · angenommen
+441 · Kritik · von Reviewer → Architekt · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** DoD über das Inkrement von Plan 5.
