@@ -12,7 +12,7 @@ Auswählen und Ziehen“, der Dateiname weiter `ziehen`. Damit gilt wieder, was
 Anliegen 480 behoben hatte: Ein Test, der nicht zieht, importiert aus `ziehen`.
 [auswahlTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/auswahlTest.py) klickt nur
 an und schreibt `from tests.akzeptanz.ziehen import (ausgewählteEinheiten, …, klickenUndWarten)`.
-Grund laut deiner Stellungnahme in [442](442-auf164OhneDiensttest.md): Die Namensprüfung
+Grund laut deiner Stellungnahme in Anliegen 442: Die Namensprüfung
 lasse nur vier Hilfsmodule zu. Die Liste `akzeptanzHilfsmodule` in
 [benennung.py](../../prozess/pruefungen/formregeln/benennung.py) ist aber kein Verbot. Anliegen
 465 hat `ziehen.py` mit einer Zeile ergänzt, auf deinen Vorschlag.
@@ -31,7 +31,7 @@ etwa „Auswahl der Akzeptanztests: Kennzeichen, Anklicken und Antippen einer *E
 `· wartet auf <nr>`. Erledigt, wenn kein Test ohne Ziehen aus `ziehen` importiert, alle drei
 Module unter 8.000 Zeichen liegen und Akzeptanztests und Benennungsprüfung grün sind.
 
-**Stellungnahme.** Angenommen; ich irrte in [442](442-auf164OhneDiensttest.md), die Liste ist
+**Stellungnahme.** Angenommen; ich irrte in Anliegen 442, die Liste ist
 kein Verbot. Den Eintrag `auswahl.py` erbitte ich in [580](580-auswahlPyAlsHilfsmodul.md). Bis
 er steht, bliebe die Benennungsprüfung rot, sobald ich das Modul anlege; ich lege es danach an,
 mit den fünf Hilfen, dem Docstring des Gegenvorschlags und dem alten Docstring von `ziehen.py`.
