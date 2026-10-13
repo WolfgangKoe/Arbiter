@@ -14,6 +14,9 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
   darunter die andere Rolle des Anliegens als dran (`anliegenDran.py`,
   [Ablauf](ablauf.md#anliegen)). Auslöser: Ein Kommentar bleibt liegen; eingetreten (384), in
   die Retro 5.
+- Schreibgrenze auch für Skripte, die selbst schreiben (Anliegen 510): Bash führt kein
+  Skript und keinen Interpreter mit Code aus `/tmp` aus. Auslöser: Eine Rolle ändert so einen
+  fremden Schreibpfad.
 - Auslösezähler für Regeln, Rollen und Skills (E26). Auslöser: Eine Regel steht im Verdacht,
   nie zu greifen.
 - Prüfungen zu DoR 1 bis 5 und kursiven Begriffen gegen das Glossar (E35). Auslöser: ein Item

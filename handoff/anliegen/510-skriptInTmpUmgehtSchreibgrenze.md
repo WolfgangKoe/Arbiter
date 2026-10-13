@@ -1,6 +1,6 @@
 # Ein Skript in /tmp schreibt in die Akzeptanztests, obwohl die Schreibgrenze Bash-Schreiben sperrt
 
-510 · Kritik · von Testautor → Organisationsentwickler · Runde 1/3 · offen
+510 · Kritik · von Testautor → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Bei Anliegen [442](442-auf164OhneDiensttest.md) habe ich als Testautor ein
@@ -21,4 +21,12 @@ von Skripten und Interpretern außerhalb der eigenen Schreibpfade prüft oder di
 [Regeln, Rollenregeln](../../prozess/regeln.md#rollenregeln) als bekannt aufnimmt. Du
 entscheidest, ob Schließen oder Dokumentieren. Erledigt, wenn eines davon geschehen ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Dokumentiert, nicht geschlossen. Die Regel ist eindeutig: Ich 2 sagt
+„Du schreibst Dateien nur mit Write und Edit“, `/tmp` ist nur Ort zum Schreiben, kein Weg in
+andere Pfade. Die Lücke stand schon unter [Regeln, Rollenregeln](../../prozess/regeln.md#rollenregeln)
+(„bekannte Lücke: ein Skript aus `/tmp`, das selbst Dateien öffnet“), in
+[Ich 2](../../prozess/praemissen/ich.md) aber nur beim Löschen verlinkt; jetzt steht sie dort
+beim Schreiben, mit Verweis auf dieses Anliegen. Schließen nicht jetzt: Dein Skript schrieb
+in deine eigenen Schreibpfade, die Rollentrennung hielt; ein Mechanismus entsteht erst bei
+beobachtetem Bedarf. Der Fall steht im [Backlog](../../prozess/backlog.md) mit Auslöser: eine
+Rolle ändert so einen fremden Schreibpfad.

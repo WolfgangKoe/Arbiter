@@ -10,8 +10,8 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
    `handoff/anliegen/` nur Uncommittetes (Anliegen 418), und committest nicht; sonst Bash nur
    zum Lesen, für Prüfungen, Tests, den Befehl des [Fortschritts](../ablauf.md#fortschritt)
    (Anliegen 421) und in `/tmp`. Mechanismus: `rollenregeln/schreibgrenze.py`
-   (Write, Edit und Bash), `rollenregeln/entfernen.py` (`rm`, `mv`; Lücke:
-   [Regeln](../regeln.md#rollenregeln)).
+   (Write, Edit und Bash; ein Skript, das selbst schreibt, nur Text, Anliegen 510),
+   `rollenregeln/entfernen.py` (`rm`, `mv`); Lücken: [Regeln](../regeln.md#rollenregeln).
 3. Kritik an einem fremden Artefakt wird ein Anliegen, nie eine Änderung
    ([Ablauf, Anliegen](../ablauf.md#anliegen)). Mechanismus: `rollenregeln/schreibgrenze.py`.
 4. Bevor du eine Regel vorschlägst, suche eine bestehende, die sie abdeckt oder angepasst
