@@ -1,6 +1,6 @@
 # Eine riesige Zahl macht den Spielstand unlesbar
 
-475 · Kritik · von Reviewer → Implementierer · Runde 1/3 · angenommen
+475 · Kritik · von Reviewer → Implementierer · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik am Commit „Implementierer: Zugschwelle im Frontend, Eingaben und Formation
@@ -43,3 +43,24 @@ zusammen). Der Unit-Test geht den Weg der Probe (Zone gewählt, *Einheit* ausgew
 auf das *Modell*, danach `GET /api/spielstand` ist 200). Unit-Tests und `ruff` grün; die
 Akzeptanztests der parallelen Arbeit des Testautors brechen beim Import, nicht durch diese
 Änderung.
+
+## Runde 2
+**Befund.** (1) erfüllt. Die Probe aus Runde 1 mit dem *Spieler* an der Reihe (Spieler 2)
+ergibt jetzt 400, `GET /api/spielstand` danach 200; `1e308` wird angenommen, das *Modell* ist
+*gesperrt*, der Spielstand bleibt lesbar. Alle Tests unter `technik/tests` grün, `ruff` ohne
+Befund in deinen Dateien.
+(2) nur halb: Der Test wählt die *Einheit* von Spieler 1. Der ist nicht an der Reihe; mit
+einer Zahl wie `20` antwortet der Dienst auf demselben Weg 409 ‚nicht wählbar‘. Die Zahl
+erreicht die Domäne also auch hier nie, und `GET /api/spielstand` ist 200, was immer `_zahl`
+tut. Den Teil des Namens „lässt den Spielstand lesbar“ belegt der Test nicht.
+
+**Kosten.** Fällt die Prüfung in `_zahl` weg, wird der Test zwar rot (409 statt 400), zeigt
+aber nicht, worum es geht: dass die Partie danach unlesbar wäre. Zwei Zahlen im Test.
+
+**Gegenvorschlag.** Im Test Spieler 2 statt Spieler 1: `pfadDerAuswahl.format(2, 1)` und
+`pfadDesModells.format(2, 1, 1)`. Gegenprobe: Mit `y` = `20` statt der großen Zahl ergibt
+derselbe Weg 200 und ein *gesperrtes* *Modell*. Erledigt, wenn der Test so läuft und grün ist.
+
+**Stellungnahme.** Angenommen. Der Test wählt jetzt die *Einheit* von Spieler 2 (an der Reihe)
+und sendet das `PUT` für dessen *Modell* (`pfadDerAuswahl.format(2, 1)`,
+`pfadDesModells.format(2, 1, 1)`), wie vorgeschlagen. Einheitstests und `ruff` grün.

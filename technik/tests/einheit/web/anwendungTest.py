@@ -81,11 +81,11 @@ def testEineSehrGroßeGanzeZahlIstEineFehlerhafteAnfrageUndLässtDenSpielstandLe
     aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     dienst = anwendungFür(aufstellung).test_client()
-    dienst.put(pfadDerAuswahl.format(1, 1))
+    dienst.put(pfadDerAuswahl.format(2, 1))
     groß = "1" + "0" * 400
 
     antwort = dienst.put(
-        pfadDesModells.format(1, 1, 1),
+        pfadDesModells.format(2, 1, 1),
         data=f'{{"x": 3, "y": {groß}}}',
         content_type="application/json",
     )
