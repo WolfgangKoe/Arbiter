@@ -1,11 +1,55 @@
-"""Ziehen der Akzeptanztests: Maus und Finger, Ziehen bis zur Antwort und ohne Anfrage."""
+"""Bedienung der Akzeptanztests: Auswählen und Ziehen mit Maus und Finger, bis zur Antwort."""
 
+import re
+from collections.abc import Callable
 from dataclasses import dataclass
 
-from playwright.sync_api import Locator, Page, Request, Response
+from playwright.sync_api import Locator, Page, Request, Response, expect
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten, einheitenKarteVon
+from tests.akzeptanz.bildschirm import (
+    ablageVon,
+    aufDieHandlungWarten,
+    einheitenKarteVon,
+    elementeDerSeite,
+)
+
+
+def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
+    """Die Namen der Einheiten, deren Karte in einer Ablage als ausgewählt gekennzeichnet ist."""
+    namen = seite.locator(".einheitenKarte.ausgewählt .einheitenKartenName span:first-child")
+    return frozenset(namen.all_text_contents())
+
+
+def ausgewählteModelle(seite: Page) -> frozenset[tuple[float, float]]:
+    """Die Stellen der Kreise auf der Karte, die als ausgewählt gekennzeichnet sind."""
+    kreise = elementeDerSeite(seite, ".karte .modell.ausgewählt")
+    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
+
+
+ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
+
+
+def _berührenUndWarten(
+    seite: Page, spielername: str, einheitenname: str, berühren: Callable[[Locator], None]
+) -> None:
+    karte = einheitenKarteVon(seite, spielername, einheitenname)
+    warAusgewählt = einheitenname in ausgewählteEinheiten(seite)
+    berühren(karte)
+    if warAusgewählt:
+        expect(karte).not_to_have_class(ausgewähltGekennzeichnet)
+    else:
+        expect(karte).to_have_class(ausgewähltGekennzeichnet)
+
+
+def klickenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
+    """Klickt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
+    _berührenUndWarten(seite, spielername, einheitenname, Locator.click)
+
+
+def tippenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
+    """Tippt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
+    _berührenUndWarten(seite, spielername, einheitenname, Locator.tap)
 
 
 @dataclass(frozen=True)

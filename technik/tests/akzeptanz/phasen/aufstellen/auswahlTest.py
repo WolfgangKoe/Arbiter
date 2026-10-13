@@ -6,12 +6,8 @@ import pytest
 from playwright.sync_api import expect
 
 from tests.akzeptanz.bildschirm import (
-    ausgewählteEinheiten,
-    ausgewählteModelle,
-    ausgewähltGekennzeichnet,
     einheitenKarteVon,
     elementeDerSeite,
-    klickenUndWarten,
     spielerAnDerReihe,
     strichVon,
     umrissVon,
@@ -31,6 +27,12 @@ from tests.akzeptanz.handgriffe import (
     einheitAufstellen,
     modelleSetzen,
     stellenAllerModelle,
+)
+from tests.akzeptanz.ziehen import (
+    ausgewählteEinheiten,
+    ausgewählteModelle,
+    ausgewähltGekennzeichnet,
+    klickenUndWarten,
 )
 
 

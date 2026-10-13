@@ -9,7 +9,6 @@ from tests.akzeptanz.bildschirm import (
     gesperrteModelle,
     gründeAlsText,
     kennzeichenDesKreises,
-    klickenUndWarten,
     sperrmeldungWarten,
 )
 from tests.akzeptanz.dienst import dienstFür, modellLoslassen
@@ -21,7 +20,7 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
-from tests.akzeptanz.ziehen import liegtEinPixelGenauAn, modellZiehen
+from tests.akzeptanz.ziehen import klickenUndWarten, liegtEinPixelGenauAn, modellZiehen
 
 
 def testAuf9_1EinModellAufEinerBaseIstNachDemLoslassenGesperrtMitDemGrund(

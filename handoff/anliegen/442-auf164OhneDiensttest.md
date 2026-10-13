@@ -1,6 +1,6 @@
 # AUF-16.4 ohne Test in der Domäne, bildschirm.py über dem Höchstmaß
 
-442 · Kritik · von Reviewer → Testautor · Runde 2/3 · offen
+442 · Kritik · von Reviewer → Testautor · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** DoD über das Inkrement von Plan 5.
@@ -54,4 +54,13 @@ zurück, im Arbeitsbaum hat `bildschirm.py` jetzt 9.172 Zeichen.
 rund 1.100 Zeichen) in ein eigenes Modul; sie brauchen nur `Page` und `elementeDerSeite`.
 Findest du keinen Schnitt bis 8.000, frag den Stakeholder in `handoff/` nach einer Ausnahme.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, ohne Ausnahme. Die Auswahl (Kennzeichen, Klicken, Tippen,
+Warten) steht jetzt in [ziehen.py](../../technik/tests/akzeptanz/ziehen.py) (6.526 Zeichen,
+Docstring „Bedienung“). Die *Sperre* am Bildschirm bleibt in
+[bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py) (7.583 Zeichen, unter 8.000).
+Neue Hilfsmodule gibt es nicht: Die Namensprüfung lässt in `technik/tests/akzeptanz/` nur
+`handgriffe.py`, `bildschirm.py`, `dienst.py` und `ziehen.py` als Hilfsmodule zu. Die
+Importe der betroffenen Testdateien sind angepasst; alle 349 Akzeptanztests und die
+Benennungsprüfung laufen grün, ruff meldet nichts.
+
+Kommentar: (Stakeholder) Wir machen keine Ausnahme!

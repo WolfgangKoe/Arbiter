@@ -10,7 +10,6 @@ from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     gründeAlsText,
-    klickenUndWarten,
     knopfDerSeite,
     sperrmeldungWarten,
 )
@@ -32,7 +31,7 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
-from tests.akzeptanz.ziehen import einheitZiehen
+from tests.akzeptanz.ziehen import einheitZiehen, klickenUndWarten
 
 beenden = "Aufstellen der Einheit beenden"
 

@@ -7,16 +7,12 @@ import pytest
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
-    ausgewählteEinheiten,
-    ausgewählteModelle,
     gesperrteModelle,
     gründeAlsText,
     inhaltDerSeite,
-    klickenUndWarten,
     neuLaden,
     seiteMitEingabe,
     sperrmeldungWarten,
-    tippenUndWarten,
 )
 from tests.akzeptanz.dienst import auswählen, dienstFür, spielstandVon
 from tests.akzeptanz.handgriffe import (
@@ -28,10 +24,14 @@ from tests.akzeptanz.handgriffe import (
     stellenDerEinheit,
 )
 from tests.akzeptanz.ziehen import (
+    ausgewählteEinheiten,
+    ausgewählteModelle,
     einheitZiehen,
+    klickenUndWarten,
     liegtEinPixelGenauAn,
     modellAufDieAblageZiehen,
     modellZiehen,
+    tippenUndWarten,
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])

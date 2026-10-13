@@ -1,7 +1,6 @@
 """Bildschirm der Akzeptanztests: Browser, Server und das Lesen der Seite."""
 
 import re
-from collections.abc import Callable
 from dataclasses import dataclass
 
 from playwright.sync_api import Browser, Locator, Page, Response, expect
@@ -63,18 +62,6 @@ def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> fro
     )
 
 
-def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
-    """Die Namen der Einheiten, deren Karte in einer Ablage als ausgewählt gekennzeichnet ist."""
-    namen = seite.locator(".einheitenKarte.ausgewählt .einheitenKartenName span:first-child")
-    return frozenset(namen.all_text_contents())
-
-
-def ausgewählteModelle(seite: Page) -> frozenset[tuple[float, float]]:
-    """Die Stellen der Kreise auf der Karte, die als ausgewählt gekennzeichnet sind."""
-    kreise = elementeDerSeite(seite, ".karte .modell.ausgewählt")
-    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
-
-
 def inhaltDerSeite(seite: Page) -> str:
     """Kopfzeile, Ablagen und Karte, wie der Browser sie zeigt."""
     return seite.evaluate(
@@ -108,9 +95,6 @@ def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Loca
     return ablageVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
 
 
-ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
-
-
 def spielerAnDerReihe(seite: Page) -> Locator:
     """Die Kopfzeile des Spielers, die „an der Reihe“ zeigt."""
     return seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
@@ -123,28 +107,6 @@ def neuLaden(seite: Page) -> None:
 
 def _aufDasSpielfeldWarten(seite: Page) -> None:
     seite.wait_for_selector(".karte .spielfeld")
-
-
-def _berührenUndWarten(
-    seite: Page, spielername: str, einheitenname: str, berühren: Callable[[Locator], None]
-) -> None:
-    karte = einheitenKarteVon(seite, spielername, einheitenname)
-    warAusgewählt = einheitenname in ausgewählteEinheiten(seite)
-    berühren(karte)
-    if warAusgewählt:
-        expect(karte).not_to_have_class(ausgewähltGekennzeichnet)
-    else:
-        expect(karte).to_have_class(ausgewähltGekennzeichnet)
-
-
-def klickenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
-    """Klickt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
-    _berührenUndWarten(seite, spielername, einheitenname, Locator.click)
-
-
-def tippenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
-    """Tippt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
-    _berührenUndWarten(seite, spielername, einheitenname, Locator.tap)
 
 
 def ablageVon(seite: Page, spielername: str) -> Locator:
