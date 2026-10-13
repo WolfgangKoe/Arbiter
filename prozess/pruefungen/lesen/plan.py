@@ -20,14 +20,18 @@ def zyklus(datei: Path) -> int | None:
     return zyklusAusText(datei.read_text(encoding="utf-8"))
 
 
-def offeneItems(wurzel: Path) -> list[str]:
-    """Items des Plans (Links in `handoff/plan.md`), deren Datei in `domaene/items/` existiert."""
+def itemNamen(wurzel: Path) -> list[str]:
+    """Dateinamen aller Items, auf die `handoff/plan.md` verlinkt, auch gelöschter."""
     plan = wurzel / planDatei
     if not plan.is_file():
         return []
     muster = rf"\]\(\.\./{re.escape(itemsOrdner)}/([^)#\s]+\.md)"
-    links = re.findall(muster, plan.read_text(encoding="utf-8"))
-    return [name for name in links if (wurzel / itemsOrdner / name).is_file()]
+    return re.findall(muster, plan.read_text(encoding="utf-8"))
+
+
+def offeneItems(wurzel: Path) -> list[str]:
+    """Items des Plans (Links in `handoff/plan.md`), deren Datei in `domaene/items/` existiert."""
+    return [name for name in itemNamen(wurzel) if (wurzel / itemsOrdner / name).is_file()]
 
 
 def freigegebenerPlan(wurzel: Path) -> int | None:

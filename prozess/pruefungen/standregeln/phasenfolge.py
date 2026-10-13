@@ -37,15 +37,25 @@ def aktuelleEtappe(wurzel: Path) -> str:
     return "keine Etappe"
 
 
-def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
-    """Das erste Item `- P<k> ` der Retro ohne Commit `P<k>: …` seit ihrer Freigabe."""
-    # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` (Prozessphase, Schritt 5).
+def prozessItems(wurzel: Path) -> list[str]:
+    """Die Kennungen `P<k>` der Zeilen `- P<k> ` im Abschnitt „Prozess-Items“ der Retro."""
     text = (wurzel / handoffOrdner / "retro.md").read_text(encoding="utf-8")
     abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
+    return re.findall(r"^- (P\d+) ", abschnitt, re.MULTILINE)
+
+
+def hatItemCommit(betreffe: list[str], retro: int, kennung: str) -> bool:
+    """Ein Betreff beginnt mit `P<k>:` oder `Retro <n> P<k>:`."""
+    # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` (Prozessphase, Schritt 5).
+    muster = rf"(Retro {retro} )?{kennung}:"
+    return any(re.match(muster, betreff) for betreff in betreffe)
+
+
+def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
+    """Das erste Item `- P<k> ` der Retro ohne Commit `P<k>: …` seit ihrer Freigabe."""
     betreffe = betreffeSeit(wurzel, freigabe)
-    for kennung in re.findall(r"^- (P\d+) ", abschnitt, re.MULTILINE):
-        muster = rf"(Retro {retro} )?{kennung}:"
-        if not any(re.match(muster, betreff) for betreff in betreffe):
+    for kennung in prozessItems(wurzel):
+        if not hatItemCommit(betreffe, retro, kennung):
             return kennung
     return None
 

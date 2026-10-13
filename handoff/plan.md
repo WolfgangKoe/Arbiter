@@ -58,6 +58,32 @@ Etappe 1 erreicht. AUF-5.5 bleibt nach deiner Antwort in 320 (B, git) draußen.
 ## Offene Anliegen
 An dich: keins offen. Die übrigen: Technik und Prozess ([Moderation](moderation.md)).
 
+## Fortschritt
+- [x] Testautor: Tests zu Item ziehen
+- [ ] Fachkritiker: Kritik an den Tests zu Item ziehen
+- [ ] Architekt: Kritik an den Tests zu Item ziehen
+- [ ] Implementierer: Tests zu Item ziehen grün
+- [ ] Reviewer: Kritik am Code zu Item ziehen
+- [ ] Fachkritiker: Item ziehen abgenommen
+- [x] Planer: Item ziehen gelöscht
+- [x] Testautor: Tests zu Item gesperrtStehenUndZurueck
+- [ ] Fachkritiker: Kritik an den Tests zu Item gesperrtStehenUndZurueck
+- [ ] Architekt: Kritik an den Tests zu Item gesperrtStehenUndZurueck
+- [ ] Implementierer: Tests zu Item gesperrtStehenUndZurueck grün
+- [ ] Reviewer: Kritik am Code zu Item gesperrtStehenUndZurueck
+- [ ] Fachkritiker: Item gesperrtStehenUndZurueck abgenommen
+- [x] Planer: Item gesperrtStehenUndZurueck gelöscht
+- [x] Testautor: Tests zu Item beendenUndSperreOhneStelle
+- [ ] Fachkritiker: Kritik an den Tests zu Item beendenUndSperreOhneStelle
+- [ ] Architekt: Kritik an den Tests zu Item beendenUndSperreOhneStelle
+- [ ] Implementierer: Tests zu Item beendenUndSperreOhneStelle grün
+- [ ] Reviewer: Kritik am Code zu Item beendenUndSperreOhneStelle
+- [ ] Fachkritiker: Item beendenUndSperreOhneStelle abgenommen
+- [x] Planer: Item beendenUndSperreOhneStelle gelöscht
+- [ ] Reviewer: DoD über das Inkrement
+- [ ] Reviewer: Review geschrieben
+- [ ] Stakeholder: Freigabe Review 5
+
 ## Freigabe
 Freigabe: Ja
 Kommentar: Eine Sache fehlt mir noch. Aktuell sieht es in den Mockups so aus, dass man Modell für Modell aufstellen muss. Ich glaube es wäre einfacher, wenn man jede Einheit mit allen Modellen komplett aufstellt, so wie es ArbiterMap gemacht hat. Bitte nochmal prüfen. Vorher kommt keine Freigabe.

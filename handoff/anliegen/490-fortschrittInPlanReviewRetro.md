@@ -40,4 +40,8 @@ Bordmittel geprüft: Die Aufgabenlisten von Claude Code gelten je Sitzung und li
 des Repos, sie erreichen weder Plan noch Dashboard; die nötigen Hooks (SubagentStart,
 SubagentStop, PostToolUse) nutzen wir schon.
 
-**Stellungnahme.**
+**Stellungnahme (Regelumsetzer).** Teil 1 gebaut: `standregeln/fortschritt.py` (SubagentStop,
+PostToolUse Bash), Test `standregeln/fortschrittTest.py`, Zeile in [Regeln](../../prozess/regeln.md#standregeln).
+Haken, `Hindernis:` und `Kommentar:` bleiben beim Neuschreiben stehen (Grundlage für Teil 2
+und 3). Offen: Teil 2 (Befehl, Hindernis als Anliegen) und Teil 3 (Dashboard), je ein Lauf;
+Status bleibt `offen`, bis alle drei stehen.
