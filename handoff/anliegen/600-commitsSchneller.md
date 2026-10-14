@@ -1,6 +1,6 @@
 # Schneller committen, ohne eine Prüfung aufzugeben
 
-600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · rückfrage
 
 ## Runde 1
 **Befund.** Dein Befund: Das Committen dauert zu lange. Heute gemessen (603 Prüfungen):
@@ -59,3 +59,4 @@ je Commit ([Ablauf](../../prozess/ablauf.md#kritik-am-code)), und ein gebündelt
 wartet nicht kürzer.
 
 **Stellungnahme.**
+Kommentar: Ich habe in die aktuelle Session einen Screenshot gelegt, der die Thematik ggf. nochmal erweitert und vielleicht auch tiefer legt. Bitte im Transskript nachsehen

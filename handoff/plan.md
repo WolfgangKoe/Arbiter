@@ -81,7 +81,7 @@ An dich: keins offen. Die übrigen: Technik und Prozess ([Moderation](moderation
 - [x] Fachkritiker: Item beendenUndSperreOhneStelle abgenommen
 - [x] Planer: Item beendenUndSperreOhneStelle gelöscht
 - [x] Reviewer: DoD über das Inkrement
-- [ ] Reviewer: Review geschrieben
+- [x] Reviewer: Review geschrieben
 - [ ] Stakeholder: Freigabe Review 5
 
 ## Freigabe
