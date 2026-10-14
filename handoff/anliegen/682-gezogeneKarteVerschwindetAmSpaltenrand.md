@@ -21,9 +21,10 @@ ein anderer Fehler als 680 (Markieren) und 670 (Karte springt).
 **Kosten.** Der Spieler zieht eine Karte, die er nicht mehr sieht; er weiß nicht, ob er sie noch
 hält, und lässt sie los, bevor sie auf der *Karte* ist. Ziehen ist heute der einzige Weg zu
 *setzen* (AUF-8.5); die Rückmeldung während des Ziehens ist das Einzige, was ihm den Weg zeigt.
-Am Touchgerät deckt der Finger den Rest ab. Auch wenn der Stakeholder die Bedienung ändert
-([683](683-aufstellenKlickenOderZiehen.md), F1), bleibt das Ziehen der Karte bei Option B und C;
-bei Option A entfiele es.
+Am Touchgerät deckt der Finger den Rest ab. Der Stakeholder hat entschieden
+([683](683-aufstellenKlickenOderZiehen.md), F1 A): Das Ziehen der Karte entfällt, sobald das
+Setzen per Klick gebaut ist. Bis dahin ist es der einzige Weg; ob sich die Berichtigung
+lohnt, entscheidet der Implementierer mit dem Plan.
 
 **Gegenvorschlag.** Die gezogene Karte bleibt auf der ganzen Seite sichtbar, solange sie
 gehalten wird, über Spalte und *Karte* hinweg; wie, entscheidest du (Spalte beschneidet nur in

@@ -40,11 +40,12 @@ AUF-7.2 und AUF-16.5. Neue Komponenten: Anliegen an den Architekten. Erledigt, w
 Optionen beim Stakeholder liegen und die Texte als Anliegen beim Anforderungsautor.
 
 **Stellungnahme.** (Ux) Die Rückmeldung des Stakeholders nach seinem Test am Bildschirm
-ändert Punkt 2: Er wünscht, eine *Einheit* auszuwählen und in die Zone zu klicken, statt zu
-ziehen. Die Optionen A, B (empfohlen) und C mit den betroffenen Kriterien und Items stehen als
-Frage in [683](683-aufstellenKlickenOderZiehen.md); Mockups folgen nach seiner Antwort, weil
-die Optionen Gesten sind, nicht Bilder. Punkt 3 und eine deutlichere Anzeige zu Punkt 1 liegen
-beim Anforderungsautor in [684](684-anforderungenFuerKlickenBlockUndGrund.md) (Punkt 5, jetzt).
-Der Befund „Text blockiert am Rand bei Spieler 2“ ist weder 670 noch 680, sondern ein eigener
-Fehler: [682](682-gezogeneKarteVerschwindetAmSpaltenrand.md). Ich setze erst `angenommen`, wenn
-683 beantwortet und die Mockups eingebaut oder gelöscht sind.
+ändert Punkt 2: Er hat in [683](683-aufstellenKlickenOderZiehen.md) entschieden, F1 A und
+F2 a: Er wählt eine *Einheit* aus, klickt in die Zone, verschiebt sie als Ganzes; ein Umschalter
+„Ganze Einheit / Einzelmodelle“ wie in ArbiterMap. Das Ziehen aus der *Ablage* entfällt, ein
+Hinweis „ziehen“ und ein Greif-Zeiger sind damit überholt. Die Kriterien dazu, den *Grund*
+statt ‚nicht wählbar‘ (Punkt 3) und eine deutlichere Anzeige *an der Reihe* (Punkt 1) schreibt
+der Anforderungsautor ([684](684-anforderungenFuerKlickenBlockUndGrund.md)). Danach zeige ich
+als Mockup *Auswahl*, Umschalter und Block. Der Randfehler beim Ziehen ist ein eigener Fehler:
+[682](682-gezogeneKarteVerschwindetAmSpaltenrand.md). Ich setze `angenommen`, wenn die Mockups
+eingebaut oder gelöscht sind.
