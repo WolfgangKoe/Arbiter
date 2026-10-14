@@ -1,62 +1,67 @@
-# Schneller committen, ohne eine Prüfung aufzugeben
+# Schneller und seltener committen, ohne eine Prüfung aufzugeben
 
-600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · rückfrage
+600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 2/3 · offen
 
 ## Runde 1
-**Befund.** Dein Befund: Das Committen dauert zu lange. Heute gemessen (603 Prüfungen):
-- Ein Lauf aller Prüfungen dauert 3:45 Minuten. Davon braucht eine einzige 1:40: die
-  Abdeckung, die alle Produkttests samt Bildschirmtests noch einmal ausführt. Drei Proben
-  für SonarLint, die je einen Java-Server starten, brauchen 1:05. Die übrigen 599 Prüfungen
-  brauchen zusammen 54 Sekunden.
-- Je Commit läuft alles zweimal: Der [Koordinator](../../.claude/agents/koordinator.md)
-  prüft vorher selbst, dann prüft der Commit-Hook „Prüfungen“. Bei Python-Dateien läuft
-  dazu SonarLint über das ganze Repo, und der Hook „Benennung“ prüft ein zweites Mal, was in
-  „Prüfungen“ schon steckt.
-- Die meisten Commits ändern nur Anliegen, Plan oder Texte (Kritik, Moderation,
-  Freigaben). Sie können weder die Abdeckung noch die Proben der Prüfskripte ändern, warten
-  aber gleich lang.
-- Deshalb committete der Koordinator im Hintergrund, während andere Rollen liefen. Dabei
-  gingen nicht committete Dateien verloren (Anliegen 610, die Ursache ist dort benannt).
+**Befund.** Ein Commit wartet 7 bis 8 Minuten: Alle Prüfungen laufen zweimal (Koordinator,
+dann Commit-Hook), auch wenn er nur Texte ändert. Die Abdeckung braucht 1:40, drei
+SonarLint-Proben 1:05, die übrigen 599 Prüfungen 54 Sekunden.
 
-**Kosten.** Je Commit 7 bis 8 Minuten Warten, bei 20 und mehr Commits je Zyklus Stunden.
-Der Druck, im Hintergrund zu committen, gefährdet die Arbeit der gleichzeitig laufenden
-Rollen.
+**Kosten.** Stunden je Zyklus; Commits im Hintergrund kosteten Arbeit (Anliegen 610).
 
-**Gegenvorschlag.** Bestehende Regeln (Ich 4): die Commit-Regel des Koordinators und die
-Commit-Hooks ([Regeln](../../prozess/regeln.md#formregeln)). Jede Prüfung bleibt, sie
-läuft nur nicht doppelt und nicht umsonst. Den Bau beschreibt Anliegen 601 an den
-Regelumsetzer; es beginnt nach deiner Antwort.
-
-**F1 · Prüft der Koordinator vor dem Commit nicht mehr selbst?**
-A: Ja. Es prüft nur noch der Commit-Hook. Ist eine Prüfung rot, scheitert der Commit und
-der Koordinator meldet es.
-B: Nein, er prüft weiter doppelt.
-Empfehlung: A. Halbiert die Wartezeit bei gleichem Ergebnis. Nach Anliegen 610 ändert der
-Hook keine Dateien mehr, ein gescheiterter Commit lässt alles stehen.
-Antwort: .
-
-**F2 · Führt der Commit-Hook die langsamen Teile nur aus, wenn der Commit sie betrifft?**
-A: Ja. Die Abdeckung läuft nur, wenn der Commit `technik/` oder `pyproject.toml` ändert.
-Die Proben der Prüfskripte laufen nur, wenn er `prozess/pruefungen/` oder eine
-Prüfkonfiguration ändert. Der doppelte Hook „Benennung“ entfällt.
-B: Nein, immer alles.
-Empfehlung: A. Was ein Commit nicht ändert, kann er nicht rot machen. Ein Commit nur mit
-Texten braucht dann unter einer Minute, einer mit Produktcode etwa 3 Minuten. Vollständig
-prüfen weiterhin der Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD.
-Antwort: .
-
-**F3 · Laufen die Prüfungen auf allen Kernen gleichzeitig (pytest-xdist)?**
-A: Ja, zuerst als Wegwerf-Versuch nach F1 und F2. Es bleibt nur, wenn alle Prüfungen dabei
-dreimal hintereinander grün sind.
-B: Nein.
-Empfehlung: A. Geschätzt sinkt ein Commit nur mit Texten auf 15 bis 20 Sekunden. Bei
-Produktcode bestimmt die Abdeckung (1:40) die Dauer, bis auch ihre Produkttests parallel
-laufen. Risiko: Prüfungen, die dieselben Dateien nutzen, stören sich; das zeigt der Versuch.
-Antwort: .
-
-Nicht empfohlen: mehrere fertige Rollen in einem Commit bündeln. Die Kritik am Code prüft
-je Commit ([Ablauf](../../prozess/ablauf.md#kritik-am-code)), und ein gebündelter Commit
-wartet nicht kürzer.
+**Gegenvorschlag.** Drei Fragen, aufgegangen in Runde 2.
 
 **Stellungnahme.**
 Kommentar: Ich habe in die aktuelle Session einen Screenshot gelegt, der die Thematik ggf. nochmal erweitert und vielleicht auch tiefer legt. Bitte im Transskript nachsehen
+
+## Runde 2
+**Befund.** Dein Bild „Arbiter – Kritik“, Zahlen aus Zyklus 5 (seit Commit „Freigabe Retro 4“):
+1. Ablauf nicht transparent, ständig Anliegen: 78 neue in fünf Tagen. Antwort in
+   [Anliegen 630](630-jedePhaseBringtDasProduktVoran.md), F1 und F3.
+2. Zu viele Commits, volle Prüfung ohne Produktcode: 109 Commits, 8 davon ändern Produktcode
+   (`technik/arbiter`, `technik/frontend`); 13 sind Kritik-Commits, 7 löschen erledigte
+   Anliegen. Jeder wartet auf alle Prüfungen. Antwort hier, F1 bis F3.
+3. Anliegen ohne Blockade, Fokus auf der Organisation: 24 der 78 gehen an den Regelumsetzer
+   oder mich oder sind Prozessfragen an dich; 2.685 Zeilen Prüfcode neu gegen 1.035 Zeilen
+   Produktcode ([Review 5](../review.md), Rundgang). Antwort in 630, F1 und F2.
+4. Tests trivial grün? Nein: Der Reviewer baute 18 Fehler einzeln in eine Kopie des Codes
+   ein, 17 machten Tests rot; die zwei Lücken schließen 621 und 622 (Review 5). Dass das
+   jeden Zyklus geschieht: 630, F4.
+5. Fortschritt im Frontend: Was am Bildschirm neu geht, zeigt der Abschnitt „Am Bildschirm
+   prüfen“ des Reviews. Die Schritte der Phase stehen nur im [Plan](../plan.md), Abschnitt
+   „Fortschritt“; das Dashboard zeigt sie noch nicht (Anliegen 490, Teil 3). Antwort in 630, F3.
+
+**Kosten.** Wer wartet oder Anliegen abarbeitet, baut nicht am Produkt. Nach fünf Zyklen ist
+keine der sieben Etappen erreicht.
+
+**Gegenvorschlag.** Bestehende Regeln (Ich 4): Commit-Regel des
+[Koordinators](../../.claude/agents/koordinator.md), Commit-Hooks
+([Regeln](../../prozess/regeln.md#formregeln)), [Kritik am
+Code](../../prozess/ablauf.md#kritik-am-code). Jede Prüfung bleibt; den Bau beschreibt 601.
+
+**F1 · Prüft nur noch der Commit-Hook?**
+A: Ja. Der Koordinator prüft nicht vorher selbst; ist eine Prüfung rot, scheitert der Commit,
+er meldet es. B: Nein, weiter doppelt.
+Empfehlung: A. Halbiert das Warten; nach 610 lässt ein gescheiterter Commit alles stehen.
+Antwort: .
+
+**F2 · Prüft der Hook nur, was der Commit ändern kann?**
+A: Ja. Ein Commit nur mit Texten prüft Form und Stand, unter einer Minute; die Abdeckung
+läuft nur bei Produktcode, die Proben nur bei Prüfcode; der doppelte Hook „Benennung“
+entfällt. B: Nein, immer alles.
+Empfehlung: A. Was ein Commit nicht ändert, kann er nicht rot machen. Alles prüfen weiter der
+Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD.
+Antwort: .
+
+**F3 · Weniger Commits?**
+A: Ja. Ein Kritiklauf bekommt keinen eigenen Commit mehr, seine Anliegen gehen mit dem
+nächsten; gelöschte erledigte Anliegen ebenso; Läufe nur mit Texten, die zusammen enden,
+gehen in einen Commit. Jeder Lauf mit Produktcode bleibt ein Commit, die Kritik prüft ihn.
+B: Nein.
+Empfehlung: A. Zyklus 5 hätte mindestens 20 Commits weniger gehabt.
+Antwort: .
+
+Parallele Prüfungen (Runde 1, F3) stelle ich zurück: Nach F2 wartet ein Commit nur mit Texten
+unter einer Minute.
+
+**Stellungnahme.**

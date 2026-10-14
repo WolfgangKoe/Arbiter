@@ -12,7 +12,8 @@ stehen in Anliegen 600: Die Abdeckung über das echte Repo braucht 1:40, drei So
 committen (Anliegen 610).
 
 **Gegenvorschlag.** Beginne erst, wenn der Stakeholder Anliegen 600 beantwortet hat. Es gilt,
-was er wählt; F1 betrifft nur den Text des Koordinators, das übernehme ich.
+was er wählt; F1 und F3 (Runde 2) betreffen nur Texte von Koordinator und Ablauf, das
+übernehme ich.
 - Bei F2 A: Mit den Bordmitteln von pre-commit (`files:` je Hook) wird `pruefungen` geteilt:
   1. Stand, immer: die Tests mit Marke `stand` ohne die Abdeckung über das echte Repo.
   2. Abdeckung: nur bei `^(technik/|pyproject\.toml)`.
@@ -20,10 +21,6 @@ was er wählt; F1 betrifft nur den Text des Koordinators, das übernehme ich.
      `pyproject.toml`, `.pre-commit-config.yaml` oder Linter-Konfiguration.
   Der Hook `benennung` entfällt. Eine Marke für die Abdeckung legst du fest. Prüfe, dass
   jeder Test über das echte Repo `stand` trägt; sonst fiele er in Text-Commits aus.
-- Bei F3 A: zuerst ein Wegwerf-Versuch mit pytest-xdist (`-n auto`) über
-  `prozess/pruefungen`. Wenn er dreimal hintereinander grün ist, kommt er in die Hooks und
-  `pytest-xdist` in `dependency-groups.entwicklung`. Sonst nennst du die Prüfungen, die sich
-  stören.
 
 Erledigt, wenn ein Scheiter-Test über `.pre-commit-config.yaml` (wie
 `formregeln/konfigurationTest.py`) zeigt: Ein Commit nur in `handoff/` startet weder
