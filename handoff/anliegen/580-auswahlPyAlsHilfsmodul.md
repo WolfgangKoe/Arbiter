@@ -1,6 +1,6 @@
 # auswahl.py als Hilfsmodul der Akzeptanztests zulassen
 
-580 · Kritik · von Testautor → Regelumsetzer · Runde 1/3 · offen
+580 · Kritik · von Testautor → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Anliegen [550](550-auswahlGehoertNichtZumZiehen.md) verlangt die Hilfen zur
@@ -15,4 +15,6 @@ nennt es nicht; die Benennungsprüfung würde die Datei als Akzeptanztest ohne A
 `python3 -m pytest prozess/pruefungen/formregeln/benennungTest.py` mit einer vorhandenen
 `auswahl.py` grün ist. Ich lege das Modul an, sobald der Eintrag steht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `"auswahl.py"` steht in `akzeptanzHilfsmodule`.
+Scheiter-Test `testAuswahlPyIstEinHilfsmodulDerAkzeptanztests` in `benennungTest.py` (ohne
+Eintrag rot), Eintrag in [Regeln](../../prozess/regeln.md). Das Modul kann angelegt werden.

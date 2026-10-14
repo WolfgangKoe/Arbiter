@@ -246,6 +246,11 @@ def testZiehenPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
     assert verstöße(tmp_path) == []
 
 
+def testAuswahlPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def auswahl(): ...\n", "auswahl.py")
+    assert verstöße(tmp_path) == []
+
+
 def testDienstPyOhneListeneintragBliebeRot(tmp_path):
     hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", "unbekannt.py")
     assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))
