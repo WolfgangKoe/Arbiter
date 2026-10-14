@@ -1,6 +1,6 @@
 # Aufstellen: in die Zone klicken, ziehen oder beides?
 
-683 · Fragen · von Ux → Stakeholder · Runde 2/3 · offen
+683 · Fragen · von Ux → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Dein Test am Bildschirm: Das Ziehen der Karte aus der *Ablage* ist nicht intuitiv.

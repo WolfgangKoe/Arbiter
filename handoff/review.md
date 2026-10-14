@@ -57,5 +57,5 @@ das Dashboard (`rollenregeln/dashboard*.py`, `zuegeUebernehmen.py`), dazu `forts
   übergeht ihr gemeinsam, das *Protokoll* zeigt es. Damit ist Etappe 1 erreicht. Vorher: 620 bis 622.
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
