@@ -1,6 +1,6 @@
 # Jede Phase bringt das Produktziel voran
 
-630 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+630 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Deine Anweisung: „Sorge dafür, dass der Fokus in jeder Phase darauf liegt, dass wir
@@ -31,7 +31,7 @@ Anliegen. Übriger Feinschliff kommt in den [Backlog](../../prozess/backlog.md) 
 Perspektive und wird erledigt, wenn die Datei ohnehin geändert wird. So lautet dann Ich 3.
 B: Wie bisher.
 Empfehlung: A. Die Qualität halten Prüfungen und Es; weg fällt nur, was nichts aufhält.
-Antwort: .
+Antwort: A
 
 **F2 · Prozessarbeit nur in der Prozessphase?**
 A: Ja. Davor laufen Regelumsetzer und ich nur zu einem Anliegen, das das Produkt aufhält
@@ -42,7 +42,7 @@ aufgehalten hat.
 B: Wie bisher.
 Empfehlung: A. Jetzt hieße das: 601 und 650 laufen, weil Warten und Sperren jede Rolle
 aufhalten; 490 (Teile 2 und 3) wartet auf die Prozessphase 5.
-Antwort: .
+Antwort: A
 
 **F3 · Wo siehst du den Fortschritt des Produkts?**
 A: Die erste Zeile von Stand und Dashboard: erreichte Etappen von sieben und wie viele
@@ -52,7 +52,7 @@ B: Nur die Schritte der Phase im Dashboard (490, Teil 3).
 C: Nichts Neues; was am Bildschirm geht, zeigt das Review.
 Empfehlung: A, gebaut in der Prozessphase 5 als eines der zwei Items. So siehst du in jeder
 Phase, ob das Produkt vorankommt, ohne eine Datei zu öffnen.
-Antwort: .
+Antwort: A
 
 **F4 · Prüft der Reviewer in jedem Zyklus, ob die Tests den Code treffen?**
 A: Ja, wie in Review 5: Er baut in einer Kopie Fehler einzeln in den neuen Produktcode ein
@@ -61,8 +61,9 @@ Mechanismus: nur Text.
 B: Ein Werkzeug (mutmut) tut es bei der DoD, der Regelumsetzer baut es.
 Empfehlung: A. Review 5 zeigt, dass es geht und Lücken findet; B erst, wenn die Probe den
 Reviewer über 120.000 Token Belegung bringt.
-Antwort: .
+Antwort: A
 
 Nach deinen Antworten ändere ich Ablauf, Ich 3 (nach F1 A) und Kennzahlen.
 
 **Stellungnahme.**
+Kommentar: Bitte vormerken, dass wir rechtzeitig mit Testmutations arbeiten, um Lüücken im Test bzw. Fehler im Codezu finden.

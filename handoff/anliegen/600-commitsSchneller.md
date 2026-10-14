@@ -1,6 +1,6 @@
 # Schneller und seltener committen, ohne eine Prüfung aufzugeben
 
-600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 2/3 · offen
+600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 2/3 · angenommen
 
 ## Runde 1
 **Befund.** Ein Commit wartet 7 bis 8 Minuten: Alle Prüfungen laufen zweimal (Koordinator,
@@ -43,7 +43,7 @@ Code](../../prozess/ablauf.md#kritik-am-code). Jede Prüfung bleibt; den Bau bes
 A: Ja. Der Koordinator prüft nicht vorher selbst; ist eine Prüfung rot, scheitert der Commit,
 er meldet es. B: Nein, weiter doppelt.
 Empfehlung: A. Halbiert das Warten; nach 610 lässt ein gescheiterter Commit alles stehen.
-Antwort: .
+Antwort: A
 
 **F2 · Prüft der Hook nur, was der Commit ändern kann?**
 A: Ja. Ein Commit nur mit Texten prüft Form und Stand, unter einer Minute; die Abdeckung
@@ -51,7 +51,7 @@ läuft nur bei Produktcode, die Proben nur bei Prüfcode; der doppelte Hook „B
 entfällt. B: Nein, immer alles.
 Empfehlung: A. Was ein Commit nicht ändert, kann er nicht rot machen. Alles prüfen weiter der
 Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD.
-Antwort: .
+Antwort: A
 
 **F3 · Weniger Commits?**
 A: Ja. Ein Kritiklauf bekommt keinen eigenen Commit mehr, seine Anliegen gehen mit dem
@@ -59,7 +59,7 @@ nächsten; gelöschte erledigte Anliegen ebenso; Läufe nur mit Texten, die zusa
 gehen in einen Commit. Jeder Lauf mit Produktcode bleibt ein Commit, die Kritik prüft ihn.
 B: Nein.
 Empfehlung: A. Zyklus 5 hätte mindestens 20 Commits weniger gehabt.
-Antwort: .
+Antwort: A
 
 Parallele Prüfungen (Runde 1, F3) stelle ich zurück: Nach F2 wartet ein Commit nur mit Texten
 unter einer Minute.
