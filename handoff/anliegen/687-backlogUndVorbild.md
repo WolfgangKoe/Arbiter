@@ -1,6 +1,6 @@
 # Wohin Feinschliff, was hält auf, und gilt „wie ArbiterMap“ für alle?
 
-687 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · offen
+687 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.**
@@ -57,3 +57,11 @@ Empfehlung: A. So decken sich Ich 3 und die Technikphase.
 Antwort: .
 
 **Stellungnahme.**
+Kommentar: Mir sind die Konsequenzen der hier dargelegten Entscheidungen nicht ganz klar. F1: Wer beurteilt, was Feinschliff ist und nach welchen Kriterien? Was hält denn wirklich auf? Bisher schien es so, dass eben der "Feinschliff" künstlich aufgehalten hat. Wenn jede Perspektive noch ein Artefakt pflegt, generieren wir organisatorische Schuld. Daher tendiere ich bei F1 eher zu B und wir bleiben grundsätztlich bei dem bisherigen oder besser gesagt ursprünglichen Vorgehen. F2: Im Blick auf die Perspektive würde ich zustimmen. Denn die schreibt ja die Anforderungen, die sich am Verhalten, Aussehen und der Funktionen der ursprünglichen PoCs richten soll. Bei der Perspektive Technik sehe ich das nicht. Denn genau da ist ja viel schief gegangen. Bei der Perspektive Prozess sehe ich das auch nicht. Hier fahren wir einen neuen und wie ich finde, besseren Ablauf als bei den anderen PoCs. Wir müssen eben F1 in den Griff bekommen. F3: Da würde ich grundsätzlich zustimmen. Hier verstehe ich allerdings nicht, wo das Problem in den heutigen Regeln liegen, ob sich Technik und Domäne überhaupt richtig an Ich(3) halten und wie eine Änderung zu einer irgendwie gearteten BEsserung führen soll. Vielleicht stellst du hier die Frage, die ich nach F1 gestellt habe? Also nach den Kriterien, wann etwas uns bremst und wann nicht? Und vor allem wann uns etwas Bremsen sollte, damit es uns nicht auf die Füße fällt? Ich weiß, dass ich in der Domänenphase in diesem Zyklus vergleichsweise viel gefordert habe. Ich hatte dennoch den Eindruck, dass vieles künstlich gebremst wurde. Mir wären mehr Zyklen, die dafür schneller ablaufen lieber. Dann kann ich früher Feedback geben. Wir sollten nur die Learnnings aus ArbiterMap und Arbiter-old mitnehmen. Das wird uns Lernzyklen ersparen, weil die UX dort schon gut war.
+
+**Klärung.** F1: Du hast recht, eine Liste je Perspektive wäre organisatorische Schuld; ich
+folge B. Was bremst und wer es beurteilt, frage ich in
+[693](693-ablaufNachDeinemModell.md) F1. F2: nur die Domäne, so in 693 F2. F3: Das Problem
+heute ist Ich 3, eine Liste von Fällen, die neben der Technikphase steht; 693 F1 ersetzt
+sie durch einen Maßstab, den Happy Path. Die Fragen hier entfallen; setze 687 auf erledigt,
+wenn du 693 beantwortest.
