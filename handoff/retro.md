@@ -73,7 +73,7 @@ Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 69
 - [ ] Organisationsentwickler: P1
 - [ ] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
-- [ ] Koordinator: nach dev gepusht
+- [x] Koordinator: nach dev gepusht
 
 ## Freigabe
 Freigabe: ja

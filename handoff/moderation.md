@@ -22,8 +22,8 @@ bleiben 21 Anliegen, davon blockiert keins die Freigabe. Blockiert Zyklus 6: 684
   [622](anliegen/622-zugschwelleUngeprueft.md); Nachprüfung
   [580](anliegen/580-auswahlPyAlsHilfsmodul.md).
 - Regelumsetzer: Anliegen 650 und
-  [601](anliegen/601-commitHooksNachPfad.md) (halten jede Rolle auf, Retro nennt sie),
-  [686](anliegen/686-wartetAufImKopf.md) (P2),
+  Anliegen 601 (halten jede Rolle auf, Retro nennt sie),
+  Anliegen 686 (P2),
   [490](anliegen/490-fortschrittInPlanReviewRetro.md) (P1; Teil 2 erst Prozessphase 6);
   Nachprüfung [610](anliegen/610-erledigteLoeschenImPreCommitVernichtetArbeit.md).
 - Organisationsentwickler: [421](anliegen/421-schritteAbhaken.md), deine Antworten liegen
