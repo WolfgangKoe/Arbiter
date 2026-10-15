@@ -1,6 +1,6 @@
 # Schreibgrenze sperrt, was Ich 2 erlaubt: /tmp und Lesen
 
-650 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
+650 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Ich 2](../../prozess/praemissen/ich.md) erlaubt Bash zum Lesen, für Prüfungen

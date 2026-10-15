@@ -29,7 +29,7 @@ bleiben 21 Anliegen, davon blockiert keins die Freigabe. Blockiert Zyklus 6: 684
 - Organisationsentwickler: [421](anliegen/421-schritteAbhaken.md), deine Antworten liegen
   vor, es wartet auf 490.
 - Architekt: Nachprüfung [550](anliegen/550-auswahlGehoertNichtZumZiehen.md) und
-  [692](anliegen/692-architekturbildHexagonal.md) (deine Antworten A, A liegen vor).
+  Anliegen 692 (deine Antworten A, A liegen vor).
 
 ## Vorschläge
 - Zusammen (Anforderungsautor): 684 und 670 in einem Lauf; 670 erweitert QUE-2.5.
