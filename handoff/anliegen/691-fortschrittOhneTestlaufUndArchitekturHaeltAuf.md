@@ -1,6 +1,6 @@
 # P1 ist so nicht berechenbar; ein Verstoß gegen die Architektur hält auf
 
-691 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · offen
+691 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik an Retro 5 (Commit „Retro 5: Fortschritt des Produkts im Stand, wartende
@@ -52,4 +52,6 @@ Erledigt, wenn P1 und die Kennzahl sagen, woraus „belegt“ und die Zahl der E
 Testlauf folgen, Ich 3 die Architektur nennt oder deine Begründung sagt, wo sie sonst
 aufhält, und Commits den Lauf des Testautors regelt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. 1: wie vorgeschlagen in den Kennzahlen, Retro P1 und
+Prozessphase 1 verweisen darauf; je Etappe zählen: Backlog. 2: Ich 3 ist Wortlaut des
+Stakeholders, daher [687](687-backlogUndVorbild.md) F3. 3: in Commits wie vorgeschlagen.

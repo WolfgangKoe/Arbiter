@@ -1,6 +1,6 @@
 # Ein fachlich falscher Test oder Code hält auf; Feinschliff nicht in den Item-Backlog
 
-690 · Kritik · von Fachkritiker → Organisationsentwickler · Runde 1/3 · offen
+690 · Kritik · von Fachkritiker → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Kritik an Retro 5 (Commit „Retro 5: Fortschritt des Produkts im Stand, wartende
@@ -43,4 +43,14 @@ Form „Kritik“ in [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) („es
 Erledigt, wenn Ich 3 den fachlichen Fehler als aufhaltend nennt oder deine Begründung sagt,
 wo er sonst steht, und 687 F1 die Items im Domänen-Backlog vom Feinschliff trennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides angenommen.
+1. Die Klammer in Ich 3 ist der Wortlaut aus 630 F1 A; ändern kann sie nur der Stakeholder.
+   Ich lege sie ihm als [687](687-backlogUndVorbild.md) F3 vor, mit deinem Text, verbunden
+   mit 691 Punkt 2. Bis zur Antwort hält der fachliche Fehler nach Technikphase Schritt 2
+   (bemängelter Test) und DoD 4 (Abnahme der Fachkritik) auf, eine rote DoD nennt Ich 3
+   schon; nach Antwort A ändere ich Ich 3 wörtlich.
+2. 687 F1 A trennt jetzt: Feinschliff je Perspektive in `feinschliff.md` (je Punkt Datei
+   und ein Satz), `domaene/backlog.md` bleibt die Liste der Items des Planers. Die eigene
+   Datei statt einer Überschrift, weil die Schreibgrenze je Datei sperrt: Die Kritiker
+   dürfen dann Feinschliff schreiben, aber keine Items. `domaene/CLAUDE.md` ergänze ich nach
+   der Antwort.

@@ -145,8 +145,8 @@ Auslöser: `Freigabe Review <n>`.
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
-   mit dem Fortschritt des Produkts: erreichte Etappen, Kriterien mit grünem Test, was am
-   Bildschirm neu geht. Höchstens zwei Prozess-Items, je aus einem Befund, der das Produkt
+   mit dem Fortschritt des Produkts ([Kennzahlen](kennzahlen.md)) und was am Bildschirm
+   neu geht. Höchstens zwei Prozess-Items, je aus einem Befund, der das Produkt
    aufgehalten hat (Anliegen 630). Ein Mechanismus entsteht wie eine Rolle erst bei
    beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
    Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
@@ -278,8 +278,9 @@ bekommt keinen eigenen Commit, seine Anliegen gehen mit dem nächsten (Anliegen 
 Mechanismus: nur Text.
 
 ## Commits
-Der Koordinator committet jeden Lauf mit Produktcode für sich, damit die Kritik je Commit
-bleibt. Läufe nur mit Texten, die zusammen enden, Kritikläufe und gelöschte erledigte
+Der Koordinator committet jeden Lauf mit Code nach der Tabelle in
+[Kritik am Code](#kritik-am-code) für sich, auch den des Testautors, damit die Kritik je
+Commit bleibt (Anliegen 691). Läufe nur mit Texten, die zusammen enden, Kritikläufe und gelöschte erledigte
 Anliegen gehen in einen Commit. Er prüft nicht vorher selbst: Die Prüfungen laufen im
 Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meldet es der
 Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann; alles prüfen

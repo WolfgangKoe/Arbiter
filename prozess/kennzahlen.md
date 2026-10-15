@@ -13,9 +13,13 @@ für die Retro. Mechanismus: nur Text.
   `technik/arbiter/` und `technik/frontend/` seit der letzten `Freigabe Retro`
   (`git diff --shortstat`). Bedeutung wie Prozesslast. Schwelle: mehr Prüfcode als
   Produktcode. Reaktion: wie Prozesslast (Anliegen 630). Mechanismus: nur Text.
-- Fortschritt des Produkts: erreichte Etappen und Kriterien mit grünem Akzeptanztest.
+- Fortschritt des Produkts: aktuelle Etappe von allen, belegte Kriterien von allen. Die
+  aktuelle ist die kleinste Nummer in `domaene/etappen/`, die Zahl aller die größte.
+  Belegt ist ein Kriterium, das einen Akzeptanztest hat und das kein offenes Item des
+  freigegebenen Plans nennt (`kriterienregeln/rueckverfolgung.py`); grün ist es dann nach
+  DoD 1. Gezählt ohne Testlauf über alle Kriterien; je Etappe: [Backlog](backlog.md).
   Schwelle: kein Zuwachs in einem Zyklus. Reaktion: Die Retro nennt die Ursache; ihre
-  Prozess-Items gelten nur ihr (Anliegen 630). Mechanismus: nur Text; Anzeige: Retro 5, P1.
+  Prozess-Items gelten nur ihr (Anliegen 630, 691). Mechanismus: nur Text; Anzeige: Retro 5, P1.
 
 ## Höchstmaße
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,
