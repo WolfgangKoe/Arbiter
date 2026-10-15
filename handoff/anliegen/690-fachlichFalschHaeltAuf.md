@@ -1,6 +1,6 @@
 # Ein fachlich falscher Test oder Code hält auf; Feinschliff nicht in den Item-Backlog
 
-690 · Kritik · von Fachkritiker → Organisationsentwickler · Runde 1/3 · angenommen
+690 · Kritik · von Fachkritiker → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik an Retro 5 (Commit „Retro 5: Fortschritt des Produkts im Stand, wartende
