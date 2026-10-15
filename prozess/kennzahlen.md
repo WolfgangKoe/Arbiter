@@ -9,6 +9,13 @@ für die Retro. Mechanismus: nur Text.
   Arbeit, die das Produkt bräuchte. Schwelle: ein Drittel. Reaktion: Die Retro löscht
   mindestens einen Mechanismus, bevor sie einen neuen beauftragt, der nicht auf ein Anliegen
   des Stakeholders zurückgeht. Mechanismus: nur Text.
+- Prüfcode gegen Produktcode: neue Zeilen in `prozess/pruefungen/` gegen neue Zeilen in
+  `technik/arbiter/` und `technik/frontend/` seit der letzten `Freigabe Retro`
+  (`git diff --shortstat`). Bedeutung wie Prozesslast. Schwelle: mehr Prüfcode als
+  Produktcode. Reaktion: wie Prozesslast (Anliegen 630). Mechanismus: nur Text.
+- Fortschritt des Produkts: erreichte Etappen und Kriterien mit grünem Akzeptanztest.
+  Schwelle: kein Zuwachs in einem Zyklus. Reaktion: Die Retro nennt die Ursache; ihre
+  Prozess-Items gelten nur ihr (Anliegen 630). Mechanismus: nur Text; Anzeige: Retro 5, P1.
 
 ## Höchstmaße
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,

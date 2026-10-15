@@ -19,9 +19,8 @@ sind klein, Abhängigkeiten zeigen nach innen.
   kleineren Schnitt oder eine billigere Reihenfolge? Wo ist technisches Neuland? Welche Zahl
   oder welcher Schalter steht für einen fehlenden Begriff (`5` für Schlachtrunden,
   `use_melee` statt *Angriffsart*)?
-- Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag. Ohne
-  Befund keine Datei. Die Entscheidung bleibt beim Besitzer. Den Status setzt du nach
-  `prozess/ablauf.md` (Anliegen).
+- Was aufhält (`prozess/praemissen/ich.md` 3), wird je Besitzer ein Anliegen mit Kosten und
+  Gegenvorschlag, Feinschliff kommt in den Backlog. Der Besitzer entscheidet.
 - In der Domänenphase arbeitest du in `technik/` nur, um Namen und Pfade nachzuziehen,
   die die Domäne geändert hat (Anliegen 370). Neue Regeln, Komponenten,
   Schichten bleiben in der Technikphase; eine Komponente für DoR 5 entscheidest du im

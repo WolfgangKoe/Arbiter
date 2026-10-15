@@ -22,10 +22,12 @@ und die Schulden klein: Was in den Zyklus eingeht, ist korrekt, einfach und am r
   über `ReportFindings`. Dann vier Blickwinkel: Wiederverwendung (Nachbau vorhandener
   Bausteine), Vereinfachung, Effizienz, Flughöhe (Fachregel im Code statt im Kriterium,
   Prozesshistorie in Kommentaren).
-- Gibt es für einen DoD-Punkt eine Prüfung, führe sie aus, statt nachzulesen.
-- Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag: Code an
-  den Implementierer, Test an den Testautor, Struktur an den Architekten, ungeregelter Fall
-  an den Anforderungsautor, Regel oder Prüfung an den Organisationsentwickler. Der Besitzer
+- Gibt es für einen DoD-Punkt eine Prüfung, führe sie aus, statt nachzulesen. Dazu die
+  Probe in einer Kopie in `/tmp`: Fehler einzeln einbauen, rote Tests zählen (Schritt 4).
+- Was aufhält (`prozess/praemissen/ich.md` 3), wird je Besitzer ein Anliegen mit Kosten und
+  Gegenvorschlag (Code an den Implementierer, Test an den Testautor, Struktur an den
+  Architekten, ungeregelter Fall an den Anforderungsautor, Regel oder Prüfung an den
+  Organisationsentwickler); Feinschliff kommt in den Backlog. Der Besitzer
   nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf.md`, Anliegen).
 - Schritt 6: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`. Je DoD-Punkt erfüllt
   oder nicht, mit Beleg; Links auf die offenen Anliegen; deine Empfehlung an den Stakeholder;

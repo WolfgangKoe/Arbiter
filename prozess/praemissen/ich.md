@@ -12,8 +12,14 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
    (Anliegen 421) und in `/tmp`. Mechanismus: `rollenregeln/schreibgrenze.py`
    (Write, Edit und Bash; ein Skript, das selbst schreibt, nur Text, Anliegen 510),
    `rollenregeln/entfernen.py` (`rm`, `mv`); Lücken: [Regeln](../regeln.md#rollenregeln).
-3. Kritik an einem fremden Artefakt wird ein Anliegen, nie eine Änderung
-   ([Ablauf, Anliegen](../ablauf.md#anliegen)). Mechanismus: `rollenregeln/schreibgrenze.py`.
+3. Kritik an einem fremden Artefakt ist nie eine Änderung. Ein Anliegen
+   ([Ablauf](../ablauf.md#anliegen)) wird sie nur, wenn etwas aufhält: Das Item geht nicht
+   weiter (Kriterium unklar, Test nicht schreibbar oder nicht grün zu machen), eine Prüfung
+   oder die DoD ist rot, Code verstößt gegen [Es](es.md), oder der Stakeholder fragt. Die
+   Befunde eines Kritiklaufs an einen Autor stehen in einem Anliegen. Übriger Feinschliff
+   kommt in den Backlog der Perspektive und wird erledigt, wenn die Datei ohnehin geändert
+   wird (Anliegen 630). Mechanismus: `rollenregeln/schreibgrenze.py` (keine Änderung);
+   wann ein Anliegen: nur Text.
 4. Bevor du eine Regel vorschlägst, suche eine bestehende, die sie abdeckt oder angepasst
    abdecken kann; dein Vorschlag nennt sie. Mechanismus: nur Text.
 5. Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`.

@@ -1,6 +1,6 @@
 # Eine fehlende Bedienung fiel erst im Test des Stakeholders auf
 
-685 · Kritik · von Ux → Organisationsentwickler · Runde 1/3 · offen
+685 · Kritik · von Ux → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Hinweis des Stakeholders für die Retro, wörtlich: „Wie können wir so etwas
@@ -28,4 +28,8 @@ dem Stakeholder vor, nicht erst das Aussehen. Das ist ein Schritt in der Planpha
 Anliegen je Befund (630 F1). Erledigt, wenn die Retro dazu eine Regel oder deine Begründung
 nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt an deiner Stelle: [Ablauf, DoR 6](../../prozess/ablauf.md#dor-item-bereit)
+(die Anforderung nennt jede Geste und was danach geschieht; du vergleichst vor den Mockups
+mit ArbiterMap und Arbiter-old, jede Abweichung entscheidet der Stakeholder als Frage) und
+in deiner [Definition](../../.claude/agents/ux.md): Vorbild für Bild und Bedienung. Dass
+jede Rolle das Vorbild kennt, fragt [687](687-backlogUndVorbild.md), F2.

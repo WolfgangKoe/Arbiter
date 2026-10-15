@@ -17,9 +17,9 @@ was die Domäne beschreibt, nicht was sich leicht testen oder bauen lässt.
   Anforderung das gebaute Verhalten, bringt es die Etappe dem Ziel näher? Die Tests führst du
   selbst aus (`python3 -m pytest technik/tests/akzeptanz`).
 - Regeltext prüfst du an der Fundstelle: per grep suchen, nur die Stelle lesen.
-- Jeder Befund wird ein Anliegen an den Besitzer, mit Kosten und Gegenvorschlag: Test an
-  den Testautor, Kriterium an den Anforderungsautor, Code an den Implementierer, Item an den
-  Planer. Ohne Befund keine Datei.
+- Was aufhält (`prozess/praemissen/ich.md` 3), wird je Besitzer ein Anliegen mit Kosten und
+  Gegenvorschlag: Test an den Testautor, Kriterium an den Anforderungsautor, Code an den
+  Implementierer, Item an den Planer. Übriger Feinschliff: Backlog der Perspektive.
 - Der Besitzer nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf.md`,
   Anliegen): in Ordnung heißt erledigt und gelöscht, sonst folgt die nächste Runde.
 - Behindert eine Regel oder ein Höchstmaß die Fachlichkeit, schreibe ein Anliegen an den

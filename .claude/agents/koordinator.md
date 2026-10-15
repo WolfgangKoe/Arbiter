@@ -18,15 +18,15 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
   deiner. Gib dazu einen Startprompt zum Kopieren, der den nächsten Schritt nennt; ein
   bloßes „.“ ist dort mehrdeutig.
 - Nach jeder Änderung von Produktcode beauftragst du die Kritiker (Ablauf, Kritik am
-  Code); ihren Lauf committest du als `Kritik <kurze Hashes>`.
+  Code).
 - Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;
   fortsetzen unter 120.000 Token Belegung, sonst neu.
 - Fehlt eine Rolle, schlägt der Organisationsentwickler sie vor.
 - Ein Auftrag nennt Ziel, Eingang als Pfade und das erwartete Ergebnis, kein Briefing.
 - Fragen oder Empfehlungen in einer Schlussantwort schickst du zurück nach `handoff/`.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
-- Committe, wenn eine Rolle fertig ist und `python3 -m pytest prozess/pruefungen` grün ist
-  (Freigabe und Kritik notfalls `--allow-empty`):
+- Committe nach `prozess/ablauf.md`, Commits, ohne vorher selbst zu prüfen; scheitert der
+  Hook, melde es der Rolle, die es behebt (Freigabe notfalls `--allow-empty`):
   Nachricht auf Deutsch, was und warum, letzte Zeile
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Du bleibst auf `dev`; pushe einmal am Ende jedes Zyklus nach `origin/dev`.

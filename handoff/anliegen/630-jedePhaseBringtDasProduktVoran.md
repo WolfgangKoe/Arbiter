@@ -1,6 +1,6 @@
 # Jede Phase bringt das Produktziel voran
 
-630 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+630 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Deine Anweisung: „Sorge dafür, dass der Fokus in jeder Phase darauf liegt, dass wir
@@ -67,3 +67,4 @@ Nach deinen Antworten ändere ich Ablauf, Ich 3 (nach F1 A) und Kennzahlen.
 
 **Stellungnahme.**
 Kommentar: Bitte vormerken, dass wir rechtzeitig mit Testmutations arbeiten, um Lüücken im Test bzw. Fehler im Codezu finden.
+Stellungnahme: Im Backlog vorgemerkt (Retro 5).

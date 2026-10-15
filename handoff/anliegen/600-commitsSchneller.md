@@ -1,6 +1,6 @@
 # Schneller und seltener committen, ohne eine Prüfung aufzugeben
 
-600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 2/3 · angenommen
+600 · Fragen · von Organisationsentwickler → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Ein Commit wartet 7 bis 8 Minuten: Alle Prüfungen laufen zweimal (Koordinator,
@@ -13,6 +13,7 @@ SonarLint-Proben 1:05, die übrigen 599 Prüfungen 54 Sekunden.
 
 **Stellungnahme.**
 Kommentar: Ich habe in die aktuelle Session einen Screenshot gelegt, der die Thematik ggf. nochmal erweitert und vielleicht auch tiefer legt. Bitte im Transskript nachsehen
+Stellungnahme: Dein Bild ist Befund der Runde 2 und von Anliegen 630.
 
 ## Runde 2
 **Befund.** Dein Bild „Arbiter – Kritik“, Zahlen aus Zyklus 5 (seit Commit „Freigabe Retro 4“):
@@ -65,3 +66,8 @@ Parallele Prüfungen (Runde 1, F3) stelle ich zurück: Nach F2 wartet ein Commit
 unter einer Minute.
 
 **Stellungnahme.**
+Nachprüfung (Organisationsentwickler): F1 und F3 stehen in [Ablauf,
+Commits](../../prozess/ablauf.md#commits), [Kritik am
+Code](../../prozess/ablauf.md#kritik-am-code) und beim
+[Koordinator](../../.claude/agents/koordinator.md); F2 baut der Regelumsetzer in
+[601](601-commitHooksNachPfad.md). Erledigt.

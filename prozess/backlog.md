@@ -5,15 +5,15 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
 
 - Höchstmaße der [Kennzahlen](kennzahlen.md) als Prüfung. Auslöser: Eine zu große Datei hält
   eine Rolle auf (Belegung über 120.000 beim Lesen) oder fällt im Review auf.
-- Kopf der Anliegen nach Anliegen 254 in `anliegenregeln/anliegen.py` und `anliegenDran.py`:
-  `Auftrag`, `· wartet auf`; `beantwortetDurchFreigabe` entfällt. Dazu im Dashboard die
-  Spalte der wartenden Anliegen und „wartet auf“ auf der Karte (Anliegen 275). Auslöser:
-  Eine Rolle oder der Stakeholder braucht eins davon; eingetreten (384 wartet auf 385), in
-  die Retro 5.
+- `beantwortetDurchFreigabe` entfällt (`anliegenDran.py`); im Dashboard die Spalte der
+  wartenden Anliegen (Anliegen 275). Auslöser: Der Stakeholder vermisst sie.
 - Stand und Dashboard nennen bei einem `Kommentar:` des Stakeholders ohne `Stellungnahme:`
   darunter die andere Rolle des Anliegens als dran (`anliegenDran.py`,
-  [Ablauf](ablauf.md#anliegen)). Auslöser: Ein Kommentar bleibt liegen; eingetreten (384), in
-  die Retro 5.
+  [Ablauf](ablauf.md#anliegen)). Auslöser: Ein liegengebliebener Kommentar hält das
+  Produkt auf.
+- Mutationstests (mutmut) bei der DoD statt der Probe des Reviewers (Anliegen 630):
+  Auslöser: Die Probe bringt ihn über 120.000 Token oder findet zwei Zyklen nacheinander
+  Lücken, spätestens zu Etappe 2 (Abstände rechnet die Domäne).
 - Schreibgrenze auch für Skripte, die selbst schreiben (Anliegen 510): Bash führt kein
   Skript und keinen Interpreter mit Code aus `/tmp` aus. Auslöser: Eine Rolle ändert so einen
   fremden Schreibpfad.

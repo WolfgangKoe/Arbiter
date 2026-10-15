@@ -42,8 +42,11 @@ Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Wer gleichzeitig lä
    sie in einem Anliegen entschieden und UX ihre Regeln wörtlich in
    `domaene/mockups/vorschlag.css` übernommen hat; der Implementierer trägt sie in der
    Technikphase in die Komponentenseite ein (Anliegen 317).
+6. Bei einer Bedienung nennt die Anforderung jede Geste (Klick, Ziehen, Auswahl) und was
+   danach am Bildschirm geschieht. UX hat sie vor den Mockups mit ArbiterMap und Arbiter-old
+   verglichen; jede Abweichung hat der Stakeholder als Frage entschieden (Anliegen 685).
 
-Mechanismus für 1 bis 5: nur Text. Fachliche Vollständigkeit ist Urteil (Schritt 6) und
+Mechanismus für 1 bis 6: nur Text. Fachliche Vollständigkeit ist Urteil (Schritt 6) und
 zeigt sich spätestens an den roten Tests.
 
 ## Technikphase
@@ -68,7 +71,10 @@ Organisationsentwickler sie vor.
    Frontend-Implementierer gleichzeitig ([Gleichzeitige Läufe](#gleichzeitige-läufe)).
    Mechanismus: nur Text ([Backlog](backlog.md)).
 4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
-   Effizienz, Flughöhe.
+   Effizienz, Flughöhe. Dazu die Probe, ob die Tests den Code treffen: In einer Kopie in
+   `/tmp` baut er Fehler einzeln in den neuen Produktcode ein und nennt im Review, wie viele
+   Tests rot wurden; jede Lücke wird ein Anliegen an den Testautor (Anliegen 630).
+   Mechanismus: nur Text.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
    die abgenommenen Items mit `rm` ([Ich 2](praemissen/ich.md)). Mechanismus: nur Text.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
@@ -138,8 +144,10 @@ ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 Auslöser: `Freigabe Review <n>`.
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
-   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
-   Prozess-Items nur aus einem Befund. Ein Mechanismus entsteht wie eine Rolle erst bei
+   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
+   mit dem Fortschritt des Produkts: erreichte Etappen, Kriterien mit grünem Test, was am
+   Bildschirm neu geht. Höchstens zwei Prozess-Items, je aus einem Befund, der das Produkt
+   aufgehalten hat (Anliegen 630). Ein Mechanismus entsteht wie eine Rolle erst bei
    beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
    Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
@@ -265,9 +273,19 @@ Code | schreibt | prüft
 `technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Reviewer
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt (schränkt sie die Technik richtig ein?)
 
-Der Kritiker prüft den Commit des Autors. Der Koordinator committet den Kritiklauf, der
-Betreff beginnt mit `Kritik` und nennt die kurzen Hashes der geprüften Commits
-(`Kritik <a> <b>`, notfalls `--allow-empty`). Mechanismus: nur Text.
+Der Kritiker prüft den Commit des Autors; sein Anliegen nennt den Betreff. Ein Kritiklauf
+bekommt keinen eigenen Commit, seine Anliegen gehen mit dem nächsten (Anliegen 600).
+Mechanismus: nur Text.
+
+## Commits
+Der Koordinator committet jeden Lauf mit Produktcode für sich, damit die Kritik je Commit
+bleibt. Läufe nur mit Texten, die zusammen enden, Kritikläufe und gelöschte erledigte
+Anliegen gehen in einen Commit. Er prüft nicht vorher selbst: Die Prüfungen laufen im
+Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meldet es der
+Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann; alles prüfen
+der Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD (Anliegen 600).
+Mechanismus: `.pre-commit-config.yaml` ([Regeln](regeln.md#formregeln)); nur, was der
+Commit ändern kann: Anliegen 601; sonst nur Text.
 
 ## Gleichzeitige Läufe
 Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen
@@ -279,10 +297,9 @@ oder Items, auch derselben Rolle, wenn (Anliegen 279):
    Importen. Sie laufen aus demselben Arbeitsbaum als Hooks jedes Laufs.
 
 Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
-Der Koordinator committet jeden Lauf nach seinen Pfaden, damit die Kritik am Code je Commit
-bleibt; die Zeile eines Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien
-eines laufenden Nachbarn rot, nennt der Lauf sie und meldet fertig; committet wird, wenn
-die Prüfungen grün sind. Mechanismus: Ein Importfehler im Prüfmodul eines Nachbarn macht nur
+Der Koordinator committet nach den Pfaden der Läufe ([Commits](#commits)); die Zeile eines
+Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien eines laufenden Nachbarn
+rot, nennt der Lauf sie und meldet fertig; committet wird, wenn der Commit-Hook grün ist. Mechanismus: Ein Importfehler im Prüfmodul eines Nachbarn macht nur
 dessen Tests rot, `pyproject.toml` ([Regeln](regeln.md#formregeln), Anliegen 304); sonst nur Text.
 
 ## Anliegen
@@ -291,10 +308,11 @@ höchstens 4.000 Zeichen; jede Zeile `Antwort:` zählt als `Antwort: .` (Anliege
 Mechanismus: nur Text.
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
-`· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss. Rolle: Name aus
-`.claude/agents/` oder Stakeholder, ohne Perspektive (Anliegen 420).
+`· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss, oder
+`· wartet auf die Prozessphase`. Rolle: Name aus `.claude/agents/` oder Stakeholder, ohne
+Perspektive (Anliegen 420).
 Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`)
-und `· wartet auf` nicht und meldet sie rot ([Backlog](backlog.md)); eine Perspektive in
+und `· wartet auf` nicht und meldet sie rot (Anliegen 686); eine Perspektive in
 Klammern lässt es durch, ohne Perspektive: nur Text.
 
 Form | der Empfänger soll | Absender
@@ -366,7 +384,11 @@ nur Text.
 - Der Koordinator beauftragt die Rolle, die dran ist: Lief sie in diesem Chat und liegt ihre
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
   neu. Anliegen an eine Perspektive, deren Phase nicht läuft, warten, außer sie blockieren
-  das Inkrement. Mechanismus: nur Text.
+  das Inkrement. Regelumsetzer und Organisationsentwickler laufen außerhalb der
+  Prozessphase nur zu einem Anliegen, das das Produkt aufhält (eine Sperre zu Unrecht,
+  Warten auf Prüfungen), oder das der Stakeholder „sofort“ nennt; die übrigen tragen
+  `· wartet auf die Prozessphase` (Anliegen 630). Mechanismus: nur Text; der Stand nennt
+  wartende nicht als dran: Anliegen 686.
 
 ## Budget
 Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und
