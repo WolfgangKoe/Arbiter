@@ -20,7 +20,7 @@ Dazu bei mir: Eine lesende `for`-Schleife mit `"$(git log … --grep="…")"` me
 nicht lesbar“; die Meldung nennt keinen Ausweg.
 
 **Kosten.** Prüfungen in einer Kopie in `/tmp`, wie die Probe des Reviewers (Fehler
-einbauen, Tests laufen lassen; [Anliegen 630](630-jedePhaseBringtDasProduktVoran.md), F4),
+einbauen, Tests laufen lassen; Anliegen 630, F4),
 brauchen Umwege; jede Sperre kostet einen Versuch und Belegung.
 
 **Gegenvorschlag.** Bestehende Regel (Ich 4): die Zeile zu `schreibgrenze.py` in

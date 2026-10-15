@@ -21,7 +21,7 @@ Schritt 6, und [Wir 5](../../prozess/praemissen/wir.md):
 
 **Kosten.** Der Stakeholder entscheidet über Plan 6, ohne zu sehen, ob die Etappe danach
 erreicht ist und was dann noch fehlt; für die Antwort auf seine Frage nach den Tests muss er
-nachschlagen. Beides ist der Kern seiner Kritik ([Anliegen 600](600-commitsSchneller.md),
+nachschlagen. Beides ist der Kern seiner Kritik (Anliegen 600,
 Runde 2).
 
 **Gegenvorschlag.** In `handoff/review.md`, im Höchstmaß von 4.000 Zeichen:

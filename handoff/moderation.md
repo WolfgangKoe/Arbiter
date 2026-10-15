@@ -24,7 +24,7 @@ Prozess:
   [601](anliegen/601-commitHooksNachPfad.md) (600 ist beantwortet, Warten und Sperren
   halten jede Rolle auf); Nachprüfung [610](anliegen/610-erledigteLoeschenImPreCommitVernichtetArbeit.md);
   [490](anliegen/490-fortschrittInPlanReviewRetro.md) Teile 2 und 3 erst in der Prozessphase.
-- Organisationsentwickler: [600](anliegen/600-commitsSchneller.md) und
+- Organisationsentwickler: Anliegen 600 und
   [421](anliegen/421-schritteAbhaken.md) (Antworten liegen vor) in Ablauf und Koordinator
   umsetzen.
 - Stakeholder: nur 630 (unten).
@@ -48,7 +48,7 @@ Prozess:
   berühren getrennte Dateien.
 
 ## Fragen an dich
-Alle in [630](anliegen/630-jedePhaseBringtDasProduktVoran.md), Antwort steht überall auf `.`:
+Alle in Anliegen 630, Antwort steht überall auf `.`:
 - F1: Anliegen nur, wenn etwas aufhält; Empfehlung A. Das hätte 640 und 670 zu Backlog
   gemacht.
 - F2: Prozessarbeit nur in der Prozessphase; Empfehlung A (601 und 650 laufen, 490 wartet).
