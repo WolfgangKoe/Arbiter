@@ -97,9 +97,7 @@ def testEinZweiterLaufÄndertNichts(tmp_path, gitRepo):
 
 
 def testDieDomänenphaseSchreibtInsReviewUndHaktDenPlanAb(tmp_path, gitRepo):
-    review = schreiben(
-        tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt
-    )
+    review = schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
     schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
     schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
     gitRepo.festhalten("Freigabe Plan 1")
@@ -139,6 +137,51 @@ def testDieProzessphaseHaktEinProzessItemMitSeinemCommitAb(tmp_path, gitRepo):
     assert "- [ ] Regelumsetzer: P2\n" in text
     assert "- [x] Stakeholder: Freigabe Retro 1\n" in text
     assert "- [ ] Koordinator: nach dev gepusht\n" in text
+
+
+def testEinProzessItemTrägtDieRolleAusSeinerKlammer(tmp_path, gitRepo):
+    schreiben(tmp_path, ".claude/agents/organisationsentwickler.md", "---\nname: x\n---\n")
+    schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n")
+    retro = schreiben(
+        tmp_path,
+        "handoff/retro.md",
+        "# Retro · Zyklus 1\n\n## Prozess-Items\n- P1 Ablauf (Organisationsentwickler): neu\n"
+        "- P2 Werkzeug (Regelumsetzer, 692): neu\n- P3 Ohne Klammer\n\n" + freigabeAbschnitt,
+    )
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1"):
+        gitRepo.festhalten(betreff)
+    fortschrittSchreiben(tmp_path)
+    text = retro.read_text(encoding="utf-8")
+    assert "- [ ] Organisationsentwickler: P1\n" in text
+    assert "- [ ] Regelumsetzer: P2\n" in text
+    assert "- [ ] Regelumsetzer: P3\n" in text
+    assert "- [ ] Architekt: Kritik an der Retro\n" in text
+
+
+def testJederKritikerStehtJeItemBeiDerKritikAmCode(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    assert "- [ ] Architekt: Kritik am Code zu Item stellen\n" in text
+    assert "- [ ] Reviewer: Kritik am Code zu Item stellen\n" in text
+
+
+def testDieDomänenzeilenFolgenDerTabelle(tmp_path, gitRepo):
+    review = schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1"):
+        gitRepo.festhalten(betreff)
+    fortschrittSchreiben(tmp_path)
+    text = review.read_text(encoding="utf-8")
+    for zeile in (
+        "Anforderungsautor: Happy Paths zum Zyklusziel",
+        "Fachkritiker: Kritik an Anforderungen und Mockups",
+        "Fachkritiker: Kritik am Plan",
+        "Architekt: Kritik am Plan",
+    ):
+        assert f"- [ ] {zeile}\n" in text
 
 
 def testHooksStartenDasSkriptNachJedemRollenlaufUndNachBashBefehlen():

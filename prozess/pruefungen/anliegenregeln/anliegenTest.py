@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from anliegenregeln.anliegen import kopfVerstöße
-from anliegenregeln.anliegenDran import dran, nachprüfungen
+from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
 from gemeinsam.pfade import wurzel
 from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
 
@@ -160,3 +160,72 @@ def testStatusIstEinWertDerAufzählungUnbekannterBleibtText(tmp_path):
     unbekannt = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf.replace("offen", "fertig"))
     assert kopfLesen(unbekannt).status == "fertig"
     assert not isinstance(kopfLesen(unbekannt).status, Status)
+
+
+@pytest.mark.parametrize(
+    "zusatz",
+    [
+        pytest.param(" · wartet auf 13", id="wartet auf Nummer"),
+        pytest.param(" · wartet auf die Prozessphase", id="wartet auf die Prozessphase"),
+        pytest.param(" · wartet auf die Technikphase", id="wartet auf die Technikphase"),
+        pytest.param(" · wartet auf die Domänenphase", id="wartet auf die Domänenphase"),
+    ],
+)
+def testWartetAufImKopfIstGrün(tmp_path, zusatz):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + zusatz)
+    assert kopfVerstöße(datei, tmp_path) == []
+    assert kopfLesen(datei).wartetAuf == zusatz.removeprefix(" · wartet auf ")
+
+
+def testWartetAufEinenUnbekanntenTextIstRot(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + " · wartet auf x")
+    assert kopfVerstöße(datei, tmp_path) != []
+
+
+def testDieFormAuftragIstErlaubt(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("Kritik", "Auftrag"))
+    assert kopfVerstöße(datei, tmp_path) == []
+
+
+def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
+    wartend = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + " · wartet auf 13")
+    ziel = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf.replace("12 ", "13 "))
+    assert dran(tmp_path) == {"Planer": [13]}
+    assert wartende(tmp_path) == {12: "13"}
+    ziel.unlink()
+    assert dran(tmp_path) == {"Planer": [12]}
+    assert wartend.is_file()
+    assert wartende(tmp_path) == {}
+
+
+def testEinAnliegenAufDieTechnikphaseIstInDerDomänenphaseNichtDran(gitRepo):
+    kopf = guterKopf + " · wartet auf die Technikphase"
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    assert dran(gitRepo.ordner) == {}
+    assert wartende(gitRepo.ordner) == {12: "die Technikphase"}
+    (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    assert dran(gitRepo.ordner) == {"Planer": [12]}
+
+
+def testEinAnliegenAufDieDomänenphaseIstInDerTechnikphaseNichtDran(gitRepo):
+    kopf = guterKopf + " · wartet auf die Domänenphase"
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    assert dran(gitRepo.ordner) == {"Planer": [12]}
+    (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    assert dran(gitRepo.ordner) == {}
+
+
+def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
+    kopf = guterKopf + " · wartet auf die Prozessphase"
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    assert dran(gitRepo.ordner) == {}
+    assert wartende(gitRepo.ordner) == {12: "die Prozessphase"}
+    plan = "# Plan · Zyklus 3\n"
+    (gitRepo.ordner / "handoff" / "plan.md").write_text(plan, encoding="utf-8")
+    (gitRepo.ordner / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    gitRepo.festhalten("Freigabe Review 3")
+    assert dran(gitRepo.ordner) == {"Planer": [12]}
+    assert wartende(gitRepo.ordner) == {}

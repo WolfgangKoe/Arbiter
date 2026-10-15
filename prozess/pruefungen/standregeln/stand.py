@@ -7,9 +7,10 @@ from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, 
 from gemeinsam.pfade import projektordner
 from kriterienregeln.rueckverfolgung import wartendeAlsText
 from lesen.anliegenKopf import anliegenDateien
-from standregeln.anliegenText import dranAlsText, nachprüfungenAlsText
+from standregeln.anliegenText import dranAlsText, nachprüfungenAlsText, wartendeAnliegenAlsText
 from standregeln.belegung import belegungAusTranskript, punkte, warnschwelle
 from standregeln.phasenfolge import lage
+from standregeln.produktstand import produktstandAlsText
 
 
 def belegungsText(transkript: Path | None) -> str:
@@ -23,11 +24,14 @@ def belegungsText(transkript: Path | None) -> str:
 def stand(wurzel: Path, transkript: Path | None = None) -> str:
     änderungen = gitAusgabe(wurzel, "status", "--porcelain").splitlines()
     uncommittet = [zeile for zeile in änderungen if zeile]
+    aktuell = lage(wurzel)
     teile = [
-        lage(wurzel).alsText(),
+        produktstandAlsText(wurzel, aktuell),
+        f"{aktuell.phase} · Nächster Schritt: {aktuell.schritt}",
         belegungsText(transkript),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
         dranAlsText(wurzel),
+        wartendeAnliegenAlsText(wurzel),
         nachprüfungenAlsText(wurzel),
         wartendeAlsText(wurzel),
         f"{len(uncommittet)} uncommittete Dateien",

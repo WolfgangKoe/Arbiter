@@ -12,11 +12,8 @@ Plans, wie eine Anforderung aussieht, und zwar so, dass die Technik es ohne Umsc
 einbaut.
 
 ## Was du tust
-- Vor den Mockups vergleichst du je Anforderung mit Bedienung die Gesten (Klick, Ziehen,
-  Auswahl, was danach geschieht) mit ArbiterMap und Arbiter-old; jede Abweichung wird eine
-  Frage an den Stakeholder (`prozess/ablauf.md`, DoR 6).
-- Je Anforderung mit Oberfläche im Plan ein Mockup `domaene/mockups/<kennung>.html`
-  (`auf-4.html`): statisches HTML, wie es später im Frontend steht. Die Technik ersetzt nur
+- Je Anforderung mit Oberfläche des Zyklus ein Mockup ihres Happy Path
+  `domaene/mockups/<kennung>.html` (`auf-4.html`): statisches HTML, wie es später im Frontend steht. Die Technik ersetzt nur
   die Beispielinhalte durch Daten.
 - CSS nur per `<link>` auf das CSS der Komponentenseite
   ([Architektur, Oberfläche](../../technik/architektur.md)); fehlt sie, auf
@@ -36,8 +33,9 @@ einbaut.
   Anforderung und Anliegen; Item und Anliegen verlinken das Mockup, nie umgekehrt.
 - Höchstmaß je Datei: `prozess/kennzahlen.md`.
 - Nur Komponenten der Komponentenseite; eine neue ist ein Anliegen an den Architekten.
-- ArbiterMap und Arbiter-old sind Vorbild für Bild und Bedienung, nicht für Code. Die Mockups
-  von ArbiterMap sind das Gegenbeispiel:
+- ArbiterMap und Arbiter-old sind Vorbild für Bild und Bedienung (`domaene/CLAUDE.md`),
+  nicht für Code; eine Abweichung ist eine Frage an den Stakeholder. Die Mockups von
+  ArbiterMap sind das Gegenbeispiel:
   eigenes CSS im `<style>`, Kommentare, Erklärboxen, meist über 20.000 Zeichen.
 - Erfinde keine Inhalte und keine Regeln; fehlt etwas, wird es ein Anliegen.
 

@@ -37,3 +37,18 @@ def testRolleOhnePassendenSchreibpfadBekommtKeineOrdnerClaudeMd(wurzel):
 def testRolleOhneSchreibpfadeBekommtKeineOrdnerClaudeMd(wurzel):
     rolle(wurzel, "leser")
     assert "REGELN" not in kontext("leser", wurzel)
+
+
+def testRolleBekommtIhreOffenenSchritteUndDenBefehlZumAbhaken(wurzel, gitRepo):
+    rolle(wurzel, "reviewer", "handoff/review.md")
+    (wurzel / "handoff").mkdir()
+    (wurzel / "domaene" / "items").mkdir()
+    (wurzel / "domaene" / "items" / "eins.md").write_text("# Eins\n")
+    (wurzel / "handoff" / "plan.md").write_text(
+        "# Plan · Zyklus 1\n\n## Items\n1. [E](../domaene/items/eins.md)\n\n## Freigabe\nx\n"
+    )
+    gitRepo.festhalten("Freigabe Plan 1")
+    ergebnis = kontext("reviewer", wurzel)
+    assert "- Kritik am Code zu Item eins" in ergebnis
+    assert "standregeln.abhaken reviewer <Schritt>" in ergebnis
+    assert "Item eins abgenommen" not in ergebnis

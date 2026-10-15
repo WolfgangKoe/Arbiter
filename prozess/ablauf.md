@@ -7,13 +7,16 @@ Etappe, Zyklus, Phase und nächsten Schritt nennt der Stand. Mechanismus:
 1. Planer: Etappen aus dem Ziel; nur die aktuelle ausformuliert. Auslöser: keine Etappe.
 2. Architekt: Kritik an der aktuellen Etappe und der Reihenfolge, als Anliegen.
 3. Freigabe: „.“ → Koordinator committet `Freigabe Etappe <n>`.
-4. Anforderungsautor, in jedem Zyklus: Anforderungen zum nächsten Schnitt, in Zyklus 1 zur
-   Etappe, danach zum Zyklusziel des freigegebenen Reviews samt Kommentaren (ohne dieses zum
-   Abschnitt „Danach“ des vorigen Plans); Begriffe ins Glossar. Eine genügt. Auslöser:
-   kein Kriterium ohne Akzeptanztest. Bei einer Oberfläche danach
+4. Anforderungsautor, in jedem Zyklus: die Happy Paths des Spielers zum nächsten Schnitt,
+   in Zyklus 1 zur Etappe, danach zum Zyklusziel des freigegebenen Reviews samt Kommentaren
+   (ohne dieses zum Abschnitt „Danach“ des vorigen Plans), abgeleitet aus ArbiterMap und
+   Arbiter-old ([Domäne](../domaene/CLAUDE.md)); Begriffe ins Glossar. Eine genügt.
+   Auslöser: kein Kriterium ohne Akzeptanztest. Bei einer Oberfläche danach
    [UX](../.claude/agents/ux.md): ein Mockup je Anforderung (DoR 5); das Item verlinkt es.
    Mechanismus: nur Text.
-5. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
+5. Fachkritiker: prüft Anforderungen und Mockups gegen Ziel und Regeltext
+   ([Kritik](#kritik)). Mechanismus: nur Text.
+6. Planer: `handoff/plan.md` (`# Plan · Zyklus <n>`) mit den Items, die bereit sind (DoR):
    eins genügt, höchstens drei; weicht er vom Zyklusziel des Reviews ab, begründet er es.
    Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](#freigabe-und-kommentare)).
    Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
@@ -21,9 +24,8 @@ Etappe, Zyklus, Phase und nächsten Schritt nennt der Stand. Mechanismus:
    (DoD 2). Mechanismus: `lesen/plan.py` (`offeneItems`). Jedes Item nennt Kriterien ohne
    Test (`AUF-7.3`) oder ihre Anforderung; bis dahin ist der Plan nicht zur Freigabe bereit.
    Mechanismus: nur Text; der Stand nennt die Kriterien ohne Test.
-6. Kritik: Architekt an Anforderungen und Items, auch an Format und Größe. Am
-   Mockup: Fachkritiker (gegen die Kriterien), Architekt (nur vorhandene Komponenten).
-7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
+7. Kritik am Plan samt Items, Anforderungen und Mockups ([Kritik](#kritik)).
+8. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
    `Freigabe Plan <n>`. Danach Technikphase.
 
 Kritik blockiert nicht: Offene Anliegen stehen in der Freigabevorlage, sortiert vom
@@ -43,38 +45,35 @@ Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Wer gleichzeitig lä
    `domaene/mockups/vorschlag.css` übernommen hat; der Implementierer trägt sie in der
    Technikphase in die Komponentenseite ein (Anliegen 317).
 6. Bei einer Bedienung nennt die Anforderung jede Geste (Klick, Ziehen, Auswahl) und was
-   danach am Bildschirm geschieht. UX hat sie vor den Mockups mit ArbiterMap und Arbiter-old
-   verglichen; jede Abweichung hat der Stakeholder als Frage entschieden (Anliegen 685).
+   danach am Bildschirm geschieht; jede Abweichung von ArbiterMap und Arbiter-old hat der
+   Stakeholder als Frage entschieden.
 
-Mechanismus für 1 bis 6: nur Text. Fachliche Vollständigkeit ist Urteil (Schritt 6) und
+Mechanismus für 1 bis 6: nur Text. Fachliche Vollständigkeit ist Urteil (Schritte 5, 7) und
 zeigt sich spätestens an den roten Tests.
 
 ## Technikphase
 Auslöser: `Freigabe Plan <n>`. Fehlen Rollen, schlägt der
-Organisationsentwickler sie vor.
+Organisationsentwickler sie vor. Die Regeln der Architektur ändern sich nur in dieser
+Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechanismus: nur Text.
 1. Testautor: Akzeptanztests je Kriterium der Items, rot. Hat ein Item beide Hälften
    (Handlung über HTTP, ihre Anzeige), legt vorher der Architekt den Vertrag fest: Pfade
    und je Antwort ein JSON-Beispiel in `technik/architektur/web.md`. Daraus testet der
    Testautor das Backend mit dem Flask-Testclient, das Frontend mit einem Bildschirmtest,
    dem Playwright das Beispiel statt des Servers liefert; derselbe Bildschirmtest gegen den
    echten Server ist der Akzeptanztest des Items (Anliegen 241). Mechanismus: nur Text.
-2. Kritik: Fachkritiker (trifft der Test das Kriterium?), Architekt (Schnittstelle).
-   Ein bemängelter Test geht nicht in die Umsetzung, bis das Anliegen geklärt ist;
-   widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
+2. Kritik an den Tests ([Kritik](#kritik)). Ein Test, dessen Befund aufhält, geht nicht in
+   die Umsetzung, bis das Anliegen geklärt ist; widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
    Rest läuft weiter. Mechanismus: nur Text.
 3. Implementierer: macht die Tests grün. Refactoring nur aus einem Befund, als Anliegen an
    ihn von dem, der den Befund hat; der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt
-   „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüft der Reviewer (Kritik
-   am Code). Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben
-   und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
+   „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüfen Architekt
+   (Architektur) und Reviewer (Lesbarkeit) gleichzeitig ([Kritik am Code](#kritik-am-code)).
+   Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
    Hat das Item Vertrag und Tests beider Hälften, laufen Implementierer (Backend) und
    Frontend-Implementierer gleichzeitig ([Gleichzeitige Läufe](#gleichzeitige-läufe)).
-   Mechanismus: nur Text ([Backlog](backlog.md)).
-4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
-   Effizienz, Flughöhe. Dazu die Probe, ob die Tests den Code treffen: In einer Kopie in
-   `/tmp` baut er Fehler einzeln in den neuen Produktcode ein und nennt im Review, wie viele
-   Tests rot wurden; jede Lücke wird ein Anliegen an den Testautor (Anliegen 630).
    Mechanismus: nur Text.
+4. Reviewer: DoD über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
+   Effizienz, Flughöhe.
 5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
    die abgenommenen Items mit `rm` ([Ich 2](praemissen/ich.md)). Mechanismus: nur Text.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
@@ -132,22 +131,22 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 Kommen Mutationstests oder eine Oberfläche hinzu, gelten auch Mutationsschwelle der
 geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
 
-Werkzeuge für die offenen Prüfungen (Regelumsetzer baut, Architekt kritisiert): mypy oder
-pyright strikt, import-linter, complexipy (Schwelle 15), ruff (Stil, ARG, PLR2004, PLR0913,
-FBT, ERA, `PLR0912` mit 12), Duplikaterkennung, semgrep für eigene Konventionen, cSpell mit deutschem Wörterbuch aus dem
-Glossar, eslint und stylelint fürs Frontend. Die Sperre der Agenten ist für Python mindestens so
+Werkzeuge (Regelumsetzer baut, Architekt kritisiert): complexipy (Schwelle 15), ruff (Stil,
+ARG, PLR2004, PLR0913, FBT, ERA, `PLR0912` mit 12), eslint und stylelint fürs Frontend. Die Sperre der Agenten ist für Python mindestens so
 streng wie SonarLint, die Sicht des Stakeholders; Mechanismus: `formregeln/sonarlint.py` (DoD 2).
 SonarLint prüft nur Python, das Frontend prüfen eslint und stylelint (Anliegen 280). Nicht verwendet: radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
-Auslöser: `Freigabe Review <n>`.
+Auslöser: `Freigabe Review <n>`. Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
+Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `Freigabe Retro
+<n>`; davor beschreibt die Retro die Änderung. Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
+in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standregeln)).
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
-   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
-   mit dem Fortschritt des Produkts ([Kennzahlen](kennzahlen.md)) und was am Bildschirm
-   neu geht. Höchstens zwei Prozess-Items, je aus einem Befund, der das Produkt
-   aufgehalten hat (Anliegen 630). Ein Mechanismus entsteht wie eine Rolle erst bei
+   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
+   Prozess-Items nur aus einem Befund, jedes in Worten beschrieben: was danach anders
+   geschieht. Ein Mechanismus entsteht wie eine Rolle erst bei
    beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
    Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
@@ -155,18 +154,19 @@ Auslöser: `Freigabe Review <n>`.
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
    darauf; grafisch und kurz, nur Seltenes (Perspektiven, Rollen, Ordner), Rollentabelle und
    Ordnerbaum per Skript. Mechanismus: nur Text.
-   Prozess-Items stehen im Abschnitt `## Prozess-Items` als `- P<k> …`; dort nur, was auf
+   Prozess-Items stehen im Abschnitt `## Prozess-Items` als `- P<k> <Titel> (<Rolle>): …`,
+   die Rolle setzt es um; dort nur, was auf
    den nächsten Zyklus wirkt oder der Stakeholder vorher will, die übrigen im
    [Backlog](backlog.md) bis zur nächsten Prozessphase. Mechanismus: nur Text.
-2. Kritik: Domäne und Technik an Regeländerungen, als Anliegen.
+2. Kritik an der Retro ([Kritik](#kritik)).
 3. Nachkorrektur: Kommentare in der Retro und Antworten in den Anliegen, auf die sie verweist,
    arbeitet der Organisationsentwickler ein, bis Befunde, Prozess-Items und Empfehlung zu
    ihnen passen; auch nach der Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)).
 4. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
    `Freigabe Retro <n>`.
-5. Regelumsetzer: Mechanismen zu den freigegebenen Prozess-Items, je mit Scheiter-Test; ein
-   Item je Lauf, damit die Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item
-   abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
+5. Die Rolle des Prozess-Items setzt es um: Organisationsentwickler Regeln, Prämissen und
+   Rollen, Regelumsetzer Mechanismen je mit Scheiter-Test; ein Item je Lauf, damit die
+   Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
    `P<k> Zwischenstand: …`. Hat jedes Item der Retro seinen Commit `P<k>:` seit
    `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), folgt die Domänenphase mit Plan n+1.
    Mechanismus: nur Text.
@@ -220,8 +220,8 @@ Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, ang
 `Kommentar: <Text> (Anliegen <nr>)`.
 - Fakt: Ein Hook hakt nach jedem Rollenlauf ab, was die Tabelle als Fakt nennt.
 - Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs mit dem Befehl ab, als Kritiker,
-  wenn seine Kritik umgesetzt ist. Hält sie etwas auf, meldet sie es mit dem Befehl und nennt
-  die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
+  wenn keiner seiner Befunde mehr aufhält ([Kritik](#kritik)). Hält sie etwas auf, meldet
+  sie es mit dem Befehl und nennt die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
   Stakeholder Fragen) und schreibt die Zeile `Hindernis:`.
 - Dashboard: Der Stakeholder hakt jede Zeile ab oder kommentiert sie; der Kommentar wird ein
   Anliegen von ihm an die Rolle der Zeile.
@@ -229,23 +229,25 @@ Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, ang
 Phase · Schritt | Zeile | abgehakt durch
 ---|---|---
 Domäne 1 bis 3, nur ohne Etappe | Planer: Etappe · Architekt: Kritik an der Etappe · Stakeholder: Freigabe Etappe | Fakt: Etappendatei neu · Befehl · Fakt: Commit
-Domäne 4 | Anforderungsautor: Anforderungen zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
-Domäne 5 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
-Domäne 6 | je Kritiker: Kritik an Anforderungen, Items und Mockups | Befehl
-Domäne 7 | Stakeholder: Freigabe Plan | Fakt: Commit
+Domäne 4 | Anforderungsautor: Happy Paths zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
+Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
+Domäne 6 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
+Domäne 7 | je Kritiker: Kritik am Plan | Befehl
+Domäne 8 | Stakeholder: Freigabe Plan | Fakt: Commit
 Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
-Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Reviewer: Kritik am Code | Befehl
+Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Architekt, Reviewer: je Kritik am Code | Befehl
 Technik 4 | Reviewer: DoD über das Inkrement | Befehl
 Technik 5 je Item | Fachkritiker: Item <k> abgenommen · Planer: Item <k> gelöscht | Befehl · Fakt: Datei weg
 Technik 6, 7 | Reviewer: Review geschrieben · Stakeholder: Freigabe Review | Fakt: `# Review · Zyklus <n>` · Fakt: Commit
 Prozess 1 | Organisationsentwickler: Retro geschrieben | Fakt: `# Retro · Zyklus <n>`
-Prozess 2, 3 | je Kritiker: Kritik an Regeländerungen · Organisationsentwickler: Nachkorrektur | Befehl
+Prozess 2, 3 | je Kritiker: Kritik an der Retro · Organisationsentwickler: Nachkorrektur | Befehl
 Prozess 4 | Stakeholder: Freigabe Retro | Fakt: Commit
-Prozess 5 je Prozess-Item | Regelumsetzer: P<k> | Fakt: Commit `P<k>:`
+Prozess 5 je Prozess-Item | Rolle des Items: P<k> | Fakt: Commit `P<k>:`
 Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
 
-Mechanismus: nur Text; Skript, Hook, Befehl und Dashboard baut der Regelumsetzer (Anliegen
-490). Bis dahin fehlt der Abschnitt.
+Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, [Regeln](regeln.md#standregeln));
+Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis und Dashboard: Anliegen
+490.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
@@ -261,32 +263,41 @@ Mechanismus: nur Text.
   braucht.
 - Testautor auf Opus: Fachkritik oder Mutationstests zeigen wiederholt fehlende Fälle.
 
-## Kritik am Code
-Nach jeder Änderung von Produktcode (`prozess/praemissen/es.md`) prüfen ihn die Kritiker der
-getroffenen Pfade, bevor die nächste Rolle darauf aufbaut. Befunde werden Anliegen an den Autor.
-Den Code der Prüfskripte und Hooks kritisiert niemand je Commit; dafür gibt es den Rundgang
-([Technikphase](#technikphase), Schritt 6). Mechanismus: nur Text.
+## Kritik
+Je Artefakt prüft jeder seiner Kritiker einmal und ordnet jeden Befund nach
+[Ich 3](praemissen/ich.md) ein. Die aufhaltenden Befunde an einen Autor stehen in einem
+Anliegen, die wartenden in einem zweiten mit `· wartet auf die <Phase>` der Perspektive des
+Autors; was entfällt, schreibt er nicht, ohne Befund keine Datei. Der Autor bessert nach
+oder widerspricht; eine weitere Runde öffnet der Kritiker nur für, was weiter aufhält, nach
+Runde 3 entscheidet der Stakeholder ([Anliegen](#anliegen)). Wer kritisiert (Anliegen 730):
 
-Code | schreibt | prüft
+Artefakt | Autor | Kritiker
 ---|---|---
+Anforderungen, Mockups (Domäne 5) | Anforderungsautor, UX | Fachkritiker (Ziel, Regeltext, Happy Path)
+Plan, Items, Anforderungen, Mockups (Domäne 7) | Planer, Anforderungsautor, UX | Architekt (prüfbar, Kosten, Schnitt, vorhandene Komponenten), Fachkritiker (Etappe)
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
-`technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Reviewer
+`technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Architekt (Architektur), Reviewer (Lesbarkeit)
+Retro | Organisationsentwickler | Fachkritiker, Architekt
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt (schränkt sie die Technik richtig ein?)
 
-Der Kritiker prüft den Commit des Autors; sein Anliegen nennt den Betreff. Ein Kritiklauf
-bekommt keinen eigenen Commit, seine Anliegen gehen mit dem nächsten (Anliegen 600).
 Mechanismus: nur Text.
 
+### Kritik am Code
+Nach jeder Änderung von Code nach der Tabelle prüfen ihn seine Kritiker, bevor die nächste
+Rolle darauf aufbaut; sie lesen die Änderung seit dem letzten Commit (`git diff`). Den Code
+der Prüfskripte und Hooks kritisiert niemand je Änderung; dafür gibt es den Rundgang
+([Technikphase](#technikphase), Schritt 6). Mechanismus: nur Text.
+
 ## Commits
-Der Koordinator committet jeden Lauf mit Code nach der Tabelle in
-[Kritik am Code](#kritik-am-code) für sich, auch den des Testautors, damit die Kritik je
-Commit bleibt (Anliegen 691). Läufe nur mit Texten, die zusammen enden, Kritikläufe und gelöschte erledigte
-Anliegen gehen in einen Commit. Er prüft nicht vorher selbst: Die Prüfungen laufen im
+Der Koordinator committet nach jeder Phase und nach jedem Item mit Produktcode, jeweils samt
+Kritik und Anliegen: eine Phase mit ihrer Freigabe, ein Item der Technikphase, wenn seine
+Tests grün sind und die Kritik daran umgesetzt ist, ein Prozess-Item mit `P<k>: …`. Er prüft
+nicht vorher selbst: Die Prüfungen laufen im
 Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meldet es der
 Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann; alles prüfen
 der Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD (Anliegen 600).
-Mechanismus: `.pre-commit-config.yaml` ([Regeln](regeln.md#formregeln)); nur, was der
-Commit ändern kann: Anliegen 601; sonst nur Text.
+Mechanismus: `.pre-commit-config.yaml`, nur, was der Commit ändern kann: Hooks je Pfad
+(Anliegen 601, [Regeln](regeln.md#formregeln)); sonst nur Text.
 
 ## Gleichzeitige Läufe
 Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen
@@ -298,7 +309,7 @@ oder Items, auch derselben Rolle, wenn (Anliegen 279):
    Importen. Sie laufen aus demselben Arbeitsbaum als Hooks jedes Laufs.
 
 Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
-Der Koordinator committet nach den Pfaden der Läufe ([Commits](#commits)); die Zeile eines
+Der Koordinator committet je Item nach dessen Pfaden ([Commits](#commits)); die Zeile eines
 Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien eines laufenden Nachbarn
 rot, nennt der Lauf sie und meldet fertig; committet wird, wenn der Commit-Hook grün ist. Mechanismus: Ein Importfehler im Prüfmodul eines Nachbarn macht nur
 dessen Tests rot, `pyproject.toml` ([Regeln](regeln.md#formregeln), Anliegen 304); sonst nur Text.
@@ -310,11 +321,11 @@ Mechanismus: nur Text.
 Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
 `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
 `· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss, oder
-`· wartet auf die Prozessphase`. Rolle: Name aus `.claude/agents/` oder Stakeholder, ohne
+`· wartet auf die Domänenphase` (`Technikphase`, `Prozessphase`), wenn es nach
+[Ich 3](praemissen/ich.md) wartet. Rolle: Name aus `.claude/agents/` oder Stakeholder, ohne
 Perspektive (Anliegen 420).
-Mechanismus: `anliegenregeln/anliegen.py`; es kennt `Auftrag` (im Kopf noch `Anliegen`)
-und `· wartet auf` nicht und meldet sie rot (Anliegen 686); eine Perspektive in
-Klammern lässt es durch, ohne Perspektive: nur Text.
+Mechanismus: `anliegenregeln/anliegen.py`; eine Perspektive in Klammern lässt es durch, ohne
+Perspektive: nur Text.
 
 Form | der Empfänger soll | Absender
 ---|---|---
@@ -327,7 +338,8 @@ Je Runde (`## Runde <n>`) die Absätze `**Befund.**`, `**Kosten.**`, `**Gegenvor
 der Absender leer an. Eine Rückfrage steht in der Stellungnahme, die Antwort des Absenders
 darunter als `**Klärung.**`; beide kosten keine Runde. Unter jeder Frage an den Stakeholder
 (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`; „.“ heißt bei `angenommen`: Die
-Empfehlung gilt. Mechanismus: nur Text.
+Empfehlung gilt. Arbeitet der Absender mit der Empfehlung weiter ([Ich 1](praemissen/ich.md)),
+steht darüber `Annahme: <was er damit tut>`. Mechanismus: nur Text.
 
 Der Status ist der letzte Zug; daraus folgt, wer dran ist.
 
@@ -346,7 +358,7 @@ Legende im Anliegen entfällt (Anliegen 420). Mechanismus: `rollenregeln/dashboa
 (`formular`), `rollenregeln/zuegeUebernehmen.py` ([Regeln](regeln.md#rollenregeln)).
 Ein `Kommentar:` von ihm, der den Status nicht ändert, geht an die andere Rolle des Anliegens:
 Sie antwortet mit einer Zeile `Stellungnahme:` darunter und ist bis dahin dran (Anliegen
-384). Mechanismus: nur Text; der Stand nennt es noch nicht ([Backlog](backlog.md)).
+384). Mechanismus: nur Text.
 Die Moderation verlinkt Fragen, er antwortet im Anliegen; ihre Vorschläge korrigiert er mit
 einer Zeile `Kommentar:` darunter ([Moderator](../.claude/agents/moderator.md)). Mechanismus:
 nur Text.
@@ -373,8 +385,7 @@ nur Text.
   `erledigt` selbst ein. Mechanismus: `standregeln/stand.py`.
 - Den Status eines Anliegens an ihn setzt der Stakeholder selbst; die Freigabe beantwortet
   keine Frage. Mechanismus: nur Text; abweichend nennt der Stand nach einer Freigabe den
-  Absender als dran (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`;
-  [Backlog](backlog.md)).
+  Absender als dran (`anliegenregeln/anliegenDran.py`, `beantwortetDurchFreigabe`).
 - Niemand löscht ein committetes Anliegen von Hand; git ist das Archiv. Mechanismus:
   `anliegenregeln/erledigteLoeschen.py` (löscht erledigte), `rollenregeln/entfernen.py`
   (sperrt `rm` und `mv` committeter).
@@ -384,12 +395,10 @@ nur Text.
   Text.
 - Der Koordinator beauftragt die Rolle, die dran ist: Lief sie in diesem Chat und liegt ihre
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
-  neu. Anliegen an eine Perspektive, deren Phase nicht läuft, warten, außer sie blockieren
-  das Inkrement. Regelumsetzer und Organisationsentwickler laufen außerhalb der
-  Prozessphase nur zu einem Anliegen, das das Produkt aufhält (eine Sperre zu Unrecht,
-  Warten auf Prüfungen), oder das der Stakeholder „sofort“ nennt; die übrigen tragen
-  `· wartet auf die Prozessphase` (Anliegen 630). Mechanismus: nur Text; der Stand nennt
-  wartende nicht als dran: Anliegen 686.
+  neu. Ein Anliegen, das aufhält ([Ich 3](praemissen/ich.md)), bearbeitet der Empfänger in
+  jeder Phase; die übrigen tragen `· wartet auf die <Phase>` seiner Perspektive.
+  Mechanismus: Wartende sind nicht dran, `anliegenregeln/anliegenDran.py`; ob ein Anliegen
+  aufhält: nur Text.
 
 ## Budget
 Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koordinator und

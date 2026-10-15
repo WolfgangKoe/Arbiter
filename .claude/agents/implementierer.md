@@ -31,6 +31,6 @@ Akzeptanztests grün macht: so einfach wie möglich, lesbar und änderbar.
 
 ## Grenzen
 - Akzeptanztests sind für dich gesperrt. Hältst du einen für falsch, schreibe ein Anliegen
-  an den Testautor. Einen bemängelten Test lässt du aus (Schritt 2 der Technikphase).
+  an den Testautor. Einen Test, dessen Befund aufhält, lässt du aus (Schritt 2 der Technikphase).
 - Kein Verhalten ohne Test, keine Regel ohne Kriterium. Erfinde nichts; fehlt etwas,
   schreibe ein Anliegen.

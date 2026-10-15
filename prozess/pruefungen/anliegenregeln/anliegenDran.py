@@ -4,6 +4,9 @@ from pathlib import Path
 
 from gemeinsam.gitAufruf import dateiBeiCommit, letzteFreigabe
 from lesen.anliegenKopf import Anliegen, Status, gelesene, kopfAusText, stakeholder
+from standregeln.phasenfolge import lage
+
+phasenanfang = "die "
 
 
 def nachprüfungen(wurzel: Path) -> dict[str, list[int]]:
@@ -40,11 +43,31 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
     return None
 
 
+def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
+    """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf die Prozessphase."""
+    if anliegen.wartetAuf is None:
+        return False
+    if anliegen.wartetAuf.startswith(phasenanfang):
+        return anliegen.wartetAuf != f"{phasenanfang}{lage(wurzel).phase}"
+    return int(anliegen.wartetAuf) in {andere.nummer for andere in gelesene(wurzel)}
+
+
+def wartende(wurzel: Path) -> dict[int, str]:
+    """Wartende Anliegen mit dem, worauf sie warten; sie sind für niemanden dran."""
+    return {
+        anliegen.nummer: str(anliegen.wartetAuf)
+        for anliegen in gelesene(wurzel)
+        if wartet(wurzel, anliegen)
+    }
+
+
 def dran(wurzel: Path) -> dict[str, list[int]]:
     """Offene Anliegen je Rolle, die dran ist; `angenommen` steht bei `nachprüfungen`."""
     zuständig: dict[str, list[int]] = {}
     freigabe = letzteFreigabe(wurzel)
     for anliegen in gelesene(wurzel):
+        if wartet(wurzel, anliegen):
+            continue
         rolle = wartetAuf(wurzel, anliegen, freigabe)
         if rolle and anliegen.status != Status.angenommen:
             zuständig.setdefault(rolle, []).append(anliegen.nummer)

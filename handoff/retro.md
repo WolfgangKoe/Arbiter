@@ -29,7 +29,7 @@ Aufstellen per Klick wie ArbiterMap.
 Mutationstests sind jetzt P3; zwölf der übrigen 13 Punkte löscht P1.
 
 ## Prozess-Items
-- P1 Ablauf nach deinem Modell (ich):
+- P1 Ablauf nach deinem Modell (Organisationsentwickler):
   - Domäne: Der Anforderungsautor leitet zum Etappenziel die Happy Paths des Spielers aus
     ArbiterMap und Arbiter-old ab, UX zeichnet die Mockups, der Fachkritiker prüft beides
     gegen Ziel und Regeltext. Die Vorbilder gelten nur der Domäne; eine Abweichung ist eine
@@ -66,11 +66,11 @@ Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 69
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
-- [ ] Fachkritiker: Kritik an Regeländerungen
-- [ ] Architekt: Kritik an Regeländerungen
-- [ ] Organisationsentwickler: Nachkorrektur
+- [ ] Fachkritiker: Kritik an der Retro
+- [ ] Architekt: Kritik an der Retro
+- [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 5
-- [ ] Regelumsetzer: P1
+- [ ] Organisationsentwickler: P1
 - [ ] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
 - [ ] Koordinator: nach dev gepusht

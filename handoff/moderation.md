@@ -21,7 +21,7 @@ bleiben 21 Anliegen, davon blockiert keins die Freigabe. Blockiert Zyklus 6: 684
 - Testautor: [621](anliegen/621-restDerEinheitOhneGesperrte.md),
   [622](anliegen/622-zugschwelleUngeprueft.md); Nachprüfung
   [580](anliegen/580-auswahlPyAlsHilfsmodul.md).
-- Regelumsetzer: [650](anliegen/650-schreibgrenzeSperrtTmpUndLesen.md) und
+- Regelumsetzer: Anliegen 650 und
   [601](anliegen/601-commitHooksNachPfad.md) (halten jede Rolle auf, Retro nennt sie),
   [686](anliegen/686-wartetAufImKopf.md) (P2),
   [490](anliegen/490-fortschrittInPlanReviewRetro.md) (P1; Teil 2 erst Prozessphase 6);

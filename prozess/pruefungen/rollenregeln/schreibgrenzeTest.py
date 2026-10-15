@@ -87,7 +87,46 @@ def testRolleOhneSchreibpfadeDarfNichts(wurzel):
 
 
 def testEigenerOrdnerIstFrei(wurzel):
-    assert entscheide(schreiben(wurzel / "prozess" / "ablauf.md"), wurzel) is None
+    assert entscheide(schreiben(wurzel / "prozess" / "pruefungen" / "x.py"), wurzel) is None
+
+
+def testBacklogIstInJederPhaseFrei(wurzel):
+    assert entscheide(schreiben(wurzel / "prozess" / "backlog.md"), wurzel) is None
+
+
+@pytest.mark.parametrize(
+    "pfad",
+    [
+        "prozess/ablauf.md",
+        "prozess/praemissen/ich.md",
+        ".claude/agents/probe.md",
+        ".claude/skills/x/SKILL.md",
+        "domaene/CLAUDE.md",
+        "CLAUDE.md",
+    ],
+)
+def testRegelnRollenUndPrämissenSindInDerTechnikphaseGesperrt(wurzel, gitRepo, pfad):
+    (wurzel / "handoff").mkdir()
+    (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    antwort = entscheide(schreiben(wurzel / pfad), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert "Prozessphase" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
+
+
+def testRegelnSindInDerProzessphaseErstNachDerFreigabeDerRetroFrei(wurzel, gitRepo):
+    (wurzel / "handoff").mkdir()
+    (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    (wurzel / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
+    retro = "# Retro · Zyklus 3\n\n## Prozess-Items\n- P1 Eins\n"
+    (wurzel / "handoff" / "retro.md").write_text(retro, encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    gitRepo.festhalten("Freigabe Review 3")
+    ablauf = schreiben(wurzel / "prozess" / "ablauf.md")
+    antwort = entscheide(ablauf, wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    gitRepo.festhalten("Freigabe Retro 3")
+    assert entscheide(ablauf, wurzel) is None
 
 
 def testStakeholderOhneRolleIstFrei(wurzel):
@@ -195,6 +234,20 @@ def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
 )
 def testBashLesenPrüfenUndTmpBleibenFrei(wurzel, befehl):
     assert entscheide(bash(befehl), wurzel) is None
+
+
+abhakenBefehl = "python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken {} Schritt"
+
+
+def testEineRolleHaktMitDemBefehlEigeneZeilenAb(wurzel):
+    assert entscheide(bash(abhakenBefehl.format("Probe")), wurzel) is None
+
+
+@pytest.mark.parametrize("genannt", ["Reviewer", "Stakeholder", "''"])
+def testEineRolleHaktKeineFremdeZeileAb(wurzel, genannt):
+    antwort = entscheide(bash(abhakenBefehl.format(genannt)), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert "eigene Zeilen" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
 
 
 def testBashGiltNichtFürDenKoordinator(wurzel):

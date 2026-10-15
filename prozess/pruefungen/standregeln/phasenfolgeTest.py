@@ -88,6 +88,6 @@ def testSindAlleProzessItemsErledigtBeginntDerNächsteZyklus(repo):
 def testDerStandNenntEtappeZyklusPhaseUndNächstenSchritt(repo):
     repo.datei("handoff/plan.md", planKopf)
     assert stand(repo.ordner).startswith(
-        "Stand: Etappe 1 · Aufstellen · Zyklus 3 · Domänenphase · "
-        "Nächster Schritt: Plan 3 wartet auf Kritik und Freigabe"
+        "Stand: Etappe 1 von 1 (Aufstellen), Zyklus 3; 0 von 0 Kriterien belegt · "
+        "Domänenphase · Nächster Schritt: Plan 3 wartet auf Kritik und Freigabe"
     )

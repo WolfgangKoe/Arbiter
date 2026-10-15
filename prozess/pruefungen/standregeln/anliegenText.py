@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from anliegenregeln.anliegenDran import dran, nachprüfungen
+from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
 
 
 def nachprüfungenAlsText(wurzel: Path) -> str:
@@ -14,6 +14,19 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
         for rolle, nummern in sorted(fällig.items())
     ]
     return "Nachprüfung fällig: " + ", ".join(teile)
+
+
+def worauf(ziel: str) -> str:
+    return ziel if ziel.startswith("die ") else f"{int(ziel):02d}"
+
+
+def wartendeAnliegenAlsText(wurzel: Path) -> str:
+    """Anliegen, die auf ein anderes oder die Prozessphase warten; für niemanden dran."""
+    warten = wartende(wurzel)
+    if not warten:
+        return ""
+    teile = [f"{nummer:02d} (auf {worauf(ziel)})" for nummer, ziel in sorted(warten.items())]
+    return "Wartet: " + ", ".join(teile)
 
 
 def dranAlsText(wurzel: Path) -> str:

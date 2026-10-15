@@ -11,7 +11,10 @@ pythonpath = ["technik"]
 addopts = ["--continue-on-collection-errors"]
 # Warum: `stand` kennzeichnet Prüfungen über das echte Repo; die Messung der Prüfskripte lässt sie aus
 # (abdeckung.py), denn sie proben nur den grünen Weg.
-markers = ["stand: prüft den Stand des Repos, keine Probe"]
+markers = [
+    "stand: prüft den Stand des Repos, keine Probe",
+    "abdeckung: misst die Abdeckung über das echte Repo, trägt auch stand, läuft nur bei technik/",
+]
 
 [tool.ruff]
 line-length = 100

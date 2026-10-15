@@ -76,6 +76,27 @@ def testWartetAufÄndertNichtsAmDran(repo):
     assert "Dran: Planer (15)" in stand(repo.wurzel)
 
 
+def testStandZähltWartendeNichtUnterDran(repo):
+    kopf = "15 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen · wartet auf 16"
+    repo.datei("handoff/anliegen/15-probe.md", f"# Probe\n\n{kopf}\n")
+    anliegen(repo, "16", "offen", absender="Architekt", empfänger="Regelumsetzer")
+    text = stand(repo.wurzel)
+    assert "Dran: Regelumsetzer (16)" in text
+    assert "Planer" not in text.partition("Wartet")[0].partition("Dran")[2]
+    assert "Wartet: 15 (auf 16)" in text
+
+
+def testStandBeginntMitEtappeUndBelegtenKriterien(repo):
+    repo.datei("domaene/etappen/01-aufstellen.md", "# Etappe 1 · Aufstellen\n")
+    repo.datei("domaene/etappen/02-bewegen.md", "# Etappe 2 · Bewegen\n")
+    text = "### AU-1 · A\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n"
+    repo.datei("domaene/anforderungen/aufstellung.md", text)
+    repo.datei("technik/tests/akzeptanz/aufstellungTest.py", "def testAu1_1Eins(): ...\n")
+    assert stand(repo.wurzel).startswith(
+        "Stand: Etappe 1 von 2 (Aufstellen), Zyklus 1; 1 von 2 Kriterien belegt · "
+    )
+
+
 @pytest.mark.stand
 def testDerPostToolUseHookAufAgentMeldetDenStand():
     einstellungen = json.loads(

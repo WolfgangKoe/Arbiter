@@ -164,6 +164,7 @@ def testRoteTestsBeiLeererAusgabeIstNull():
 
 
 @pytest.mark.stand
+@pytest.mark.abdeckung
 def testDasProduktErreichtDieSchwelleMitSeinenTests():
     gemessen = abdeckungMessen(wurzel, "technik/arbiter", "technik/tests")
     ausgesetzt = aussetzung(gemessen)

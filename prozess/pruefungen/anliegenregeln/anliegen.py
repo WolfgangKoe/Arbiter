@@ -15,7 +15,8 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     if anliegen is None:
         return [
             "Zeile 3: Kopf `<nr> · <Typ> · von <Rolle> → <Rolle> · "
-            f"Runde <n>/{höchstRunde} · <Status>` erwartet"
+            f"Runde <n>/{höchstRunde} · <Status>`, dahinter höchstens `· wartet auf <nr>` "
+            "oder `· wartet auf die Prozessphase` erwartet"
         ]
     verstöße = []
     if not datei.name.startswith(f"{anliegen.nummer:02d}-"):

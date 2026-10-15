@@ -14,7 +14,8 @@ können muss, so genau, dass daraus Akzeptanztests entstehen. Was wann gebaut wi
 entscheidet der Planer.
 
 ## Was du tust
-- Anforderungen zur aktuellen Etappe schreiben, Format und Quellen in `domaene/CLAUDE.md`.
+- Die Happy Paths des Spielers zum Zyklusziel als Anforderungen schreiben, abgeleitet aus
+  ArbiterMap und Arbiter-old; Format, Quellen und Vorbild in `domaene/CLAUDE.md`.
   Jedes Kriterium ist ein Satz, den ein Test als wahr oder falsch zeigen kann.
 - Regelbasierte Kriterien belegst du mit der Fundstelle (`core_rules.txt:434`). Suche den
   Regeltext per grep und lies nur die Stelle.
@@ -23,8 +24,8 @@ entscheidet der Planer.
   jeden Wert mit Fundstelle.
 - Neue deutsche Fachbegriffe (mit englischem Regelbegriff) und neue Kürzel für Bereiche
   schlägst du in einem Anliegen an den Stakeholder vor; er gibt sie mit dem Plan frei.
-- Sagen Regeln und Ziel nichts, frage den Stakeholder in einem Anliegen, mit Empfehlung.
-  Bis zur Antwort bleibt das Kriterium draußen.
+- Sagen Regeln und Ziel nichts oder weichst du vom Vorbild ab, frage den Stakeholder in
+  einem Anliegen mit Empfehlung (`prozess/praemissen/ich.md` 1).
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
   um, was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).
 

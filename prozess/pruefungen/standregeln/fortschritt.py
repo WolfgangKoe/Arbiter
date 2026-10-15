@@ -9,11 +9,15 @@ from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
 from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, projektordner
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import anforderungUmfasst, umfasst, zuordnungen
+from lesen.agenten import rollennamen
 from lesen.plan import itemNamen, offeneItems, zyklus
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
 kritiker = ("Fachkritiker", "Architekt")
+codekritiker = ("Architekt", "Reviewer")
+umsetzer = "Regelumsetzer"
+itemzeile = re.compile(r"^- (P\d+) [^\n(]*\(([^),:]+)", re.MULTILINE)
 zeilenmuster = re.compile(r"^- \[([ x])\] (.+)$")
 abschnittsmuster = re.compile(r"^## Fortschritt\n(?:(?!## )[^\n]*\n)*", re.MULTILINE)
 Bisher = dict[str, tuple[bool, list[str]]]
@@ -61,10 +65,11 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     planFertig = zyklus(wurzel / handoffOrdner / planName) == aktuell.zyklus
     freigegeben = freigabeCommit(wurzel, "Plan", aktuell.zyklus) is not None
     return [
-        Zeile("Anforderungsautor", "Anforderungen zum Zyklusziel"),
+        Zeile("Anforderungsautor", "Happy Paths zum Zyklusziel"),
         Zeile("UX", "Mockups, bei einer Oberfläche"),
+        Zeile("Fachkritiker", "Kritik an Anforderungen und Mockups"),
         Zeile("Planer", "Plan geschrieben", planFertig),
-        *(Zeile(rolle, "Kritik an Anforderungen, Items und Mockups") for rolle in kritiker),
+        *(Zeile(rolle, "Kritik am Plan") for rolle in kritiker),
         Zeile("Stakeholder", f"Freigabe Plan {aktuell.zyklus}", freigegeben),
     ]
 
@@ -78,7 +83,7 @@ def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
         Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName)),
         *(Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker),
         Zeile("Implementierer", f"Tests zu Item {name} grün", folge),
-        Zeile("Reviewer", f"Kritik am Code zu Item {name}", folge),
+        *(Zeile(rolle, f"Kritik am Code zu Item {name}", folge) for rolle in codekritiker),
         Zeile("Fachkritiker", f"Item {name} abgenommen", folge),
         Zeile("Planer", f"Item {name} gelöscht", gelöscht),
     ]
@@ -96,18 +101,29 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     ]
 
 
+def itemRollen(wurzel: Path) -> dict[str, str]:
+    """Die Rolle je `P<k>` aus der Klammer `- P<k> <Titel> (<Rolle>): …`; sonst Regelumsetzer."""
+    text = (wurzel / handoffOrdner / retroName).read_text(encoding="utf-8")
+    abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
+    bekannt = {name.casefold(): name.capitalize() for name in rollennamen(wurzel)}
+    genannt = {kennung: rolle.strip().casefold() for kennung, rolle in itemzeile.findall(abschnitt)}
+    return {
+        kennung: bekannt.get(genannt.get(kennung, ""), umsetzer) for kennung in prozessItems(wurzel)
+    }
+
+
 def prozesszeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     freigabe = freigabeCommit(wurzel, "Retro", aktuell.zyklus)
     betreffe = betreffeSeit(wurzel, freigabe) if freigabe else []
     gepusht = "origin/dev" in gitAusgabe(wurzel, "branch", "-r", "--contains", "HEAD")
     return [
         Zeile("Organisationsentwickler", "Retro geschrieben", fakt=True),
-        *(Zeile(rolle, "Kritik an Regeländerungen") for rolle in kritiker),
+        *(Zeile(rolle, "Kritik an der Retro") for rolle in kritiker),
         Zeile("Organisationsentwickler", "Nachkorrektur"),
         Zeile("Stakeholder", f"Freigabe Retro {aktuell.zyklus}", freigabe is not None),
         *(
-            Zeile("Regelumsetzer", kennung, hatItemCommit(betreffe, aktuell.zyklus, kennung))
-            for kennung in prozessItems(wurzel)
+            Zeile(rolle, kennung, hatItemCommit(betreffe, aktuell.zyklus, kennung))
+            for kennung, rolle in itemRollen(wurzel).items()
         ),
         Zeile("Koordinator", "nach dev gepusht", gepusht),
     ]

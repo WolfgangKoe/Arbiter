@@ -7,18 +7,24 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-      - id: pruefungen
-        name: Prüfungen (Benennung, Glossar, Importvertrag, Anliegen, Kriterium zu Test)
-        entry: python3 -m pytest prozess/pruefungen -q
+      - id: stand
+        name: Stand des Repos (Benennung, Glossar, Importvertrag, Anliegen, Kriterium zu Test)
+        entry: python3 -m pytest prozess/pruefungen -q -m "stand and not abdeckung"
         language: system
         pass_filenames: false
         always_run: true
-      - id: benennung
-        name: Benennung nach prozess/praemissen/wir.md
-        entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.benennung
+      - id: abdeckung
+        name: Abdeckung und toter Code des Produkts (nur bei technik/ oder pyproject.toml)
+        entry: python3 -m pytest prozess/pruefungen -q -m abdeckung
         language: system
         pass_filenames: false
-        always_run: true
+        files: ^(technik/|pyproject\.toml)
+      - id: proben
+        name: Proben der Prüfskripte (nur bei Prüfskripten, Konfiguration oder .claude/)
+        entry: python3 -m pytest prozess/pruefungen -q -m "not stand"
+        language: system
+        pass_filenames: false
+        files: ^(prozess/pruefungen/|\.claude/|pyproject\.toml|\.pre-commit-config\.yaml|package(-lock)?\.json|eslint\.config\.mjs|\.stylelintrc\.json|\.gitignore)
       - id: sonarlint
         name: SonarLint (Standardprofil ohne Namensregeln)
         entry: python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint

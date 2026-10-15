@@ -410,6 +410,7 @@ def testGelberHinweisErscheintBeiOffenerFrageUndVerschwindetMitDerAntwort(tmp_pa
     assert 'class="offene-frage"' not in hinweise(tmp_path)
 
 
+@pytest.mark.stand
 def testRetroDesRepoNenntDenBefehl():
     assert retroNenntBefehl((wurzel / "handoff" / "retro.md").read_text(encoding="utf-8"))
 

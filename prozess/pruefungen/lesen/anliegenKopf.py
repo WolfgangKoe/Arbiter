@@ -18,12 +18,13 @@ class Status(StrEnum):
     erledigt = "erledigt"
 
 
-typWerte = ("Kritik", "Fragen", "Anliegen")
+typWerte = ("Kritik", "Fragen", "Anliegen", "Auftrag")
 höchstRunde = 3
 kopfzeile = re.compile(
     rf"^(?P<nummer>\d+) · (?P<typ>\w+) · von (?P<absender>[^\s(]+)(?: \([^)]+\))?"
     rf" → (?P<empfänger>[^\s(]+)(?: \([^)]+\))?"
-    rf" · Runde (?P<runde>\d+)/{höchstRunde} · (?P<status>\w+)$"
+    rf" · Runde (?P<runde>\d+)/{höchstRunde} · (?P<status>\w+)"
+    rf"(?: · wartet auf (?P<wartetAuf>\d+|die (?:Domänen|Technik|Prozess)phase))?$"
 )
 stakeholder = "Stakeholder"
 
@@ -37,6 +38,7 @@ class Anliegen:
     empfänger: str
     runde: int
     status: Status | str  # Warum: ein unbekannter Text bleibt Text, `kopfVerstöße` meldet ihn
+    wartetAuf: str | None = None
 
 
 def statusAusText(text: str) -> Status | str:
@@ -65,6 +67,7 @@ def kopfAusText(text: str, datei: Path) -> Anliegen | None:
         empfänger=treffer["empfänger"],
         runde=int(treffer["runde"]),
         status=statusAusText(treffer["status"]),
+        wartetAuf=treffer["wartetAuf"],
     )
 
 

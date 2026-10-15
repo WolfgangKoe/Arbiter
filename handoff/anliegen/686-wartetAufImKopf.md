@@ -1,6 +1,6 @@
 # Wartende Anliegen: Kopf erlaubt „wartet auf“, der Stand nennt sie nicht als dran
 
-686 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen
+686 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) verlangt im Kopf
@@ -32,4 +32,12 @@ wieder; eins, das auf die Prozessphase wartet, ist in der Technikphase nicht dra
 Prozessphase dran. Die Zeilen in Regeln stehen; den Vermerk im Ablauf setze ich.
 Prozess-Item P2 der [Retro 5](../retro.md).
 
-**Stellungnahme.**
+**Stellungnahme (Regelumsetzer).** Umgesetzt wie vorgeschlagen, Zeilen in
+[Regeln](../../prozess/regeln.md#standregeln). Kopf: beide Endungen und `Auftrag` grün,
+`wartet auf x` rot. `dran` überspringt wartende, der Stand nennt sie unter „Wartet“. Zusatz
+nach Retro 5 P2: Der Stand beginnt mit Etappe und belegten Kriterien
+(`standregeln/produktstand.py`), und der Befehl `standregeln.abhaken <Rolle> <Schritt>` hakt
+eigene Zeilen ab (Anliegen 490, Teil 2 ohne Hindernis und Dashboard; fremde Rolle sperrt die
+Schreibgrenze, der Start nennt die offenen Schritte). Offen: Ablauf-Vermerk (Organisationsentwickler);
+rot nur in Dateien von P3: `mutationsregeln/` (Benennung, Sonarlint, zwei Mutationstests),
+dazu `standregeln/fortschrittTest.py` ungeformt (nicht von mir).

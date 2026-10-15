@@ -36,7 +36,7 @@ und Schulden eindämmt.
 
 ## Grenzen
 - Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor:
-  als Anliegen an den Stakeholder.
+  als Anliegen an den Stakeholder. Ändern nur in der Prozessphase nach `Freigabe Retro <n>`.
 - Eine Rolle entsteht erst bei beobachtetem Bedarf. Was über mehrere Zyklen nie auslöst,
   kommt in die Retro.
 - Höchstmaße in Zeichen: Agentendefinition 2.500, Beschreibung 150, Ordner-CLAUDE.md 1.500,

@@ -1,5 +1,6 @@
 """Hook (PreToolUse): Eine Rolle schreibt nur in ihren Schreibpfaden; manches ist nur lesbar."""
 
+import shlex
 from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
@@ -14,15 +15,34 @@ from rollenregeln.bashSchreiben import (
 )
 from rollenregeln.entfernen import urteil
 from rollenregeln.pfadsperren import pfadsperren
+from rollenregeln.regelnNurInProzessphase import regelnGesperrt, regelnMeldung
 
 schreibwerkzeuge = ("Write", "Edit")
 koordinator = "koordinator"
+abhakenModul = "standregeln.abhaken"
+
+
+def abhakenFürAndere(befehl: str, rolle: str | None) -> bool:
+    """Der Befehl `standregeln.abhaken` nennt als Rolle eine andere als die aufrufende."""
+    try:
+        wörter = shlex.split(befehl)
+    except ValueError:
+        return False
+    if abhakenModul not in wörter:
+        return False
+    genannt = wörter[wörter.index(abhakenModul) + 1 : wörter.index(abhakenModul) + 2]
+    return not genannt or genannt[0].casefold() != (rolle or "").casefold()
 
 
 def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     # Warum: Der Hauptchat läuft als Koordinator (`agent` in settings.json) und committet.
     if eingabe.rolle == koordinator:
         return None
+    if abhakenFürAndere(str(eingabe.angaben.get("command") or ""), eingabe.rolle):
+        return verweigerung(
+            f"Schreibgrenze: {eingabe.rolle} hakt nur eigene Zeilen ab: "
+            f"`lauf.py {abhakenModul} {eingabe.rolle} <Schritt>`."
+        )
 
     def entfernenDerRolle(name: str, wörter: list[str]) -> str | None:
         return urteil(name, wörter, eingabe.rolle, wurzel)
@@ -54,6 +74,8 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     for gesperrt, meldung in pfadsperren:
         if gesperrt(relativ):
             return verweigerung(f"Schreibgrenze: {relativ}: {meldung}")
+    if not außerhalb and regelnGesperrt(relativ, wurzel):
+        return verweigerung(f"Schreibgrenze: {relativ}: {regelnMeldung}")
     # Regel: Ich 2, Write und Edit in /tmp sind frei, die Pfadsperren gelten weiter.
     if (außerhalb and liegtInTmp(relativ)) or darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
         return None

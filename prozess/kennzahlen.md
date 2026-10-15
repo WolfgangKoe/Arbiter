@@ -9,17 +9,13 @@ für die Retro. Mechanismus: nur Text.
   Arbeit, die das Produkt bräuchte. Schwelle: ein Drittel. Reaktion: Die Retro löscht
   mindestens einen Mechanismus, bevor sie einen neuen beauftragt, der nicht auf ein Anliegen
   des Stakeholders zurückgeht. Mechanismus: nur Text.
-- Prüfcode gegen Produktcode: neue Zeilen in `prozess/pruefungen/` gegen neue Zeilen in
-  `technik/arbiter/` und `technik/frontend/` seit der letzten `Freigabe Retro`
-  (`git diff --shortstat`). Bedeutung wie Prozesslast. Schwelle: mehr Prüfcode als
-  Produktcode. Reaktion: wie Prozesslast (Anliegen 630). Mechanismus: nur Text.
 - Fortschritt des Produkts: aktuelle Etappe von allen, belegte Kriterien von allen. Die
   aktuelle ist die kleinste Nummer in `domaene/etappen/`, die Zahl aller die größte.
   Belegt ist ein Kriterium, das einen Akzeptanztest hat und das kein offenes Item des
   freigegebenen Plans nennt (`kriterienregeln/rueckverfolgung.py`); grün ist es dann nach
   DoD 1. Gezählt ohne Testlauf über alle Kriterien; je Etappe: [Backlog](backlog.md).
   Schwelle: kein Zuwachs in einem Zyklus. Reaktion: Die Retro nennt die Ursache; ihre
-  Prozess-Items gelten nur ihr (Anliegen 630, 691). Mechanismus: nur Text; Anzeige: Retro 5, P1.
+  Prozess-Items gelten nur ihr (Anliegen 630, 691). Mechanismus: nur Text; Anzeige im Stand: Retro 5, P2.
 
 ## Höchstmaße
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,
@@ -36,4 +32,4 @@ ganze Datei lädt. Code-Modul (auch `conftest.py`, Anliegen 251) und Einheitstes
 12.000/8.000, Akzeptanztest-Datei 20.000/12.000 (darüber wird die Anforderung geteilt:
 Architektur, T1), Backlog je Perspektive 3.000/2.000.
 
-Mechanismus: nur Text ([Backlog](backlog.md)).
+Mechanismus: nur Text.

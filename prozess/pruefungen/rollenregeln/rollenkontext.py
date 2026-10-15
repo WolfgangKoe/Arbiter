@@ -5,6 +5,7 @@ from pathlib import Path
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
 from gemeinsam.pfade import perspektiven, projektordner
 from lesen.agenten import schreibpfade
+from standregeln.abhaken import offeneZeilen
 from standregeln.stand import stand
 
 
@@ -16,6 +17,12 @@ def perspektive(rolle: str, wurzel: Path) -> str | None:
 
 def kontext(rolle: str, wurzel: Path) -> str:
     teile = [stand(wurzel)]
+    offen = offeneZeilen(wurzel, rolle)
+    if offen:
+        befehl = f"python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken {rolle}"
+        schritte = "".join(f"\n- {schritt}" for schritt in offen)
+        hinweis = f"Am Ende abhaken: {befehl} <Schritt>"
+        teile.append(f"Offene Schritte im Fortschritt:{schritte}\n{hinweis}")
     ordner = perspektive(rolle, wurzel)
     datei = wurzel / ordner / "CLAUDE.md" if ordner else None
     if datei and datei.is_file():

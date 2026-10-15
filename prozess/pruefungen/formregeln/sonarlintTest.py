@@ -158,6 +158,7 @@ def corsFreigaben(quelltext: str) -> list[str]:
     return [merkmal for merkmal in corsMerkmale if merkmal in quelltext]
 
 
+@pytest.mark.stand
 def testDieAusnahmeVonS4502GiltNurSolangeWebKeinPostKeineAnsichtUndKeinCorsHat():
     # Regel: technik/architektur/vertrag.md, V4
     ausnahme = (f"{webOrdner}/anwendung.py", "python:S4502")
