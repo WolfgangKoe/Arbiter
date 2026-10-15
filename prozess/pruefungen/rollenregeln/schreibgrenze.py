@@ -5,7 +5,13 @@ from pathlib import Path
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
-from rollenregeln.bashSchreiben import verbotenesSchreiben, weg
+from rollenregeln.bashSchreiben import (
+    ausweg,
+    liegtInTmp,
+    nichtLesbar,
+    verbotenesSchreiben,
+    weg,
+)
 from rollenregeln.entfernen import urteil
 from rollenregeln.pfadsperren import pfadsperren
 
@@ -24,8 +30,9 @@ def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     gefunden = verbotenesSchreiben(str(eingabe.angaben.get("command") or ""), entfernenDerRolle)
     if gefunden is None:
         return None
+    hinweis = ausweg if gefunden == nichtLesbar else ""
     return verweigerung(
-        f"Schreibgrenze: {eingabe.rolle} darf per Bash nicht schreiben ({gefunden}). {weg}"
+        f"Schreibgrenze: {eingabe.rolle} darf per Bash nicht schreiben ({gefunden}). {weg}{hinweis}"
     )
 
 
@@ -41,12 +48,14 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     angaben = eingabe.angaben
     ziel = Path(angaben.get("file_path") or "")
     relativ = relativZurWurzel(ziel, wurzel)
+    außerhalb = relativ is None
     if relativ is None:
         relativ = str(ziel)
     for gesperrt, meldung in pfadsperren:
         if gesperrt(relativ):
             return verweigerung(f"Schreibgrenze: {relativ}: {meldung}")
-    if darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
+    # Regel: Ich 2, Write und Edit in /tmp sind frei, die Pfadsperren gelten weiter.
+    if (außerhalb and liegtInTmp(relativ)) or darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
         return None
     return verweigerung(
         f"Schreibgrenze: {rolle} darf {relativ} nicht schreiben. "

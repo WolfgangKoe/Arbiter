@@ -57,8 +57,28 @@ def testSchreibenInFremdePerspektiveWirdGesperrt(wurzel):
 
 
 def testSchreibenAußerhalbDesReposWirdGesperrt(wurzel):
-    antwort = entscheide(schreiben("/tmp/irgendwo.md"), wurzel)
+    antwort = entscheide(schreiben("/etc/irgendwo.md"), wurzel)
     assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
+def testWriteUndEditInTmpSindFrei(wurzel):
+    assert entscheide(schreiben("/tmp/irgendwo.md"), wurzel) is None
+
+
+def testWriteInTmpMitUmwegWirdGesperrt(wurzel):
+    antwort = entscheide(schreiben("/tmp/../etc/irgendwo.md"), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
+def testWriteInsProjektBleibtGesperrt(wurzel):
+    antwort = entscheide(schreiben(wurzel / "technik" / "x.py"), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
+def testNichtLesbarerBefehlNenntDenAusweg(wurzel):
+    antwort = entscheide(bash("echo 'offen"), wurzel)
+    grund = antwort["hookSpecificOutput"]["permissionDecisionReason"]
+    assert "ohne verschachtelte Anführung" in grund
 
 
 def testRolleOhneSchreibpfadeDarfNichts(wurzel):
@@ -129,8 +149,10 @@ def bash(befehl, rolle="probe"):
         pytest.param("mv a.md b.md", id="mv"),
         pytest.param("cp a.md b.md", id="cp"),
         pytest.param("touch prozess/neu.md", id="touch"),
-        pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
-        pytest.param("python3 -c 'print(1)'", id="python3 -c"),
+        pytest.param("rm -rf technik/", id="rm -rf im Projekt"),
+        pytest.param("rm -rf /tmp/probe technik/x", id="rm -rf gemischt"),
+        pytest.param("python3 -c 'print(1)' > technik/x.py", id="python3 -c mit Umleitung"),
+        pytest.param("python3 - > technik/x.py <<EOF\nprint(1)\nEOF", id="python3 - mit Umleitung"),
         pytest.param("git add prozess/x.md", id="git add"),
         pytest.param("ls && git commit -m x", id="git commit nach &&"),
         pytest.param("git checkout -- prozess/x.md", id="git checkout"),
@@ -162,6 +184,10 @@ def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
         pytest.param("grep '>' prozess/ablauf.md", id="Größerzeichen in Anführungszeichen"),
         pytest.param("sed -n 1,5p prozess/ablauf.md", id="sed lesend"),
         pytest.param("rm /tmp/probe.md", id="rm in /tmp"),
+        pytest.param("rm -rf /tmp/kopie /tmp/probe", id="rm -rf in /tmp"),
+        pytest.param("mv -T /tmp/a /tmp/b", id="mv in /tmp mit jeder Option"),
+        pytest.param("python3 -c 'print(1)'", id="python3 -c"),
+        pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
         pytest.param("cp prozess/ablauf.md /tmp/ablauf.md", id="cp nach /tmp"),
         pytest.param("git -C /tmp/repo commit -m x", id="git -C /tmp"),
         pytest.param("cd /tmp/repo && git add x", id="cd /tmp"),

@@ -32,4 +32,4 @@ nennt.
 (die Anforderung nennt jede Geste und was danach geschieht; du vergleichst vor den Mockups
 mit ArbiterMap und Arbiter-old, jede Abweichung entscheidet der Stakeholder als Frage) und
 in deiner [Definition](../../.claude/agents/ux.md): Vorbild für Bild und Bedienung. Dass
-jede Rolle das Vorbild kennt, fragt [687](687-backlogUndVorbild.md), F2.
+jede Rolle das Vorbild kennt, fragt Anliegen 687, F2.

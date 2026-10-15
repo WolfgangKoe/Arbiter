@@ -16,8 +16,9 @@ gitÄnderungen = {"add", "commit", "checkout", "restore", "reset", "stash", "rm"
 alleZieleFrei = {"rm", "mv", "touch", "tee"}
 nurZielFrei = {"cp"}
 löschenUndUmbenennen = {"rm", "mv"}
-pythonMitSkriptInDerEingabe = {"-", "-c"}
 weg = "Nimm Write und Edit; Bash nur zum Lesen, für Prüfungen und Tests und in /tmp."
+nichtLesbar = "Befehl nicht lesbar"
+ausweg = " Schreibe den Befehl ohne verschachtelte Anführung oder in einzelnen Aufrufen."
 
 
 def liegtInTmp(pfad: str) -> bool:
@@ -107,11 +108,17 @@ def grundGegenEntfernen(wörter: list[str], entfernen: Entfernen, *, gewechselt:
     return f"{name} nach cd" if gewechselt else entfernen(name, wörter[1:])
 
 
+def alleZieleInTmp(wörter: list[str]) -> bool:
+    ziele = argumente(ohneUmhüllung(wörter))
+    return bool(ziele) and all(liegtInTmp(ziel) and not set("$`") & set(ziel) for ziel in ziele)
+
+
 def urteilenÜber(
     wörter: list[str], *, inTmp: bool, gewechselt: bool, entfernen: Entfernen | None
 ) -> str | None:
     umleitung = umleitungImProjekt(wörter)
-    if umleitung or not (entfernen and entfernenName(wörter) and not inTmp):
+    gehörtZuEntfernen = entfernen and entfernenName(wörter) and not inTmp
+    if umleitung or not gehörtZuEntfernen or alleZieleInTmp(wörter):
         return umleitung or befehlImProjekt(wörter, inTmp=inTmp)
     return grundGegenEntfernen(wörter, entfernen, gewechselt=gewechselt)
 
@@ -125,9 +132,6 @@ def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
         return None if inTmp else gitÄndertImProjekt(wörter)
     if name == "sed" and any(ändertInPlace(wort) for wort in wörter[1:]):
         return "sed -i"
-    erstes = wörter[1:2]
-    if name.startswith("python") and any(wort in pythonMitSkriptInDerEingabe for wort in erstes):
-        return f"{name} {wörter[1]}"
     ziele = argumente(wörter)
     if name in nurZielFrei and ziele and not liegtInTmp(ziele[-1]):
         return name
@@ -141,7 +145,7 @@ def verbotenesSchreiben(befehl: str, entfernen: Entfernen | None = None) -> str 
     try:
         teile = zerlegen(befehl)
     except ValueError:
-        return "Befehl nicht lesbar"
+        return nichtLesbar
     inTmp = False
     gewechselt = False
     for wörter in teile:

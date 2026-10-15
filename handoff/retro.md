@@ -1,8 +1,8 @@
 # Retro · Zyklus 5
 
-Dashboard öffnen: im Projektordner
-`python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten, im
-Browser `http://127.0.0.1:8765/` öffnen, beenden mit Strg+C.
+Dashboard: im Projektordner
+`python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten,
+`http://127.0.0.1:8765/` öffnen, Strg+C beendet.
 
 Etappe 1 von 7 (Aufstellen), Zyklus 5, keine erreicht; 74 von 94 Kriterien haben einen
 Akzeptanztest. Neu am Bildschirm: *Einheiten* auf die *Karte* ziehen, *Modelle*
@@ -26,10 +26,7 @@ Aufstellen per Klick wie ArbiterMap.
 4. Ich habe Regeln vor deiner Freigabe geändert; P1 nimmt sie zurück.
 
 ## Backlog
-Von 14 Punkten zählen zwei: Kriterien je Etappe zählen, sobald Etappe 1 erreicht ist, und
-Mutationstests. Sie bauen Fehler ein und zählen, welche kein Test bemerkt: deine Frage in
-Anliegen 692 nach grünen Tests, die nichts prüfen. Per Kommentar: jetzt als P3 (Empfehlung
-des Architekten) oder spätestens zu Etappe 2. Die übrigen zwölf löscht P1.
+Mutationstests sind jetzt P3; zwölf der übrigen 13 Punkte löscht P1.
 
 ## Prozess-Items
 - P1 Ablauf nach deinem Modell (ich):
@@ -56,12 +53,15 @@ des Architekten) oder spätestens zu Etappe 2. Die übrigen zwölf löscht P1.
 - P2 Der Stand zeigt, was wirklich ist (Regelumsetzer): Rollen haken Kritik und
   Nachkorrektur selbst ab; wartende Anliegen gelten nicht als dran; erste Zeile Etappe und
   Kriterien wie oben.
+- P3 Mutationstests (Regelumsetzer, 692): Ein Werkzeug baut Fehler in geänderte
+  Domänenmodule ein und zählt, welche kein Test bemerkt. Es ersetzt die Probe des Reviewers,
+  Lücken gehen an den Testautor. Die Schwelle schlage ich nach dem ersten Lauf vor.
 
-Außerdem, weil sie jede Rolle aufhalten: Schreibgrenze sperrt zu Unrecht (650), Commits
+Außerdem, da sie jede Rolle aufhalten: Schreibgrenze sperrt zu Unrecht (650), Commits
 warten auf alle Prüfungen (601).
 
 ## Empfehlung
-Freigeben. Danach P1, P2, dann Domänenphase 6 mit dem Aufstellen per Klick.
+Freigeben. Danach P1 bis P3, dann Domänenphase 6 mit dem Aufstellen per Klick.
 Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 697.
 
 ## Fortschritt
@@ -69,11 +69,13 @@ Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 69
 - [ ] Fachkritiker: Kritik an Regeländerungen
 - [ ] Architekt: Kritik an Regeländerungen
 - [ ] Organisationsentwickler: Nachkorrektur
-- [ ] Stakeholder: Freigabe Retro 5
+- [x] Stakeholder: Freigabe Retro 5
 - [ ] Regelumsetzer: P1
 - [ ] Regelumsetzer: P2
+- [ ] Regelumsetzer: P3
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
 Freigabe: ja
 Kommentar: S. Anliegen 692 vom Architekten, bitte Mutationstests als item P3 einführen.
+Stellungnahme: P3 steht, Backlog bereinigt.

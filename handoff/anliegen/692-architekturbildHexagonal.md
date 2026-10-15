@@ -1,6 +1,6 @@
 # Architekturbild: Fachregeln in der Mitte, Technik steckt außen an
 
-692 · Fragen · von Architekt → Stakeholder · Runde 1/3 · angenommen
+692 · Fragen · von Architekt → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Hexagonal (Cockburn 2005, „Ports und Adapter“): Der Kern kennt keine Technik.
@@ -46,7 +46,7 @@ Antwort: A
 Kommentar: Für mich klingt das schlüssig. Ich hoffe, du weißt, was du tust ;-). Eine Sache, die mir noch bei den Akzeptanztests aufgefallen ist. Kann es sein, dass es dort ein paar "triviale Tests" gibt, die quasi immer grün sind? Ich bin mir da nicht sicher, ob jeder einzelne Test dann auch Methoden aufruft, die im Produktivcode stehen. Ich frage das nur, weil ich die Sorge habe, dass wir viele frohe und vor allem grüne Tests haben, die am Ende gar nichts testen.
 
 **Klärung.** Umgesetzt: Bild oben verlinkt, A4 beim Regelumsetzer
-([694](694-importvertragA4.md)). Zu den Tests: Ja, solche gibt es. Jeder ruft Produktcode
+(Anliegen 694). Zu den Tests: Ja, solche gibt es. Jeder ruft Produktcode
 auf, doch die Abdeckung zeigt nur, dass jede Zeile läuft, nicht, dass ein Test einen Fehler
 bemerkt. Zwei Arten: Tests, die vor allem die Katalogdaten prüfen (OBJ-1.1, „jeder *Spieler*
 führt eine *Armee* mit *Einheiten*“), und Tests auf „ändert nichts“ (AUF-17.1, „zurück“ ohne

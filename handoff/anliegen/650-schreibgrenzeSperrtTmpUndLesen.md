@@ -1,6 +1,6 @@
 # Schreibgrenze sperrt, was Ich 2 erlaubt: /tmp und Lesen
 
-650 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen
+650 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** [Ich 2](../../prozess/praemissen/ich.md) erlaubt Bash zum Lesen, für Prüfungen
@@ -36,4 +36,11 @@ Befehle des Reviewers grün, `rm -rf technik/`, `python3 -c` mit Umleitung nach 
 und Write auf `technik/…` weiter rot. Liest du Ich 2 bei Punkt 3 anders, wird es eine Frage
 an den Stakeholder; ich stelle sie.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle vier Punkte umgesetzt, in `rollenregeln/bashSchreiben.py`
+(`alleZieleInTmp`, ohne Sperre für `python3 -c` und `python3 -`, Ausweg-Text) und
+`rollenregeln/schreibgrenze.py` (Write und Edit in `/tmp`, nur für Pfade außerhalb des
+Projekts, Pfadsperren zuerst). `rm` und `mv` mit allen Pfaden in `/tmp` sind frei, auch ohne
+`$` und `..`. Scheiter-Tests in `rollenregeln/schreibgrenzeTest.py`: die drei Befehle grün,
+`rm -rf technik/`, `rm -rf` gemischt, `python3 -c` und `python3 -` mit Umleitung nach
+`technik/` und Write auf `technik/…` rot. Zeile in
+[Regeln](../../prozess/regeln.md#rollenregeln) angepasst. Die Lücke von Anliegen 510 bleibt.

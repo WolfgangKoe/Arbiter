@@ -14,9 +14,6 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
 - Belegte Kriterien je Etappe zählen ([Kennzahlen](kennzahlen.md)): Kein Kriterium nennt
   seine Etappe; Frage an Planer und Anforderungsautor (Anliegen 691). Auslöser: Etappe 1
   ist erreicht, dann zählen alle Kriterien nicht mehr nur die laufende.
-- Mutationstests (mutmut) bei der DoD statt der Probe des Reviewers (Anliegen 630):
-  Auslöser: Die Probe bringt ihn über 120.000 Token oder findet zwei Zyklen nacheinander
-  Lücken, spätestens zu Etappe 2 (Abstände rechnet die Domäne).
 - Schreibgrenze auch für Skripte, die selbst schreiben (Anliegen 510): Bash führt kein
   Skript und keinen Interpreter mit Code aus `/tmp` aus. Auslöser: Eine Rolle ändert so einen
   fremden Schreibpfad.
