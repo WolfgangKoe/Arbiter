@@ -45,9 +45,9 @@ def prozessItems(wurzel: Path) -> list[str]:
 
 
 def hatItemCommit(betreffe: list[str], retro: int, kennung: str) -> bool:
-    """Ein Betreff beginnt mit `P<k>:` oder `Retro <n> P<k>:`."""
-    # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` (Prozessphase, Schritt 5).
-    muster = rf"(Retro {retro} )?{kennung}:"
+    """Ein Betreff beginnt mit `P<k>:`, `P<j>, P<k>: …` (mehrere Items) oder `Retro <n> P<k>:`."""
+    # Warum: Der Ablauf erlaubt das Präfix `Retro <n> ` und einen Commit für mehrere Items.
+    muster = rf"(Retro {retro} )?(P\d+(, | und ))*{kennung}((, | und )P\d+)*:"
     return any(re.match(muster, betreff) for betreff in betreffe)
 
 

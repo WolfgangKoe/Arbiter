@@ -139,6 +139,18 @@ def testDieProzessphaseHaktEinProzessItemMitSeinemCommitAb(tmp_path, gitRepo):
     assert "- [ ] Koordinator: nach dev gepusht\n" in text
 
 
+def testBeginntDieNächstePhaseErhältDieRetroIhrenEndstand(tmp_path, gitRepo):
+    schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n")
+    retro = schreiben(
+        tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n- P1 Eins\n\n"
+    )
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1", "P1: Eins"):
+        gitRepo.festhalten(betreff)
+    assert "handoff/retro.md" in fortschrittSchreiben(tmp_path)
+    assert "- [x] Regelumsetzer: P1\n" in retro.read_text(encoding="utf-8")
+
+
 def testEinProzessItemTrägtDieRolleAusSeinerKlammer(tmp_path, gitRepo):
     schreiben(tmp_path, ".claude/agents/organisationsentwickler.md", "---\nname: x\n---\n")
     schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")

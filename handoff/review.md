@@ -56,6 +56,15 @@ das Dashboard (`rollenregeln/dashboard*.py`, `zuegeUebernehmen.py`), dazu `forts
 - **Zyklusziel:** Plan 6: Nach dem Start wählt ihr *Gewinner* und Zone selbst; eine *Sperre*
   übergeht ihr gemeinsam, das *Protokoll* zeigt es. Damit ist Etappe 1 erreicht. Vorher: 620 bis 622.
 
+## Fortschritt
+- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
+- [ ] UX: Mockups, bei einer Oberfläche
+- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
+- [ ] Planer: Plan geschrieben
+- [ ] Fachkritiker: Kritik am Plan
+- [ ] Architekt: Kritik am Plan
+- [ ] Stakeholder: Freigabe Plan 6
+
 ## Freigabe
 Freigabe: ja
 Kommentar: .

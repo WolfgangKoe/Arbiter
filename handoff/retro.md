@@ -70,9 +70,9 @@ Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 69
 - [ ] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 5
-- [ ] Organisationsentwickler: P1
-- [ ] Regelumsetzer: P2
-- [ ] Regelumsetzer: P3
+- [x] Organisationsentwickler: P1
+- [x] Regelumsetzer: P2
+- [x] Regelumsetzer: P3
 - [x] Koordinator: nach dev gepusht
 
 ## Freigabe

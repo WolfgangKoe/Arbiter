@@ -181,11 +181,16 @@ def abschnittEinsetzen(text: str, abschnitt: str) -> str:
     return text.rstrip("\n") + "\n\n" + abschnitt
 
 
-def fortschrittSchreiben(wurzel: Path) -> str | None:
-    """Schreibt den Abschnitt in die Datei der Phase; nennt sie, wenn sich etwas änderte."""
-    ziel = zielUndZeilen(wurzel, lage(wurzel))
-    if ziel is None:
-        return None
+def vorherigeLage(aktuell: Lage) -> Lage:
+    """Die Phase davor: nach der Domänenphase die Prozessphase des Vorzyklus."""
+    if aktuell.phase == Phase.technikphase:
+        return aktuell._replace(phase=Phase.domänenphase)
+    if aktuell.phase == Phase.prozessphase:
+        return aktuell._replace(phase=Phase.technikphase)
+    return aktuell._replace(zyklus=aktuell.zyklus - 1, phase=Phase.prozessphase)
+
+
+def abschnittSchreiben(wurzel: Path, ziel: tuple[Path, list[Zeile]]) -> str | None:
     datei, zeilen = ziel
     text = datei.read_text(encoding="utf-8")
     neu = abschnittEinsetzen(text, abschnittBauen(zeilen, bisherigeZeilen(text)))
@@ -193,6 +198,18 @@ def fortschrittSchreiben(wurzel: Path) -> str | None:
         return None
     datei.write_text(neu, encoding="utf-8")
     return datei.relative_to(wurzel).as_posix()
+
+
+def fortschrittSchreiben(wurzel: Path) -> str | None:
+    """Schreibt den Abschnitt in die Dateien der Phase und der Phase davor; nennt geänderte."""
+    # Warum: Die Datei der vorigen Phase erhält ihren Endstand, wenn die nächste beginnt.
+    aktuell = lage(wurzel)
+    ziele = (zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell)))
+    geschrieben = [
+        abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None
+    ]
+    änderungen = [name for name in geschrieben if name]
+    return ", ".join(änderungen) if änderungen else None
 
 
 if __name__ == "__main__":
