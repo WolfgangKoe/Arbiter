@@ -4,34 +4,41 @@ Jede Regel nennt, was sie prüft. „Nur Text“: ohne Mechanismus; ein Auslöse
 baut ihn der Regelumsetzer auf Anliegen des Architekten.
 
 ## Schichten
+Hexagonal: Die Domäne kennt keine Technik, Adapter stecken an den Ports von
+[`anwendung/`](architektur/anwendung.md).
 ```
 technik/
+  frontend/     HTML, CSS, JS; nur über HTTP an web/
   arbiter/
-    domaene/    Fachlogik, nur Standardbibliothek
-    katalog/    liest das YAML aus domaene/daten/ in Objekte der Domäne
-    speicher/   Datenbank: die Folge der Handlungen
-    web/        Flask; übersetzt Anfragen in Handlungen der Domäne
-  frontend/     HTML, CSS, JS; spricht nur über HTTP mit web/
+    web/        Flask: Anfrage → Befehl, Spielstand → JSON, Sperre → 409
+    anwendung/  je Handlung ein Dienst; Ports, Befehle, Spielstand
+    katalog/    Port Katalog: YAML aus domaene/daten/
+    speicher/   Port Partien: die Folge der Befehle (P2)
+    domaene/    Fachlogik
+    __main__.py steckt Adapter und Dienste zusammen (W5)
   tests/        akzeptanz/, einheit/
 ```
-Ordner entstehen mit dem ersten Item, das sie braucht. Zusammenspiel von `web/` und
-`frontend/`: [Web](architektur/web.md), [Vertrag](architektur/vertrag.md); die Datenbank:
+Ordner entstehen mit dem ersten Item, das sie braucht. Themen: [Web](architektur/web.md),
+[Vertrag](architektur/vertrag.md), [Oberfläche](architektur/oberflaeche.md),
 [Speicher](architektur/speicher.md).
 
 ## Abhängigkeiten zeigen nach innen
 - **A1** `arbiter.domaene` importiert nur die Standardbibliothek und sich selbst. Prüft:
   `formregeln/importvertrag.py`, auch relative Importe.
-- **A2** `web` und `katalog` kennen die Domäne, nie umgekehrt; `speicher/` kennt weder sie
-  noch `web/`, `web/` verdrahtet beide (P1). Prüft: wie A1.
+- **A2** Außen kennt innen, nie umgekehrt: `anwendung/` und `katalog/` kennen die Domäne,
+  `speicher/` nur `anwendung/` (P1); `katalog/` und `speicher/` kennt nur `__main__.py`.
+  Prüft: wie A1, `speicher/` nach P1; der Rest nur Text.
 - **A3** Katalogdaten stehen nur als YAML in `domaene/daten/`, `katalog/` liest sie
   (`yaml.safe_load`). Prüft: nur Text; Auslöser: erstes Modul in `speicher/`.
+- **A4** `web/` kennt von `arbiter` nur `anwendung/`; `anwendung/` nur die Domäne und die
+  Standardbibliothek. Prüft: nur Text; Auslöser: Freigabe des Plans mit dem ersten Item zum
+  Speicher, dann `formregeln/importvertrag.py` vor dem Umbau.
 
 ## Grundschnitt der Domäne
 `arbiter/domaene/` spiegelt `domaene/anforderungen/`:
 - Ein Ordner der Anforderungen ist ein Modul (`spielobjekte.py`), ein Paket
   (`phasen/aufstellen/__init__.py`), sobald eine seiner Anforderungen ein Modul hat. Darin
-  liegt, was mehrere seiner Anforderungen brauchen: `Aufstellung`, die eine Tür zum Stand der
-  Phase, oder die Spielobjekte.
+  liegt, was mehrere seiner Anforderungen brauchen (`Aufstellung`, Spielobjekte).
 - Eine Anforderung mit eigenen Regeln der Domäne wird ein gleichnamiges Modul:
   `phasen/aufstellen/auswahl.md` → `phasen/aufstellen/auswahl.py` (`Auswahl`). Anzeige und
   Bedienung (`karte.md`) liegen in `web/` und `frontend/`.
@@ -59,14 +66,14 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
 - **D3** Zustand ändern nur Handlungen und das Auswählen ([Vertrag, V3](architektur/vertrag.md)).
   Spielobjekte sind `frozen`, Sammlungen Tupel oder `MappingProxyType`. Die Phase hält ihren
   Zustand in `_`-Feldern, lesbar über Properties ohne Setter oder Abfragen
-  (`aufstellung.gesetzt(modell)`); `modell.gesetzt = True` umginge jede Sperre. `web/` und `katalog/` lesen keine `_`-Felder; `web/`
-  ändert Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
+  (`aufstellung.gesetzt(modell)`). Andere Schichten lesen keine `_`-Felder; `web/` ändert
+  Attribute nur an `self`, nie per `object.__setattr__`, das `frozen` umgeht.
   Prüft: Python wirft bei der Zuweisung; der Rest nur Text.
-- **D4** Gründe, die zusammen gelten (AUF-3.5, 10.2 und 10.3), stehen in einer Tabelle
-  Grund → Prüfung oder Grund → Befund im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
-  Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund (AUF-3.8)
-  bleibt Wächter. Vorbild: `check_rules` in ArbiterMap (`domain/rule_checks.py`). Prüft:
-  `formregeln/gruendeTabellen.py` ([Regeln](../prozess/regeln.md#formregeln)).
+- **D4** Gründe, die zusammen gelten, stehen in einer Tabelle Grund → Prüfung oder
+  Grund → Befund im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
+  Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund bleibt
+  Wächter. Prüft: `formregeln/gruendeTabellen.py`
+  ([Regeln](../prozess/regeln.md#formregeln)).
 - **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
   einer Fläche. In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
@@ -78,18 +85,11 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   (1) die Überschrift als Docstring (`"""AUF-7 · Einheit in Aufstellung."""`), (2) nur deren
   Kriterien (`testAuf7_<m>…`), (3) deren Reihenfolge: die Tests eines Kriteriums beisammen,
   in der Folge der Kriterien, (4) Gegeben, wenn, dann als Aufbau, Handlung, Prüfung, durch
-  Leerzeilen getrennt; ohne **wenn** keine Handlung. Über dem Höchstmaß
-  (`prozess/kennzahlen.md`) wird die Anforderung geteilt. Prüft: der Ort
-  `formregeln/benennung.py`, 1 bis 3 `formregeln/spiegel.py`; 4 Kritik am Code; Höchstmaß
-  nur Text.
+  Leerzeilen getrennt; ohne **wenn** keine Handlung. Prüft: der Ort
+  `formregeln/benennung.py`, 1 bis 3 `formregeln/spiegel.py`; 4 Kritik am Code.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
   `testAuf7_3…`). Spur: [Regeln](../prozess/regeln.md).
-- `tests/einheit/` spiegelt `arbiter/`, etwa `tests/einheit/domaene/phasen/aufstellenTest.py`.
-  Jeder Ordner dort hat `__init__.py`, sonst kollidieren Dateinamen mit Akzeptanztests.
-  Prüft: `pytest technik/tests` bricht ab.
+- `tests/einheit/` spiegelt `arbiter/`. Jeder Ordner dort hat `__init__.py`, sonst
+  kollidieren Dateinamen mit Akzeptanztests. Prüft: `pytest technik/tests` bricht ab.
 - `arbiter` liegt über `pythonpath` (`pyproject.toml`) im Pfad, ohne `sys.path`. Prüft: nur Text.
-
-## Oberfläche
-Design-System, Komponentenseite, Leisten: [Oberfläche](architektur/oberflaeche.md);
-Bildschirmtests: [Web](architektur/web.md#bildschirmtests).

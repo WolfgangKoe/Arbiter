@@ -1,6 +1,6 @@
 # Wohin Feinschliff, was hält auf, und gilt „wie ArbiterMap“ für alle?
 
-687 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+687 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.**

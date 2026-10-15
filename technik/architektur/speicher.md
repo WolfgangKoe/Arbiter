@@ -6,19 +6,20 @@ ersten Handlung über HTTP (Wählen oder Setzen); die Anzeige der Ausgangslage b
 ## Aufbau
 - **P1** SQLite über `sqlite3` aus der Standardbibliothek, ohne ORM; eine Datei außerhalb von
   git. Prüft: nur Text; Auslöser: erstes Modul in `speicher/`, dann der Importvertrag
-  „`speicher/` importiert weder `flask` noch `arbiter.web`“.
+  „`speicher/` importiert von `arbiter` nur `arbiter.anwendung`“ (A2).
 - **P2** Gespeichert wird nicht der Zustand, sondern die Folge der Handlungen einer Partie:
   - `partie`: Kennung, Beginn.
   - `handlung`: Partie, Nummer, Art, Angaben als JSON, übergangene Sperre.
-  Den Spielstand stellt `web/` her, indem es die Handlungen auf der Ausgangslage wiederholt.
+  Den Spielstand stellt ein Dienst in `anwendung/` her, indem er die Handlungen auf der
+  Ausgangslage wiederholt.
   Prüft: nur Text; Auslöser: wie P1, dann ein Akzeptanztest „wiederholt ergibt denselben
   Spielstand“.
 - **P3** Katalogdaten bleiben YAML in `domaene/daten/` (A3); in die Datenbank kommen sie nicht.
 
 ## Warum so
 - Die Domäne bleibt die einzige Prüfinstanz: Jede wiederholte Handlung läuft durch dieselben
-  Sperren. Sie braucht keine Schnittstelle zur Datenbank (A2); `speicher/` kennt nur Art und
-  Angaben, die Übersetzung in Handlungen der Domäne macht `web/`.
+  Sperren. Sie braucht keine Schnittstelle zur Datenbank (A2); `speicher/` legt Befehle als
+  Art und Angaben ab, an die Domäne gibt sie der Dienst.
 - „Zurück“ heißt, die letzte Handlung weglassen; das Protokoll des Übergehens ist dieselbe
   Tabelle.
 - Das Schema wächst nicht mit jedem Spielobjekt. Gegenbeispiel ArbiterMap: eigene Tabellen
@@ -27,6 +28,4 @@ ersten Handlung über HTTP (Wählen oder Setzen); die Anzeige der Ausgangslage b
 
 ## Neuland
 Das Wiederholen der Handlungen: vorher ein Wegwerf-Versuch, mit der ersten Handlung über
-HTTP. Offen bis dahin: wie eine übergangene Sperre beim Wiederholen übersprungen wird (D2), und
-wie ein Bildschirmtest seinen Zustand übergibt: Heute bekommt `serverStarten` die
-`Aufstellung` (W2, B1), mit dem Speicher wäre es die Folge der Handlungen.
+HTTP. Offen bis dahin: wie eine übergangene Sperre beim Wiederholen übersprungen wird (D2).

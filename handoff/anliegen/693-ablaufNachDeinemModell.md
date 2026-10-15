@@ -1,6 +1,6 @@
 # Ablauf nach deinem Modell: was bremst, Vorbild, fehlende Entscheidung
 
-693 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+693 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Modell des Zyklus steht als P1 in der [Retro](../retro.md). Drei Punkte

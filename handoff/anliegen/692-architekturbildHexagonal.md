@@ -6,28 +6,8 @@
 **Befund.** Hexagonal (Cockburn 2005, „Ports und Adapter“): Der Kern kennt keine Technik.
 Er hat Anschlüsse (Ports) wie Steckdosen; Technik steckt als Adapter daran, wie ein
 Stecker. Treibend: was den Kern aufruft (Bildschirm, Tests). Getrieben: was er aufruft
-(Katalog, Speicher). Pfeile heißen „kennt“, alle zeigen nach innen:
-```
-   frontend/  Browser: HTML, CSS, JS
-       | HTTP, JSON
-   web/       treibender Adapter (Flask)
-       | Befehl (DTO)        ^ Spielstand (DTO)
-   anwendung/ Dienste und Ports            <- neu
-       |                  ^            ^
-   domaene/   Regeln   katalog/ (YAML)   speicher/ (SQLite)
-                       getriebene Adapter
-```
-- `domaene/`: Regeln, Sperren, Messen, wie heute; nur Standardbibliothek (A1).
-- `anwendung/`, neu: je Handlung ein Dienst, „Partie holen, Befehl an die Domäne,
-  Handlung ablegen, Spielstand zurück“. Ports als `typing.Protocol`: `Katalog`
-  (Ausgangslage laden), `Partien` (Handlungen lesen, anhängen). DTOs als unveränderliche
-  `dataclass`: Befehle wie `ModellLoslassen(spieler, einheit, modell, x, y)` und der
-  Spielstand. Der Befehl ist zugleich, was der Speicher als Handlung ablegt
-  ([Speicher, P2](../../technik/architektur/speicher.md)). Die Domäne braucht keine Ports:
-  Sie rechnet nur.
-- `web/`: nur Flask; Anfrage → Befehl, Spielstand → JSON, Sperre → 409.
-- `katalog/`, `speicher/`: erfüllen die Ports; Tests stecken einen Speicher im Arbeitsspeicher an.
-- `frontend/`: wie heute, nur über HTTP.
+(Katalog, Speicher). Pfeile heißen „kennt“, alle zeigen nach innen. Bild und Schichten:
+[Architektur](../../technik/architektur.md#schichten), [Anwendung](../../technik/architektur/anwendung.md).
 
 Abstand heute: klein. Die Domäne ist rein, `web/` getrennt (A1, A2,
 [W1](../../technik/architektur/web.md)). Es fehlen die Dienste: `web/anwendung.py` ruft die
@@ -64,3 +44,14 @@ Antwort: A
 
 **Stellungnahme.**
 Kommentar: Für mich klingt das schlüssig. Ich hoffe, du weißt, was du tust ;-). Eine Sache, die mir noch bei den Akzeptanztests aufgefallen ist. Kann es sein, dass es dort ein paar "triviale Tests" gibt, die quasi immer grün sind? Ich bin mir da nicht sicher, ob jeder einzelne Test dann auch Methoden aufruft, die im Produktivcode stehen. Ich frage das nur, weil ich die Sorge habe, dass wir viele frohe und vor allem grüne Tests haben, die am Ende gar nichts testen.
+
+**Klärung.** Umgesetzt: Bild oben verlinkt, A4 beim Regelumsetzer
+([694](694-importvertragA4.md)). Zu den Tests: Ja, solche gibt es. Jeder ruft Produktcode
+auf, doch die Abdeckung zeigt nur, dass jede Zeile läuft, nicht, dass ein Test einen Fehler
+bemerkt. Zwei Arten: Tests, die vor allem die Katalogdaten prüfen (OBJ-1.1, „jeder *Spieler*
+führt eine *Armee* mit *Einheiten*“), und Tests auf „ändert nichts“ (AUF-17.1, „zurück“ ohne
+*gesperrtes* *Modell*): Sie blieben grün, wenn „zurück“ gar nichts täte, und zählen nur mit
+ihrem Gegenstück (AUF-9.3). Wie viele nichts fangen, misst ein Mutationstest: Er baut Fehler
+ein und zählt, welche kein Test bemerkt. Von Hand fand die Probe des Reviewers zwei Lücken;
+das Werkzeug steht im Backlog, spätestens zu Etappe 2. Empfehlung: jetzt auslösen, als
+Kommentar zur Retro 5.
