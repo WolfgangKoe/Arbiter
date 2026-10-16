@@ -5,6 +5,7 @@ from mutationsregeln.mutation import (
     bericht,
     geänderteModule,
     mutationenPrüfen,
+    schwelleErreicht,
     volleProzent,
 )
 
@@ -78,3 +79,13 @@ def testGeändertSindNurDieSeitDerPlanfreigabeGeänderten(gitRepo):
         "technik/arbiter/domaene/geändert.py",
         "technik/arbiter/domaene/neu.py",
     ]
+
+
+def testUnterDerSchwelleIstDerLaufRot(tmp_path):
+    ergebnis = mutationenPrüfen(projektMit(tmp_path, lückenhaft), [modul], testpfade)
+    assert not schwelleErreicht(ergebnis)
+
+
+def testAnDerSchwelleIstDerLaufGrün():
+    assert schwelleErreicht(Ergebnis(20, [("datei", 1, "Fehler")]))
+    assert not schwelleErreicht(Ergebnis(20, [("datei", 1, "Fehler")] * 2))

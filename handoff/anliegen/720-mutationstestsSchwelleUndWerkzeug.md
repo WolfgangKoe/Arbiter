@@ -1,6 +1,6 @@
 # Mutationstests: Schwelle, Laufzeit und eigenes Werkzeug statt Paket
 
-720 · Fragen · von Regelumsetzer → Stakeholder · Runde 1/3 · angenommen
+720 · Fragen · von Regelumsetzer → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** P3 ist gebaut ([Regeln](../../prozess/regeln.md#mutationsregeln)): Das Werkzeug
@@ -29,3 +29,4 @@ je Item vor dem Review, Lücken an den Testautor.
 Antwort: .
 
 **Stellungnahme.**
+Schwelle 95 % steht in `mutationsregeln/mutation.py` mit Scheiter-Test; eigenes Werkzeug bleibt; Lauf je Item vor dem Review ([Regeln](../../prozess/regeln.md#mutationsregeln)).

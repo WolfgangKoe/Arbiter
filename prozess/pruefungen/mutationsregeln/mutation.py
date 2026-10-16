@@ -16,8 +16,8 @@ from mutationsregeln.mutanten import mutantenVon
 
 # Regel: Einheitstests zuerst, denn sie scheitern am schnellsten; dann die Akzeptanztests.
 testpfade = ("technik/tests/einheit/domaene", "technik/tests/akzeptanz")
-# Warum: Noch keine Mindestzahl; die Schwelle folgt nach dem ersten Lauf (Retro 5, P3).
-schwelle = 0
+# Regel: Anliegen 720, F1: mindestens 95 % gefangene Mutanten je Lauf.
+schwelle = 95
 sekundenMindestens = 10
 wartefaktor = 3
 volleProzent = 100
@@ -41,6 +41,10 @@ class Ergebnis(NamedTuple):
         if not self.gesamt:
             return volleProzent
         return (self.gesamt - len(self.überlebende)) * volleProzent // self.gesamt
+
+
+def schwelleErreicht(ergebnis: Ergebnis) -> bool:
+    return ergebnis.prozentGefangen >= schwelle
 
 
 def geänderteModule(wurzel: Path) -> list[str]:
@@ -119,7 +123,7 @@ def main(argumente: list[str]) -> int:
     module = argumente or geänderteModule(wurzel)
     ergebnis = mutationenPrüfen(wurzel, module)
     print(bericht(ergebnis))
-    return 1 if ergebnis.prozentGefangen < schwelle else 0
+    return 0 if schwelleErreicht(ergebnis) else 1
 
 
 if __name__ == "__main__":

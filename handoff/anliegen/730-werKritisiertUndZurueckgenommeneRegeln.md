@@ -1,6 +1,6 @@
 # P1: Wer kritisiert, und was von den zurückgenommenen Regeln wieder gilt
 
-730 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+730 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen · wartet auf die Prozessphase
 
 ## Runde 1
 **Befund.** P1 der [Retro 5](../retro.md) steht im [Ablauf](../../prozess/ablauf.md#kritik),
@@ -39,3 +39,13 @@ Antwort: A
 
 **Stellungnahme.**
 Kommentar: Die Kritiker sollen parallel laufen. Generell sollte darauf geachtet werden, dass Tasks soweit möglich immer parallel abgearbeitet werden.
+Stellungnahme: F1 A: Die Tabelle in [Ablauf, Kritik](../../prozess/ablauf.md#kritik) steht
+so, nichts zu ändern. F2 A: Beide Regeln trage ich nach „Freigabe Retro 6“ ein, die Kennzahl
+„Prüfcode gegen Produktcode“ in [Kennzahlen](../../prozess/kennzahlen.md), den Beginn der
+Retro und die zwei Prozess-Items in [Ablauf, Prozessphase](../../prozess/ablauf.md#prozessphase)
+Schritt 1; vorher sperrt die Schreibgrenze `prozess/`. Retro 6 folgt beiden schon.
+Zu deinem Kommentar: Die Kritiker eines Artefakts schreiben nur Anliegen und dürfen daher
+schon jetzt gleichzeitig laufen ([Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe));
+bis „Freigabe Retro 6“ gilt dein Kommentar als Anweisung an den Koordinator. Danach steht in
+[Kritik](../../prozess/ablauf.md#kritik) und im [Koordinator](../../.claude/agents/koordinator.md):
+Er startet gleichzeitig, was nach Gleichzeitige Läufe darf. Bis dahin wartet 730.
