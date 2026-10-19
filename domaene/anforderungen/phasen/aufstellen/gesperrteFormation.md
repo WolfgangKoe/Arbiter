@@ -4,4 +4,3 @@ Zweck: Ist nach AUF-8.5 ein *Modell* der *Formation* *gesperrt*, entscheiden die
 Am Bildschirm: „zurück“ oder „gemeinsam übergehen“ klicken wie [AUF-9](gesperrtesModell.md).
 
 - AUF-15.1 **Gegeben** ein *gesperrtes* *Modell*, das mit AUF-8.5 auf die *Karte* kam, **wenn** ein *Spieler* *zurück* wählt, **dann** ist kein *Modell* dieses Loslassens *gesetzt* oder *gesperrt* (Anliegen 374 F1 A).
-- AUF-15.2 **Gegeben** ein *gesperrtes* *Modell*, das mit AUF-8.5 auf die *Karte* kam, **wenn** die *Spieler* *gemeinsam übergehen* wählen, **dann** ist jedes *Modell* dieses Loslassens dort *gesetzt*, wo es steht, und keines mehr *gesperrt* (Anliegen 374 F1 A).

@@ -1,49 +1,58 @@
 # Moderation
 
-Stand vor Freigabe Retro 5. Erledigt und zu löschen: 687, 693, 694, 695, 696, 697 (Links
-auf 687 in `685` Zeile 35 gehen dann ins Leere; Verfasser Ux bei der Nachprüfung). Offen
-bleiben 21 Anliegen, davon blockiert keins die Freigabe. Blockiert Zyklus 6: 684 vor 681
-(Aufstellen per Klick).
+Stand vor Freigabe Plan 6. Die Freigabe hält kein offenes Anliegen auf: Plan 6 nennt jedes
+Item bereit. Vor dem Bauen (Technikphase) hängen Item 1 an
+[622](anliegen/622-zugschwelleUngeprueft.md) und Item 2 an
+[830](anliegen/830-knopfInDerEinheitenkarteBekommtKeinenKlick.md).
 
 ## Dran
-- Stakeholder: keine Frage offen. Freigabe und Kommentar in der
-  [Retro](retro.md); sein Kommentar verweist auf 692.
-- Anforderungsautor: [684](anliegen/684-anforderungenFuerKlickenBlockUndGrund.md) zuerst,
-  das Item in Plan 6 hängt daran; dazu [670](anliegen/670-karteSpringtWennEinGrundErscheint.md).
-- Ux: [681](anliegen/681-zeigenWasDerSpielerTunKann.md) nach 684;
-  [620](anliegen/620-mockupsNachDemEinbauLoeschen.md); Nachprüfung
-  [683](anliegen/683-aufstellenKlickenOderZiehen.md) (deine Antwort A liegt vor) und
-  [685](anliegen/685-bedienungVorDemBildschirmTestPruefen.md).
-- Implementierer: [680](anliegen/680-markierterTextSperrtDasZiehen.md),
-  [682](anliegen/682-gezogeneKarteVerschwindetAmSpaltenrand.md).
-- Reviewer: [640](anliegen/640-review5BelegeUndWorteDesSpielers.md),
-  [660](anliegen/660-klickpfadZeigtNichtAllesNeue.md).
-- Testautor: [621](anliegen/621-restDerEinheitOhneGesperrte.md),
-  [622](anliegen/622-zugschwelleUngeprueft.md); Nachprüfung
+- Stakeholder: nichts. [1000](anliegen/1000-anhaltenAnDerBaseDieEsSchonUeberdeckt.md) ist mit
+  A beantwortet und erledigt, der Plan nennt es unter „Offene Anliegen“ noch als an dich.
+- Testautor: [622](anliegen/622-zugschwelleUngeprueft.md) zuerst (blockiert Item 1),
+  [621](anliegen/621-restDerEinheitOhneGesperrte.md); Nachprüfung
   [580](anliegen/580-auswahlPyAlsHilfsmodul.md).
-- Regelumsetzer: Anliegen 650 und
-  Anliegen 601 (halten jede Rolle auf, Retro nennt sie),
-  Anliegen 686 (P2),
-  [490](anliegen/490-fortschrittInPlanReviewRetro.md) (P1; Teil 2 erst Prozessphase 6);
-  Nachprüfung [610](anliegen/610-erledigteLoeschenImPreCommitVernichtetArbeit.md).
-- Organisationsentwickler: [421](anliegen/421-schritteAbhaken.md), deine Antworten liegen
-  vor, es wartet auf 490.
-- Architekt: Nachprüfung [550](anliegen/550-auswahlGehoertNichtZumZiehen.md) und
-  Anliegen 692 (deine Antworten A, A liegen vor).
+- Implementierer: [680](anliegen/680-markierterTextSperrtDasZiehen.md),
+  [682](anliegen/682-gezogeneKarteVerschwindetAmSpaltenrand.md);
+  [830](anliegen/830-knopfInDerEinheitenkarteBekommtKeinenKlick.md) wartet auf die
+  Technikphase (blockiert Item 2).
+- Reviewer: [640](anliegen/640-review5BelegeUndWorteDesSpielers.md),
+  [660](anliegen/660-klickpfadZeigtNichtAllesNeue.md); Nachprüfung
+  [620](anliegen/620-mockupsNachDemEinbauLoeschen.md).
+- Regelumsetzer: [490](anliegen/490-fortschrittInPlanReviewRetro.md); Nachprüfung
+  [610](anliegen/610-erledigteLoeschenImPreCommitVernichtetArbeit.md).
+- Ux: Nachprüfung [683](anliegen/683-aufstellenKlickenOderZiehen.md),
+  [684](anliegen/684-anforderungenFuerKlickenBlockUndGrund.md),
+  [685](anliegen/685-bedienungVorDemBildschirmTestPruefen.md).
+- Fachkritiker: Nachprüfung [681](anliegen/681-zeigenWasDerSpielerTunKann.md).
+- Architekt: Nachprüfung [550](anliegen/550-auswahlGehoertNichtZumZiehen.md);
+  [921](anliegen/921-zeileUnterDemGrundIstKeinGrund.md) wartet auf die Technikphase.
+- Organisationsentwickler: Nachprüfung
+  [730](anliegen/730-werKritisiertUndZurueckgenommeneRegeln.md), wartet auf die
+  Prozessphase.
+- Anforderungsautor: [978](anliegen/978-randfaelleKlickUndZiehenNachPlan6.md) hält Plan 6
+  nicht auf (Lücken abseits des Happy Path, Plan 7); der Kopf sagt „wartet auf die
+  Domänenphase“, der Stand führt ihn als dran. Ob jetzt oder erst nach Zyklus 6, ist nicht
+  geklärt; ich entscheide nichts, der Koordinator ordnet zu.
+- Wartend: [421](anliegen/421-schritteAbhaken.md) auf 490;
+  [740](anliegen/740-commitFuerMehrereItemsImAblauf.md) und
+  [991](anliegen/991-fortschrittVorDerPhaseVerwirftHakenUndHindernis.md) auf die
+  Prozessphase (991 baut erst nach 490).
 
 ## Vorschläge
-- Zusammen (Anforderungsautor): 684 und 670 in einem Lauf; 670 erweitert QUE-2.5.
+- Schließen (Verfasser, nach Nachprüfung): 550, 580, 610, 620, 681, 683, 684, 685;
+  730 erst in der Prozessphase, 421 nach 490.
+- Zusammen (Testautor): 622 und 621, getrennte Testdateien.
 - Zusammen (Reviewer): 640 und 660, gleiche Datei `review.md`.
-- Zusammen (Testautor): 621 und 622, getrennte Testdateien.
-- Zusammen (Implementierer): 680 und 682 ein Lauf, wenn dieselbe Frontend-Datei; sonst
-  gleichzeitig nach `git status`. Beide hängen nicht an 684.
-- Schließen (Verfasser nach Nachprüfung): 550, 580, 610, 683, 685, 692; 421 nach 490.
-- Löschen: die erledigten 687, 693 bis 697 löscht `anliegenregeln/erledigteLoeschen.py`.
-- Stränge Regelumsetzer, ein Hook-Code-Lauf zugleich
-  ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): Kette 650, 601, dann 686 (P2) und
-  490 (P1).
-- Stränge Zyklus 6 gleichzeitig: Anforderungsautor (684/670), Implementierer (680/682),
-  Testautor (621/622), Reviewer (640/660); Ux ist eine Kette (684, dann 681), 620 sofort.
+- Zusammen (Implementierer): 680 und 682, wenn dieselbe Frontend-Datei.
+- Zusammen (Regelumsetzer): 490 und 991, beide im Fortschritt-Skript; 991 nach 490.
+- Randfälle Plan 7 (Anforderungsautor): 978 deckt sich mit AUF-16.7, 22 und 23 im
+  [Plan](plan.md#randfälle-plan-7); beim Schnitt von Plan 7 zusammen nehmen.
+- Planer: „Offene Anliegen“ im Plan nennt 1000 noch, obwohl erledigt; streichen.
+- Löschen: die Anliegen mit Status erledigt (670, 800 bis 820, 821 bis 1000) löscht
+  `anliegenregeln/erledigteLoeschen.py`.
+- Stränge gleichzeitig ([Ablauf](../prozess/ablauf.md#gleichzeitige-läufe)): Testautor,
+  Implementierer, Reviewer, Regelumsetzer (490, danach 991); die Nachprüfungen der
+  Verfasser getrennt. Kette: 622 vor Item 1, 830 vor Item 2.
 
 ## Fragen an dich
-Keine offen. 687 und 693 sind beantwortet und erledigt.
+Keine offen. Annahmen ohne Antwort gibt es nicht.

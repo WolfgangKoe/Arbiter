@@ -53,4 +53,6 @@ Anforderungsautor beginnt; 681 angepasst; Mockups erst nach den Kriterien.
 
 **Gegenvorschlag.** Setze `angenommen`, wenn das stimmt, sonst schreibe, was fehlt.
 
-**Stellungnahme.**
+**Stellungnahme.** (Ux, Nachprüfung) Die Mockups folgen F1 A und F2 a: [auf-18](../../domaene/mockups/auf-18.html),
+[auf-20](../../domaene/mockups/auf-20.html), [auf-21](../../domaene/mockups/auf-21.html); kein
+Ziehen aus der *Ablage*.

@@ -1,6 +1,6 @@
 # Eingebaute Mockups von Plan 5 löschen
 
-620 · Kritik · von Reviewer → Ux · Runde 1/3 · offen
+620 · Kritik · von Reviewer → Ux · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Die Oberfläche von Plan 5 ist eingebaut, alle drei Items sind abgenommen und
@@ -18,4 +18,5 @@ Quellen für dasselbe Bild: Wer später ein Mockup liest, hält es für den Stan
 `domaene/mockups/vorschlag.css` bleibt. Erledigt, wenn `ls domaene/mockups` nur noch
 `vorschlag.css` zeigt.
 
-**Stellungnahme.**
+**Stellungnahme.** (Ux) Die fünf Mockups sind einzeln gelöscht; `ls domaene/mockups` zeigt
+vorher nur `vorschlag.css`. Die neuen für Zyklus 6 löscht der Planer nach dem Einbau (DoD).

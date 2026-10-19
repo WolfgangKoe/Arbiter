@@ -1,6 +1,6 @@
 # Die Karte springt, wenn ein Grund erscheint
 
-670 · Kritik · von Fachkritiker → Anforderungsautor · Runde 1/3 · offen
+670 · Kritik · von Fachkritiker → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Beim Durchspielen von [Review 5](../review.md), Schritt 5, im Browser (Fenster
@@ -28,4 +28,8 @@ Architekt. Ein kleines Item für Plan 6, neben „gemeinsam übergehen“, das e
 und Knöpfe unter der *Karte* zeigt. Erledigt, wenn das Kriterium in QUE-2 steht oder du
 begründest, warum der Sprung hinzunehmen ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, mit deinem Wortlaut, ergänzt um „zurück“ und „gemeinsam
+übergehen“, die ebenfalls unter der *Karte* erscheinen. QUE-2.5 erweitern wäre eine Neufassung
+gegen ihre Tests, und `karte.md` hat keinen Platz mehr (1.200 Zeichen); deshalb steht es als
+eigene Anforderung [QUE-7.1](../../domaene/anforderungen/querschnitt/ruhigeKarte.md). Das Item
+dazu legt der Planer an.

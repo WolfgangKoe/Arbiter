@@ -112,11 +112,12 @@ def testDieDomänenphaseSchreibtInsReviewUndHaktDenPlanAb(tmp_path, gitRepo):
     assert "- [ ] Stakeholder: Freigabe Plan 2\n" in text
 
 
-def testInZyklusEinsGibtEsKeinenAbschnitt(tmp_path):
+def testInZyklusEinsGibtEsKeinReviewAbschnittNurDenDesPlans(tmp_path):
     assert fortschrittSchreiben(tmp_path) is None
     plan = schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
-    assert fortschrittSchreiben(tmp_path) is None
-    assert plan.read_text(encoding="utf-8") == "# Plan · Zyklus 1\n"
+    assert fortschrittSchreiben(tmp_path) == "handoff/plan.md"
+    assert "- [ ] Reviewer: Review geschrieben\n" in plan.read_text(encoding="utf-8")
+    assert not (tmp_path / "handoff/review.md").exists()
 
 
 def testDieProzessphaseHaktEinProzessItemMitSeinemCommitAb(tmp_path, gitRepo):
@@ -194,6 +195,51 @@ def testDieDomänenzeilenFolgenDerTabelle(tmp_path, gitRepo):
         "Architekt: Kritik am Plan",
     ):
         assert f"- [ ] {zeile}\n" in text
+
+
+def testDerPlanTrägtVorDerFreigabeDieTechnikzeilenAlleOffen(tmp_path, gitRepo):
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n")
+    plan = schreiben(
+        tmp_path,
+        "handoff/plan.md",
+        "# Plan · Zyklus 2\n\n## Items\n1. [Stellen](../domaene/items/stellen.md)\n\n"
+        + freigabeAbschnitt,
+    )
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nAUF-1.1\n")
+    schreiben(tmp_path, "domaene/anforderungen/auf.md", anforderung)
+    schreiben(tmp_path, "technik/tests/akzeptanz/aufTest.py", test)
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1"):
+        gitRepo.festhalten(betreff)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    assert "- [ ] Testautor: Tests zu Item stellen\n" in text
+    assert "- [ ] Reviewer: Review geschrieben\n" in text
+    assert "- [x]" not in text
+
+
+def testDasReviewTrägtVorDerFreigabeDieDomänenzeilenDesFolgezyklusOffen(tmp_path, gitRepo):
+    schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    review = schreiben(
+        tmp_path,
+        "handoff/review.md",
+        "# Review · Zyklus 1\n\n## Fortschritt\n- [x] Anforderungsautor: Happy Paths zum"
+        " Zyklusziel\n- [x] Stakeholder: Freigabe Plan 1\n\n" + freigabeAbschnitt,
+    )
+    gitRepo.festhalten("Freigabe Plan 1")
+    fortschrittSchreiben(tmp_path)
+    text = review.read_text(encoding="utf-8")
+    assert "- [ ] Anforderungsautor: Happy Paths zum Zyklusziel\n" in text
+    assert "- [ ] Stakeholder: Freigabe Plan 2\n" in text
+    assert "- [x]" not in text
+
+
+def testJedesItemHatVorDenTestsDieVertragszeileDesArchitekten(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    vertrag = "- [ ] Architekt: Vertrag zu Item stellen, bei beiden Hälften\n"
+    assert vertrag + "- [ ] Testautor: Tests zu Item stellen\n" in text
 
 
 def testHooksStartenDasSkriptNachJedemRollenlaufUndNachBashBefehlen():

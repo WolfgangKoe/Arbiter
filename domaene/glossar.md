@@ -10,20 +10,21 @@ aufgestellt | deployed | aufgestellt | Zustand einer *Einheit*, für die *Aufste
 Aufstellen der Einheit beenden | – | aufstellenDerEinheitBeenden | Handlung, mit der die *Spieler* die *Einheit in Aufstellung* abschließen.
 Aufstellung | deploy forces | Aufstellung | Schritt 4 der Mission Only War: Die *Spieler* stellen abwechselnd je eine *Einheit* auf, bis beide alle aufgestellt haben (`core_rules.txt:2322`).
 Aufstellungskarte | deployment map | Aufstellungskarte | Karte einer *Mission* mit ihren *Aufstellungszonen* (`core_rules.txt:2182`); einen Namen hat eine Zone nur, wenn die Karte ihn zeigt, etwa die des Angreifers (`open_play.txt:235`, `narrative_play.txt:2001`).
-Aufstellungszone | deployment zone | Aufstellungszone (erste, zweite) | Fläche des *Spielfelds*, in der ein *Spieler* die *Modelle* seiner *Armee* aufstellt; die *Aufstellungskarte* der *Mission* legt sie fest (`core_rules.txt:2182`). Only War hat zwei ohne Namen, nur gezählt (`core_rules.txt:2322`).
+Aufstellungszone | deployment zone | Aufstellungszone (erste, zweite) | Fläche des *Spielfelds*, in der ein *Spieler* die *Modelle* seiner *Armee* aufstellt; die *Aufstellungskarte* der *Mission* legt sie fest (`core_rules.txt:2182`). Only War hat zwei ohne Namen, gezählt (`core_rules.txt:2322`).
 Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, *Spielfeld* und *Aufstellungszonen* (Etappe 1); Werte in `domaene/daten/ausgangslage.yaml` und `onlyWar.yaml`.
-ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; erlaubt keine Handlung, zeigt nur, welche *Einheit* gemeint ist.
-Auswahl | – | Auswahl | Die *ausgewählten* *Einheiten* eines *Spielers*, höchstens zwei; jeder *Spieler* hat eine (Anliegen 309, 345 F3 A).
+ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; ist ihre *Ebene* eines ihrer *Modelle*, ist von ihren *Modellen* nur dieses ausgewählt (Anliegen 980). Erlaubt keine Handlung, zeigt nur, was gemeint ist.
+Auswahl | – | Auswahl | Die *ausgewählte* *Einheit* mit ihrer *Ebene*, höchstens eine für beide *Spieler* zusammen (Anliegen 309, 960 F3 A, 980).
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. In Etappe 1 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
+Ebene | – | ebene | Was Ziehen eines *Modells* einer *ausgewählten* *Einheit* bewegt: ist sie die ganze *Einheit*, alle ihre *gesetzten* *Modelle*; ist sie eines ihrer *Modelle*, nur das gezogene. Jede *ausgewählte* *Einheit* hat eine (Anliegen 980, Vorbild `ArbiterMap/…/model_selection.js:110`).
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die zusammen bewegen und kämpfen (`core_rules.txt:420`).
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
-Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, dass jede *Base* zu jeder anderen mindestens den *Abstand* aus `domaene/daten/formation.yaml` hat (Anliegen 374 F2 A, 377 F1 A).
+Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, wie es `domaene/daten/formation.yaml` vorgibt (Anliegen 374 F2 A, 377 F1 A).
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
 gesperrt | – | gesperrt | Zustand eines *Modells*, das beim Loslassen an eine *Stelle* kam, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).
-Gesperrtes | – | Gesperrtes | Was Arbiter zu einem *gesperrten* *Modell* festhält: die *Stelle*, an der es steht, jeden *Grund*, seine vorige *Stelle*, wenn es *gesetzt* war, und die *Modelle* desselben Loslassens, die *zurück* mit ihm in die *Ablage* bringt (AUF-9.1, 9.3, 9.4, 15.1).
+Gesperrtes | – | Gesperrtes | Was Arbiter zu einem *gesperrten* *Modell* festhält: die *Stelle*, an der es steht, jeden *Grund*, seine vorige *Stelle*, wenn es *gesetzt* war, und die *Modelle* desselben Klicks oder Loslassens, die *zurück* mit ihm zurückbringt (AUF-9.3, 9.4, 15.1).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
@@ -44,8 +45,7 @@ Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht 
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
-vernichtet | destroyed | vernichtet | Zustand eines *Modells*, das aus dem Spiel ist (`core_rules.txt:441`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
-zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt, ein *gesperrtes* *Modell* kommt an seine vorige *Stelle* oder in die *Ablage*, mit ihm seine *Formation* (Etappe 1, Anliegen 362 F6 A, 374 F1 A).
-zurücklegen | – | zurücklegen | Handlung, die ein *gesetztes* *Modell* in die *Ablage* bringt; danach ist es nicht *gesetzt* (Etappe 1).
+zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt, ein *gesperrtes* *Modell* und die seines *Gesperrten* kommen an ihre vorige *Stelle* oder in die *Ablage* (Etappe 1, Anliegen 362 F6 A, 374 F1 A).
+zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* in die *Ablage* bringt; danach ist keines *gesetzt*. Ein einzelnes *Modell* nur, wenn die *Einheit* nur eines hat (Etappe 1, Anliegen 890 F1).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).

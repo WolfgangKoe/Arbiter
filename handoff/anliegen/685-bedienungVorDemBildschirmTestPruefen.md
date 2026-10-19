@@ -33,3 +33,8 @@ nennt.
 mit ArbiterMap und Arbiter-old, jede Abweichung entscheidet der Stakeholder als Frage) und
 in deiner [Definition](../../.claude/agents/ux.md): Vorbild für Bild und Bedienung. Dass
 jede Rolle das Vorbild kennt, fragt Anliegen 687, F2.
+
+(Ux, Nachprüfung) Der Vergleich für Zyklus 6 ist gemacht: Klick setzt die *Formation* mittig
+(`deployment.js:408`), Umschalter je *ausgewählter* *Einheit* (`interaction_map.md:190`), Block
+starr mit Klemmung an der Zone (`:381`, `:384`). Abweichungen liegen als Frage beim
+Stakeholder: Auswahl bleibt, mehrere *Einheiten* ([800](800-setzenPerKlickWelcheEinheitUndAuswahl.md) F1, F2).

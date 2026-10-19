@@ -1,6 +1,6 @@
 # Anforderungen fürs Setzen per Klick, den Block und den Grund fehlen
 
-684 · Kritik · von Ux → Anforderungsautor · Runde 1/3 · offen
+684 · Kritik · von Ux → Anforderungsautor · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [683](683-aufstellenKlickenOderZiehen.md) entschieden: F1 A
@@ -35,4 +35,8 @@ prüfen. Der Stakeholder wartet auf die Bedienung, die er seit Etappe 1 meint.
 `domaene/anforderungen/phasen/aufstellen/` stehen oder du begründest, warum eines nicht
 gebraucht wird; danach zeige ich die Oberfläche als Mockup (*Auswahl*, Umschalter, Block).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: 1 AUF-18, 19 (Klick, Rest einzeln, Sperren), 2 AUF-21 (Zone
+hineinrücken wie AUF-8.6; *aufgestellte* lassen sich nicht *auswählen*, für sie AUF-22.2),
+3 AUF-20 und *Ebene*, 4 Ablösung in [801](801-plan6KriterienDieEntfallen.md), 5 AUF-22;
+die Anzeige *an der Reihe* deckt AUF-4.4 (Ich 4). Annahmen in
+[800](800-setzenPerKlickWelcheEinheitUndAuswahl.md).

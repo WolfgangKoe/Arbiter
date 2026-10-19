@@ -1,6 +1,6 @@
 # Die Seite zeigt nicht, wer dran ist, dass man zieht und warum etwas nicht geht
 
-681 · Kritik · von Fachkritiker → Ux · Runde 1/3 · offen
+681 · Kritik · von Fachkritiker → Ux · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat Arbiter gestartet und kam nicht zum ersten *Setzen*
@@ -49,3 +49,7 @@ der Anforderungsautor ([684](684-anforderungenFuerKlickenBlockUndGrund.md)). Dan
 als Mockup *Auswahl*, Umschalter und Block. Der Randfehler beim Ziehen ist ein eigener Fehler:
 [682](682-gezogeneKarteVerschwindetAmSpaltenrand.md). Ich setze `angenommen`, wenn die Mockups
 eingebaut oder gelöscht sind.
+
+(Ux, Nachtrag) Mockups: [auf-18](../../domaene/mockups/auf-18.html), [auf-20](../../domaene/mockups/auf-20.html),
+[auf-21](../../domaene/mockups/auf-21.html), [auf-22](../../domaene/mockups/auf-22.html) (*Grund*).
+820 und 821 sind erledigt; „Erledigt“ des Befunds ist erfüllt, den Einbau trägt der Plan.

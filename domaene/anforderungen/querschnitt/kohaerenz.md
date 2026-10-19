@@ -1,6 +1,6 @@
 ### QUE-4 · Kohärenz
 
-Zweck: Die *Modelle* einer *Einheit* stehen beisammen ([AUF-10](../phasen/aufstellen/beenden.md)). Es zählen die *gesetzten* *Modelle*; nicht *gesetzte* sind danach *vernichtet* (`core_rules.txt:441`).
+Zweck: Die *Modelle* einer *Einheit* stehen beisammen ([AUF-10](../phasen/aufstellen/beenden.md)). Es zählen die *gesetzten* *Modelle*.
 
 - QUE-4.1 **Gegeben** eine *Einheit* mit höchstens einem *gesetzten* *Modell*, **dann** ist sie in *Kohärenz*.
 - QUE-4.2 **Gegeben** eine *Einheit* mit zwei bis fünf *gesetzten* *Modellen*, von denen eines zu keinem anderen davon einen *Abstand* von höchstens 2″ hat, **dann** ist sie nicht in *Kohärenz* (`core_rules.txt:434`).

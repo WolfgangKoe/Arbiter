@@ -80,6 +80,7 @@ def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
     # Regel: Ablauf, Technikphase 5 (gelöscht wird erst nach der Abnahme)
     folge = gelöscht or None
     return [
+        Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften", folge),
         Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName)),
         *(Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker),
         Zeile("Implementierer", f"Tests zu Item {name} grün", folge),
@@ -190,10 +191,26 @@ def vorherigeLage(aktuell: Lage) -> Lage:
     return aktuell._replace(zyklus=aktuell.zyklus - 1, phase=Phase.prozessphase)
 
 
-def abschnittSchreiben(wurzel: Path, ziel: tuple[Path, list[Zeile]]) -> str | None:
+def nächsteLage(aktuell: Lage) -> Lage:
+    """Die Phase danach: nach der Domänenphase die Technikphase, sonst die Domänenphase danach."""
+    if aktuell.phase == Phase.domänenphase:
+        return aktuell._replace(phase=Phase.technikphase)
+    return aktuell._replace(zyklus=aktuell.zyklus + 1, phase=Phase.domänenphase)
+
+
+def alleOffen(ziel: tuple[Path, list[Zeile]]) -> tuple[Path, list[Zeile]]:
+    """Vor Beginn der Phase hakt kein Fakt ab."""
+    datei, zeilen = ziel
+    return datei, [Zeile(zeile.rolle, zeile.schritt) for zeile in zeilen]
+
+
+def abschnittSchreiben(
+    wurzel: Path, ziel: tuple[Path, list[Zeile]], *, bisherAusDatei: bool = True
+) -> str | None:
     datei, zeilen = ziel
     text = datei.read_text(encoding="utf-8")
-    neu = abschnittEinsetzen(text, abschnittBauen(zeilen, bisherigeZeilen(text)))
+    bisher = bisherigeZeilen(text) if bisherAusDatei else {}
+    neu = abschnittEinsetzen(text, abschnittBauen(zeilen, bisher))
     if neu == text:
         return None
     datei.write_text(neu, encoding="utf-8")
@@ -201,13 +218,14 @@ def abschnittSchreiben(wurzel: Path, ziel: tuple[Path, list[Zeile]]) -> str | No
 
 
 def fortschrittSchreiben(wurzel: Path) -> str | None:
-    """Schreibt den Abschnitt in die Dateien der Phase und der Phase davor; nennt geänderte."""
-    # Warum: Die Datei der vorigen Phase erhält ihren Endstand, wenn die nächste beginnt.
+    """Schreibt den Abschnitt für die Phase davor, die laufende und die nächste; nennt geänderte."""
+    # Warum: Die vorige Phase erhält ihren Endstand, die nächste steht vor ihrem Beginn offen da.
     aktuell = lage(wurzel)
-    ziele = (zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell)))
-    geschrieben = [
-        abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None
-    ]
+    ziele = [zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell))]
+    folgendes = zielUndZeilen(wurzel, nächsteLage(aktuell))
+    geschrieben = [abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None]
+    if folgendes is not None:
+        geschrieben.append(abschnittSchreiben(wurzel, alleOffen(folgendes), bisherAusDatei=False))
     änderungen = [name for name in geschrieben if name]
     return ", ".join(änderungen) if änderungen else None
 

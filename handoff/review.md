@@ -57,12 +57,12 @@ das Dashboard (`rollenregeln/dashboard*.py`, `zuegeUebernehmen.py`), dazu `forts
   übergeht ihr gemeinsam, das *Protokoll* zeigt es. Damit ist Etappe 1 erreicht. Vorher: 620 bis 622.
 
 ## Fortschritt
-- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
-- [ ] UX: Mockups, bei einer Oberfläche
-- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
-- [ ] Planer: Plan geschrieben
-- [ ] Fachkritiker: Kritik am Plan
-- [ ] Architekt: Kritik am Plan
+- [x] Anforderungsautor: Happy Paths zum Zyklusziel
+- [x] UX: Mockups, bei einer Oberfläche
+- [x] Fachkritiker: Kritik an Anforderungen und Mockups
+- [x] Planer: Plan geschrieben
+- [x] Fachkritiker: Kritik am Plan
+- [x] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 6
 
 ## Freigabe
