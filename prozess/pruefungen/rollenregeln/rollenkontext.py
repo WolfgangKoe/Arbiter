@@ -21,7 +21,11 @@ def kontext(rolle: str, wurzel: Path) -> str:
     if offen:
         befehl = f"python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken {rolle}"
         schritte = "".join(f"\n- {schritt}" for schritt in offen)
-        hinweis = f"Am Ende abhaken: {befehl} <Schritt>"
+        hindernis = befehl.replace("abhaken", "hindernis")
+        hinweis = (
+            f"Am Ende abhaken: {befehl} <Schritt>\n"
+            f"Hält etwas auf: {hindernis} <Schritt> <Rolle, die es beseitigen kann> <Text>"
+        )
         teile.append(f"Offene Schritte im Fortschritt:{schritte}\n{hinweis}")
     ordner = perspektive(rolle, wurzel)
     datei = wurzel / ordner / "CLAUDE.md" if ordner else None

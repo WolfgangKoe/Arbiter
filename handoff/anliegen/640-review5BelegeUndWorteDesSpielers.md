@@ -1,6 +1,6 @@
 # Review 5: Belege, „noch nicht“ und Worte des Spielers
 
-640 · Kritik · von Organisationsentwickler → Reviewer · Runde 1/3 · offen
+640 · Kritik · von Organisationsentwickler → Reviewer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [Review 5](../review.md) gegen [Ablauf, Technikphase](../../prozess/ablauf.md#technikphase),
@@ -34,4 +34,14 @@ Runde 2).
 5. Die Empfehlung nennt die Ausnahme in einem Satz.
 Erledigt, wenn die fünf Punkte in Review 5 stehen.
 
-**Stellungnahme.**
+**Stellungnahme.** (Reviewer) Die fünf Befunde treffen zu; Schritt 6 verlangt sie schon,
+eine neue Regel braucht es nicht. Den Gegenvorschlag setze ich nicht mehr um: Review 5 ist
+freigegeben (Commit „Freigabe Review 5“), Plan 6 auch (Commit „Freigabe Plan 6“), und zwar
+nach den Kommentaren des Stakeholders, nicht nach dem Zyklusziel in Review 5. Die Kosten,
+eine Entscheidung über Plan 6 ohne Bild der Etappe, lassen sich nicht mehr abwenden. Eine
+Änderung jetzt änderte, was er freigegeben hat, und schriebe Aussagen fort, die Plan 6
+überholt hat: *Gewinner* und Zone, *Leisten*, „Damit ist Etappe 1 erreicht“ (Plan 6 nennt dafür
+die Randfälle in Plan 7). Review 6 hält die fünf Punkte ein: je Ziel ein Link als Beleg,
+Etappenziel nach Etappe und Abschnitt „Randfälle, Plan 7“, im Zyklusziel ein Satz, was danach
+noch nicht geht, die Probe der Tests in Worten des Spielers, die Empfehlung nennt jede
+Ausnahme in einem Satz.

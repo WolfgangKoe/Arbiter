@@ -1,6 +1,6 @@
 # Vertrag: Handlungen über HTTP
 
-Ziehen, Loslassen, „zurück“ und Beenden zwischen `web/` und `frontend/`; Spielstand, Auswahl
+Klicken, Loslassen, „zurück“ und Beenden zwischen `web/` und `frontend/`; Spielstand, Auswahl
 und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
 
 - **V5** Je Handlung eine Anfrage (W3), Kennungen nach W4 wie V1; `…/modelle/<m>` steht für
@@ -8,48 +8,93 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
 
   Am Bildschirm | Anfrage | `Aufstellung`
   ---|---|---
-  *Modell* auf der *Karte* loslassen (AUF-8.2) | `PUT …/modelle/<m>/stelle`, `{"x": 38.8, "y": 28}` | `modellLoslassen`
-  *Modell* auf der *Ablage* von Spieler a (AUF-8.3, 8.4, 16.3) | `DELETE …/modelle/<m>/stelle?ablage=<a>` | `modellZurücklegen`
-  *Einheit* auf der *Karte* loslassen (AUF-8.5, 14.1, 16.1) | `PUT /api/spieler/<s>/einheiten/<e>/stelle`, Körper wie oben | `einheitLoslassen`
-  *Einheit* auf der *Ablage* des anderen *Spielers* a (AUF-16.5) | `DELETE /api/spieler/<s>/einheiten/<e>/stelle?ablage=<a>` | `einheitAufAblageLoslassen`
-  „zurück“ (AUF-9.3, 9.4, 15.1) | `PUT /api/zurück` | `zurück`
+  *Karte* anklicken (AUF-18.1 bis 18.5, 19.4) | `PUT /api/karteAnklicken`, `{"x": 39.5, "y": 30}` | `karteAnklicken`
+  *Modell* auf der *Karte* loslassen (AUF-8.2, 20.4, 21.1, 21.2, 24.2, 26.1) | `PUT …/modelle/<m>/stelle`, Körper wie oben | `modellLoslassen`
+  *Modell* auf der *Ablage* von Spieler a (AUF-8.4, 16.3, 16.6) | `DELETE …/modelle/<m>/stelle?ablage=<a>` | `modellAufAblageLoslassen`
+  „zurück“ (AUF-9.3) | `PUT /api/zurück` | `zurück`
   „Aufstellen der Einheit beenden“ (AUF-10.1) | `PUT /api/aufstellenDerEinheitBeenden` | `aufstellenDerEinheitBeenden`
 
-  Ein *Modell* nennt jedes der *Armee*, auch einer *aufgestellten* *Einheit* (AUF-8.4); eine
-  *Einheit* nur eine der *Ablage* (V2). Unbekannte Kennung 404, Körper ohne Zahl `x` und `y`
-  oder ohne `ablage` 400. `web/` liest Zahlen als `Fraction(str(zahl))`, die Dezimalzahl wie
-  gesendet (S2). Warum `PUT`: V4; doppelt gesendet ändert nichts oder sperrt (D2).
-  In der Domäne: Gründe gegen die *Stelle* (D4) machen beim Loslassen das *Modell* *gesperrt*
-  (AUF-9.1), Wächter werfen `Sperre` (AUF-12.2); kein `try` um `modellSetzen`.
-  `zurück()` ohne *gesperrtes* *Modell* ändert nichts (AUF-17.1), `einheitAufAblageLoslassen`
-  mit der eigenen *Ablage* auch (AUF-16.4).
+  Ein *Modell* nennt jedes der *Armee*, auch einer *aufgestellten* *Einheit* (AUF-8.4).
+  Unbekannte Kennung 404, Körper ohne Zahl `x` und `y` oder ohne `ablage` 400. `web/` liest
+  Zahlen als `Fraction(str(zahl))`, die Dezimalzahl wie gesendet (S2). Warum `PUT`: V4;
+  doppelt gesendet ändert nichts oder sperrt (D2).
+  In der Domäne: Welcher *Einheit* der Klick gilt, entscheidet `karteAnklicken` (AUF-18.1),
+  nicht die Seite, denn eine zweite Seite kann eine alte *Auswahl* zeigen (QUE-3.2). Ob
+  `modellLoslassen` ein *Modell* oder den Block *setzt*, entscheiden *Auswahl* und *Ebene*
+  (V3; AUF-20.4, 21.1).
+  Gründe gegen die *Stelle* (D4) machen das *Modell* *gesperrt* (AUF-9.1), Wächter werfen
+  `Sperre` (AUF-12.5, 19.4). `zurück()` ohne *gesperrtes* *Modell* ändert nichts (AUF-17.1),
+  `modellAufAblageLoslassen` mit der eigenen *Ablage* auch (AUF-16.6).
+  Ohne Route: `modellSetzen(modell, stelle)` *setzt* nach QUE-1.1 bis 1.3 und AUF-7.2, 7.3,
+  auch Gründe gegen die *Stelle* werfen `Sperre`. Warum: Tests bauen damit die Vorgeschichte
+  an genauen *Stellen*; eine falsche scheitert, statt ein *gesperrtes* *Modell* zu
+  hinterlassen.
 - **V6** Antwort 200: Spielstand wie V1. *Sperre*: 409 mit `gründe` (`Sperre.gründe`, Text
   aus `Grund`, in dessen Reihenfolge) und dem unveränderten `spielstand`. Beispiel
   [sperre.json](vertrag/sperre.json): Stand des Beispiels von V1, danach
-  `PUT /api/spieler/2/einheiten/1/modelle/4/stelle` mit `{"x": 38.8, "y": 28}` (*gesperrt*,
-  ‚Base überdeckt‘) und `PUT /api/aufstellenDerEinheitBeenden` (AUF-12.1).
-- **V7** Die Seite zeigt (O1, Bestandteile aus Anliegen 372):
+  `DELETE /api/spieler/2/einheiten/1/ausgewählt` (AUF-5.4),
+  `PUT /api/spieler/2/einheiten/1/modelle/3/stelle` mit `{"x": 37.4, "y": 28}` (nur dieses
+  *Modell*, AUF-20.4; *gesperrt*, ‚Base überdeckt‘) und `PUT /api/aufstellenDerEinheitBeenden`
+  (AUF-12.1). Warum abgewählt: Ohne *Auswahl* zieht der Zug das *Modell* allein, mit und ohne
+  *Ebene*, so gilt das Beispiel vor und nach AUF-21.1.
+- **V7** Die Seite zeigt (O1):
   - `modell gesperrt` am Kreis, wenn `gesperrt` (AUF-9.1).
   - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409, bis eine
-    Anfrage außer V2 beantwortet ist (AUF-12.3, 12.4: bis zur nächsten Handlung, Auswählen ist
-    keine); sonst `gründeDerGesperrten` (AUF-9.1, QUE-3.5); ohne *Grund* keine.
-    Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
+    Anfrage außer V2 und V9 beantwortet ist (AUF-12.6, 12.7: Auswählen ist keine Handlung);
+    sonst `gründeDerGesperrten` (AUF-9.1, QUE-3.5); ohne *Grund* keine. Warum in der Seite:
+    Die *Sperre* ändert den Stand nicht (D2).
   - `knopfGruppe`: „zurück“, solange ein *Modell* `gesperrt` ist; „Aufstellen der Einheit
-    beenden“ immer, denn AUF-12.4 nennt auch den *Grund* nach AUF-7.4 (Anliegen 388).
-- **V8** Ziehen mit Pointer Events an `.karte .modell` und `.einheitenKarte`, ein Weg für
-  Maus und Finger (QUE-3.4, `touch-action: none` aus 372). Ziel des Loslassens: der Punkt in
-  Zoll über `getScreenCTM().inverse()` der `.karte`; im *Spielfeld* die *Karte*, sonst die
-  `armeeKarte` darunter, sonst keins: keine Anfrage, die Seite zeichnet den letzten Stand
-  (AUF-16.2). Eine *Einheit* auf der *Ablage* ihres *Spielers*: keine Anfrage (AUF-16.4), auf
-  der des anderen: V5 (AUF-16.5). Warum: Eine Antwort 200 beendete die `sperrmeldung` (V7),
-  doch Loslassen ohne Ziel ist keine Handlung (AUF-12.3).
-  Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr als 4 px (`zugschwelle`) von seinem
-  Startpunkt abweicht; erst dann folgt das Element dem Zeiger. Vorbild: `dragStartThresholdPx`
-  in ArbiterMap (`interaction_profile.js`). Ohne Zug ist es ein Klick: auf einer *Einheit* der
-  *Ablage* V2, sonst nichts. Mit Zug ist es Loslassen wie oben, auch über dem Element, an dem
-  er begann (AUF-8.2), und wählt nie aus.
+    beenden“ immer, denn AUF-12.7 nennt den *Grund* nach AUF-7.4.
+- **V8** Pointer Events am Dokument, ein Weg für Maus und Finger (QUE-3.4,
+  `touch-action: none` an `.karte`). Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr
+  als 4 px (`zugschwelle`, wie `dragStartThresholdPx` in ArbiterMap) vom Startpunkt abweicht.
+  Ohne Zug ist es ein Klick: auf einer `.einheitenKarte` V2; auf einem *Modell* der
+  *Einheit*, die in der *Ablage* `ausgewählt` trägt, V9 (AUF-25.1, 25.2), auf einem anderen
+  *Modell* nichts (AUF-18.1); sonst im *Spielfeld* `karteAnklicken` mit dem Punkt in Zoll
+  (`getScreenCTM().inverse()` der `.karte`), sonst nichts. Warum die *Ablage*: Ist die
+  *Ebene* ein *Modell*, tragen die anderen *Modelle* kein `ausgewählt` (AUF-25.4).
+  Gezogen wird nur ein `.karte .modell`: Es folgt dem Zeiger; trägt es `ausgewählt`, folgen
+  alle mit `ausgewählt` um denselben Weg (AUF-21.1). Beim Loslassen im *Spielfeld*
+  `modellLoslassen`, auch über dem Startpunkt (AUF-8.2), auf einer `armeeKarte`
+  `modellAufAblageLoslassen`, sonst keine Anfrage, die Seite zeichnet den letzten Stand
+  (AUF-16.6). Ein Zug wählt nie aus.
+  Beim Druck auf ein gezogenes Element verhindert die Seite Markieren und das eigene Ziehen
+  des Browsers (`preventDefault` auf `pointerdown` und `dragstart`, `user-select: none` an
+  `.armeeKarte`); sonst bricht `pointercancel` den Zug ab.
 
-Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5 und V6 (409 gleich
-`sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
-`page.route` `sperre.json` liefert (`spielstand` auf `GET`, 409 auf die Handlung); 400 und
-404: Unit-Tests des Implementierers in `tests/einheit/web/anwendungTest.py`.
+- **V10** Anhalten an *Bases* (AUF-24.1, 26.2 bis 26.4), mit Item anhaltenAnBases:
+  - Domäne: Die Abfrage `stellenBeimLoslassen(modell, stelle)` → *Modell* → *Stelle* nennt
+    jedes *Modell*, das `modellLoslassen(modell, stelle)` *setzen* würde (das gezogene oder
+    jedes *gesetzte* der *Einheit*, V3), an seiner *Stelle* nach AUF-8.2, 21.1, 21.2, 26.1
+    bis 26.3, ohne zu *setzen*; Wächter wie dort werfen `Sperre`. `modellLoslassen` *setzt*
+    genau diese *Stellen*, so steht nach dem Loslassen alles, wo die *Karte* es zeigte.
+    Angehalten wird nur, wenn die *Stelle* am Ende des Wegs eine *Base* *überdecken* würde,
+    dann an der ersten, an die eine *Base* auf der geraden Strecke stößt (Zweck AUF-26), auf
+    1/100″ genau ([S3](../architektur.md#stelle-und-rechnen)). Vorbedingung bis AUF-27: Am
+    Anfang des Wegs *überdeckt* keine *Base* eine, gegen die angehalten wird.
+  - Bleibt danach ein *Grund* gegen die *Stelle* (QUE-1.3 nur bei Zonen unter 1″ Abstand),
+    wirft `modellLoslassen` `Sperre` wie `modellSetzen` (V5). Kein *Modell* wird mehr
+    *gesperrt*: `gesperrtesModell.py`, `gesperrt`, `stelleDesGesperrten` und
+    `gründeDerGesperrten` (V1), `modell gesperrt` und der Knopf „zurück“ (V7) entfallen;
+    `PUT /api/zurück` bleibt und ändert nichts (AUF-17.1). Die Beispiele `spielstand.json`,
+    `ebene.json` und `sperre.json` (dort neu: ‚keine Kohärenz‘) verlieren `gesperrt` und
+    `gründeDerGesperrten`, wann: [Plan, Items](../../handoff/plan.md#items) (1210).
+  - HTTP: `GET …/modelle/<m>/stelleBeimLoslassen?x=<x>&y=<y>` → 200 mit `modelle[]`, je
+    *Modell* der Abfrage `spieler`, `einheit`, `nummer` wie V1 und `x`, `y`. Beispiel
+    [stelleBeimLoslassen.json](vertrag/stelleBeimLoslassen.json): Stand von V1, `x=35&y=28`
+    für *Modell* 1, AUF-21.2 rückt den Block hinein. *Sperre*: 409 wie V6. Zahlen wie V5,
+    fehlt eine: 400. Warum `GET`: Die Abfrage ändert nichts (V4).
+  - Seite: Statt V8 „folgt dem Zeiger“ fragt sie je Zeigerbewegung im *Spielfeld* nach,
+    höchstens eine Anfrage zugleich, danach nur mit dem jüngsten Punkt. Auf 200 setzt sie
+    `cx`, `cy` jedes genannten Kreises, sonst bleibt jeder, wo er ist, auch bei 409 (ohne
+    `sperrmeldung`: keine Handlung). Eine Antwort nach dem Loslassen verwirft sie. Beim
+    Loslassen schickt sie V5 mit dem Punkt des Zeigers, nicht dem gezeigten.
+
+Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5, V6, V9 und V10 (409 bei
+AUF-12.1 gleich `sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
+`page.route` die Beispiele liefert; 400 und 404: Unit-Tests des Implementierers in
+`tests/einheit/web/anwendungTest.py`. Zu V10: AUF-26.2, 26.3 an der *Stelle* nach dem
+Loslassen: auf der Strecke (exakt kollinear), keine *Base* *überdeckt*, zur ersten
+angestoßenen `abstandHöchstens` 1/100″; den Raster prüfen nur Unit-Tests. AUF-24.1, 26.4 am
+Bildschirm: halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt loslassen;
+die *Stelle* danach gleicht den gelesenen Werten exakt (B3).

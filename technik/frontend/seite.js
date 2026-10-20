@@ -50,9 +50,9 @@ async function spielstandNeuHolen() {
   return await (await fetch("/api/spielstand")).json()
 }
 
-async function auswahlSenden(spieler, einheit) {
-  const pfad = `/api/spieler/${spieler.nummer}/einheiten/${einheit.nummer}/ausgewählt`
-  const antwort = await senden(pfad, einheit.ausgewählt ? "DELETE" : "PUT")
+async function auswahlSenden(karte) {
+  const pfad = `/api/spieler/${karte.dataset.spieler}/einheiten/${karte.dataset.einheit}/ausgewählt`
+  const antwort = await senden(pfad, karte.classList.contains("ausgewählt") ? "DELETE" : "PUT")
   // Warum: Bei einer Ablehnung (404) liefert Flask HTML; die Seite holt dann den Spielstand neu
   zeichnen(antwort.ok ? await antwort.json() : await spielstandNeuHolen())
 }
@@ -80,16 +80,12 @@ function modellLoslassen(kreis, stelle) {
   return handlungSenden(`${einheitenPfad(kreis)}/modelle/${kreis.dataset.nummer}/stelle`, "PUT", stelle)
 }
 
-function modellZurücklegen(kreis, ablage) {
+function modellAufAblageLoslassen(kreis, ablage) {
   return handlungSenden(`${einheitenPfad(kreis)}/modelle/${kreis.dataset.nummer}/stelle?ablage=${ablage.dataset.spieler}`, "DELETE")
 }
 
-function einheitLoslassen(karte, stelle) {
-  return handlungSenden(`${einheitenPfad(karte)}/stelle`, "PUT", stelle)
-}
-
-function einheitAufAblageLoslassen(karte, ablage) {
-  return handlungSenden(`${einheitenPfad(karte)}/stelle?ablage=${ablage.dataset.spieler}`, "DELETE")
+function karteAnklicken(stelle) {
+  return handlungSenden("/api/karteAnklicken", "PUT", stelle)
 }
 
 function punktAufDerKarte(ereignis) {
@@ -116,61 +112,71 @@ let ziehenStart = null
 
 function ziehenBeginnen(ereignis) {
   if (!ereignis.isPrimary || ereignis.button !== 0) return
-  gezogen = ereignis.target.closest(".karte .modell, .einheitenKarte")
-  ziehenStart = { pointerId: ereignis.pointerId, x: ereignis.clientX, y: ereignis.clientY, kreisX: gezogen?.getAttribute("cx"), kreisY: gezogen?.getAttribute("cy"), begonnen: false }
-  gezogen?.setPointerCapture(ereignis.pointerId)
+  gezogen = ereignis.target.closest(".karte .modell")
+  ziehenStart = { pointerId: ereignis.pointerId, ziel: ereignis.target, x: ereignis.clientX, y: ereignis.clientY, begonnen: false }
+  if (!gezogen) return
+  Object.assign(ziehenStart, { kreisX: gezogen.getAttribute("cx"), kreisY: gezogen.getAttribute("cy") })
+  gezogen.setPointerCapture(ereignis.pointerId)
+  // Warum: Sonst markiert der Browser Text oder beginnt sein eigenes Ziehen und bricht unseres ab
+  ereignis.preventDefault()
 }
 
-function ziehenZurücknehmen(element) {
-  element.style.transform = ""
-  if (ziehenStart.kreisX !== null) {
-    element.setAttribute("cx", ziehenStart.kreisX)
-    element.setAttribute("cy", ziehenStart.kreisY)
-  }
+function browserZiehenVerhindern(ereignis) {
+  ereignis.preventDefault()
+}
+
+function ziehenZurücknehmen(kreis, start) {
+  kreis.setAttribute("cx", start.kreisX)
+  kreis.setAttribute("cy", start.kreisY)
 }
 
 function ziehenFolgen(ereignis) {
-  if (!gezogen || ereignis.pointerId !== ziehenStart.pointerId) return
+  if (!ziehenStart || ereignis.pointerId !== ziehenStart.pointerId) return
   const weite = Math.max(Math.abs(ereignis.clientX - ziehenStart.x), Math.abs(ereignis.clientY - ziehenStart.y))
   ziehenStart.begonnen ||= weite > zugschwelle
-  if (!ziehenStart.begonnen) return
-  if (gezogen.classList.contains("modell")) {
-    // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
-    const punkt = punktAufDerKarte(ereignis)
-    gezogen.setAttribute("cx", punkt.x)
-    gezogen.setAttribute("cy", punkt.y)
-  } else {
-    gezogen.style.transform = `translate(${ereignis.clientX - ziehenStart.x}px, ${ereignis.clientY - ziehenStart.y}px)`
-  }
+  if (!ziehenStart.begonnen || !gezogen) return
+  // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
+  const punkt = punktAufDerKarte(ereignis)
+  gezogen.setAttribute("cx", punkt.x)
+  gezogen.setAttribute("cy", punkt.y)
 }
 
 function ziehenAbbrechen(ereignis) {
-  if (!gezogen || ereignis.pointerId !== ziehenStart.pointerId) return
-  ziehenZurücknehmen(gezogen)
+  if (!ziehenStart || ereignis.pointerId !== ziehenStart.pointerId) return
+  if (gezogen) ziehenZurücknehmen(gezogen, ziehenStart)
   gezogen = null
+  ziehenStart = null
+}
+
+function klicken(ereignis, ziel) {
+  const einheitenKarte = ziel.closest(".einheitenKarte")
+  if (einheitenKarte) return auswahlSenden(einheitenKarte)
+  if (!ziel.closest(".karte") || ziel.closest(".modell")) return
+  const stelle = stelleAufDerKarte(ereignis)
+  if (stelle) return karteAnklicken(stelle)
 }
 
 function ziehenBeenden(ereignis) {
-  if (ereignis.pointerId !== ziehenStart?.pointerId) return
-  const start = gezogen
+  if (!ziehenStart || ereignis.pointerId !== ziehenStart.pointerId) return
+  const start = ziehenStart
+  const kreis = gezogen
+  ziehenStart = null
   gezogen = null
-  if (!start) return
   // Warum: Der gezogene Kreis liegt unter dem Zeiger; zum Prüfen steht er wieder an seinem Platz
-  ziehenZurücknehmen(start)
-  // Regel: Ohne Zug ist es ein Klick (V8)
-  if (!ziehenStart.begonnen) return start.klicken?.()
+  if (kreis) ziehenZurücknehmen(kreis, start)
+  // Regel: Ohne Zug ist es ein Klick (V8), ein Zug wählt nie aus
+  if (!start.begonnen) return klicken(ereignis, start.ziel)
+  if (!kreis) return
   const stelle = stelleAufDerKarte(ereignis)
   const ablage = darunter(ereignis)?.closest(".armeeKarte")
-  const istModell = start.classList.contains("modell")
-  if (stelle) return istModell ? modellLoslassen(start, stelle) : einheitLoslassen(start, stelle)
-  if (ablage && istModell) return modellZurücklegen(start, ablage)
-  // Regel: AUF-16.5 auf der Ablage des anderen Spielers, auf der eigenen keine Anfrage (AUF-16.4)
-  if (ablage && ablage.dataset.spieler !== start.dataset.spieler) return einheitAufAblageLoslassen(start, ablage)
+  if (stelle) return modellLoslassen(kreis, stelle)
+  if (ablage) return modellAufAblageLoslassen(kreis, ablage)
   // Regel: Ohne Ziel keine Anfrage, die Seite zeichnet den letzten Stand (V8)
   zeichnen(letzterSpielstand)
 }
 
 document.addEventListener("pointerdown", ziehenBeginnen)
+document.addEventListener("dragstart", browserZiehenVerhindern)
 document.addEventListener("pointermove", ziehenFolgen)
 document.addEventListener("pointerup", ziehenBeenden)
 document.addEventListener("pointercancel", ziehenAbbrechen)
@@ -178,13 +184,8 @@ document.addEventListener("pointercancel", ziehenAbbrechen)
 function einheitenKarte(spieler, einheit) {
   const karte = ausVorlage("einheitenKarte")
   karte.classList.toggle("ausgewählt", einheit.ausgewählt)
-  karte.klicken = () => auswahlSenden(spieler, einheit)
   Object.assign(karte.dataset, { spieler: spieler.nummer, einheit: einheit.nummer })
   karte.querySelector(".einheitenKartenName span").textContent = einheit.name
-  if (!einheit.inAufstellung) {
-    karte.classList.remove("inAufstellung")
-    karte.querySelector(".einheitenKartenAbzeichen").remove()
-  }
   if (einheit.nichtGesetzt > 0) {
     karte.querySelector(".einheitenKartenModelle").textContent = String(einheit.nichtGesetzt)
   } else {

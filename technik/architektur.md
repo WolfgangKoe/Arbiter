@@ -56,6 +56,11 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
   übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz.
   Prüft: die Grenzfälle der Akzeptanztests.
+- **S3** Anhalten (AUF-26.2, 26.3, [V10](architektur/handlungen.md)): Die Berührung ist eine
+  Wurzel, darum hält Arbiter auf einem Raster des Wegs an: Anteil k/n mit
+  n = ⌈100 · (|Δx| + |Δy|)⌉, das größte k vor der ersten Überdeckung, exakt nachgeprüft (S2);
+  so liegt der Halt höchstens 1/100″ vor der Berührung, wie die *Formation* (`setzenPerKlick.py`).
+  Vorbild: `ArbiterMap/backend/app/domain/geometry.py:942`. Prüft: V10, Unit-Tests zu `messen.py`.
 
 ## Regeln im Domänencode
 - **D1** Spielobjekte haben Identität: Vergleich mit `is`, `@dataclass(eq=False)`. Werte
@@ -74,9 +79,9 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund bleibt
   Wächter. Prüft: `formregeln/gruendeTabellen.py`
   ([Regeln](../prozess/regeln.md#formregeln)).
-- **M1** Phasen messen nur über drei Messungen in `messen.py`: zwei *Bases* *überdecken*
+- **M1** Phasen messen nur über vier Messungen in `messen.py`: zwei *Bases* *überdecken*
   sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
-  einer Fläche. In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
+  einer Fläche, der Anteil eines Wegs, bis eine *Base* an eine andere stößt (S3). In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
   Baseform (Etappe 6), dann je Baseform ein Vertragstest.
 
 ## Tests

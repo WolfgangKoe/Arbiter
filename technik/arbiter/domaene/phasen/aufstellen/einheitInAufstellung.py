@@ -15,14 +15,6 @@ def einheitInAufstellungNach(
     return None
 
 
-def prüfenDassZurückzulegen(
-    einheit: Einheit, aufgestellt: Collection[Einheit], ablage: Spieler
-) -> None:
-    # Regel: AUF-8.4 und AUF-16.3, nur in die eigene Ablage, nie aus einer aufgestellten Einheit
-    if einheit in aufgestellt or einheit not in ablage.armee.einheiten:
-        raise Sperre(Grund.nichtWählbar)
-
-
 def prüfenDassWählbar(
     einheit: Einheit,
     aufgestellt: Collection[Einheit],

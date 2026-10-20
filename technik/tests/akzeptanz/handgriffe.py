@@ -16,6 +16,9 @@ from arbiter.katalog.ausgangslage import ausgangslageLaden
 # Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
 
+# Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
+millionstel = Fraction(1, 1_000_000)
+
 
 # Warum: Lage der Zonen, Ursprung und Achsen der Stelle stehen in technik/architektur.md, S1
 breiteDesSpielfelds = 44
@@ -113,8 +116,7 @@ class Platz:
     def __init__(self, zone: Aufstellungszone) -> None:
         self._zone = zone
         self.radius = radiusInZoll(Modell(base=Base(durchmesser=durchmesserDerTestmodelle)))
-        # Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
-        self.millionstel = Fraction(1, 1_000_000)
+        self.millionstel = millionstel
         self.breiteDesSpielfelds = breiteDesSpielfelds
         self.längeDerSpielfeldkante = längeDerSpielfeldkante
         self.tiefeDerZone = tiefeDerZone
@@ -171,10 +173,44 @@ def modelleAnStellenSetzen(
         aufstellung.modellSetzen(modell, stelle)
 
 
+def inZoll(maß: tuple[int, int], radius: Fraction) -> Fraction:
+    """Ganze Zoll plus ein Vielfaches des Radius."""
+    zoll, radien = maß
+    return zoll + radien * radius
+
+
+welchesGezogenWird = pytest.mark.parametrize(
+    "zweitesGezogen", [False, True], ids=["erstesGezogen", "zweitesGezogen"]
+)
+
+
+def wegVon(davor: Stelle, ziel: Stelle) -> tuple[Fraction, Fraction]:
+    return ziel.x - davor.x, ziel.y - davor.y
+
+
+def versetzt(stelle: Stelle, weg: tuple[Fraction, Fraction]) -> Stelle:
+    wegInX, wegInY = weg
+    return Stelle(x=stelle.x + wegInX, y=stelle.y + wegInY)
+
+
+def gezogenesUndRest(
+    gesetzte: list[tuple[Modell, Stelle]], *, zweitesGezogen: bool
+) -> tuple[tuple[Modell, Stelle], tuple[Modell, Stelle]]:
+    """Von zwei gesetzten Modellen das gezogene zuerst, das mitgezogene danach."""
+    erstes, zweites = gesetzte
+    return (zweites, erstes) if zweitesGezogen else (erstes, zweites)
+
+
 def stelleInDerZoneVon(
     aufstellung: Aufstellung, spieler: Spieler, tiefe: Fraction | int, länge: Fraction | int
 ) -> Stelle:
     return stelleInZone(aufstellung.aufstellungszone(spieler), tiefe, länge)
+
+
+def stelleInDerZoneDesSpielersAnDerReihe(
+    aufstellung: Aufstellung, tiefe: Fraction | int, länge: Fraction | int
+) -> Stelle:
+    return stelleInDerZoneVon(aufstellung, aufstellung.anDerReihe, tiefe, länge)
 
 
 def stellenAllerModelle(aufstellung: Aufstellung) -> dict[Modell, Stelle | None]:
@@ -188,11 +224,13 @@ def stellenAllerModelle(aufstellung: Aufstellung) -> dict[Modell, Stelle | None]
 def einGesperrtesModell(
     aufstellung: Aufstellung, spieler: Spieler
 ) -> tuple[Modell, Modell, Stelle]:
-    """Das erste Modell der ersten Einheit steht, das zweite liegt auf ihm und ist gesperrt."""
+    """Das zweite Modell der ersten Einheit, auf das erste gezogen (AUF-8.2), ist gesperrt."""
     ersteEinheit, _ = spieler.armee.einheiten
     gesetztesModell, gesperrtesModell = ersteEinheit.modelle
     stelle = stelleInDerZoneVon(aufstellung, spieler, tiefeDerErstenReihe, 3)
+    nebenan = stelleInDerZoneVon(aufstellung, spieler, tiefeDerErstenReihe, 6)
     aufstellung.modellSetzen(gesetztesModell, stelle)
+    aufstellung.modellSetzen(gesperrtesModell, nebenan)
     aufstellung.modellLoslassen(gesperrtesModell, stelle)
     return gesetztesModell, gesperrtesModell, stelle
 
@@ -202,14 +240,3 @@ def reihenDerFormation(einheitenname: str) -> list[int]:
     pfad = Path(__file__).parents[3] / "domaene" / "daten" / "formation.yaml"
     with pfad.open(encoding="utf-8") as datei:
         return yaml.safe_load(datei)["formation"][einheitenname]
-
-
-def eineGesperrteFormation(aufstellung: Aufstellung, einheiten: tuple[Einheit, Einheit]) -> Stelle:
-    """Der Warboss steht in der Mitte der Zone, die Boyz werden darauf gezogen."""
-    boyz, warboss = einheiten
-    mitte = stelleInZone(Aufstellungszone.zweite, 4, 30)
-    modelleAnStellenSetzen(aufstellung, warboss, [mitte])
-    aufstellung.aufstellenDerEinheitBeenden()
-    einheitenAufstellen(aufstellung, 1)
-    aufstellung.einheitLoslassen(boyz, mitte)
-    return mitte

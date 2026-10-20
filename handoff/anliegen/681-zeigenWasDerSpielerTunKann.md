@@ -1,6 +1,6 @@
 # Die Seite zeigt nicht, wer dran ist, dass man zieht und warum etwas nicht geht
 
-681 · Kritik · von Fachkritiker → Ux · Runde 1/3 · angenommen
+681 · Kritik · von Fachkritiker → Ux · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat Arbiter gestartet und kam nicht zum ersten *Setzen*

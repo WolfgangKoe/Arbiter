@@ -1,4 +1,4 @@
-"""Die Gründe gegen das Beenden des Aufstellens einer Einheit (AUF-10.2, 10.3, D4)."""
+"""Die Gründe gegen das Beenden des Aufstellens einer Einheit (AUF-10.3, D4)."""
 
 from collections.abc import Callable, Mapping
 
@@ -14,16 +14,11 @@ def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[
     return {modell: stellen[modell] for modell in einheit.modelle if modell in stellen}
 
 
-def _modelleFehlen(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> bool:
-    return len(gesetzteModelle(einheit, stellen)) < len(einheit.modelle)
-
-
 def _ohneKohärenz(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> bool:
     return not inKohärenz(gesetzteModelle(einheit, stellen))
 
 
 _prüfungen: dict[Grund, Prüfung] = {
-    Grund.modelleFehlen: _modelleFehlen,
     Grund.keineKohärenz: _ohneKohärenz,
 }
 

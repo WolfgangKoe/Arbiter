@@ -38,7 +38,6 @@ def testEineAufgestellteEinheitIstNichtMehrInDerAblageUndNichtGefunden(aufstellu
 
 
 pfadDesModells = "/api/spieler/{}/einheiten/{}/modelle/{}/stelle"
-pfadDerStelle = "/api/spieler/{}/einheiten/{}/stelle"
 eineStelle = {"x": 3, "y": 20}
 
 
@@ -71,7 +70,7 @@ def testEineStelleMitUnendlicherOderUnbestimmterZahlIstEineFehlerhafteAnfrage(au
     dienst = anwendungFür(aufstellung).test_client()
 
     antwort = dienst.put(
-        pfadDerStelle.format(1, 1), data=f'{{"x": {zahl}, "y": 2}}', content_type="application/json"
+        "/api/karteAnklicken", data=f'{{"x": {zahl}, "y": 2}}', content_type="application/json"
     )
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
@@ -110,39 +109,12 @@ def testEinModellAufDieAblageEinesUnbekanntenSpielersIstNichtGefunden(aufstellun
     assert antwort.status_code == HTTPStatus.NOT_FOUND
 
 
-def testEineEinheitOhneKennungInDerAblageIstBeimLoslassenNichtGefunden(aufstellung):
+def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 
-    antwort = dienst.put(pfadDerStelle.format(1, 3), json=eineStelle)
-
-    assert antwort.status_code == HTTPStatus.NOT_FOUND
-
-
-def testEineEinheitOhneZahlenFürXUndYIstBeimLoslassenEineFehlerhafteAnfrage(aufstellung):
-    dienst = anwendungFür(aufstellung).test_client()
-
-    antwort = dienst.put(pfadDerStelle.format(1, 1), json={"y": 2})
+    antwort = dienst.put("/api/karteAnklicken", json={"y": 2})
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
-
-
-def testEineEinheitOhneAblageZumLoslassenAufDieAblageIstEineFehlerhafteAnfrage(aufstellung):
-    dienst = anwendungFür(aufstellung).test_client()
-
-    antwort = dienst.delete(pfadDerStelle.format(1, 1))
-
-    assert antwort.status_code == HTTPStatus.BAD_REQUEST
-
-
-@pytest.mark.parametrize(("einheitennummer", "ablage"), [(1, 3), (3, 2)])
-def testEineEinheitAufDieAblageEinesUnbekanntenSpielersOderOhneKennungIstNichtGefunden(
-    aufstellung, einheitennummer, ablage
-):
-    dienst = anwendungFür(aufstellung).test_client()
-
-    antwort = dienst.delete(pfadDerStelle.format(1, einheitennummer) + f"?ablage={ablage}")
-
-    assert antwort.status_code == HTTPStatus.NOT_FOUND
 
 
 def testEinFremderHostBekommtBadRequest(aufstellung):

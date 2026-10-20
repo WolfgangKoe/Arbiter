@@ -1,6 +1,6 @@
 # Markierter Text sperrt das Ziehen einer Einheit
 
-680 · Kritik · von Fachkritiker → Implementierer · Runde 1/3 · offen
+680 · Kritik · von Fachkritiker → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder kann keine *Einheit* aufstellen: „Necron Warriors“ (Spieler 2,
@@ -45,4 +45,9 @@ der Lücke, dann auf der Karte), mit rohen Mausereignissen, denn Playwrights Zie
 Seite sieht den Fehler nicht. Falls V8 das festhalten soll: Anliegen an den Architekten.
 Erledigt, wenn die Folge in Brave am laufenden Arbiter zehn Kreise setzt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beides umgesetzt: `user-select: none` an `.armeeKarte`
+([komponenten.css](../../technik/frontend/komponenten.css)) und in
+[seite.js](../../technik/frontend/seite.js) `preventDefault` beim Greifen einer Karte oder eines
+Kreises sowie bei `dragstart`. Ein Wegwerf-Versuch mit rohen Mausereignissen zeigte nach dem
+Ziehen keine Markierung. Der Test mit der Folge (Lücke, dann Karte) gehört dem Testautor, den
+Satz in V8 trägt der Architekt ein; Brave am laufenden Arbiter prüft der Stakeholder.

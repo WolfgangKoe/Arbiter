@@ -70,17 +70,6 @@ def inhaltDerSeite(seite: Page) -> str:
     )
 
 
-_umrissLesen = """element => {
-    const stil = getComputedStyle(element)
-    return [stil.outlineStyle, stil.outlineWidth, stil.outlineColor].join(' ')
-}"""
-
-
-def umrissVon(element: Locator) -> str:
-    """Art, Breite und Farbe des Umrisses, wie der Browser ihn zeichnet."""
-    return element.evaluate(_umrissLesen)
-
-
 _strichLesen = """element => {
     const stil = getComputedStyle(element)
     return [stil.stroke, stil.strokeWidth].join(' ')

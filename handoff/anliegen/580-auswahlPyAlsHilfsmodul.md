@@ -1,6 +1,6 @@
 # auswahl.py als Hilfsmodul der Akzeptanztests zulassen
 
-580 · Kritik · von Testautor → Regelumsetzer · Runde 1/3 · angenommen
+580 · Kritik · von Testautor → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Anliegen [550](550-auswahlGehoertNichtZumZiehen.md) verlangt die Hilfen zur

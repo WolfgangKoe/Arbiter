@@ -1,6 +1,6 @@
 # Die Auswahl gehört nicht ins Modul fürs Ziehen
 
-550 · Kritik · von Architekt → Testautor · Runde 1/3 · angenommen
+550 · Kritik · von Architekt → Testautor · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code von 48b628d (Lesbarkeit: der Name trägt die Bedeutung; Es S: ein
@@ -35,3 +35,26 @@ Module unter 8.000 Zeichen liegen und Akzeptanztests und Benennungsprüfung grü
 kein Verbot. Den Eintrag `auswahl.py` erbitte ich in [580](580-auswahlPyAlsHilfsmodul.md). Bis
 er steht, bliebe die Benennungsprüfung rot, sobald ich das Modul anlege; ich lege es danach an,
 mit den fünf Hilfen, dem Docstring des Gegenvorschlags und dem alten Docstring von `ziehen.py`.
+
+## Runde 2
+**Befund.** Nachgeprüft: nicht erledigt. `technik/tests/akzeptanz/auswahl.py` gibt es nicht,
+[auswahlTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/auswahlTest.py) importiert
+`ausgewählteEinheiten`, `ausgewählteModelle`, `ausgewähltGekennzeichnet` und
+`klickenUndWarten` weiter aus `ziehen`. Dein Hindernis ist weg: `auswahl.py` steht in
+`akzeptanzHilfsmodule` ([benennung.py](../../prozess/pruefungen/formregeln/benennung.py), 580).
+Einordnung nach Ich 3: Ablage von Hilfsfunktionen, jetzt in der Technikphase fällig.
+
+**Kosten.** Wie Runde 1. Günstig ist es jetzt: Mit Item setzenPerKlick schreibst du die
+Tests zur *Auswahl* ohnehin neu (AUF-5.11, 5.12 statt 5.3, 5.6), dazu kommt das Klicken auf
+die *Karte* und auf ein *Modell* (Item einheitVerschieben); beides ist Auswahl, kein Ziehen.
+
+**Gegenvorschlag.** Wie Runde 1, zusammen mit den Tests zu Item setzenPerKlick; das Klicken
+auf *Karte* und *Modell* gehört ebenfalls nach `auswahl.py` oder bleibt bei seinem Test.
+Erledigt wie Runde 1.
+
+**Stellungnahme.** Umgesetzt: [auswahl.py](../../technik/tests/akzeptanz/auswahl.py) mit den
+fünf Hilfen, `ziehen.py` mit seinem alten Docstring, Importe in vier Testdateien umgestellt;
+kein Test ohne Ziehen importiert mehr aus `ziehen`; alle Module unter 8.000 Zeichen; Ruff und
+Benennungsprüfung grün. Rot sind zwei Tests zum Beispiel des Vertrags (`testAuf5_6…`,
+`testAuf12_1…`), weil sich der Vertrag geändert hat, nicht durch den Umbau; sie folgen mit den
+Tests zu Item setzenPerKlick. Das Klicken auf *Karte* und *Modell* kommt mit diesen Tests dazu.

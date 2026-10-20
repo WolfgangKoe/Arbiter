@@ -1,6 +1,6 @@
 # Aufstellen: in die Zone klicken, ziehen oder beides?
 
-683 · Fragen · von Ux → Stakeholder · Runde 2/3 · angenommen
+683 · Fragen · von Ux → Stakeholder · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Dein Test am Bildschirm: Das Ziehen der Karte aus der *Ablage* ist nicht intuitiv.
@@ -53,6 +53,6 @@ Anforderungsautor beginnt; 681 angepasst; Mockups erst nach den Kriterien.
 
 **Gegenvorschlag.** Setze `angenommen`, wenn das stimmt, sonst schreibe, was fehlt.
 
-**Stellungnahme.** (Ux, Nachprüfung) Die Mockups folgen F1 A und F2 a: [auf-18](../../domaene/mockups/auf-18.html),
-[auf-20](../../domaene/mockups/auf-20.html), [auf-21](../../domaene/mockups/auf-21.html); kein
+**Stellungnahme.** (Ux, Nachprüfung) Die Mockups folgen F1 A und F2 a: [auf-18](../../domaene/mockups/auf-18.html) (Klick setzt),
+[auf-21](../../domaene/mockups/auf-21.html) (ein *Modell* gewählt); kein
 Ziehen aus der *Ablage*.

@@ -11,6 +11,7 @@ from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import anforderungUmfasst, umfasst, zuordnungen
 from lesen.agenten import rollennamen
 from lesen.plan import itemNamen, offeneItems, zyklus
+from standregeln.beseitigt import beseitigtErgänzen
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
@@ -210,6 +211,10 @@ def abschnittSchreiben(
     datei, zeilen = ziel
     text = datei.read_text(encoding="utf-8")
     bisher = bisherigeZeilen(text) if bisherAusDatei else {}
+    bisher = {
+        schlüssel: (abgehakt, beseitigtErgänzen(wurzel, zusatz))
+        for schlüssel, (abgehakt, zusatz) in bisher.items()
+    }
     neu = abschnittEinsetzen(text, abschnittBauen(zeilen, bisher))
     if neu == text:
         return None

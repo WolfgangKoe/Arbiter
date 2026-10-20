@@ -44,7 +44,7 @@ alsHooks = konfiguration.read_text(encoding="utf-8")
 def testEinCommitNurInHandoffStartetWederAbdeckungNochProben():
     ausgelöst = ausgelösteHooks(alsHooks, ["handoff/anliegen/601-commitHooksNachPfad.md"])
     assert {"abdeckung", "proben"}.isdisjoint(ausgelöst)
-    assert {"erledigteLoeschen", "stand"} <= ausgelöst
+    assert "stand" in ausgelöst
 
 
 def testEinCommitInTechnikStartetDieAbdeckungNichtDieProben():
@@ -93,3 +93,9 @@ def testNurDieAbdeckungstestsTragenDieMarkeAbdeckung():
         and datei.name != "commitHooksTest.py"
     ]
     assert trägerMitMarke == ["abdeckungTest.py"]
+
+
+def testDasLöschenErledigterAnliegenLäuftNichtImCommitHook():
+    # Warum: Der Stash von pre-commit vernichtet fremde, uncommittete Arbeit (Anliegen 610).
+    assert "erledigteLoeschen" not in hooksLesen(alsHooks)
+    assert "erledigteLoeschen" not in alsHooks

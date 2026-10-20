@@ -8,22 +8,12 @@ from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import aufDieHandlungWarten, knopfDerSeite, spielerAnDerReihe
 from tests.akzeptanz.dienst import aufstellenDerEinheitBeenden, dienstFür
 from tests.akzeptanz.handgriffe import (
-    aufstellungVon,
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
     sperrgründe,
-    spielerMit,
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
-
-
-def aufstellungMitEinerEinheitAusDreiModellen():
-    anderer, beginner = spielerMit(1), spielerMit(3)
-    aufstellung = aufstellungVon(anderer, beginner)
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=anderer)
-    (einheit,) = beginner.armee.einheiten
-    return aufstellung, beginner, einheit
 
 
 def testAuf10_1EineEinheitInKohärenzMitAllenGesetztenModellenIstNachDemBeendenAufgestellt(
@@ -77,22 +67,6 @@ def testAuf10_1DieAnfrageAufstellenDerEinheitBeendenWähltAufstellenDerEinheitBe
     assert namenAnDerReihe == ["Spieler 1"]
 
 
-def testAuf10_2EinNichtGesetztesModellSperrtDasBeendenMitModelleFehlen(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einheit, _ = zweiterSpieler.armee.einheiten
-    erstesModell, _ = einheit.modelle
-    aufstellung.modellSetzen(erstesModell, stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 20))
-
-    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
-
-    assert gründe == {Grund.modelleFehlen}
-    assert not aufstellung.aufgestellt(einheit)
-    assert aufstellung.einheitInAufstellung is einheit
-    assert aufstellung.anDerReihe is zweiterSpieler
-
-
 def testAuf10_3EineEinheitNichtInKohärenzSperrtDasBeendenMitKeineKohärenz(
     aufstellung, ersterSpieler, zweiterSpieler
 ):
@@ -108,15 +82,3 @@ def testAuf10_3EineEinheitNichtInKohärenzSperrtDasBeendenMitKeineKohärenz(
     assert not aufstellung.aufgestellt(einheit)
     assert aufstellung.einheitInAufstellung is einheit
     assert aufstellung.anDerReihe is zweiterSpieler
-
-
-def testAuf10_4ZweiSperrenZugleichNenntArbiterBeideGründe():
-    aufstellung, beginner, einheit = aufstellungMitEinerEinheitAusDreiModellen()
-    erstesModell, zweitesModell, _ = einheit.modelle
-    aufstellung.modellSetzen(erstesModell, stelleInDerZoneVon(aufstellung, beginner, 4, 10))
-    aufstellung.modellSetzen(zweitesModell, stelleInDerZoneVon(aufstellung, beginner, 4, 30))
-
-    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
-
-    assert gründe == {Grund.modelleFehlen, Grund.keineKohärenz}
-    assert not aufstellung.aufgestellt(einheit)

@@ -45,5 +45,14 @@ PostToolUse Bash), Test `standregeln/fortschrittTest.py`, Zeile in [Regeln](../.
 Haken, `Hindernis:` und `Kommentar:` bleiben beim Neuschreiben stehen (Grundlage für Teil 2
 und 3). Nach deinem Kommentar: Ist ein Item gelöscht, gelten auch Kritik an den Tests,
 „grün“, Kritik am Code und „abgenommen“ als geschehen, und „DoD über das Inkrement“, sobald
-kein Item mehr offen ist (Test `testEinFaktHaktSelbstAb`, `testEinOffenesItem…`). Offen: Teil 2 (Befehl, Hindernis als Anliegen) und Teil 3 (Dashboard), je ein Lauf;
-Status bleibt `offen`, bis alle drei stehen.
+kein Item mehr offen ist (Test `testEinFaktHaktSelbstAb`, `testEinOffenesItem…`).
+Teil 2 gebaut: Der Befehl zum Abhaken steht seit Retro 5 P2 (`standregeln/abhaken.py`). Neu ist
+`lauf.py standregeln.hindernis <Rolle> <Schritt> <Beseitiger> <Text>` (`standregeln/hindernis.py`):
+Es legt das nächste freie Anliegen an (Kritik an die Rolle, an den Stakeholder Fragen mit `F1`)
+und schreibt `Hindernis: <Text> (Anliegen <nr>)` unter die Zeile; ist das Anliegen im letzten
+Commit `angenommen` oder `erledigt`, ergänzt `standregeln/beseitigt.py` bei jedem Lauf von
+`fortschritt.py` `; beseitigt: Commit „<Betreff>“`. Die Schreibgrenze lässt den Befehl nur für
+die eigene Rolle durch, der Start der Rolle nennt ihn (Tests `standregeln/hindernisTest.py`,
+`schreibgrenzeTest.py`, `rollenkontextTest.py`). Die Zeile in [Regeln](../../prozess/regeln.md)
+trage ich in der Prozessphase nach: Bis dahin sperrt die Schreibgrenze `prozess/*.md`.
+Offen: Teil 3 (Dashboard), ein Lauf; Status bleibt `offen`, bis er steht.

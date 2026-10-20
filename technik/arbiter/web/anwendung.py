@@ -94,19 +94,13 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         aufstellung.modellLoslassen(modell, _stelleDerAnfrage())
         return spielstandLiefern()
 
-    def modellZurücklegen(spielernummer: int, einheitennummer: int, modellnummer: int):
+    def modellAufAblageLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        aufstellung.modellZurücklegen(modell, ablageDerAnfrage())
+        aufstellung.modellAufAblageLoslassen(modell, ablageDerAnfrage())
         return spielstandLiefern()
 
-    def einheitLoslassen(spielernummer: int, einheitennummer: int):
-        einheit = einheitInDerAblage(spielernummer, einheitennummer)
-        aufstellung.einheitLoslassen(einheit, _stelleDerAnfrage())
-        return spielstandLiefern()
-
-    def einheitAufAblageLoslassen(spielernummer: int, einheitennummer: int):
-        einheit = einheitInDerAblage(spielernummer, einheitennummer)
-        aufstellung.einheitAufAblageLoslassen(einheit, ablageDerAnfrage())
+    def karteAnklicken():
+        aufstellung.karteAnklicken(_stelleDerAnfrage())
         return spielstandLiefern()
 
     def zurück():
@@ -131,11 +125,8 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
     anwendung.add_url_rule(pfadDerAuswahl, view_func=einheitAuswählen, methods=["PUT"])
     anwendung.add_url_rule(pfadDerAuswahl, view_func=einheitAbwählen, methods=["DELETE"])
     anwendung.add_url_rule(pfadDesModells, view_func=modellLoslassen, methods=["PUT"])
-    anwendung.add_url_rule(pfadDesModells, view_func=modellZurücklegen, methods=["DELETE"])
-    anwendung.add_url_rule(f"{pfadDerEinheit}/stelle", view_func=einheitLoslassen, methods=["PUT"])
-    anwendung.add_url_rule(
-        f"{pfadDerEinheit}/stelle", view_func=einheitAufAblageLoslassen, methods=["DELETE"]
-    )
+    anwendung.add_url_rule(pfadDesModells, view_func=modellAufAblageLoslassen, methods=["DELETE"])
+    anwendung.add_url_rule("/api/karteAnklicken", view_func=karteAnklicken, methods=["PUT"])
     anwendung.add_url_rule("/api/zurück", view_func=zurück, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]

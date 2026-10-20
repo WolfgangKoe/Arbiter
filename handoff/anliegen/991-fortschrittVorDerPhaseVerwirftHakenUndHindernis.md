@@ -4,7 +4,7 @@
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet, Randfall abseits des Happy Path. Seit
-[982](982-fortschrittDerTechnikphaseVorDerFreigabe.md) schreibt `standregeln/fortschritt.py`
+Anliegen 982 schreibt `standregeln/fortschritt.py`
 den Abschnitt der nächsten Phase mit `bisherAusDatei=False` (`fortschrittSchreiben`,
 `alleOffen`): Bei jedem Lauf fallen dort Haken und die eingerückten Zeilen `Hindernis:` und
 `Kommentar:` weg. Heute schreibt sie dort niemand; sobald [490](490-fortschrittInPlanReviewRetro.md)

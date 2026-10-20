@@ -1,6 +1,6 @@
 # Die gezogene Karte verschwindet am Rand ihrer Spalte
 
-682 · Kritik · von Ux → Implementierer · Runde 1/3 · offen
+682 · Kritik · von Ux → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder meldet: „Beim zweiten Spieler blockiert der Text nämlich am Rand der
@@ -36,4 +36,9 @@ die Karte halb außerhalb der Spalte, liefert `elementFromPoint` an ihrer Mitte 
 selbst). Erledigt, wenn die Karte am
 laufenden Arbiter in beiden Spalten bis auf die *Karte* sichtbar bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, die Berichtigung ist klein und lohnt bis zum Klick-Setzen:
+Solange eine Karte gezogen wird, beschneidet die Spalte nicht mehr (`.zieht .spalte` in
+[komponenten.css](../../technik/frontend/komponenten.css)) und die Karte liegt obenauf
+(`.gezogen`). Wegwerf-Versuch mit rohen Mausereignissen: Spieler 2 zieht 150 px nach links, die
+Karte ist dort sichtbar. Der Test gehört dem Testautor. Nebenwirkung: Eine gescrollte Spalte
+kann beim Ziehen springen; ohne Anlass nicht behandelt.

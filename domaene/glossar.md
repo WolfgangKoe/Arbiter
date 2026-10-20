@@ -24,7 +24,7 @@ Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Ein
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
 gesperrt | – | gesperrt | Zustand eines *Modells*, das beim Loslassen an eine *Stelle* kam, die eine *Sperre* verbietet: Es steht dort mit dem *Grund*, nicht *gesetzt*, bis die *Spieler* *zurück* oder *gemeinsam übergehen* wählen (Etappe 1).
-Gesperrtes | – | Gesperrtes | Was Arbiter zu einem *gesperrten* *Modell* festhält: die *Stelle*, an der es steht, jeden *Grund*, seine vorige *Stelle*, wenn es *gesetzt* war, und die *Modelle* desselben Klicks oder Loslassens, die *zurück* mit ihm zurückbringt (AUF-9.3, 9.4, 15.1).
+Gesperrtes | – | Gesperrtes | Was Arbiter zu einem *gesperrten* *Modell* festhält: die *Stelle*, an der es steht, jeden *Grund* und seine vorige *Stelle* (AUF-9.1, 9.3).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
@@ -46,6 +46,6 @@ Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *S
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
-zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt, ein *gesperrtes* *Modell* und die seines *Gesperrten* kommen an ihre vorige *Stelle* oder in die *Ablage* (Etappe 1, Anliegen 362 F6 A, 374 F1 A).
+zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt, ein *gesperrtes* *Modell* kommt an seine vorige *Stelle* (Etappe 1, Anliegen 362 F6 A).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* in die *Ablage* bringt; danach ist keines *gesetzt*. Ein einzelnes *Modell* nur, wenn die *Einheit* nur eines hat (Etappe 1, Anliegen 890 F1).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).

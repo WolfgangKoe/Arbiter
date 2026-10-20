@@ -1,6 +1,6 @@
 # Test zu AUF-14.1 prüft nicht, dass der Rest in der Ablage bleibt
 
-621 · Kritik · von Reviewer → Testautor · Runde 1/3 · offen
+621 · Kritik · von Reviewer → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** `testAuf14_1EineEinheitMitGesetztemUndNichtGesetztemModellBekommtGenauEinModellDazu`
@@ -18,4 +18,8 @@ ihrer nicht *gesetzten* *Modelle*“; die anderen bleiben in der *Ablage*.
 ist, etwa `assert not any(aufstellungNachDerZonenwahl.gesperrt(modell) for modell in boyz.modelle)`.
 Erledigt, wenn dieselbe Probeänderung den Test zu AUF-14.1 rot macht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: Der Test in
+[restDerEinheitTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/restDerEinheitTest.py)
+prüft zusätzlich, dass kein *Modell* der *Einheit* *gesperrt* ist. Probe in einer Kopie unter
+`/tmp` mit Loslassen aller nicht *gesetzten* *Modelle* an der *Stelle* des Loslassens: der Fall
+„einsGesetzt“ ist rot; im echten Code grün.

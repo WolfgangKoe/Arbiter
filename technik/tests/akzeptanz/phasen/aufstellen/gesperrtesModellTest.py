@@ -5,6 +5,7 @@ from http import HTTPStatus
 from playwright.sync_api import expect
 
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.auswahl import klickenUndWarten
 from tests.akzeptanz.bildschirm import (
     gesperrteModelle,
     gründeAlsText,
@@ -13,14 +14,14 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import dienstFür, modellLoslassen
 from tests.akzeptanz.handgriffe import (
-    eineGesperrteFormation,
     einGesperrtesModell,
     einheitAufstellen,
     nachDerWahlDerAufstellungszone,
+    stelleDesErstenModells,
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
-from tests.akzeptanz.ziehen import klickenUndWarten, liegtEinPixelGenauAn, modellZiehen
+from tests.akzeptanz.ziehen import liegtEinPixelGenauAn, modellZiehen
 
 
 def testAuf9_1EinModellAufEinerBaseIstNachDemLoslassenGesperrtMitDemGrund(
@@ -42,6 +43,7 @@ def testAuf9_1EinModellAußerhalbDerZoneIstNachDemLoslassenGesperrtMitDemGrund(
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     einheit, _ = zweiterSpieler.armee.einheiten
     modell, _ = einheit.modelle
+    aufstellung.modellSetzen(modell, stelleDesErstenModells(aufstellung, zweiterSpieler, einheit))
     außerhalb = stelleInDerZoneVon(aufstellung, zweiterSpieler, 10, 20)
 
     aufstellung.modellLoslassen(modell, außerhalb)
@@ -60,6 +62,7 @@ def testAuf9_1EinModellAufDemModellDesAnderenSpielersNenntJedenGrund(
     modell, _ = einheit.modelle
     einheitAufstellen(aufstellung, einheitDesAnderen)
     (_, stelleDesAnderen), _ = stellenDerEinheit(aufstellung, zweiterSpieler, einheitDesAnderen)
+    aufstellung.modellSetzen(modell, stelleDesErstenModells(aufstellung, ersterSpieler, einheit))
 
     aufstellung.modellLoslassen(modell, stelleDesAnderen)
 
@@ -69,19 +72,6 @@ def testAuf9_1EinModellAufDemModellDesAnderenSpielersNenntJedenGrund(
         Grund.nahkampfreichweite,
         Grund.nichtGanzInDerZone,
     }
-
-
-def testAuf9_1EinModellDerFormationAufEinerBaseIstGesperrt(
-    aufstellungNachDerZonenwahl, boyz, warboss
-):
-    eineGesperrteFormation(aufstellungNachDerZonenwahl, (boyz, warboss))
-
-    gesperrte = [modell for modell in boyz.modelle if aufstellungNachDerZonenwahl.gesperrt(modell)]
-    assert gesperrte
-    assert all(
-        aufstellungNachDerZonenwahl.gründeDesGesperrten(modell) == {Grund.baseÜberdeckt}
-        for modell in gesperrte
-    )
 
 
 def zweiGesetzteModelle(aufstellung, ersterSpieler, zweiterSpieler):
@@ -119,11 +109,11 @@ def testAuf9_1DasLoslassenAufEinerBaseKennzeichnetDasModellAmBildschirmAlsGesper
         aufstellung, ersterSpieler, zweiterSpieler
     )
     seite = bildschirm.seiteZu(aufstellung)
-    klickenUndWarten(seite, "Spieler 2", "Einheit 1")
 
     modellZiehen(seite, zweiteStelle, ersteStelle)
 
     expect(seite.locator(".karte .modell.gesperrt")).to_have_count(1)
+    klickenUndWarten(seite, "Spieler 2", "Einheit 1")
     stelleDesGesperrten = aufstellung.stelleDesGesperrten(zweitesModell)
     assert liegtEinPixelGenauAn(seite, stelleDesGesperrten, ersteStelle)
     assert gesperrteModelle(seite) == {(float(stelleDesGesperrten.x), float(stelleDesGesperrten.y))}
@@ -153,6 +143,7 @@ def testAuf9_1DieSeiteNenntBeiEinemModellAufDemModellDesAnderenSpielersJedenGrun
     modell, _ = einheit.modelle
     einheitAufstellen(aufstellung, einheitDesAnderen)
     (_, stelleDesAnderen), _ = stellenDerEinheit(aufstellung, zweiterSpieler, einheitDesAnderen)
+    aufstellung.modellSetzen(modell, stelleDesErstenModells(aufstellung, ersterSpieler, einheit))
     aufstellung.modellLoslassen(modell, stelleDesAnderen)
     seite = bildschirm.seiteZu(aufstellung)
     gründe = {Grund.baseÜberdeckt, Grund.nahkampfreichweite, Grund.nichtGanzInDerZone}
@@ -178,16 +169,3 @@ def testAuf9_3EinGesperrtesModellKommtMitZurückAnSeineVorigeStelle(
     assert aufstellung.gesetzt(erstesModell)
     assert aufstellung.stelle(erstesModell) == vorigeStelle
     assert not aufstellung.gesperrt(erstesModell)
-
-
-def testAuf9_4EinGesperrtesModellAusDerAblageIstMitZurückNichtGesetztUndNichtGesperrt(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    gesetztesModell, gesperrtesModell, stelle = einGesperrtesModell(aufstellung, zweiterSpieler)
-
-    aufstellung.zurück()
-
-    assert not aufstellung.gesetzt(gesperrtesModell)
-    assert not aufstellung.gesperrt(gesperrtesModell)
-    assert aufstellung.stelle(gesetztesModell) == stelle

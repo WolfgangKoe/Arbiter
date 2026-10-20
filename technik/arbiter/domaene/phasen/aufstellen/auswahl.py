@@ -1,4 +1,4 @@
-"""Die Auswahl: die ausgewählten Einheiten der Ablage (AUF-5)."""
+"""Die Auswahl: die eine ausgewählte Einheit der Ablagen (AUF-5)."""
 
 from collections.abc import Collection
 
@@ -9,20 +9,26 @@ class Auswahl:
     def __init__(self, spieler: tuple[Spieler, Spieler], aufgestellt: Collection[Einheit]) -> None:
         self._spieler = spieler
         self._aufgestellt = aufgestellt
-        self._einheiten: set[Einheit] = set()
+        self._einheit: Einheit | None = None
+
+    @property
+    def einheit(self) -> Einheit | None:
+        return self._einheit
 
     def auswählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)
         if einheit in self._aufgestellt:
             raise ValueError("Eine aufgestellte Einheit ist nicht auswählbar")
-        self._einheiten.add(einheit)
+        # Regel: AUF-5.11, die Einheit ist ausgewählt und keine andere
+        self._einheit = einheit
 
     def abwählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)
-        self._einheiten.discard(einheit)
+        if self._einheit is einheit:
+            self._einheit = None
 
     def ausgewählt(self, einheit: Einheit) -> bool:
-        return einheit in self._einheiten
+        return einheit is self._einheit
 
     def _prüfenDassZurAufstellung(self, einheit: Einheit) -> None:
         if not any(einheit in spieler.armee.einheiten for spieler in self._spieler):

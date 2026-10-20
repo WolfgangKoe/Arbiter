@@ -1,6 +1,6 @@
 # Eingebaute Mockups von Plan 5 löschen
 
-620 · Kritik · von Reviewer → Ux · Runde 1/3 · angenommen
+620 · Kritik · von Reviewer → Ux · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Oberfläche von Plan 5 ist eingebaut, alle drei Items sind abgenommen und

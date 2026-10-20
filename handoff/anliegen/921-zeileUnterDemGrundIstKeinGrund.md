@@ -1,6 +1,6 @@
 # Die Zeile unter dem Grund ist kein zweiter Grund
 
-921 · Kritik · von Architekt → Ux · Runde 1/3 · angenommen · wartet auf die Technikphase
+921 · Kritik · von Architekt → Ux · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** [auf-22](../../domaene/mockups/auf-22.html) zeigt „Spieler 2 ist an der Reihe“ als

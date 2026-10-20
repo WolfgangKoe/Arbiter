@@ -1,6 +1,6 @@
 # Löschen erledigter Anliegen im pre-commit vernichtet Arbeit
 
-610 · Kritik · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · angenommen
+610 · Kritik · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Hook `erledigteLoeschen` steht in `.pre-commit-config.yaml` und löscht beim

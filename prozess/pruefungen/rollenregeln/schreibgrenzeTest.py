@@ -250,6 +250,18 @@ def testEineRolleHaktKeineFremdeZeileAb(wurzel, genannt):
     assert "eigene Zeilen" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
 
 
+hindernisBefehl = (
+    "python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.hindernis {} Schritt Planer Text"
+)
+
+
+def testEineRolleMeldetEinHindernisNurFürEigeneZeilen(wurzel):
+    assert entscheide(bash(hindernisBefehl.format("Probe")), wurzel) is None
+    antwort = entscheide(bash(hindernisBefehl.format("Reviewer")), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert "eigene Zeilen" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
+
+
 def testBashGiltNichtFürDenKoordinator(wurzel):
     assert entscheide(bash("git commit -m x", rolle=None), wurzel) is None
 

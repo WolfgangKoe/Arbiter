@@ -103,6 +103,5 @@ def _einheit(aufstellung: Aufstellung, einheitennummer: int, einheit: Einheit) -
         "nummer": einheitennummer,
         "name": einheit.name,
         "nichtGesetzt": sum(1 for modell in einheit.modelle if not aufstellung.gesetzt(modell)),
-        "inAufstellung": aufstellung.einheitInAufstellung is einheit,
         "ausgewählt": aufstellung.ausgewählt(einheit),
     }

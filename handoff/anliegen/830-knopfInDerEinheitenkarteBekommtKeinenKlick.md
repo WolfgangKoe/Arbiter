@@ -1,6 +1,6 @@
 # Ein Knopf in der Einheitenkarte bekommt keinen Mausklick
 
-830 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
+830 · Kritik · von Architekt → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Mockups [auf-18](../../domaene/mockups/auf-18.html) bis
@@ -21,4 +21,6 @@ früh zurück, wenn `ereignis.target.closest(".knopf")` etwas findet. Den Satz t
 der Technikphase in [V8](../../technik/architektur/handlungen.md) ein. Erledigt, wenn ein
 Bildschirmtest zu AUF-20.3 mit der Maus (`page.mouse`, B5) und mit dem Finger grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Der Fall ist entfallen: AUF-20.3 ist gestrichen (980), die Knöpfe
+liegen nicht mehr in der Einheitenkarte. Der Wächter in `ziehenBeginnen` ist wieder gestrichen
+([1090](1090-knopfWaechterOhneFallUndZiehenDerKarte.md)).

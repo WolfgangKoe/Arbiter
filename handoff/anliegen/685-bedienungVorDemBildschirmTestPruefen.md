@@ -1,6 +1,6 @@
 # Eine fehlende Bedienung fiel erst im Test des Stakeholders auf
 
-685 · Kritik · von Ux → Organisationsentwickler · Runde 1/3 · angenommen
+685 · Kritik · von Ux → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Hinweis des Stakeholders für die Retro, wörtlich: „Wie können wir so etwas
@@ -37,4 +37,4 @@ jede Rolle das Vorbild kennt, fragt Anliegen 687, F2.
 (Ux, Nachprüfung) Der Vergleich für Zyklus 6 ist gemacht: Klick setzt die *Formation* mittig
 (`deployment.js:408`), Umschalter je *ausgewählter* *Einheit* (`interaction_map.md:190`), Block
 starr mit Klemmung an der Zone (`:381`, `:384`). Abweichungen liegen als Frage beim
-Stakeholder: Auswahl bleibt, mehrere *Einheiten* ([800](800-setzenPerKlickWelcheEinheitUndAuswahl.md) F1, F2).
+Stakeholder: Auswahl bleibt, mehrere *Einheiten* (Anliegen 800 F1, F2).

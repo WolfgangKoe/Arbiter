@@ -61,8 +61,14 @@ def pfadDesModells(aufstellung: Aufstellung, einheit: Einheit, modell: Modell) -
     return f"{pfadDerEinheit(aufstellung, einheit)}/modelle/{modellnummer}"
 
 
+def stelleImSpielstand(stelle: Stelle) -> tuple[float, float]:
+    """Die Stelle als Zahlenpaar, wie der Spielstand sie führt (V1)."""
+    return float(stelle.x), float(stelle.y)
+
+
 def körperDerStelle(stelle: Stelle) -> dict[str, float]:
-    return {"x": float(stelle.x), "y": float(stelle.y)}
+    inX, inY = stelleImSpielstand(stelle)
+    return {"x": inX, "y": inY}
 
 
 def modellLoslassen(
@@ -72,14 +78,15 @@ def modellLoslassen(
     return dienst.put(f"{pfad}/stelle", json=körperDerStelle(stelle))
 
 
-def modellZurücklegen(dienst, aufstellung, einheit: Einheit, modell: Modell, spielernummer: int):
+def modellAufAblageLoslassen(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, spielernummer: int
+):
     pfad = pfadDesModells(aufstellung, einheit, modell)
     return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
 
 
-def einheitAufAblageLoslassen(dienst, aufstellung, einheit: Einheit, spielernummer: int):
-    pfad = pfadDerEinheit(aufstellung, einheit)
-    return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
+def karteAnklicken(dienst, stelle: Stelle):
+    return dienst.put("/api/karteAnklicken", json=körperDerStelle(stelle))
 
 
 def aufstellenDerEinheitBeenden(dienst):
@@ -101,6 +108,37 @@ def auswählen(dienst, einheitenname: str):
 
 def abwählen(dienst, einheitenname: str):
     return dienst.delete(pfadDerAuswahl(einheitenname))
+
+
+def ebeneDesVertrags() -> dict:
+    """Das Beispiel von V9 aus `ebene.json`, nicht kopiert."""
+    with (_vertrag / "ebene.json").open(encoding="utf-8") as datei:
+        return json.load(datei)
+
+
+def modellAlsEbene(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):
+    return dienst.put(f"{pfadDesModells(aufstellung, einheit, modell)}/ebene")
+
+
+def einheitAlsEbene(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):
+    return dienst.delete(f"{pfadDesModells(aufstellung, einheit, modell)}/ebene")
+
+
+def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple[float, float]]:
+    """Die Stellen der gesetzten Modelle der Einheit, je Nummer des Modells."""
+    spielernummer, einheitennummer = kennungenDerEinheiten[einheitenname]
+    return {
+        modell["nummer"]: (modell["x"], modell["y"])
+        for modell in spielstand["modelle"]
+        if (modell["spieler"], modell["einheit"]) == (spielernummer, einheitennummer)
+    }
+
+
+def ebenenIm(spielstand: dict) -> frozenset[tuple[float, float]]:
+    """Die Stellen der Modelle, die der Spielstand als Ebene kennzeichnet."""
+    return frozenset(
+        (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell.get("ebene")
+    )
 
 
 def spielstandVon(dienst) -> dict:

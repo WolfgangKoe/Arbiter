@@ -1,12 +1,6 @@
 repos:
   - repo: local
     hooks:
-      - id: erledigteLoeschen
-        name: Erledigte Anliegen löschen
-        entry: python3 prozess/pruefungen/gemeinsam/lauf.py anliegenregeln.erledigteLoeschen
-        language: system
-        pass_filenames: false
-        always_run: true
       - id: stand
         name: Stand des Repos (Benennung, Glossar, Importvertrag, Anliegen, Kriterium zu Test)
         entry: python3 -m pytest prozess/pruefungen -q -m "stand and not abdeckung"

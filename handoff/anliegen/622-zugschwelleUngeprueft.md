@@ -1,6 +1,6 @@
 # Kein Test hält die Zugschwelle von 4 Pixeln
 
-622 · Kritik · von Reviewer → Testautor · Runde 1/3 · offen
+622 · Kritik · von Reviewer → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Ich habe in `technik/frontend/seite.js` probeweise `const zugschwelle = 4` auf `0`
@@ -22,4 +22,8 @@ an seiner *Stelle* wie vorher. Das gilt heute (V8: ohne Zug auf einem *Modell* n
 nach Item 1 (AUF-18.1: ein Klick auf ein *Modell* gilt keiner *Einheit*). Erledigt, wenn
 dieselbe Probeänderung den Test rot macht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle`
+in [ziehenTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ziehenTest.py), je Eingabe Maus
+und Finger: ein *gesetztes* *Modell* um 3 Pixel in x und y bewegen, loslassen; keine ändernde
+Anfrage, jedes *Modell* an seiner *Stelle* wie vorher. Probe in einer Kopie unter `/tmp` mit
+`const zugschwelle = 0`: beide Fälle rot; mit 4 grün.

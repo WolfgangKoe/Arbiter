@@ -9,10 +9,10 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   40.000 Zeichen in einer Datei. Prüft: `formregeln/importvertrag.py`
   (`webVerstöße`), die Fälle nennt [Regeln](../../prozess/regeln.md).
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
-  - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server in einem eigenen
-    Thread auf `127.0.0.1` mit freiem Port und gibt einen `Server` mit `adresse` und
-    `beenden()` zurück. `make_server` ohne `threaded`: Ein Thread beantwortet die Anfragen
-    nacheinander, denn `Aufstellung` ist nicht threadsicher.
+  - `server.py`: `serverStarten(aufstellung)` startet den Werkzeug-Server im eigenen Thread
+    (W5) und gibt `Server` mit `adresse` und `beenden()` zurück. `make_server` ohne
+    `threaded`: Ein Thread beantwortet die Anfragen nacheinander, denn `Aufstellung` ist
+    nicht threadsicher.
   - `anwendung.py`: Flask; Anfrage lesen, eine Handlung der Domäne aufrufen, Antwort schreiben.
   - `darstellung.py`: Spielstand der Domäne → JSON-fähige Werte. Den Namen „Spieler <n>“
     (AUF-4.2) bildet es aus der Kennung, die `kennungen.py` vergibt.
@@ -21,14 +21,14 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   Flask und Werkzeug importieren nur `anwendung.py` und `server.py`.
   Regeln und Rechnen stehen nur in der Domäne: Längen in Zoll liefern `messen.py` und
   `Ausgangslage.grenzenDerZone`, `web/` wandelt `Fraction` nur für die Antwort in `float`. `web/` liest
-  Properties und Abfragen (D3), nie `_`-Felder: Spielfeld, Tiefen und Spieler über
-  `Aufstellung.ausgangslage` (unveränderlich), den Namen über `Einheit.name` (Glossar).
+  Properties und Abfragen (D3), nie `_`-Felder, die Ausgangslage über `Aufstellung.ausgangslage`.
   Prüft: Akzeptanztests zu QUE-2 und AUF-4; „nur `anwendung.py` und `server.py`“
   `formregeln/importvertrag.py`; „nie `_`-Felder“ wie D3; der Rest nur Text; Auslöser:
   zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`) und dem Spielstand ([V6](handlungen.md)). CSRF:
-  [Vertrag, V4](vertrag.md). Prüft: die Dienst-Tests zu AUF-12.3 und 12.4 gegen `sperre.json`.
+  [Vertrag, V4](vertrag.md). Prüft: die Dienst-Tests zu AUF-12.6 und 12.7, zu AUF-12.1 gegen
+  `sperre.json`.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
   Reihenfolge der Ausgangslage: Spieler, Einheit, Modell, an einer Stelle (`kennungen.py`,
   W2). Prüft: wie W3.

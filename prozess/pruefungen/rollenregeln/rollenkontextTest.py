@@ -51,4 +51,5 @@ def testRolleBekommtIhreOffenenSchritteUndDenBefehlZumAbhaken(wurzel, gitRepo):
     ergebnis = kontext("reviewer", wurzel)
     assert "- Kritik am Code zu Item eins" in ergebnis
     assert "standregeln.abhaken reviewer <Schritt>" in ergebnis
+    assert "standregeln.hindernis reviewer <Schritt>" in ergebnis
     assert "Item eins abgenommen" not in ergebnis

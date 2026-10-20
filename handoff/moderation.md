@@ -6,7 +6,7 @@ Item bereit. Vor dem Bauen (Technikphase) hängen Item 1 an
 [830](anliegen/830-knopfInDerEinheitenkarteBekommtKeinenKlick.md).
 
 ## Dran
-- Stakeholder: nichts. [1000](anliegen/1000-anhaltenAnDerBaseDieEsSchonUeberdeckt.md) ist mit
+- Stakeholder: nichts. Anliegen 1000 ist mit
   A beantwortet und erledigt, der Plan nennt es unter „Offene Anliegen“ noch als an dich.
 - Testautor: [622](anliegen/622-zugschwelleUngeprueft.md) zuerst (blockiert Item 1),
   [621](anliegen/621-restDerEinheitOhneGesperrte.md); Nachprüfung

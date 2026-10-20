@@ -1,11 +1,14 @@
 """QUE-3 · Bedienung."""
 
-from fractions import Fraction
-
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Stelle
+from tests.akzeptanz.auswahl import (
+    ausgewählteEinheiten,
+    ausgewählteModelle,
+    klickenUndWarten,
+    tippenUndWarten,
+)
 from tests.akzeptanz.bildschirm import (
     gesperrteModelle,
     gründeAlsText,
@@ -20,18 +23,14 @@ from tests.akzeptanz.handgriffe import (
     einheitAufstellen,
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
+    stelleDesErstenModells,
     stelleInDerZoneVon,
     stellenDerEinheit,
 )
 from tests.akzeptanz.ziehen import (
-    ausgewählteEinheiten,
-    ausgewählteModelle,
-    einheitZiehen,
-    klickenUndWarten,
     liegtEinPixelGenauAn,
     modellAufDieAblageZiehen,
     modellZiehen,
-    tippenUndWarten,
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])
@@ -49,6 +48,7 @@ def einModellAufDemModellDesAnderenSpielers(aufstellung, ersterSpieler, zweiterS
     einheit, _ = ersterSpieler.armee.einheiten
     modell, _ = einheit.modelle
     einheitAufstellen(aufstellung, einheitDesAnderen)
+    aufstellung.modellSetzen(modell, stelleDesErstenModells(aufstellung, ersterSpieler, einheit))
     (_, stelleDesAnderen), _ = stellenDerEinheit(aufstellung, zweiterSpieler, einheitDesAnderen)
     aufstellung.modellLoslassen(modell, stelleDesAnderen)
     return modell
@@ -164,20 +164,7 @@ def testQue3_4EinModellAufDieKarteZiehenUndLoslassenSetztEsAnDieStelleDesLoslass
 
 
 @mitMausUndFinger
-def testQue3_4EineEinheitAufDieKarteZiehenUndLoslassenSetztAlleIhreModelle(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
-):
-    mitteDerZone = Stelle(x=Fraction(40), y=Fraction(30))
-    seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
-
-    einheitZiehen(seite, "Spieler 1", "Boyz", mitteDerZone, eingabe)
-
-    assert all(aufstellungNachDerZonenwahl.gesetzt(modell) for modell in boyz.modelle)
-    assert aufstellungNachDerZonenwahl.einheitInAufstellung is boyz
-
-
-@mitMausUndFinger
-def testQue3_4EinModellAufDieAblageZiehenUndLoslassenLegtEsZurück(
+def testQue3_4EinModellAufDieAblageZiehenUndLoslassenLässtJedesModellWoEsWar(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
 ):
     (erstesModell, ersteStelle), (zweitesModell, stelleDavor) = boyzSetzen(2)
@@ -185,7 +172,7 @@ def testQue3_4EinModellAufDieAblageZiehenUndLoslassenLegtEsZurück(
 
     modellAufDieAblageZiehen(seite, stelleDavor, "Spieler 1", eingabe)
 
-    assert not aufstellungNachDerZonenwahl.gesetzt(zweitesModell)
+    assert aufstellungNachDerZonenwahl.stelle(zweitesModell) == stelleDavor
     assert aufstellungNachDerZonenwahl.stelle(erstesModell) == ersteStelle
 
 

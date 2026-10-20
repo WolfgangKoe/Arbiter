@@ -1,7 +1,8 @@
 """Mini-Server des Dashboards (WSGI): zeigt die Anliegen, legt Züge des Stakeholders sofort ab."""
 
-import os
+import subprocess
 import sys
+import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from http import HTTPStatus
@@ -28,6 +29,9 @@ htmlTyp = "text/html; charset=utf-8"
 anliegenPfad = "/anliegen/"
 prüfskripteOrdner = "prozess/pruefungen"
 neustartPrüfIntervall = 1
+kindMarke = "--server"
+modulName = "rollenregeln.dashboardServer"
+laufSkript = Path(__file__).resolve().parents[1] / "gemeinsam" / "lauf.py"
 
 
 @dataclass(frozen=True)
@@ -152,25 +156,66 @@ def serverErzeugen(ordner: Path, port: int) -> WSGIServer:
 
 def quellenStand(ordner: Path) -> tuple[tuple[str, int], ...]:
     """Änderungszeiten aller Prüfskripte; ändern sie sich, läuft der Server mit altem Code."""
-    skripte = sorted((ordner / prüfskripteOrdner).rglob("*.py"))
-    return tuple((str(skript), skript.stat().st_mtime_ns) for skript in skripte)
+    stand = []
+    for skript in sorted((ordner / prüfskripteOrdner).rglob("*.py")):
+        try:
+            stand.append((str(skript), skript.stat().st_mtime_ns))
+        except FileNotFoundError:
+            continue  # Warum: Eine Rolle löscht oder ersetzt die Datei gerade
+    return tuple(stand)
+
+
+class Wächter:
+    """Hält den Server als Kindprozess am Laufen und startet ihn bei Codeänderung neu."""
+
+    def __init__(self, befehl: list[str], ordner: Path) -> None:
+        self.befehl = befehl
+        self.ordner = ordner
+        self.kind: subprocess.Popen | None = None
+        self.letzterStand: tuple[tuple[str, int], ...] | None = None
+
+    def schritt(self) -> None:
+        aktuell = quellenStand(self.ordner)
+        if self.kind is not None and aktuell == self.letzterStand:
+            return  # Warum: Stürzt das Kind ab, wartet der Wächter auf die nächste Änderung
+        self.beenden()
+        self.letzterStand = aktuell
+        self.kind = subprocess.Popen(self.befehl)
+
+    def läuft(self) -> bool:
+        return self.kind is not None and self.kind.poll() is None
+
+    def beenden(self) -> None:
+        if not self.läuft():
+            return
+        self.kind.terminate()
+        self.kind.wait()
+
+
+def dienen(port: int) -> None:
+    server = serverErzeugen(projektordner(), port)
+    print(f"{lokalesSchema}://{adresse}:{port}/  (beenden mit Strg+C)", flush=True)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
 
 
 def hauptlauf(argumente: list[str]) -> None:
-    port = int(argumente[0]) if argumente else vorgabePort
-    ordner = projektordner()
-    server = serverErzeugen(ordner, port)
-    server.timeout = neustartPrüfIntervall
-    anfang = quellenStand(ordner)
-    print(f"{lokalesSchema}://{adresse}:{port}/  (beenden mit Strg+C)")
-    try:
-        while quellenStand(ordner) == anfang:
-            server.handle_request()
-    except KeyboardInterrupt:
+    if argumente[:1] == [kindMarke]:
+        dienen(int(argumente[1]))
         return
-    # Warum: Der Stakeholder startet den Server nicht neu, wenn sich der Code geändert hat
-    server.server_close()
-    os.execv(sys.executable, [sys.executable, *sys.argv])
+    port = int(argumente[0]) if argumente else vorgabePort
+    befehl = [sys.executable, str(laufSkript), modulName, kindMarke, str(port)]
+    wächter = Wächter(befehl, projektordner())
+    try:
+        while True:
+            wächter.schritt()
+            time.sleep(neustartPrüfIntervall)
+    except KeyboardInterrupt:
+        wächter.beenden()
 
 
 if __name__ == "__main__":

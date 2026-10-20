@@ -13,7 +13,7 @@ from tests.akzeptanz.bildschirm import (
     modellfarben,
     spielerAnDerReihe,
 )
-from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, einheitenAufstellen, modelleSetzen
+from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, einheitenAufstellen
 
 
 @dataclass(frozen=True)
@@ -56,13 +56,6 @@ def aufstellungVorDerZonenwahl(request, ausgangslage, spielerEins) -> Aufstellun
 @pytest.fixture
 def aufstellungNachDerAufstellung(aufstellungNachDerZonenwahl) -> Aufstellung:
     alleEinheitenAufstellen(aufstellungNachDerZonenwahl)
-    return aufstellungNachDerZonenwahl
-
-
-@pytest.fixture(params=["nachDerZonenwahl", "nachDemBeenden"])
-def aufstellungOhneEinheitInAufstellung(request, aufstellungNachDerZonenwahl):
-    if request.param == "nachDemBeenden":
-        einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
     return aufstellungNachDerZonenwahl
 
 
@@ -214,55 +207,6 @@ def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
     markierte = spielerAnDerReihe(seite)
     assert markierte.count() == 1
     assert gewinnerwahl.nameDesGewinners in markierte.text_content()
-
-
-@pytest.mark.parametrize("gesetzt", [1, 3, 10], ids=["einGesetzt", "dreiGesetzt", "alleGesetzt"])
-def testAuf4_5DieEinheitInAufstellungIstInDerAblageGekennzeichnet(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, gesetzt
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, gesetzt)
-
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-
-    ablage = ablageVon(seite, "Spieler 1")
-    abzeichen = seite.locator(".einheitenKartenAbzeichen")
-    assert abzeichen.count() == 1
-    assert abzeichen.text_content() == "in Aufstellung"
-    assert (
-        ablage.locator(".einheitenKarte", has_text="Boyz")
-        .locator(".einheitenKartenAbzeichen")
-        .count()
-        == 1
-    )
-
-
-def testAuf4_5DieEinheitInAufstellungDesZweitenSpielersIstInSeinerAblageGekennzeichnet(
-    bildschirm, aufstellungNachDerZonenwahl, necronWarriors
-):
-    einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
-    modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 1)
-
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-
-    ablageEins = ablageVon(seite, "Spieler 1")
-    ablageZwei = ablageVon(seite, "Spieler 2")
-    assert ablageEins.locator(".einheitenKartenAbzeichen").count() == 0
-    assert ablageZwei.locator(".einheitenKartenAbzeichen").count() == 1
-    assert (
-        ablageZwei.locator(".einheitenKarte", has_text="Necron Warriors")
-        .locator(".einheitenKartenAbzeichen")
-        .count()
-        == 1
-    )
-
-
-def testAuf4_5OhneEinheitInAufstellungKennzeichnetDieAblageKeine(
-    bildschirm, aufstellungOhneEinheitInAufstellung
-):
-    seite = bildschirm.seiteZu(aufstellungOhneEinheitInAufstellung)
-
-    assert seite.locator(".einheitenKarte").count() > 0
-    assert seite.locator(".einheitenKartenAbzeichen").count() == 0
 
 
 def testAuf4_6NachDerWahlZeigtDieKarteJedeZoneInDerFarbeDerModelleIhresSpielers(

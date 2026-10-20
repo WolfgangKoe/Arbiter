@@ -10,7 +10,6 @@ from arbiter.domaene.phasen.aufstellen.beenden import gesetzteModelle, gründeGe
 from arbiter.domaene.phasen.aufstellen.einheitInAufstellung import (
     einheitInAufstellungNach,
     prüfenDassWählbar,
-    prüfenDassZurückzulegen,
 )
 from arbiter.domaene.phasen.aufstellen.gesperrtesModell import Gesperrtes, zurücknehmen
 from arbiter.domaene.phasen.aufstellen.reihenfolge import (
@@ -18,8 +17,8 @@ from arbiter.domaene.phasen.aufstellen.reihenfolge import (
     nächsterAnDerReihe,
     zonenVerteilen,
 )
+from arbiter.domaene.phasen.aufstellen.setzenPerKlick import formationDerEinheit
 from arbiter.domaene.phasen.aufstellen.sperrenBeimSetzen import gründeGegenDieStelle
-from arbiter.domaene.phasen.aufstellen.ziehen import stellenDerUngesetzten
 from arbiter.domaene.querschnitt.kohaerenz import inKohärenz
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -116,30 +115,25 @@ class Aufstellung:
         einheit = self._wählbareEinheitVon(modell)
         self._loslassen(modell, einheit, stelle, frozenset({modell}))
 
-    def einheitLoslassen(self, einheit: Einheit, stelle: Stelle) -> None:
-        ungesetzte = [modell for modell in einheit.modelle if not self.gesetzt(modell)]
-        # Regel: AUF-16.1, sind alle Modelle gesetzt, geschieht nichts
-        if not ungesetzte:
+    def karteAnklicken(self, stelle: Stelle) -> None:
+        einheit = self._auswahl.einheit
+        if einheit is None:
             return
-        erstes, *_ = ungesetzte
-        self._wählbareEinheitVon(erstes)
+        self._prüfenDassDran(einheit)
+        # Regel: AUF-18.2 setzt die Formation, AUF-18.5 mit gesetzten Modellen nichts
+        if any(self.gesetzt(modell) for modell in einheit.modelle):
+            return
         formationen = self._ausgangslage.formationen
-        orte = stellenDerUngesetzten(
-            einheit, ungesetzte, stelle, formationen, self._zoneAnDerReihe()
-        )
+        orte = formationDerEinheit(einheit, stelle, formationen, self._zoneAnDerReihe())
         for modell, ort in orte.items():
             self._loslassen(modell, einheit, ort, frozenset(orte))
 
-    def einheitAufAblageLoslassen(self, einheit: Einheit, ablage: Spieler) -> None:
-        # Regel: AUF-16.4 eigene Ablage, nichts; AUF-16.5 die des anderen Spielers ist nicht wählbar
-        if einheit not in ablage.armee.einheiten:
-            raise Sperre(Grund.nichtWählbar)
-
-    def modellZurücklegen(self, modell: Modell, spieler: Spieler) -> None:
+    def modellAufAblageLoslassen(self, modell: Modell, ablage: Spieler) -> None:
         self._prüfenDassNichtsGesperrtIst()
-        prüfenDassZurückzulegen(einheitVon(self._spieler, modell), self._aufgestellt, spieler)
-        self._stellen.pop(modell, None)
-        self._einheitInAufstellungPrüfen()
+        einheit = einheitVon(self._spieler, modell)
+        # Regel: AUF-8.4 und AUF-16.3 sperren, AUF-16.6 auf der eigenen Ablage geschieht nichts
+        if einheit in self._aufgestellt or einheit not in ablage.armee.einheiten:
+            raise Sperre(Grund.nichtWählbar)
 
     def zurück(self) -> None:
         zurücknehmen(self._gesperrte, self._stellen)
@@ -166,10 +160,13 @@ class Aufstellung:
         if self._gesperrte:
             raise Sperre(Grund.modellGesperrt)
 
-    def _wählbareEinheitVon(self, modell: Modell) -> Einheit:
+    def _prüfenDassDran(self, einheit: Einheit) -> None:
         self._prüfenDassNichtsGesperrtIst()
-        einheit = einheitVon(self._spieler, modell)
         prüfenDassWählbar(einheit, self._aufgestellt, self._anDerReihe, self._einheitInAufstellung)
+
+    def _wählbareEinheitVon(self, modell: Modell) -> Einheit:
+        einheit = einheitVon(self._spieler, modell)
+        self._prüfenDassDran(einheit)
         return einheit
 
     def aufstellenDerEinheitBeenden(self) -> None:

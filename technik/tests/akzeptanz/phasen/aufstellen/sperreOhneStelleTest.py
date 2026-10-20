@@ -1,12 +1,13 @@
 """AUF-12 · Sperre ohne Stelle."""
 
-from fractions import Fraction
+from dataclasses import dataclass
 from http import HTTPStatus
 
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
+from tests.akzeptanz.auswahl import klickenUndWarten
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     gründeAlsText,
@@ -14,9 +15,10 @@ from tests.akzeptanz.bildschirm import (
     sperrmeldungWarten,
 )
 from tests.akzeptanz.dienst import (
+    abwählen,
     aufstellenDerEinheitBeenden,
-    auswählen,
     dienstFür,
+    modellAufAblageLoslassen,
     modellLoslassen,
     sperreDesVertrags,
     spielstandVon,
@@ -24,27 +26,107 @@ from tests.akzeptanz.dienst import (
 )
 from tests.akzeptanz.handgriffe import (
     einGesperrtesModell,
-    einheitAufstellen,
+    einheitenAufstellen,
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
     sperrgründe,
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
-from tests.akzeptanz.ziehen import einheitZiehen, klickenUndWarten
+from tests.akzeptanz.ziehen import modellAufDieAblageZiehen, modellZiehen
 
 beenden = "Aufstellen der Einheit beenden"
+übergehen = "gemeinsam übergehen"
+
+
+@dataclass(frozen=True)
+class Loslassen:
+    """Ein Modell, losgelassen auf der Karte (`stelle`) oder auf der Ablage von Spieler `ablage`."""
+
+    einheit: Einheit
+    modell: Modell
+    stelle: Stelle | None = None
+    ablage: int | None = None
+
+
+def inDerDomäneLoslassen(aufstellung, fall: Loslassen) -> None:
+    if fall.ablage is None:
+        aufstellung.modellLoslassen(fall.modell, fall.stelle)
+        return
+    ausgangslage = aufstellung.ausgangslage
+    spielerDerAblage = {1: ausgangslage.ersterSpieler, 2: ausgangslage.zweiterSpieler}[fall.ablage]
+    aufstellung.modellAufAblageLoslassen(fall.modell, spielerDerAblage)
+
+
+def imDienstLoslassen(dienst, aufstellung, fall: Loslassen):
+    if fall.ablage is None:
+        return modellLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.stelle)
+    return modellAufAblageLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.ablage)
+
+
+def amBildschirmLoslassen(seite, aufstellung, fall: Loslassen):
+    start = aufstellung.stelle(fall.modell)
+    if fall.ablage is None:
+        return modellZiehen(seite, start, fall.stelle)
+    return modellAufDieAblageZiehen(seite, start, f"Spieler {fall.ablage}")
+
+
+def freieStelleDesSpielersAnDerReihe(aufstellung) -> Stelle:
+    return stelleInDerZoneVon(aufstellung, aufstellung.anDerReihe, 4, 40)
+
+
+def einModellDesSpielersNichtAnDerReihe(aufstellung, einheit) -> Loslassen:
+    einheitenAufstellen(aufstellung, 2)
+    modell, *_ = einheit.modelle
+    return Loslassen(einheit, modell, stelle=freieStelleDesSpielersAnDerReihe(aufstellung))
+
+
+def einModellEinerAufgestelltenEinheit(aufstellung, einheit) -> Loslassen:
+    einheitenAufstellen(aufstellung, 2)
+    modell, *_ = einheit.modelle
+    return Loslassen(einheit, modell, stelle=freieStelleDesSpielersAnDerReihe(aufstellung))
+
+
+def einAufgestelltesModellAufDerEigenenAblage(aufstellung, einheit) -> Loslassen:
+    einheitenAufstellen(aufstellung, 2)
+    modell, *_ = einheit.modelle
+    return Loslassen(einheit, modell, ablage=1)
+
+
+def einAufgestelltesModellAufDerAblageDesAnderen(aufstellung, einheit) -> Loslassen:
+    einheitenAufstellen(aufstellung, 2)
+    modell, *_ = einheit.modelle
+    return Loslassen(einheit, modell, ablage=2)
+
+
+def einGesetztesModellAufDerAblageDesAnderen(aufstellung, einheit) -> Loslassen:
+    (modell, _), *_ = modelleSetzen(aufstellung, einheit, 3)
+    return Loslassen(einheit, modell, ablage=2)
+
+
+@pytest.fixture(
+    params=[
+        (einModellDesSpielersNichtAnDerReihe, "necronWarriors"),
+        (einModellEinerAufgestelltenEinheit, "boyz"),
+        (einAufgestelltesModellAufDerEigenenAblage, "boyz"),
+        (einAufgestelltesModellAufDerAblageDesAnderen, "boyz"),
+        (einGesetztesModellAufDerAblageDesAnderen, "boyz"),
+    ],
+    ids=[
+        "auf7_2ModellDesSpielersNichtAnDerReihe",
+        "auf7_2ModellEinerAufgestelltenEinheit",
+        "auf8_4AufgestelltesModellAufDerEigenenAblage",
+        "auf8_4AufgestelltesModellAufDerAblageDesAnderen",
+        "auf16_3GesetztesModellAufDerAblageDesAnderen",
+    ],
+)
+def sperrendesLoslassen(request, aufstellungNachDerZonenwahl) -> Loslassen:
+    aufbau, einheitenname = request.param
+    return aufbau(aufstellungNachDerZonenwahl, request.getfixturevalue(einheitenname))
 
 
 def ohneEinheitInAufstellung(aufstellung):
     """Nichts gesetzt: AUF-7.4."""
-
-
-def mitFehlendemModell(aufstellung):
-    spieler = aufstellung.anDerReihe
-    einheit, _ = spieler.armee.einheiten
-    erstesModell, _ = einheit.modelle
-    aufstellung.modellSetzen(erstesModell, stelleInDerZoneVon(aufstellung, spieler, 4, 20))
 
 
 def ohneKohärenz(aufstellung):
@@ -59,26 +141,24 @@ sperrenBeimBeenden = pytest.mark.parametrize(
     ("aufbau", "grund"),
     [
         (ohneEinheitInAufstellung, Grund.nichtInAufstellung),
-        (mitFehlendemModell, Grund.modelleFehlen),
         (ohneKohärenz, Grund.keineKohärenz),
     ],
-    ids=["nichtInAufstellung", "modelleFehlen", "keineKohärenz"],
+    ids=["nichtInAufstellung", "keineKohärenz"],
 )
 
 
 def testAuf12_1DieAntwortDesDienstesAufDasBeendenBeiGesperrtemModellGleichtDemBeispielDesVertrags(
     dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors
 ):
-    auswählen(dienstDesBeispiels, "Warboss")
-    auswählen(dienstDesBeispiels, "Necron Warriors")
-    _, _, stelleDesDrittenModells = stellenDesVertrags(2)
-    _, _, _, viertesModell, *_ = necronWarriors.modelle
+    abwählen(dienstDesBeispiels, "Necron Warriors")
+    _, stelleDesZweitenModells, _ = stellenDesVertrags(2)
+    _, _, drittesModell, *_ = necronWarriors.modelle
     modellLoslassen(
         dienstDesBeispiels,
         aufstellungDesBeispiels,
         necronWarriors,
-        viertesModell,
-        stelleDesDrittenModells,
+        drittesModell,
+        stelleDesZweitenModells,
     )
 
     antwort = aufstellenDerEinheitBeenden(dienstDesBeispiels)
@@ -103,18 +183,32 @@ def testAuf12_1EinGesperrtesModellSperrtDasSetzenMitDemGrundModellGesperrt(
     assert stellenAllerModelle(aufstellung) == davor
 
 
-def testAuf12_1EinGesperrtesModellSperrtDasZurücklegenMitDemGrundModellGesperrt(
+def testAuf12_1EinGesperrtesModellSperrtDasLoslassenAufDieAblageMitDemGrundModellGesperrt(
     aufstellung, ersterSpieler, zweiterSpieler
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
     gesetztesModell, gesperrtesModell, _ = einGesperrtesModell(aufstellung, zweiterSpieler)
     davor = stellenAllerModelle(aufstellung)
 
-    gründe = sperrgründe(aufstellung.modellZurücklegen, gesetztesModell, zweiterSpieler)
+    gründe = sperrgründe(aufstellung.modellAufAblageLoslassen, gesetztesModell, zweiterSpieler)
 
     assert gründe == {Grund.modellGesperrt}
     assert stellenAllerModelle(aufstellung) == davor
     assert aufstellung.gesperrt(gesperrtesModell)
+
+
+def testAuf12_1EinGesperrtesModellSperrtDasLoslassenAufDieKarteMitDemGrundModellGesperrt(
+    aufstellung, ersterSpieler, zweiterSpieler
+):
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
+    gesetztesModell, _, _ = einGesperrtesModell(aufstellung, zweiterSpieler)
+    neueStelle = stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30)
+    davor = stellenAllerModelle(aufstellung)
+
+    gründe = sperrgründe(aufstellung.modellLoslassen, gesetztesModell, neueStelle)
+
+    assert gründe == {Grund.modellGesperrt}
+    assert stellenAllerModelle(aufstellung) == davor
 
 
 def testAuf12_1EinGesperrtesModellSperrtDasBeendenMitDemGrundModellGesperrt(
@@ -131,171 +225,60 @@ def testAuf12_1EinGesperrtesModellSperrtDasBeendenMitDemGrundModellGesperrt(
     assert not aufstellung.aufgestellt(aufstellung.einheitInAufstellung)
 
 
-def testAuf12_2EinModellDesSpielersNichtAnDerReiheStehtNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler
+def testAuf12_5EinSperrendesLoslassenNenntNichtWählbarUndLässtJedesModellWoEsWar(
+    aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einheitDesAnderen, _ = ersterSpieler.armee.einheiten
-    modell, *_ = einheitDesAnderen.modelle
-    davor = stellenAllerModelle(aufstellung)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
 
-    gründe = sperrgründe(
-        aufstellung.modellLoslassen, modell, stelleInDerZoneVon(aufstellung, ersterSpieler, 4, 20)
-    )
+    gründe = sperrgründe(inDerDomäneLoslassen, aufstellungNachDerZonenwahl, sperrendesLoslassen)
 
     assert gründe == {Grund.nichtWählbar}
-    assert stellenAllerModelle(aufstellung) == davor
-    assert not aufstellung.gesperrt(modell)
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
 
-def testAuf12_2EinModellEinerAnderenEinheitStehtNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler, zweiterSpieler
+def testAuf12_6EinSperrendesLoslassenNenntDenGrundUndLässtKeinModellGesperrt(
+    aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
-    erstesModell, _ = begonneneEinheit.modelle
-    modellDerAnderen, *_ = andereEinheit.modelle
-    aufstellung.modellSetzen(erstesModell, stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 20))
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(
-        aufstellung.modellLoslassen,
-        modellDerAnderen,
-        stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30),
-    )
-
-    assert gründe == {Grund.einheitBegonnen}
-    assert stellenAllerModelle(aufstellung) == davor
-    assert not aufstellung.gesperrt(modellDerAnderen)
-
-
-def testAuf12_2EinModellAufEinerAblageStehtNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    aufgestellteEinheit, _ = zweiterSpieler.armee.einheiten
-    modell, _ = aufgestellteEinheit.modelle
-    einheitAufstellen(aufstellung, aufgestellteEinheit)
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(aufstellung.modellZurücklegen, modell, zweiterSpieler)
+    gründe = sperrgründe(inDerDomäneLoslassen, aufstellungNachDerZonenwahl, sperrendesLoslassen)
 
     assert gründe == {Grund.nichtWählbar}
-    assert stellenAllerModelle(aufstellung) == davor
+    assert not aufstellungNachDerZonenwahl.gesperrt(sperrendesLoslassen.modell)
 
 
-def testAuf12_2EinGesperrtesModellSperrtDasLoslassenUndLässtDasModellWoEsWar(
-    aufstellung, ersterSpieler, zweiterSpieler
+def testAuf12_6DerDienstAntwortetMitDemGrundUndDemStandWieDavor(
+    aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    gesetztesModell, _, _ = einGesperrtesModell(aufstellung, zweiterSpieler)
-    davor = stellenAllerModelle(aufstellung)
-    neueStelle = stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30)
+    dienst = dienstFür(aufstellungNachDerZonenwahl)
+    davor = spielstandVon(dienst)
 
-    gründe = sperrgründe(aufstellung.modellLoslassen, gesetztesModell, neueStelle)
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_2EineEinheitDesSpielersNichtAnDerReiheStehtNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einheitDesAnderen, _ = ersterSpieler.armee.einheiten
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(
-        aufstellung.einheitLoslassen,
-        einheitDesAnderen,
-        stelleInDerZoneVon(aufstellung, ersterSpieler, 4, 20),
-    )
-
-    assert gründe == {Grund.nichtWählbar}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_2EineAndereEinheitStehtNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    begonneneEinheit, andereEinheit = zweiterSpieler.armee.einheiten
-    erstesModell, _ = begonneneEinheit.modelle
-    aufstellung.modellSetzen(erstesModell, stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 20))
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(
-        aufstellung.einheitLoslassen,
-        andereEinheit,
-        stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30),
-    )
-
-    assert gründe == {Grund.einheitBegonnen}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_2EineEinheitStehtBeiGesperrtemModellNachDemLoslassenWieDavor(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einGesperrtesModell(aufstellung, zweiterSpieler)
-    _, andereEinheit = zweiterSpieler.armee.einheiten
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(
-        aufstellung.einheitLoslassen,
-        andereEinheit,
-        stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30),
-    )
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_3DerDienstAntwortetAufDasLoslassenAußerDerReiheMitDemGrundUndDemStandWieDavor(
-    dienstDesBeispiels, aufstellungDesBeispiels, boyz
-):
-    erstesModell, *_ = boyz.modelle
-    davor = spielstandVon(dienstDesBeispiels)
-
-    antwort = modellLoslassen(
-        dienstDesBeispiels,
-        aufstellungDesBeispiels,
-        boyz,
-        erstesModell,
-        Stelle(x=Fraction(2), y=Fraction(30)),
-    )
+    antwort = imDienstLoslassen(dienst, aufstellungNachDerZonenwahl, sperrendesLoslassen)
 
     assert antwort.status_code == HTTPStatus.CONFLICT
     assert antwort.get_json()["gründe"] == [Grund.nichtWählbar.value]
     assert antwort.get_json()["spielstand"] == davor
 
 
-def testAuf12_3DieSeiteNenntDenGrundNachDemLoslassenAußerDerReiheUndBietetGemeinsamÜbergehenNichtAn(
-    bildschirm, aufstellungNachDerZonenwahl, spielerEins
+def testAuf12_6DieSeiteNenntDenGrundUndBietetGemeinsamÜbergehenNichtAn(
+    bildschirm, aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
-    aufstellung = aufstellungNachDerZonenwahl
-    seite = bildschirm.seiteZu(aufstellung)
-    davor = stellenAllerModelle(aufstellung)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
 
-    einheitZiehen(
-        seite, "Spieler 2", "Necron Warriors", stelleInDerZoneVon(aufstellung, spielerEins, 4, 30)
-    )
-
+    antwort = amBildschirmLoslassen(seite, aufstellungNachDerZonenwahl, sperrendesLoslassen)
     genannt = sperrmeldungWarten(seite, {Grund.nichtWählbar})
+
+    assert antwort.status == HTTPStatus.CONFLICT
     assert genannt == gründeAlsText({Grund.nichtWählbar})
-    assert knopfDerSeite(seite, "gemeinsam übergehen").count() == 0
-    assert stellenAllerModelle(aufstellung) == davor
+    assert knopfDerSeite(seite, übergehen).count() == 0
+    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
 
-def testAuf12_3DieSeiteNenntDenGrundNochNachDemAuswählen(
-    bildschirm, aufstellungNachDerZonenwahl, spielerEins
+def testAuf12_6DieSeiteNenntDenGrundNochNachDemAuswählen(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
 ):
-    aufstellung = aufstellungNachDerZonenwahl
-    seite = bildschirm.seiteZu(aufstellung)
-    einheitZiehen(
-        seite, "Spieler 2", "Necron Warriors", stelleInDerZoneVon(aufstellung, spielerEins, 4, 30)
-    )
+    (_, stelleDesModells), *_ = boyzSetzen(3)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    modellAufDieAblageZiehen(seite, stelleDesModells, "Spieler 2")
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
 
     klickenUndWarten(seite, "Spieler 1", "Boyz")
@@ -303,22 +286,36 @@ def testAuf12_3DieSeiteNenntDenGrundNochNachDemAuswählen(
     assert sperrmeldungWarten(seite, {Grund.nichtWählbar}) == gründeAlsText({Grund.nichtWählbar})
 
 
-def testAuf12_3DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
-    bildschirm, aufstellungNachDerZonenwahl, spielerEins
+def testAuf12_6DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, spielerEins
 ):
-    aufstellung = aufstellungNachDerZonenwahl
-    seite = bildschirm.seiteZu(aufstellung)
-    stelle = stelleInDerZoneVon(aufstellung, spielerEins, 4, 30)
-    einheitZiehen(seite, "Spieler 2", "Necron Warriors", stelle)
+    (_, stelleDesModells), *_ = boyzSetzen(3)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    modellAufDieAblageZiehen(seite, stelleDesModells, "Spieler 2")
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
+    neueStelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
 
-    einheitZiehen(seite, "Spieler 1", "Boyz", stelle)
+    modellZiehen(seite, stelleDesModells, neueStelle)
 
     assert sperrmeldungWarten(seite, set()) == frozenset()
 
 
 @sperrenBeimBeenden
-def testAuf12_4DerDienstAntwortetAufDasBeendenMitDemGrundUndDemStandWieDavor(
+def testAuf12_7DieSperreBeimBeendenNenntDenGrundUndLässtDieModelleWoSieSind(
+    aufstellung, ersterSpieler, aufbau, grund
+):
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
+    aufbau(aufstellung)
+    davor = stellenAllerModelle(aufstellung)
+
+    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
+
+    assert gründe == {grund}
+    assert stellenAllerModelle(aufstellung) == davor
+
+
+@sperrenBeimBeenden
+def testAuf12_7DerDienstAntwortetAufDasBeendenMitDemGrundUndDemStandWieDavor(
     aufstellung, ersterSpieler, aufbau, grund
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
@@ -334,7 +331,7 @@ def testAuf12_4DerDienstAntwortetAufDasBeendenMitDemGrundUndDemStandWieDavor(
 
 
 @sperrenBeimBeenden
-def testAuf12_4DieSeiteNenntDenGrundNachDemKlickAufAufstellenDerEinheitBeenden(
+def testAuf12_7DieSeiteNenntDenGrundNachDemKlickAufAufstellenDerEinheitBeenden(
     bildschirm, aufstellung, ersterSpieler, aufbau, grund
 ):
     nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
@@ -347,30 +344,34 @@ def testAuf12_4DieSeiteNenntDenGrundNachDemKlickAufAufstellenDerEinheitBeenden(
     assert sperrmeldungWarten(seite, {grund}) == gründeAlsText({grund})
 
 
-def testAuf12_4DieSeiteNenntDenGrundNochNachDemAuswählen(
-    bildschirm, aufstellungNachDerZonenwahl, boyz
-):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 3)
+def testAuf12_7DieSeiteNenntDenGrundNochNachDemAuswählen(bildschirm, aufstellungNachDerZonenwahl):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     with aufDieHandlungWarten(seite):
         knopfDerSeite(seite, beenden).click()
-    sperrmeldungWarten(seite, {Grund.modelleFehlen})
+    sperrmeldungWarten(seite, {Grund.nichtInAufstellung})
 
     klickenUndWarten(seite, "Spieler 1", "Warboss")
 
-    assert sperrmeldungWarten(seite, {Grund.modelleFehlen}) == gründeAlsText({Grund.modelleFehlen})
+    assert sperrmeldungWarten(seite, {Grund.nichtInAufstellung}) == gründeAlsText(
+        {Grund.nichtInAufstellung}
+    )
 
 
-def testAuf12_4DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, spielerEins
+def testAuf12_7DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
+    bildschirm, aufstellung, ersterSpieler
 ):
-    modelleSetzen(aufstellungNachDerZonenwahl, boyz, 3)
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
+    ohneKohärenz(aufstellung)
+    spielerAnDerReihe = aufstellung.anDerReihe
+    einheit, _ = spielerAnDerReihe.armee.einheiten
+    _, zweitesModell = einheit.modelle
+    stelleDesZweitenModells = aufstellung.stelle(zweitesModell)
+    nebenDemErsten = stelleInDerZoneVon(aufstellung, spielerAnDerReihe, 4, 12)
+    seite = bildschirm.seiteZu(aufstellung)
     with aufDieHandlungWarten(seite):
         knopfDerSeite(seite, beenden).click()
-    sperrmeldungWarten(seite, {Grund.modelleFehlen})
-    stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
+    sperrmeldungWarten(seite, {Grund.keineKohärenz})
 
-    einheitZiehen(seite, "Spieler 1", "Boyz", stelle)
+    modellZiehen(seite, stelleDesZweitenModells, nebenDemErsten)
 
     assert sperrmeldungWarten(seite, set()) == frozenset()

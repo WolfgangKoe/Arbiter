@@ -63,7 +63,7 @@ das Dashboard (`rollenregeln/dashboard*.py`, `zuegeUebernehmen.py`), dazu `forts
 - [x] Planer: Plan geschrieben
 - [x] Fachkritiker: Kritik am Plan
 - [x] Architekt: Kritik am Plan
-- [ ] Stakeholder: Freigabe Plan 6
+- [x] Stakeholder: Freigabe Plan 6
 
 ## Freigabe
 Freigabe: ja

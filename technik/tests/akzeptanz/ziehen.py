@@ -1,55 +1,12 @@
-"""Bedienung der Akzeptanztests: Auswählen und Ziehen mit Maus und Finger, bis zur Antwort."""
+"""Bedienung der Akzeptanztests: Klicken und Ziehen mit Maus und Finger, mit und ohne Antwort."""
 
-import re
-from collections.abc import Callable
 from dataclasses import dataclass
 
-from playwright.sync_api import Locator, Page, Request, Response, expect
+import pytest
+from playwright.sync_api import Locator, Page, Request, Response
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.bildschirm import (
-    ablageVon,
-    aufDieHandlungWarten,
-    einheitenKarteVon,
-    elementeDerSeite,
-)
-
-
-def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
-    """Die Namen der Einheiten, deren Karte in einer Ablage als ausgewählt gekennzeichnet ist."""
-    namen = seite.locator(".einheitenKarte.ausgewählt .einheitenKartenName span:first-child")
-    return frozenset(namen.all_text_contents())
-
-
-def ausgewählteModelle(seite: Page) -> frozenset[tuple[float, float]]:
-    """Die Stellen der Kreise auf der Karte, die als ausgewählt gekennzeichnet sind."""
-    kreise = elementeDerSeite(seite, ".karte .modell.ausgewählt")
-    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
-
-
-ausgewähltGekennzeichnet = re.compile(r"\bausgewählt\b")
-
-
-def _berührenUndWarten(
-    seite: Page, spielername: str, einheitenname: str, berühren: Callable[[Locator], None]
-) -> None:
-    karte = einheitenKarteVon(seite, spielername, einheitenname)
-    warAusgewählt = einheitenname in ausgewählteEinheiten(seite)
-    berühren(karte)
-    if warAusgewählt:
-        expect(karte).not_to_have_class(ausgewähltGekennzeichnet)
-    else:
-        expect(karte).to_have_class(ausgewähltGekennzeichnet)
-
-
-def klickenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
-    """Klickt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
-    _berührenUndWarten(seite, spielername, einheitenname, Locator.click)
-
-
-def tippenUndWarten(seite: Page, spielername: str, einheitenname: str) -> None:
-    """Tippt die Karte der Einheit an und wartet, bis die Seite ihre Auswahl zeigt."""
-    _berührenUndWarten(seite, spielername, einheitenname, Locator.tap)
+from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten
 
 
 @dataclass(frozen=True)
@@ -147,14 +104,6 @@ def modellAufDieAblageZiehen(
     return _ziehenBisZurAntwort(seite, eingabe, punktAufDerKarte(seite, von), ziel)
 
 
-def einheitZiehen(
-    seite: Page, spielername: str, einheitenname: str, nach: Stelle, eingabe: str = "maus"
-) -> Response:
-    """Zieht die Karte der Einheit aus der Ablage auf die Karte und wartet auf die Antwort."""
-    start = mitteVon(einheitenKarteVon(seite, spielername, einheitenname))
-    return _ziehenBisZurAntwort(seite, eingabe, start, punktAufDerKarte(seite, nach))
-
-
 _bildaufbauAbwarten = "() => new Promise(fertig => requestAnimationFrame(() => fertig()))"
 
 
@@ -179,3 +128,20 @@ def ziehenOhneAnfrage(
 def amKopfDerSeite(seite: Page) -> Bildpunkt:
     """Ein Punkt neben Karte und Ablagen: die Kopfzeile."""
     return mitteVon(seite.locator(".kopfzeile"))
+
+
+def mitDerMausKlicken(seite: Page, punkt: Bildpunkt) -> None:
+    seite.mouse.click(punkt.links, punkt.oben)
+
+
+def mitDemFingerTippen(seite: Page, punkt: Bildpunkt) -> None:
+    seite.touchscreen.tap(punkt.links, punkt.oben)
+
+
+klickenMit = {"maus": mitDerMausKlicken, "finger": mitDemFingerTippen}
+mitMausUndFinger = pytest.mark.parametrize("eingabe", list(klickenMit), ids=list(klickenMit))
+
+
+def aufDieEbeneWarten(seite: Page):
+    """Wartet auf die Antwort des Dienstes auf das Anklicken eines Modells (V9)."""
+    return seite.expect_response("**/ebene")

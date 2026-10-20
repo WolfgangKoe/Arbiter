@@ -19,18 +19,19 @@ from rollenregeln.regelnNurInProzessphase import regelnGesperrt, regelnMeldung
 
 schreibwerkzeuge = ("Write", "Edit")
 koordinator = "koordinator"
-abhakenModul = "standregeln.abhaken"
+abhakenModule = ("standregeln.abhaken", "standregeln.hindernis")
 
 
 def abhakenFürAndere(befehl: str, rolle: str | None) -> bool:
-    """Der Befehl `standregeln.abhaken` nennt als Rolle eine andere als die aufrufende."""
+    """Der Befehl zum Abhaken oder für ein Hindernis nennt eine andere als die aufrufende Rolle."""
     try:
         wörter = shlex.split(befehl)
     except ValueError:
         return False
-    if abhakenModul not in wörter:
+    modul = next((wort for wort in wörter if wort in abhakenModule), None)
+    if modul is None:
         return False
-    genannt = wörter[wörter.index(abhakenModul) + 1 : wörter.index(abhakenModul) + 2]
+    genannt = wörter[wörter.index(modul) + 1 : wörter.index(modul) + 2]
     return not genannt or genannt[0].casefold() != (rolle or "").casefold()
 
 
@@ -40,8 +41,8 @@ def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
         return None
     if abhakenFürAndere(str(eingabe.angaben.get("command") or ""), eingabe.rolle):
         return verweigerung(
-            f"Schreibgrenze: {eingabe.rolle} hakt nur eigene Zeilen ab: "
-            f"`lauf.py {abhakenModul} {eingabe.rolle} <Schritt>`."
+            f"Schreibgrenze: {eingabe.rolle} hakt und meldet nur eigene Zeilen: "
+            f"`lauf.py {abhakenModule[0]} {eingabe.rolle} <Schritt>`."
         )
 
     def entfernenDerRolle(name: str, wörter: list[str]) -> str | None:

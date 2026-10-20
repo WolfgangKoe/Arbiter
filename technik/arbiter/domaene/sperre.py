@@ -8,7 +8,6 @@ class Grund(Enum):
     nichtInAufstellung = "nicht in Aufstellung"
     einheitBegonnen = "Einheit begonnen"
     modellGesperrt = "Modell gesperrt"
-    modelleFehlen = "Modelle fehlen"
     keineKohärenz = "keine Kohärenz"
     nichtGanzInDerZone = "nicht ganz in der Zone"
     baseÜberdeckt = "Base überdeckt"
