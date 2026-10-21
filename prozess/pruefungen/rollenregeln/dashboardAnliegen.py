@@ -10,7 +10,6 @@ from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
 from standregeln.phasenfolge import Phase, lage
 
 Verweis = Callable[[Anliegen, Path], str]
-Zusatz = Callable[[Anliegen], str]
 phasenanfang = "die "
 
 filterStil = """
@@ -21,7 +20,6 @@ border-radius:5px;padding:4px 8px;font-family:inherit}
 .anliegen-spalte{flex:1 1 200px;min-width:200px}
 .anliegen-spalte h3,.anliegen-bereich h3{color:var(--accent-text)}
 .anliegen-bereich{margin-top:12px}
-.anliegen-karte textarea{width:100%;box-sizing:border-box;margin-top:4px}
 .anliegen-karte{background:var(--panel-2);border:1px solid var(--border);border-radius:6px;
 padding:6px 8px;margin-bottom:8px;font-size:.82rem}
 .anliegen-karte.an-stakeholder{border-left:3px solid var(--c-peak)}
@@ -63,10 +61,6 @@ def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
     return anliegen.datei.relative_to(ordner).as_posix()
 
 
-def keinZusatz(anliegen: Anliegen) -> str:  # noqa: ARG001
-    return ""
-
-
 def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
     """Wartende Anliegen je Bereich: auf ein anderes Anliegen, dann je folgende Phase."""
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
@@ -102,9 +96,7 @@ def wartetAufText(anliegen: Anliegen) -> str:
     return f" · wartet auf {anliegen.wartetAuf}"
 
 
-def anliegenKarte(
-    anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis, zusatz: Zusatz = keinZusatz
-) -> str:
+def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:
     pfad = verweis(anliegen, ordner)
     anDich = anliegen.empfänger == stakeholder
     klasse = "anliegen-karte an-stakeholder" if anDich else "anliegen-karte"
@@ -115,7 +107,7 @@ def anliegenKarte(
         f'<a href="{html.escape(pfad)}">{anliegen.nummer}</a> '
         f"{html.escape(titelLesen(anliegen.datei))}"
         f"<p>{html.escape(anliegen.typ)} · Runde {anliegen.runde} · "
-        f"{html.escape(richtung)}{html.escape(wartetAufText(anliegen))}</p>{zusatz(anliegen)}</div>"
+        f"{html.escape(richtung)}{html.escape(wartetAufText(anliegen))}</p></div>"
     )
 
 
@@ -126,14 +118,12 @@ def optionen(werte: list[str]) -> str:
 
 
 def wartendeHtml(
-    ordner: Path, bereiche: list[tuple[str, list[Anliegen]]], verweis: Verweis, zusatz: Zusatz
+    ordner: Path, bereiche: list[tuple[str, list[Anliegen]]], verweis: Verweis
 ) -> str:
     return "".join(
         f'<div class="anliegen-bereich"><h3>{html.escape(titel)} ({len(anliegen)})</h3>'
         + "".join(
-            anliegenKarte(
-                eines, wartetAuf(ordner, eines, None) or stakeholder, ordner, verweis, zusatz
-            )
+            anliegenKarte(eines, wartetAuf(ordner, eines, None) or stakeholder, ordner, verweis)
             for eines in sorted(anliegen, key=attrgetter("nummer"))
         )
         + "</div>"
@@ -141,9 +131,7 @@ def wartendeHtml(
     )
 
 
-def anliegenAbschnitt(
-    ordner: Path, verweis: Verweis = dateiVerweis, zusatz: Zusatz = keinZusatz
-) -> str:
+def anliegenAbschnitt(ordner: Path, verweis: Verweis = dateiVerweis) -> str:
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
     spalten = zuständige(ordner)
     bereiche = vorgemerkte(ordner)
@@ -155,7 +143,7 @@ def anliegenAbschnitt(
     spaltenHtml = "".join(
         f'<div class="anliegen-spalte"><h3>{html.escape(rolle)} ({len(nummern)})</h3>'
         + "".join(
-            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis, zusatz)
+            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis)
             for nummer in sorted(nummern)
         )
         + "</div>"
@@ -171,6 +159,6 @@ def anliegenAbschnitt(
         jetzt = f'<h3>Jetzt dran</h3><div class="anliegen-spalten">{spaltenHtml}</div>'
     return (
         f'<section class="kasten"><h3>Anliegen</h3>{filterHtml}{jetzt}'
-        f"{wartendeHtml(ordner, bereiche, verweis, zusatz)}</section>"
+        f"{wartendeHtml(ordner, bereiche, verweis)}</section>"
         f"<script>{filterSkript}</script>"
     )

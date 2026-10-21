@@ -11,8 +11,8 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
   Anliegen 1581,
   Anliegen 1591,
   Anliegen 740,
-  [1570](anliegen/1570-mutationstestsEffizienter.md),
-  [1740](anliegen/1740-mutationsschwelleAlsUntereGrenze.md),
+  Anliegen 1570,
+  Anliegen 1740,
   Anliegen 1751: alle Prozessphase,
   also nach der Freigabe. Nachprüfung fällig: Anliegen 1671
   (F1, F2 beantwortet, dein Kommentar dort verlangt eine Klärung zur Kritik am Inkrement),
@@ -20,7 +20,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
 - Regelumsetzer: Anliegen 490 zuerst (hält 421 und
   991), Anliegen 1790,
   Anliegen 991,
-  [1070](anliegen/1070-wartendeNachpruefungIstNichtFaellig.md).
+  Anliegen 1070.
 - Testautor: Nachprüfung Anliegen 1320
   (Antwort Ja steht); AUF-22, 23, 27, 13, 11, 16.7, 18.7, 3.9, QUE-5 bis 7 warten auf ihn.
 - Anforderungsautor: Nachprüfung [1400](anliegen/1400-nahkampfreichweiteBeimLoslassen.md)

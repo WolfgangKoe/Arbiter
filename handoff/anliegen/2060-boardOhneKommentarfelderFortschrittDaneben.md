@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder in [1670](1670-anliegenboardNachPhasen.md), letzte Zeile:
@@ -43,4 +43,15 @@ Bordmittel geprüft: keine; das Dashboard ist eigener Code und kein Hook-Code (k
 importiert `dashboardAnliegen`, `dashboardAnliegenSeiten`, `dashboardFortschritt`,
 `dashboardServer`), läuft also neben 2041.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. Karten ohne Feld (Kommentar nur auf der Seite des
+Anliegens); die Startseite hat links das Board, rechts die Liste des Fortschritts, im schmalen
+Fenster darunter; der Haken gilt mit dem Klick, ein Klick auf den Text klappt das Kommentarfeld
+auf; ein Hindernis steht eingerückt, seine Nummer als Link; der Reiter „Fortschritt“ entfällt,
+`/fortschritt` nimmt nur noch die Formulare an und leitet auf die Startseite. Scheiter-Tests:
+`rollenregeln/dashboardFortschrittTest.py`, `dashboardAnliegenTest.py`, `dashboardServerTest.py`.
+Mutationstest: Das Werkzeug mutiert nur Domänenmodule unter `technik/arbiter`; ein gezielter
+Lauf auf die Dashboard-Dateien endete nicht innerhalb von zwei Minuten und blieb ungeprüft.
+Kommentar: So sieht das schon besser aus, aber die unterschiedliche Formatierung der Haken in den Farben ergibt keinen Sinn. Außerdem ergibt es keinen Sinn, dass ich die Haken entfernen kann.
+Stellungnahme: Eingearbeitet. Ein gesetzter Haken ist gesperrt und lässt sich nicht entfernen
+(auch der Server setzt nur noch, nie zurück); alle Haken haben dieselbe Farbe, gesperrte wie
+freie.

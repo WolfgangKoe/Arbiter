@@ -47,10 +47,12 @@ def testEinCommitNurInHandoffStartetWederAbdeckungNochProben():
     assert "stand" in ausgelöst
 
 
-def testEinCommitInTechnikStartetDieAbdeckungNichtDieProben():
-    ausgelöst = ausgelösteHooks(alsHooks, ["technik/arbiter/domaene/sperre.py"])
-    assert "abdeckung" in ausgelöst
-    assert "proben" not in ausgelöst
+def testEinCommitInTechnikStartetKeineProduktTests():
+    ausgelöst = ausgelösteHooks(alsHooks, ["technik/arbiter/domaene/sperre.py", "pyproject.toml"])
+    assert "abdeckung" not in ausgelöst
+    assert "abdeckung" not in hooksLesen(alsHooks)
+    assert "-m abdeckung" not in alsHooks
+    assert "technik/tests" not in alsHooks
 
 
 def testEinCommitInDenPrüfskriptenStartetDieProbenNichtDieAbdeckung():

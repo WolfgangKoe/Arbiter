@@ -7,12 +7,6 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-      - id: abdeckung
-        name: Abdeckung und toter Code des Produkts (nur bei technik/ oder pyproject.toml)
-        entry: python3 -m pytest prozess/pruefungen -q -m abdeckung
-        language: system
-        pass_filenames: false
-        files: ^(technik/|pyproject\.toml)
       - id: proben
         name: Proben der Prüfskripte (nur bei Prüfskripten, Konfiguration oder .claude/)
         entry: python3 -m pytest prozess/pruefungen -q -m "not stand"

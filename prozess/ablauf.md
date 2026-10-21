@@ -328,10 +328,11 @@ Technikphase, ein Prozess-Item mit `P<k>: …`, mehrere mit `P<j>, P<k> und P<l>
 nicht vorher selbst: Die Prüfungen laufen im
 Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meldet es der
 Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann, ohne die
-Produkttests: Die laufen beim Implementierer, bevor er fertig meldet. Alles prüfen der
-Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD (Anliegen 600).
-Mechanismus: `.pre-commit-config.yaml`, nur, was der Commit ändern kann: Hooks je Pfad
-(Anliegen 601, [Regeln](regeln.md#formregeln)); ohne Produkttests: Retro 6, P2; sonst nur Text.
+Produkttests und die Abdeckung, auch bei einem Commit in `technik/`: Beides misst der Lauf
+von `python3 -m pytest prozess/pruefungen` beim Implementierer, bevor er fertig meldet, und
+beim Reviewer bei der DoD. Alles prüft der Regelumsetzer, bevor er fertig meldet
+(Anliegen 600, 1950). Mechanismus: `.pre-commit-config.yaml`, Hooks je Pfad, ohne
+Produkttests und Abdeckung (Anliegen 601, 1950, [Regeln](regeln.md#formregeln)); sonst nur Text.
 
 ## Gleichzeitige Läufe
 Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen

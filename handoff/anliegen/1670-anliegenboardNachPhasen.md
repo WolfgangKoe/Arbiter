@@ -35,7 +35,7 @@ Bestehende Regeln, die das berühren ([Ich 4](../../prozess/praemissen/ich.md)):
 - Das Dashboard zeigt je Rolle nur, wer dran ist, und fällige Nachprüfungen
   (`rollenregeln/dashboardAnliegen.py`, `zuständige`); was `anliegenregeln/anliegenDran.py`
   (`wartet`) als wartend erkennt, fehlt. In der Technikphase 6 sind das 20 Anliegen, dieses mitgezählt.
-- Verwandt: [1070](1070-wartendeNachpruefungIstNichtFaellig.md) (wartende Nachprüfung gilt
+- Verwandt: Anliegen 1070 (wartende Nachprüfung gilt
   als fällig).
 
 **Kosten.** Der Stakeholder sieht vorgemerkte Anliegen nur in `handoff/`, nicht im Dashboard,

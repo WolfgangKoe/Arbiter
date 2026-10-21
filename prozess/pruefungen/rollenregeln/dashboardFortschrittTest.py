@@ -1,3 +1,4 @@
+import re
 from http import HTTPStatus
 from pathlib import Path
 from urllib.parse import quote
@@ -38,16 +39,53 @@ def senden(ordner, körper: str):
     return antworten(ordner, "POST", "/fortschritt", körper.encode(), kopf)
 
 
+def startseite(ordner) -> str:
+    return antworten(ordner, "GET", "/", b"", kopf).inhalt.decode()
+
+
 @pytest.mark.usefixtures("plan")
-def testDieSeiteFortschrittZeigtJedeZeileMitHakenUndKommentarfeld(tmp_path):
-    text = antworten(tmp_path, "GET", "/fortschritt", b"", kopf).inhalt.decode()
-    assert zeile in text and 'name="kommentar"' in text
-    assert 'aria-current="page">Fortschritt' in text
+def testDieStartseiteZeigtJedeZeileMitHakenUndDasKommentarfeldNurInDetails(tmp_path):
+    text = startseite(tmp_path)
+    assert zeile in text and 'name="haken" value="x"' in text
+    felder = text.count('name="kommentar"')
+    assert felder > 0
+    assert felder == len(re.findall(r"<details>(?:(?!</details>).)*name=\"kommentar\"", text))
+
+
+@pytest.mark.usefixtures("plan")
+def testDieReiterSindAnliegenUndTokenbericht(tmp_path):
+    reiter = re.search(r'<nav class="reiter">(.*?)</nav>', startseite(tmp_path)).group(1)
+    assert re.findall(r">([^<]+)</a>", reiter) == ["Anliegen", "Tokenbericht"]
+    assert antworten(tmp_path, "GET", "/fortschritt", b"", kopf).status == HTTPStatus.NOT_FOUND
+
+
+@pytest.mark.usefixtures("plan")
+def testDerHakenGiltMitDemKlickOhneKnopf(tmp_path):
+    text = startseite(tmp_path)
+    assert 'onchange="this.form.submit()"' in text
+    assert "Abschicken" not in text
+
+
+def testEinGesetzterHakenIstGesperrtUndEinKommentarEntferntIhnNicht(tmp_path, plan):
+    senden(tmp_path, f"zeile={quote(zeile)}&haken=x")
+    assert 'value="x" checked disabled' in startseite(tmp_path)
+    senden(tmp_path, f"zeile={quote(zeile)}&haken=&kommentar={quote('Noch eins.')}")
+    assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
+
+
+def testEinHindernisStehtUnterDerZeileMitLinkAufDasAnliegen(tmp_path, plan):
+    text = plan.read_text(encoding="utf-8").replace(
+        f"- [ ] {zeile}\n", f"- [ ] {zeile}\n  Hindernis: Fehlt <b> (Anliegen 77)\n"
+    )
+    plan.write_text(text, encoding="utf-8")
+    seite = startseite(tmp_path)
+    assert '<a href="/anliegen/77">Anliegen 77</a>' in seite
+    assert "Fehlt &lt;b&gt;" in seite
 
 
 def testDerHakenAusDemDashboardStehtSofortImPlan(tmp_path, plan):
     antwort = senden(tmp_path, f"zeile={quote(zeile)}&haken=&haken=x&kommentar=")
-    assert antwort.status == HTTPStatus.SEE_OTHER and antwort.ort == "/fortschritt"
+    assert antwort.status == HTTPStatus.SEE_OTHER and antwort.ort == "/"
     assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
     assert vorgemerkte(tmp_path) == []
 

@@ -20,3 +20,11 @@ die Berechtigungsprüfung der Sitzung abgelehnt („CI Bypass“); ich habe es n
 **Frage.** Darf der Regelumsetzer diese Änderung vornehmen? Annahme: ja (Empfehlung); alles
 übrige von P2 ist fertig.
 Kommentar: Ja
+
+## Stellungnahme Regelumsetzer
+Umgesetzt: Der Hook `abdeckung` ist aus `.pre-commit-config.yaml` gestrichen; ein Commit in
+`technik/` oder an `pyproject.toml` startet keine Produkttests mehr. `stand` behält
+`not abdeckung`, damit der Abdeckungstest im Commit nicht läuft. Scheiter-Test:
+`testEinCommitInTechnikStartetKeineProduktTests` in `formregeln/commitHooksTest.py` (gegen die
+alte Konfiguration rot, geprüft). Mutationstest entfällt: keine Zeile unter `technik/arbiter`
+geändert. [Regeln](../../prozess/regeln.md) nachgezogen. Status bleibt angenommen bis zur Nachprüfung.

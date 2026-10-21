@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 
 from rollenregeln.dashboardAnliegen import anliegenAbschnitt, zuständige
-from rollenregeln.dashboardAnliegenSeiten import kommentarFeld
 
 agenten = ("planer", "architekt")
 
@@ -64,14 +63,14 @@ def wartendesAnlegen(ordner: Path, nummer, wartetAuf, status="offen"):
     datei.write_text(f"# Titel {nummer}\n\n{kopf}\n", encoding="utf-8")
 
 
-def testWartendeStehenInEigenenBereichenMitKommentarfeld(ordner):
+def testWartendeStehenInEigenenBereichenOhneKommentarfeld(ordner):
     anliegenAnlegen(ordner, 10, "Kritik", ("architekt", "planer"), "offen")
     wartendesAnlegen(ordner, 11, "10")
-    abschnitt = anliegenAbschnitt(ordner, zusatz=kommentarFeld)
+    abschnitt = anliegenAbschnitt(ordner)
     assert "Jetzt dran" in abschnitt
     assert "Wartet auf ein anderes Anliegen (1)" in abschnitt
     assert "Titel 11" in abschnitt and "wartet auf 10" in abschnitt
-    assert abschnitt.count('name="kommentar"') == len(("dran", "wartend"))
+    assert 'name="kommentar"' not in abschnitt and "<textarea" not in abschnitt
 
 
 @pytest.mark.usefixtures("gitRepo")

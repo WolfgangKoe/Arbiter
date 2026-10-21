@@ -1,4 +1,4 @@
-"""Seiten des Dashboard-Servers: Anliegen, ein Anliegen mit Formular, Reiter, Neuladen."""
+"""Seiten des Dashboard-Servers: Anliegen mit Fortschritt, ein Anliegen mit Formular, Reiter."""
 
 import hashlib
 import html
@@ -9,6 +9,7 @@ from anliegenregeln.anliegenDran import dran, nachprüfungen
 from gemeinsam.pfade import handoffOrdner
 from lesen.anliegenKopf import Anliegen, Status, gelesene, stakeholder
 from rollenregeln.dashboardAnliegen import anliegenAbschnitt, filterStil, titelLesen
+from rollenregeln.dashboardFortschritt import fortschrittListe, fortschrittStil
 from rollenregeln.dashboardStil import stil
 from rollenregeln.eingang import eingangDatei, verworfenDatei, verworfene, vorgemerkte
 from rollenregeln.zuegeUebernehmen import dateiZu, fragtStakeholder, zulässigeStatus
@@ -50,7 +51,7 @@ neuladenSkript = """
 })();
 """.replace("__INTERVALL__", str(neuladenIntervall))
 
-reiter = (("Anliegen", "/"), ("Fortschritt", "/fortschritt"), ("Tokenbericht", "/tokens"))
+reiter = (("Anliegen", "/"), ("Tokenbericht", "/tokens"))
 
 
 def navigation(aktiv: str) -> str:
@@ -66,7 +67,7 @@ def seite(titel: str, aktiv: str, inhalt: str) -> str:
     return (
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
         f"<title>Arbiter · {html.escape(titel)}</title>"
-        f"<style>{stil}{filterStil}{seitenStil}</style></head><body>"
+        f"<style>{stil}{filterStil}{seitenStil}{fortschrittStil}</style></head><body>"
         f"<h1>{html.escape(titel)}</h1>{navigation(aktiv)}{inhalt}"
         f"<script>{neuladenSkript}</script></body></html>\n"
     )
@@ -112,18 +113,11 @@ def seitenVerweis(anliegen: Anliegen, ordner: Path) -> str:  # noqa: ARG001
     return f"/anliegen/{anliegen.nummer}"
 
 
-def kommentarFeld(anliegen: Anliegen) -> str:
-    return (
-        f'<form class="zug" method="post" action="/anliegen/{anliegen.nummer}">'
-        '<textarea name="kommentar" rows="2" placeholder="Kommentar"></textarea>'
-        '<button type="submit">Kommentieren</button></form>'
-    )
-
-
 def anliegenSeite(ordner: Path) -> str:
     inhalt = (
-        f'<p class="zaehler">Du bist dran: {zähler(ordner)}</p>{vermerke(ordner)}'
-        f"{anliegenAbschnitt(ordner, seitenVerweis, kommentarFeld)}"
+        f'<div class="startseite"><div><p class="zaehler">Du bist dran: {zähler(ordner)}</p>'
+        f"{vermerke(ordner)}{anliegenAbschnitt(ordner, seitenVerweis)}</div>"
+        f'<aside class="kasten"><h3>Fortschritt</h3>{fortschrittListe(ordner)}</aside></div>'
     )
     return seite("Anliegen", "Anliegen", inhalt)
 

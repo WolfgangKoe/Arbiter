@@ -39,7 +39,7 @@ Bestehende Regeln, die das berühren ([Ich 4](../../prozess/praemissen/ich.md)):
   Namen (`testAuf7_3…`), geprüft von `kriterienregeln/rueckverfolgung.py`; ein
   Kriterium im Kommentar des Produktcodes wiederholt das ([Wir 3](../../prozess/praemissen/wir.md)).
 - Toten Code finden vulture (DoD 2) und die Mutationstests
-  ([1570](1570-mutationstestsEffizienter.md)); die Schichten prüft
+  (Anliegen 1570); die Schichten prüft
   `formregeln/importvertrag.py`.
 
 **Kosten.** Ein Kommentar mit Kennung veraltet, sobald sich Kriterium oder Nummer ändert,

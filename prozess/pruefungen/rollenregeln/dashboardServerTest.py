@@ -75,6 +75,12 @@ def testEinzelseiteBietetNurStatusAnDieDerAblaufZulässt(ordner):
     assert 'name="kommentar"' in text
 
 
+def testDasBoardHatKeinKommentarfeldDieSeiteDesAnliegensEins(ordner):
+    anlegen(ordner)
+    assert 'name="kommentar"' not in holen(ordner, "/").inhalt.decode()
+    assert 'name="kommentar"' in holen(ordner, "/anliegen/10").inhalt.decode()
+
+
 def testUnbekanntesAnliegenGibtNichtGefunden(ordner):
     assert holen(ordner, "/anliegen/99").status == HTTPStatus.NOT_FOUND
 
