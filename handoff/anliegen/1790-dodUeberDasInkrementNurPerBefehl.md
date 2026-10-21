@@ -21,7 +21,7 @@ Stakeholder den Haken, kann er ein Inkrement mit Fehlern abnehmen (sein Kommenta
 **Gegenvorschlag.** Bestehende Regel, kein neuer Text ([Ich 4](../../prozess/praemissen/ich.md)):
 Die Zeile ist nur abgehakt, wenn der Reviewer sie mit dem Befehl abhakt; `review` und
 `not offeneItems` entfallen dort. Das Review zählt nicht: Sein Kopf stand in Zyklus 6, bevor
-die DoD durch war (Architekt in [1850](1850-retro6TechnischBaubar.md), Punkt 8).
+die DoD durch war (Architekt in Anliegen 1850, Punkt 8).
 
 Erledigt, wenn ein Scheiter-Test in `standregeln/fortschrittTest.py` zeigt: Alle Items
 gelöscht, das Review des Zyklus geschrieben, kein Befehl, dann ist „DoD über das Inkrement“

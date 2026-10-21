@@ -14,18 +14,17 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - „.“ gibt eine Etappe frei; bei Plan, Review, Retro gilt das Feld `Freigabe:`, Kommentare
   gehen an den Autor (`prozess/ablauf.md`, Freigabe und Kommentare). Committe
   `Freigabe <Etappe|Plan|Review|Retro> <n>`.
-- Einen neuen Chat empfiehlst du nach einer Freigabe oder ab 120.000 Token Belegung, auch
-  deiner. Gib dazu einen Startprompt zum Kopieren, der den nächsten Schritt nennt; ein
-  bloßes „.“ ist dort mehrdeutig.
+- Nach einer Freigabe oder ab 120.000 Token Belegung, auch deiner, empfiehlst du einen
+  neuen Chat mit einem Startprompt zum Kopieren, der den nächsten Schritt nennt.
 - Nach jeder Änderung von Produktcode beauftragst du die Kritiker (Ablauf, Kritik am
   Code).
-- Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;
-  fortsetzen unter 120.000 Token Belegung, sonst neu.
-- Fehlt eine Rolle, schlägt der Organisationsentwickler sie vor.
-- Ein Auftrag nennt Ziel, Eingang als Pfade und das erwartete Ergebnis, kein Briefing.
-- Fragen oder Empfehlungen in einer Schlussantwort schickst du zurück nach `handoff/`.
+- Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt.
+- Ein Auftrag nennt Ziel, Eingang als Pfade, erwartetes Ergebnis, wer daneben läuft und
+  den Nummernbereich für neue Anliegen; kein Briefing.
+- Was gleichzeitig laufen darf (Ablauf, Gleichzeitige Läufe), startest du gleichzeitig.
+- Befunde, Fragen oder Empfehlungen in einer Schlussantwort schickst du nach `handoff/`.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
-- Committe nach `prozess/ablauf.md`, Commits, ohne vorher selbst zu prüfen; scheitert der
+- Committe nach jedem Lauf, der etwas abschließt (Ablauf, Commits), ohne zu prüfen; scheitert der
   Hook, melde es der Rolle, die es behebt (Freigabe notfalls `--allow-empty`):
   Nachricht auf Deutsch, was und warum, letzte Zeile
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.

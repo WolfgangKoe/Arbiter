@@ -24,9 +24,11 @@ deutsch mit Umlauten, Dateinamen ASCII.
 6. Keine Indizes auf Fachobjekte (`einheiten[0]`): benennen oder entpacken. Mechanismus: nur Text.
 7. Kein lambda als Hülle um einen Aufruf, keine Bindung per Standardargument. Mechanismus:
    nur Text.
-8. Kommentare nur einzeilig als `# Regel: <Fundstelle>` oder `# Warum: …` (nicht
-   offensichtlich); Docstrings einzeilig; kein TODO, FIXME, Prozessverweis. Mechanismus:
-   `formregeln/kommentare.py`; Prozessverweis: nur Text.
+8. Der Code erklärt sich selbst. Kommentare nur aus einer festen Liste: Werkzeugkommentare mit
+   Regelcode (`# noqa: <Code>`, `// eslint-disable-next-line <Regel>`) und `TODO: <was>`,
+   höchstens drei; ein TODO von vor der laufenden Technikphase macht die DoD über das
+   Inkrement rot. Docstrings einzeilig (Anliegen 1660, 1860). Mechanismus: nur Text, bis
+   Retro 6, P5 `formregeln/kommentare.py` umbaut.
 9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele, die
    sich nur in Daten unterscheiden, als Tabelle; viele mit eigenem Verhalten als eigene Typen.
    Urteil des Reviewers, Schwellen: [Ablauf, DoD](../ablauf.md#dod-item-fertig).

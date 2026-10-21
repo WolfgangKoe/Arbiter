@@ -3,7 +3,7 @@
 1761 · Kritik · von Reviewer → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
 
 ## Runde 1
-**Befund.** Kritik am Code (Lesbarkeit) zu [1640](1640-basesBlitzenNachDemLoslassen.md),
+**Befund.** Kritik am Code (Lesbarkeit) zu Anliegen 1640,
 `ziehenBeenden` in [seite.js](../../technik/frontend/seite.js):
 1. Antwortet der Server beim Loslassen nicht (Arbiter beendet, `fetch` scheitert), wirft
    `handlungSenden`, und keiner zeichnet neu. Die Kreise bleiben dann an der Vorschau stehen,

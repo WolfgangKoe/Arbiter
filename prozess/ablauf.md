@@ -46,7 +46,10 @@ Moderator (`handoff/moderation.md`). Mechanismus: nur Text. Wer gleichzeitig lä
    Technikphase in die Komponentenseite ein (Anliegen 317).
 6. Bei einer Bedienung nennt die Anforderung jede Geste (Klick, Ziehen, Auswahl) und was
    danach am Bildschirm geschieht; jede Abweichung von ArbiterMap und Arbiter-old hat der
-   Stakeholder als Frage entschieden.
+   Stakeholder als Frage entschieden. Das gilt für das Gebaute samt Frontend
+   (`ArbiterMap/frontend/static/js/`), auch wo Regeln der Architektur oder eine Empfehlung an
+   den Stakeholder die Bedienung festlegen; der Fachkritiker prüft die Fundstelle im Gebauten
+   in Schritt 5 und an den Tests (Technikphase, Schritt 2; Anliegen 1841).
 
 Mechanismus für 1 bis 6: nur Text. Fachliche Vollständigkeit ist Urteil (Schritte 5, 7) und
 zeigt sich spätestens an den roten Tests.
@@ -68,7 +71,9 @@ Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechan
    ihn von dem, der den Befund hat; der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt
    „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüfen Architekt
    (Architektur) und Reviewer (Lesbarkeit) gleichzeitig ([Kritik am Code](#kritik-am-code)).
-   Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Mechanismus: nur Text.
+   Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Er meldet erst
+   fertig, wenn alle Tests in `technik/tests` grün sind, auch die Bildschirmtests, und
+   SonarLint grün ist (DoD 1, 2; Retro 6, Befund 4). Mechanismus: nur Text.
    Hat das Item Vertrag und Tests beider Hälften, laufen Implementierer (Backend) und
    Frontend-Implementierer gleichzeitig ([Gleichzeitige Läufe](#gleichzeitige-läufe)).
    Mechanismus: nur Text.
@@ -128,13 +133,22 @@ technisches Neuland (Wegwerf-Versuch, dann Test).
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: nur Text.
 
-Kommen Mutationstests oder eine Oberfläche hinzu, gelten auch Mutationsschwelle der
-geänderten Domänenmodule und Bildschirmtest grün, Mockup gelöscht.
+Bei einer Oberfläche gelten auch Bildschirmtest grün, Mockup gelöscht. Dazu die
+Mutationsschwelle: mindestens 95 % gefangene Mutanten in den geänderten Zeilen der
+Domänenmodule. Je Mutant laufen nur die Tests, die seine Zeile ausführen (Zeilen auf
+Modulebene, Tests in einem eigenen Prozess: alle); ein Ergebnis gilt, solange `technik/`,
+`pyproject.toml` und `domaene/daten` gleich sind. Unter 95 % wird jeder Überlebende
+angegangen, nicht nur bis zur Schwelle: ein Test, der ihn fängt, oder, ist er gleichwertig,
+eine Begründung beim Werkzeug, dann zählt er nicht (Anliegen 1740). Code ändert sich dafür nur,
+wenn er lesbarer wird; ein Test sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen
+1751). Der volle Lauf über alle Module, auch `web/`, läuft nur in der Prozessphase
+([Schritt 1](#prozessphase)) und hält nichts auf. Mechanismus: `mutationsregeln/mutation.py`,
+gezielt und gleichwertig: Retro 6, P2; „jeder Überlebende“ und Lesbarkeit: nur Text.
 
 Werkzeuge (Regelumsetzer baut, Architekt kritisiert): complexipy (Schwelle 15), ruff (Stil,
 ARG, PLR2004, PLR0913, FBT, ERA, `PLR0912` mit 12), eslint und stylelint fürs Frontend. Die Sperre der Agenten ist für Python mindestens so
 streng wie SonarLint, die Sicht des Stakeholders; Mechanismus: `formregeln/sonarlint.py` (DoD 2).
-SonarLint prüft nur Python, das Frontend prüfen eslint und stylelint (Anliegen 280). Nicht verwendet: radon-Wartbarkeitsindex,
+SonarLint prüft nur Python, das Frontend prüfen eslint und stylelint (Anliegen 280). Nicht verwendet: ruff format (Anliegen 1581), radon-Wartbarkeitsindex,
 ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 
 ## Prozessphase
@@ -144,9 +158,14 @@ Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `F
 in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standregeln)).
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
-   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text);
-   Prozess-Items nur aus einem Befund, jedes in Worten beschrieben: was danach anders
-   geschieht. Ein Mechanismus entsteht wie eine Rolle erst bei
+   Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
+   mit dem Fortschritt des Produkts: Etappe, belegte Kriterien, was am Bildschirm neu geht.
+   Höchstens zwei Prozess-Items aus Befunden, die das Produkt aufgehalten haben, dazu die
+   Aufträge des Stakeholders (Anliegen 630, 730, 1671); jedes in Worten beschrieben: was
+   danach anders geschieht. Mit Beginn der Phase startet der Koordinator den vollen
+   Mutationslauf ([DoD](#dod-item-fertig)) im Hintergrund; der Reviewer schreibt seine Lücken
+   als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
+   (Anliegen 1671, F2). Ein Mechanismus entsteht wie eine Rolle erst bei
    beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
    Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
@@ -167,9 +186,10 @@ in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standrege
 5. Die Rolle des Prozess-Items setzt es um: Organisationsentwickler Regeln, Prämissen und
    Rollen, Regelumsetzer Mechanismen je mit Scheiter-Test; ein Item je Lauf, damit die
    Belegung unter 120.000 Token bleibt. Den Lauf, der ein Item abschließt, committet der Koordinator mit dem Betreff `P<k>: …`, einen Zwischenstand mit
-   `P<k> Zwischenstand: …`. Hat jedes Item der Retro seinen Commit `P<k>:` seit
+   `P<k> Zwischenstand: …`; Items, die sich Dateien teilen, liefert ein Commit
+   `P<j>, P<k> und P<l>: …` (Anliegen 740). Hat jedes Item der Retro seinen Commit `P<k>:` seit
    `Freigabe Retro <n>` (auch als `Retro <n> P<k>: …`), folgt die Domänenphase mit Plan n+1.
-   Mechanismus: nur Text.
+   Mechanismus: `standregeln/phasenfolge.py` (`hatItemCommit`), sonst nur Text.
 6. Der Zyklus endet nach Schritt 5; dann pusht der
    [Koordinator](../.claude/agents/koordinator.md) nach `dev`. Mechanismus: nur Text.
 
@@ -210,7 +230,9 @@ Kommentar: .
 Wo ein Plan umgesetzt wird, zeigt der Abschnitt `## Fortschritt` vor `## Freigabe`, wie weit
 die Phase ist und was sie aufhält (Anliegen 421): im Review für die Domänenphase danach (sie
 setzt sein Zyklusziel um; ohne Review, in Zyklus 1, entfällt er), im Plan für die
-Technikphase, in der Retro für die Prozessphase. Er wächst mit der Phase und zählt nicht zum
+Technikphase, in der Retro für die Prozessphase. Er steht ab dem Schreiben der Datei, vor
+ihrer Freigabe, alle Zeilen offen bis zum Beginn der Phase; beginnt die nächste Phase, erhält
+die Datei der vorigen ihren Endstand (Anliegen 740, 982). Er wächst mit der Phase und zählt nicht zum
 Höchstmaß. Ihn schreibt nur das Skript, der Autor lässt ihn beim Ändern stehen. Keine Rolle
 liest ihn für ihre Arbeit: Ihre offenen Schritte nennt ihr der Hook beim Start.
 
@@ -234,6 +256,7 @@ Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
 Domäne 6 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
 Domäne 7 | je Kritiker: Kritik am Plan | Befehl
 Domäne 8 | Stakeholder: Freigabe Plan | Fakt: Commit
+Technik 1 je Item mit beiden Hälften | Architekt: Vertrag zu Item <k>, bei beiden Hälften | Befehl
 Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
 Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Architekt, Reviewer: je Kritik am Code | Befehl
 Technik 4 | Reviewer: DoD über das Inkrement | Befehl
@@ -245,7 +268,7 @@ Prozess 4 | Stakeholder: Freigabe Retro | Fakt: Commit
 Prozess 5 je Prozess-Item | Rolle des Items: P<k> | Fakt: Commit `P<k>:`
 Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
 
-Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, [Regeln](regeln.md#standregeln));
+Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
 Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis und Dashboard: Anliegen
 490.
 
@@ -269,7 +292,9 @@ Je Artefakt prüft jeder seiner Kritiker einmal und ordnet jeden Befund nach
 Anliegen, die wartenden in einem zweiten mit `· wartet auf die <Phase>` der Perspektive des
 Autors; was entfällt, schreibt er nicht, ohne Befund keine Datei. Der Autor bessert nach
 oder widerspricht; eine weitere Runde öffnet der Kritiker nur für, was weiter aufhält, nach
-Runde 3 entscheidet der Stakeholder ([Anliegen](#anliegen)). Wer kritisiert (Anliegen 730):
+Runde 3 entscheidet der Stakeholder ([Anliegen](#anliegen)). Die Kritiker eines Artefakts
+laufen gleichzeitig. Befunde stehen nur in Anliegen, nie nur in einer Schlussantwort
+([Ich 5](praemissen/ich.md)). Wer kritisiert (Anliegen 730):
 
 Artefakt | Autor | Kritiker
 ---|---|---
@@ -284,20 +309,23 @@ Mechanismus: nur Text.
 
 ### Kritik am Code
 Nach jeder Änderung von Code nach der Tabelle prüfen ihn seine Kritiker, bevor die nächste
-Rolle darauf aufbaut; sie lesen die Änderung seit dem letzten Commit (`git diff`). Den Code
+Rolle darauf aufbaut; sie lesen die Änderung seit dem Commit, den der Auftrag nennt
+(`git diff <commit>`). Den Code
 der Prüfskripte und Hooks kritisiert niemand je Änderung; dafür gibt es den Rundgang
 ([Technikphase](#technikphase), Schritt 6). Mechanismus: nur Text.
 
 ## Commits
-Der Koordinator committet nach jeder Phase und nach jedem Item mit Produktcode, jeweils samt
-Kritik und Anliegen: eine Phase mit ihrer Freigabe, ein Item der Technikphase, wenn seine
-Tests grün sind und die Kritik daran umgesetzt ist, ein Prozess-Item mit `P<k>: …`. Er prüft
+Der Koordinator committet nach jeder Freigabe und nach jedem Lauf, der etwas abschließt:
+einen Schritt des [Fortschritts](#fortschritt) abhakt oder ein Anliegen auf `angenommen`,
+`abgelehnt` oder `erledigt` setzt (Retro 6, P1). Betreff: die Freigabe, das Item der
+Technikphase, ein Prozess-Item mit `P<k>: …`, mehrere mit `P<j>, P<k> und P<l>: …`. Er prüft
 nicht vorher selbst: Die Prüfungen laufen im
 Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meldet es der
-Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann; alles prüfen
-der Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD (Anliegen 600).
+Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann, ohne die
+Produkttests: Die laufen beim Implementierer, bevor er fertig meldet. Alles prüfen der
+Regelumsetzer, bevor er fertig meldet, und der Reviewer bei der DoD (Anliegen 600).
 Mechanismus: `.pre-commit-config.yaml`, nur, was der Commit ändern kann: Hooks je Pfad
-(Anliegen 601, [Regeln](regeln.md#formregeln)); sonst nur Text.
+(Anliegen 601, [Regeln](regeln.md#formregeln)); ohne Produkttests: Retro 6, P2; sonst nur Text.
 
 ## Gleichzeitige Läufe
 Gleichzeitig laufen Rollen, die nur Anliegen schreiben, und Läufe zu verschiedenen Anliegen
@@ -308,6 +336,9 @@ oder Items, auch derselben Rolle, wenn (Anliegen 279):
 3. höchstens einer Hook-Code ändert: Module, die `.claude/settings.json` startet, samt ihren
    Importen. Sie laufen aus demselben Arbeitsbaum als Hooks jedes Laufs.
 
+Was danach gleichzeitig laufen darf, startet der Koordinator gleichzeitig (Anliegen 730). Sein
+Auftrag nennt jeder Rolle, wer neben ihr läuft, und den Bereich, aus dem sie Nummern für neue
+Anliegen vergibt; sie vergibt nur daraus. Mechanismus: nur Text; Nummern: Retro 6, P4.
 Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
 Der Koordinator committet je Item nach dessen Pfaden ([Commits](#commits)); die Zeile eines
 Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien eines laufenden Nachbarn
@@ -373,8 +404,8 @@ nur Text.
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
   wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `· wartet auf <nr>`.
   Mechanismus: nur Text.
-- Den Status setzt, wem die Tabelle ihn zuweist; `erledigt` nur der Absender. Mechanismus:
-  nur Text.
+- Den Status setzt, wem die Tabelle ihn zuweist. Der Empfänger setzt nie `erledigt`, das
+  setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Mechanismus: nur Text.
 - Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine
   Stellungnahme mit Text: was umgesetzt ist und wo, die Begründung oder die Frage; dem
   Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt

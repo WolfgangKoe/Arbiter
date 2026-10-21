@@ -9,6 +9,12 @@ für die Retro. Mechanismus: nur Text.
   Arbeit, die das Produkt bräuchte. Schwelle: ein Drittel. Reaktion: Die Retro löscht
   mindestens einen Mechanismus, bevor sie einen neuen beauftragt, der nicht auf ein Anliegen
   des Stakeholders zurückgeht. Mechanismus: nur Text.
+- Prüfcode gegen Produktcode: neue Zeilen in `prozess/pruefungen/` gegen neue Zeilen in
+  `technik/arbiter/` und `technik/frontend/`, beide ohne Tests, von der letzten
+  `Freigabe Retro` bis `Freigabe Review`: `git diff --shortstat <von> <bis> --
+  prozess/pruefungen ':!*Test.py' ':!*conftest.py'`, ebenso über die Produktordner.
+  Bedeutung wie Prozesslast. Schwelle: mehr Prüfcode als Produktcode. Reaktion: wie
+  Prozesslast (Anliegen 630, 730). Mechanismus: nur Text.
 - Fortschritt des Produkts: aktuelle Etappe von allen, belegte Kriterien von allen. Die
   aktuelle ist die kleinste Nummer in `domaene/etappen/`, die Zahl aller die größte.
   Belegt ist ein Kriterium, das einen Akzeptanztest hat und das kein offenes Item des

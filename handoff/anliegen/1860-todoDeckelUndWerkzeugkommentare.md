@@ -7,7 +7,7 @@
 [1660](1660-regelkommentareEntbehrlich.md) um: Im Code stehen nur noch TODOs, gedeckelt; ein
 TODO, das schon vor der laufenden Technikphase da war (Commit „Freigabe Plan <n>“), macht am
 Ende der Technikphase die DoD über das Inkrement rot. Der Architekt fand in
-[1850](1850-retro6TechnischBaubar.md), Punkt 6, was der Regelumsetzer dafür noch nicht weiß:
+Anliegen 1850, Punkt 6, was der Regelumsetzer dafür noch nicht weiß:
 1. Wie hoch der Deckel ist.
 2. Welche Kommentare für Werkzeuge bleiben. `# noqa` ohne Regelcode schaltet jede ruff-Regel
    der Zeile ab; heute stehen 8 solcher Kommentare, einer ohne Code.

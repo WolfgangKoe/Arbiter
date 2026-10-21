@@ -13,6 +13,8 @@ was die Domäne beschreibt, nicht was sich leicht testen oder bauen lässt.
 - Anforderungen und Mockups (Domänenphase, Schritt 5) gegen Ziel und Regeltext: Fehlt ein
   Schritt des Happy Path? Greift eine *Sperre* zu Unrecht, fehlt eine, die ein Kriterium
   verlangt? Weicht die Bedienung ohne Antwort des Stakeholders von ArbiterMap und Arbiter-old ab?
+  Prüfe die Fundstelle im Gebauten samt Frontend (`ArbiterMap/frontend/static/js/`), auch wo
+  Architektur oder eine Empfehlung die Bedienung festlegen (DoR 6); ebenso an den Tests.
 - Rote Akzeptanztests (Schritt 2 in `prozess/ablauf.md`): Trifft jeder Test sein
   Kriterium? Fehlt ein Fall, den das Kriterium regelt? Stehen die Namen wörtlich im Glossar?
   Verlangt ein Test mehr als Kriterium und Grenzen im Plan?

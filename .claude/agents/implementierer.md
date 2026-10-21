@@ -25,9 +25,10 @@ Akzeptanztests grün macht: so einfach wie möglich, lesbar und änderbar.
 - `pyproject.toml` (Suchpfad, Abhängigkeiten, Prüfregeln) schreibt der Regelumsetzer;
   brauchst du dort etwas, schreibe ihm ein Anliegen.
 - Refactoring nur aus einem Befund: Review, Prüfung oder Anliegen.
-- Fertig bist du, wenn die Punkte 1 und 2 der DoD in `prozess/ablauf.md` erfüllt sind.
+- Fertig meldest du erst, wenn DoD 1 und 2 in `prozess/ablauf.md` erfüllt sind: alle Tests
+  in `technik/tests` grün, auch die Bildschirmtests, und SonarLint grün.
 - Kritik an deinem Code kommt als Anliegen. Nimm in derselben Datei Stellung, setze um,
-  was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).
+  was du annimmst, und setze `angenommen` oder `abgelehnt`, nie `erledigt`.
 
 ## Grenzen
 - Akzeptanztests sind für dich gesperrt. Hältst du einen für falsch, schreibe ein Anliegen
