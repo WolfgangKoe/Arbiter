@@ -6,7 +6,7 @@
 **Befund.** Ich habe [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py) und
 die Module daneben gegen [kritik-entwickler.md](../kritik-entwickler.md), Abschnitt 1 („Domänenmodell
 teilweise zu implizit“, „sprechende Namen“), und [Es](../../prozess/praemissen/es.md) gelesen;
-Anlass ist die Einschätzung des Stakeholders ([1652](1652-einschaetzungAuswahl.md)). Namen,
+Anlass ist die Einschätzung des Stakeholders (Anliegen 1652). Namen,
 Verzweigung und Größe sind gut. Was implizit bleibt:
 1. `Auswahl` bekommt die Menge `_aufgestellt` der `Aufstellung` als `Collection[Einheit]`
    ([`__init__.py`](../../technik/arbiter/domaene/phasen/aufstellen/__init__.py):41–42,

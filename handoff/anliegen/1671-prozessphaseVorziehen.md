@@ -11,8 +11,8 @@ Entwurf. Der [Ablauf](../../prozess/ablauf.md) lässt das Vorziehen an diesen St
 2. Regeln, Prämissen und Rollen ändern sich erst nach „Freigabe Retro 6“; die Schreibgrenze
    sperrt `prozess/` bis dahin, P1 lässt sich nicht vorbereiten.
 3. Die DoD ist nicht durch ([Review 6](../review.md#dod)): SonarLint rot
-   ([1630](1630-sonarlintRotInAnwendung.md)), Mockups liegen noch
-   ([1631](1631-mockupsNachDemEinbau.md)), der Mutationslauf läuft. Der Commit-Hook lässt
+   (Anliegen 1630), Mockups liegen noch
+   (Anliegen 1631), der Mutationslauf läuft. Der Commit-Hook lässt
    keinen Commit mit rotem SonarLint durch. Endet der Lauf unter 95 %, ist ein Item nach
    der DoD nicht fertig; davon weicht nur deine Entscheidung ab.
 4. Lücken aus dem Mutationslauf warten nach [Ich 3](../../prozess/praemissen/ich.md) auf

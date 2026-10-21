@@ -3,8 +3,8 @@
 1591 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
 
 ## Runde 1
-**Befund.** Der Implementierer hat in [1580](1580-haltImTestSelbstGerechnet.md) (Absender
-Architekt) und [1590](1590-rasterMutantUndRaenderDerAbfrage.md) (Absender Reviewer) den Kopf
+**Befund.** Der Implementierer hat in Anliegen 1580 (Absender
+Architekt) und Anliegen 1590 (Absender Reviewer) den Kopf
 auf `erledigt` gesetzt statt auf `angenommen`, die Stellungnahme endet mit „Status: erledigt“.
 Der [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) sagt: „`erledigt` nur der Absender.
 Mechanismus: nur Text.“ Nach dem Kopf ist danach niemand dran, die Nachprüfung steht nicht im

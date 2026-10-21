@@ -3,9 +3,9 @@
 1581 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
 
 ## Runde 1
-**Befund.** Bei der Nachprüfung von [1580](1580-haltImTestSelbstGerechnet.md) (erfüllt: kein
+**Befund.** Bei der Nachprüfung von Anliegen 1580 (erfüllt: kein
 `[0]` mehr, Halt über `verschoben` und `teilDesWegs`, Name „ist ganz“) und bei der Kritik am Code
-nach [1590](1590-rasterMutantUndRaenderDerAbfrage.md): Der Code hält Architektur und V10. `seite.js` hat
+nach Anliegen 1590: Der Code hält Architektur und V10. `seite.js` hat
 12.111 Zeichen, `technik/tests` 733 grün, `ruff check` und eslint grün. Zwei Befunde zum Ablauf:
 1. Der Implementierer hat in 1580 und 1590 als Empfänger selbst `erledigt` gesetzt.
    Nach [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) setzt er `angenommen`, `erledigt`

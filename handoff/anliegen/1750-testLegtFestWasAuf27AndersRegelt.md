@@ -3,7 +3,7 @@
 1750 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
 
 ## Runde 1
-**Befund.** Kritik am Code zu [1710](1710-unitTestsFuerZweiMutantenAusPlan6.md), Punkt 8. Der neue
+**Befund.** Kritik am Code zu Anliegen 1710, Punkt 8. Der neue
 Test `testEineSchonÜberdeckendeBaseHältDenWegAmAnfangAnAuchWennSieSichEntfernt`
 ([messenTest.py](../../technik/tests/einheit/domaene/messenTest.py)) legt fest: Überdeckt eine
 *Base* schon am Anfang des Wegs eine andere, bleibt sie stehen (Anteil 0), auch wenn sie sich
@@ -29,7 +29,7 @@ nächsten Technikphase wird der Test rot.
 
 **Kosten.** Bis dahin liest man im Test eine Zusage, die die Domäne schon anders entschieden
 hat; wer AUF-27.2 baut, muss erst klären, ob der Test eine Regel schützt. In
-[1632](1632-mutationslaufUnterDerSchwelle.md) zählt der Mutant als gefangen, obwohl er
+Anliegen 1632 zählt der Mutant als gefangen, obwohl er
 gleichwertig ist.
 
 **Gegenvorschlag.** Mit AUF-27.2 den Test löschen; der Test zu AUF-27.2 tritt an seine Stelle

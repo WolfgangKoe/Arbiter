@@ -7,7 +7,7 @@
 Code finden. Sie sollen effizienter werden: schneller, parallel oder gezielter. Läuft nach
 einem Mutationslauf keine Änderung mehr, soll der komplette Lauf nicht noch einmal nötig
 sein. Anlass: In Zyklus 6 lief die Nachprüfung von
-[1550](1550-anhaltenStreifenUndHilfen.md) durch den Reviewer über 57 Minuten, davon ein
+Anliegen 1550 durch den Reviewer über 57 Minuten, davon ein
 Lauf, der die überlebenden Mutanten gegen alle Akzeptanztests startet. Heute baut das
 Werkzeug Fehler in alle seit der jüngsten `Freigabe Plan` geänderten Domänenmodule und
 lässt je Mutant Einheits- und Akzeptanztests laufen

@@ -26,7 +26,7 @@ Bezug: [1610](1610-ziehenUeberDieKanteUndGreifpunkt.md) Punkt 1 ist ein anderer 
 man über der Kante los, schickt die Seite nichts, und der Block bleibt nach AUF-16.6 am Anfang
 stehen. Das ist eine Frage an die Anforderung, nicht an den Code. Das Blitzen dagegen trifft
 jedes Loslassen im *Spielfeld*. Folgt der Stakeholder dort der Empfehlung, blitzt es ohne
-Abhilfe auch an der Kante. [1590](1590-rasterMutantUndRaenderDerAbfrage.md) Punkt 3 (eine alte
+Abhilfe auch an der Kante. Anliegen 1590 Punkt 3 (eine alte
 Antwort der Abfrage setzt Kreise nach dem Zug) ist behoben und nicht die Ursache: Nach dem
 Loslassen schreibt keine Abfrage mehr.
 

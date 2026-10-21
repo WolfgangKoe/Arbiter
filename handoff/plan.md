@@ -53,20 +53,20 @@ An dich, an den Anforderungsautor, Vorschläge von ihm: keine. Sonst: [Moderatio
 - [x] Fachkritiker: Kritik an den Tests zu Item setzenPerKlick
   Hindernis: 1120: Tests zu AUF-18.2, 18.3 prüfen Formation und kürzesten Weg nicht, QUE-3.4 widerspricht AUF-16.6; dazu 1121 an den Anforderungsautor (Anliegen 1143)
 - [x] Architekt: Kritik an den Tests zu Item setzenPerKlick
-  Hindernis: Anliegen 1140: Spiegel, Ruff und toter Code rot (Anliegen 1142)
+  Hindernis: Anliegen 1140: Spiegel, Ruff und toter Code rot (Anliegen 1142); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Implementierer: Tests zu Item setzenPerKlick grün
 - [x] Architekt: Kritik am Code zu Item setzenPerKlick
-  Hindernis: Anliegen 1212: ruff E501 in aufstellen/__init__.py, ziehen.py nach setzenPerKlick.py, tote Klassen des Abzeichens in komponenten.css und komponenten.html (Anliegen 1214)
+  Hindernis: Anliegen 1212: ruff E501 in aufstellen/__init__.py, ziehen.py nach setzenPerKlick.py, tote Klassen des Abzeichens in komponenten.css und komponenten.html (Anliegen 1214); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Reviewer: Kritik am Code zu Item setzenPerKlick
-  Hindernis: Anliegen 1220: Ein Zug von mehr als 4 px auf der Einheitenkarte wählt aus, auf dem Spielfeld setzt er die Formation (V8) (Anliegen 1222)
+  Hindernis: Anliegen 1220: Ein Zug von mehr als 4 px auf der Einheitenkarte wählt aus, auf dem Spielfeld setzt er die Formation (V8) (Anliegen 1222); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Fachkritiker: Item setzenPerKlick abgenommen
 - [x] Planer: Item setzenPerKlick gelöscht
 - [x] Architekt: Vertrag zu Item einheitVerschieben, bei beiden Hälften
 - [x] Testautor: Tests zu Item einheitVerschieben
-  Hindernis: Belegungsschwelle erreicht. Fertig: Tests AUF-20/21/24/25/26 in Domäne, Dienst und Bildschirm geschrieben (ebeneTest, einheitVerschiebenTest, blockAlsGanzesTest, modellPerKlickTest, anhaltenAnEinerBaseTest). Offen: 1. ruff (PLR0913 mehr als 5 Parameter in 13 Bildschirm- und Dienst-Tests, ARG001 in modellPerKlickTest anderesModellDavor und spielerEins, E501 anhaltenAnEinerBaseTest:97 und einheitVerschiebenTest:177, I001 ebeneTest). 2. Die Bildschirmtests zu 21.1, 21.2, 24.2, 26.1 laufen rot, ob aus dem richtigen Grund (nicht wegen Testfehler wie Zielpunkt außerhalb der Karte), ist ungeprüft. 3. 10 Tests grün (Randfälle Grenze berührt, nichtAusgewählt bei 20.4, Dienst 20.2), vor allem Regressionswächter. 4. Benennung, vulture, Spiegel (python3 -m pytest prozess/pruefungen) nicht gelaufen. 5. setzenPerKlickDavor in modellPerKlickTest unbenutzt, löschen. Anliegen 1190 ist erledigt. (Anliegen 1211)
+  Hindernis: Belegungsschwelle erreicht. Fertig: Tests AUF-20/21/24/25/26 in Domäne, Dienst und Bildschirm geschrieben (ebeneTest, einheitVerschiebenTest, blockAlsGanzesTest, modellPerKlickTest, anhaltenAnEinerBaseTest). Offen: 1. ruff (PLR0913 mehr als 5 Parameter in 13 Bildschirm- und Dienst-Tests, ARG001 in modellPerKlickTest anderesModellDavor und spielerEins, E501 anhaltenAnEinerBaseTest:97 und einheitVerschiebenTest:177, I001 ebeneTest). 2. Die Bildschirmtests zu 21.1, 21.2, 24.2, 26.1 laufen rot, ob aus dem richtigen Grund (nicht wegen Testfehler wie Zielpunkt außerhalb der Karte), ist ungeprüft. 3. 10 Tests grün (Randfälle Grenze berührt, nichtAusgewählt bei 20.4, Dienst 20.2), vor allem Regressionswächter. 4. Benennung, vulture, Spiegel (python3 -m pytest prozess/pruefungen) nicht gelaufen. 5. setzenPerKlickDavor in modellPerKlickTest unbenutzt, löschen. Anliegen 1190 ist erledigt. (Anliegen 1211); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Fachkritiker: Kritik an den Tests zu Item einheitVerschieben
 - [x] Architekt: Kritik an den Tests zu Item einheitVerschieben
-  Hindernis: Anliegen 1215: Tests zu Item 2 prüfen ‚ohne Grund‘ über gesperrt und gründeDerGesperrten, die V10 mit Item 3 streicht; Docstring von ziehen.py, Wiederholungen, Ausschnitte statt Entpacken (Anliegen 1292)
+  Hindernis: Anliegen 1215: Tests zu Item 2 prüfen ‚ohne Grund‘ über gesperrt und gründeDerGesperrten, die V10 mit Item 3 streicht; Docstring von ziehen.py, Wiederholungen, Ausschnitte statt Entpacken (Anliegen 1292); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Implementierer: Tests zu Item einheitVerschieben grün
 - [x] Architekt: Kritik am Code zu Item einheitVerschieben
   Hindernis: Neuer Code verletzt Architektur M1: Das Hineinrücken in einheitVerschieben.py kennt die Baseform und doppelt _rückung aus setzenPerKlick.py; Befund und Gegenvorschlag in Anliegen 1410. (Anliegen 1411)
@@ -77,9 +77,9 @@ An dich, an den Anforderungsautor, Vorschläge von ihm: keine. Sonst: [Moderatio
 - [x] Testautor: Tests zu Item anhaltenAnBases
   Hindernis: Offen: 26.2 bis 26.4 stehen in anhaltenAnEinerBaseTest.py (ruff E501 und Format noch beheben; Hilfe anhalten.py; Fixture andereEinheitAufgestellt in conftest.py). AUF-24.1 fehlt in blockAlsGanzesTest.py: Abfrage stellenBeimLoslassen mit drei gesetzten Boyz (21.1, 21.2, fremde Base), Dienst samt Beispiel stelleBeimLoslassen.json, Seite mit haltenUndLosslassen. Danach Rotprüfung, ruff, prozess/pruefungen, abhaken (Anliegen 1291); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Fachkritiker: Kritik an den Tests zu Item anhaltenAnBases
-  Hindernis: 1350: Tests zu AUF-9.1, 9.3, 12.1, QUE-3.5 und der Bildschirmtest zu 17.1 stehen noch und widersprechen AUF-26.1 und 26.2; danach 1351 an den Anforderungsautor (Anliegen 1353)
+  Hindernis: 1350: Tests zu AUF-9.1, 9.3, 12.1, QUE-3.5 und der Bildschirmtest zu 17.1 stehen noch und widersprechen AUF-26.1 und 26.2; danach 1351 an den Anforderungsautor (Anliegen 1353); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Architekt: Kritik an den Tests zu Item anhaltenAnBases
-  Hindernis: Die Seite wird nie gegen das Beispiel stelleBeimLoslassen.json geprüft (V10 verlangt page.route): ein Bildschirmtest in blockAlsGanzesTest.py fehlt, siehe Anliegen 1360. (Anliegen 1363)
+  Hindernis: Die Seite wird nie gegen das Beispiel stelleBeimLoslassen.json geprüft (V10 verlangt page.route): ein Bildschirmtest in blockAlsGanzesTest.py fehlt, siehe Anliegen 1360. (Anliegen 1363); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Implementierer: Tests zu Item anhaltenAnBases grün
   Hindernis: 1460: vier von 160 Tests verlangen Exaktheit, die Eingabe nicht liefert (Fixture ohne Auswahl, Dezimalzahl des Dienstes, Pixel der Seite); 92 der 96 roten Fälle sind grün, kein anderer Test rot (Anliegen 1461)
 - [x] Architekt: Kritik am Code zu Item anhaltenAnBases

@@ -1,81 +1,64 @@
-# Retro · Zyklus 5
+# Retro · Zyklus 6
 
 Dashboard: im Projektordner
 `python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten,
 `http://127.0.0.1:8765/` öffnen, Strg+C beendet.
 
-Etappe 1 von 7 (Aufstellen), Zyklus 5, keine erreicht; 74 von 94 Kriterien haben einen
-Akzeptanztest. Neu am Bildschirm: *Einheiten* auf die *Karte* ziehen, *Modelle*
-verschieben, *gesperrt* stehen mit *Grund*, „zurück“, „Aufstellen der Einheit beenden“.
-Es fehlen „gemeinsam übergehen“ mit *Protokoll*, *Gewinner* und Zone, *Leisten* und das
-Aufstellen per Klick wie ArbiterMap.
+Etappe 1 von 7 (Aufstellen), Zyklus 6, keine erreicht; 78 von 103 Kriterien haben einen
+Akzeptanztest (Zyklus 5: 74 von 94). Neu am Bildschirm: eine *Einheit* per Klick als
+*Formation* *setzen*, als Block oder ein *Modell* allein ziehen; sie halten an fremden *Bases*
+und am Rand der Zone an ([Review 6](review.md)).
 
 ## Was geklappt hat
-- Die Domänenphase: Anforderungen und Mockups nach den Vorbildern, das Format passt (dein
-  Urteil).
-- Der Reviewer baute Fehler in den Code ein und fand zwei Fälle, die kein Test prüft.
+- Alle drei Items des Plans sind gebaut, abgenommen und gelöscht.
+- Die Mutationstests fanden Fälle, die kein Test prüfte (1551, 1590).
 
 ## Was nicht geklappt hat
-1. Du siehst nicht, was passiert: Der Fortschritt unten hakt nur ab, was ein Skript
-   erkennt; die Kritik ist geschehen, ihr Haken fehlt.
-2. Feinschliff bremste: 89 Anliegen, 114 Commits, nur 8 mit Produktcode; mehr neuer
-   Prüfcode (2.668 Zeilen) als Produktcode (1.035). Rollen stritten über Form und Länge,
-   Kritikrunden hatten kein Ende, Regelumsetzer und ich liefen neben dem Produkt.
-3. Niemand prüfte die Anforderungen fachlich; die fehlende Bedienung per Klick fiel erst dir
-   auf.
-4. Ich habe Regeln vor deiner Freigabe geändert; P1 nimmt sie zurück.
+1. Der Reviewer wartete auf Mutationsläufe: 72 Minuten im ersten Lauf, die DoD jetzt über
+   80; jeder Mutant startet alle Tests samt Bildschirmtests (1570).
+2. Viermal schrieb eine Rolle per Python-Skript über Bash (Testautor, Architekt in 1530,
+   Implementierer in 1542 und 1551); die Schreibgrenze sperrte spät oder nicht (Lücke 510).
+3. Befunde standen nur in der Schlussantwort (Anforderungsautor zu W3 und que-7, Reviewer
+   zu 1551); der Koordinator forderte die Anliegen nach ([Ich 5](../prozess/praemissen/ich.md)).
+4. Der Implementierer setzte als Empfänger `erledigt`; die Nachprüfung hätte entfallen
+   können (1581, 1591).
+5. Der Befehl für ein Hindernis vergab eine Nummer aus dem Bereich einer anderen Rolle; das
+   Hindernis zu 1560 fehlt im Plan.
+6. Prüfcode gegen Produktcode (730): seit „Freigabe Retro 5“ 1.659 neue Zeilen Prüfcode,
+   539 Produktcode, über der Schwelle.
+   Prozesslast: 12 von 134 neuen Anliegen, unter einem Drittel.
+7. Wartende Anliegen fehlen im Dashboard (1670); Kommentare im Code wiederholen, was
+   Testnamen und Prüfungen sichern (1660).
 
-## Backlog
-Mutationstests sind jetzt P3; zwölf der übrigen 13 Punkte löscht P1.
+Ohne Item: Architekt und Reviewer lagen bei 128.000 Token, der Hook meldete wie vorgesehen;
+gleichzeitige Läufe sahen fremde Zwischenstände rot und liefen bei geteilten Dateien
+nacheinander, wie [Gleichzeitige Läufe](../prozess/ablauf.md#gleichzeitige-läufe) es verlangt.
 
 ## Prozess-Items
-- P1 Ablauf nach deinem Modell (Organisationsentwickler):
-  - Domäne: Der Anforderungsautor leitet zum Etappenziel die Happy Paths des Spielers aus
-    ArbiterMap und Arbiter-old ab, UX zeichnet die Mockups, der Fachkritiker prüft beides
-    gegen Ziel und Regeltext. Die Vorbilder gelten nur der Domäne; eine Abweichung ist eine
-    Frage an dich. Dann der Plan; alle Rollen kritisieren.
-  - Technik: Testautor, Kritik aller Rollen; Implementierer; den Produktcode prüfen
-    Architekt (Architektur) und Reviewer (Lesbarkeit); dann das Review.
-  - Kritik: je Artefakt eine Runde aller Kritiker; jeder ordnet seine Befunde ein, der Autor
-    bessert nach oder widerspricht. Eine weitere Runde nur für, was aufhält; nach der
-    dritten entscheidest du. Hält auf: Ein Schritt des Happy Path fehlt, eine *Sperre*
-    greift zu Unrecht oder fehlt, obwohl ein Kriterium sie verlangt, ein Test prüft sein
-    Kriterium nicht, neuer Code verletzt Architektur oder Lesbarkeit, eine Prüfung ist rot.
-    Wartet auf die nächste Phase: Randfälle, Lücken abseits des Happy Path (auch eine
-    *Sperre*, die nur der Regeltext verlangt), Namen und Ablage von Hilfsfunktionen,
-    solange keine Prüfung rot ist. Entfällt: Form und Länge eines Anliegens, Geschmack
-    ohne Regel.
-  - Fehlt einer Rolle eine Entscheidung, fragt sie dich mit Empfehlung und arbeitet damit
-    weiter, außer es hält den Happy Path auf; die Moderation listet solche Annahmen zuoberst.
-  - Prozessregeln, Prämissen und Rollen ändern sich nur in der Prozessphase nach deiner
-    Freigabe, die Architektur in der Technikphase. Die Retro beschreibt jedes Item in Worten.
-  - Commits: nach jeder Phase und jedem Item mit Produktcode, samt Kritik und Anliegen.
-- P2 Der Stand zeigt, was wirklich ist (Regelumsetzer): Rollen haken Kritik und
-  Nachkorrektur selbst ab; wartende Anliegen gelten nicht als dran; erste Zeile Etappe und
-  Kriterien wie oben.
-- P3 Mutationstests (Regelumsetzer, 692): Ein Werkzeug baut Fehler in geänderte
-  Domänenmodule ein und zählt, welche kein Test bemerkt. Es ersetzt die Probe des Reviewers,
-  Lücken gehen an den Testautor. Die Schwelle schlage ich nach dem ersten Lauf vor.
-
-Außerdem, da sie jede Rolle aufhalten: Schreibgrenze sperrt zu Unrecht (650), Commits
-warten auf alle Prüfungen (601).
+Zwei aus Befunden (P1, P3), dazu deine Aufträge (P2, P4, P5); ob das gilt: [1671](anliegen/1671-prozessphaseVorziehen.md).
+- P1 Regeln nachziehen (Organisationsentwickler): Was du entschieden hast, steht danach im
+  Ablauf und in den Rollen: Kennzahl Prüfcode gegen Produktcode, Beginn der Retro, Kritiker
+  gleichzeitig (730), ein Commit für mehrere Items (740), der Empfänger setzt nie `erledigt`
+  (Befund 4), Befunde nur als Anliegen (Befund 3), Es 8 nach 1660, der Kopf nach 1670 und
+  die drei Punkte des [Backlogs](../prozess/backlog.md) mit Auslöser „Freigabe Retro 6“.
+- P2 Mutationslauf in Minuten (Regelumsetzer, 1570): Mutanten nur in geänderten Zeilen, je
+  Mutant nur die Tests, die die Zeile ausführen; ein Ergebnis gilt weiter, solange Modul und
+  Tests gleich bleiben. Den Zielwert schlage ich in 1570 vor.
+- P3 Schreiben nur mit Write und Edit (Regelumsetzer, Befund 2): Ein Skript einer Rolle
+  schreibt nicht mehr ins Projekt. Zuerst das Bordmittel, die Sandbox von Claude Code für
+  Bash; das Betriebssystem setzt sie auch für Skripte durch, Teile von
+  `rollenregeln/bashSchreiben.py` entfallen dann.
+- P4 Anliegenboard nach Phasen (Regelumsetzer, 1670): Das Dashboard zeigt alle nicht
+  erledigten Anliegen: wer jetzt dran ist, was auf ein anderes wartet, was für die nächsten
+  Phasen vorgemerkt ist, je mit Kommentarfeld. Den Kopf lesen und schreiben alle Skripte
+  über ein Modul, auch der Befehl für ein Hindernis, der nur freie Nummern vergibt (Befund 5).
+- P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): Im Code stehen nur Werkzeugkommentare
+  und gedeckelte TODOs; ein TODO aus einer früheren Technikphase macht die DoD rot.
 
 ## Empfehlung
-Freigeben. Danach P1 bis P3, dann Domänenphase 6 mit dem Aufstellen per Klick.
-Stellungnahme: P1 gibt deine Antworten in 693 wieder, geschärft nach 695 und 697.
-
-## Fortschritt
-- [x] Organisationsentwickler: Retro geschrieben
-- [ ] Fachkritiker: Kritik an der Retro
-- [ ] Architekt: Kritik an der Retro
-- [x] Organisationsentwickler: Nachkorrektur
-- [x] Stakeholder: Freigabe Retro 5
-- [x] Organisationsentwickler: P1
-- [x] Regelumsetzer: P2
-- [x] Regelumsetzer: P3
-- [x] Koordinator: nach dev gepusht
+Kritik und Freigabe nach „Freigabe Review 6“; vorher fehlen der Fortschritt dieser Retro und
+die Aufträge aus dem Rundgang Prüfcode des Reviews. Danach P1, dann P2 bis P5.
 
 ## Freigabe
-Freigabe: ja
-Kommentar: S. Anliegen 692 vom Architekten, bitte Mutationstests als item P3 einführen.
-Stellungnahme: P3 steht, Backlog bereinigt.
+Freigabe: offen
+Kommentar: .

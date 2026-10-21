@@ -4,7 +4,7 @@
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders in Zyklus 6, Anlass der Mutationslauf über Plan 6
-mit 93 % ([1632](1632-mutationslaufUnterDerSchwelle.md)), im Wortlaut:
+mit 93 % (Anliegen 1632), im Wortlaut:
 
 > Die 95 % sind eine untere Grenze. Wenn schon klar ist, welche Tests ein Problem sind, dann
 > sollten auch alle angegangen werden. Die Richtlinie (keine harte Regel) wäre: Unterschreitet
@@ -41,7 +41,7 @@ Anliegen, die der Reviewer beurteilt, oder die Zeile vereinfachen, wenn die Glei
 überflüssigen Code zeigt.
 
 Stand in 1632: Alle 15 Überlebenden sind angegangen, 13 als gleichwertig begründet (Reviewer
-und Testautor), zwei mit Einheitstests in [1710](1710-unitTestsFuerZweiMutantenAusPlan6.md),
+und Testautor), zwei mit Einheitstests in Anliegen 1710,
 gezielt geprüft, ohne vollen Lauf.
 
 **Stellungnahme.**

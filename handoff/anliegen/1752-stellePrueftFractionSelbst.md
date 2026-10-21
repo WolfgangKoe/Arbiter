@@ -3,7 +3,7 @@
 1752 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
 
 ## Runde 1
-**Befund.** Kritik am Code zu [1760](1760-formationEinerReiheRechnetMitFloat.md). Die Abhilfe
+**Befund.** Kritik am Code zu Anliegen 1760. Die Abhilfe
 dort hält [S2](../../technik/architektur.md#stelle-und-rechnen) wieder ein, und die
 Architektur ist eingehalten. Der Fall zeigt aber eine Lücke: Eine *Stelle* mit float entstand
 mitten in der Domäne, und keine Prüfung schlug an. S2 nennt als Prüfung nur „die Grenzfälle

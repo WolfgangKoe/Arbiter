@@ -5,7 +5,7 @@
 ## Runde 1
 **Befund.** Beitrag zur offenen Frage in [1740](1740-mutationsschwelleAlsUntereGrenze.md):
 Was heißt „repariert“ bei einem gleichwertigen Mutanten? Aus der Kritik am Code zu
-[1710](1710-unitTestsFuerZweiMutantenAusPlan6.md). Bei vier gleichwertigen Mutanten wurden Code
+Anliegen 1710. Bei vier gleichwertigen Mutanten wurden Code
 oder Tests so geändert, dass der Mutant nicht mehr entsteht oder gefangen wird, nicht weil der
 Code dadurch besser wird:
 

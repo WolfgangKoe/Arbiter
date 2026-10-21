@@ -12,8 +12,8 @@ Anforderung, [Architektur, T1](../../technik/architektur.md)). Nach
 [Ich 3](../../prozess/praemissen/ich.md) wartet das: keine Prüfung ist rot, das Kriterium
 hat seinen Test. Die Zeichen je Kriterium: 26.1 rund 5.300, 26.2 rund 6.500, 26.3 rund 4.700,
 26.4 rund 3.200, dazu 3.100 Tabellen der Züge. Räumt der Testautor die Hilfen auf
-([1361](1361-anhaltenHilfenDoppeltUndQuerAbgelegt.md)), bleiben für 26.2 bis 26.4 noch über
-12.000, ohne die Fälle aus [1352](1352-luekenTestsZuAnhaltenAnBases.md).
+(Anliegen 1361), bleiben für 26.2 bis 26.4 noch über
+12.000, ohne die Fälle aus Anliegen 1352.
 
 **Kosten.** Bis zur Teilung wächst die Datei nicht; die Fälle aus 1352 brauchen die Teilung
 oder warten. Wer einen Test zum Anhalten sucht, liest 600 Zeilen.

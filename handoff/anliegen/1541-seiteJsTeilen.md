@@ -5,7 +5,7 @@
 ## Runde 1
 **Befund.** [seite.js](../../technik/frontend/seite.js) hat 12.124 Zeichen, das Höchstmaß
 eines Code-Moduls ist 12.000, das Kürzungsmaß 8.000 ([Kennzahlen](../../prozess/kennzahlen.md#höchstmaße)).
-Nach [1440](1440-kritikAmCodeAnhaltenAnBases.md), Punkt 4, wächst sie nicht mehr (vorher
+Nach Anliegen 1440, Punkt 4, wächst sie nicht mehr (vorher
 12.486). Kein Item nennt die Teilung, kein Backlog führt sie. Nach [Ich 3](../../prozess/praemissen/ich.md)
 wartet es: Höchstmaße sind nur Text, keine Prüfung ist rot.
 
