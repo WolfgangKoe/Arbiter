@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 2060
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich sehe in handoff ganz viele fertige Anliegen, die
@@ -28,34 +27,25 @@ wir es möglichst so, wie es jetzt ist‘ werde ich nicht akzeptieren. Wir müss
 Prozessen Stück für Stück effektiver und effizienter werden, so dass ausreichend Transparenz,
 aber auch Ordnung gewährleistet ist.“
 
-Bestehende Regeln, die das berühren ([Ich 4](../../prozess/praemissen/ich.md)):
-- Kopf und Status: [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen), geprüft von
-  `anliegenregeln/anliegen.py`; Köpfe schreiben auch `standregeln/hindernis.py` und das
-  Formular des Dashboards (`rollenregeln/dashboardAnliegenSeiten.py`).
-- Das Dashboard zeigt je Rolle nur, wer dran ist, und fällige Nachprüfungen
-  (`rollenregeln/dashboardAnliegen.py`, `zuständige`); was `anliegenregeln/anliegenDran.py`
-  (`wartet`) als wartend erkennt, fehlt. In der Technikphase 6 sind das 20 Anliegen, dieses mitgezählt.
-- Verwandt: Anliegen 1070 (wartende Nachprüfung gilt
-  als fällig).
+Bestehende Regeln ([Ich 4](../../prozess/praemissen/ich.md)): Kopf und Status in
+[Ablauf, Anliegen](../../prozess/ablauf.md#anliegen); das Board zeigte nur, wer dran ist, und
+fällige Nachprüfungen, keine wartenden Anliegen.
 
-**Kosten.** Der Stakeholder sieht vorgemerkte Anliegen nur in `handoff/`, nicht im Dashboard,
-und kann sie dort nicht kommentieren. Ein Kopf in einer Zeile mit sechs Teilen ist schwer zu
-lesen, und jedes Skript, das ihn liest oder schreibt, zerlegt ihn selbst.
+**Kosten.** Der Stakeholder sieht vorgemerkte Anliegen nur in `handoff/` und kann sie nicht
+kommentieren. Ein Kopf in einer Zeile mit sechs Teilen ist schwer zu lesen.
 
 **Gegenvorschlag.** Fragen an die Prozessphase; den Mechanismus baut der Regelumsetzer:
-1. Welche Bereiche zeigt das Board: jetzt dran, wartet auf ein anderes Anliegen, vorgemerkt
-   je folgende Phase in der Reihenfolge der Rotation?
-2. Welche Felder hat der Kopf, je Zeile eines, und wer liest und schreibt sie an einer Stelle
-   (ein Lese- und Schreibmodul statt Muster in jedem Skript)?
-3. Wie kommen die offenen Anliegen in die neue Form: ein Lauf, der alle Köpfe umschreibt?
-4. Welche Felder kann der Stakeholder im Formular setzen, auch für Vorgemerktes?
+1. Welche Bereiche zeigt das Board?
+2. Welche Felder hat der Kopf, und wer liest und schreibt sie an einer Stelle?
+3. Wie kommen die offenen Anliegen in die neue Form?
+4. Was kann der Stakeholder im Formular setzen?
 
-**Stellungnahme.** Angenommen, [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen); den
-Mechanismus baut der Regelumsetzer mit P4. 1: dran je Rolle samt Nachprüfung, wartet auf ein
-Anliegen, vorgemerkt je Phase nach der Rotation. 2: `Form:`, `Von:`, `An:`, `Runde:`,
-`Status:`, `Wartet auf:` je Zeile, die Nummer nur im Dateinamen; ein Modul liest und schreibt.
-3: ein Lauf schreibt alle offenen Köpfe um. 4: Kommentar überall, Status und Antwort wie bisher.
+**Stellungnahme.** Angenommen, [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen), gebaut
+mit P4. 1: dran je Rolle samt Nachprüfung, wartet auf ein Anliegen, vorgemerkt je Phase nach
+der Rotation. 2: `Form:`, `Von:`, `An:`, `Runde:`, `Status:`, `Wartet auf:` je Zeile, die
+Nummer nur im Dateinamen; ein Modul liest und schreibt. 3: ein Lauf schrieb alle offenen Köpfe
+um. 4: Kommentar, Status und Antwort im Formular auf der Seite des Anliegens.
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
 Stellungnahme: Wenn in der [Retro 6](../retro.md) „Regelumsetzer: P4“ abgehakt ist und das Dashboard die Bereiche aus 1 und die Köpfe aus 2 zeigt.
 Kommentar: Ein Kommentar hierzu. Es ist zwar nett, dass ich überall Kommentare setzen darf. Aber diese Funktion ist mir hier etwas zu offensiv. Ich hätte alles lieber kompakter. einen Kommentar setze ich dann, wenn ich das ANliegen öffne. Die Fortschrittsliste darf auch etwas kompakter sein und neben dem Anliegenboard als kompakte Liste angeordnet sein.
-Stellungnahme: Im [Ablauf](../../prozess/ablauf.md#anliegen), bauen soll es der Regelumsetzer ([2060](2060-boardOhneKommentarfelderFortschrittDaneben.md)): Karten ohne Feld, rechts daneben der Fortschritt als Liste, Haken per Klick, Kommentarfeld erst beim Klick auf die Zeile. Danach setze ich `angenommen`.
+Stellungnahme: Gebaut ([Ablauf, Fortschritt](../../prozess/ablauf.md#fortschritt)): Karten ohne Feld; rechts neben dem Board der Fortschritt als Liste, Haken per Klick, ein gesetzter als Feld mit ✓, nicht entfernbar, Zeilen mit Fakt gesperrt; das Kommentarfeld erst beim Klick auf den Text der Zeile.

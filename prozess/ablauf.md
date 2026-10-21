@@ -275,9 +275,9 @@ Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den le
 
 Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
 Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
-`standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py`,
-`standregeln/zeilenZug.py`; Kontrast der Haken: nur Text bis Anliegen 2060; eine Zeile, deren
-Fakt noch fehlt, sperren: nur Text bis Anliegen 2061.
+`standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
+Sperre der Zeilen mit Fakt), `standregeln/zeilenZug.py` (weist den Haken darauf ab; Anliegen
+2061); ob sich die Haken deutlich abheben: Urteil des Stakeholders.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
