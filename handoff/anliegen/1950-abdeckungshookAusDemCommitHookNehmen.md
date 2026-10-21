@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Retro 6](../retro.md), P2 verlangt: Der Commit-Hook lässt die Produkttests aus.
@@ -28,3 +28,10 @@ Umgesetzt: Der Hook `abdeckung` ist aus `.pre-commit-config.yaml` gestrichen; ei
 `testEinCommitInTechnikStartetKeineProduktTests` in `formregeln/commitHooksTest.py` (gegen die
 alte Konfiguration rot, geprüft). Mutationstest entfällt: keine Zeile unter `technik/arbiter`
 geändert. [Regeln](../../prozess/regeln.md) nachgezogen. Status bleibt angenommen bis zur Nachprüfung.
+
+## Nachprüfung Regelumsetzer
+Geprüft an Commit 1e8166e: `.pre-commit-config.yaml` hat keinen Hook `abdeckung` mehr, `stand`
+trägt `not abdeckung`; `testEinCommitInTechnikStartetKeineProduktTests` und die übrigen Tests
+in `formregeln/commitHooksTest.py` sind grün; der Ablauf (Commits) und
+[Regeln](../../prozess/regeln.md#formregeln) nennen es; `python3 -m pytest prozess/pruefungen`
+grün (752), SonarLint ohne Funde. Erledigt.

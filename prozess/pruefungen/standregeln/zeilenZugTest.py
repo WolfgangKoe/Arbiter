@@ -12,6 +12,7 @@ planText = (
     "## Freigabe\nFreigabe: offen\nKommentar: .\n"
 )
 zeile = "Implementierer: Tests zu Item stellen grün"
+faktZeile = "Reviewer: Review geschrieben"
 stakeholderZeile = "Stakeholder: Freigabe Review 1"
 
 
@@ -38,6 +39,12 @@ def testDerHakenDesStakeholdersSetztUndNimmtDieZeile(tmp_path, plan):
     assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
     assert zeilenzugÜbernehmen(tmp_path, zeile, "haken", "") is None
     assert f"- [ ] {zeile}\n" in plan.read_text(encoding="utf-8")
+
+
+def testDerHakenAufEineZeileMitFaktWirdAbgewiesen(tmp_path, plan):
+    vorher = plan.read_text(encoding="utf-8")
+    assert zeilenzugÜbernehmen(tmp_path, faktZeile, "haken", "x")
+    assert plan.read_text(encoding="utf-8") == vorher
 
 
 def testEinKommentarLegtEinAnliegenAnDieRolleUndEineZeileAn(tmp_path, plan):

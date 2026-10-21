@@ -248,9 +248,10 @@ Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, ang
   sie es mit dem Befehl und nennt die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
   Stakeholder Fragen) und schreibt die Zeile `Hindernis:`.
 - Dashboard: Der Fortschritt der laufenden Phase steht als kompakte Liste neben dem
-  Anliegenboard. Der Stakeholder hakt jede Zeile mit einem Klick ab; ein Klick auf ihren Text
-  öffnet das Kommentarfeld (Anliegen 1670). Der Kommentar wird ein Anliegen von ihm an die
-  Rolle der Zeile.
+  Anliegenboard. Der Stakeholder hakt eine Zeile, die kein Fakt abhakt, mit einem Klick ab;
+  ein gesetzter Haken bleibt, alle Haken sehen gleich aus und heben sich deutlich vom leeren
+  Kästchen ab. Ein Klick auf ihren Text öffnet das Kommentarfeld (Anliegen 1670, 2060). Der
+  Kommentar wird ein Anliegen von ihm an die Rolle der Zeile.
 
 Phase · Schritt | Zeile | abgehakt durch
 ---|---|---
@@ -275,8 +276,8 @@ Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den le
 Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
 Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
 `standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py`,
-`standregeln/zeilenZug.py`; Liste neben dem Board, Kommentarfeld erst beim Klick: nur Text bis
-Anliegen 2060.
+`standregeln/zeilenZug.py`; Kontrast der Haken: nur Text bis Anliegen 2060; eine Zeile, deren
+Fakt noch fehlt, sperren: nur Text bis Anliegen 2061.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
@@ -406,8 +407,8 @@ Legende im Anliegen entfällt (Anliegen 420). Mechanismus: `rollenregeln/dashboa
 Das Dashboard zeigt jedes nicht erledigte Anliegen als Karte ohne Eingabefeld, in Bereichen:
 dran je Rolle samt fälliger Nachprüfung, wartet auf ein Anliegen, vorgemerkt je folgende Phase
 in der Reihenfolge der Rotation. Kommentiert wird im Formular, wenn er das Anliegen öffnet
-(Anliegen 1670). Mechanismus: `rollenregeln/dashboardAnliegen.py` (Bereiche); Karte ohne
-Eingabefeld: nur Text bis Anliegen 2060.
+(Anliegen 1670, 2060). Mechanismus: `rollenregeln/dashboardAnliegen.py`,
+`rollenregeln/dashboardAnliegenSeiten.py` ([Regeln](regeln.md#rollenregeln)).
 Ein `Kommentar:` von ihm, der den Status nicht ändert, geht an die andere Rolle des Anliegens:
 Sie antwortet mit einer Zeile `Stellungnahme:` darunter und ist bis dahin dran (Anliegen
 384). Mechanismus: nur Text.

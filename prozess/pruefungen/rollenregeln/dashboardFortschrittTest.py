@@ -15,6 +15,7 @@ planText = (
     "## Freigabe\nFreigabe: offen\nKommentar: .\n"
 )
 zeile = "Implementierer: Tests zu Item stellen grün"
+faktZeile = "Reviewer: Review geschrieben"
 
 
 def schreiben(wurzel: Path, pfad: str, text: str) -> Path:
@@ -68,9 +69,20 @@ def testDerHakenGiltMitDemKlickOhneKnopf(tmp_path):
 
 def testEinGesetzterHakenIstGesperrtUndEinKommentarEntferntIhnNicht(tmp_path, plan):
     senden(tmp_path, f"zeile={quote(zeile)}&haken=x")
-    assert 'value="x" checked disabled' in startseite(tmp_path)
+    seite = startseite(tmp_path)
+    assert '<span class="haken" role="img" aria-label="abgehakt">✓</span>' in seite
+    assert 'type="checkbox"' not in seite.split(f"<summary>{zeile}")[0].rsplit("<li>", 1)[-1]
     senden(tmp_path, f"zeile={quote(zeile)}&haken=&kommentar={quote('Noch eins.')}")
     assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineZeileMitNochFehlendemFaktIstGesperrtUndDerServerSetztSieNicht(tmp_path, plan):
+    vorher = plan.read_text(encoding="utf-8")
+    seite = startseite(tmp_path)
+    vorDerZeile = seite.split(f"<summary>{faktZeile}")[0].rsplit("<li>", 1)[-1]
+    assert 'name="haken" value="x" disabled' in vorDerZeile
+    senden(tmp_path, f"zeile={quote(faktZeile)}&haken=x")
+    assert plan.read_text(encoding="utf-8") == vorher
 
 
 def testEinHindernisStehtUnterDerZeileMitLinkAufDasAnliegen(tmp_path, plan):

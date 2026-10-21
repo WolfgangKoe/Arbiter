@@ -55,3 +55,5 @@ Kommentar: So sieht das schon besser aus, aber die unterschiedliche Formatierung
 Stellungnahme: Eingearbeitet. Ein gesetzter Haken ist gesperrt und lässt sich nicht entfernen
 (auch der Server setzt nur noch, nie zurück); alle Haken haben dieselbe Farbe, gesperrte wie
 freie.
+Kommentar: Es sollte schon ausreichend Kontrast geben, damit ich die Haken erkennen kann.
+Stellungnahme: Haken sind Felder mit ✓ in Akzentfarbe.

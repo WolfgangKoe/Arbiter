@@ -22,7 +22,9 @@ ul.fortschritt{list-style:none;margin:0;padding:0;font-size:.82rem}
 ul.fortschritt li{padding:2px 0;border-bottom:1px solid var(--border)}
 ul.fortschritt form{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
 ul.fortschritt details{flex:1 1 0;min-width:0}
-ul.fortschritt input[type=checkbox]{accent-color:var(--accent-text);opacity:1}
+ul.fortschritt input[type=checkbox]{margin:0 3px 0 0}
+ul.fortschritt .haken{color:var(--bg);background:var(--accent-text);font-weight:700;
+border-radius:3px;width:1.1em;height:1.1em;line-height:1.1em;text-align:center;flex:none}
 ul.fortschritt summary{cursor:pointer}
 ul.fortschritt details input[type=text]{width:100%;box-sizing:border-box}
 ul.fortschritt .vermerk{flex-basis:100%;margin-left:22px;color:var(--text-muted)}
@@ -38,14 +40,17 @@ def vermerkHtml(zeile: str) -> str:
 
 def zeileHtml(schlüssel: str, *, abgehakt: bool, zusatz: list[str], vonFakt: bool) -> str:
     schlüsselText = html.escape(schlüssel, quote=True)
-    gesperrt = " disabled" if vonFakt or abgehakt else ""
-    markiert = " checked" if abgehakt else ""
+    gesperrt = " disabled" if vonFakt else ""
+    haken = (
+        '<span class="haken" role="img" aria-label="abgehakt">✓</span>'
+        if abgehakt
+        else f'<input type="checkbox" name="haken" value="{abgehaktWert}"{gesperrt} '
+        'onchange="this.form.submit()">'
+    )
     vermerke = "".join(vermerkHtml(zeile) for zeile in zusatz)
     return (
         f'<li><form method="post" action="{fortschrittPfad}">'
-        f'<input type="hidden" name="zeile" value="{schlüsselText}">'
-        f'<input type="checkbox" name="haken" value="{abgehaktWert}"{markiert}{gesperrt} '
-        'onchange="this.form.submit()">'
+        f'<input type="hidden" name="zeile" value="{schlüsselText}">{haken}'
         f"<details><summary>{html.escape(schlüssel)}</summary>"
         '<input type="text" name="kommentar" placeholder="Kommentar">'
         f'<button type="submit">Kommentieren</button></details>{vermerke}</form></li>'
@@ -63,7 +68,7 @@ def fortschrittListe(ordner: Path) -> str:
     for zeile in zeilen:
         abgehakt, zusatz = bisher.get(zeile.schlüssel, (False, []))
         punkte += zeileHtml(
-            zeile.schlüssel, abgehakt=abgehakt, zusatz=zusatz, vonFakt=zeile.fakt is True
+            zeile.schlüssel, abgehakt=abgehakt, zusatz=zusatz, vonFakt=zeile.fakt is not None
         )
     return f'<ul class="fortschritt">{punkte}</ul>' if punkte else keinAbschnitt
 

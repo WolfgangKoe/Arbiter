@@ -36,6 +36,7 @@ Status: offen
 keineZeile = "Die Zeile steht nicht mehr im Fortschritt."
 keineRolle = "Die Zeile gehört keiner Rolle; kommentiere im Anliegen."
 leer = "Der Kommentar war leer."
+vonFakt = "Die Zeile hakt ein Fakt ab; sie lässt sich nicht von Hand setzen."
 
 
 def zeileFinden(wurzel: Path, schlüssel: str) -> tuple[Path, list[Zeile], Zeile] | None:
@@ -71,6 +72,8 @@ def zeilenzugÜbernehmen(wurzel: Path, schlüssel: str, art: str, wert: str) -> 
     datei, zeilen, zeile = gefunden
     text = einzeiler(wert)
     rolle = beseitigerName(wurzel, zeile.rolle)
+    if art == hakenArt and zeile.fakt is not None:
+        return vonFakt
     if art == kommentarArt and not text:
         return leer
     if art == kommentarArt and rolle in (None, stakeholder):
