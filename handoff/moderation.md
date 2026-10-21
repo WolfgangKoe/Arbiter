@@ -6,7 +6,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
 ## Dran
 - Stakeholder: Anliegen 1860 F1 bis F3 (unten),
   dann „Freigabe Retro 6“. Deine Prüfung von 1640 ist abgeschlossen (erledigt).
-- Organisationsentwickler: [1670](anliegen/1670-anliegenboardNachPhasen.md),
+- Organisationsentwickler: Anliegen 1670,
   [1660](anliegen/1660-regelkommentareEntbehrlich.md),
   Anliegen 1581,
   Anliegen 1591,
