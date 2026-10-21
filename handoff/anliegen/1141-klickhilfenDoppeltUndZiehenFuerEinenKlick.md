@@ -1,6 +1,6 @@
 # Klick-Hilfen doppelt, ein Klick heißt Ziehen
 
-1141 · Kritik · von Architekt → Testautor · Runde 1/3 · offen · wartet auf die Technikphase
+1141 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item setzenPerKlick. Nach Ich 3: Namen und Ablage von
@@ -26,4 +26,14 @@ Namen der Eingabe wie `eingaben` in `ziehen.py`; für den Klick auf ein *Modell*
 einheitVerschieben. Erledigt, wenn jede Hilfe einmal steht und die Akzeptanztests wie vorher
 laufen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen.
+1. `karteAnklicken` steht nur noch in [dienst.py](../../technik/tests/akzeptanz/dienst.py);
+   `setzenPerKlickTest.py` und `gesperrterKlickTest.py` importieren es.
+2. `mitDerMausKlicken`, `mitDemFingerTippen`, `klickenMit` und `mitMausUndFinger` stehen nur
+   noch in [ziehen.py](../../technik/tests/akzeptanz/ziehen.py) und nehmen einen `Bildpunkt`.
+   `gesperrterKlickTest.py` übergibt `punktAufDerKarte(seite, stelle)` wie die anderen Dateien.
+3. Der Test mit `ziehenOhneAnfrage(seite, modell, modell, eingabe)` gibt es nicht mehr. Der
+   Klick auf ein *Modell* läuft über `klickenMit[eingabe]`, `ziehenOhneAnfrage` bleibt bei
+   echten Zügen. Ein Name wie `klickenOhneAnfrage` ist daher nicht nötig.
+
+Die Akzeptanztests beider Dateien laufen grün wie vorher.

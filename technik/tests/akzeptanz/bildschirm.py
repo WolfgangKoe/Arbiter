@@ -1,10 +1,12 @@
 """Bildschirm der Akzeptanztests: Browser, Server und das Lesen der Seite."""
 
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
+from functools import partial
 from urllib.parse import unquote
 
-from playwright.sync_api import Browser, Locator, Page, Response, expect
+from playwright.sync_api import Browser, Locator, Page, Response, Route, expect
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
@@ -63,6 +65,12 @@ def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> fro
     )
 
 
+def kreiseDerKarte(seite: Page) -> frozenset[tuple[float, float]]:
+    """Die Mittelpunkte der Kreise der Karte, wie die Seite sie zeichnet."""
+    kreise = elementeDerSeite(seite, ".karte .modell")
+    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
+
+
 def inhaltDerSeite(seite: Page) -> str:
     """Kopfzeile, Ablagen und Karte, wie der Browser sie zeigt."""
     return seite.evaluate(
@@ -114,18 +122,6 @@ def aufDieHandlungWarten(seite: Page):
     return seite.expect_response(istHandlung)
 
 
-def gesperrteModelle(seite: Page) -> frozenset[tuple[float, float]]:
-    """Die Stellen der Kreise auf der Karte, die als gesperrt gekennzeichnet sind."""
-    kreise = elementeDerSeite(seite, ".karte .modell.gesperrt")
-    return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
-
-
-def kennzeichenDesKreises(seite: Page, auswahl: str) -> tuple[str, str]:
-    """Füllung und Strich des ersten Kreises der Auswahl, wie der Browser sie zeichnet."""
-    kreis = seite.locator(auswahl).first
-    return elementeDerSeite(seite, auswahl)[0].fill, strichVon(kreis)
-
-
 def gründeAlsText(gründe) -> frozenset[str]:
     return frozenset(grund.value for grund in gründe)
 
@@ -151,6 +147,10 @@ def seiteMitEingabe(bildschirm: "Bildschirm", aufstellung: Aufstellung, eingabe:
     return bildschirm.seiteZu(aufstellung, berührbar=eingabe == "finger")
 
 
+def _liefern(antwort: dict, anfrage: Route) -> None:
+    anfrage.fulfill(json=antwort)
+
+
 # Warum: Länger als das wartet Playwright nicht; dann antwortet der Server nicht
 wartezeitInMillisekunden = 5000
 
@@ -170,14 +170,14 @@ class Bildschirm:
         _aufDasSpielfeldWarten(seite)
         return seite
 
-    def seiteMitSpielstand(self, aufstellung: Aufstellung, spielstand: dict) -> Page:
-        """Öffnet die Seite des Servers, der Spielstand kommt statt vom Dienst aus dem Argument."""
+    def seiteMitSpielstand(
+        self, aufstellung: Aufstellung, spielstand: dict, weitere: Mapping[str, dict] | None = None
+    ) -> Page:
+        """Öffnet die Seite des Servers; Spielstand und `weitere` (Muster, Antwort) kommen so."""
         seite = self._neueSeite(berührbar=False)
 
-        def spielstandLiefern(anfrage) -> None:
-            anfrage.fulfill(json=spielstand)
-
-        seite.route("**/api/spielstand", spielstandLiefern)
+        for muster, antwort in {"**/api/spielstand": spielstand, **(weitere or {})}.items():
+            seite.route(muster, partial(_liefern, antwort))
         server = serverStarten(aufstellung)
         self._server.append(server)
         seite.goto(server.adresse)

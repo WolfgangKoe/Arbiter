@@ -1,8 +1,8 @@
 """QUE-3 · Bedienung."""
 
 import pytest
+from playwright.sync_api import expect
 
-from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.auswahl import (
     ausgewählteEinheiten,
     ausgewählteModelle,
@@ -10,22 +10,15 @@ from tests.akzeptanz.auswahl import (
     tippenUndWarten,
 )
 from tests.akzeptanz.bildschirm import (
-    gesperrteModelle,
-    gründeAlsText,
     inhaltDerSeite,
     neuLaden,
     seiteMitEingabe,
-    sperrmeldungWarten,
 )
-from tests.akzeptanz.dienst import auswählen, dienstFür, spielstandVon
+from tests.akzeptanz.dienst import auswählen, spielstandVon
 from tests.akzeptanz.handgriffe import (
     anzahlGesetzterModelle,
-    einheitAufstellen,
     modelleSetzen,
-    nachDerWahlDerAufstellungszone,
-    stelleDesErstenModells,
     stelleInDerZoneVon,
-    stellenDerEinheit,
 )
 from tests.akzeptanz.ziehen import (
     liegtEinPixelGenauAn,
@@ -34,24 +27,6 @@ from tests.akzeptanz.ziehen import (
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])
-gründeAufDemModellDesAnderen = {
-    Grund.baseÜberdeckt,
-    Grund.nahkampfreichweite,
-    Grund.nichtGanzInDerZone,
-}
-
-
-def einModellAufDemModellDesAnderenSpielers(aufstellung, ersterSpieler, zweiterSpieler):
-    """Das erste Modell des ersten Spielers ist gesperrt, mit allen drei Gründen."""
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einheitDesAnderen, _ = zweiterSpieler.armee.einheiten
-    einheit, _ = ersterSpieler.armee.einheiten
-    modell, _ = einheit.modelle
-    einheitAufstellen(aufstellung, einheitDesAnderen)
-    aufstellung.modellSetzen(modell, stelleDesErstenModells(aufstellung, ersterSpieler, einheit))
-    (_, stelleDesAnderen), _ = stellenDerEinheit(aufstellung, zweiterSpieler, einheitDesAnderen)
-    aufstellung.modellLoslassen(modell, stelleDesAnderen)
-    return modell
 
 
 def kreisAufDerKarte(seite):
@@ -95,6 +70,8 @@ def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
 
     kreisAufDerKarte(mitMaus).click()
     kreisAufDerKarte(mitFinger).tap()
+    expect(kreisAufDerKarte(mitMaus)).to_have_attribute("data-ebene", "ja")
+    expect(kreisAufDerKarte(mitFinger)).to_have_attribute("data-ebene", "ja")
 
     assert inhaltDerSeite(mitFinger) == inhaltDerSeite(mitMaus)
     assert ausgewählteModelle(mitFinger) == ausgewählteModelle(mitMaus)
@@ -174,46 +151,3 @@ def testQue3_4EinModellAufDieAblageZiehenUndLoslassenLässtJedesModellWoEsWar(
 
     assert aufstellungNachDerZonenwahl.stelle(zweitesModell) == stelleDavor
     assert aufstellungNachDerZonenwahl.stelle(erstesModell) == ersteStelle
-
-
-@pytest.mark.parametrize("erneut", ["neuLaden", "adresseErneutÖffnen"])
-def testQue3_5EinGesperrtesModellIstNachDemErneutenÖffnenWeiterGesperrtMitJedemGrund(
-    bildschirm, aufstellung, ersterSpieler, zweiterSpieler, erneut
-):
-    gesperrtesModell = einModellAufDemModellDesAnderenSpielers(
-        aufstellung, ersterSpieler, zweiterSpieler
-    )
-    davor = bildschirm.seiteZu(aufstellung)
-    gründeDavor = sperrmeldungWarten(davor, gründeAufDemModellDesAnderen)
-    gesperrtDavor = gesperrteModelle(davor)
-
-    if erneut == "neuLaden":
-        neuLaden(davor)
-        danach = davor
-    else:
-        danach = bildschirm.seiteBei(davor.url)
-
-    assert sperrmeldungWarten(danach, gründeAufDemModellDesAnderen) == gründeDavor
-    assert gründeDavor == gründeAlsText(gründeAufDemModellDesAnderen)
-    assert gesperrteModelle(danach) == gesperrtDavor
-    assert len(gesperrtDavor) == 1
-    assert aufstellung.gesperrt(gesperrtesModell)
-
-
-def testQue3_5DerDienstMeldetEinGesperrtesModellAufJedeWeitereAnfrageWieDavor(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    gesperrtesModell = einModellAufDemModellDesAnderenSpielers(
-        aufstellung, ersterSpieler, zweiterSpieler
-    )
-    dienst = dienstFür(aufstellung)
-    davor = spielstandVon(dienst)
-
-    danach = spielstandVon(dienst)
-
-    gesperrte = [modell for modell in danach["modelle"] if modell["gesperrt"]]
-    assert len(gesperrte) == 1
-    assert danach["gründeDerGesperrten"] == davor["gründeDerGesperrten"]
-    assert set(danach["gründeDerGesperrten"]) == gründeAlsText(gründeAufDemModellDesAnderen)
-    assert danach == davor
-    assert aufstellung.gesperrt(gesperrtesModell)

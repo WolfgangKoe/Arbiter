@@ -22,6 +22,6 @@ Komponente. Der Stakeholder hat es im Plan 6 abgelehnt („kein ‚in Aufstellun
 bekommt der Vertrag das Feld nicht zurück. Die Arbeit verteilt sich nach Schreibpfaden: Du
 streichst `.einheitenKarte.inAufstellung` und `.einheitenKartenAbzeichen` aus
 `komponenten.css` und `komponenten.html`; das steht als Befund 3 in
-[1212](1212-setzenPerKlickModulZeileUndToteKlassen.md) und hält auf. UX streicht beide aus
+Anliegen 1212 und hält auf. UX streicht beide aus
 `vorschlag.css` ([1213](1213-abzeichenAusVorschlagCss.md)), das wartet auf die
 Domänenphase. Auf `angenommen` setze ich dieses Anliegen, sobald 1213 erledigt ist.

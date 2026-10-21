@@ -52,9 +52,19 @@ async function spielstandNeuHolen() {
 
 async function auswahlSenden(karte) {
   const pfad = `/api/spieler/${karte.dataset.spieler}/einheiten/${karte.dataset.einheit}/ausgewählt`
-  const antwort = await senden(pfad, karte.classList.contains("ausgewählt") ? "DELETE" : "PUT")
+  await zeichneAntwort(await senden(pfad, karte.classList.contains("ausgewählt") ? "DELETE" : "PUT"))
+}
+
+async function zeichneAntwort(antwort) {
   // Warum: Bei einer Ablehnung (404) liefert Flask HTML; die Seite holt dann den Spielstand neu
   zeichnen(antwort.ok ? await antwort.json() : await spielstandNeuHolen())
+}
+
+async function ebeneSenden(kreis) {
+  // Regel: V8, V9, nur ein Modell der Einheit, die in der Ablage ausgewählt trägt
+  const ausgewählteKarte = document.querySelector(`.einheitenKarte.ausgewählt[data-spieler="${kreis.dataset.spieler}"][data-einheit="${kreis.dataset.einheit}"]`)
+  if (!ausgewählteKarte) return
+  await zeichneAntwort(await senden(`${modellPfad(kreis)}/ebene`, kreis.dataset.ebene ? "DELETE" : "PUT"))
 }
 
 async function handlungSenden(pfad, methode, körper) {
@@ -76,12 +86,16 @@ function einheitenPfad(element) {
   return `/api/spieler/${element.dataset.spieler}/einheiten/${element.dataset.einheit}`
 }
 
+function modellPfad(kreis) {
+  return `${einheitenPfad(kreis)}/modelle/${kreis.dataset.nummer}`
+}
+
 function modellLoslassen(kreis, stelle) {
-  return handlungSenden(`${einheitenPfad(kreis)}/modelle/${kreis.dataset.nummer}/stelle`, "PUT", stelle)
+  return handlungSenden(`${modellPfad(kreis)}/stelle`, "PUT", stelle)
 }
 
 function modellAufAblageLoslassen(kreis, ablage) {
-  return handlungSenden(`${einheitenPfad(kreis)}/modelle/${kreis.dataset.nummer}/stelle?ablage=${ablage.dataset.spieler}`, "DELETE")
+  return handlungSenden(`${modellPfad(kreis)}/stelle?ablage=${ablage.dataset.spieler}`, "DELETE")
 }
 
 function karteAnklicken(stelle) {
@@ -115,7 +129,9 @@ function ziehenBeginnen(ereignis) {
   gezogen = ereignis.target.closest(".karte .modell")
   ziehenStart = { pointerId: ereignis.pointerId, ziel: ereignis.target, x: ereignis.clientX, y: ereignis.clientY, begonnen: false }
   if (!gezogen) return
-  Object.assign(ziehenStart, { kreisX: gezogen.getAttribute("cx"), kreisY: gezogen.getAttribute("cy") })
+  // Regel: V10, die Abfrage setzt die Stellen aller ausgewählten Kreise; hier nur zum Zurücksetzen
+  const mitgezogene = gezogen.classList.contains("ausgewählt") ? document.querySelectorAll(".karte .modell.ausgewählt") : [gezogen]
+  ziehenStart.kreise = [...mitgezogene].map(kreis => ({ kreis, x: Number(kreis.getAttribute("cx")), y: Number(kreis.getAttribute("cy")) }))
   gezogen.setPointerCapture(ereignis.pointerId)
   // Warum: Sonst markiert der Browser Text oder beginnt sein eigenes Ziehen und bricht unseres ab
   ereignis.preventDefault()
@@ -125,9 +141,39 @@ function browserZiehenVerhindern(ereignis) {
   ereignis.preventDefault()
 }
 
-function ziehenZurücknehmen(kreis, start) {
-  kreis.setAttribute("cx", start.kreisX)
-  kreis.setAttribute("cy", start.kreisY)
+function ziehenZurücknehmen(start) {
+  for (const { kreis, x, y } of start.kreise) {
+    kreis.setAttribute("cx", x)
+    kreis.setAttribute("cy", y)
+  }
+}
+
+// Regel: V10, höchstens eine Abfrage zugleich, danach nur mit dem jüngsten Punkt seines Zugs
+let abfrageLäuft = false
+let wartenderPunkt = null
+
+function kreiseAnDieStellenSetzen(modelle) {
+  for (const { spieler, einheit, nummer, x, y } of modelle) {
+    const kreis = document.querySelector(`.karte .modell[data-spieler="${spieler}"][data-einheit="${einheit}"][data-nummer="${nummer}"]`)
+    kreis.setAttribute("cx", x)
+    kreis.setAttribute("cy", y)
+  }
+}
+
+async function stelleBeimLoslassenAbfragen(punkt) {
+  abfrageLäuft = true
+  const zug = ziehenStart
+  try {
+    const antwort = await fetch(`${modellPfad(gezogen)}/stelleBeimLoslassen?x=${punkt.x}&y=${punkt.y}`).catch(() => null)
+    const modelle = antwort?.ok && (await antwort.json()).modelle
+    // Warum: Nach dem Zug ist die Antwort alt
+    if (modelle && ziehenStart === zug) kreiseAnDieStellenSetzen(modelle)
+  } finally {
+    abfrageLäuft = false
+    const nächster = wartenderPunkt
+    wartenderPunkt = null
+    if (nächster?.zug === ziehenStart)stelleBeimLoslassenAbfragen(nächster.punkt)
+  }
 }
 
 function ziehenFolgen(ereignis) {
@@ -135,15 +181,19 @@ function ziehenFolgen(ereignis) {
   const weite = Math.max(Math.abs(ereignis.clientX - ziehenStart.x), Math.abs(ereignis.clientY - ziehenStart.y))
   ziehenStart.begonnen ||= weite > zugschwelle
   if (!ziehenStart.begonnen || !gezogen) return
-  // Warum: Das Ziehen ändert den Stand nicht (D2); zeichnen stellt ihn danach wieder her
-  const punkt = punktAufDerKarte(ereignis)
-  gezogen.setAttribute("cx", punkt.x)
-  gezogen.setAttribute("cy", punkt.y)
+  // Warum: Das Ziehen ändert den Stand nicht (D2); die Kreise zeigen, was das Loslassen setzen würde
+  const stelle = stelleAufDerKarte(ereignis)
+  if (!stelle) return
+  if (abfrageLäuft) {
+    wartenderPunkt = { zug: ziehenStart, punkt: stelle }
+  } else {
+    stelleBeimLoslassenAbfragen(stelle)
+  }
 }
 
 function ziehenAbbrechen(ereignis) {
   if (!ziehenStart || ereignis.pointerId !== ziehenStart.pointerId) return
-  if (gezogen) ziehenZurücknehmen(gezogen, ziehenStart)
+  if (gezogen) ziehenZurücknehmen(ziehenStart)
   gezogen = null
   ziehenStart = null
 }
@@ -151,7 +201,9 @@ function ziehenAbbrechen(ereignis) {
 function klicken(ereignis, ziel) {
   const einheitenKarte = ziel.closest(".einheitenKarte")
   if (einheitenKarte) return auswahlSenden(einheitenKarte)
-  if (!ziel.closest(".karte") || ziel.closest(".modell")) return
+  const modell = ziel.closest(".karte .modell")
+  if (modell) return ebeneSenden(modell)
+  if (!ziel.closest(".karte")) return
   const stelle = stelleAufDerKarte(ereignis)
   if (stelle) return karteAnklicken(stelle)
 }
@@ -162,8 +214,7 @@ function ziehenBeenden(ereignis) {
   const kreis = gezogen
   ziehenStart = null
   gezogen = null
-  // Warum: Der gezogene Kreis liegt unter dem Zeiger; zum Prüfen steht er wieder an seinem Platz
-  if (kreis) ziehenZurücknehmen(kreis, start)
+  // Warum: Die Kreise bleiben bis zur Antwort, wo die Karte sie zuletzt zeigte; sonst blitzen sie am Anfang auf
   // Regel: Ohne Zug ist es ein Klick (V8), ein Zug wählt nie aus
   if (!start.begonnen) return klicken(ereignis, start.ziel)
   if (!kreis) return
@@ -232,13 +283,12 @@ function karte(spielstand) {
     kreis.setAttribute("cy", modell.y)
     kreis.setAttribute("r", modell.radius)
     kreis.classList.toggle("ausgewählt", modell.ausgewählt)
-    kreis.classList.toggle("gesperrt", modell.gesperrt)
+    if (modell.ebene) kreis.dataset.ebene = "ja"
     Object.assign(kreis.dataset, { spieler: modell.spieler, einheit: modell.einheit, nummer: modell.nummer })
     zeichnung.append(kreis)
   }
-  const gründe = gründeDerLetztenSperre.length > 0 ? gründeDerLetztenSperre : spielstand.gründeDerGesperrten
-  if (gründe.length > 0) mitte.append(sperrmeldung(gründe))
-  mitte.append(knopfGruppe(spielstand))
+  if (gründeDerLetztenSperre.length > 0) mitte.append(sperrmeldung(gründeDerLetztenSperre))
+  mitte.append(knopfGruppe())
   return mitte
 }
 
@@ -259,11 +309,8 @@ function knopf(text, handlung) {
   return neu
 }
 
-function knopfGruppe(spielstand) {
+function knopfGruppe() {
   const gruppe = ausVorlage("knopfGruppe")
-  if (spielstand.modelle.some(modell => modell.gesperrt)) {
-    gruppe.append(knopf("zurück", () => handlungSenden("/api/zurück", "PUT")))
-  }
   gruppe.append(knopf("Aufstellen der Einheit beenden", () => handlungSenden("/api/aufstellenDerEinheitBeenden", "PUT")))
   return gruppe
 }

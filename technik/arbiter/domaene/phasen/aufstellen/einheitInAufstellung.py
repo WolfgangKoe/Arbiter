@@ -3,16 +3,7 @@
 from collections.abc import Collection
 
 from arbiter.domaene.sperre import Grund, Sperre
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
-
-
-def einheitInAufstellungNach(
-    einheit: Einheit | None, stellen: Collection[Modell]
-) -> Einheit | None:
-    """Die Einheit in Aufstellung, solange eines ihrer Modelle gesetzt ist."""
-    if einheit is not None and any(modell in stellen for modell in einheit.modelle):
-        return einheit
-    return None
+from arbiter.domaene.spielobjekte import Einheit, Spieler
 
 
 def prüfenDassWählbar(

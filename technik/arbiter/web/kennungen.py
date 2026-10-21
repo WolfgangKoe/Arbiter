@@ -1,7 +1,18 @@
 """Übersetzt die Kennungen nach W4 in Spieler, Einheiten und Modelle (web.md, W2, W4)."""
 
+from collections.abc import Iterator
+from typing import NamedTuple
+
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
+
+
+class ModellMitKennungen(NamedTuple):
+    spielernummer: int
+    einheitennummer: int
+    modellnummer: int
+    einheit: Einheit
+    modell: Modell
 
 
 def spielerNachNummer(aufstellung: Aufstellung) -> dict[int, Spieler]:
@@ -15,6 +26,15 @@ def einheitenNachNummer(spieler: Spieler) -> dict[int, Einheit]:
 
 def modelleNachNummer(einheit: Einheit) -> dict[int, Modell]:
     return dict(enumerate(einheit.modelle, start=1))
+
+
+def modelleMitKennungen(aufstellung: Aufstellung) -> Iterator[ModellMitKennungen]:
+    for spielernummer, spieler in spielerNachNummer(aufstellung).items():
+        for einheitennummer, einheit in einheitenNachNummer(spieler).items():
+            for modellnummer, modell in modelleNachNummer(einheit).items():
+                yield ModellMitKennungen(
+                    spielernummer, einheitennummer, modellnummer, einheit, modell
+                )
 
 
 def ablageNachNummer(aufstellung: Aufstellung, spieler: Spieler) -> dict[int, Einheit]:

@@ -15,17 +15,13 @@ from tests.akzeptanz.bildschirm import (
     sperrmeldungWarten,
 )
 from tests.akzeptanz.dienst import (
-    abwählen,
     aufstellenDerEinheitBeenden,
     dienstFür,
     modellAufAblageLoslassen,
     modellLoslassen,
-    sperreDesVertrags,
     spielstandVon,
-    stellenDesVertrags,
 )
 from tests.akzeptanz.handgriffe import (
-    einGesperrtesModell,
     einheitenAufstellen,
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
@@ -147,84 +143,6 @@ sperrenBeimBeenden = pytest.mark.parametrize(
 )
 
 
-def testAuf12_1DieAntwortDesDienstesAufDasBeendenBeiGesperrtemModellGleichtDemBeispielDesVertrags(
-    dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors
-):
-    abwählen(dienstDesBeispiels, "Necron Warriors")
-    _, stelleDesZweitenModells, _ = stellenDesVertrags(2)
-    _, _, drittesModell, *_ = necronWarriors.modelle
-    modellLoslassen(
-        dienstDesBeispiels,
-        aufstellungDesBeispiels,
-        necronWarriors,
-        drittesModell,
-        stelleDesZweitenModells,
-    )
-
-    antwort = aufstellenDerEinheitBeenden(dienstDesBeispiels)
-
-    assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json() == sperreDesVertrags()
-
-
-def testAuf12_1EinGesperrtesModellSperrtDasSetzenMitDemGrundModellGesperrt(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einGesperrtesModell(aufstellung, zweiterSpieler)
-    _, zweiteEinheit = zweiterSpieler.armee.einheiten
-    anderesModell, *_ = zweiteEinheit.modelle
-    stelle = stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30)
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(aufstellung.modellSetzen, anderesModell, stelle)
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_1EinGesperrtesModellSperrtDasLoslassenAufDieAblageMitDemGrundModellGesperrt(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    gesetztesModell, gesperrtesModell, _ = einGesperrtesModell(aufstellung, zweiterSpieler)
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(aufstellung.modellAufAblageLoslassen, gesetztesModell, zweiterSpieler)
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-    assert aufstellung.gesperrt(gesperrtesModell)
-
-
-def testAuf12_1EinGesperrtesModellSperrtDasLoslassenAufDieKarteMitDemGrundModellGesperrt(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    gesetztesModell, _, _ = einGesperrtesModell(aufstellung, zweiterSpieler)
-    neueStelle = stelleInDerZoneVon(aufstellung, zweiterSpieler, 4, 30)
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(aufstellung.modellLoslassen, gesetztesModell, neueStelle)
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-
-
-def testAuf12_1EinGesperrtesModellSperrtDasBeendenMitDemGrundModellGesperrt(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einGesperrtesModell(aufstellung, zweiterSpieler)
-    davor = stellenAllerModelle(aufstellung)
-
-    gründe = sperrgründe(aufstellung.aufstellenDerEinheitBeenden)
-
-    assert gründe == {Grund.modellGesperrt}
-    assert stellenAllerModelle(aufstellung) == davor
-    assert not aufstellung.aufgestellt(aufstellung.einheitInAufstellung)
-
-
 def testAuf12_5EinSperrendesLoslassenNenntNichtWählbarUndLässtJedesModellWoEsWar(
     aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
@@ -236,13 +154,12 @@ def testAuf12_5EinSperrendesLoslassenNenntNichtWählbarUndLässtJedesModellWoEsW
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
 
-def testAuf12_6EinSperrendesLoslassenNenntDenGrundUndLässtKeinModellGesperrt(
+def testAuf12_6EinSperrendesLoslassenNenntDenGrund(
     aufstellungNachDerZonenwahl, sperrendesLoslassen
 ):
     gründe = sperrgründe(inDerDomäneLoslassen, aufstellungNachDerZonenwahl, sperrendesLoslassen)
 
     assert gründe == {Grund.nichtWählbar}
-    assert not aufstellungNachDerZonenwahl.gesperrt(sperrendesLoslassen.modell)
 
 
 def testAuf12_6DerDienstAntwortetMitDemGrundUndDemStandWieDavor(

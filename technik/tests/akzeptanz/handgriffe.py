@@ -167,13 +167,15 @@ def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
 
 def modelleAnStellenSetzen(
     aufstellung: Aufstellung, einheit: Einheit, stellen: list[Stelle]
-) -> None:
+) -> list[tuple[Modell, Stelle]]:
     """Setzt die ersten Modelle der Einheit an die Stellen, ein Modell je Stelle."""
-    for modell, stelle in zip(einheit.modelle, stellen, strict=False):
+    gesetzte = list(zip(einheit.modelle, stellen, strict=False))
+    for modell, stelle in gesetzte:
         aufstellung.modellSetzen(modell, stelle)
+    return gesetzte
 
 
-def inZoll(maß: tuple[int, int], radius: Fraction) -> Fraction:
+def inZoll(maß: tuple[Fraction | int, int], radius: Fraction) -> Fraction:
     """Ganze Zoll plus ein Vielfaches des Radius."""
     zoll, radien = maß
     return zoll + radien * radius
@@ -201,6 +203,16 @@ def gezogenesUndRest(
     return (zweites, erstes) if zweitesGezogen else (erstes, zweites)
 
 
+def erwarteteStelle(
+    aufstellung: Aufstellung, radius: Fraction, erwartet: tuple[tuple, tuple]
+) -> Stelle:
+    """Tiefe und Länge je als (Zoll, Radien) in der Zone des Spielers an der Reihe."""
+    tiefe, länge = erwartet
+    return stelleInDerZoneDesSpielersAnDerReihe(
+        aufstellung, inZoll(tiefe, radius), inZoll(länge, radius)
+    )
+
+
 def stelleInDerZoneVon(
     aufstellung: Aufstellung, spieler: Spieler, tiefe: Fraction | int, länge: Fraction | int
 ) -> Stelle:
@@ -219,20 +231,6 @@ def stellenAllerModelle(aufstellung: Aufstellung) -> dict[Modell, Stelle | None]
     return {
         modell: aufstellung.stelle(modell) for einer in spieler for modell in einer.armee.modelle
     }
-
-
-def einGesperrtesModell(
-    aufstellung: Aufstellung, spieler: Spieler
-) -> tuple[Modell, Modell, Stelle]:
-    """Das zweite Modell der ersten Einheit, auf das erste gezogen (AUF-8.2), ist gesperrt."""
-    ersteEinheit, _ = spieler.armee.einheiten
-    gesetztesModell, gesperrtesModell = ersteEinheit.modelle
-    stelle = stelleInDerZoneVon(aufstellung, spieler, tiefeDerErstenReihe, 3)
-    nebenan = stelleInDerZoneVon(aufstellung, spieler, tiefeDerErstenReihe, 6)
-    aufstellung.modellSetzen(gesetztesModell, stelle)
-    aufstellung.modellSetzen(gesperrtesModell, nebenan)
-    aufstellung.modellLoslassen(gesperrtesModell, stelle)
-    return gesetztesModell, gesperrtesModell, stelle
 
 
 def reihenDerFormation(einheitenname: str) -> list[int]:

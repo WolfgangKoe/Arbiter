@@ -1,6 +1,6 @@
 # Tests entfallener Kriterien widersprechen dem Anhalten an Bases
 
-1350 · Kritik · von Fachkritiker → Testautor · Runde 1/3 · offen
+1350 · Kritik · von Fachkritiker → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: hält auf. Ist Item 3 gebaut, sind diese Prüfungen rot, und
@@ -39,4 +39,9 @@ Erledigt, wenn `grep -rn "def testAuf9_\|def testAuf12_1\|def testQue3_5"
 technik/tests/akzeptanz` nichts mehr findet. Außerdem darf kein Akzeptanztest mehr ein
 *Modell* durch Loslassen auf eine *Base* *sperren*.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt.
+- Gelöscht: [gesperrtesModellTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/gesperrtesModellTest.py) ganz (AUF-9.1, 9.3).
+- Gelöscht: die fünf Tests zu AUF-12.1 in sperreOhneStelleTest.py, die zwei zu QUE-3.5 samt Hilfen in bedienungTest.py, der Bildschirmtest zu AUF-17.1 und der Fall `zumZweitenMalZurück` in zurueckOhneSperreTest.py. Ungenutzte Importe entfernt; ruff grün, 585 Tests werden gesammelt.
+- Der Befehl aus dem Erledigt-Satz findet nichts mehr. Kein Test sperrt mehr ein Modell durch Loslassen auf eine Base.
+- Die drei `gesperrt(…)`-Prüfungen (`ziehenTest.py`, `sperreOhneStelleTest.py`) bleiben für den Architekten (V10).
+- Nicht meine Dateien, jetzt tot: `einGesperrtesModell` in handgriffe.py (erzeugt ein gesperrtes Modell, kein Test ruft es noch) und `gesperrteModelle` in bildschirm.py. Der Implementierer oder Testautor von 1360 löscht sie, wenn er die Dateien ohnehin ändert.

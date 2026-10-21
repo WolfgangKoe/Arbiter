@@ -1,4 +1,4 @@
-"""Bedienung der Akzeptanztests: Klicken und Ziehen mit Maus und Finger, mit und ohne Antwort."""
+"""Bedienung der Akzeptanztests: Klicken, Ziehen und Halten mit Maus und Finger."""
 
 from dataclasses import dataclass
 
@@ -6,7 +6,7 @@ import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten
+from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten, kreiseDerKarte
 
 
 @dataclass(frozen=True)
@@ -52,33 +52,68 @@ def liegtEinPixelGenauAn(seite: Page, ist: Stelle, soll: Stelle) -> bool:
     return abweichungInX <= toleranz and abweichungInY <= toleranz
 
 
+class Maus:
+    """Drücken, Bewegen und Loslassen mit `page.mouse` (Web, B5)."""
+
+    def __init__(self, seite: Page) -> None:
+        self._seite = seite
+
+    def drücken(self, ort: Bildpunkt) -> None:
+        self._seite.mouse.move(ort.links, ort.oben)
+        self._seite.mouse.down()
+
+    def bewegen(self, ort: Bildpunkt) -> None:
+        self._seite.mouse.move(ort.links, ort.oben, steps=10)
+
+    def loslassen(self, _ort: Bildpunkt) -> None:
+        self._seite.mouse.up()
+
+
+class Finger:
+    """Berühren, Wischen und Abheben über CDP `Input.dispatchTouchEvent` (Web, B5)."""
+
+    def __init__(self, seite: Page) -> None:
+        self._sitzung = seite.context.new_cdp_session(seite)
+        self._ort: Bildpunkt | None = None
+
+    def _senden(self, art: str, ort: Bildpunkt | None) -> None:
+        punkte = [] if ort is None else [{"x": ort.links, "y": ort.oben}]
+        self._sitzung.send("Input.dispatchTouchEvent", {"type": art, "touchPoints": punkte})
+
+    def drücken(self, ort: Bildpunkt) -> None:
+        self._ort = ort
+        self._senden("touchStart", ort)
+
+    def bewegen(self, ort: Bildpunkt) -> None:
+        start = self._ort
+        for schritt in range(1, 11):
+            anteil = schritt / 10
+            unterwegs = Bildpunkt(
+                start.links + (ort.links - start.links) * anteil,
+                start.oben + (ort.oben - start.oben) * anteil,
+            )
+            self._senden("touchMove", unterwegs)
+        self._ort = ort
+
+    def loslassen(self, _ort: Bildpunkt) -> None:
+        self._senden("touchEnd", None)
+
+
+zeigerArten = {"maus": Maus, "finger": Finger}
+
+
+def _ziehenMit(zeiger: Maus | Finger, von: Bildpunkt, nach: Bildpunkt) -> None:
+    zeiger.drücken(von)
+    zeiger.bewegen(nach)
+    zeiger.loslassen(nach)
+
+
 def mitDerMausZiehen(seite: Page, von: Bildpunkt, nach: Bildpunkt) -> None:
-    seite.mouse.move(von.links, von.oben)
-    seite.mouse.down()
-    seite.mouse.move(nach.links, nach.oben, steps=10)
-    seite.mouse.up()
-
-
-_schritteDesFingers = 10
+    _ziehenMit(Maus(seite), von, nach)
 
 
 def mitDemFingerZiehen(seite: Page, von: Bildpunkt, nach: Bildpunkt) -> None:
-    """Berührt, wischt und hebt ab über CDP `Input.dispatchTouchEvent` (Web, B5)."""
-    sitzung = seite.context.new_cdp_session(seite)
-
-    def berührung(art: str, ort: Bildpunkt | None) -> None:
-        punkte = [] if ort is None else [{"x": ort.links, "y": ort.oben}]
-        sitzung.send("Input.dispatchTouchEvent", {"type": art, "touchPoints": punkte})
-
-    berührung("touchStart", von)
-    for schritt in range(1, _schritteDesFingers + 1):
-        anteil = schritt / _schritteDesFingers
-        unterwegs = Bildpunkt(
-            von.links + (nach.links - von.links) * anteil,
-            von.oben + (nach.oben - von.oben) * anteil,
-        )
-        berührung("touchMove", unterwegs)
-    berührung("touchEnd", None)
+    _ziehenMit(Finger(seite), von, nach)
 
 
 eingaben = {"maus": mitDerMausZiehen, "finger": mitDemFingerZiehen}
@@ -140,6 +175,69 @@ def mitDemFingerTippen(seite: Page, punkt: Bildpunkt) -> None:
 
 klickenMit = {"maus": mitDerMausKlicken, "finger": mitDemFingerTippen}
 mitMausUndFinger = pytest.mark.parametrize("eingabe", list(klickenMit), ids=list(klickenMit))
+
+
+class Abfragen:
+    """Zählt die Anfragen der Seite nach der Stelle beim Loslassen und deren Antworten."""
+
+    def __init__(self, seite: Page) -> None:
+        self.gestellt = 0
+        self.erledigt = 0
+        seite.on("request", self._gestellt)
+        seite.on("requestfinished", self._erledigt)
+        seite.on("requestfailed", self._erledigt)
+
+    @staticmethod
+    def _istAbfrage(anfrage: Request) -> bool:
+        return "/stelleBeimLoslassen" in anfrage.url
+
+    def _gestellt(self, anfrage: Request) -> None:
+        if self._istAbfrage(anfrage):
+            self.gestellt += 1
+
+    def _erledigt(self, anfrage: Request) -> None:
+        if self._istAbfrage(anfrage):
+            self.erledigt += 1
+
+    def ruhig(self) -> bool:
+        return self.gestellt > 0 and self.gestellt == self.erledigt
+
+
+# Warum: Erst wenn eine Weile keine Anfrage offen ist, zeigt die Karte den Stand zum Zeigerpunkt
+_pausenInMillisekunden = 50
+_ruhigeProben = 4
+_höchstensProben = 200
+
+
+def aufDieAntwortenWarten(seite: Page, abfragen: Abfragen) -> None:
+    ruhige = 0
+    for _ in range(_höchstensProben):
+        seite.wait_for_timeout(_pausenInMillisekunden)
+        ruhige = ruhige + 1 if abfragen.ruhig() else 0
+        if ruhige == _ruhigeProben:
+            return
+    raise TimeoutError("Die Seite fragt nicht nach der Stelle beim Loslassen oder antwortet nicht")
+
+
+def halten(seite: Page, von: Stelle, nach: Stelle, eingabe: str) -> Maus | Finger:
+    """Drückt an `von`, bewegt nach `nach` und wartet auf die Antworten, ohne loszulassen."""
+    zeiger = zeigerArten[eingabe](seite)
+    abfragen = Abfragen(seite)
+    zeiger.drücken(punktAufDerKarte(seite, von))
+    zeiger.bewegen(punktAufDerKarte(seite, nach))
+    aufDieAntwortenWarten(seite, abfragen)
+    return zeiger
+
+
+def haltenUndLosslassen(
+    seite: Page, von: Stelle, nach: Stelle, eingabe: str
+) -> frozenset[tuple[float, float]]:
+    """Hält am Ziel, liest die Kreise der Karte und lässt am selben Punkt los."""
+    zeiger = halten(seite, von, nach, eingabe)
+    gezeigt = kreiseDerKarte(seite)
+    with aufDieHandlungWarten(seite):
+        zeiger.loslassen(punktAufDerKarte(seite, nach))
+    return gezeigt
 
 
 def aufDieEbeneWarten(seite: Page):

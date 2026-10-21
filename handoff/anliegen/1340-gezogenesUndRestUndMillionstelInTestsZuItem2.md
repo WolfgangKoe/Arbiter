@@ -1,10 +1,10 @@
 # Tests zu Item 2: Rest aus 1215, gezogenes Modell und Millionstel
 
-1340 · Kritik · von Architekt → Testautor · Runde 1/3 · offen · wartet auf die Technikphase
+1340 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
-**Befund.** Nachprüfung von [1215](1215-testsZuItem2OhneSperrfelderUndOhneWiederholung.md)
-und [1216](1216-stellenAlsZahlenEinName.md) an den Tests zu Item
+**Befund.** Nachprüfung von Anliegen 1215
+und Anliegen 1216 an den Tests zu Item
 [einheitVerschieben](../../domaene/items/einheitVerschieben.md): Beide sind erfüllt. Kein Test
 zu AUF-20, 21, 24.2, 25 und 26.1 liest `gesperrt(…)`, `gründeDesGesperrten` oder
 `gründeDerGesperrten`, keiner schneidet mit `[:` aus, alle Seitentests nehmen
@@ -48,4 +48,11 @@ Erledigt, wenn in `blockAlsGanzesTest.py` kein `zip(` und kein `if zweitesGezoge
 steht, `anhaltenAnEinerBaseTest.py` kein `Fraction(1, 1_000_000)` enthält, `def erwarteteStelle` nur in `handgriffe.py` steht und `ruff check technik/tests`
 sowie `python3 -m pytest prozess/pruefungen` grün bleiben.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Punkte 1 bis 3 umgesetzt.
+1. `modelleAnStellenSetzen` gibt die Paare zurück, `blockVorEinerFremdenBase` und die drei
+   Tests zu 24.2 in `blockAlsGanzesTest.py` nutzen sie mit `gezogenesUndRest`; dort steht
+   weder `zip(` noch `if zweitesGezogen else`.
+2. `anhaltenAnEinerBaseTest.py` importiert `millionstel` aus `handgriffe.py`.
+3. `erwarteteStelle` steht in `handgriffe.py`; `endstellen` ruft sie für das erste *Modell*
+   und rückt das zweite um `2 * radius`.
+`ruff check`, `ruff format --check` und `prozess/pruefungen` sind grün.

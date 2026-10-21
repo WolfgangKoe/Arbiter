@@ -17,9 +17,16 @@ from tests.akzeptanz.bildschirm import (
     elementeDerSeite,
     seiteMitEingabe,
 )
-from tests.akzeptanz.dienst import auswählen, kennungenDerEinheiten, körperDerStelle, spielstandVon
+from tests.akzeptanz.dienst import (
+    auswählen,
+    karteAnklicken,
+    kennungenDerEinheiten,
+    spielstandVon,
+    stelleImSpielstand,
+)
 from tests.akzeptanz.handgriffe import (
     anzahlGesetzterModelle,
+    millionstel,
     modelleSetzen,
     radiusInZoll,
     reihenDerFormation,
@@ -28,6 +35,9 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import (
     Bildpunkt,
+    klickenMit,
+    mitDerMausKlicken,
+    mitMausUndFinger,
     mitteVon,
     punktAufDerKarte,
     ziehenOhneAnfrage,
@@ -35,27 +45,9 @@ from tests.akzeptanz.ziehen import (
 )
 
 mitteDerZone = Fraction(9, 2)
-# Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
-millionstel = Fraction(1, 1_000_000)
 abstandInDerFormation = Fraction(3, 2)
 # Warum: Deutlich über der Zugschwelle von 4 px (V8), aber innerhalb von Karte und Einheitenkarte
 weiteDesZugsInPixeln = 12
-
-
-def karteAnklicken(dienst, stelle):
-    return dienst.put("/api/karteAnklicken", json=körperDerStelle(stelle))
-
-
-def mitDerMausKlicken(seite, punkt: Bildpunkt) -> None:
-    seite.mouse.click(punkt.links, punkt.oben)
-
-
-def mitDemFingerTippen(seite, punkt: Bildpunkt) -> None:
-    seite.touchscreen.tap(punkt.links, punkt.oben)
-
-
-klickenMit = {"maus": mitDerMausKlicken, "finger": mitDemFingerTippen}
-mitMausUndFinger = pytest.mark.parametrize("eingabe", list(klickenMit), ids=list(klickenMit))
 
 
 def modelleDerEinheitIm(spielstand: dict, einheitenname: str) -> list[dict]:
@@ -163,8 +155,9 @@ def testAuf18_1EinKlickAufDieKarteSendetDenPunktInZollAnDenDienst(
     gesendet = anfrage.post_data_json
     toleranz = zollJePixel(seite)
     assert (anfrage.method, urlparse(anfrage.url).path) == ("PUT", "/api/karteAnklicken")
-    assert abs(gesendet["x"] - float(stelle.x)) <= toleranz
-    assert abs(gesendet["y"] - float(stelle.y)) <= toleranz
+    inX, inY = stelleImSpielstand(stelle)
+    assert abs(gesendet["x"] - inX) <= toleranz
+    assert abs(gesendet["y"] - inY) <= toleranz
 
 
 def testAuf18_1EinKlickAufDieKarteOhneAusgewählteEinheitGehtAnDenDienstUndÄndertNichts(
@@ -272,6 +265,19 @@ def testAuf18_2DieReihenDerFormationLiegenParallelZurSpielfeldkanteDerZone(
 
     reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
     assert [len(reihe) for reihe in reihen] == reihenDerFormation("Boyz")
+
+
+def testAuf18_2JedeReiheDerFormationLiegtEntlangDerSpielfeldkanteMittigAmKlick(
+    aufstellungNachDerZonenwahl, spielerEins, boyz
+):
+    aufstellungNachDerZonenwahl.auswählen(boyz)
+    klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
+
+    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+
+    reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
+    mitten = [(reihe[0].y + reihe[-1].y) / 2 for reihe in reihen]
+    assert mitten == [klick.y] * len(reihen)
 
 
 def testAuf18_2BenachbarteBasesEinerReiheHabenDenAbstandEinsKommaFünfZoll(
@@ -452,4 +458,3 @@ def testAuf18_5DerDienstÄndertBeiNurGesetztenModellenNichtsUndNenntKeinenGrund(
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == davor
-    assert antwort.get_json()["gründeDerGesperrten"] == []

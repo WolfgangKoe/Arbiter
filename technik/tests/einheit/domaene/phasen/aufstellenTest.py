@@ -2,8 +2,13 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone, Ausgangslage
+from arbiter.domaene.missionsvorbereitung.ausgangslage import (
+    Aufstellungszone,
+    Ausgangslage,
+    Formation,
+)
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld, Stelle
 
 
@@ -155,3 +160,27 @@ def testEineAufgestellteEinheitAuswählenIstEineVorbedingungsverletzung():
 
     with pytest.raises(ValueError):
         aufstellung.auswählen(einheit)
+
+
+def testEinKlickMitEinerFormationAufEinerFremdenBaseSperrtUndSetztKeinModell():
+    gewinner, gegner = spielerMitEinerEinheit(), spielerMitEinerEinheit()
+    spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
+    ganzesFeld = {zone: Fraction(44) for zone in Aufstellungszone}
+    formationen = {"Einheit": Formation(reihen=(1,), abstand=Fraction(0))}
+    aufstellung = Aufstellung(Ausgangslage(gewinner, gegner, spielfeld, ganzesFeld, formationen))
+    aufstellung.gewinnerWählen(gewinner)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    fremde, *_ = gegner.armee.einheiten
+    fremdes, *_ = fremde.modelle
+    ort = Stelle(x=Fraction(20), y=Fraction(30))
+    aufstellung.modellSetzen(fremdes, ort)
+    aufstellung.aufstellenDerEinheitBeenden()
+    eigene, *_ = gewinner.armee.einheiten
+    eigenes, *_ = eigene.modelle
+    aufstellung.auswählen(eigene)
+
+    with pytest.raises(Sperre) as sperre:
+        aufstellung.karteAnklicken(ort)
+
+    assert Grund.baseÜberdeckt in sperre.value.gründe
+    assert not aufstellung.gesetzt(eigenes)

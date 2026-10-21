@@ -42,7 +42,6 @@ def testAuf8_2EinGesetztesModellIstNachDemLoslassenAnDerStelleDesLoslassensGeset
 
     assert aufstellung.gesetzt(modell)
     assert aufstellung.stelle(modell) == stelleDesLoslassens
-    assert not aufstellung.gesperrt(modell)
 
 
 @pytest.mark.parametrize("eingabe", ["maus", "finger"])
@@ -59,7 +58,6 @@ def testAuf8_2EinModellWirdUmWenigerAlsSeinenRadiusGezogenUndAnDerStelleDesLosla
     modellZiehen(seite, stelleDavor, ziel, eingabe)
 
     assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(modell), ziel)
-    assert not aufstellungNachDerZonenwahl.gesperrt(modell)
 
 
 @pytest.mark.parametrize("eingabe", ["maus", "finger"])

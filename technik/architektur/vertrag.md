@@ -12,11 +12,8 @@ Pfade und JSON zwischen `web/` und `frontend/`
   mehr in der *Ablage* liegt. `ausgewählt` an der *Einheit* nach AUF-5.12, am *Modell* nach
   AUF-5.7 und 25.4; `ebene: true` nur am *Modell*, das die *Ebene* ist (AUF-25.1), sonst fehlt
   der Schlüssel. Warum: So gelten die Beispiele ohne *Ebene* unverändert.
-  `modelle[]` nennt *gesetzte* und *gesperrte* *Modelle* mit Kennung `einheit` (Reihenfolge
-  der *Armee*) und `nummer` (Reihenfolge der *Einheit*), `gesperrt` nach AUF-9.1, ein
-  *gesperrtes* an `stelleDesGesperrten`. `gründeDerGesperrten`: jeder *Grund* aller
-  *gesperrten* einmal, Text aus `Grund`, in dessen Reihenfolge. `nichtGesetzt` zählt
-  *gesperrte* mit (Glossar). Handlungen: [V5 bis V8](handlungen.md).
+  `modelle[]` nennt die *gesetzten* *Modelle* mit Kennung `einheit` (Reihenfolge der *Armee*)
+  und `nummer` (Reihenfolge der *Einheit*). Handlungen: [V5 bis V8](handlungen.md).
 - **V2** `PUT /api/spieler/<nummer>/einheiten/<nummer>/ausgewählt` macht die *Einheit*
   *ausgewählt* (AUF-5.11), `DELETE` nicht (AUF-5.4); beide 200 mit dem Spielstand. Das
   Beispiel ist der Stand nach `PUT` auf `…/spieler/1/einheiten/2/…`, dann

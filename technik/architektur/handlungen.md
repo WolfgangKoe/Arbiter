@@ -11,7 +11,7 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
   *Karte* anklicken (AUF-18.1 bis 18.5, 19.4) | `PUT /api/karteAnklicken`, `{"x": 39.5, "y": 30}` | `karteAnklicken`
   *Modell* auf der *Karte* loslassen (AUF-8.2, 20.4, 21.1, 21.2, 24.2, 26.1) | `PUT …/modelle/<m>/stelle`, Körper wie oben | `modellLoslassen`
   *Modell* auf der *Ablage* von Spieler a (AUF-8.4, 16.3, 16.6) | `DELETE …/modelle/<m>/stelle?ablage=<a>` | `modellAufAblageLoslassen`
-  „zurück“ (AUF-9.3) | `PUT /api/zurück` | `zurück`
+  „zurück“ (AUF-17.1) | `PUT /api/zurück` | `zurück`
   „Aufstellen der Einheit beenden“ (AUF-10.1) | `PUT /api/aufstellenDerEinheitBeenden` | `aufstellenDerEinheitBeenden`
 
   Ein *Modell* nennt jedes der *Armee*, auch einer *aufgestellten* *Einheit* (AUF-8.4).
@@ -22,29 +22,26 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
   nicht die Seite, denn eine zweite Seite kann eine alte *Auswahl* zeigen (QUE-3.2). Ob
   `modellLoslassen` ein *Modell* oder den Block *setzt*, entscheiden *Auswahl* und *Ebene*
   (V3; AUF-20.4, 21.1).
-  Gründe gegen die *Stelle* (D4) machen das *Modell* *gesperrt* (AUF-9.1), Wächter werfen
-  `Sperre` (AUF-12.5, 19.4). `zurück()` ohne *gesperrtes* *Modell* ändert nichts (AUF-17.1),
-  `modellAufAblageLoslassen` mit der eigenen *Ablage* auch (AUF-16.6).
-  Ohne Route: `modellSetzen(modell, stelle)` *setzt* nach QUE-1.1 bis 1.3 und AUF-7.2, 7.3,
-  auch Gründe gegen die *Stelle* werfen `Sperre`. Warum: Tests bauen damit die Vorgeschichte
-  an genauen *Stellen*; eine falsche scheitert, statt ein *gesperrtes* *Modell* zu
-  hinterlassen.
+  Wächter und jeder *Grund* gegen die *Stelle* (D4), der nach dem Anhalten (V10) bleibt
+  (QUE-1.3 nur bei Zonen unter 1″ Abstand), werfen `Sperre` (AUF-12.5, 19.4). `zurück()`
+  ändert nichts (AUF-17.1), `modellAufAblageLoslassen` mit der eigenen *Ablage* auch (AUF-16.6).
+  Ohne Route: `modellSetzen(modell, stelle)` *setzt* nach QUE-1.1 bis 1.3 und AUF-7.2, 7.3
+  genau an die *Stelle*, ohne Hineinrücken und Anhalten. Warum: Tests bauen damit die
+  Vorgeschichte an genauen *Stellen*; eine falsche scheitert, statt verschoben zu stehen.
 - **V6** Antwort 200: Spielstand wie V1. *Sperre*: 409 mit `gründe` (`Sperre.gründe`, Text
   aus `Grund`, in dessen Reihenfolge) und dem unveränderten `spielstand`. Beispiel
   [sperre.json](vertrag/sperre.json): Stand des Beispiels von V1, danach
   `DELETE /api/spieler/2/einheiten/1/ausgewählt` (AUF-5.4),
-  `PUT /api/spieler/2/einheiten/1/modelle/3/stelle` mit `{"x": 37.4, "y": 28}` (nur dieses
-  *Modell*, AUF-20.4; *gesperrt*, ‚Base überdeckt‘) und `PUT /api/aufstellenDerEinheitBeenden`
-  (AUF-12.1). Warum abgewählt: Ohne *Auswahl* zieht der Zug das *Modell* allein, mit und ohne
+  `PUT /api/spieler/2/einheiten/1/modelle/3/stelle` mit `{"x": 42, "y": 28}` (nur dieses
+  *Modell*, AUF-20.4; über 2″ von den anderen, QUE-4.2) und `PUT /api/aufstellenDerEinheitBeenden`
+  (AUF-10.3). Warum abgewählt: Ohne *Auswahl* zieht der Zug das *Modell* allein, mit und ohne
   *Ebene*, so gilt das Beispiel vor und nach AUF-21.1.
 - **V7** Die Seite zeigt (O1):
-  - `modell gesperrt` am Kreis, wenn `gesperrt` (AUF-9.1).
   - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409, bis eine
     Anfrage außer V2 und V9 beantwortet ist (AUF-12.6, 12.7: Auswählen ist keine Handlung);
-    sonst `gründeDerGesperrten` (AUF-9.1, QUE-3.5); ohne *Grund* keine. Warum in der Seite:
-    Die *Sperre* ändert den Stand nicht (D2).
-  - `knopfGruppe`: „zurück“, solange ein *Modell* `gesperrt` ist; „Aufstellen der Einheit
-    beenden“ immer, denn AUF-12.7 nennt den *Grund* nach AUF-7.4.
+    ohne *Grund* keine. Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
+  - `knopfGruppe`: „Aufstellen der Einheit beenden“ immer, denn AUF-12.7 nennt den *Grund*
+    nach AUF-7.4; „zurück“ erst mit AUF-13.1.
 - **V8** Pointer Events am Dokument, ein Weg für Maus und Finger (QUE-3.4,
   `touch-action: none` an `.karte`). Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr
   als 4 px (`zugschwelle`, wie `dragStartThresholdPx` in ArbiterMap) vom Startpunkt abweicht.
@@ -72,13 +69,6 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
     dann an der ersten, an die eine *Base* auf der geraden Strecke stößt (Zweck AUF-26), auf
     1/100″ genau ([S3](../architektur.md#stelle-und-rechnen)). Vorbedingung bis AUF-27: Am
     Anfang des Wegs *überdeckt* keine *Base* eine, gegen die angehalten wird.
-  - Bleibt danach ein *Grund* gegen die *Stelle* (QUE-1.3 nur bei Zonen unter 1″ Abstand),
-    wirft `modellLoslassen` `Sperre` wie `modellSetzen` (V5). Kein *Modell* wird mehr
-    *gesperrt*: `gesperrtesModell.py`, `gesperrt`, `stelleDesGesperrten` und
-    `gründeDerGesperrten` (V1), `modell gesperrt` und der Knopf „zurück“ (V7) entfallen;
-    `PUT /api/zurück` bleibt und ändert nichts (AUF-17.1). Die Beispiele `spielstand.json`,
-    `ebene.json` und `sperre.json` (dort neu: ‚keine Kohärenz‘) verlieren `gesperrt` und
-    `gründeDerGesperrten`, wann: [Plan, Items](../../handoff/plan.md#items) (1210).
   - HTTP: `GET …/modelle/<m>/stelleBeimLoslassen?x=<x>&y=<y>` → 200 mit `modelle[]`, je
     *Modell* der Abfrage `spieler`, `einheit`, `nummer` wie V1 und `x`, `y`. Beispiel
     [stelleBeimLoslassen.json](vertrag/stelleBeimLoslassen.json): Stand von V1, `x=35&y=28`
@@ -91,10 +81,10 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
     Loslassen schickt sie V5 mit dem Punkt des Zeigers, nicht dem gezeigten.
 
 Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5, V6, V9 und V10 (409 bei
-AUF-12.1 gleich `sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
+AUF-10.3 gleich `sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
 `page.route` die Beispiele liefert; 400 und 404: Unit-Tests des Implementierers in
 `tests/einheit/web/anwendungTest.py`. Zu V10: AUF-26.2, 26.3 an der *Stelle* nach dem
-Loslassen: auf der Strecke (exakt kollinear), keine *Base* *überdeckt*, zur ersten
+Loslassen: auf der Strecke zur *Stelle*, wie `web/` sie liest (S2, exakt kollinear), keine *Base* *überdeckt*, zur ersten
 angestoßenen `abstandHöchstens` 1/100″; den Raster prüfen nur Unit-Tests. AUF-24.1, 26.4 am
 Bildschirm: halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt loslassen;
 die *Stelle* danach gleicht den gelesenen Werten exakt (B3).

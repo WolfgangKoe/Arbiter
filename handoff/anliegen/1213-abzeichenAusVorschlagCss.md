@@ -10,7 +10,7 @@ Abzeichen. In [vorschlag.css](../../domaene/mockups/vorschlag.css) stehen trotzd
 `.einheitenKarte.inAufstellung` (Zeile 137) und `.einheitenKartenAbzeichen` (Zeile 149).
 Kein Mockup verwendet sie. Die Komponentenseite ist nach
 [O3](../../technik/architektur/oberflaeche.md) aus `vorschlag.css` gebaut, und dort streicht
-der Implementierer beide Klassen ([1212](1212-setzenPerKlickModulZeileUndToteKlassen.md)).
+der Implementierer beide Klassen (Anliegen 1212).
 Die Entscheidung dazu steht in [1191](1191-abzeichenInAufstellungOhneQuelle.md).
 
 **Kosten.** Ein neues Mockup könnte das Abzeichen aus `vorschlag.css` übernehmen, das die

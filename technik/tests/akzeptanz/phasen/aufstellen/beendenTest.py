@@ -1,12 +1,25 @@
 """AUF-10 · Aufstellen der Einheit beenden."""
 
+from fractions import Fraction
 from http import HTTPStatus
 
-from playwright.sync_api import expect
+from playwright.sync_api import Route, expect
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import aufDieHandlungWarten, knopfDerSeite, spielerAnDerReihe
-from tests.akzeptanz.dienst import aufstellenDerEinheitBeenden, dienstFür
+from arbiter.domaene.spielobjekte import Stelle
+from tests.akzeptanz.bildschirm import (
+    aufDieHandlungWarten,
+    knopfDerSeite,
+    sperrmeldungWarten,
+    spielerAnDerReihe,
+)
+from tests.akzeptanz.dienst import (
+    abwählen,
+    aufstellenDerEinheitBeenden,
+    dienstFür,
+    modellLoslassen,
+    sperreDesVertrags,
+)
 from tests.akzeptanz.handgriffe import (
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
@@ -82,3 +95,37 @@ def testAuf10_3EineEinheitNichtInKohärenzSperrtDasBeendenMitKeineKohärenz(
     assert not aufstellung.aufgestellt(einheit)
     assert aufstellung.einheitInAufstellung is einheit
     assert aufstellung.anDerReihe is zweiterSpieler
+
+
+def testAuf10_3DerDienstSperrtDasBeendenMitDemBeispielDesVertrags(
+    dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors
+):
+    abwählen(dienstDesBeispiels, "Necron Warriors")
+    _, _, drittes, *_ = necronWarriors.modelle
+    stelleDesBeispiels = Stelle(x=Fraction(42), y=Fraction(28))
+    modellLoslassen(
+        dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes, stelleDesBeispiels
+    )
+
+    antwort = aufstellenDerEinheitBeenden(dienstDesBeispiels)
+
+    assert antwort.status_code == HTTPStatus.CONFLICT
+    assert antwort.get_json() == sperreDesVertrags()
+
+
+def antwortMitDerSperreDesVertrags(anfrage: Route) -> None:
+    anfrage.fulfill(status=HTTPStatus.CONFLICT, json=sperreDesVertrags())
+
+
+def testAuf10_3DieSeiteNenntBeimBeendenDenGrundDerSperreImBeispiel(bildschirm, ausgangsaufstellung):
+    stand = sperreDesVertrags()["spielstand"]
+    seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, stand)
+    seite.route("**/api/aufstellenDerEinheitBeenden", antwortMitDerSperreDesVertrags)
+    knopf = knopfDerSeite(seite, "Aufstellen der Einheit beenden")
+
+    with aufDieHandlungWarten(seite):
+        knopf.click()
+
+    assert sperrmeldungWarten(seite, {Grund.keineKohärenz}) == frozenset(
+        sperreDesVertrags()["gründe"]
+    )

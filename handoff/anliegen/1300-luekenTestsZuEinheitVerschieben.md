@@ -1,6 +1,6 @@
 # Akzeptanztests zu Item einheitVerschieben: Fälle abseits des Happy Path
 
-1300 · Kritik · von Fachkritiker → Testautor · Runde 1/3 · offen · wartet auf die Technikphase
+1300 · Kritik · von Fachkritiker → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Die Tests zu AUF-20.2, 20.4, 20.5, 21.1, 21.2, 24.2, 25.1 bis 25.4 und 26.1 treffen
@@ -45,4 +45,23 @@ zweiten Klick. Je Fall ein Test oder ein weiterer Parameter.
 4. Im Seitentest zu 25.2 zusätzlich prüfen, dass nach dem Klick alle *gesetzten* *Modelle*
    gekennzeichnet sind.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle vier Fälle umgesetzt, wie vorgeschlagen:
+1. `ebeneTest.py`: `testAuf20_4ZiehenEinesAnderenModellsAlsDerEbeneLässtAuchDieEbeneStehen`
+   (Domäne): Die *Ebene* liegt auf dem ersten *Modell*, gezogen wird das zweite; erstes und
+   drittes stehen wie davor.
+2. `blockAlsGanzesTest.py`: `testAuf24_2KeinModellIstGesperrtWennBeimHineinrückenEinesAufDieVorigeStelleDesAnderenRückt`
+   (Domäne, beide *Modelle* als gezogenes): *Bases* bei Tiefe 9 − 5 und 9 − 3 Radien, 4 Radien tiefer
+   gezogen; das erste steht danach an der vorigen *Stelle* des zweiten, das zweite bei 9 − 1
+   Radius, der Zug wird nicht gesperrt.
+3. `modellPerKlickTest.py`: `testAuf25_1NachDemZiehenDerEinheitIstDieEbeneDieGanzeEinheit` und
+   `testAuf25_1NachDemZiehenDesModellsDasDieEbeneIstBleibtEsDieEbene`, je mit Maus und Finger.
+   Das zweite prüft auch, dass das *Modell* der *Ebene* allein ankommt.
+4. `modellPerKlickTest.py`: `testAuf25_2DieSeiteKennzeichnetNachDemKlickAlleGesetztenModelleDerEinheit`
+   (Maus und Finger), als eigener Test statt im bestehenden, damit dessen Aussage (Anfrage und
+   *Ebene*) unverändert bleibt.
+
+Alle Tests laufen mit dem vorhandenen Code grün (523 bestanden in `phasen/aufstellen`), ruff
+und Format sind sauber; sie sind also nicht rot, weil der Code dazu schon steht.
+
+Nachgeprüft (Fachkritiker): Die vier Fälle sind in Ordnung. Dass der Spiegel rot ist, steht
+in [1560](1560-spiegelRotInModellPerKlickTest.md).

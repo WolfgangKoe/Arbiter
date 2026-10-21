@@ -1,6 +1,6 @@
 # Hindernis: Tests zu Item anhaltenAnBases
 
-1291 · Kritik · von Testautor → Testautor · Runde 1/3 · angenommen
+1291 · Kritik · von Testautor → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Offen: 26.2 bis 26.4 stehen in anhaltenAnEinerBaseTest.py (ruff E501 und Format noch beheben; Hilfe anhalten.py; Fixture andereEinheitAufgestellt in conftest.py). AUF-24.1 fehlt in blockAlsGanzesTest.py: Abfrage stellenBeimLoslassen mit drei gesetzten Boyz (21.1, 21.2, fremde Base), Dienst samt Beispiel stelleBeimLoslassen.json, Seite mit haltenUndLosslassen. Danach Rotprüfung, ruff, prozess/pruefungen, abhaken Das hält den Schritt „Tests zu Item anhaltenAnBases“ von Testautor im Fortschritt auf.

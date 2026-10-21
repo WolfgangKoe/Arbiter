@@ -7,7 +7,6 @@ class Grund(Enum):
     nichtWählbar = "nicht wählbar"
     nichtInAufstellung = "nicht in Aufstellung"
     einheitBegonnen = "Einheit begonnen"
-    modellGesperrt = "Modell gesperrt"
     keineKohärenz = "keine Kohärenz"
     nichtGanzInDerZone = "nicht ganz in der Zone"
     baseÜberdeckt = "Base überdeckt"

@@ -1,20 +1,18 @@
 from fractions import Fraction
 
 from arbiter.domaene.querschnitt import baseÜberdeckt
-from arbiter.domaene.spielobjekte import Base, Modell, Stelle
+from arbiter.domaene.spielobjekte import Modell, Stelle
 
-# Regel: 254 mm sind 10″, der Durchmesser 254 mm hat den Radius 5″
-zehnZoll = Base(durchmesser=254)
 ursprung = Stelle(x=Fraction(0), y=Fraction(0))
 
 
-def testEineBaseAufEinerAnderenBaseIstÜberdeckt():
+def testEineBaseAufEinerAnderenBaseIstÜberdeckt(zehnZoll):
     anderes = Modell(base=zehnZoll)
 
     assert baseÜberdeckt(Modell(base=zehnZoll), ursprung, {anderes: ursprung})
 
 
-def testBerührendeBasesSindNichtÜberdeckt():
+def testBerührendeBasesSindNichtÜberdeckt(zehnZoll):
     anderes = Modell(base=zehnZoll)
 
     assert not baseÜberdeckt(
@@ -22,7 +20,7 @@ def testBerührendeBasesSindNichtÜberdeckt():
     )
 
 
-def testDasModellÜberdecktSichNichtSelbst():
+def testDasModellÜberdecktSichNichtSelbst(zehnZoll):
     modell = Modell(base=zehnZoll)
 
     assert not baseÜberdeckt(modell, ursprung, {modell: ursprung})

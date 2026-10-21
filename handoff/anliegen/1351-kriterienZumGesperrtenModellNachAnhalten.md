@@ -1,6 +1,6 @@
 # Kriterien zum gesperrten Modell entfallen mit dem Anhalten an Bases
 
-1351 · Kritik · von Fachkritiker → Anforderungsautor · Runde 1/3 · offen · wartet auf 1350
+1351 · Kritik · von Fachkritiker → Anforderungsautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Einordnung: hält die Abnahme des Items auf, nicht die Umsetzung. Nach DoD 3 muss
@@ -34,4 +34,23 @@ AUF-9 ganz weg, auch die Datei. Die Verweise aus 4 und die Glossarzeilen aus 5 n
 Erledigt, wenn `grep -rn "gesperrt" domaene/anforderungen domaene/glossar.md` nur noch
 *Sperren* von Handlungen findet, kein *gesperrtes* *Modell*.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in zwei Schritten, weil der Code das *gesperrte* *Modell*
+noch hat, bis Item 3 gebaut ist (V10).
+- Jetzt umgesetzt: AUF-9.1, 9.3 und QUE-3.5 gelöscht. Verweise nachgezogen: AUF-17.1
+  („Gegeben keine *Sperre* nach AUF-10.3“), QUE-2.7 (nur *gesetzte* *Modelle*), „Am
+  Bildschirm“ in [ziehen.md](../../domaene/anforderungen/phasen/aufstellen/ziehen.md) und
+  [sperrenBeimSetzen.md](../../domaene/anforderungen/phasen/aufstellen/sperrenBeimSetzen.md)
+  (jetzt AUF-26), Zweck von
+  [gesperrtesBeenden.md](../../domaene/anforderungen/phasen/aufstellen/gesperrtesBeenden.md)
+  und [uebergehen.md](../../domaene/anforderungen/querschnitt/uebergehen.md). Im Glossar
+  bringt *zurück* kein *Modell* mehr an seine vorige *Stelle*.
+- Bleibt, bis der Implementierer mit V10 `gesperrtesModell.py`, die Klasse `Gesperrtes` und
+  `Grund.modellGesperrt` entfernt hat: [gesperrtesModell.md](../../domaene/anforderungen/phasen/aufstellen/gesperrtesModell.md)
+  nur mit Überschrift und Zweck, ohne Kriterium (sonst ist `spiegelTest` rot), AUF-12.1 mit
+  ‚Modell gesperrt‘ und der Satz dazu im Zweck von AUF-12, die Glossarzeilen *gesperrt* und
+  *Gesperrtes* (sonst ist `glossarTest` rot). Rot sperrten beide jeden Commit (Hook).
+- Reihenfolge: nach „Implementierer: Tests zu Item anhaltenAnBases grün“, vor „Fachkritiker:
+  Item anhaltenAnBases abgenommen“ lösche ich diese Reste; dann gilt dein Erledigt-Satz.
+  Bis dahin nennt der Stand AUF-12.1 als „wartet auf den Testautor“.
+- Nebenbei gefunden: Was am Bildschirm geschieht, wenn beim Loslassen noch QUE-1.3 sperrt,
+  sagt nach AUF-9 kein Kriterium mehr: [1400](1400-nahkampfreichweiteBeimLoslassen.md).

@@ -7,6 +7,7 @@ from arbiter.web.anwendung import anwendungFür
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, aufstellungVon, spielerMit
 
 pfadDerAuswahl = "/api/spieler/{}/einheiten/{}/ausgewählt"
+pfadDerAbfrage = "/api/spieler/{}/einheiten/{}/modelle/{}/stelleBeimLoslassen"
 
 
 @pytest.fixture
@@ -61,6 +62,22 @@ def testEinModellOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung, körp
     dienst = anwendungFür(aufstellung).test_client()
 
     antwort = dienst.put(pfadDesModells.format(1, 1, 1), json=körper)
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+@pytest.mark.parametrize(
+    "abfrage",
+    [{}, {"x": 3}, {"y": 2}, {"x": "a", "y": 2}, {"x": 3, "y": ""}, {"x": "NaN", "y": 2}]
+    + [{"x": "1_0", "y": 2}, {"x": " 3 ", "y": 2}, {"x": "true", "y": 2}, {"x": "[" * 999, "y": 2}]
+    + [{"x": "1" * 5000, "y": 2}, {"x": "1٣", "y": 2}],
+)
+def testEineAbfrageDerStelleBeimLoslassenOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(
+    aufstellung, abfrage
+):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string=abfrage)
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
@@ -123,3 +140,21 @@ def testEinFremderHostBekommtBadRequest(aufstellung):
     antwort = dienst.get("/api/spielstand", headers={"Host": "fremd.example"})
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+pfadDerEbene = "/api/spieler/{}/einheiten/{}/modelle/{}/ebene"
+
+
+@pytest.mark.parametrize("methode", ["put", "delete"])
+def testEineEbeneOhneGesetztesModellDerAusgewähltenEinheitIstNichtGefunden(aufstellung, methode):
+    aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    dienst = anwendungFür(aufstellung).test_client()
+    pfad = pfadDerEbene.format(1, 1, 1)
+
+    ohneAuswahl = getattr(dienst, methode)(pfad)
+    dienst.put(pfadDerAuswahl.format(1, 1))
+    ohneGesetztesModell = getattr(dienst, methode)(pfad)
+
+    assert ohneAuswahl.status_code == HTTPStatus.NOT_FOUND
+    assert ohneGesetztesModell.status_code == HTTPStatus.NOT_FOUND

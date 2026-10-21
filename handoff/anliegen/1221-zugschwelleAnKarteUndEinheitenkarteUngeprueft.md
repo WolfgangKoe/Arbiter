@@ -1,15 +1,15 @@
 # Kein Test hält die Zugschwelle an Karte und Einheitenkarte
 
-1221 · Kritik · von Reviewer → Testautor · Runde 1/3 · angenommen
+1221 · Kritik · von Reviewer → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu Item [setzenPerKlick](../../domaene/items/setzenPerKlick.md).
 Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, denn es ist eine Lücke
 abseits des Happy Path. Die Zugschwelle prüft nur
 `testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle` an einem
-*Modell* ([622](622-zugschwelleUngeprueft.md)). Dass ein Zug auf einer *Einheitenkarte* nicht
+*Modell* (Anliegen 622). Dass ein Zug auf einer *Einheitenkarte* nicht
 auswählt und ein Zug auf dem *Spielfeld* keine *Formation* *setzt* (V8, AUF-18.1), prüft kein
-Test. Der Fehler in [1220](1220-zugAufKarteUndEinheitenkarteGiltAlsKlick.md) blieb deshalb in
+Test. Der Fehler in Anliegen 1220 blieb deshalb in
 allen Akzeptanztests grün.
 
 **Kosten.** Mit Item 2 baut der Implementierer den Klick um (V9). Ein Rückfall bliebe

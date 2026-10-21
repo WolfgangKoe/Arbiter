@@ -1,16 +1,15 @@
 """Der Spielstand der Aufstellung als JSON-fähige Werte (technik/architektur/web.md, W2, W4)."""
 
-from collections.abc import Collection
+from collections.abc import Collection, Mapping
 
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Einheit, Spieler
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.kennungen import (
     ablageNachNummer,
-    einheitenNachNummer,
-    modelleNachNummer,
+    modelleMitKennungen,
     spielerNachNummer,
 )
 
@@ -22,12 +21,28 @@ def spielstand(aufstellung: Aufstellung) -> dict:
     return {
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
         "zonen": [_zone(aufstellung, zone, spielerNummern) for zone in Aufstellungszone],
-        "modelle": _modelle(aufstellung, spielerNummern),
-        "gründeDerGesperrten": _gründeDerGesperrten(aufstellung, spielerNummern),
+        "modelle": _modelle(aufstellung),
         "spieler": [
             _spieler(aufstellung, spielernummer, einer)
             for spielernummer, einer in spielerNummern.items()
         ],
+    }
+
+
+def stellenBeimLoslassen(aufstellung: Aufstellung, abfrage: Mapping[Modell, Stelle]) -> dict:
+    """Die Antwort der Abfrage: jedes genannte Modell mit seiner Stelle (V10)."""
+    return {
+        "modelle": [
+            {
+                "spieler": kennungen.spielernummer,
+                "einheit": kennungen.einheitennummer,
+                "nummer": kennungen.modellnummer,
+                "x": float(abfrage[kennungen.modell].x),
+                "y": float(abfrage[kennungen.modell].y),
+            }
+            for kennungen in modelleMitKennungen(aufstellung)
+            if kennungen.modell in abfrage
+        ]
     }
 
 
@@ -52,33 +67,30 @@ def _zone(
     }
 
 
-def _modelle(aufstellung: Aufstellung, spielerNummern: dict[int, Spieler]) -> list[dict]:
+def _modell(aufstellung: Aufstellung, modell: Modell, einheit: Einheit, stelle: Stelle) -> dict:
+    beschreibung = {
+        "x": float(stelle.x),
+        "y": float(stelle.y),
+        "radius": float(radiusInZoll(modell.base)),
+        "ausgewählt": aufstellung.modellAusgewählt(modell),
+    }
+    # Regel: V1, `ebene` steht nur am Modell, das die Ebene ist
+    if aufstellung.ebene(einheit) is modell:
+        beschreibung["ebene"] = True
+    return beschreibung
+
+
+def _modelle(aufstellung: Aufstellung) -> list[dict]:
     return [
         {
-            "x": float(stelle.x),
-            "y": float(stelle.y),
-            "radius": float(radiusInZoll(modell.base)),
-            "spieler": spielernummer,
-            "einheit": einheitennummer,
-            "nummer": modellnummer,
-            "ausgewählt": aufstellung.ausgewählt(einheit),
-            "gesperrt": aufstellung.gesperrt(modell),
+            **_modell(aufstellung, kennungen.modell, kennungen.einheit, stelle),
+            "spieler": kennungen.spielernummer,
+            "einheit": kennungen.einheitennummer,
+            "nummer": kennungen.modellnummer,
         }
-        for spielernummer, einer in spielerNummern.items()
-        for einheitennummer, einheit in einheitenNachNummer(einer).items()
-        for modellnummer, modell in modelleNachNummer(einheit).items()
-        if (stelle := aufstellung.stelle(modell) or aufstellung.stelleDesGesperrten(modell))
+        for kennungen in modelleMitKennungen(aufstellung)
+        if (stelle := aufstellung.stelle(kennungen.modell))
     ]
-
-
-def _gründeDerGesperrten(aufstellung: Aufstellung, spielerNummern: dict[int, Spieler]) -> list[str]:
-    genannte = {
-        grund
-        for einer in spielerNummern.values()
-        for modell in einer.armee.modelle
-        for grund in aufstellung.gründeDesGesperrten(modell)
-    }
-    return texteDerGründe(genannte)
 
 
 def texteDerGründe(gründe: Collection[Grund]) -> list[str]:

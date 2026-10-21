@@ -1,6 +1,7 @@
 """Dienst der Akzeptanztests: Anfragen nach dem Vertrag und das Lesen des Spielstands."""
 
 import json
+from collections.abc import Mapping
 from fractions import Fraction
 from pathlib import Path
 
@@ -23,10 +24,24 @@ def dienstFür(aufstellung: Aufstellung):
     return anwendungFür(aufstellung).test_client()
 
 
+def _beispielDesVertrags(datei: str) -> dict:
+    with (_vertrag / datei).open(encoding="utf-8") as quelle:
+        return json.load(quelle)
+
+
 def spielstandDesVertrags() -> dict:
     """Das Beispiel von V1 aus `spielstand.json`, nicht kopiert."""
-    with (_vertrag / "spielstand.json").open(encoding="utf-8") as datei:
-        return json.load(datei)
+    return _beispielDesVertrags("spielstand.json")
+
+
+def sperreDesVertrags() -> dict:
+    """Das Beispiel von V6 aus `sperre.json`, nicht kopiert."""
+    return _beispielDesVertrags("sperre.json")
+
+
+def stelleBeimLoslassenDesVertrags() -> dict:
+    """Das Beispiel von V10 aus `stelleBeimLoslassen.json`, nicht kopiert."""
+    return _beispielDesVertrags("stelleBeimLoslassen.json")
 
 
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
@@ -36,12 +51,6 @@ def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
         for modell in spielstandDesVertrags()["modelle"]
         if modell["spieler"] == spielernummer
     ]
-
-
-def sperreDesVertrags() -> dict:
-    """Das Beispiel von V6 aus `sperre.json`, nicht kopiert."""
-    with (_vertrag / "sperre.json").open(encoding="utf-8") as datei:
-        return json.load(datei)
 
 
 def pfadDerEinheit(aufstellung: Aufstellung, einheit: Einheit) -> str:
@@ -78,6 +87,24 @@ def modellLoslassen(
     return dienst.put(f"{pfad}/stelle", json=körperDerStelle(stelle))
 
 
+def stelleBeimLoslassenAbfragen(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, stelle: Stelle
+):
+    pfad = pfadDesModells(aufstellung, einheit, modell)
+    return dienst.get(f"{pfad}/stelleBeimLoslassen", query_string=körperDerStelle(stelle))
+
+
+def stellenDerAbfrage(
+    einheit: Einheit, abfrage: Mapping[Modell, Stelle]
+) -> dict[int, tuple[float, float]]:
+    """Die Antwort der Abfrage je Nummer des Modells in der Einheit, wie der Dienst sie nennt."""
+    return {
+        nummer: stelleImSpielstand(abfrage[modell])
+        for nummer, modell in enumerate(einheit.modelle, start=1)
+        if modell in abfrage
+    }
+
+
 def modellAufAblageLoslassen(
     dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, spielernummer: int
 ):
@@ -112,8 +139,7 @@ def abwählen(dienst, einheitenname: str):
 
 def ebeneDesVertrags() -> dict:
     """Das Beispiel von V9 aus `ebene.json`, nicht kopiert."""
-    with (_vertrag / "ebene.json").open(encoding="utf-8") as datei:
-        return json.load(datei)
+    return _beispielDesVertrags("ebene.json")
 
 
 def modellAlsEbene(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):

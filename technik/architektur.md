@@ -79,9 +79,10 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund bleibt
   Wächter. Prüft: `formregeln/gruendeTabellen.py`
   ([Regeln](../prozess/regeln.md#formregeln)).
-- **M1** Phasen messen nur über vier Messungen in `messen.py`: zwei *Bases* *überdecken*
-  sich, der *Abstand* zweier Modelle ist höchstens eine Zahl, eine *Base* liegt *ganz in*
-  einer Fläche, der Anteil eines Wegs, bis eine *Base* an eine andere stößt (S3). In der Domäne kennt die Baseform nur `messen.py`. Prüft: nur Text; Auslöser: zweite
+- **M1** Die Baseform kennt in der Domäne nur `messen.py`; Phasen messen nur mit dessen
+  Messungen: *überdecken*, *Abstand* höchstens, *ganz in* einer Fläche, der kürzeste Weg,
+  der *Bases* gemeinsam *ganz in* eine Fläche rückt, der Anteil eines Wegs bis zur ersten
+  Berührung (S3). Prüft: nur Text; Auslöser: zweite
   Baseform (Etappe 6), dann je Baseform ein Vertragstest.
 
 ## Tests

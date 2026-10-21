@@ -4,16 +4,8 @@ from http import HTTPStatus
 
 import pytest
 
-from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import (
-    aufDieHandlungWarten,
-    inhaltDerSeite,
-    knopfDerSeite,
-    sperrmeldungenDerSeite,
-)
 from tests.akzeptanz.dienst import dienstFür, spielstandVon, zurück
 from tests.akzeptanz.handgriffe import (
-    einGesperrtesModell,
     modelleSetzen,
     nachDerWahlDerAufstellungszone,
     stellenAllerModelle,
@@ -30,21 +22,15 @@ def mitGesetztenModellen(aufstellung, ersterSpieler, zweiterSpieler):
     modelleSetzen(aufstellung, einheit, 1)
 
 
-def nachZurückBeiGesperrtemModell(aufstellung, ersterSpieler, zweiterSpieler):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einGesperrtesModell(aufstellung, zweiterSpieler)
-    aufstellung.zurück()
-
-
 ständeOhneSperre = pytest.mark.parametrize(
     "aufbau",
-    [nachDerZonenwahl, mitGesetztenModellen, nachZurückBeiGesperrtemModell],
-    ids=["nachDerZonenwahl", "mitGesetztemModell", "zumZweitenMalZurück"],
+    [nachDerZonenwahl, mitGesetztenModellen],
+    ids=["nachDerZonenwahl", "mitGesetztemModell"],
 )
 
 
 @ständeOhneSperre
-def testAuf17_1ZurückOhneGesperrtesModellLässtModelleEinheitInAufstellungUndAnDerReiheWieDavor(
+def testAuf17_1ZurückOhneSperreLässtModelleEinheitInAufstellungUndAnDerReiheWieDavor(
     aufstellung, ersterSpieler, zweiterSpieler, aufbau
 ):
     aufbau(aufstellung, ersterSpieler, zweiterSpieler)
@@ -60,7 +46,7 @@ def testAuf17_1ZurückOhneGesperrtesModellLässtModelleEinheitInAufstellungUndAn
 
 
 @ständeOhneSperre
-def testAuf17_1DerDienstAntwortetAufZurückOhneGesperrtesModellMitDemStandWieDavor(
+def testAuf17_1DerDienstAntwortetAufZurückOhneSperreMitDemStandWieDavor(
     aufstellung, ersterSpieler, zweiterSpieler, aufbau
 ):
     aufbau(aufstellung, ersterSpieler, zweiterSpieler)
@@ -71,24 +57,3 @@ def testAuf17_1DerDienstAntwortetAufZurückOhneGesperrtesModellMitDemStandWieDav
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == davor
-
-
-def testAuf17_1EinKlickAufZurückAufEinerVorherGeöffnetenSeiteÄndertNichtsUndNenntKeinenGrund(
-    bildschirm, aufstellung, ersterSpieler, zweiterSpieler
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    einGesperrtesModell(aufstellung, zweiterSpieler)
-    veraltet = bildschirm.seiteZu(aufstellung)
-    knopfDerSeite(veraltet, "zurück").wait_for()
-    aufstellung.zurück()
-    stellenDavor = stellenAllerModelle(aufstellung)
-    einheitDavor = aufstellung.einheitInAufstellung
-
-    with aufDieHandlungWarten(veraltet):
-        knopfDerSeite(veraltet, "zurück").click()
-
-    assert stellenAllerModelle(aufstellung) == stellenDavor
-    assert aufstellung.einheitInAufstellung is einheitDavor
-    assert aufstellung.anDerReihe is zweiterSpieler
-    assert sperrmeldungenDerSeite(veraltet) == []
-    assert Grund.modellGesperrt.value not in inhaltDerSeite(veraltet)

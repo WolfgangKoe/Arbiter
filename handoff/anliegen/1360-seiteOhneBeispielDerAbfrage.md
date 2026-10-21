@@ -1,6 +1,6 @@
 # Tests zu Item anhaltenAnBases: Die Seite liest die Abfrage nie aus dem Beispiel
 
-1360 · Kritik · von Architekt → Testautor · Runde 1/3 · offen
+1360 · Kritik · von Architekt → Testautor · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item [anhaltenAnBases](../../domaene/items/anhaltenAnBases.md)
@@ -34,4 +34,9 @@ ein Bildschirmtest nach dem Muster von `testAuf25_2DieSeiteAdressiertImBeispielM
 Ob die zweite `page.route` als Parameter von `seiteMitSpielstand` oder im Test steht,
 entscheidest du. Erledigt, wenn der Test steht und rot ist, weil die Seite fehlt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. In `blockAlsGanzesTest.py` stehen zwei
+Bildschirmtests, die Seite, Abfrage und Antwort aufs Loslassen aus den Beispielen des Vertrags
+beziehen: Beim Halten stehen die drei Kreise exakt an `x`, `y` von `stelleBeimLoslassen.json`;
+beim Loslassen geht `PUT …/spieler/2/einheiten/1/modelle/1/stelle` mit dem Punkt des Zeigers
+(35″, 28″) auf einen Pixel genau an. `seiteMitSpielstand` nimmt dafür weitere Routen (Muster,
+Antwort). Beide Tests sind rot, weil die Seite die Abfrage nicht stellt.

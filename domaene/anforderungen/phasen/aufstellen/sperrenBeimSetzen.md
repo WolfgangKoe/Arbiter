@@ -1,7 +1,7 @@
 ### AUF-3 · Sperren beim Setzen
 
 Zweck: In der *Aufstellung* sperrt Arbiter beim *Setzen* außer nach [QUE-1](../../querschnitt/setzen.md) jede *Stelle* außerhalb der eigenen *Aufstellungszone* und nennt jeden *Grund*.
-Am Bildschirm: ein *Modell* ziehen und loslassen ([AUF-8](ziehen.md)); was bei *Sperre* geschieht, sagt [AUF-9](gesperrtesModell.md).
+Am Bildschirm: ein *Modell* ziehen und loslassen ([AUF-8](ziehen.md), angehalten nach [AUF-26](anhaltenAnEinerBase.md)).
 
 - AUF-3.2 **Wenn** ein *Spieler* ein *Modell* an eine *Stelle* *setzt*, an der seine *Base* nicht *ganz in* der *Aufstellungszone* dieses *Spielers* liegt, **dann** *Sperre* ‚nicht ganz in der Zone‘ (`core_rules.txt:2322`).
 - AUF-3.5 **Wenn** an einer *Stelle* mehr als eines von QUE-1.2, QUE-1.3 und AUF-3.2 sperrt, **dann** nennt Arbiter den *Grund* jedes davon (Anliegen 100 F3 A, git).

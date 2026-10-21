@@ -2,6 +2,7 @@
 
 from collections.abc import Mapping
 from fractions import Fraction
+from itertools import accumulate, pairwise
 from math import isqrt
 
 from arbiter.domaene import messen
@@ -23,15 +24,15 @@ def stellenDerFormation(
     radius = messen.radiusInZoll(base)
     schritt = 2 * radius + formation.abstand
     versätze = _versätzeDerReihen(formation.reihen, schritt)
-    mittelpunkt = (versätze[0] + versätze[-1]) / 2
     stellen = [
-        Stelle(x=mitte.x + versatz - mittelpunkt, y=mitte.y + lage)
+        Stelle(x=mitte.x + versatz, y=mitte.y + lage)
         for versatz, anzahl in zip(versätze, formation.reihen, strict=True)
         for lage in _lagenDerReihe(anzahl, schritt)
     ]
-    rückungX = _rückung([stelle.x for stelle in stellen], radius, grenzenInX)
-    rückungY = _rückung([stelle.y for stelle in stellen], radius, grenzenInY)
-    return [Stelle(x=stelle.x + rückungX, y=stelle.y + rückungY) for stelle in stellen]
+    rückung = messen.rückungInDieFläche(
+        ((base, stelle) for stelle in stellen), grenzenInX, grenzenInY
+    )
+    return [messen.verschoben(stelle, rückung) for stelle in stellen]
 
 
 def formationDerEinheit(
@@ -44,20 +45,19 @@ def formationDerEinheit(
 
 
 def _versätzeDerReihen(reihen: tuple[int, ...], schritt: Fraction) -> list[Fraction]:
-    versätze = [Fraction(0)]
-    for vordere, hintere in zip(reihen, reihen[1:], strict=False):
-        versätze.append(versätze[-1] + _reihenabstand(vordere, hintere, schritt))
-    return versätze
+    """Die Lagen der Reihen quer zu den Reihen, mittig um null."""
+    abstände = [_reihenabstand(vordere, hintere, schritt) for vordere, hintere in pairwise(reihen)]
+    return list(accumulate(abstände, initial=-sum(abstände, Fraction(0)) / 2))
 
 
 def _reihenabstand(vordere: int, hintere: int, schritt: Fraction) -> Fraction:
     """Der kleinste Abstand auf 1/100″, bei dem jede Base der Nachbarreihe den Schritt hält."""
-    nötig = max(
-        max(Fraction(0), schritt**2 - (vorn - hinten) ** 2)
+    nächster = min(
+        abs(vorn - hinten)
         for vorn in _lagenDerReihe(vordere, schritt)
         for hinten in _lagenDerReihe(hintere, schritt)
     )
-    hundertstel = _aufgerundeteWurzel(nötig * _hundertstel**2)
+    hundertstel = _aufgerundeteWurzel((schritt**2 - nächster**2) * _hundertstel**2)
     return Fraction(hundertstel, _hundertstel)
 
 
@@ -69,16 +69,3 @@ def _lagenDerReihe(anzahl: int, schritt: Fraction) -> list[Fraction]:
 def _aufgerundeteWurzel(quadrat: Fraction) -> int:
     ganze = isqrt(-(-quadrat.numerator // quadrat.denominator))
     return ganze if ganze**2 >= quadrat else ganze + 1
-
-
-def _rückung(
-    werte: list[Fraction], radius: Fraction, grenzen: tuple[Fraction, Fraction]
-) -> Fraction:
-    von, bis = grenzen
-    vorn = min(werte) - radius
-    hinten = max(werte) + radius
-    if vorn < von:
-        return von - vorn
-    if hinten > bis:
-        return bis - hinten
-    return Fraction(0)

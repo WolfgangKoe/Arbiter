@@ -27,7 +27,7 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
   (`Sperre.gründe`, Text aus `Grund`) und dem Spielstand ([V6](handlungen.md)). CSRF:
-  [Vertrag, V4](vertrag.md). Prüft: die Dienst-Tests zu AUF-12.6 und 12.7, zu AUF-12.1 gegen
+  [Vertrag, V4](vertrag.md). Prüft: die Dienst-Tests zu AUF-12.6 und 12.7, zu AUF-10.3 gegen
   `sperre.json`.
 - **W4** Spielobjekte haben in der Domäne keine Kennung (D1). `web/` vergibt sie aus der
   Reihenfolge der Ausgangslage: Spieler, Einheit, Modell, an einer Stelle (`kennungen.py`,
