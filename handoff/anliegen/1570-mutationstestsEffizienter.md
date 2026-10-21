@@ -1,6 +1,6 @@
 # Mutationstests effizienter
 
-1570 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
+1570 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Mutationstests sind mir sehr wichtig, weil sie Lücken in den Tests und toten
@@ -34,3 +34,4 @@ ein Ergebnis gilt, solange `technik/`, `pyproject.toml` und `domaene/daten` glei
 nicht nötig, solange 1 und 2 reichen. 4: Bildschirmtests laufen nur, wo sie die Zeile
 ausführen. 5: je Item vor dem Review in geänderten Zeilen, der volle Lauf in der Prozessphase,
 ohne aufzuhalten.
+Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?

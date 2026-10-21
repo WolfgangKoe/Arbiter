@@ -1,6 +1,6 @@
 # P1: Wer kritisiert, und was von den zurückgenommenen Regeln wieder gilt
 
-730 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen · wartet auf die Prozessphase
+730 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** P1 der [Retro 5](../retro.md) steht im [Ablauf](../../prozess/ablauf.md#kritik),

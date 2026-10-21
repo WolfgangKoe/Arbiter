@@ -1,6 +1,6 @@
 # Prozessphase vorziehen: Items und Grenzen
 
-1671 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+1671 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Du willst schon jetzt zur Prozessphase; die [Retro 6](../retro.md) steht als

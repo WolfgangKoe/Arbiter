@@ -1,6 +1,6 @@
 # Mutationsschwelle als untere Grenze, wiederholter Lauf gezielt
 
-1740 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
+1740 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders in Zyklus 6, Anlass der Mutationslauf über Plan 6
@@ -50,3 +50,4 @@ Text; „repariert“ heißt ein Test, der ihn fängt, oder bei einem gleichwert
 beim Werkzeug, dann zählt er nicht (dazu [1751](1751-gleichwertigeMutantenNichtUmDasWerkzeugBauen.md)).
 2 gezielter Lauf je Item, voller Lauf in der Prozessphase; Mechanismus Retro 6, P2. 3 in
 [1570](1570-mutationstestsEffizienter.md).
+Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?

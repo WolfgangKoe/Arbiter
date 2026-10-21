@@ -1,6 +1,6 @@
 # Fortschritt vor der Phase verwirft Haken, Hindernis und Kommentar
 
-991 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
+991 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet, Randfall abseits des Happy Path. Seit

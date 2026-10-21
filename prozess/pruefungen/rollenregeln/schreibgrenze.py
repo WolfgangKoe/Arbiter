@@ -75,7 +75,7 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     for gesperrt, meldung in pfadsperren:
         if gesperrt(relativ):
             return verweigerung(f"Schreibgrenze: {relativ}: {meldung}")
-    if not außerhalb and regelnGesperrt(relativ, wurzel):
+    if not außerhalb and regelnGesperrt(relativ, wurzel, rolle):
         return verweigerung(f"Schreibgrenze: {relativ}: {regelnMeldung}")
     # Regel: Ich 2, Write und Edit in /tmp sind frei, die Pfadsperren gelten weiter.
     if (außerhalb and liegtInTmp(relativ)) or darfSchreiben(relativ, schreibpfade(rolle, wurzel)):

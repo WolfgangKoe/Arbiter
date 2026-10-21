@@ -15,6 +15,8 @@ geschützteMuster = (
     "*/CLAUDE.md",
 )
 ausgenommen = ("prozess/backlog.md", "prozess/pruefungen/*")
+regelumsetzer = "regelumsetzer"
+regelnDatei = "prozess/regeln.md"
 regelnMeldung = (
     "Prozessregeln, Prämissen und Rollen ändern sich nur in der Prozessphase nach "
     "`Freigabe Retro <n>`; davor beschreibt die Retro die Änderung."
@@ -35,5 +37,8 @@ def prozessphaseFreigegeben(wurzel: Path) -> bool:
     return freigabeCommit(wurzel, "Retro", aktuell.zyklus) is not None
 
 
-def regelnGesperrt(relativ: str, wurzel: Path) -> bool:
+def regelnGesperrt(relativ: str, wurzel: Path, rolle: str | None = None) -> bool:
+    # Regel: Ablauf, Prozessphase (Anliegen 1900): `regeln.md` pflegt der Regelumsetzer.
+    if relativ == regelnDatei and rolle == regelumsetzer:
+        return False
     return istGeschützt(relativ) and not prozessphaseFreigegeben(wurzel)

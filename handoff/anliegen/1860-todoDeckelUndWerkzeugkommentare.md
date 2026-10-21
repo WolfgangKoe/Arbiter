@@ -1,6 +1,6 @@
 # P5: Deckel für TODOs, Werkzeugkommentare und die bestehenden Kommentare
 
-1860 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
+1860 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** P5 der [Retro 6](../retro.md) setzt deinen Auftrag

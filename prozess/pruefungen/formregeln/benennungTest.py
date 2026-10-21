@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 
 from formregeln.benennung import (
-    akzeptanzHilfsmodule,
     dateinamenVerstoß,
     geprüfteDateien,
     nameVerstoß,
@@ -233,29 +232,16 @@ def testHilfsmodulInEinemUnterordnerBleibtRot(tmp_path):
     assert any("handgriffe.py" in meldung for meldung in verstöße(tmp_path))
 
 
-@pytest.mark.parametrize("dateiname", sorted(akzeptanzHilfsmodule))
-def testJedesHilfsmodulIstGrünUndMitTestfunktionRot(tmp_path, dateiname):
-    hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", dateiname)
-    assert verstöße(tmp_path) == []
-    hilfsmodulAufbauen(tmp_path / "zweit", "", "def testAuf1_1Probe(): ...\n", dateiname)
-    assert any(dateiname in meldung for meldung in verstöße(tmp_path / "zweit"))
-
-
-def testZiehenPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "", "def ziehen(): ...\n", "ziehen.py")
-    assert verstöße(tmp_path) == []
-
-
-def testAuswahlPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "", "def auswahl(): ...\n", "auswahl.py")
-    assert verstöße(tmp_path) == []
-
-
-def testAnhaltenPyIstEinHilfsmodulDerAkzeptanztests(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "", "def anhalten(): ...\n", "anhalten.py")
-    assert verstöße(tmp_path) == []
-
-
-def testDienstPyOhneListeneintragBliebeRot(tmp_path):
+def testUnbekanntesHilfsmodulOhneTestfunktionIstGrün(tmp_path):
     hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", "unbekannt.py")
+    assert verstöße(tmp_path) == []
+
+
+def testUnbekanntesModulMitTestfunktionIstRot(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "def testAuf1_1Probe(): ...\n", "unbekannt.py")
+    assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))
+
+
+def testUnbekanntesModulImUnterordnerIstRot(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "phasen", "def stelleSetzen(): ...\n", "unbekannt.py")
     assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))

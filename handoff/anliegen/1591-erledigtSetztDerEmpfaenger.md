@@ -1,6 +1,6 @@
 # Der Empfänger setzt `erledigt`, die Nachprüfung entfällt
 
-1591 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · abgelehnt
+1591 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Implementierer hat in Anliegen 1580 (Absender

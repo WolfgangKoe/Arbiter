@@ -1,6 +1,6 @@
 # DoD über das Inkrement nur per Befehl des Reviewers
 
-1790 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
+1790 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Aus dem [Rundgang Prüfcode](../review.md#rundgang-prüfcode) in Review 6, Punkt 1,

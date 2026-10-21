@@ -271,8 +271,9 @@ Prozess 5 je Prozess-Item | Rolle des Items: P<k> | Fakt: Commit `P<k>:`
 Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
 
 Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
-Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis und Dashboard: Anliegen
-490.
+Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
+`standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py`,
+`standregeln/zeilenZug.py`.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.

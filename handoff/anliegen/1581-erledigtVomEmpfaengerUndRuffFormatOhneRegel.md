@@ -1,6 +1,6 @@
 # Erledigt vom Empfänger gesetzt, ruff format ohne Regel
 
-1581 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · angenommen
+1581 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Bei der Nachprüfung von Anliegen 1580 (erfüllt: kein

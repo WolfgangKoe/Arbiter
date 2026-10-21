@@ -29,7 +29,8 @@ markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
 frontendDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.(js|css|html)$")
 anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
 
-dateinameFalsch = "Dateiname nicht in camelCase, ASCII"
+testEndung = "Test.py"
+dateinameFalsch ="Dateiname nicht in camelCase, ASCII"
 frontendEndungen = (".js", ".css", ".html")
 mindestlänge = 3
 achsen = {"x", "y"}
@@ -38,15 +39,6 @@ ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
 # Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
-# Warum: Diese Hilfsmodule haben keine Anforderung hinter sich (Anliegen 257).
-akzeptanzHilfsmodule = {
-    "handgriffe.py",
-    "bildschirm.py",
-    "dienst.py",
-    "ziehen.py",
-    "auswahl.py",
-    "anhalten.py",
-}
 ausgeschlosseneOrdner = {
     *altbestandOrdner,
     ".git",
@@ -148,7 +140,7 @@ def testfunktionen(baum: ast.AST) -> Iterator[ast.FunctionDef | ast.AsyncFunctio
 
 
 def istTestdatei(name: str) -> bool:
-    return name.endswith("Test.py") or name.startswith("test_")
+    return name.endswith(testEndung) or name.startswith("test_")
 
 
 def quelltextVerstöße(
@@ -196,14 +188,14 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None
-    if pfad.parent == ordner and pfad.name in akzeptanzHilfsmodule:
+    if pfad.parent == ordner and not pfad.name.endswith(testEndung):
         hatTest = any(testfunktionen(ast.parse(pfad.read_text(encoding="utf-8"))))
         return "Hilfsmodul darf keine Testfunktion enthalten" if hatTest else None
-    if not pfad.name.endswith("Test.py"):
+    if not pfad.name.endswith(testEndung):
         return "Akzeptanztest muss `<anforderung>Test.py` heißen"
     anforderungen = wurzel / anforderungsOrdner
     anforderung = (
-        anforderungen / pfad.parent.relative_to(ordner) / f"{pfad.name.removesuffix('Test.py')}.md"
+        anforderungen / pfad.parent.relative_to(ordner) / f"{pfad.name.removesuffix(testEndung)}.md"
     )
     if anforderung.is_file():
         return None

@@ -1,6 +1,6 @@
 # Regelkommentare entbehrlich
 
-1660 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
+1660 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich finde noch diverse Kommentare wie ‚# Regel:
@@ -58,3 +58,4 @@ und Prüfungen schon sichern.
 1 und 3 nur Werkzeugkommentare mit Regelcode und `TODO`, die Fundstelle trägt der Name; 2
 höchstens drei, ein TODO von vor der Technikphase macht die DoD rot; 4 Technikphase 7; 5 baut
 der Regelumsetzer mit P5.
+Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?

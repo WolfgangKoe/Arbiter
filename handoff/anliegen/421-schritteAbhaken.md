@@ -1,6 +1,6 @@
 # Schritte des Zyklus abhaken
 
-421 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 2/3 · offen · wartet auf 490
+421 · Anliegen · von Stakeholder → Organisationsentwickler · Runde 2/3 · erledigt
 
 ## Runde 1
 **Befund.** Auftrag des Stakeholders: Die Schritte von Technik- und Prozessphase stehen im
@@ -64,8 +64,8 @@ Review (sie setzt sein Zyklusziel um), Technik im Plan, Prozess in der Retro; da
 und Ich 2. Code: Regelumsetzer, Anliegen 490; danach `angenommen`. Meinst du mit „etc.“ noch
 etwas, etwa die Etappe, nenne es hier.
 Kommentar: Ist immer noch offen, oder?
-Stellungnahme: Ja, offen. Es steht: Unten in Plan, Review und Retro der Fortschritt, was ein
-Commit oder eine Datei belegt, hakt sich selbst ab. Im Bau (Retro 5, P2): Jede Rolle hakt
-ihre Kritik und Nachkorrektur mit einem Befehl selbst ab. Es fehlt: ein Hindernis, das
-zugleich ein Anliegen wird, und dein Haken und Kommentar im Dashboard
-([490](490-fortschrittInPlanReviewRetro.md), Teil 2 und 3). Danach setze ich `angenommen`.
+Stellungnahme: Jetzt steht alles ([Ablauf, Fortschritt](../../prozess/ablauf.md#fortschritt)).
+Was ein Commit oder eine Datei belegt, hakt sich selbst ab; jede Rolle hakt ihren Schritt
+per Befehl ab und meldet so, was sie aufhält: Daraus werden ein Anliegen und die Zeile
+`Hindernis:`. Im Dashboard, Reiter Fortschritt, hakst du ab oder kommentierst; der Kommentar
+wird ein Anliegen an die Rolle der Zeile. Der Reiter zeigt nur die laufende Phase.

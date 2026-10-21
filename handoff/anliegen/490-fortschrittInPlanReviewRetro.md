@@ -1,6 +1,6 @@
 # Fortschritt in Plan, Review und Retro
 
-490 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
+490 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 421 (F1 A, F2 A) einen lebenden Plan beauftragt,

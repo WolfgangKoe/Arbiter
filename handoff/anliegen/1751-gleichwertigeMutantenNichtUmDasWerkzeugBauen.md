@@ -1,6 +1,6 @@
 # Gleichwertige Mutanten: den Code nicht um das Werkzeug herum bauen
 
-1751 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · angenommen
+1751 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** Beitrag zur offenen Frage in [1740](1740-mutationsschwelleAlsUntereGrenze.md):

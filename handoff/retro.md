@@ -51,8 +51,8 @@ Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 ([1671](anliegen/1671-pro
   erledigte Anliegen nach Phase, mit Kommentarfeld; ein Modul liest und schreibt den Kopf
   für alle Skripte und vergibt nur freie Nummern aus dem Bereich des Auftrags (5); dazu 1070.
 - P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): im Code nur Werkzeugkommentare und
-  gedeckelte TODOs; TODOs von vor der Technikphase machen die DoD über das Inkrement rot
-  ([1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md)).
+  gedeckelte TODOs (Es 8); die bestehenden Kommentare entfernt er im Prüfcode, Implementierer
+  und Testautor in der Technikphase 7, rot erst in deren DoD ([1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md)).
 
 ## Empfehlung
 Freigabe samt 1860, dann P1, danach P2 bis P5 und [1790](anliegen/1790-dodUeberDasInkrementNurPerBefehl.md)

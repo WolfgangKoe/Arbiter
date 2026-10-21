@@ -129,6 +129,22 @@ def testRegelnSindInDerProzessphaseErstNachDerFreigabeDerRetroFrei(wurzel, gitRe
     assert entscheide(ablauf, wurzel) is None
 
 
+def testRegelnMdIstFürDenRegelumsetzerInJederPhaseFrei(wurzel, gitRepo):
+    (wurzel / ".claude" / "agents" / "regelumsetzer.md").write_text(
+        rollenkopf.replace("probe", "regelumsetzer"), encoding="utf-8"
+    )
+    (wurzel / "handoff").mkdir()
+    (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    regeln = wurzel / "prozess" / "regeln.md"
+    assert entscheide(schreiben(regeln, rolle="regelumsetzer"), wurzel) is None
+    antwort = entscheide(schreiben(regeln), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    ablauf = schreiben(wurzel / "prozess" / "ablauf.md", rolle="regelumsetzer")
+    antwort = entscheide(ablauf, wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
 def testStakeholderOhneRolleIstFrei(wurzel):
     assert entscheide(schreiben(wurzel / "domaene" / "ziel.md", rolle=None), wurzel) is None
 

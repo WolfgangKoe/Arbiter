@@ -1,6 +1,6 @@
 # regeln.md in jeder Phase, Hilfsmodule ohne Liste
 
-1900 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen
+1900 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Zwei Einträge im [Backlog](../../prozess/backlog.md) sind mit „Freigabe Retro 6“
@@ -35,4 +35,10 @@ zwei Listen, die auseinanderlaufen.
 Erledigt, wenn beide Tests grün sind und die Zeilen in [Regeln](../../prozess/regeln.md)
 stehen; den Vermerk im Ablauf setze ich.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt. Zu 1: `regelnGesperrt` nimmt die Rolle und lässt
+`prozess/regeln.md` für den Regelumsetzer durch (`rollenregeln/schreibgrenzeTest.py`: Regelumsetzer
+in der Technikphase grün, andere Rolle rot, `ablauf.md` rot). Zu 2: Hilfsmodul ist jede Datei direkt
+im Akzeptanzordner ohne Endung `Test.py` und ohne Testfunktion, die Liste entfällt
+(`formregeln/benennungTest.py`: unbekanntes Modul grün, mit Testfunktion rot, im Unterordner rot);
+beide Zeilen in [Regeln](../../prozess/regeln.md) angepasst. Die Kritik des Architekten vor Teil 2
+lag mir nicht vor; die Regel folgt deinem Gegenvorschlag, der Architekt kann nachträglich kritisieren.
