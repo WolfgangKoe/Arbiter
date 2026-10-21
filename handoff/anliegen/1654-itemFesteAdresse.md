@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: 1653
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1650 entschieden: Arbiter startet immer unter
@@ -28,4 +27,7 @@ ist. Technisch zu beachten, damit Testautor und Implementierer nicht raten:
 3. W5 in [web.md](../../technik/architektur/web.md) ziehe ich in der Technikphase vor den Tests
    nach.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. QUE-8.1 und 8.2 sind Item 1 in Plan 7,
+[Aufräumen und feste Adresse](../../domaene/items/aufraeumenUndFesteAdresse.md), neben dem
+Umbau aus 1655 und der Teilung von `seite.js` (1541); die drei haben getrennte Dateien. Deine
+Punkte 1 bis 3 gelten für Testautor und Implementierer, wie sie hier stehen.

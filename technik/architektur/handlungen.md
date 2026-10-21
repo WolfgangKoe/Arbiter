@@ -59,14 +59,16 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
   des Browsers (`preventDefault` auf `pointerdown` und `dragstart`, `user-select: none` an
   `.armeeKarte`); sonst bricht `pointercancel` den Zug ab.
 
-- **V10** Anhalten an *Bases* (AUF-24.1, 26.2 bis 26.4), mit Item anhaltenAnBases:
+- **V10** Zeigen beim Ziehen und Anhalten an *Bases* (AUF-24.3, 26.5; AUF-28.2, 29.1 und 29.3
+  nur für das erste Weiterrücken, Rest: Anliegen 2180), mit Item anhaltenAnBases:
   - Domäne: Die Abfrage `stellenBeimLoslassen(modell, stelle)` → *Modell* → *Stelle* nennt
     jedes *Modell*, das `modellLoslassen(modell, stelle)` *setzen* würde (das gezogene oder
     jedes *gesetzte* der *Einheit*, V3), an seiner *Stelle* nach AUF-8.2, 21.1, 21.2, 26.1
-    bis 26.3, ohne zu *setzen*; Wächter wie dort werfen `Sperre`. `modellLoslassen` *setzt*
-    genau diese *Stellen*, so steht nach dem Loslassen alles, wo die *Karte* es zeigte.
+    und 29.1, ohne zu *setzen*; Wächter wie dort werfen `Sperre`. `modellLoslassen` *setzt*
+    genau diese *Stellen*, so steht nach dem Loslassen alles, wo die *Karte* es zeigte
+    (AUF-28.2). Der Weg beginnt an der *gesetzten* *Stelle*, nicht an der zuletzt gezeigten.
     Angehalten wird nur, wenn die *Stelle* am Ende des Wegs eine *Base* *überdecken* würde,
-    dann an der ersten, an die eine *Base* auf der geraden Strecke stößt (Zweck AUF-26), auf
+    dann an der ersten, an die eine *Base* auf der geraden Strecke stößt (Zweck AUF-29), auf
     1/100″ genau ([S3](../architektur.md#stelle-und-rechnen)). Vorbedingung bis AUF-27: Am
     Anfang des Wegs *überdeckt* keine *Base* eine, gegen die angehalten wird.
   - HTTP: `GET …/modelle/<m>/stelleBeimLoslassen?x=<x>&y=<y>` → 200 mit `modelle[]`, je
@@ -83,8 +85,8 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
 Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5, V6, V9 und V10 (409 bei
 AUF-10.3 gleich `sperre.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
 `page.route` die Beispiele liefert; 400 und 404: Unit-Tests des Implementierers in
-`tests/einheit/web/anwendungTest.py`. Zu V10: AUF-26.2, 26.3 an der *Stelle* nach dem
-Loslassen: auf der Strecke zur *Stelle*, wie `web/` sie liest (S2, exakt kollinear), keine *Base* *überdeckt*, zur ersten
-angestoßenen `abstandHöchstens` 1/100″; den Raster prüfen nur Unit-Tests. AUF-24.1, 26.4 am
+`tests/einheit/web/anwendungTest.py`. Zu V10: AUF-29.1 mit einem Weiterrücken ab der *gesetzten*
+*Stelle*, an der *Stelle* nach dem Loslassen (28.2): auf der Strecke zur *Stelle*, wie `web/` sie liest (S2, exakt kollinear), keine *Base* *überdeckt*, zur ersten
+angestoßenen `abstandHöchstens` 1/100″; den Raster prüfen nur Unit-Tests. AUF-24.3, 26.5 am
 Bildschirm: halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt loslassen;
 die *Stelle* danach gleicht den gelesenen Werten exakt (B3).

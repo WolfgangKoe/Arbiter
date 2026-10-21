@@ -1,7 +1,9 @@
 ### AUF-23 · Einheit zurücklegen
 
-Zweck: Ein Zug auf die eigene *Ablage* bringt die ganze *Einheit in Aufstellung* zurück, ein einzelnes *Modell* nur, wenn sie nur eines hat; danach *setzt* ein Klick ihre *Formation* neu ([AUF-18.2](setzenPerKlick.md), Anliegen 851, 890 F1). Ersetzt in [AUF-16.6](loslassenOhneZiel.md) die eigene *Ablage*.
-Am Bildschirm: ein *Modell* auf die eigene *Ablage* ziehen und loslassen.
+Zweck: Ein Knopf neben „Aufstellen der Einheit beenden“ nimmt die ganze *Einheit in Aufstellung* von der *Karte*, dann *setzt* ein Klick sie neu ([AUF-18.2](setzenPerKlick.md), Anliegen 851, 890 F1, 2062, 2220).
+Am Bildschirm: „Einheit zurücklegen“ klicken.
 
-- AUF-23.1 **Gegeben** die *Ebene* der *Einheit in Aufstellung* ist die ganze *Einheit*, oder sie hat nur ein *Modell*, **wenn** jemand eines ihrer *gesetzten* *Modelle* auf die *Ablage* ihres *Spielers* zieht und loslässt, **dann** ist keines ihrer *Modelle* mehr *gesetzt* (*zurücklegen*, Anliegen 890 F1).
-- AUF-23.2 **Gegeben** die *Einheit in Aufstellung* hat mehr als ein *Modell* und nicht die ganze *Einheit* als *Ebene*, **wenn** jemand eines ihrer *gesetzten* *Modelle* auf die *Ablage* ihres *Spielers* zieht und loslässt, **dann** *Sperre* ‚nur ganze Einheit‘ wie nach AUF-12.5 und 12.6 (Anliegen 890 F1, 931 F1).
+- AUF-23.1 **Gegeben** eine *Einheit in Aufstellung*, **wenn** ein *Spieler* „Einheit zurücklegen“ klickt, **dann** ist keines ihrer *Modelle* mehr *gesetzt*, gleich welche *Ebene* sie hat, und *an der Reihe* bleibt gleich (*zurücklegen*, Anliegen 2062, 2220 F1, F2).
+- AUF-23.3 **Wenn** AUF-23.1 eine *ausgewählte* *Einheit* *zurücklegt*, **dann** bleibt sie es mit der ganzen *Einheit* als *Ebene* (AUF-18.1).
+- AUF-23.4 **Gegeben** eine *Einheit in Aufstellung*, **dann** bietet Arbiter „Einheit zurücklegen“ neben „Aufstellen der Einheit beenden“ an, sonst nicht (Anliegen 2220 F3).
+- AUF-23.5 **Gegeben** keine *Einheit in Aufstellung*, **wenn** *zurücklegen* ankommt, etwa von einer zweiten offenen Seite (QUE-3.2), **dann** ändert Arbiter nichts und nennt keinen *Grund* (wie Anliegen 380 F1 A, 2220 F3).

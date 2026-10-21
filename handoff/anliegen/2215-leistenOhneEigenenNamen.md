@@ -1,0 +1,34 @@
+# Die drei Leisten haben keinen eigenen Namen
+
+Form: Kritik
+Von: Fachkritiker
+An: Architekt
+Runde: 1/3
+Status: offen
+Wartet auf: Technikphase
+
+## Runde 1
+**Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
+Technikphase. In [auf-13.html](../../domaene/mockups/auf-13.html) und
+[que-5.html](../../domaene/mockups/que-5.html) meldet SonarLint in der IDE je dreimal
+Web:S5255: Gleichartige Elemente sollen sich per `aria-label` unterscheiden. Gemeint sind die
+drei `<aside class="leiste">`; einen Namen haben nur ihre *Griffe* („Ablage Spieler 1“,
+„Ablage Spieler 2“, „Protokoll“), nicht die *Leisten* selbst. Das Markup der *Leiste* legt
+[Oberfläche, O4](../../technik/architektur/oberflaeche.md) fest. Kein Schritt des Happy Path
+fehlt, keine *Sperre* ist betroffen, und keine Prüfung ist rot, denn SonarLint prüft nach
+[Ablauf](../../prozess/ablauf.md#technikphase) nur Python (Anliegen 280). Barrierefreiheit
+steht nicht im [Ziel](../../domaene/ziel.md); fachlich ist das deshalb kein Mangel, es fällt
+aber in die Sicht des Stakeholders.
+
+**Kosten.** Nach O3 übernimmt der Implementierer das Markup der Mockups ohne Umschreiben. Ohne
+Entscheidung erben die Spielseite und die Komponentenseite dieselben Warnungen
+([2240](2240-leistenInKomponentenseiteEintragen.md) trägt die *Leisten* dort ein). Wird es
+später geändert, müssen Mockups, Komponentenseite und Seite noch einmal angepasst werden.
+
+**Gegenvorschlag.** In O4 entscheiden, ob jede *Leiste* ein `aria-label` bekommt, das ihren
+Inhalt mit den Begriffen des Glossars nennt: links „Ablage Spieler 1“, rechts
+„Ablage Spieler 2“, unten „Protokoll“. Dann entscheidet O4 auch, was der *Griff* weiter als
+Namen trägt. Wird das nicht übernommen, die Warnung in O4 mit Begründung als bewusst
+hingenommen festhalten. Ux zieht danach auf-13.html und que-5.html nach.
+
+**Stellungnahme.**

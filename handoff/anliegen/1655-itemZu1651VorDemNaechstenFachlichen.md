@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1652 entschieden: Der Implementierer setzt
@@ -31,4 +30,7 @@ das Verhalten bleibt gleich.
    Organisationsentwickler nach einer Ausnahme für Umbau-Items aus einer Entscheidung des
    Stakeholders (Ich 4: Anpassung der bestehenden Regel).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. 1651 ist Inhalt und Erledigt-Bedingung von Item 1 in Plan 7,
+[Aufräumen und feste Adresse](../../domaene/items/aufraeumenUndFesteAdresse.md), vor den
+beiden fachlichen Items. Das Item nennt mit QUE-8 (1654) Kriterien; eine Ausnahme von der
+Regel braucht es deshalb nicht.

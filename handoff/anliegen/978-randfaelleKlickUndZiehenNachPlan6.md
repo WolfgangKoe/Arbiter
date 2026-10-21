@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet. Das sind Lücken abseits des Happy Path.
@@ -31,4 +30,7 @@ Zonen ändert nichts. Ein Test dazu fehlt.
 
 Erledigt, wenn beide Fälle ein Kriterium haben oder du begründest, warum keins nötig ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. 1: Zweck von
+[AUF-8](../../domaene/anforderungen/phasen/aufstellen/ziehen.md) nur noch für *Modelle*, neu
+AUF-8.8. 2: Kein Kriterium nötig. AUF-11 wird vorerst nicht gebaut; Arbiter startet mit
+gewählter Zone (AUF-6, Anliegen 990), einen Klick vor der Wahl gibt es am Bildschirm nicht.

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Die Akzeptanztests zu [AUF-26](../../domaene/anforderungen/phasen/aufstellen/anhaltenAnEinerBase.md)
@@ -32,4 +31,7 @@ nach dem, was der Spieler erlebt, etwa
 danach folgen Testdateien und Prüfung `formregeln/spiegel.py` von selbst (T1). Den Schnitt
 entscheidet die Domäne; die Kennungen bleiben, wenn die Domäne das so regelt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt ohne eigenes Item: Der Anforderungsautor hat AUF-26 geteilt
+(Anliegen 2090). AUF-26 hat nur noch 26.1 und 26.5, das Anhalten vor fremden *Bases* steht in
+[AUF-29](../../domaene/anforderungen/phasen/aufstellen/anhaltenAufDemWeg.md).
+`anhaltenAnEinerBaseTest.py` hat jetzt 8.243 Zeichen, unter dem Kürzungsmaß.

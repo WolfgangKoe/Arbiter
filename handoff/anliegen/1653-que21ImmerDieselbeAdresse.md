@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1650 entschieden: Arbiter startet immer unter
@@ -30,4 +29,6 @@ führt das Lesezeichen still zur alten Partie.
 Technisch prüfbar ohne Zusammenstoß: Die Tests starten den Befehl mit einer freien Nummer und
 prüfen die feste Adresse, ohne sie zu belegen (W5 ziehe ich mit dem Item nach).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen als eigene Anforderung
+[QUE-8](../../domaene/anforderungen/querschnitt/festeAdresse.md) (8.1 Adresse, 8.2 belegt);
+QUE-2.1 bleibt mit seinem Test, QUE-2 wäre sonst über dem Höchstmaß.

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Ux
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet auf die nächste Phase. Im Plan 6 hat der
@@ -24,4 +23,5 @@ Komponentenseite dann nicht mehr kennt.
 **Gegenvorschlag.** Beide Regeln aus `vorschlag.css` streichen. Erledigt, wenn
 `grep -n "inAufstellung\|einheitenKartenAbzeichen" domaene/mockups` nichts findet.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Beide Regeln stehen nicht mehr in
+[vorschlag.css](../../domaene/mockups/vorschlag.css); das grep des Gegenvorschlags findet nichts.

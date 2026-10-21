@@ -228,19 +228,3 @@ def dienst(aufstellungNachDerZonenwahl: Aufstellung):
 def dienstDesBeispiels(aufstellungDesBeispiels: Aufstellung):
     """Der Flask-Testclient der Anwendung über dem Stand des Beispiels im Vertrag."""
     return dienstFür(aufstellungDesBeispiels)
-
-
-@pytest.fixture
-def andereEinheitAufgestellt(
-    aufstellung: Aufstellung,
-    ersterSpieler: Spieler,
-    zweiterSpieler: Spieler,
-    ersteEinheitDesSpielersAnDerReihe: Einheit,
-) -> Einheit:
-    """Zweite Einheit des ersten Spielers, erste des anderen stehen; der erste ist dran."""
-    _, andereEinheit = ersterSpieler.armee.einheiten
-    einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
-    einheitAufstellen(aufstellung, andereEinheit)
-    einheitAufstellen(aufstellung, einheitDesAnderenSpielers)
-    assert not aufstellung.aufgestellt(ersteEinheitDesSpielersAnDerReihe)
-    return andereEinheit

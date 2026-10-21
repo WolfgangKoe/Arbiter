@@ -8,7 +8,7 @@ import pytest
 from playwright.sync_api import expect
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.anhalten import blockVorEinerFremdenBase, stellenAlsZahlen
+from tests.akzeptanz.anhalten import stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     kreiseDerKarte,
@@ -68,184 +68,6 @@ def stellenDerReihe(aufstellung, radius) -> list[Stelle]:
 def verschobeneStelle(stelle: Stelle, radien: int, radius) -> Stelle:
     # Warum: Die Reihe liegt entlang y, die Tiefe x bleibt
     return Stelle(x=stelle.x, y=stelle.y + radien * radius)
-
-
-# Warum: Ziel in Tiefe und Länge in Zoll; der Block aus drei Boyz verschiebt sich, rückt hinein
-zieleDesBlocks = pytest.mark.parametrize(
-    "ziel", [(4, 20), (12, 20)], ids=["verschieben", "hineinrücken"]
-)
-
-
-@zieleDesBlocks
-def testAuf24_1DieAbfrageNenntJedesGesetzteModellDerEinheitUndSetztNichts(
-    aufstellungNachDerZonenwahl, boyz, ziel
-):
-    aufstellung = aufstellungNachDerZonenwahl
-    gesetzte = modelleSetzen(aufstellung, boyz, 3)
-    [(gezogenes, _), *_] = gesetzte
-    aufstellung.auswählen(boyz)
-    tiefe, länge = ziel
-    stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
-
-    abfrage = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
-
-    assert set(abfrage) == {modell for modell, _ in gesetzte}
-    for modell, davor in gesetzte:
-        assert aufstellung.stelle(modell) == davor
-
-
-@zieleDesBlocks
-def testAuf24_1BeimLoslassenStehtJedesModellDortWoDieAbfrageEsZeigte(
-    aufstellungNachDerZonenwahl, boyz, ziel
-):
-    aufstellung = aufstellungNachDerZonenwahl
-    gesetzte = modelleSetzen(aufstellung, boyz, 3)
-    [(gezogenes, _), *_] = gesetzte
-    aufstellung.auswählen(boyz)
-    tiefe, länge = ziel
-    stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
-    gezeigt = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
-
-    aufstellung.modellLoslassen(gezogenes, stelleDesLoslassens)
-
-    for modell, _ in gesetzte:
-        assert aufstellung.stelle(modell) == gezeigt[modell]
-
-
-@welchesGezogenWird
-def testAuf24_1VorEinerBaseEinerAnderenEinheitStehtJedesModellDortWoDieAbfrageEsZeigte(
-    aufstellung, ersteEinheitDesSpielersAnDerReihe, andereEinheitAufgestellt, zweitesGezogen
-):
-    einheit = ersteEinheitDesSpielersAnDerReihe
-    [fremdesModell] = andereEinheitAufgestellt.modelle
-    zug = blockVorEinerFremdenBase(
-        aufstellung, einheit, fremdesModell, zweitesGetroffen=False, zweitesGezogen=zweitesGezogen
-    )
-    gezeigt = aufstellung.stellenBeimLoslassen(zug.gezogenes, zug.ziel)
-
-    aufstellung.modellLoslassen(zug.gezogenes, zug.ziel)
-
-    for modell, _ in zug.gesetzte:
-        assert aufstellung.stelle(modell) == gezeigt[modell]
-    assert aufstellung.stelle(zug.gezogenes) != zug.ziel
-
-
-def testAuf24_1DerDienstNenntDieStellenDesBlocksWieDasBeispielImVertrag(dienstDesBeispiels):
-    auswählen(dienstDesBeispiels, "Necron Warriors")
-
-    antwort = dienstDesBeispiels.get(
-        "/api/spieler/2/einheiten/1/modelle/1/stelleBeimLoslassen", query_string={"x": 35, "y": 28}
-    )
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == stelleBeimLoslassenDesVertrags()
-
-
-def testAuf24_1DerDienstNenntJedesGesetzteModellDerEinheitUndVerändertNichts(
-    dienst, aufstellungNachDerZonenwahl, boyz
-):
-    aufstellung = aufstellungNachDerZonenwahl
-    [(gezogenes, _), *_] = modelleSetzen(aufstellung, boyz, 3)
-    auswählen(dienst, "Boyz")
-    ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 12, 20)
-    erwartet = aufstellung.stellenBeimLoslassen(gezogenes, ziel)
-    spielstandDavor = spielstandVon(dienst)
-
-    antwort = stelleBeimLoslassenAbfragen(dienst, aufstellung, boyz, gezogenes, ziel)
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert stellenDerEinheitIm(antwort.get_json(), "Boyz") == stellenDerAbfrage(boyz, erwartet)
-    assert len(antwort.get_json()["modelle"]) == len(erwartet)
-    assert spielstandVon(dienst) == spielstandDavor
-
-
-@pytest.mark.parametrize("eingabe", ["maus", "finger"])
-def testAuf24_1DieKarteZeigtBeimHaltenJedesModellDortWoEsBeimLoslassenStehtOhneSperre(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
-):
-    aufstellung = aufstellungNachDerZonenwahl
-    [(_, davor), *_] = modelleSetzen(aufstellung, boyz, 3)
-    aufstellung.auswählen(boyz)
-    ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 12, 20)
-    seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
-
-    gezeigt = haltenUndLosslassen(seite, davor, ziel, eingabe)
-
-    assert gezeigt == stellenAlsZahlen(aufstellung)
-    assert sperrmeldungenDerSeite(seite) == []
-
-
-@mitMausUndFinger
-def testAuf24_1DieKarteZeigtBeimHaltenDenBlockVorEinerFremdenBaseDortWoErBeimLoslassenSteht(
-    bildschirm,
-    aufstellung,
-    ersteEinheitDesSpielersAnDerReihe,
-    andereEinheitAufgestellt,
-    eingabe,
-):
-    einheit = ersteEinheitDesSpielersAnDerReihe
-    [fremdesModell] = andereEinheitAufgestellt.modelle
-    zug = blockVorEinerFremdenBase(
-        aufstellung, einheit, fremdesModell, zweitesGetroffen=False, zweitesGezogen=False
-    )
-    seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
-
-    gezeigt = haltenUndLosslassen(seite, zug.davor, zug.ziel, eingabe)
-
-    assert gezeigt == stellenAlsZahlen(aufstellung)
-    assert aufstellung.stelle(zug.gezogenes) != zug.ziel
-    assert sperrmeldungenDerSeite(seite) == []
-
-
-def seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung):
-    """Spielstand, Abfrage und Antwort aufs Loslassen liefern die Beispiele des Vertrags."""
-    spielstand = spielstandDesVertrags()
-    return bildschirm.seiteMitSpielstand(
-        ausgangsaufstellung,
-        spielstand,
-        {
-            "**/stelleBeimLoslassen*": stelleBeimLoslassenDesVertrags(),
-            "**/modelle/1/stelle": spielstand,
-        },
-    )
-
-
-# Regel: handlungen.md, V10, das Beispiel gilt für x=35 und y=28
-stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
-
-
-def testAuf24_1DieSeiteSetztBeimHaltenDieKreiseAnDieStellenDerAntwortImBeispiel(
-    bildschirm, ausgangsaufstellung
-):
-    seite = seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung)
-    gehaltenes, _, _ = stellenDesVertrags(2)
-
-    halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
-
-    modelle = stelleBeimLoslassenDesVertrags()["modelle"]
-    assert kreiseDerKarte(seite) == {(modell["x"], modell["y"]) for modell in modelle}
-
-
-def testAuf24_1DieSeiteSendetBeimLoslassenDenPunktDesZeigersNichtDenGezeigten(
-    bildschirm, ausgangsaufstellung
-):
-    seite = seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung)
-    gehaltenes, _, _ = stellenDesVertrags(2)
-    zielPunkt = punktAufDerKarte(seite, stelleDesLoslassensImBeispiel)
-    zeiger = halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
-
-    with aufDieHandlungWarten(seite) as antwort:
-        zeiger.loslassen(zielPunkt)
-
-    anfrage = antwort.value.request
-    gesendet = anfrage.post_data_json
-    toleranz = zollJePixel(seite)
-    assert (anfrage.method, urlparse(anfrage.url).path) == (
-        "PUT",
-        "/api/spieler/2/einheiten/1/modelle/1/stelle",
-    )
-    assert abs(gesendet["x"] - float(stelleDesLoslassensImBeispiel.x)) <= toleranz
-    assert abs(gesendet["y"] - float(stelleDesLoslassensImBeispiel.y)) <= toleranz
 
 
 @verschiebungenInRadien
@@ -358,3 +180,141 @@ def testAuf24_2KeinModellIstGesperrtWennBeimHineinrückenEinesAufDieVorigeStelle
 
     assert aufstellung.stelle(erstes) == stelleDavorZweites
     assert aufstellung.stelle(zweites) == nachDemHineinrücken
+
+
+# Warum: Ziel in Tiefe und Länge in Zoll; der Block aus drei Boyz verschiebt sich, rückt hinein
+zieleDesBlocks = pytest.mark.parametrize(
+    "ziel", [(4, 20), (12, 20)], ids=["verschieben", "hineinrücken"]
+)
+
+
+@zieleDesBlocks
+def testAuf24_3DieAbfrageNenntJedesGesetzteModellDerEinheitUndSetztNichts(
+    aufstellungNachDerZonenwahl, boyz, ziel
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    gesetzte = modelleSetzen(aufstellung, boyz, 3)
+    [(gezogenes, _), *_] = gesetzte
+    aufstellung.auswählen(boyz)
+    tiefe, länge = ziel
+    stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
+
+    abfrage = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
+
+    assert set(abfrage) == {modell for modell, _ in gesetzte}
+    for modell, davor in gesetzte:
+        assert aufstellung.stelle(modell) == davor
+
+
+@zieleDesBlocks
+def testAuf24_3BeimLoslassenStehtJedesModellDortWoDieAbfrageEsZeigte(
+    aufstellungNachDerZonenwahl, boyz, ziel
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    gesetzte = modelleSetzen(aufstellung, boyz, 3)
+    [(gezogenes, _), *_] = gesetzte
+    aufstellung.auswählen(boyz)
+    tiefe, länge = ziel
+    stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
+    gezeigt = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
+
+    aufstellung.modellLoslassen(gezogenes, stelleDesLoslassens)
+
+    for modell, _ in gesetzte:
+        assert aufstellung.stelle(modell) == gezeigt[modell]
+
+
+def testAuf24_3DerDienstNenntDieStellenDesBlocksWieDasBeispielImVertrag(dienstDesBeispiels):
+    auswählen(dienstDesBeispiels, "Necron Warriors")
+
+    antwort = dienstDesBeispiels.get(
+        "/api/spieler/2/einheiten/1/modelle/1/stelleBeimLoslassen", query_string={"x": 35, "y": 28}
+    )
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert antwort.get_json() == stelleBeimLoslassenDesVertrags()
+
+
+def testAuf24_3DerDienstNenntJedesGesetzteModellDerEinheitUndVerändertNichts(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    [(gezogenes, _), *_] = modelleSetzen(aufstellung, boyz, 3)
+    auswählen(dienst, "Boyz")
+    ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 12, 20)
+    erwartet = aufstellung.stellenBeimLoslassen(gezogenes, ziel)
+    spielstandDavor = spielstandVon(dienst)
+
+    antwort = stelleBeimLoslassenAbfragen(dienst, aufstellung, boyz, gezogenes, ziel)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert stellenDerEinheitIm(antwort.get_json(), "Boyz") == stellenDerAbfrage(boyz, erwartet)
+    assert len(antwort.get_json()["modelle"]) == len(erwartet)
+    assert spielstandVon(dienst) == spielstandDavor
+
+
+@pytest.mark.parametrize("eingabe", ["maus", "finger"])
+def testAuf24_3DieKarteZeigtBeimHaltenJedesModellDortWoEsBeimLoslassenStehtOhneSperre(
+    bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    [(_, davor), *_] = modelleSetzen(aufstellung, boyz, 3)
+    aufstellung.auswählen(boyz)
+    ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 12, 20)
+    seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
+
+    gezeigt = haltenUndLosslassen(seite, davor, ziel, eingabe)
+
+    assert gezeigt == stellenAlsZahlen(aufstellung)
+    assert sperrmeldungenDerSeite(seite) == []
+
+
+def seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung):
+    """Spielstand, Abfrage und Antwort aufs Loslassen liefern die Beispiele des Vertrags."""
+    spielstand = spielstandDesVertrags()
+    return bildschirm.seiteMitSpielstand(
+        ausgangsaufstellung,
+        spielstand,
+        {
+            "**/stelleBeimLoslassen*": stelleBeimLoslassenDesVertrags(),
+            "**/modelle/1/stelle": spielstand,
+        },
+    )
+
+
+# Regel: handlungen.md, V10, das Beispiel gilt für x=35 und y=28
+stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
+
+
+def testAuf24_3DieSeiteSetztBeimHaltenDieKreiseAnDieStellenDerAntwortImBeispiel(
+    bildschirm, ausgangsaufstellung
+):
+    seite = seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung)
+    gehaltenes, _, _ = stellenDesVertrags(2)
+
+    halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
+
+    modelle = stelleBeimLoslassenDesVertrags()["modelle"]
+    assert kreiseDerKarte(seite) == {(modell["x"], modell["y"]) for modell in modelle}
+
+
+def testAuf24_3DieSeiteSendetBeimLoslassenDenPunktDesZeigersNichtDenGezeigten(
+    bildschirm, ausgangsaufstellung
+):
+    seite = seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung)
+    gehaltenes, _, _ = stellenDesVertrags(2)
+    zielPunkt = punktAufDerKarte(seite, stelleDesLoslassensImBeispiel)
+    zeiger = halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
+
+    with aufDieHandlungWarten(seite) as antwort:
+        zeiger.loslassen(zielPunkt)
+
+    anfrage = antwort.value.request
+    gesendet = anfrage.post_data_json
+    toleranz = zollJePixel(seite)
+    assert (anfrage.method, urlparse(anfrage.url).path) == (
+        "PUT",
+        "/api/spieler/2/einheiten/1/modelle/1/stelle",
+    )
+    assert abs(gesendet["x"] - float(stelleDesLoslassensImBeispiel.x)) <= toleranz
+    assert abs(gesendet["y"] - float(stelleDesLoslassensImBeispiel.y)) <= toleranz

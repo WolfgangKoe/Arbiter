@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Fachliche Abnahme der Items [einheitVerschieben](../../domaene/items/einheitVerschieben.md)
@@ -54,4 +53,5 @@ den ArbiterMap nicht hat. Zu 3: Der Zweck verspricht mehr, als gebaut ist.
    vormerkt. Der Zweck sagt bis dahin „nur wenn die *Stelle* am Ende eine *Base* überdecken
    würde“.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. 1: AUF-28.1, *zurücklegen* per Knopf
+([2210](2210-loslassenNebenDerKarteWiderspruechlich.md)). 2: AUF-8.7. 3: AUF-29 (1820).

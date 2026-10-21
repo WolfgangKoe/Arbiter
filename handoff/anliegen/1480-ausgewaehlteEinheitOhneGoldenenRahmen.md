@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Fachliche Abnahme von Item [setzenPerKlick](../../domaene/items/setzenPerKlick.md).
@@ -38,4 +37,7 @@ bleibt, wie es ist. Der Stakeholder hat dazu keine Farbe genannt. Willst du das 
 der Domänenphase erledigen, damit Review 6 schon den goldenen Rahmen zeigt, hält dich nichts
 auf.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. `.einheitenKarte.ausgewählt` in
+[vorschlag.css](../../domaene/mockups/vorschlag.css) hat jetzt `outline: 2px solid var(--akzentHell);`.
+Die beiden Mockups auf-18 und auf-18-ausgewaehlt sind schon gelöscht. Die Zeile in
+`komponenten.css` übernimmt der Implementierer.

@@ -27,7 +27,8 @@ akzeptanzTestName = re.compile(r"^test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[A-ZÄÖÜ
 pythonDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.py$")
 markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
 frontendDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.(js|css|html)$")
-anliegenDatei = re.compile(r"^\d+-[a-z][a-zA-Z0-9]*\.md$")
+# Warum: Eine Kriterienkennung (`Auf8_4`) behält ihren Unterstrich, wie in Testnamen.
+anliegenDatei = re.compile(r"^\d+-[a-z](?:[a-zA-Z0-9]|(?<=\d)_(?=\d))*\.md$")
 
 testEndung = "Test.py"
 dateinameFalsch ="Dateiname nicht in camelCase, ASCII"

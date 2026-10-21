@@ -5,7 +5,7 @@ Von: Architekt
 An: Implementierer
 Runde: 1/3
 Status: offen
-Wartet auf: 1655
+Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Ich habe [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py) und

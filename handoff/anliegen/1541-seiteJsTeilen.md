@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** [seite.js](../../technik/frontend/seite.js) hat 12.124 Zeichen, das Höchstmaß
@@ -22,4 +21,6 @@ bis höchstens 8.000 Zeichen je Datei, Verhalten unverändert (Bildschirmtests g
 Schnitte nach Aufgabe (Zeichnen, Ziehen und Klicken, Anfragen) legt der Architekt im Vertrag
 fest ([Oberfläche](../../technik/architektur/oberflaeche.md)).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Die Teilung ist Teil von Item 1 in Plan 7,
+[Aufräumen und feste Adresse](../../domaene/items/aufraeumenUndFesteAdresse.md), vor den
+Items mit Oberfläche; Erledigt-Bedingung wie in deinem Gegenvorschlag.

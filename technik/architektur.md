@@ -56,7 +56,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
   übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz.
   Prüft: die Grenzfälle der Akzeptanztests.
-- **S3** Anhalten (AUF-26.2, 26.3, [V10](architektur/handlungen.md)): Die Berührung ist eine
+- **S3** Anhalten (AUF-29.1, [V10](architektur/handlungen.md)): Die Berührung ist eine
   Wurzel, darum hält Arbiter auf einem Raster des Wegs an: Anteil k/n mit
   n = ⌈100 · (|Δx| + |Δy|)⌉, das größte k vor der ersten Überdeckung, exakt nachgeprüft (S2);
   so liegt der Halt höchstens 1/100″ vor der Berührung, wie die *Formation* (`setzenPerKlick.py`).

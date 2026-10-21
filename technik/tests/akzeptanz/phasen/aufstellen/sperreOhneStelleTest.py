@@ -95,25 +95,18 @@ def einAufgestelltesModellAufDerAblageDesAnderen(aufstellung, einheit) -> Loslas
     return Loslassen(einheit, modell, ablage=2)
 
 
-def einGesetztesModellAufDerAblageDesAnderen(aufstellung, einheit) -> Loslassen:
-    (modell, _), *_ = modelleSetzen(aufstellung, einheit, 3)
-    return Loslassen(einheit, modell, ablage=2)
-
-
 @pytest.fixture(
     params=[
         (einModellDesSpielersNichtAnDerReihe, "necronWarriors"),
         (einModellEinerAufgestelltenEinheit, "boyz"),
         (einAufgestelltesModellAufDerEigenenAblage, "boyz"),
         (einAufgestelltesModellAufDerAblageDesAnderen, "boyz"),
-        (einGesetztesModellAufDerAblageDesAnderen, "boyz"),
     ],
     ids=[
         "auf7_2ModellDesSpielersNichtAnDerReihe",
         "auf7_2ModellEinerAufgestelltenEinheit",
         "auf8_4AufgestelltesModellAufDerEigenenAblage",
         "auf8_4AufgestelltesModellAufDerAblageDesAnderen",
-        "auf16_3GesetztesModellAufDerAblageDesAnderen",
     ],
 )
 def sperrendesLoslassen(request, aufstellungNachDerZonenwahl) -> Loslassen:
@@ -190,29 +183,34 @@ def testAuf12_6DieSeiteNenntDenGrundUndBietetGemeinsamÜbergehenNichtAn(
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
 
-def testAuf12_6DieSeiteNenntDenGrundNochNachDemAuswählen(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
-):
-    (_, stelleDesModells), *_ = boyzSetzen(3)
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    modellAufDieAblageZiehen(seite, stelleDesModells, "Spieler 2")
+def einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellung, boyz) -> None:
+    aufgestelltesModell, *_ = boyz.modelle
+    modellAufDieAblageZiehen(seite, aufstellung.stelle(aufgestelltesModell), "Spieler 1")
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
 
-    klickenUndWarten(seite, "Spieler 1", "Boyz")
+
+def testAuf12_6DieSeiteNenntDenGrundNochNachDemAuswählen(
+    bildschirm, aufstellungNachDerZonenwahl, boyz
+):
+    einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
+    einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellungNachDerZonenwahl, boyz)
+
+    klickenUndWarten(seite, "Spieler 1", "Warboss")
 
     assert sperrmeldungWarten(seite, {Grund.nichtWählbar}) == gründeAlsText({Grund.nichtWählbar})
 
 
 def testAuf12_6DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, spielerEins
+    bildschirm, aufstellungNachDerZonenwahl, boyz, warboss, spielerEins
 ):
-    (_, stelleDesModells), *_ = boyzSetzen(3)
+    einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
+    (_, stelleDesWarboss), *_ = modelleSetzen(aufstellungNachDerZonenwahl, warboss, 1)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    modellAufDieAblageZiehen(seite, stelleDesModells, "Spieler 2")
-    sperrmeldungWarten(seite, {Grund.nichtWählbar})
+    einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellungNachDerZonenwahl, boyz)
     neueStelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
 
-    modellZiehen(seite, stelleDesModells, neueStelle)
+    modellZiehen(seite, stelleDesWarboss, neueStelle)
 
     assert sperrmeldungWarten(seite, set()) == frozenset()
 

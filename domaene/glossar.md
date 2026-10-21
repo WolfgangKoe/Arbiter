@@ -2,7 +2,7 @@
 
 Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 ---|---|---|---
-Ablage | – | Ablage | Ort neben der *Karte* für die nicht *aufgestellten* *Einheiten* eines *Spielers* mit ihren nicht *gesetzten* *Modellen*; jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A).
+Ablage | – | Ablage | Spalte neben der *Karte* mit den nicht *aufgestellten* *Einheiten* eines *Spielers*, in der er eine per Klick auswählt; kein Ziel zum Hineinziehen. Jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A, 2220, Name: 2221).
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
 Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
@@ -45,5 +45,5 @@ Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an d
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
 zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt (Etappe 1, Anliegen 362 F6 A).
-zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* in die *Ablage* bringt; danach ist keines *gesetzt*. Ein einzelnes *Modell* nur, wenn die *Einheit* nur eines hat (Etappe 1, Anliegen 890 F1).
+zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Etappe 1, Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).

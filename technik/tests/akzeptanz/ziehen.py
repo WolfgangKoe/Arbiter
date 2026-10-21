@@ -160,11 +160,6 @@ def ziehenOhneAnfrage(
     return anfragen
 
 
-def amKopfDerSeite(seite: Page) -> Bildpunkt:
-    """Ein Punkt neben Karte und Ablagen: die Kopfzeile."""
-    return mitteVon(seite.locator(".kopfzeile"))
-
-
 def mitDerMausKlicken(seite: Page, punkt: Bildpunkt) -> None:
     seite.mouse.click(punkt.links, punkt.oben)
 

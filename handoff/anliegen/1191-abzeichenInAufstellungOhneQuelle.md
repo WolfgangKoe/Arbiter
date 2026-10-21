@@ -4,8 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: 1213
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet auf die nächste Phase. Die Beispiele
@@ -29,4 +28,7 @@ streichst `.einheitenKarte.inAufstellung` und `.einheitenKartenAbzeichen` aus
 `komponenten.css` und `komponenten.html`; das steht als Befund 3 in
 Anliegen 1212 und hält auf. UX streicht beide aus
 `vorschlag.css` ([1213](1213-abzeichenAusVorschlagCss.md)), das wartet auf die
-Domänenphase. Auf `angenommen` setze ich dieses Anliegen, sobald 1213 erledigt ist.
+Domänenphase. Beides ist umgesetzt: 1212 ist erledigt, 1213 habe ich nach Nachprüfung auf
+`erledigt` gesetzt. Ein grep nach `inAufstellung` und `einheitenKartenAbzeichen` über
+Produkt, Vertrag und [Mockups](../../domaene/mockups/) findet nichts, auch das neue
+[auf-13](../../domaene/mockups/auf-13.html) verwendet das Abzeichen nicht.

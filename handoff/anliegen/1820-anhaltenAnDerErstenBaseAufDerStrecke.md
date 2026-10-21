@@ -4,8 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Auf Wunsch des Stakeholders in Anliegen 1320 (Kommentar: „wie in ArbiterMap, Anforderungen erst im nächsten Zyklus anpassen, vormerken“) gilt künftig: Ein gezogenes *Modell* oder ein Block hält an der ersten *Base* an, die seine gerade Strecke berührt, auch wenn das Ziel dahinter frei liegt. Heute lesen der Architekt ([V10](../../technik/architektur/handlungen.md)) und die Tests AUF-26.2 und 26.3 so, dass nur zählt, ob die *Stelle* am Ende des Wegs eine *Base* *überdeckt*. Betroffen sind [AUF-26.2 und 26.3](../../domaene/anforderungen/phasen/aufstellen/anhaltenAnEinerBase.md), AUF-26.4 (zeigt dieselbe *Stelle*) und AUF-27.2.
@@ -14,4 +13,11 @@ Wartet auf: Domänenphase
 
 **Gegenvorschlag.** Die Kriterien sagen ausdrücklich: Berührt die gerade Strecke von der vorigen *Stelle* zum Ziel eine fremde *Base*, steht das *Modell* an der letzten freien *Stelle* davor (Block: starr, die eigene *Einheit* sperrt sich nicht selbst). Vorbild: ArbiterMap, `docs/spec/interaction_map.md` (Entscheidungen 100. und 101. Sitzung, Item 061 F-1) und `backend/app/domain/geometry.py` (`last_allowed_point_before_blocked_discs`). Danach schreibt der Testautor die Fälle neu.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, mit einer Abweichung zum Vorbild hin: Neu ist
+[AUF-29](../../domaene/anforderungen/phasen/aufstellen/anhaltenAufDemWeg.md); sie ersetzt
+AUF-26.2, 26.3 und 27.2. Die gerade Strecke beginnt nicht an der *Stelle* vor dem Ziehen,
+sondern an der zuletzt gezeigten, bei jedem Weiterrücken des Zeigers, und das *Modell* gleitet
+an der *Base* entlang (29.2). So arbeitet ArbiterMap heute: Die Entscheidung der 100. Sitzung
+hat die 102. auf das Ziel eingeschränkt (`interaction_map.md:427`), angehalten wird schrittweise
+in der Vorschau (`model_drag.js:887`, `:964`), und das Loslassen *setzt*, was sie zeigt
+(AUF-28.1). Eine Strecke vom Anfang hielte auch an, wenn der Spieler um die *Base* herumzieht.
