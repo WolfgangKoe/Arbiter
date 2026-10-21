@@ -7,7 +7,7 @@ Runde: 1/3
 Status: angenommen
 
 ## Runde 1
-**Befund.** Kritik an [1900](1900-regelnMdUndHilfsmoduleOhneListe.md), Teil 2 (Commit
+**Befund.** Kritik an Anliegen 1900, Teil 2 (Commit
 295ff30). Die Frage dort, ob eine Datei ohne Liste genügt: ja. [Architektur,
 T1](../../technik/architektur.md) verlangt neben den Spiegeln nur Hilfsmodule; Pytest sammelt
 nur `*Test.py` (`pyproject.toml`), eine Testfunktion in einer anderen Datei liefe also nie und

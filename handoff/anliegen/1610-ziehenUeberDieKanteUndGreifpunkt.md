@@ -28,7 +28,7 @@ folgt, weicht von ArbiterMap ab, betrifft aber nur Fälle, die kein Kriterium de
    „*Stelle* des Loslassens“). Fasst man eine *Base* am Rand, springt sie um bis zu einen
    Radius. ArbiterMap behält den Abstand zwischen Zeiger und Mittelpunkt bei
    (`model_drag.js:1479`, B12).
-3. Zum Vormerken für Anliegen [1320](1320-kreuztDieStreckeEineBaseUndLiegtDasZielFrei.md): Den
+3. Zum Vormerken für Anliegen Anliegen 1320: Den
    Overlord habe ich gerade nach oben durch zwei Necron Warriors gezogen. Er ist in eine freie
    Lücke dahinter gesprungen, so wie AUF-26.2 es verlangt. Der Zweck von
    [AUF-26](../../domaene/anforderungen/phasen/aufstellen/anhaltenAnEinerBase.md) sagt dagegen

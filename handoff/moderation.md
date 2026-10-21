@@ -10,7 +10,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
   [1660](anliegen/1660-regelkommentareEntbehrlich.md),
   Anliegen 1581,
   Anliegen 1591,
-  [740](anliegen/740-commitFuerMehrereItemsImAblauf.md),
+  Anliegen 740,
   [1570](anliegen/1570-mutationstestsEffizienter.md),
   [1740](anliegen/1740-mutationsschwelleAlsUntereGrenze.md),
   Anliegen 1751: alle Prozessphase,
@@ -21,7 +21,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
   991), Anliegen 1790,
   Anliegen 991,
   [1070](anliegen/1070-wartendeNachpruefungIstNichtFaellig.md).
-- Testautor: Nachprüfung [1320](anliegen/1320-kreuztDieStreckeEineBaseUndLiegtDasZielFrei.md)
+- Testautor: Nachprüfung Anliegen 1320
   (Antwort Ja steht); AUF-22, 23, 27, 13, 11, 16.7, 18.7, 3.9, QUE-5 bis 7 warten auf ihn.
 - Anforderungsautor: Nachprüfung [1400](anliegen/1400-nahkampfreichweiteBeimLoslassen.md)
   (Antwort Ja steht).
