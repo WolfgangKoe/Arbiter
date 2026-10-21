@@ -18,7 +18,11 @@ hakenArt, kommentarArt = "haken", "kommentarZeile"
 abgehaktWert = "x"
 vorlage = """# Kommentar: {schritt}
 
-{nummer} · Kritik · von {stakeholder} → {rolle} · Runde 1/{höchstRunde} · offen
+Form: Kritik
+Von: {stakeholder}
+An: {rolle}
+Runde: 1/{höchstRunde}
+Status: offen
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert im Fortschritt den Schritt „{schritt}“ von {rolle}: {text}

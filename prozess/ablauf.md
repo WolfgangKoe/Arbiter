@@ -155,9 +155,8 @@ ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 Auslöser: `Freigabe Review <n>`. Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
 Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `Freigabe Retro
 <n>`; davor beschreibt die Retro die Änderung. Ausnahme: Seine Zeilen in `regeln.md` trägt der
-Regelumsetzer in jeder Phase ein (Anliegen 731). Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
-in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standregeln));
-Ausnahme: Anliegen 1900.
+Regelumsetzer in jeder Phase ein (Anliegen 731, 1900). Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
+in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Regeln](regeln.md#standregeln)).
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
@@ -419,8 +418,10 @@ nur Text.
   `anliegenregeln/anliegen.py` (Runde höchstens 3), `anliegenregeln/anliegenDran.py` (bei
   `eskaliert` ist der Stakeholder dran); wer Runde und Status ändert, nur Text.
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
-  wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `Wartet auf: <nr>`.
-  Mechanismus: nur Text.
+  wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `Wartet auf: <nr>`. Baut ein
+  Prozess-Item den Mechanismus, setzt er `angenommen`, sobald die Regel steht, und seine
+  Stellungnahme nennt das Item: `erledigt` folgt dessen Haken im Fortschritt der Retro
+  (Anliegen 1570). Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist. Der Empfänger setzt nie `erledigt`, das
   setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Mechanismus: nur Text.
 - Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine

@@ -5,9 +5,18 @@ import pytest
 from anliegenregeln.anliegen import kopfVerstöße
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
 from gemeinsam.pfade import wurzel
-from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
+from lesen.anliegenKopf import Status, anliegenDateien, freieNummer, kopfLesen, kopfÄndern
 
-guterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
+guterKopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen"
+alterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
+
+
+def wartetAuf(ziel):
+    return f"{guterKopf}\nWartet auf: {ziel}"
+
+
+def kopfVon(form, absender, empfänger, status, runde=1):
+    return f"Form: {form}\nVon: {absender}\nAn: {empfänger}\nRunde: {runde}/3\nStatus: {status}"
 
 
 def anliegenAnlegen(tmp_path: Path, name: str, kopf: str, titel: str = "# Titel") -> Path:
@@ -42,7 +51,7 @@ def testKopfWirdGelesen(tmp_path):
 
 
 def testStakeholderAlsRolleIstErlaubt(tmp_path):
-    kopf = "12 · Anliegen · von Stakeholder → Planer · Runde 2/3 · beantwortet"
+    kopf = kopfVon("Anliegen", "Stakeholder", "Planer", "beantwortet", runde=2)
     assert kopfVerstöße(anliegenAnlegen(tmp_path, "12-probe.md", kopf), tmp_path) == []
 
 
@@ -50,13 +59,14 @@ def testStakeholderAlsRolleIstErlaubt(tmp_path):
     "ersetzung, bis",
     [
         pytest.param("offen", "fertig", id="unbekannter Status"),
-        pytest.param("Kritik", "Meinung", id="unbekannter Typ"),
-        pytest.param("Runde 1/3", "Runde 4/3", id="Runde über 3"),
-        pytest.param("Runde 1/3", "Runde 0/3", id="Runde 0"),
-        pytest.param("Architekt (Technik)", "Gärtner", id="unbekannte Rolle"),
+        pytest.param("Kritik", "Meinung", id="unbekannte Form"),
+        pytest.param("1/3", "4/3", id="Runde über 3"),
+        pytest.param("1/3", "0/3", id="Runde 0"),
+        pytest.param("Architekt", "Gärtner", id="unbekannte Rolle"),
         pytest.param("Planer", "planer", id="Rolle klein geschrieben"),
-        pytest.param("12 ·", "13 ·", id="falsche Nummer"),
         pytest.param(guterKopf, "Von Architekt an Planer · Runde 1/3", id="freier Text"),
+        pytest.param(guterKopf, alterKopf, id="alte Kopfzeile"),
+        pytest.param("Runde: 1/3\n", "", id="Feld fehlt"),
     ],
 )
 def testFalscherKopfIstRot(tmp_path, ersetzung, bis):
@@ -81,15 +91,14 @@ def testAnliegenOhneTitelIstRot(tmp_path):
 
 def testNachprüfungenNenntenDenAbsenderDerAngenommenenAnliegen(tmp_path):
     anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "angenommen"))
-    anliegenAnlegen(tmp_path, "13-probe.md", guterKopf.replace("12 ", "13 "))
-    anliegenAnlegen(
-        tmp_path, "14-probe.md", "14 · Kritik · von Fachkritiker → Planer · Runde 1/3 · angenommen"
-    )
+    anliegenAnlegen(tmp_path, "13-probe.md", guterKopf)
+    fremder = kopfVon("Kritik", "Fachkritiker", "Planer", "angenommen")
+    anliegenAnlegen(tmp_path, "14-probe.md", fremder)
     assert nachprüfungen(tmp_path) == {"Architekt": [12], "Fachkritiker": [14]}
 
 
 def stakeholderFragen(tmp_path, status="offen"):
-    kopf = f"12 · Fragen · von Planer → Stakeholder · Runde 1/3 · {status}"
+    kopf = kopfVon("Fragen", "Planer", "Stakeholder", status)
     return anliegenAnlegen(tmp_path, "12-probe.md", kopf)
 
 
@@ -120,7 +129,7 @@ def testNeueRundeNachDerFreigabeIstBeimStakeholderDran(tmp_path, gitRepo):
     datei = stakeholderFragen(tmp_path)
     gitRepo.festhalten("Freigabe Plan 2")
     datei.write_text(
-        datei.read_text(encoding="utf-8").replace("Runde 1/3", "Runde 2/3"), encoding="utf-8"
+        datei.read_text(encoding="utf-8").replace("Runde: 1/3", "Runde: 2/3"), encoding="utf-8"
     )
     assert dranBei(tmp_path) == {"Stakeholder": [12]}
     gitRepo.festhalten("Nachgefragt")
@@ -165,20 +174,32 @@ def testStatusIstEinWertDerAufzählungUnbekannterBleibtText(tmp_path):
 @pytest.mark.parametrize(
     "zusatz",
     [
-        pytest.param(" · wartet auf 13", id="wartet auf Nummer"),
-        pytest.param(" · wartet auf die Prozessphase", id="wartet auf die Prozessphase"),
-        pytest.param(" · wartet auf die Technikphase", id="wartet auf die Technikphase"),
-        pytest.param(" · wartet auf die Domänenphase", id="wartet auf die Domänenphase"),
+        pytest.param("13", id="wartet auf Nummer"),
+        pytest.param("Prozessphase", id="wartet auf die Prozessphase"),
+        pytest.param("Technikphase", id="wartet auf die Technikphase"),
+        pytest.param("Domänenphase", id="wartet auf die Domänenphase"),
     ],
 )
 def testWartetAufImKopfIstGrün(tmp_path, zusatz):
-    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + zusatz)
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf(zusatz))
     assert kopfVerstöße(datei, tmp_path) == []
-    assert kopfLesen(datei).wartetAuf == zusatz.removeprefix(" · wartet auf ")
+    erwartet = zusatz if zusatz.isdigit() else f"die {zusatz}"
+    assert kopfLesen(datei).wartetAuf == erwartet
 
 
 def testWartetAufEinenUnbekanntenTextIstRot(tmp_path):
-    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + " · wartet auf x")
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf("x"))
+    assert kopfVerstöße(datei, tmp_path) != []
+
+
+def testDieAlteKopfzeileWirdNochGelesenAberNichtGeduldet(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", alterKopf + " · wartet auf die Prozessphase")
+    gelesen = kopfLesen(datei)
+    assert (gelesen.nummer, gelesen.absender, gelesen.wartetAuf) == (
+        12,
+        "Architekt",
+        "die Prozessphase",
+    )
     assert kopfVerstöße(datei, tmp_path) != []
 
 
@@ -188,8 +209,8 @@ def testDieFormAuftragIstErlaubt(tmp_path):
 
 
 def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
-    wartend = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf + " · wartet auf 13")
-    ziel = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf.replace("12 ", "13 "))
+    wartend = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf("13"))
+    ziel = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf)
     assert dran(tmp_path) == {"Planer": [13]}
     assert wartende(tmp_path) == {12: "13"}
     ziel.unlink()
@@ -199,8 +220,7 @@ def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
 
 
 def testEinAnliegenAufDieTechnikphaseIstInDerDomänenphaseNichtDran(gitRepo):
-    kopf = guterKopf + " · wartet auf die Technikphase"
-    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Technikphase"))
     assert dran(gitRepo.ordner) == {}
     assert wartende(gitRepo.ordner) == {12: "die Technikphase"}
     (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
@@ -209,8 +229,7 @@ def testEinAnliegenAufDieTechnikphaseIstInDerDomänenphaseNichtDran(gitRepo):
 
 
 def testEinAnliegenAufDieDomänenphaseIstInDerTechnikphaseNichtDran(gitRepo):
-    kopf = guterKopf + " · wartet auf die Domänenphase"
-    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Domänenphase"))
     assert dran(gitRepo.ordner) == {"Planer": [12]}
     (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
@@ -218,8 +237,7 @@ def testEinAnliegenAufDieDomänenphaseIstInDerTechnikphaseNichtDran(gitRepo):
 
 
 def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
-    kopf = guterKopf + " · wartet auf die Prozessphase"
-    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Prozessphase"))
     assert dran(gitRepo.ordner) == {}
     assert wartende(gitRepo.ordner) == {12: "die Prozessphase"}
     plan = "# Plan · Zyklus 3\n"
@@ -229,3 +247,53 @@ def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
     gitRepo.festhalten("Freigabe Review 3")
     assert dran(gitRepo.ordner) == {"Planer": [12]}
     assert wartende(gitRepo.ordner) == {}
+
+
+def testEineWartendeNachprüfungIstErstInDerProzessphaseFällig(gitRepo):
+    kopf = wartetAuf("Prozessphase").replace("offen", "angenommen")
+    anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)
+    assert nachprüfungen(gitRepo.ordner) == {}
+    plan = "# Plan · Zyklus 3\n"
+    (gitRepo.ordner / "handoff" / "plan.md").write_text(plan, encoding="utf-8")
+    (gitRepo.ordner / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    gitRepo.festhalten("Freigabe Review 3")
+    assert nachprüfungen(gitRepo.ordner) == {"Architekt": [12]}
+
+
+def testEinErledigtesAnliegenWartetNicht(tmp_path):
+    kopf = wartetAuf("13").replace("offen", "erledigt")
+    anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+    assert wartende(tmp_path) == {}
+
+
+def testKopfÄndernSchreibtDieFelderUndLässtDenRestStehen(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
+    neu = kopfÄndern(datei.read_text(encoding="utf-8"), {"Status": "angenommen"})
+    assert neu == datei.read_text(encoding="utf-8").replace("Status: offen", "Status: angenommen")
+
+
+def testKopfÄndernSchreibtDieAlteZeileAlsFelder(tmp_path):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", alterKopf + " · wartet auf 13")
+    neu = kopfÄndern(datei.read_text(encoding="utf-8"), {"Runde": "2/3"})
+    erwartet = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 2/3\nStatus: offen\nWartet auf: 13"
+    assert neu == f"# Titel\n\n{erwartet}\n\n## Runde 1\n"
+
+
+def testKopfÄndernOhneKopfGibtNichtsZurück():
+    assert kopfÄndern("# Titel\n\nText\n", {"Status": "offen"}) is None
+
+
+def testFreieNummerNimmtDieErsteNochNieVergebeneImBereich(gitRepo):
+    anliegenAnlegen(gitRepo.ordner, "1980-erste.md", guterKopf)
+    anliegenAnlegen(gitRepo.ordner, "1981-zweite.md", guterKopf)
+    gitRepo.festhalten("Anliegen")
+    (gitRepo.ordner / "handoff" / "anliegen" / "1981-zweite.md").unlink()
+    gitRepo.festhalten("Anliegen gelöscht")
+    zweiteFreie = 1982
+    assert freieNummer(gitRepo.ordner, range(1980, 1990)) == zweiteFreie
+
+
+def testFreieNummerMeldetEinenVollenBereich(tmp_path):
+    anliegenAnlegen(tmp_path, "1980-erste.md", guterKopf)
+    assert freieNummer(tmp_path, range(1980, 1981)) is None

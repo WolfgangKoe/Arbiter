@@ -8,7 +8,11 @@ from rollenregeln.zuegeUebernehmen import löstAus, übernehmen
 
 fragen = """# Titel
 
-{nummer} · {form} · von {absender} → {empfänger} · Runde {runde}/3 · {status}
+Form: {form}
+Von: {absender}
+An: {empfänger}
+Runde: {runde}/3
+Status: {status}
 
 ## Runde 1
 **Befund.** Text.
@@ -48,7 +52,7 @@ def testStatusDesEmpfängersLandetImKopfUndDerZugIstAusDemEingang(ordner):
     datei = anlegen(ordner)
     zugVormerken(ordner, Zug(10, "status", "angenommen"))
     assert übernehmen(ordner) == (1, 0)
-    assert "· Runde 1/3 · angenommen" in datei.read_text(encoding="utf-8").splitlines()[2]
+    assert "Runde: 1/3\nStatus: angenommen" in datei.read_text(encoding="utf-8")
     assert vorgemerkte(ordner) == []
 
 
@@ -121,8 +125,8 @@ def testRundeSenkenNurBeiEskaliert(ordner):
     zugVormerken(ordner, Zug(10, "runde"))
     zugVormerken(ordner, Zug(11, "runde"))
     assert übernehmen(ordner) == (1, 1)
-    assert "Runde 2/3 · eskaliert" in gesenkt.read_text(encoding="utf-8")
-    assert "Runde 3/3 · offen" in offen.read_text(encoding="utf-8")
+    assert "Runde: 2/3\nStatus: eskaliert" in gesenkt.read_text(encoding="utf-8")
+    assert "Runde: 3/3\nStatus: offen" in offen.read_text(encoding="utf-8")
 
 
 def testSpätereZügeWerdenGegenDenNeuenStatusGeprüft(ordner):

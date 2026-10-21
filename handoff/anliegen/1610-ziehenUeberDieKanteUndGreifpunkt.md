@@ -1,6 +1,11 @@
 # Ziehen über die Kante der Karte und Greifpunkt anders als in ArbiterMap
 
-1610 · Kritik · von Fachkritiker → Anforderungsautor · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Fachkritiker
+An: Anforderungsautor
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Fachliche Abnahme der Items [einheitVerschieben](../../domaene/items/einheitVerschieben.md)

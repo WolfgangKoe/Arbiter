@@ -1,6 +1,11 @@
 # seite.js liegt über dem Höchstmaß
 
-1541 · Kritik · von Architekt → Planer · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Planer
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** [seite.js](../../technik/frontend/seite.js) hat 12.124 Zeichen, das Höchstmaß

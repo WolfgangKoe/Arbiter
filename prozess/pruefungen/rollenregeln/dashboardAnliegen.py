@@ -1,13 +1,17 @@
-"""Sicht auf die Anliegen im Dashboard: Spalte je Zuständigem, Karten, Filter im Browser."""
+"""Das Anliegenboard im Dashboard: dran je Rolle, wartend, vorgemerkt je Phase; Karten, Filter."""
 
 import html
 from collections.abc import Callable
+from operator import attrgetter
 from pathlib import Path
 
-from anliegenregeln.anliegenDran import dran, nachprüfungen
+from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende, wartetAuf
 from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
+from standregeln.phasenfolge import Phase, lage
 
 Verweis = Callable[[Anliegen, Path], str]
+Zusatz = Callable[[Anliegen], str]
+phasenanfang = "die "
 
 filterStil = """
 .anliegen-filter{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
@@ -15,7 +19,9 @@ filterStil = """
 border-radius:5px;padding:4px 8px;font-family:inherit}
 .anliegen-spalten{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
 .anliegen-spalte{flex:1 1 200px;min-width:200px}
-.anliegen-spalte h3{color:var(--accent-text)}
+.anliegen-spalte h3,.anliegen-bereich h3{color:var(--accent-text)}
+.anliegen-bereich{margin-top:12px}
+.anliegen-karte textarea{width:100%;box-sizing:border-box;margin-top:4px}
 .anliegen-karte{background:var(--panel-2);border:1px solid var(--border);border-radius:6px;
 padding:6px 8px;margin-bottom:8px;font-size:.82rem}
 .anliegen-karte.an-stakeholder{border-left:3px solid var(--c-peak)}
@@ -57,7 +63,48 @@ def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
     return anliegen.datei.relative_to(ordner).as_posix()
 
 
-def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:
+def keinZusatz(anliegen: Anliegen) -> str:  # noqa: ARG001
+    return ""
+
+
+def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
+    """Wartende Anliegen je Bereich: auf ein anderes Anliegen, dann je folgende Phase."""
+    nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
+    auf: dict[str, list[Anliegen]] = {}
+    for nummer, ziel in wartende(ordner).items():
+        auf.setdefault(ziel, []).append(nachNummer[nummer])
+    aufAnliegen = [
+        anliegen
+        for ziel, liste in auf.items()
+        if not ziel.startswith(phasenanfang)
+        for anliegen in liste
+    ]
+    bereiche = [("Wartet auf ein anderes Anliegen", aufAnliegen)] if aufAnliegen else []
+    if any(ziel.startswith(phasenanfang) for ziel in auf):
+        bereiche += vorgemerktJePhase(ordner, auf)
+    return bereiche
+
+
+def vorgemerktJePhase(
+    ordner: Path, auf: dict[str, list[Anliegen]]
+) -> list[tuple[str, list[Anliegen]]]:
+    """Die Phasen nach der jetzigen in der Reihenfolge der Rotation, soweit etwas auf sie wartet."""
+    phasen = list(Phase)
+    nächste = phasen.index(lage(ordner).phase) + 1
+    versetzt = phasen[nächste:] + phasen[:nächste]
+    folge = [f"{phasenanfang}{phase}" for phase in versetzt]
+    return [(f"Vorgemerkt für {ziel}", auf[ziel]) for ziel in folge if ziel in auf]
+
+
+def wartetAufText(anliegen: Anliegen) -> str:
+    if anliegen.wartetAuf is None:
+        return ""
+    return f" · wartet auf {anliegen.wartetAuf}"
+
+
+def anliegenKarte(
+    anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis, zusatz: Zusatz = keinZusatz
+) -> str:
     pfad = verweis(anliegen, ordner)
     anDich = anliegen.empfänger == stakeholder
     klasse = "anliegen-karte an-stakeholder" if anDich else "anliegen-karte"
@@ -68,7 +115,7 @@ def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis
         f'<a href="{html.escape(pfad)}">{anliegen.nummer}</a> '
         f"{html.escape(titelLesen(anliegen.datei))}"
         f"<p>{html.escape(anliegen.typ)} · Runde {anliegen.runde} · "
-        f"{html.escape(richtung)}</p></div>"
+        f"{html.escape(richtung)}{html.escape(wartetAufText(anliegen))}</p>{zusatz(anliegen)}</div>"
     )
 
 
@@ -78,27 +125,52 @@ def optionen(werte: list[str]) -> str:
     )
 
 
-def anliegenAbschnitt(ordner: Path, verweis: Verweis = dateiVerweis) -> str:
+def wartendeHtml(
+    ordner: Path, bereiche: list[tuple[str, list[Anliegen]]], verweis: Verweis, zusatz: Zusatz
+) -> str:
+    return "".join(
+        f'<div class="anliegen-bereich"><h3>{html.escape(titel)} ({len(anliegen)})</h3>'
+        + "".join(
+            anliegenKarte(
+                eines, wartetAuf(ordner, eines, None) or stakeholder, ordner, verweis, zusatz
+            )
+            for eines in sorted(anliegen, key=attrgetter("nummer"))
+        )
+        + "</div>"
+        for titel, anliegen in bereiche
+    )
+
+
+def anliegenAbschnitt(
+    ordner: Path, verweis: Verweis = dateiVerweis, zusatz: Zusatz = keinZusatz
+) -> str:
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
     spalten = zuständige(ordner)
-    if not spalten:
+    bereiche = vorgemerkte(ordner)
+    if not spalten and not bereiche:
         return '<section class="kasten"><h3>Anliegen</h3><p>Kein Anliegen offen.</p></section>'
-    formen = sorted({nachNummer[nummer].typ for nummern in spalten.values() for nummer in nummern})
+    gezeigt = [nachNummer[nummer] for nummern in spalten.values() for nummer in nummern]
+    gezeigt += [anliegen for _, liste in bereiche for anliegen in liste]
+    rollen = set(spalten) | {wartetAuf(ordner, eines, None) or stakeholder for eines in gezeigt}
     spaltenHtml = "".join(
         f'<div class="anliegen-spalte"><h3>{html.escape(rolle)} ({len(nummern)})</h3>'
         + "".join(
-            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis) for nummer in sorted(nummern)
+            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis, zusatz)
+            for nummer in sorted(nummern)
         )
         + "</div>"
         for rolle, nummern in sorted(spalten.items())
     )
     filterHtml = (
         '<div class="anliegen-filter"><label>Rolle <select id="filterRolle">'
-        f'{optionen(sorted(spalten))}</select></label><label>Form <select id="filterForm">'
-        f"{optionen(formen)}</select></label></div>"
+        f'{optionen(sorted(rollen))}</select></label><label>Form <select id="filterForm">'
+        f"{optionen(sorted({anliegen.typ for anliegen in gezeigt}))}</select></label></div>"
     )
+    jetzt = ""
+    if spalten:
+        jetzt = f'<h3>Jetzt dran</h3><div class="anliegen-spalten">{spaltenHtml}</div>'
     return (
-        f'<section class="kasten"><h3>Anliegen</h3>{filterHtml}'
-        f'<div class="anliegen-spalten">{spaltenHtml}</div></section>'
+        f'<section class="kasten"><h3>Anliegen</h3>{filterHtml}{jetzt}'
+        f"{wartendeHtml(ordner, bereiche, verweis, zusatz)}</section>"
         f"<script>{filterSkript}</script>"
     )

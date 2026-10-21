@@ -7,7 +7,15 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
 from gemeinsam.pfade import anliegenOrdner, projektordner
-from lesen.anliegenKopf import Anliegen, Status, kopfAusText, stakeholder
+from lesen.anliegenKopf import (
+    Anliegen,
+    Status,
+    höchstRunde,
+    kopfAlsFelder,
+    kopfAusText,
+    kopfÄndern,
+    stakeholder,
+)
 from rollenregeln.eingang import (
     Verworfen,
     Zug,
@@ -28,8 +36,6 @@ statusZüge = (
     ),
     (("absender", "empfänger"), {Status.eskaliert}, {Status.offen, Status.erledigt}),
 )
-statusInKopf = re.compile(r"(Runde \d+/\d+ · )\w+")
-rundeInKopf = re.compile(r"Runde (\d+)/")
 commitBefehl = "git commit"
 befehlsTrenner = re.compile(r"&&|\|\||[;|\n]")
 sperrDatei = f"{eingangDatei}.sperre"
@@ -56,15 +62,14 @@ def zeileErsetzen(text: str, nummer: int, neu: str) -> str:
     return "".join(zeilen)
 
 
-def statusSetzen(text: str, zug: Zug) -> str:
-    kopf = text.splitlines()[2]
-    return zeileErsetzen(text, 2, statusInKopf.sub(rf"\g<1>{zug.wert}", kopf, count=1))
+def statusSetzen(text: str, zug: Zug) -> str | None:
+    return kopfÄndern(text, {"Status": zug.wert})
 
 
-def rundeSenken(text: str, zug: Zug) -> str:  # noqa: ARG001
-    kopf = text.splitlines()[2]
-    runde = int(rundeInKopf.search(kopf).group(1))
-    return zeileErsetzen(text, 2, rundeInKopf.sub(f"Runde {runde - 1}/", kopf, count=1))
+def rundeSenken(text: str, zug: Zug) -> str | None:  # noqa: ARG001
+    felder, _ = kopfAlsFelder(text)
+    runde = int(felder["Runde"].partition("/")[0])
+    return kopfÄndern(text, {"Runde": f"{runde - 1}/{höchstRunde}"})
 
 
 def antwortSetzen(text: str, zug: Zug) -> str | None:

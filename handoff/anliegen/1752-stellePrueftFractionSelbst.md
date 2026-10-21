@@ -1,6 +1,11 @@
 # Die Stelle prüft selbst, dass sie exakt ist
 
-1752 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
+Form: Kritik
+Von: Architekt
+An: Implementierer
+Runde: 1/3
+Status: offen
+Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Kritik am Code zu Anliegen 1760. Die Abhilfe

@@ -1,6 +1,10 @@
 # Mutationsschwelle als untere Grenze, wiederholter Lauf gezielt
 
-1740 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+Form: Auftrag
+Von: Stakeholder
+An: Organisationsentwickler
+Runde: 1/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders in Zyklus 6, Anlass der Mutationslauf über Plan 6
@@ -47,7 +51,8 @@ gezielt geprüft, ohne vollen Lauf.
 **Stellungnahme.** Angenommen, [Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig), Absatz
 Mutation: 1 „Unter 95 % wird jeder Überlebende angegangen, nicht nur bis zur Schwelle“, nur
 Text; „repariert“ heißt ein Test, der ihn fängt, oder bei einem gleichwertigen eine Begründung
-beim Werkzeug, dann zählt er nicht (dazu [1751](1751-gleichwertigeMutantenNichtUmDasWerkzeugBauen.md)).
+beim Werkzeug, dann zählt er nicht (dazu Anliegen 1751).
 2 gezielter Lauf je Item, voller Lauf in der Prozessphase; Mechanismus Retro 6, P2. 3 in
 [1570](1570-mutationstestsEffizienter.md).
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
+Stellungnahme: Wie [1570](1570-mutationstestsEffizienter.md): erledigt, wenn in der [Retro 6](../retro.md) unter Fortschritt „Regelumsetzer: P2“ abgehakt ist. Dann prüft ein wiederholter Lauf nur die betroffenen Zeilen, und ein gleichwertiger Mutant zählt mit Begründung nicht; „jeder Überlebende“ bleibt nur Text und steht schon.

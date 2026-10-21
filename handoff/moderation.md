@@ -4,22 +4,22 @@ Stand vor „Freigabe Retro 6“. Nichts in [Plan](plan.md) ist blockiert; die [
 wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
 
 ## Dran
-- Stakeholder: [1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md) F1 bis F3 (unten),
+- Stakeholder: Anliegen 1860 F1 bis F3 (unten),
   dann „Freigabe Retro 6“. Deine Prüfung von 1640 ist abgeschlossen (erledigt).
 - Organisationsentwickler: [1670](anliegen/1670-anliegenboardNachPhasen.md),
   [1660](anliegen/1660-regelkommentareEntbehrlich.md),
-  [1581](anliegen/1581-erledigtVomEmpfaengerUndRuffFormatOhneRegel.md),
-  [1591](anliegen/1591-erledigtSetztDerEmpfaenger.md),
+  Anliegen 1581,
+  Anliegen 1591,
   [740](anliegen/740-commitFuerMehrereItemsImAblauf.md),
   [1570](anliegen/1570-mutationstestsEffizienter.md),
   [1740](anliegen/1740-mutationsschwelleAlsUntereGrenze.md),
-  [1751](anliegen/1751-gleichwertigeMutantenNichtUmDasWerkzeugBauen.md): alle Prozessphase,
-  also nach der Freigabe. Nachprüfung fällig: [1671](anliegen/1671-prozessphaseVorziehen.md)
+  Anliegen 1751: alle Prozessphase,
+  also nach der Freigabe. Nachprüfung fällig: Anliegen 1671
   (F1, F2 beantwortet, dein Kommentar dort verlangt eine Klärung zur Kritik am Inkrement),
-  [730](anliegen/730-werKritisiertUndZurueckgenommeneRegeln.md).
-- Regelumsetzer: [490](anliegen/490-fortschrittInPlanReviewRetro.md) zuerst (hält 421 und
-  991), [1790](anliegen/1790-dodUeberDasInkrementNurPerBefehl.md),
-  [991](anliegen/991-fortschrittVorDerPhaseVerwirftHakenUndHindernis.md),
+  Anliegen 730.
+- Regelumsetzer: Anliegen 490 zuerst (hält 421 und
+  991), Anliegen 1790,
+  Anliegen 991,
   [1070](anliegen/1070-wartendeNachpruefungIstNichtFaellig.md).
 - Testautor: Nachprüfung [1320](anliegen/1320-kreuztDieStreckeEineBaseUndLiegtDasZielFrei.md)
   (Antwort Ja steht); AUF-22, 23, 27, 13, 11, 16.7, 18.7, 3.9, QUE-5 bis 7 warten auf ihn.
@@ -48,7 +48,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
 
 ## Fragen an dich
 Mit Annahme zuerst:
-1. [1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md) F1: Wie viele TODOs im Code?
+1. Anliegen 1860 F1: Wie viele TODOs im Code?
    Annahme: drei (Empfehlung A).
 2. 1860 F2: Welche Werkzeugkommentare bleiben? Annahme: feste Liste mit Regelcode (A).
 3. 1860 F3: Wer entfernt die 58 `Regel:` und 100 `Warum:`? Annahme: nach A, in der

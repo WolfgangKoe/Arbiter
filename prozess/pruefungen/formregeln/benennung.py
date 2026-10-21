@@ -188,7 +188,7 @@ def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None
-    if pfad.parent == ordner and not pfad.name.endswith(testEndung):
+    if pfad.parent == ordner and pfad.suffix == ".py" and not pfad.name.endswith(testEndung):
         hatTest = any(testfunktionen(ast.parse(pfad.read_text(encoding="utf-8"))))
         return "Hilfsmodul darf keine Testfunktion enthalten" if hatTest else None
     if not pfad.name.endswith(testEndung):

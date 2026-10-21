@@ -1,6 +1,11 @@
 # Ein Unit-Test legt fest, was AUF-27.2 anders regelt
 
-1750 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
+Form: Kritik
+Von: Architekt
+An: Implementierer
+Runde: 1/3
+Status: offen
+Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Kritik am Code zu Anliegen 1710, Punkt 8. Der neue
@@ -35,6 +40,6 @@ gleichwertig ist.
 **Gegenvorschlag.** Mit AUF-27.2 den Test löschen; der Test zu AUF-27.2 tritt an seine Stelle
 und fängt `max(…, 0)`, falls die Zeile dann noch gebraucht wird. Bis dahin führt 1632 den
 Mutanten als gleichwertig unter der Vorbedingung von V10. Allgemein dazu:
-[1751](1751-gleichwertigeMutantenNichtUmDasWerkzeugBauen.md).
+Anliegen 1751.
 
 **Stellungnahme.**

@@ -1,6 +1,11 @@
 # Das Abzeichen „in Aufstellung“ aus vorschlag.css streichen
 
-1213 · Kritik · von Architekt → Ux · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Ux
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet auf die nächste Phase. Im Plan 6 hat der

@@ -1,13 +1,18 @@
 # Eine wartende Nachprüfung ist nicht fällig
 
-1070 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen · wartet auf die Prozessphase
+Form: Kritik
+Von: Organisationsentwickler
+An: Regelumsetzer
+Runde: 1/3
+Status: offen
+Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet, kein Schritt des Happy Path und keine rote
 Prüfung. [Ablauf, Prozessphase](../../prozess/ablauf.md#prozessphase) sagt: „Wartende sind
 nicht dran, `anliegenregeln/anliegenDran.py`“. `dran` überspringt Wartende, `nachprüfungen`
 nicht: Es zählt jedes `angenommen`, auch mit `· wartet auf die Prozessphase`. Darum nennt
-der Stand [730](730-werKritisiertUndZurueckgenommeneRegeln.md) in der Technikphase zugleich
+der Stand Anliegen 730 in der Technikphase zugleich
 unter „Wartet“ und unter „Nachprüfung fällig“.
 
 **Kosten.** Der Koordinator startet den Absender für eine Nachprüfung, die erst in der

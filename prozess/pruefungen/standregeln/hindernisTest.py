@@ -86,7 +86,7 @@ def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(
     assert "beseitigt" not in plan.read_text(encoding="utf-8")
     (datei,) = anliegenDateien(tmp_path)
     datei.write_text(
-        datei.read_text(encoding="utf-8").replace("Runde 1/3 · offen", "Runde 1/3 · angenommen"),
+        datei.read_text(encoding="utf-8").replace("Status: offen", "Status: angenommen"),
         encoding="utf-8",
     )
     fortschrittSchreiben(tmp_path)
@@ -102,7 +102,7 @@ def testEinGelöschtesErledigtesAnliegenBeseitigtMitDemCommitDavor(tmp_path, git
     hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
     (datei,) = anliegenDateien(tmp_path)
     datei.write_text(
-        datei.read_text(encoding="utf-8").replace("Runde 1/3 · offen", "Runde 1/3 · erledigt"),
+        datei.read_text(encoding="utf-8").replace("Status: offen", "Status: erledigt"),
         encoding="utf-8",
     )
     gitRepo.festhalten("Pfad freigegeben")

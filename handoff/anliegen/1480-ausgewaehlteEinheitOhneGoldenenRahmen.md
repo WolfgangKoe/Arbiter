@@ -1,6 +1,11 @@
 # Ausgewählte Einheit ohne goldenen Rahmen
 
-1480 · Kritik · von Fachkritiker → Ux · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Fachkritiker
+An: Ux
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Fachliche Abnahme von Item [setzenPerKlick](../../domaene/items/setzenPerKlick.md).

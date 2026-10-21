@@ -1,6 +1,10 @@
 # Zieht ein Modell durch eine fremde Base hindurch, wenn sein Ziel frei liegt?
 
-1320 · Fragen · von Testautor → Stakeholder · Runde 1/3 · angenommen
+Form: Fragen
+Von: Testautor
+An: Stakeholder
+Runde: 1/3
+Status: erledigt
 
 ## Runde 1
 **Befund.** AUF-26.2 und 26.3 halten ein Modell oder einen Block nur an, wenn die Stelle beim Loslassen eine Base überdecken würde. Ein Modell, dessen gerade Strecke eine Base kreuzt, dessen Ziel aber frei liegt, wird nicht angehalten. Es springt über die Base hinweg. Die Tests sagen das so (`testAuf26_2KreuztDieStreckeNurEineBaseUndLiegtDasZielFreiStehtDasModellAmZiel`, ebenso 26.3). Der Architekt hat es in [V10](../../technik/architektur/handlungen.md) so festgelegt: „Angehalten wird nur, wenn die Stelle am Ende des Wegs eine Base überdecken würde“.

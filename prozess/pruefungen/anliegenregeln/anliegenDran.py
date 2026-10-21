@@ -10,10 +10,10 @@ phasenanfang = "die "
 
 
 def nachprüfungen(wurzel: Path) -> dict[str, list[int]]:
-    """Fällige Nachprüfungen je Rolle: Anliegen mit Status `angenommen` prüft der Absender."""
+    """Fällige Nachprüfungen je Rolle: `angenommen` prüft der Absender, Wartende nicht."""
     fällig: dict[str, list[int]] = {}
     for anliegen in gelesene(wurzel):
-        if anliegen.status == Status.angenommen:
+        if anliegen.status == Status.angenommen and not wartet(wurzel, anliegen):
             fällig.setdefault(anliegen.absender, []).append(anliegen.nummer)
     return fällig
 
@@ -45,7 +45,7 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
 
 def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
     """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf die Prozessphase."""
-    if anliegen.wartetAuf is None:
+    if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
         return False
     if anliegen.wartetAuf.startswith(phasenanfang):
         return anliegen.wartetAuf != f"{phasenanfang}{lage(wurzel).phase}"

@@ -56,7 +56,8 @@ def testEinKommentarAusDemDashboardWirdAnliegenUndZeile(tmp_path, plan):
     senden(tmp_path, f"zeile={quote(zeile)}&haken=&kommentar={quote('Bitte prüfen.')}")
     assert "  Kommentar: Bitte prüfen. (Anliegen 1)\n" in plan.read_text(encoding="utf-8")
     (datei,) = (tmp_path / "handoff/anliegen").glob("*.md")
-    assert "von Stakeholder → Implementierer" in datei.read_text(encoding="utf-8")
+    text = datei.read_text(encoding="utf-8")
+    assert "Von: Stakeholder\nAn: Implementierer" in text
 
 
 def testFormularVonEinerFremdenSeiteSetztKeinenHaken(tmp_path, plan):

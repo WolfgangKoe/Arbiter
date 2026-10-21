@@ -1,6 +1,11 @@
 # AUF-26 teilen: Die Testdatei liegt über dem Höchstmaß
 
-1362 · Kritik · von Architekt → Planer · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Planer
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Die Akzeptanztests zu [AUF-26](../../domaene/anforderungen/phasen/aufstellen/anhaltenAnEinerBase.md)

@@ -4,10 +4,9 @@ import re
 import sys
 from pathlib import Path
 
-from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner, projektordner
 from lesen.agenten import rollennamen
-from lesen.anliegenKopf import höchstRunde, stakeholder
+from lesen.anliegenKopf import belegteNummern, höchstRunde, stakeholder
 from standregeln.abhaken import gleicheRolle
 from standregeln.fortschritt import (
     Zeile,
@@ -20,12 +19,15 @@ from standregeln.fortschritt import (
 from standregeln.phasenfolge import lage
 
 aufrufteile = 4  # Warum: Rolle, Schritt, Beseitiger und Text
-dateinummer = re.compile(rf"{anliegenOrdner}/(\d+)-")
 längeDesNamens = 40
 umlaute = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
 vorlage = """# Hindernis: {schritt}
 
-{nummer} · {form} · von {rolle} → {beseitiger} · Runde 1/{höchstRunde} · offen
+Form: {form}
+Von: {rolle}
+An: {beseitiger}
+Runde: 1/{höchstRunde}
+Status: offen
 
 ## Runde 1
 **Befund.** {text} Das hält den Schritt „{schritt}“ von {rolle} im Fortschritt auf.
@@ -57,13 +59,7 @@ def dateiname(nummer: int, schritt: str, vorsilbe: str = "hindernis") -> str:
 
 def nächsteNummer(wurzel: Path) -> int:
     """Die nächste freie Nummer: größer als jede im Ordner und in der Geschichte."""
-    log = ("log", "--all", "--format=", "--name-only", "--", anliegenOrdner)
-    geschichte = gitAusgabe(wurzel, *log)
-    dateien = (wurzel / anliegenOrdner).glob("*.md")
-    vorhandene = [datei.name.partition("-")[0] for datei in dateien]
-    nummern = [int(nummer) for nummer in vorhandene if nummer.isdigit()]
-    nummern += [int(nummer) for nummer in dateinummer.findall(geschichte)]
-    return max(nummern, default=0) + 1
+    return max(belegteNummern(wurzel), default=0) + 1
 
 
 def beseitigerName(wurzel: Path, genannt: str) -> str | None:

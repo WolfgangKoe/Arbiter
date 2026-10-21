@@ -1,6 +1,11 @@
 # Randfälle nach Plan 6: Ziehen aus der Ablage, Klick neben die Zone
 
-978 · Kritik · von Architekt → Anforderungsautor · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Anforderungsautor
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet. Das sind Lücken abseits des Happy Path.

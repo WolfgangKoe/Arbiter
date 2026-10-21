@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from rollenregeln.dashboardAnliegen import anliegenAbschnitt, zuständige
+from rollenregeln.dashboardAnliegenSeiten import kommentarFeld
 
 agenten = ("planer", "architekt")
 
@@ -54,6 +55,41 @@ def testFilterNachRolleUndFormBieteteNurVorhandeneWerteAn(ordner):
     assert 'id="filterRolle"' in abschnitt and 'id="filterForm"' in abschnitt
     assert 'data-rolle="planer" data-form="Kritik"' in abschnitt
     assert '<option value="Fragen">' in abschnitt and '<option value="Auftrag">' not in abschnitt
+
+
+def wartendesAnlegen(ordner: Path, nummer, wartetAuf, status="offen"):
+    kopf = f"Form: Kritik\nVon: architekt\nAn: planer\nRunde: 1/3\nStatus: {status}"
+    kopf += f"\nWartet auf: {wartetAuf}"
+    datei = ordner / "handoff" / "anliegen" / f"{nummer}-titel.md"
+    datei.write_text(f"# Titel {nummer}\n\n{kopf}\n", encoding="utf-8")
+
+
+def testWartendeStehenInEigenenBereichenMitKommentarfeld(ordner):
+    anliegenAnlegen(ordner, 10, "Kritik", ("architekt", "planer"), "offen")
+    wartendesAnlegen(ordner, 11, "10")
+    abschnitt = anliegenAbschnitt(ordner, zusatz=kommentarFeld)
+    assert "Jetzt dran" in abschnitt
+    assert "Wartet auf ein anderes Anliegen (1)" in abschnitt
+    assert "Titel 11" in abschnitt and "wartet auf 10" in abschnitt
+    assert abschnitt.count('name="kommentar"') == len(("dran", "wartend"))
+
+
+@pytest.mark.usefixtures("gitRepo")
+def testVorgemerktesStehtJeFolgendePhaseInDerReihenfolgeDerRotation(ordner):
+    wartendesAnlegen(ordner, 11, "Prozessphase")
+    wartendesAnlegen(ordner, 12, "Technikphase")
+    wartendesAnlegen(ordner, 13, "Domänenphase")
+    abschnitt = anliegenAbschnitt(ordner)
+    reihenfolge = [abschnitt.index(f"Titel {nummer}") for nummer in (12, 11)]
+    assert reihenfolge == sorted(reihenfolge)
+    assert "Vorgemerkt für die Technikphase (1)" in abschnitt
+    assert "Vorgemerkt für die Prozessphase (1)" in abschnitt
+    assert "Titel 13" in abschnitt
+
+
+def testErledigtesAnliegenStehtNichtImBoard(ordner):
+    wartendesAnlegen(ordner, 11, "10", status="erledigt")
+    assert "Kein Anliegen offen" in anliegenAbschnitt(ordner)
 
 
 def testOhneOffenesAnliegenSteheHinweis(ordner):

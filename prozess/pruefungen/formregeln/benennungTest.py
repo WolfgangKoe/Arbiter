@@ -205,9 +205,7 @@ def testPytestHookAußerhalbVonConftestBleibtRot():
     assert grundZu("def pytest_irgendwas(config):\n    pass\n", "conftest.py") == []
 
 
-def hilfsmodulAufbauen(
-    tmp_path, ordnername: str, quelltext: str, dateiname: str = "handgriffe.py"
-) -> Path:
+def hilfsmodulAufbauen(tmp_path, ordnername: str, quelltext: str, dateiname: str) -> Path:
     ordner = tmp_path / "technik" / "tests" / "akzeptanz" / ordnername
     ordner.mkdir(parents=True)
     datei = ordner / dateiname
@@ -216,32 +214,22 @@ def hilfsmodulAufbauen(
 
 
 def testHilfsmodulImAkzeptanzordnerBrauchtKeineAnforderung(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n")
-    assert verstöße(tmp_path) == []
-
-
-def testHilfsmodulMitTestfunktionIstRot(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "", "def testAuf1_1Probe(): ...\n")
-    assert any(
-        "handgriffe.py" in meldung and "Testfunktion" in meldung for meldung in verstöße(tmp_path)
-    )
-
-
-def testHilfsmodulInEinemUnterordnerBleibtRot(tmp_path):
-    hilfsmodulAufbauen(tmp_path, "phasen", "def stelleSetzen(): ...\n")
-    assert any("handgriffe.py" in meldung for meldung in verstöße(tmp_path))
-
-
-def testUnbekanntesHilfsmodulOhneTestfunktionIstGrün(tmp_path):
     hilfsmodulAufbauen(tmp_path, "", "def stelleSetzen(): ...\n", "unbekannt.py")
     assert verstöße(tmp_path) == []
 
 
-def testUnbekanntesModulMitTestfunktionIstRot(tmp_path):
+def testHilfsmodulMitTestfunktionIstRot(tmp_path):
     hilfsmodulAufbauen(tmp_path, "", "def testAuf1_1Probe(): ...\n", "unbekannt.py")
-    assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))
+    assert any(
+        "unbekannt.py" in meldung and "Testfunktion" in meldung for meldung in verstöße(tmp_path)
+    )
 
 
-def testUnbekanntesModulImUnterordnerIstRot(tmp_path):
+def testHilfsmodulInEinemUnterordnerIstRot(tmp_path):
     hilfsmodulAufbauen(tmp_path, "phasen", "def stelleSetzen(): ...\n", "unbekannt.py")
     assert any("unbekannt.py" in meldung for meldung in verstöße(tmp_path))
+
+
+def testNichtPythonDateiImAkzeptanzordnerIstRotStattAbsturz(tmp_path):
+    hilfsmodulAufbauen(tmp_path, "", "Ein Satz Text.\n", "notiz.md")
+    assert any("notiz.md" in meldung for meldung in verstöße(tmp_path))

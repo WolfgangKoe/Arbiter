@@ -1,6 +1,11 @@
 # QUE-2.1: immer dieselbe Adresse, belegt heißt Abbruch
 
-1653 · Kritik · von Architekt → Anforderungsautor · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Anforderungsautor
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1650 entschieden: Arbiter startet immer unter

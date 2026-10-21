@@ -1,6 +1,11 @@
 # Loslassen ohne Antwort bleibt in der Vorschau stehen
 
-1761 · Kritik · von Reviewer → Implementierer · Runde 1/3 · offen · wartet auf die Technikphase
+Form: Kritik
+Von: Reviewer
+An: Implementierer
+Runde: 1/3
+Status: offen
+Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit) zu Anliegen 1640,

@@ -1,4 +1,4 @@
-"""Mutationstest: baut Fehler in geänderte Domänenmodule und nennt, welche kein Test bemerkt."""
+"""Mutationstest: baut Fehler in geänderte Zeilen und nennt, welche kein Test bemerkt."""
 
 import os
 import shutil
@@ -10,20 +10,28 @@ from pathlib import Path
 from typing import NamedTuple
 
 from formregeln.glossar import domaeneOrdner
-from gemeinsam.gitAufruf import freigaben, gitAusgabe
 from gemeinsam.pfade import projektordner
-from mutationsregeln.mutanten import mutantenVon
+from mutationsregeln.abdeckungKontext import auswahl, messen
+from mutationsregeln.ergebnisse import (
+    Gleichwertig,
+    gemerkt,
+    gleichwertigeLesen,
+    merken,
+    standKennung,
+)
+from mutationsregeln.geaenderteZeilen import geänderteZeilen
+from mutationsregeln.mutanten import Mutant, mutantenVon
 
-# Regel: Einheitstests zuerst, denn sie scheitern am schnellsten; dann die Akzeptanztests.
-testpfade = ("technik/tests/einheit/domaene", "technik/tests/akzeptanz")
+testpfade = ("technik/tests",)
+produktOrdner = "technik/arbiter"
 # Regel: Anliegen 720, F1: mindestens 95 % gefangene Mutanten je Lauf.
 schwelle = 95
 sekundenMindestens = 10
 wartefaktor = 3
 volleProzent = 100
-planFreigabe = "Freigabe Plan "
+vollerLauf = "--voll"
 # Warum: Ohne Bytecode-Datei läuft kein Mutant in der zwischengespeicherten Fassung des Vorgängers.
-umgebung = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+ohneBytecode = {"PYTHONDONTWRITEBYTECODE": "1"}
 
 
 class Überlebender(NamedTuple):
@@ -35,6 +43,7 @@ class Überlebender(NamedTuple):
 class Ergebnis(NamedTuple):
     gesamt: int
     überlebende: list[Überlebender]
+    gleichwertige: int = 0
 
     @property
     def prozentGefangen(self) -> int:
@@ -49,19 +58,7 @@ def schwelleErreicht(ergebnis: Ergebnis) -> bool:
 
 def geänderteModule(wurzel: Path) -> list[str]:
     """Domänenmodule, die seit der jüngsten `Freigabe Plan` geändert oder neu sind."""
-    plan = next(
-        (frei.kennung for frei in freigaben(wurzel) if frei.betreff.startswith(planFreigabe)),
-        "HEAD",
-    )
-    ohneAnführung = ("-c", "core.quotepath=false")
-    geändert = gitAusgabe(
-        wurzel, *ohneAnführung, "diff", "--name-only", plan, "--", domaeneOrdner
-    ).splitlines()
-    neu = gitAusgabe(
-        wurzel, *ohneAnführung, "ls-files", "--others", "--exclude-standard", "--", domaeneOrdner
-    ).splitlines()
-    vorhanden = (name for name in sorted({*geändert, *neu}) if (wurzel / name).is_file())
-    return [name for name in vorhanden if name.endswith(".py")]
+    return list(geänderteZeilen(wurzel, domaeneOrdner))
 
 
 def testenAufrufen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> bool:
@@ -69,7 +66,10 @@ def testenAufrufen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> boo
     befehl = [sys.executable, "-m", "pytest", "-x", "-q", "-p", "no:cacheprovider", *pfade]
     try:
         lauf = subprocess.run(
-            befehl, cwd=kopie, env=umgebung, capture_output=True, check=False, timeout=wartezeit
+            befehl, cwd=kopie, env={**os.environ, **ohneBytecode},
+            capture_output=True,
+            check=False,
+            timeout=wartezeit,
         )
     except subprocess.TimeoutExpired:
         return False
@@ -86,42 +86,129 @@ def kopieAnlegen(wurzel: Path, ziel: Path) -> None:
         shutil.copytree(daten, ziel / "domaene" / "daten")
 
 
+def überlebt(
+    kopie: Path, ausgewählt: tuple[str, ...] | None, pfade: tuple[str, ...], wartezeit: float
+) -> bool:
+    """Wahr, wenn kein Test den Mutanten fängt; ein Überlebender prüft sich gegen alle nach."""
+    if ausgewählt == ():
+        return True
+    if ausgewählt is None:
+        return testenAufrufen(kopie, pfade, wartezeit)
+    # Warum: Eine Fixture, die nur im ersten Test läuft, ließe die Zeile den falschen Tests.
+    return testenAufrufen(kopie, ausgewählt, wartezeit) and testenAufrufen(kopie, pfade, wartezeit)
+
+
+def mutantenWählen(
+    modul: str,
+    original: str,
+    zeilen: dict[str, set[int]] | None,
+    gleichwertige: frozenset[Gleichwertig],
+) -> tuple[list[tuple[int, Mutant]], int]:
+    """Die Mutanten in den genannten Zeilen mit ihrer Nummer, und wie viele gleichwertig sind."""
+    quellzeilen = original.splitlines()
+    gewählt = []
+    begründet = 0
+    for nummer, mutant in enumerate(mutantenVon(original)):
+        if zeilen is not None and mutant.zeile not in zeilen.get(modul, set()):
+            continue
+        quelle = quellzeilen[mutant.zeile - 1].strip()
+        if Gleichwertig(modul, quelle, mutant.beschreibung) in gleichwertige:
+            begründet += 1
+        else:
+            gewählt.append((nummer, mutant))
+    return gewählt, begründet
+
+
+class Vorgaben(NamedTuple):
+    """Zeilen je Modul (ohne: alle), Merkzettel (ohne: nichts merken) und gleichwertige Mutanten."""
+
+    zeilen: dict[str, set[int]] | None = None
+    ablage: Path | None = None
+    gleichwertige: frozenset[Gleichwertig] = frozenset()
+
+
 def mutationenPrüfen(
-    wurzel: Path, module: list[str], pfade: tuple[str, ...] = testpfade
+    wurzel: Path,
+    module: list[str],
+    pfade: tuple[str, ...] = testpfade,
+    vorgaben: Vorgaben = Vorgaben(),  # noqa: B008
 ) -> Ergebnis:
-    """Baut je Mutant eines Moduls in eine Kopie des Repos und lässt die Tests laufen."""
+    """Baut je Mutant in eine Kopie und lässt nur die Tests laufen, die seine Zeile ausführen."""
+    zeilen, ablage, gleichwertige = vorgaben
     überlebende: list[Überlebender] = []
     gesamt = 0
+    ohneWirkung = 0
+    stand = standKennung(wurzel)
+    ergebnisse = dict(gemerkt(ablage, stand))
     with tempfile.TemporaryDirectory() as ordner:
         kopie = Path(ordner)
         kopieAnlegen(wurzel, kopie)
         beginn = time.monotonic()
-        grün = testenAufrufen(kopie, pfade, 3600)
-        assert grün, "Die Tests sind ohne Mutant rot; so zeigt keiner eine Lücke"
+        messung = messen(kopie, pfade, 3600)
+        assert messung.grün, "Die Tests sind ohne Mutant rot; so zeigt keiner eine Lücke"
         wartezeit = max(sekundenMindestens, wartefaktor * (time.monotonic() - beginn))
         for modul in module:
             original = (wurzel / modul).read_text(encoding="utf-8")
-            for mutant in mutantenVon(original):
+            mutanten, begründet = mutantenWählen(modul, original, zeilen, gleichwertige)
+            ohneWirkung += begründet
+            for nummer, mutant in mutanten:
                 gesamt += 1
-                (kopie / modul).write_text(mutant.quelle, encoding="utf-8")
-                if testenAufrufen(kopie, pfade, wartezeit):
+                schlüssel = f"{modul}#{nummer}"
+                if schlüssel not in ergebnisse:
+                    (kopie / modul).write_text(mutant.quelle, encoding="utf-8")
+                    ausgewählt = auswahl(messung.karten.get(modul), mutant.zeile)
+                    ergebnisse[schlüssel] = überlebt(kopie, ausgewählt, pfade, wartezeit)
+                    (kopie / modul).write_text(original, encoding="utf-8")
+                if ergebnisse[schlüssel]:
                     überlebende.append(Überlebender(modul, mutant.zeile, mutant.beschreibung))
-            (kopie / modul).write_text(original, encoding="utf-8")
-    return Ergebnis(gesamt, überlebende)
+    merken(ablage, stand, ergebnisse)
+    return Ergebnis(gesamt, überlebende, ohneWirkung)
 
 
 def bericht(ergebnis: Ergebnis) -> str:
     lücken = [f"{lücke.datei}:{lücke.zeile} {lücke.beschreibung}" for lücke in ergebnis.überlebende]
     kopf = (
         f"{ergebnis.gesamt} Mutanten, {ergebnis.prozentGefangen} % gefangen, Schwelle {schwelle} %"
+        f", {ergebnis.gleichwertige} gleichwertig begründet, nicht gezählt"
     )
     return "\n".join([*lücken, kopf])
 
 
+def ziel(wurzel: Path, argument: str) -> tuple[str, set[int]]:
+    """Ein Modul, ganz oder nur `modul:von-bis` (eine Zeile: `modul:zeile`)."""
+    modul, _, bereich = argument.partition(":")
+    if not bereich:
+        anzahl = len((wurzel / modul).read_text(encoding="utf-8").splitlines())
+        return modul, set(range(1, anzahl + 1))
+    erste, _, letzte = bereich.partition("-")
+    return modul, set(range(int(erste), int(letzte or erste) + 1))
+
+
+def alleModule(wurzel: Path) -> dict[str, set[int]]:
+    """Jede Zeile jedes Moduls des Produkts, auch `web/`: der volle Lauf der Retro."""
+    ergebnis = {}
+    for datei in sorted((wurzel / produktOrdner).rglob("*.py")):
+        name = datei.relative_to(wurzel).as_posix()
+        ergebnis[name] = ziel(wurzel, name)[1]
+    return ergebnis
+
+
+def zeilenWählen(wurzel: Path, argumente: list[str]) -> dict[str, set[int]]:
+    """Voll: alles; Module genannt: diese Zeilen; sonst die seit der Planfreigabe geänderten."""
+    if vollerLauf in argumente:
+        return alleModule(wurzel)
+    if argumente:
+        return dict(ziel(wurzel, argument) for argument in argumente)
+    return geänderteZeilen(wurzel, domaeneOrdner)
+
+
 def main(argumente: list[str]) -> int:
     wurzel = projektordner()
-    module = argumente or geänderteModule(wurzel)
-    ergebnis = mutationenPrüfen(wurzel, module)
+    zeilen = zeilenWählen(wurzel, argumente)
+    ablage = wurzel / ".git" / "arbiter" / "mutation.json"
+    gleichwertige = frozenset(gleichwertigeLesen())
+    vorgaben = Vorgaben(zeilen, ablage, gleichwertige)
+    ergebnis = mutationenPrüfen(wurzel, list(zeilen), testpfade, vorgaben)
     print(bericht(ergebnis))
     return 0 if schwelleErreicht(ergebnis) else 1
 

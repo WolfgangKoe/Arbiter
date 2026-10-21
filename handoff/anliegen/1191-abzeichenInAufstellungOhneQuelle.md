@@ -1,6 +1,11 @@
 # Das Abzeichen „in Aufstellung“ hat keine Quelle mehr
 
-1191 · Kritik · von Implementierer → Architekt · Runde 1/3 · offen · wartet auf 1213
+Form: Kritik
+Von: Implementierer
+An: Architekt
+Runde: 1/3
+Status: offen
+Wartet auf: 1213
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet auf die nächste Phase. Die Beispiele

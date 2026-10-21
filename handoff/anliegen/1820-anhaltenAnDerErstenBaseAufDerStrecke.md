@@ -1,6 +1,11 @@
 # AUF-26.2, 26.3 und 27.2 sollen an der ersten Base auf der Strecke anhalten
 
-1820 · Kritik · von Testautor → Anforderungsautor · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Testautor
+An: Anforderungsautor
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Auf Wunsch des Stakeholders in [1320](1320-kreuztDieStreckeEineBaseUndLiegtDasZielFrei.md) (Kommentar: „wie in ArbiterMap, Anforderungen erst im nächsten Zyklus anpassen, vormerken“) gilt künftig: Ein gezogenes *Modell* oder ein Block hält an der ersten *Base* an, die seine gerade Strecke berührt, auch wenn das Ziel dahinter frei liegt. Heute lesen der Architekt ([V10](../../technik/architektur/handlungen.md)) und die Tests AUF-26.2 und 26.3 so, dass nur zählt, ob die *Stelle* am Ende des Wegs eine *Base* *überdeckt*. Betroffen sind [AUF-26.2 und 26.3](../../domaene/anforderungen/phasen/aufstellen/anhaltenAnEinerBase.md), AUF-26.4 (zeigt dieselbe *Stelle*) und AUF-27.2.

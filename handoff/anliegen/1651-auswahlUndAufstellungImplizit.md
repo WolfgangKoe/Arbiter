@@ -1,6 +1,11 @@
 # Auswahl sieht fremden Zustand, Ebene und Spielerpaar ohne Namen
 
-1651 · Kritik · von Architekt → Implementierer · Runde 1/3 · offen · wartet auf 1655
+Form: Kritik
+Von: Architekt
+An: Implementierer
+Runde: 1/3
+Status: offen
+Wartet auf: 1655
 
 ## Runde 1
 **Befund.** Ich habe [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py) und

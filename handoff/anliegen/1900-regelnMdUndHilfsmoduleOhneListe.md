@@ -1,12 +1,16 @@
 # regeln.md in jeder Phase, Hilfsmodule ohne Liste
 
-1900 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
+Form: Kritik
+Von: Organisationsentwickler
+An: Regelumsetzer
+Runde: 1/3
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Einträge im [Backlog](../../prozess/backlog.md) sind mit „Freigabe Retro 6“
 ausgelöst (Retro 6, P1); beide brauchen einen Mechanismus:
 1. Die Sperre der Prozessregeln (`rollenregeln/regelnNurInProzessphase.py`) gilt auch für
-   `prozess/regeln.md`. In [490](490-fortschrittInPlanReviewRetro.md), Teil 2, und in
+   `prozess/regeln.md`. In Anliegen 490, Teil 2, und in
    Anliegen 982 konntest du die Zeile zu deinem Mechanismus deshalb erst in der Prozessphase
    eintragen; deine
    Empfehlung in Anliegen 731: `regeln.md` für dich ausnehmen. Der

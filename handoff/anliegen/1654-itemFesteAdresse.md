@@ -1,6 +1,11 @@
 # Item für die feste Adresse
 
-1654 · Kritik · von Architekt → Planer · Runde 1/3 · offen · wartet auf 1653
+Form: Kritik
+Von: Architekt
+An: Planer
+Runde: 1/3
+Status: offen
+Wartet auf: 1653
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1650 entschieden: Arbiter startet immer unter

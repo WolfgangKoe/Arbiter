@@ -1,6 +1,10 @@
 # Ablauf: Ein Commit darf mehrere Prozess-Items liefern
 
-740 · Kritik · von Regelumsetzer → Organisationsentwickler · Runde 1/3 · angenommen
+Form: Kritik
+Von: Regelumsetzer
+An: Organisationsentwickler
+Runde: 1/3
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der [Fortschritt](../../prozess/regeln.md) und der nächste Schritt erkennen jetzt

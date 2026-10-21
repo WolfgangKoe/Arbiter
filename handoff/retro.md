@@ -28,7 +28,7 @@ ungeprüfte Fälle (1551, 1590, 1710).
    1841): Sprung über fremde *Bases* (1820), Loslassen über der Kante, Greifpunkt (1610).
 
 ## Prozess-Items
-Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 ([1671](anliegen/1671-prozessphaseVorziehen.md) F1).
+Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 (Anliegen 1671 F1).
 - P1 Regeln nachziehen (Organisationsentwickler): Ablauf und Rollen nennen: Kennzahl
   Prüfcode gegen Produktcode ohne Tests, Beginn der Retro, Kritiker gleichzeitig (730), ein
   Commit für mehrere Items (740), nie `erledigt` durch den Empfänger und Befunde nur als
@@ -52,10 +52,10 @@ Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 ([1671](anliegen/1671-pro
   für alle Skripte und vergibt nur freie Nummern aus dem Bereich des Auftrags (5); dazu 1070.
 - P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): im Code nur Werkzeugkommentare und
   gedeckelte TODOs (Es 8); die bestehenden Kommentare entfernt er im Prüfcode, Implementierer
-  und Testautor in der Technikphase 7, rot erst in deren DoD ([1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md)).
+  und Testautor in der Technikphase 7, rot erst in deren DoD (Anliegen 1860).
 
 ## Empfehlung
-Freigabe samt 1860, dann P1, danach P2 bis P5 und [1790](anliegen/1790-dodUeberDasInkrementNurPerBefehl.md)
+Freigabe samt 1860, dann P1, danach P2 bis P5 und Anliegen 1790
 (kein Item).
 
 ## Fortschritt

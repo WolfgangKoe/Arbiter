@@ -1,6 +1,11 @@
 # Was die Karte zeigt, wenn beim Loslassen die Nahkampfreichweite sperrt
 
-1400 · Fragen · von Anforderungsautor → Stakeholder · Runde 1/3 · angenommen · wartet auf die Domänenphase
+Form: Fragen
+Von: Anforderungsautor
+An: Stakeholder
+Runde: 1/3
+Status: angenommen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, ein Randfall

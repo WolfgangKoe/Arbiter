@@ -1,6 +1,10 @@
 # Regelkommentare entbehrlich
 
-1660 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+Form: Auftrag
+Von: Stakeholder
+An: Organisationsentwickler
+Runde: 1/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich finde noch diverse Kommentare wie ‚# Regel:
@@ -53,9 +57,8 @@ und Prüfungen schon sichern.
 5. Welche Prüfung der DoD fehlt noch, damit Kriteriumsbezug, toter Code und Architektur
    nur über Skripte belegt sind, nicht über Kommentare?
 
-**Stellungnahme.** Angenommen ([Retro 6](../retro.md), P1 und P5; deine Antworten in
-[1860](1860-todoDeckelUndWerkzeugkommentare.md)). [Es 8](../../prozess/praemissen/es.md) neu:
-1 und 3 nur Werkzeugkommentare mit Regelcode und `TODO`, die Fundstelle trägt der Name; 2
-höchstens drei, ein TODO von vor der Technikphase macht die DoD rot; 4 Technikphase 7; 5 baut
-der Regelumsetzer mit P5.
+**Stellungnahme.** Angenommen (Anliegen 1860), [Es 8](../../prozess/praemissen/es.md) neu:
+1 und 3 nur Werkzeugkommentare mit Regelcode und `TODO`, der Name trägt die Fundstelle; 2
+höchstens drei, ein altes TODO macht die DoD rot; 4 Technikphase 7; 5 Regelumsetzer, P5.
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
+Stellungnahme: Wenn in der [Retro 6](../retro.md) „Regelumsetzer: P5“ abgehakt ist; die alten Kommentare sind nach Technikphase 7 weg, sonst ist deren DoD rot.

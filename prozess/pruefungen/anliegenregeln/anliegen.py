@@ -1,9 +1,9 @@
-"""Prüft den Kopf einer Anliegen-Datei (Titel, Kopfzeile, Typ, Runde, Status, Rollen)."""
+"""Prüft den Kopf einer Anliegen-Datei (Titel, Felder, Form, Runde, Status, Rollen)."""
 
 from pathlib import Path
 
 from lesen.agenten import rollennamen
-from lesen.anliegenKopf import Status, höchstRunde, kopfLesen, stakeholder, typWerte
+from lesen.anliegenKopf import Status, felderLesen, höchstRunde, kopfLesen, stakeholder, typWerte
 
 
 def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
@@ -11,18 +11,21 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     zeilen = datei.read_text(encoding="utf-8").splitlines()
     if not zeilen or not zeilen[0].startswith("# "):
         return ["Zeile 1 ist kein Titel `# <Titel>`"]
+    if not felderLesen(zeilen):
+        return [
+            "Zeile 3: Kopf als Felder je Zeile erwartet: `Form:`, `Von:`, `An:`, "
+            f"`Runde: <n>/{höchstRunde}`, `Status:`, dahinter höchstens `Wartet auf: <nr>` "
+            "oder `Wartet auf: Prozessphase`"
+        ]
     anliegen = kopfLesen(datei)
     if anliegen is None:
         return [
-            "Zeile 3: Kopf `<nr> · <Typ> · von <Rolle> → <Rolle> · "
-            f"Runde <n>/{höchstRunde} · <Status>`, dahinter höchstens `· wartet auf <nr>` "
-            "oder `· wartet auf die Prozessphase` erwartet"
+            "Kopf unvollständig oder ungültig: alle Felder bis `Status`, `Runde` als `<n>/3`, "
+            "`Wartet auf` als Nummer oder Phase, Dateiname `<nr>-<kurz>.md`"
         ]
     verstöße = []
-    if not datei.name.startswith(f"{anliegen.nummer:02d}-"):
-        verstöße.append(f"Nummer {anliegen.nummer} passt nicht zum Dateinamen")
     if anliegen.typ not in typWerte:
-        verstöße.append(f"Typ {anliegen.typ} ist keiner von {', '.join(typWerte)}")
+        verstöße.append(f"Form {anliegen.typ} ist keine von {', '.join(typWerte)}")
     if not 1 <= anliegen.runde <= höchstRunde:
         verstöße.append(f"Runde {anliegen.runde} liegt außerhalb von 1 bis {höchstRunde}")
     if not isinstance(anliegen.status, Status):

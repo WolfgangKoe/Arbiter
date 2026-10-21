@@ -1,6 +1,10 @@
 # Mutationstests effizienter
 
-1570 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen
+Form: Auftrag
+Von: Stakeholder
+An: Organisationsentwickler
+Runde: 1/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Mutationstests sind mir sehr wichtig, weil sie Lücken in den Tests und toten
@@ -35,3 +39,4 @@ nicht nötig, solange 1 und 2 reichen. 4: Bildschirmtests laufen nur, wo sie die
 ausführen. 5: je Item vor dem Review in geänderten Zeilen, der volle Lauf in der Prozessphase,
 ohne aufzuhalten.
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
+Stellungnahme: Die Regel steht ([Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig), Absatz Mutation). Erledigt, wenn in der [Retro 6](../retro.md) unter Fortschritt „Regelumsetzer: P2“ abgehakt ist: Dann prüft der Mutationslauf je Item nur die geänderten Zeilen, und der Absatz nennt statt „Retro 6, P2“ den Mechanismus. So gilt es jetzt für jeden Auftrag mit Prozess-Item ([Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)).

@@ -14,7 +14,11 @@ from rollenregeln.eingang import Verworfen, Zug, verworfenVermerken, vorgemerkte
 kopf = {"Origin": None, "Host": "127.0.0.1:8765"}
 vorlage = """# Titel
 
-{nummer} · Fragen · von {absender} → {empfänger} · Runde 1/3 · {status}
+Form: Fragen
+Von: {absender}
+An: {empfänger}
+Runde: 1/3
+Status: {status}
 
 **F1 · Eins.** A oder B.
 Antwort:
@@ -82,7 +86,7 @@ def testFormularLegtDieZügeSofortInsAnliegen(ordner):
     )
     assert antwort.status == HTTPStatus.SEE_OTHER and antwort.ort == "/anliegen/10"
     text = (ordner / "handoff" / "anliegen" / "10-titel.md").read_text(encoding="utf-8")
-    assert "Runde 1/3 · angenommen" in text and "Antwort: B" in text
+    assert "Runde: 1/3\nStatus: angenommen" in text and "Antwort: B" in text
     assert text.endswith("Kommentar: Hallo\n")
     assert vorgemerkte(ordner) == []
 

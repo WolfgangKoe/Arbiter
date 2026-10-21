@@ -112,10 +112,18 @@ def seitenVerweis(anliegen: Anliegen, ordner: Path) -> str:  # noqa: ARG001
     return f"/anliegen/{anliegen.nummer}"
 
 
+def kommentarFeld(anliegen: Anliegen) -> str:
+    return (
+        f'<form class="zug" method="post" action="/anliegen/{anliegen.nummer}">'
+        '<textarea name="kommentar" rows="2" placeholder="Kommentar"></textarea>'
+        '<button type="submit">Kommentieren</button></form>'
+    )
+
+
 def anliegenSeite(ordner: Path) -> str:
     inhalt = (
         f'<p class="zaehler">Du bist dran: {zähler(ordner)}</p>{vermerke(ordner)}'
-        f"{anliegenAbschnitt(ordner, seitenVerweis)}"
+        f"{anliegenAbschnitt(ordner, seitenVerweis, kommentarFeld)}"
     )
     return seite("Anliegen", "Anliegen", inhalt)
 

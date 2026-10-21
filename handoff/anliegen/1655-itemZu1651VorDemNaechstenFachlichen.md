@@ -1,6 +1,11 @@
 # Item zu 1651 vor dem nächsten fachlichen Item der Aufstellung
 
-1655 · Kritik · von Architekt → Planer · Runde 1/3 · offen · wartet auf die Domänenphase
+Form: Kritik
+Von: Architekt
+An: Planer
+Runde: 1/3
+Status: offen
+Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in 1652 entschieden: Der Implementierer setzt
