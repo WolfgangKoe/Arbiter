@@ -56,3 +56,4 @@ Anliegen, vorgemerkt je Phase nach der Rotation. 2: `Form:`, `Von:`, `An:`, `Run
 3: ein Lauf schreibt alle offenen Köpfe um. 4: Kommentar überall, Status und Antwort wie bisher.
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
 Stellungnahme: Wenn in der [Retro 6](../retro.md) „Regelumsetzer: P4“ abgehakt ist und das Dashboard die Bereiche aus 1 und die Köpfe aus 2 zeigt.
+Kommentar: Ein Kommentar hierzu. Es ist zwar nett, dass ich überall Kommentare setzen darf. Aber diese Funktion ist mir hier etwas zu offensiv. Ich hätte alles lieber kompakter. einen Kommentar setze ich dann, wenn ich das ANliegen öffne. Die Fortschrittsliste darf auch etwas kompakter sein und neben dem Anliegenboard als kompakte Liste angeordnet sein.

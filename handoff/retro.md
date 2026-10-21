@@ -65,9 +65,9 @@ Freigabe samt 1860, dann P1, danach P2 bis P5 und Anliegen 1790
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 6
 - [x] Organisationsentwickler: P1
-- [ ] Regelumsetzer: P2
+- [x] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
-- [ ] Regelumsetzer: P4
+- [x] Regelumsetzer: P4
 - [ ] Regelumsetzer: P5
 - [ ] Koordinator: nach dev gepusht
 

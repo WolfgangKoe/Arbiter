@@ -137,13 +137,14 @@ Bei einer Oberfläche gelten auch Bildschirmtest grün, Mockup gelöscht. Dazu d
 Mutationsschwelle: mindestens 95 % gefangene Mutanten in den geänderten Zeilen der
 Domänenmodule. Je Mutant laufen nur die Tests, die seine Zeile ausführen (Zeilen auf
 Modulebene, Tests in einem eigenen Prozess: alle); ein Ergebnis gilt, solange `technik/`,
-`pyproject.toml` und `domaene/daten` gleich sind. Unter 95 % wird jeder Überlebende
-angegangen, nicht nur bis zur Schwelle: ein Test, der ihn fängt, oder, ist er gleichwertig,
-eine Begründung beim Werkzeug, dann zählt er nicht (Anliegen 1740). Code ändert sich dafür nur,
-wenn er lesbarer wird; ein Test sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen
-1751). Der volle Lauf über alle Module, auch `web/`, läuft nur in der Prozessphase
-([Schritt 1](#prozessphase)) und hält nichts auf. Mechanismus: `mutationsregeln/mutation.py`,
-gezielt und gleichwertig: Retro 6, P2; „jeder Überlebende“ und Lesbarkeit: nur Text.
+`pyproject.toml` und `domaene/daten` gleich sind (Merkzettel `.git/arbiter/mutation.json`).
+Unter 95 % wird jeder Überlebende angegangen, nicht nur bis zur Schwelle: ein Test, der ihn
+fängt, oder, ist er gleichwertig, eine Begründung in `mutationsregeln/gleichwertig.json`, dann
+zählt er nicht (Anliegen 1740). Code ändert sich dafür nur, wenn er lesbarer wird; ein Test
+sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Der volle Lauf (`--voll`)
+über alle Module, auch `web/`, läuft nur in der Prozessphase ([Schritt 1](#prozessphase)) und
+hält nichts auf. Mechanismus: `mutationsregeln/mutation.py` (Befehle:
+[Regeln](regeln.md#mutationsregeln)); „jeder Überlebende“ und Lesbarkeit: nur Text.
 
 Werkzeuge (Regelumsetzer baut, Architekt kritisiert): complexipy (Schwelle 15), ruff (Stil,
 ARG, PLR2004, PLR0913, FBT, ERA, `PLR0912` mit 12), eslint und stylelint fürs Frontend. Die Sperre der Agenten ist für Python mindestens so

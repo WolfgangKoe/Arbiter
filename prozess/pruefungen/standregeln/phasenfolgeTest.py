@@ -85,6 +85,18 @@ def testEinCommitFürMehrereItemsErledigtJedesDieserItems(repo):
     assert schritt(repo) == "Regelumsetzer: Prozess-Item P4 aus Retro 3"
 
 
+def testEinSammelbetreffMitAnliegennummerErledigtSeineItems(repo):
+    repo.datei("handoff/plan.md", planKopf)
+    repo.datei("handoff/review.md", "# Review · Zyklus 3\n")
+    items = "- P1 Eins\n- P2 Zwei\n- P3 Drei\n- P4 Vier\n"
+    repo.datei("handoff/retro.md", f"# Retro · Zyklus 3\n\n## Prozess-Items\n{items}")
+    for betreff in ("Freigabe Plan 3", "Freigabe Review 3", "Freigabe Retro 3"):
+        repo.festhalten(betreff)
+    repo.festhalten("P1, P2 und 1920: Gemeinsam geliefert")
+    repo.festhalten("P4 und 12, 13: Mit Anliegen")
+    assert schritt(repo) == "Regelumsetzer: Prozess-Item P3 aus Retro 3"
+
+
 def testZwischenstandOderNennungImTextErledigtKeinItem(repo):
     repo.datei("handoff/plan.md", planKopf)
     repo.datei("handoff/review.md", "# Review · Zyklus 3\n")

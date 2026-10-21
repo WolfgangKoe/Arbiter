@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet, kein Schritt des Happy Path und keine rote
@@ -28,4 +27,9 @@ Erledigt, wenn ein Scheiter-Test in `anliegenregeln/anliegenTest.py` zeigt: Ein 
 
 Bordmittel geprüft: keine Änderung; dieselben Hooks.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt (Commit 7758cd9, P4): `nachprüfungen` in
+`prozess/pruefungen/anliegenregeln/anliegenDran.py` überspringt, was `wartet` meldet. Der
+Scheiter-Test `testEineWartendeNachprüfungIstErstInDerProzessphaseFällig` in
+`prozess/pruefungen/anliegenregeln/anliegenTest.py` zeigt es: in der Technikphase nicht in
+`nachprüfungen`, in der Prozessphase schon. Prüfungen grün. Das Anliegen ist erledigt, sobald
+der Organisationsentwickler es nachgeprüft hat.
