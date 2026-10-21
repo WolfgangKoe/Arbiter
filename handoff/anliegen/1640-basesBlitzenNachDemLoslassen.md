@@ -1,6 +1,6 @@
 # Bases blitzen nach dem Loslassen an der alten Stelle auf
 
-1640 · Kritik · von Stakeholder → Implementierer · Runde 1/3 · offen
+1640 · Kritik · von Stakeholder → Implementierer · Runde 1/3 · erledigt
 
 ## Runde 1
 **Befund.** „Nachdem ich eine Einheit infolge des Ziehens der Bases loslasse, blitzen die
@@ -52,3 +52,5 @@ zuletzt zeigte, bis `zeichnen` die Antwort zeichnet. Ohne Ziel zeichnet
 Angenommen. `ziehenBeenden` nimmt die Kreise nicht mehr zurück; sie bleiben, wo die *Karte* sie zuletzt zeigte, bis `zeichnen` die Antwort zeichnet. Der Aufruf entfällt dort ganz: `darunter` wird nur ohne *Stelle* im *Spielfeld* gefragt, dann liegt kein Kreis unter dem Zeiger. Abbrechen nimmt weiter zurück.
 Kommentar: BItte rückmelden, wenn die Arbeit erledigt ist und ich es prüfen kann wie in der Review. Ich setze das Anliegen so lange auf "offen".
 Stellungnahme: Die Arbeit ist erledigt und zum Prüfen bereit: Beim Loslassen bleiben die Kreise am Ziel stehen, bis die Antwort sie zeichnet ([seite.js](../../technik/frontend/seite.js), `ziehenBeenden`). Alle Unit- und Akzeptanztests der Phasen sind grün, die Seite habe ich nicht im Browser angesehen. Der Status bleibt bei dir.
+Kommentar: Ich habe es nochmal geprüft. Das Blitzen hat aufgehört. Die Funktion verhält sich wie gewünscht :-). Setze das item bitte auf "angenommen", damit ich es auf "erledigt" setzen kann.
+Stellungnahme: Danke für die Prüfung. Ich habe den Status auf `angenommen` gesetzt; `erledigt` setzt du.

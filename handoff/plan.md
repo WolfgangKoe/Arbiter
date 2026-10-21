@@ -69,7 +69,7 @@ An dich, an den Anforderungsautor, Vorschläge von ihm: keine. Sonst: [Moderatio
   Hindernis: Anliegen 1215: Tests zu Item 2 prüfen ‚ohne Grund‘ über gesperrt und gründeDerGesperrten, die V10 mit Item 3 streicht; Docstring von ziehen.py, Wiederholungen, Ausschnitte statt Entpacken (Anliegen 1292); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Implementierer: Tests zu Item einheitVerschieben grün
 - [x] Architekt: Kritik am Code zu Item einheitVerschieben
-  Hindernis: Neuer Code verletzt Architektur M1: Das Hineinrücken in einheitVerschieben.py kennt die Baseform und doppelt _rückung aus setzenPerKlick.py; Befund und Gegenvorschlag in Anliegen 1410. (Anliegen 1411)
+  Hindernis: Neuer Code verletzt Architektur M1: Das Hineinrücken in einheitVerschieben.py kennt die Baseform und doppelt _rückung aus setzenPerKlick.py; Befund und Gegenvorschlag in Anliegen 1410. (Anliegen 1411); beseitigt: Commit „Items einheitVerschieben und anhaltenAnBases: Einheit verschieben, an Bases anhalten“
 - [x] Reviewer: Kritik am Code zu Item einheitVerschieben
 - [x] Fachkritiker: Item einheitVerschieben abgenommen
 - [x] Planer: Item einheitVerschieben gelöscht
@@ -81,15 +81,15 @@ An dich, an den Anforderungsautor, Vorschläge von ihm: keine. Sonst: [Moderatio
 - [x] Architekt: Kritik an den Tests zu Item anhaltenAnBases
   Hindernis: Die Seite wird nie gegen das Beispiel stelleBeimLoslassen.json geprüft (V10 verlangt page.route): ein Bildschirmtest in blockAlsGanzesTest.py fehlt, siehe Anliegen 1360. (Anliegen 1363); beseitigt: Commit „Item setzenPerKlick: Modelle per Klick setzen, Tests grün, Kritik am Code umgesetzt“
 - [x] Implementierer: Tests zu Item anhaltenAnBases grün
-  Hindernis: 1460: vier von 160 Tests verlangen Exaktheit, die Eingabe nicht liefert (Fixture ohne Auswahl, Dezimalzahl des Dienstes, Pixel der Seite); 92 der 96 roten Fälle sind grün, kein anderer Test rot (Anliegen 1461)
+  Hindernis: 1460: vier von 160 Tests verlangen Exaktheit, die Eingabe nicht liefert (Fixture ohne Auswahl, Dezimalzahl des Dienstes, Pixel der Seite); 92 der 96 roten Fälle sind grün, kein anderer Test rot (Anliegen 1461); beseitigt: Commit „Items einheitVerschieben und anhaltenAnBases: Einheit verschieben, an Bases anhalten“
 - [x] Architekt: Kritik am Code zu Item anhaltenAnBases
-  Hindernis: Benennungsprüfung rot: Typalias BasenAnStellen in messen.py; Befund und Gegenvorschlag in Anliegen 1440. (Anliegen 1441)
+  Hindernis: Benennungsprüfung rot: Typalias BasenAnStellen in messen.py; Befund und Gegenvorschlag in Anliegen 1440. (Anliegen 1441); beseitigt: Commit „Items einheitVerschieben und anhaltenAnBases: Einheit verschieben, an Bases anhalten“
 - [x] Reviewer: Kritik am Code zu Item anhaltenAnBases
 - [x] Fachkritiker: Item anhaltenAnBases abgenommen
 - [x] Planer: Item anhaltenAnBases gelöscht
 - [x] Reviewer: DoD über das Inkrement
 - [x] Reviewer: Review geschrieben
-- [ ] Stakeholder: Freigabe Review 6
+- [x] Stakeholder: Freigabe Review 6
 
 ## Freigabe
 Freigabe: ja.

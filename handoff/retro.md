@@ -4,61 +4,74 @@ Dashboard: im Projektordner
 `python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten,
 `http://127.0.0.1:8765/` öffnen, Strg+C beendet.
 
-Etappe 1 von 7 (Aufstellen), Zyklus 6, keine erreicht; 78 von 103 Kriterien haben einen
-Akzeptanztest (Zyklus 5: 74 von 94). Neu am Bildschirm: eine *Einheit* per Klick als
-*Formation* *setzen*, als Block oder ein *Modell* allein ziehen; sie halten an fremden *Bases*
-und am Rand der Zone an ([Review 6](review.md)).
+Etappe 1 von 7 (Aufstellen), Zyklus 6, keine erreicht; 78 von 103 Kriterien belegt
+(Zyklus 5: 74 von 94, [Review 6](review.md)).
 
 ## Was geklappt hat
-- Alle drei Items des Plans sind gebaut, abgenommen und gelöscht.
-- Die Mutationstests fanden Fälle, die kein Test prüfte (1551, 1590).
+Alle drei Items abgenommen, eines mit Vorbehalt (AUF-26, 1820); Mutationstests fanden
+ungeprüfte Fälle (1551, 1590, 1710).
 
 ## Was nicht geklappt hat
-1. Der Reviewer wartete auf Mutationsläufe: 72 Minuten im ersten Lauf, die DoD jetzt über
-   80; jeder Mutant startet alle Tests samt Bildschirmtests (1570).
-2. Viermal schrieb eine Rolle per Python-Skript über Bash (Testautor, Architekt in 1530,
-   Implementierer in 1542 und 1551); die Schreibgrenze sperrte spät oder nicht (Lücke 510).
-3. Befunde standen nur in der Schlussantwort (Anforderungsautor zu W3 und que-7, Reviewer
-   zu 1551); der Koordinator forderte die Anliegen nach ([Ich 5](../prozess/praemissen/ich.md)).
-4. Der Implementierer setzte als Empfänger `erledigt`; die Nachprüfung hätte entfallen
-   können (1581, 1591).
-5. Der Befehl für ein Hindernis vergab eine Nummer aus dem Bereich einer anderen Rolle; das
-   Hindernis zu 1560 fehlt im Plan.
-6. Prüfcode gegen Produktcode (730): seit „Freigabe Retro 5“ 1.659 neue Zeilen Prüfcode,
-   539 Produktcode, über der Schwelle.
-   Prozesslast: 12 von 134 neuen Anliegen, unter einem Drittel.
-7. Wartende Anliegen fehlen im Dashboard (1670); Kommentare im Code wiederholen, was
-   Testnamen und Prüfungen sichern (1660).
-
-Ohne Item: Architekt und Reviewer lagen bei 128.000 Token, der Hook meldete wie vorgesehen;
-gleichzeitige Läufe sahen fremde Zwischenstände rot und liefen bei geteilten Dateien
-nacheinander, wie [Gleichzeitige Läufe](../prozess/ablauf.md#gleichzeitige-läufe) es verlangt.
+1. Der Mutationslauf dauerte über 100 Minuten (1570) und fand keinen Fehler am Bildschirm;
+   Umformungen gegen gleichwertige Mutanten lesen sich schlechter (1751), eine brachte einen
+   float-Fehler (1760).
+2. Sechsmal schrieb eine Rolle per Python über Bash (Lücke 510).
+3. Befunde standen nur in Schlussantworten (Ich 5), Empfänger setzten `erledigt` (1581, 1591).
+4. Die DoD war bei rotem SonarLint abgehakt (Rundgang 1); Bildschirmtests holte erst der
+   Reviewer nach.
+5. Der Befehl für ein Hindernis vergibt fremde Nummern (Rundgang 3).
+6. Der Koordinator sagte „läuft allein“, startete drei Rollen.
+7. Bis „Freigabe Review 6“ rund 870 Zeilen Prüfcode, 518 Produktcode, beide ohne Tests: über
+   der Schwelle (730). Prozesslast 15 von 148 Anliegen, unter einem Drittel.
+8. Wartende Anliegen fehlen im Dashboard (1670), Kommentare doppeln Testnamen (1660).
+9. Dreimal wich das Gebaute ohne deine Entscheidung von ArbiterMap ab, spät bemerkt (DoR 6,
+   1841): Sprung über fremde *Bases* (1820), Loslassen über der Kante, Greifpunkt (1610).
 
 ## Prozess-Items
-Zwei aus Befunden (P1, P3), dazu deine Aufträge (P2, P4, P5); ob das gilt: [1671](anliegen/1671-prozessphaseVorziehen.md).
-- P1 Regeln nachziehen (Organisationsentwickler): Was du entschieden hast, steht danach im
-  Ablauf und in den Rollen: Kennzahl Prüfcode gegen Produktcode, Beginn der Retro, Kritiker
-  gleichzeitig (730), ein Commit für mehrere Items (740), der Empfänger setzt nie `erledigt`
-  (Befund 4), Befunde nur als Anliegen (Befund 3), Es 8 nach 1660, der Kopf nach 1670 und
-  die drei Punkte des [Backlogs](../prozess/backlog.md) mit Auslöser „Freigabe Retro 6“.
-- P2 Mutationslauf in Minuten (Regelumsetzer, 1570): Mutanten nur in geänderten Zeilen, je
-  Mutant nur die Tests, die die Zeile ausführen; ein Ergebnis gilt weiter, solange Modul und
-  Tests gleich bleiben. Den Zielwert schlage ich in 1570 vor.
-- P3 Schreiben nur mit Write und Edit (Regelumsetzer, Befund 2): Ein Skript einer Rolle
-  schreibt nicht mehr ins Projekt. Zuerst das Bordmittel, die Sandbox von Claude Code für
-  Bash; das Betriebssystem setzt sie auch für Skripte durch, Teile von
-  `rollenregeln/bashSchreiben.py` entfallen dann.
-- P4 Anliegenboard nach Phasen (Regelumsetzer, 1670): Das Dashboard zeigt alle nicht
-  erledigten Anliegen: wer jetzt dran ist, was auf ein anderes wartet, was für die nächsten
-  Phasen vorgemerkt ist, je mit Kommentarfeld. Den Kopf lesen und schreiben alle Skripte
-  über ein Modul, auch der Befehl für ein Hindernis, der nur freie Nummern vergibt (Befund 5).
-- P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): Im Code stehen nur Werkzeugkommentare
-  und gedeckelte TODOs; ein TODO aus einer früheren Technikphase macht die DoD rot.
+Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 ([1671](anliegen/1671-prozessphaseVorziehen.md) F1).
+- P1 Regeln nachziehen (Organisationsentwickler): Ablauf und Rollen nennen: Kennzahl
+  Prüfcode gegen Produktcode ohne Tests, Beginn der Retro, Kritiker gleichzeitig (730), ein
+  Commit für mehrere Items (740), nie `erledigt` durch den Empfänger und Befunde nur als
+  Anliegen (3), Es 8 (1660), Kopf (1670), DoD und Commits zu P2, Backlog mit „Freigabe Retro
+  6“. Der Koordinator sagt jeder Rolle, wer neben ihr läuft (6) und welche Nummern sie
+  vergibt, und committet nach jedem Lauf, der etwas abschließt; der Implementierer meldet
+  erst mit allen Tests fertig (4). DoR 6 gilt für ArbiterMap samt Frontend, auch wo
+  Architektur oder Empfehlung die Bedienung festlegen; der Fachkritiker prüft die Fundstelle (9).
+- P2 Prüfen in Minuten (Regelumsetzer, 1570, 1740, 1751): Mutanten nur in geänderten Zeilen,
+  je Mutant nur die Tests, die sie ausführen, sonst alle; ein Ergebnis gilt, solange
+  `technik/`, `pyproject.toml` und `domaene/daten` gleich sind (1850). Der volle Lauf, auch
+  über `web/`, nur in der Retro, ohne aufzuhalten; seine Lücken nach 1671 F2: ein fehlendes
+  Kriterium in die Domänenphase, sonst in die Technikphase. Unter 95 % wird jeder Überlebende
+  angegangen, ein gleichwertiger zählt mit Begründung beim Werkzeug nicht; Code ändert sich
+  nur, wenn er lesbarer wird. Der Commit-Hook lässt die Produkttests aus.
+- P3 Schreiben nur mit Write und Edit (Regelumsetzer, 2): Skripte einer Rolle schreiben nicht
+  ins Projekt: die Sandbox von Claude Code, erst an einer Kopie erprobt (1850);
+  `bashSchreiben.py` verliert, was sie sperrt.
+- P4 Anliegenboard nach Phasen (Regelumsetzer, 1670): Das Dashboard zeigt jedes nicht
+  erledigte Anliegen nach Phase, mit Kommentarfeld; ein Modul liest und schreibt den Kopf
+  für alle Skripte und vergibt nur freie Nummern aus dem Bereich des Auftrags (5); dazu 1070.
+- P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): im Code nur Werkzeugkommentare und
+  gedeckelte TODOs; TODOs von vor der Technikphase machen die DoD über das Inkrement rot
+  ([1860](anliegen/1860-todoDeckelUndWerkzeugkommentare.md)).
 
 ## Empfehlung
-Kritik und Freigabe nach „Freigabe Review 6“; vorher fehlen der Fortschritt dieser Retro und
-die Aufträge aus dem Rundgang Prüfcode des Reviews. Danach P1, dann P2 bis P5.
+Freigabe samt 1860, dann P1, danach P2 bis P5 und [1790](anliegen/1790-dodUeberDasInkrementNurPerBefehl.md)
+(kein Item).
+
+## Fortschritt
+- [x] Organisationsentwickler: Retro geschrieben
+- [x] Fachkritiker: Kritik an der Retro
+- [x] Architekt: Kritik an der Retro
+- [x] Organisationsentwickler: Nachkorrektur
+- [ ] Stakeholder: Freigabe Retro 6
+- [ ] Organisationsentwickler: P1
+- [ ] Regelumsetzer: P2
+- [ ] Regelumsetzer: P3
+- [ ] Regelumsetzer: P4
+- [ ] Regelumsetzer: P5
+- [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: offen
-Kommentar: .
+Freigabe: ja
+Kommentar: Du kannst wieder häufiger committen, dafür ist es aber nicht nötig, jedes Mal die komplette Prüfung durchlaufen zu lassen.
+Stellungnahme: P1 (Commit nach jedem Lauf, der etwas abschließt), P2 (Hook ohne Produkttests).

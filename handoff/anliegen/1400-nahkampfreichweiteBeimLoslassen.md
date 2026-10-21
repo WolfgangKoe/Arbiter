@@ -1,6 +1,6 @@
 # Was die Karte zeigt, wenn beim Loslassen die Nahkampfreichweite sperrt
 
-1400 · Fragen · von Anforderungsautor → Stakeholder · Runde 1/3 · offen · wartet auf die Domänenphase
+1400 · Fragen · von Anforderungsautor → Stakeholder · Runde 1/3 · angenommen · wartet auf die Domänenphase
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, ein Randfall
@@ -20,6 +20,6 @@ ob die *Spieler* den *Grund* lesen.
 ja. „**Wenn** QUE-1.3 beim Loslassen sperrt, **dann** steht jedes *Modell*, wo es vor dem
 Ziehen war, und Arbiter nennt den *Grund* bis zur nächsten Handlung.“ *Gemeinsam übergehen*
 kommt dazu, wenn AUF-13 und QUE-5 gebaut werden (Plan 7).
-Antwort: .
+Antwort: Ja.
 
 **Stellungnahme.**

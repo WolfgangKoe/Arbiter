@@ -1,6 +1,6 @@
 # Prozessphase vorziehen: Items und Grenzen
 
-1671 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · rückfrage
+1671 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Du willst schon jetzt zur Prozessphase; die [Retro 6](../retro.md) steht als
@@ -46,7 +46,15 @@ A: Nach Ich 3: Tests und Code in die Technikphase 7, ein fehlendes Kriterium in 
 Domänenphase 7.
 B: Alle in die Domänenphase 7.
 Empfehlung: A. Wer die Lücke schließt, arbeitet in der Technikphase.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
 Kommentar: Ich möchte den aktuellen Lauf nicht grundsätzlich ändern. Aber ich finde es schwierig, dass wir inzwischen 100 Minuten auf einen Mutationstest warten, dessen Befunde wir vermutlich erst im nächsten Zyklus bearbeiten werden und welche die Prozessphase möglicherweise nicht blockieren. Sei hier bitte nochmal kritisch, damit wir nicht aus Versehen ein Inkrement abnehmen, dass fehlerhaft ist. Und vor allem sollten keine Tests aus Sonarlint rot sein.
+Kommentar: Natürlich beantwortet mein Kommentar nicht die von dir gestellte Frage. Denn ich stelle deine Aussage hier nochmal bewusst "in Frage". Darum steht der Status auch auf "rückfrage". Bitte gehe darauf ein.
+
+**Klärung.** Du hast recht, Punkt 3 war zu streng. Ein Lauf unter 95 % zeigt Lücken in den
+Tests, kein fehlerhaftes Inkrement: Die 15 Überlebenden zeigten keinen Fehler am Bildschirm.
+Fehler fanden SonarLint (1630), die Kritik am Code (1760) und der Reviewer mit den
+ausgelassenen Bildschirmtests; das Skript hakte die DoD zu früh ab (1790). Künftig hält der
+volle Lauf nichts auf, SonarLint und alle Tests schon ([Retro 6](../retro.md), Befunde 1 und 5,
+P2). F2 bleibt offen.
