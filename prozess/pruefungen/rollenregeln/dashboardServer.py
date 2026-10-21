@@ -21,6 +21,11 @@ from rollenregeln.dashboardAnliegenSeiten import (
     seitenStil,
     stand,
 )
+from rollenregeln.dashboardFortschritt import (
+    fortschrittPfad,
+    fortschrittSeite,
+    zügeAusFortschrittFormular,
+)
 from rollenregeln.dashboardHinweise import adresse, lokalesSchema, vorgabePort
 from rollenregeln.eingang import Zug, verworfeneLeeren, zugVormerken
 from rollenregeln.zuegeUebernehmen import übernehmen
@@ -102,6 +107,8 @@ def fremderUrsprung(kopf: dict[str, str | None]) -> bool:
 def lesen(ordner: Path, pfad: str) -> Antwort:
     if pfad == "/":
         return text(anliegenSeite(ordner))
+    if pfad == fortschrittPfad:
+        return text(fortschrittSeite(ordner))
     if pfad == "/tokens":
         return tokenbericht(ordner)
     if pfad == "/stand":
@@ -115,6 +122,11 @@ def schreiben(ordner: Path, pfad: str, körper: bytes) -> Antwort:
     if pfad == "/verworfeneLeeren":
         verworfeneLeeren(ordner)
         return weiterleitung("/")
+    if pfad == fortschrittPfad:
+        for zug in zügeAusFortschrittFormular(körper):
+            zugVormerken(ordner, zug)
+        übernehmen(ordner)
+        return weiterleitung(fortschrittPfad)
     nummer = nummerAus(pfad)
     if nummer is None:
         return text("Nicht gefunden.", HTTPStatus.NOT_FOUND)

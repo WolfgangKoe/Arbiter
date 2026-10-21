@@ -48,10 +48,10 @@ def einzeiler(text: str) -> str:
     return " ".join(text.split())
 
 
-def dateiname(nummer: int, schritt: str) -> str:
-    """`<nr>-hindernis<Schritt>.md` in ASCII und camelCase, wie die Benennung es verlangt."""
+def dateiname(nummer: int, schritt: str, vorsilbe: str = "hindernis") -> str:
+    """`<nr>-<vorsilbe><Schritt>.md` in ASCII und camelCase, wie die Benennung es verlangt."""
     wörter = re.findall(r"[a-z0-9]+", schritt.casefold().translate(umlaute))
-    name = "hindernis" + "".join(wort.capitalize() for wort in wörter)
+    name = vorsilbe + "".join(wort.capitalize() for wort in wörter)
     return f"{nummer:02d}-{name[:längeDesNamens]}.md"
 
 

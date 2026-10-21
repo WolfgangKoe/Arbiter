@@ -16,6 +16,7 @@ from rollenregeln.eingang import (
     verworfenVermerken,
     vorgemerkte,
 )
+from standregeln.zeilenZug import zeilenzugÜbernehmen
 
 # Regel: Ablauf, Anliegen: Zug, setzt, Status; `seiten` nennt, auf welcher Seite er stehen darf
 statusZüge = (
@@ -139,6 +140,9 @@ def dateiZu(ordner: Path, nummer: int) -> Path | None:
 
 
 def einzelnenÜbernehmen(ordner: Path, zug: Zug) -> Verworfen | None:
+    if zug.zeile:
+        grund = zeilenzugÜbernehmen(ordner, zug.zeile, zug.art, zug.wert)
+        return Verworfen(zug, grund) if grund else None
     datei = dateiZu(ordner, zug.nummer)
     text = datei.read_text(encoding="utf-8") if datei else ""
     anliegen = kopfAusText(text, datei) if datei else None

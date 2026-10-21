@@ -1,6 +1,6 @@
 # Fortschritt in Plan, Review und Retro
 
-490 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen
+490 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 421 (F1 A, F2 A) einen lebenden Plan beauftragt,
@@ -55,4 +55,14 @@ Commit `angenommen` oder `erledigt`, ergänzt `standregeln/beseitigt.py` bei jed
 die eigene Rolle durch, der Start der Rolle nennt ihn (Tests `standregeln/hindernisTest.py`,
 `schreibgrenzeTest.py`, `rollenkontextTest.py`). Die Zeile in [Regeln](../../prozess/regeln.md)
 trage ich in der Prozessphase nach: Bis dahin sperrt die Schreibgrenze `prozess/*.md`.
-Offen: Teil 3 (Dashboard), ein Lauf; Status bleibt `offen`, bis er steht.
+Teil 3 gebaut: Die Dashboard-Seite Fortschritt (`rollenregeln/dashboardFortschritt.py`, Reiter
+neben Anliegen) zeigt die Zeilen der laufenden Phase mit Haken und Kommentarfeld. Die Züge gehen
+über `eingang.jsonl` (`Zug` mit `zeile`) und `rollenregeln/zuegeUebernehmen.py` sofort in die
+Datei (`standregeln/zeilenZug.py`): Der Haken steht in der Zeile, ein Kommentar legt ein Anliegen
+vom Stakeholder an die Rolle der Zeile an (Kritik) und die Zeile `Kommentar: <Text> (Anliegen
+<nr>)`. Zeilen ohne Rolle (Stakeholder, Koordinator) und leere Kommentare werden als
+nicht übernommen gemeldet. Tests `standregeln/zeilenZugTest.py`,
+`rollenregeln/dashboardFortschrittTest.py`; die Zeilen für Teil 2 und 3 stehen in
+[Regeln](../../prozess/regeln.md#standregeln). Grenze: Das Dashboard zeigt nur die laufende Phase,
+den Plan vor der Freigabe nicht (dafür [991](991-fortschrittVorDerPhaseVerwirftHakenUndHindernis.md)).
+Alle drei Teile stehen; bitte nachprüfen.

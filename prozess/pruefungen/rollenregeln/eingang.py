@@ -14,8 +14,13 @@ class Zug:
     art: str  # Warum: status, runde, antwort oder kommentar; `zuegeUebernehmen` kennt sie
     wert: str = ""
     frage: str = ""
+    zeile: str = ""  # Warum: Schlüssel einer Zeile im Fortschritt; `nummer` gilt dann nicht
 
     def beschreibung(self) -> str:
+        if self.zeile:
+            haken = "abhaken" if self.wert == "x" else "Haken entfernen"
+            inhalt = haken if self.art == "haken" else f"Kommentar: {self.wert}"
+            return f"Fortschritt {self.zeile} · {inhalt}"
         inhalt = {
             "status": f"Status {self.wert}",
             "runde": "Runde senken",
