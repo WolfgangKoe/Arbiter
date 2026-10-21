@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** [Regeln](../../prozess/regeln.md#anliegenregeln) nennen den Befehl
@@ -20,4 +20,9 @@ vergibt Nummern von Hand.
 den Befehl über `gemeinsam/lauf.py` nennen, wie bei den übrigen Befehlen, oder das Skript
 direkt lauffähig machen; ein Test startet den genannten Befehl als Kindprozess.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, erste Wahl des Gegenvorschlags. [Regeln](../../prozess/regeln.md#anliegenregeln)
+nennen jetzt `python3 prozess/pruefungen/gemeinsam/lauf.py anliegenregeln.freieNummer <erste> <letzte>`, wie
+die übrigen Befehle. Scheiter-Test `testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess`
+in `anliegenregeln/kopfUmschreibenTest.py` liest den Befehl aus der Regelzeile und startet ihn ohne
+`PYTHONPATH` als Kindprozess; vor der Änderung rot (`ModuleNotFoundError`), danach grün.
+Der Koordinator gibt den Befehl in Aufträgen schon richtig weiter.

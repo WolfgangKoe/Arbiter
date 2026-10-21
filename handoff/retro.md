@@ -48,7 +48,7 @@ Zwei aus Befunden (P1, P3), deine Aufträge P2, P4, P5 (Anliegen 1671 F1).
   ins Projekt: die Sandbox von Claude Code, erst an einer Kopie erprobt (1850);
   `bashSchreiben.py` verliert, was sie sperrt.
 - P4 Anliegenboard nach Phasen (Regelumsetzer, 1670): Das Dashboard zeigt jedes nicht
-  erledigte Anliegen nach Phase, mit Kommentarfeld; ein Modul liest und schreibt den Kopf
+  erledigte Anliegen nach Phase; ein Modul liest und schreibt den Kopf
   für alle Skripte und vergibt nur freie Nummern aus dem Bereich des Auftrags (5); dazu 1070.
 - P5 Prüfungen statt Kommentare (Regelumsetzer, 1660): im Code nur Werkzeugkommentare und
   gedeckelte TODOs (Es 8); die bestehenden Kommentare entfernt er im Prüfcode, Implementierer

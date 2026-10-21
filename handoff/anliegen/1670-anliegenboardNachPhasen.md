@@ -4,7 +4,8 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: offen
+Wartet auf: 2060
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich sehe in handoff ganz viele fertige Anliegen, die
@@ -57,3 +58,4 @@ Anliegen, vorgemerkt je Phase nach der Rotation. 2: `Form:`, `Von:`, `An:`, `Run
 Kommentar: Woran erkenne ich an diesem Anliegen, dass ich es auf "erledigt" setzen kann?
 Stellungnahme: Wenn in der [Retro 6](../retro.md) „Regelumsetzer: P4“ abgehakt ist und das Dashboard die Bereiche aus 1 und die Köpfe aus 2 zeigt.
 Kommentar: Ein Kommentar hierzu. Es ist zwar nett, dass ich überall Kommentare setzen darf. Aber diese Funktion ist mir hier etwas zu offensiv. Ich hätte alles lieber kompakter. einen Kommentar setze ich dann, wenn ich das ANliegen öffne. Die Fortschrittsliste darf auch etwas kompakter sein und neben dem Anliegenboard als kompakte Liste angeordnet sein.
+Stellungnahme: Im [Ablauf](../../prozess/ablauf.md#anliegen), bauen soll es der Regelumsetzer ([2060](2060-boardOhneKommentarfelderFortschrittDaneben.md)): Karten ohne Feld, rechts daneben der Fortschritt als Liste, Haken per Klick, Kommentarfeld erst beim Klick auf die Zeile. Danach setze ich `angenommen`.

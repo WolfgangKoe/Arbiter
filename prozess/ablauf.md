@@ -247,8 +247,10 @@ Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, ang
   wenn keiner seiner Befunde mehr aufhält ([Kritik](#kritik)). Hält sie etwas auf, meldet
   sie es mit dem Befehl und nennt die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
   Stakeholder Fragen) und schreibt die Zeile `Hindernis:`.
-- Dashboard: Der Stakeholder hakt jede Zeile ab oder kommentiert sie; der Kommentar wird ein
-  Anliegen von ihm an die Rolle der Zeile.
+- Dashboard: Der Fortschritt der laufenden Phase steht als kompakte Liste neben dem
+  Anliegenboard. Der Stakeholder hakt jede Zeile mit einem Klick ab; ein Klick auf ihren Text
+  öffnet das Kommentarfeld (Anliegen 1670). Der Kommentar wird ein Anliegen von ihm an die
+  Rolle der Zeile.
 
 Phase · Schritt | Zeile | abgehakt durch
 ---|---|---
@@ -273,7 +275,8 @@ Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den le
 Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
 Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
 `standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py`,
-`standregeln/zeilenZug.py`.
+`standregeln/zeilenZug.py`; Liste neben dem Board, Kommentarfeld erst beim Klick: nur Text bis
+Anliegen 2060.
 
 ## Rollen mit Auslöser
 Der Organisationsentwickler schlägt eine Rolle vor, wenn ihr Auslöser eintritt.
@@ -341,7 +344,7 @@ oder Items, auch derselben Rolle, wenn (Anliegen 279):
 
 Was danach gleichzeitig laufen darf, startet der Koordinator gleichzeitig (Anliegen 730). Sein
 Auftrag nennt jeder Rolle, wer neben ihr läuft, und den Bereich, aus dem sie Nummern für neue
-Anliegen vergibt; sie vergibt nur daraus. Mechanismus: nur Text; Nummern: Retro 6, P4.
+Anliegen vergibt; sie vergibt nur daraus. Mechanismus: nur Text; Nummern: `anliegenregeln/freieNummer.py` ([Regeln](regeln.md#anliegenregeln)).
 Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
 Der Koordinator committet je Item nach dessen Pfaden ([Commits](#commits)); die Zeile eines
 Nachbarn in `regeln.md` geht mit. Ist eine Prüfung nur in Dateien eines laufenden Nachbarn
@@ -365,11 +368,10 @@ Die Nummer steht nur im Dateinamen. `Wartet auf:` steht, solange erst ein andere
 erledigt sein muss (`Wartet auf: 1213`) oder es nach [Ich 3](praemissen/ich.md) auf eine
 Phase wartet (`Domänenphase`, `Technikphase`, `Prozessphase`). Rolle: Name aus
 `.claude/agents/` oder Stakeholder, ohne Perspektive (Anliegen 420). Ein Modul liest und
-schreibt den Kopf für alle Skripte; ein Lauf schreibt die Köpfe der offenen Anliegen um, bis
-dahin gilt die Zeile `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>` mit
-`· wartet auf <nr>` oder `· wartet auf die <Phase>`.
-Mechanismus: `anliegenregeln/anliegen.py`; Felder, Modul und Umschreiben: Retro 6, P4; eine
-Perspektive in Klammern lässt es durch, ohne Perspektive: nur Text.
+schreibt den Kopf für alle Skripte.
+Mechanismus: `anliegenregeln/anliegen.py`, `lesen/anliegenKopf.py`
+([Regeln](regeln.md#anliegenregeln)); eine Perspektive in Klammern lässt es durch, ohne
+Perspektive: nur Text.
 
 Form | der Empfänger soll | Absender
 ---|---|---
@@ -400,10 +402,11 @@ Seine Züge in einem Anliegen setzt der Stakeholder im Formular des Dashboards: 
 die Status an, die ihm die Tabelle zuweist, und je Frage ein Feld für die Antwort; eine
 Legende im Anliegen entfällt (Anliegen 420). Mechanismus: `rollenregeln/dashboardAnliegenSeiten.py`
 (`formular`), `rollenregeln/zuegeUebernehmen.py` ([Regeln](regeln.md#rollenregeln)).
-Das Dashboard zeigt jedes nicht erledigte Anliegen mit Kommentarfeld, in Bereichen: dran je
-Rolle samt fälliger Nachprüfung, wartet auf ein Anliegen, vorgemerkt je folgende Phase in der
-Reihenfolge der Rotation (Anliegen 1670). Mechanismus: `rollenregeln/dashboardAnliegen.py`
-(dran, Nachprüfung); Wartende: Retro 6, P4.
+Das Dashboard zeigt jedes nicht erledigte Anliegen als Karte ohne Eingabefeld, in Bereichen:
+dran je Rolle samt fälliger Nachprüfung, wartet auf ein Anliegen, vorgemerkt je folgende Phase
+in der Reihenfolge der Rotation. Kommentiert wird im Formular, wenn er das Anliegen öffnet
+(Anliegen 1670). Mechanismus: `rollenregeln/dashboardAnliegen.py` (Bereiche); Karte ohne
+Eingabefeld: nur Text bis Anliegen 2060.
 Ein `Kommentar:` von ihm, der den Status nicht ändert, geht an die andere Rolle des Anliegens:
 Sie antwortet mit einer Zeile `Stellungnahme:` darunter und ist bis dahin dran (Anliegen
 384). Mechanismus: nur Text.

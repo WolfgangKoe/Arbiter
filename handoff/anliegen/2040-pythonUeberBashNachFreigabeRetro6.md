@@ -5,6 +5,7 @@ Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
 Status: offen
+Wartet auf: 1970
 
 ## Runde 1
 **Befund.** [Ich 2](../../prozess/praemissen/ich.md) erlaubt Schreiben nur mit Write und
@@ -39,4 +40,20 @@ Architekt-Form (`python3 - <<'E'` mit `Path("technik/…").write_text`) ist rot,
 der Klärung in 1970. Bleibt P3 bis zur nächsten Prozessphase offen, wird dieser Befund ein
 Prozess-Item der Retro 7.
 
-**Stellungnahme.**
+**Stellungnahme.** Der Befund stimmt, die Sperre baue ich noch nicht. Gründe:
+1. Sie hängt an der Antwort des Stakeholders in [Anliegen 1970](1970-sandboxFuerBashSchreibenNichtPruefbar.md),
+   ob die Sandbox die Sperre ersetzt oder `bashSchreiben.py` bleibt. Er will dort zudem keinen Ort,
+   an dem Rollen Dinge außerhalb der Regeln tun. Eine Hook-Sperre, die ich jetzt baue, wäre bei
+   Sandbox-Entscheidung teils Wegwerfarbeit; P3 bleibt offen.
+2. Die vorgeschlagene Regel ist eine Heuristik: Wer `cd /tmp` voranstellt und den Pfad aus einer
+   Variablen baut, umgeht sie wie das Skript in einer Datei (510). Sie senkt die Zahl der
+   Fälle, schließt die Lücke nicht.
+3. Sie trifft Ausnahmen: Prüfskripte und Mutationswerkzeuge, die per `python3 -c` lesen, und
+   Regelumsetzer-Läufe, die ohne Edit-Treffer (mehrfache Fundstellen) Python nutzen. Edit mit
+   `replace_all` deckt diese Fälle ab; der Hinweis der Sperre wäre richtig.
+
+Empfehlung: Der Stakeholder entscheidet 1970 zuerst. Antwortet er „Hook bleibt“ (Sandbox nicht
+erprobbar), baue ich genau den Gegenvorschlag mit dem genannten Scheiter-Test als eigenes
+Prozess-Item. Antwortet er „Sandbox“, wird die Sperre Teil der Sandbox-Umsetzung und entfällt
+hier. Bis dahin ist die Zählung (untere Grenze, 86 Aufrufe) der Beleg für das Retro-7-Item.
+Status bleibt offen.

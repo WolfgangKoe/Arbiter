@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** [Retro 6](../retro.md), P2 verlangt: Der Commit-Hook lässt die Produkttests aus.
@@ -19,3 +19,4 @@ die Berechtigungsprüfung der Sitzung abgelehnt („CI Bypass“); ich habe es n
 
 **Frage.** Darf der Regelumsetzer diese Änderung vornehmen? Annahme: ja (Empfehlung); alles
 übrige von P2 ist fertig.
+Kommentar: Ja
