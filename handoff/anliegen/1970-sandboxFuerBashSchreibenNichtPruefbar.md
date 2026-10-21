@@ -59,4 +59,39 @@ geben.*Gegen Missbrauch:* In der Kopie fehlte `.claude` in `denyWrite`; ergänze
 
 **F2 · Probe und Grenzen.** Probierst du die drei Schritte, und gelten die Grenzen oben?
 Empfehlung: ja; das Ergebnis (läuft oder läuft nicht) schreibst du in die Antwort.
+Antwort: (Stakeholder, übermittelt über den Koordinator) Probe in `/tmp/arbiterKopie` mit /sandbox
+(„Sandbox commands, with auto-allow“):
+1. `echo x > handoff/probe1.txt`: FEHLER, Dateisystem nur lesbar.
+2. `python3 -c "open('prozess/probe2.txt','w')…"`: FEHLER, `[Errno 30] Read-only file system`.
+3. `echo x > /tmp/probe3.txt`: FEHLER, Dateisystem nur lesbar.
+4. `git add domaene && git status --short | head -2`: OK.
+5. `pytest …/entfernenTest.py`: OK, 31 passed.
+6. `echo y > probe6.txt`: OK.
+7. `cd /tmp && echo z > /tmp/probe7.txt`: FEHLER, Dateisystem nur lesbar.
+Spuren: `probe6.txt` in der Wurzel der Kopie; Aufruf 4 hat `domaene` gestaged.
+
+**Auswertung.** Die Sandbox startet und sperrt, was `denyWrite` nennt (1, 2); `.git` bleibt
+beschreibbar (4), die Tests laufen (5). Zwei Abweichungen vom Entwurf:
+- **Wurzel (6).** Unbenannte Wurzeldateien bleiben schreibbar. Das lässt sich nicht
+  schließen: Die Werkzeuge legen Caches in der Wurzel an (`.pytest_cache`, `.ruff_cache`,
+  `.coverage`, `.complexipy_cache`, `dashboard.html`). Neue Dateien in der Wurzel sperrt
+  weiter nur der Hook.
+- **/tmp (3, 7).** Die Sandbox lässt außer dem Projekt nur ihren eigenen Temp-Ordner zu. Die
+  Rollen brauchen `/tmp` für Kopien und Mutationstests. Das Fehlen von `.claude` in
+  `denyWrite` ist der dritte Punkt: Dort läge `settings.json`.
+
+**Anpassung der Kopie.** `filesystem.allowWrite: ["/tmp"]` und `.claude` in `denyWrite`
+(Entwurf in `/tmp/arbiterKopie/.claude/settings.json`). `allowWrite` öffnet nur `/tmp`, nichts
+im Projekt. Der Hook `schreibgrenze.py` bleibt für die Wurzel und für alles, was die Sandbox
+nicht sieht (Write und Edit laufen ohnehin nicht in ihr). Kürzen darf `bashSchreiben.py` daher
+nur, was in den gesperrten Ordnern liegt; die Wurzel bliebe Sache des Hooks, die Ersparnis ist
+klein.
+
+**F3 · Zweite Probe, danach Umsetzung?** Ich habe `/tmp/probe.txt` neu geschrieben (6 Aufrufe:
+`.claude`, `/tmp` direkt und nach `cd`, Kopie nach `/tmp`, Wurzel, `handoff`). Erwartet:
+1 FEHLER, 2 OK, 3 OK, 4 OK, 5 OK (bekannte Lücke), 6 FEHLER. Probierst du sie in derselben
+Weise (Claude in `/tmp/arbiterKopie` neu starten, `/sandbox`, „Führe /tmp/probe.txt aus“)?
+Und lohnt die Sandbox, wenn die Wurzel beim Hook bleibt, oder lässt du alles bei Anliegen 510?
+Empfehlung: ja, zweite Probe; bei erwartetem Ergebnis setze ich `settings.json` um und kürze
+`bashSchreiben.py` nur um Schreiben in die gesperrten Ordner.
 Antwort: .
