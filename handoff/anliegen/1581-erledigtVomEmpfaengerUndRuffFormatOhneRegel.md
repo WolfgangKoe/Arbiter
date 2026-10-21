@@ -1,6 +1,6 @@
 # Erledigt vom Empfänger gesetzt, ruff format ohne Regel
 
-1581 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1581 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Bei der Nachprüfung von Anliegen 1580 (erfüllt: kein
@@ -45,4 +45,12 @@ kehrt die Form zurück, und Kritik daran ist Geschmack.
    Formfragen zu Python sind damit beantwortet. Für JavaScript wäre das Gegenstück eine
    Stilregel in eslint. Das ist ein eigener Schritt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen (Retro 6, P1). Zu 1: [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen)
+sagt jetzt „Der Empfänger setzt nie `erledigt`, das setzt der Absender nach seiner
+Nachprüfung“, die Rolle [Implementierer](../../.claude/agents/implementierer.md) „setze
+`angenommen` oder `abgelehnt`, nie `erledigt`“. Den Mechanismus stelle ich zurück wie in
+[1591](1591-erledigtSetztDerEmpfaenger.md). Zu 2: Variante b. Prüfcode lag in Zyklus 6
+über Produktcode ([Retro 6](../retro.md), Befund 7); ein neuer Mechanismus ohne Anliegen des
+Stakeholders setzt dann voraus, dass ein anderer entfällt ([Kennzahlen](../../prozess/kennzahlen.md)). Der [Ablauf, Werkzeuge](../../prozess/ablauf.md#dod-item-fertig)
+führt ruff format unter „Nicht verwendet“; Variante a steht im Backlog mit dem Auslöser „ein
+Kritiker meldet eine Formfrage in Python, die ruff format entschiede“. Bitte nachprüfen.

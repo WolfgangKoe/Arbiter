@@ -1,6 +1,6 @@
 # P5: Deckel für TODOs, Werkzeugkommentare und die bestehenden Kommentare
 
-1860 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · rückfrage
+1860 · Fragen · von Organisationsentwickler → Stakeholder · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** P5 der [Retro 6](../retro.md) setzt deinen Auftrag
@@ -50,3 +50,8 @@ Antwort: .
 
 **Stellungnahme.**
 Kommentar: Ich folge deinen Empfehlungen. Setze sie so um. Lass uns von Zeit zu Zeit darauf achten, dass die Agenten nicht auf anderen Wegen Kommentare schreiben. Der Code selbst soll erklären, was er tut. Ein Kommentar ist überflüssig. Es würde sich fast lohnen eine Art Whitelist zu führen. Wäre das noch eine sinnvolle Ergänzung an dieser Stelle?
+
+**Klärung.** Ja, und sie steht schon: [Es 8](../../prozess/praemissen/es.md) erlaubt nur
+Kommentare aus einer festen Liste (Werkzeugkommentare mit Regelcode, höchstens drei TODOs);
+alles andere, auch `# Warum:`, sperrt P5 in `formregeln/kommentare.py` und
+`eslintKommentare.mjs`. Darauf achtet der Reviewer im Rundgang Prüfcode. Bitte setze den Status.

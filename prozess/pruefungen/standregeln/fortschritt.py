@@ -10,7 +10,7 @@ from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, proj
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import anforderungUmfasst, umfasst, zuordnungen
 from lesen.agenten import rollennamen
-from lesen.plan import itemNamen, offeneItems, zyklus
+from lesen.plan import itemNamen, zyklus
 from standregeln.beseitigt import beseitigtErgänzen
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
 
@@ -18,6 +18,7 @@ planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
 kritiker = ("Fachkritiker", "Architekt")
 codekritiker = ("Architekt", "Reviewer")
 umsetzer = "Regelumsetzer"
+stakeholderRolle = "Stakeholder"
 itemzeile = re.compile(r"^- (P\d+) [^\n(]*\(([^),:]+)", re.MULTILINE)
 zeilenmuster = re.compile(r"^- \[([ x])\] (.+)$")
 abschnittsmuster = re.compile(r"^## Fortschritt\n(?:(?!## )[^\n]*\n)*", re.MULTILINE)
@@ -97,7 +98,7 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     zeilen = [zeile for name in itemNamen(wurzel) for zeile in itemzeilen(wurzel, name)]
     return [
         *zeilen,
-        Zeile("Reviewer", "DoD über das Inkrement", review or not offeneItems(wurzel)),
+        Zeile("Reviewer", "DoD über das Inkrement"),
         Zeile("Reviewer", "Review geschrieben", review),
         Zeile("Stakeholder", f"Freigabe Review {aktuell.zyklus}", freigegeben),
     ]
@@ -205,6 +206,13 @@ def alleOffen(ziel: tuple[Path, list[Zeile]]) -> tuple[Path, list[Zeile]]:
     return datei, [Zeile(zeile.rolle, zeile.schritt) for zeile in zeilen]
 
 
+def fürDiesenZyklusGeschrieben(ziel: tuple[Path, list[Zeile]]) -> bool:
+    """Der Abschnitt trägt schon die Freigabezeile dieses Zyklus; sonst ist er der eines älteren."""
+    datei, zeilen = ziel
+    freigaben = [zeile.schlüssel for zeile in zeilen if zeile.rolle == stakeholderRolle]
+    return any(name in bisherigeZeilen(datei.read_text(encoding="utf-8")) for name in freigaben)
+
+
 def abschnittSchreiben(
     wurzel: Path, ziel: tuple[Path, list[Zeile]], *, bisherAusDatei: bool = True
 ) -> str | None:
@@ -230,7 +238,9 @@ def fortschrittSchreiben(wurzel: Path) -> str | None:
     folgendes = zielUndZeilen(wurzel, nächsteLage(aktuell))
     geschrieben = [abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None]
     if folgendes is not None:
-        geschrieben.append(abschnittSchreiben(wurzel, alleOffen(folgendes), bisherAusDatei=False))
+        # Warum: Was der Stakeholder vor der Phase kommentiert, soll bleiben; Älteres fällt weg
+        bleibt = fürDiesenZyklusGeschrieben(folgendes)
+        geschrieben.append(abschnittSchreiben(wurzel, alleOffen(folgendes), bisherAusDatei=bleibt))
     änderungen = [name for name in geschrieben if name]
     return ", ".join(änderungen) if änderungen else None
 

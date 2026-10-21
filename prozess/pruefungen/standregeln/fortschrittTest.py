@@ -55,9 +55,20 @@ def testEinFaktHaktSelbstAb(tmp_path, gitRepo):
         "Implementierer: Tests zu Item stellen grün",
         "Reviewer: Kritik am Code zu Item stellen",
         "Fachkritiker: Item stellen abgenommen",
-        "Reviewer: DoD über das Inkrement",
     ):
         assert f"- [x] {zeile}\n" in text
+
+
+def testDieDoDÜberDasInkrementHaktNichtAbWennAlleItemsGelöschtUndDasReviewGeschriebenSind(
+    tmp_path, gitRepo
+):
+    plan = planMitItem(tmp_path, gitRepo)
+    (tmp_path / "domaene/items/stellen.md").unlink()
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    assert "- [x] Planer: Item stellen gelöscht\n" in text
+    assert "- [ ] Reviewer: DoD über das Inkrement\n" in text
 
 
 def testEinOffenesItemLässtDieSchritteDavorOffen(tmp_path, gitRepo):
@@ -251,3 +262,36 @@ def testHooksStartenDasSkriptNachJedemRollenlaufUndNachBashBefehlen():
     assert any("standregeln.fortschritt" in str(eintrag) for eintrag in nachBash)
     nachRolle = einstellungen["SubagentStop"]
     assert any("standregeln.fortschritt" in str(eintrag) for eintrag in nachRolle)
+
+
+def testEinKommentarImPlanVorDerFreigabeBleibtBeimNächstenLauf(tmp_path, gitRepo):
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n")
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    plan = schreiben(
+        tmp_path,
+        "handoff/plan.md",
+        "# Plan · Zyklus 2\n\n## Items\n\n## Fortschritt\n- [ ] Planer: Plan geschrieben\n"
+        "- [ ] Stakeholder: Freigabe Review 2\n  Kommentar: Bitte prüfen. (Anliegen 1951)\n\n"
+        + freigabeAbschnitt,
+    )
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1"):
+        gitRepo.festhalten(betreff)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    assert "  Kommentar: Bitte prüfen. (Anliegen 1951)\n" in text
+
+
+def testDerAbschnittEinesÄlterenZyklusImReviewVerliertSeineHaken(tmp_path, gitRepo):
+    schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    review = schreiben(
+        tmp_path,
+        "handoff/review.md",
+        "# Review · Zyklus 1\n\n## Fortschritt\n- [x] Stakeholder: Freigabe Plan 1\n"
+        "  Kommentar: Alt. (Anliegen 5)\n\n" + freigabeAbschnitt,
+    )
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1"):
+        gitRepo.festhalten(betreff)
+    fortschrittSchreiben(tmp_path)
+    text = review.read_text(encoding="utf-8")
+    assert "Alt." not in text and "- [x]" not in text

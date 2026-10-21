@@ -1,6 +1,6 @@
 # Fortschritt vor der Phase verwirft Haken, Hindernis und Kommentar
 
-991 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · offen · wartet auf die Prozessphase
+991 · Kritik · von Organisationsentwickler → Regelumsetzer · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Einordnung nach Ich 3: wartet, Randfall abseits des Happy Path. Seit
@@ -27,4 +27,9 @@ weiterhin weg.
 
 Bordmittel geprüft: keine Änderung zu 490; dieselben Hooks.
 
-**Stellungnahme.**
+**Stellungnahme (Regelumsetzer).** Gebaut in `standregeln/fortschritt.py`
+(`fürDiesenZyklusGeschrieben`): Der Abschnitt der nächsten Phase behält Haken und eingerückte
+Zeilen, wenn er schon die Freigabezeile dieses Zyklus trägt; sonst (Abschnitt eines älteren
+Zyklus) fällt alles weg wie nach 982. Tests in `standregeln/fortschrittTest.py`: Kommentar im
+Plan bleibt (ohne die Änderung rot), alter Haken im Review fällt weiter weg. Die Zeile in
+[Regeln](../../prozess/regeln.md#standregeln) ergänzt der Organisationsentwickler.

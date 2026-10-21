@@ -1,6 +1,6 @@
 # Regelkommentare entbehrlich
 
-1660 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1660 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich finde noch diverse Kommentare wie ‚# Regel:
@@ -53,4 +53,8 @@ und Prüfungen schon sichern.
 5. Welche Prüfung der DoD fehlt noch, damit Kriteriumsbezug, toter Code und Architektur
    nur über Skripte belegt sind, nicht über Kommentare?
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen ([Retro 6](../retro.md), P1 und P5; deine Antworten in
+[1860](1860-todoDeckelUndWerkzeugkommentare.md)). [Es 8](../../prozess/praemissen/es.md) neu:
+1 und 3 nur Werkzeugkommentare mit Regelcode und `TODO`, die Fundstelle trägt der Name; 2
+höchstens drei, ein TODO von vor der Technikphase macht die DoD rot; 4 Technikphase 7; 5 baut
+der Regelumsetzer mit P5.

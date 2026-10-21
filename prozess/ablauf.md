@@ -154,8 +154,10 @@ ruff-McCabe, ruff `PLR0911` (meldet frühes `return`).
 ## Prozessphase
 Auslöser: `Freigabe Review <n>`. Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
 Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `Freigabe Retro
-<n>`; davor beschreibt die Retro die Änderung. Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
-in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standregeln)).
+<n>`; davor beschreibt die Retro die Änderung. Ausnahme: Seine Zeilen in `regeln.md` trägt der
+Regelumsetzer in jeder Phase ein (Anliegen 731). Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
+in `rollenregeln/schreibgrenze.py` (Write und Edit; [Regeln](regeln.md#standregeln));
+Ausnahme: Anliegen 1900.
 1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
@@ -289,7 +291,7 @@ Mechanismus: nur Text.
 ## Kritik
 Je Artefakt prüft jeder seiner Kritiker einmal und ordnet jeden Befund nach
 [Ich 3](praemissen/ich.md) ein. Die aufhaltenden Befunde an einen Autor stehen in einem
-Anliegen, die wartenden in einem zweiten mit `· wartet auf die <Phase>` der Perspektive des
+Anliegen, die wartenden in einem zweiten mit `Wartet auf: <Phase>` der Perspektive des
 Autors; was entfällt, schreibt er nicht, ohne Befund keine Datei. Der Autor bessert nach
 oder widerspricht; eine weitere Runde öffnet der Kritiker nur für, was weiter aufhält, nach
 Runde 3 entscheidet der Stakeholder ([Anliegen](#anliegen)). Die Kritiker eines Artefakts
@@ -349,14 +351,24 @@ dessen Tests rot, `pyproject.toml` ([Regeln](regeln.md#formregeln), Anliegen 304
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
 höchstens 4.000 Zeichen; jede Zeile `Antwort:` zählt als `Antwort: .` (Anliegen 161).
 Mechanismus: nur Text.
-Erste Zeile `# <Titel>`, dritte Zeile der Kopf:
-`<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>`, dahinter
-`· wartet auf <nr>`, solange erst ein anderes Anliegen erledigt sein muss, oder
-`· wartet auf die Domänenphase` (`Technikphase`, `Prozessphase`), wenn es nach
-[Ich 3](praemissen/ich.md) wartet. Rolle: Name aus `.claude/agents/` oder Stakeholder, ohne
-Perspektive (Anliegen 420).
-Mechanismus: `anliegenregeln/anliegen.py`; eine Perspektive in Klammern lässt es durch, ohne
-Perspektive: nur Text.
+Erste Zeile `# <Titel>`, ab der dritten der Kopf, ein Feld je Zeile (Anliegen 1670):
+```
+Form: Kritik
+Von: Architekt
+An: Organisationsentwickler
+Runde: 1/3
+Status: offen
+Wartet auf: Prozessphase
+```
+Die Nummer steht nur im Dateinamen. `Wartet auf:` steht, solange erst ein anderes Anliegen
+erledigt sein muss (`Wartet auf: 1213`) oder es nach [Ich 3](praemissen/ich.md) auf eine
+Phase wartet (`Domänenphase`, `Technikphase`, `Prozessphase`). Rolle: Name aus
+`.claude/agents/` oder Stakeholder, ohne Perspektive (Anliegen 420). Ein Modul liest und
+schreibt den Kopf für alle Skripte; ein Lauf schreibt die Köpfe der offenen Anliegen um, bis
+dahin gilt die Zeile `<nr> · <Form> · von <Rolle> → <Rolle> · Runde <n>/3 · <Status>` mit
+`· wartet auf <nr>` oder `· wartet auf die <Phase>`.
+Mechanismus: `anliegenregeln/anliegen.py`; Felder, Modul und Umschreiben: Retro 6, P4; eine
+Perspektive in Klammern lässt es durch, ohne Perspektive: nur Text.
 
 Form | der Empfänger soll | Absender
 ---|---|---
@@ -387,6 +399,10 @@ Seine Züge in einem Anliegen setzt der Stakeholder im Formular des Dashboards: 
 die Status an, die ihm die Tabelle zuweist, und je Frage ein Feld für die Antwort; eine
 Legende im Anliegen entfällt (Anliegen 420). Mechanismus: `rollenregeln/dashboardAnliegenSeiten.py`
 (`formular`), `rollenregeln/zuegeUebernehmen.py` ([Regeln](regeln.md#rollenregeln)).
+Das Dashboard zeigt jedes nicht erledigte Anliegen mit Kommentarfeld, in Bereichen: dran je
+Rolle samt fälliger Nachprüfung, wartet auf ein Anliegen, vorgemerkt je folgende Phase in der
+Reihenfolge der Rotation (Anliegen 1670). Mechanismus: `rollenregeln/dashboardAnliegen.py`
+(dran, Nachprüfung); Wartende: Retro 6, P4.
 Ein `Kommentar:` von ihm, der den Status nicht ändert, geht an die andere Rolle des Anliegens:
 Sie antwortet mit einer Zeile `Stellungnahme:` darunter und ist bis dahin dran (Anliegen
 384). Mechanismus: nur Text.
@@ -402,7 +418,7 @@ nur Text.
   `anliegenregeln/anliegen.py` (Runde höchstens 3), `anliegenregeln/anliegenDran.py` (bei
   `eskaliert` ist der Stakeholder dran); wer Runde und Status ändert, nur Text.
 - Reicht der Empfänger einen Teil an eine andere Rolle weiter, setzt er `angenommen` erst,
-  wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `· wartet auf <nr>`.
+  wenn jenes Anliegen erledigt ist; bis dahin trägt der Kopf `Wartet auf: <nr>`.
   Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist. Der Empfänger setzt nie `erledigt`, das
   setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Mechanismus: nur Text.
@@ -427,7 +443,7 @@ nur Text.
 - Der Koordinator beauftragt die Rolle, die dran ist: Lief sie in diesem Chat und liegt ihre
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
   neu. Ein Anliegen, das aufhält ([Ich 3](praemissen/ich.md)), bearbeitet der Empfänger in
-  jeder Phase; die übrigen tragen `· wartet auf die <Phase>` seiner Perspektive.
+  jeder Phase; die übrigen tragen `Wartet auf: <Phase>` seiner Perspektive.
   Mechanismus: Wartende sind nicht dran, `anliegenregeln/anliegenDran.py`; ob ein Anliegen
   aufhält: nur Text.
 

@@ -64,7 +64,7 @@ Freigabe samt 1860, dann P1, danach P2 bis P5 und [1790](anliegen/1790-dodUeberD
 - [x] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 6
-- [ ] Organisationsentwickler: P1
+- [x] Organisationsentwickler: P1
 - [ ] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
 - [ ] Regelumsetzer: P4

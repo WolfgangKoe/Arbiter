@@ -1,6 +1,6 @@
 # Anliegenboard nach Phasen, Kopf als Felder
 
-1670 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1670 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Ich sehe in handoff ganz viele fertige Anliegen, die
@@ -45,4 +45,8 @@ lesen, und jedes Skript, das ihn liest oder schreibt, zerlegt ihn selbst.
 3. Wie kommen die offenen Anliegen in die neue Form: ein Lauf, der alle Köpfe umschreibt?
 4. Welche Felder kann der Stakeholder im Formular setzen, auch für Vorgemerktes?
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Ablauf, Anliegen](../../prozess/ablauf.md#anliegen); den
+Mechanismus baut der Regelumsetzer mit P4. 1: dran je Rolle samt Nachprüfung, wartet auf ein
+Anliegen, vorgemerkt je Phase nach der Rotation. 2: `Form:`, `Von:`, `An:`, `Runde:`,
+`Status:`, `Wartet auf:` je Zeile, die Nummer nur im Dateinamen; ein Modul liest und schreibt.
+3: ein Lauf schreibt alle offenen Köpfe um. 4: Kommentar überall, Status und Antwort wie bisher.

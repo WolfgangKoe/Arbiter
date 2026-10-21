@@ -1,6 +1,6 @@
 # Mutationstests effizienter
 
-1570 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1570 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Mutationstests sind mir sehr wichtig, weil sie Lücken in den Tests und toten
@@ -27,4 +27,10 @@ ein, ihn auszulassen; dann bleiben Lücken und toter Code unentdeckt.
 5. Wann ist der Lauf im Ablauf nötig: je Item vor dem Review, bei der Nachprüfung, nur für
    Geändertes ([Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig))?
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig), Absatz
+Mutation; den Mechanismus baut der Regelumsetzer mit [Retro 6](../retro.md), P2. 1: ja, Zeilen
+auf Modulebene und Tests in eigenem Prozess: alle. 2: ja, Mutanten nur in geänderten Zeilen;
+ein Ergebnis gilt, solange `technik/`, `pyproject.toml` und `domaene/daten` gleich sind. 3:
+nicht nötig, solange 1 und 2 reichen. 4: Bildschirmtests laufen nur, wo sie die Zeile
+ausführen. 5: je Item vor dem Review in geänderten Zeilen, der volle Lauf in der Prozessphase,
+ohne aufzuhalten.

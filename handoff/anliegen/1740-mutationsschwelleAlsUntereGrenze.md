@@ -1,6 +1,6 @@
 # Mutationsschwelle als untere Grenze, wiederholter Lauf gezielt
 
-1740 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1740 · Auftrag · von Stakeholder → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Entscheidung des Stakeholders in Zyklus 6, Anlass der Mutationslauf über Plan 6
@@ -44,4 +44,9 @@ Stand in 1632: Alle 15 Überlebenden sind angegangen, 13 als gleichwertig begrü
 und Testautor), zwei mit Einheitstests in Anliegen 1710,
 gezielt geprüft, ohne vollen Lauf.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig), Absatz
+Mutation: 1 „Unter 95 % wird jeder Überlebende angegangen, nicht nur bis zur Schwelle“, nur
+Text; „repariert“ heißt ein Test, der ihn fängt, oder bei einem gleichwertigen eine Begründung
+beim Werkzeug, dann zählt er nicht (dazu [1751](1751-gleichwertigeMutantenNichtUmDasWerkzeugBauen.md)).
+2 gezielter Lauf je Item, voller Lauf in der Prozessphase; Mechanismus Retro 6, P2. 3 in
+[1570](1570-mutationstestsEffizienter.md).

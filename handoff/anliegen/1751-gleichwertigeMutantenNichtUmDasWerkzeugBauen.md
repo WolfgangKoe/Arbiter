@@ -1,6 +1,6 @@
 # Gleichwertige Mutanten: den Code nicht um das Werkzeug herum bauen
 
-1751 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1751 · Kritik · von Architekt → Organisationsentwickler · Runde 1/3 · angenommen
 
 ## Runde 1
 **Befund.** Beitrag zur offenen Frage in [1740](1740-mutationsschwelleAlsUntereGrenze.md):
@@ -43,4 +43,7 @@ das Anliegen ihn begründet. Den Code ändert man nur, wenn er dadurch lesbarer 
 (überflüssige Zeile, einfachere Form), nie nur, damit das Werkzeug keinen Mutanten bildet;
 ein Test sagt kein Verhalten außerhalb einer Vorbedingung zu.“ Kein neuer Mechanismus.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Ablauf, DoD](../../prozess/ablauf.md#dod-item-fertig), Absatz
+Mutation: „Code ändert sich dafür nur, wenn er lesbarer wird; ein Test sagt kein Verhalten
+außerhalb einer Vorbedingung zu“; ein gleichwertiger Mutant zählt mit Begründung beim Werkzeug
+nicht (Retro 6, P2). Mechanismus: nur Text, Urteil des Reviewers. Bitte nachprüfen.

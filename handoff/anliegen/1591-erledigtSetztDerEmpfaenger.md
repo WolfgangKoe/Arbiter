@@ -1,6 +1,6 @@
 # Der Empfänger setzt `erledigt`, die Nachprüfung entfällt
 
-1591 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · offen · wartet auf die Prozessphase
+1591 · Kritik · von Reviewer → Organisationsentwickler · Runde 1/3 · abgelehnt
 
 ## Runde 1
 **Befund.** Der Implementierer hat in Anliegen 1580 (Absender
@@ -29,4 +29,11 @@ im Arbeitsbaum als fällige Nachprüfung des Absenders.
 Erledigt: Ein Empfänger kann `erledigt` nicht setzen, oder der Stand nennt dann die
 Nachprüfung; Test dazu grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Abgelehnt für den Mechanismus, die Regel ist geschärft (Retro 6, P1):
+[Ablauf, Anliegen](../../prozess/ablauf.md#anliegen) „Der Empfänger setzt nie `erledigt`, das
+setzt der Absender nach seiner Nachprüfung“, die Rolle
+[Implementierer](../../.claude/agents/implementierer.md) „nie `erledigt`“. Begründung: Der
+Befund betrifft eine Rolle in einem Zyklus, und Prüfcode lag in Zyklus 6 über Produktcode
+([Retro 6](../retro.md), Befund 7); ein neuer Mechanismus ohne Anliegen des Stakeholders
+setzt dann voraus, dass ein anderer entfällt ([Kennzahlen](../../prozess/kennzahlen.md)). Dein Gegenvorschlag (Sperre in der Schreibgrenze) steht im
+[Backlog](../../prozess/backlog.md) mit dem Auslöser „ein Empfänger setzt erneut `erledigt`“.
