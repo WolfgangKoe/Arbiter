@@ -100,7 +100,7 @@ Fortschritt und Hindernis (`standregeln/fortschritt.py`, `hindernis.py`, `abhake
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [x] UX: Mockups, bei einer Oberfläche
-- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
+- [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
 - [x] Fachkritiker: Kritik am Plan
 - [x] Architekt: Kritik am Plan
