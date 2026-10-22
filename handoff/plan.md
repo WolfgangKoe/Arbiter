@@ -20,20 +20,25 @@ Zyklusziel aus [Review 6](review.md).
 
 ## Items
 1. [Aufräumen und feste Adresse](../domaene/items/aufraeumenUndFesteAdresse.md): Schritt 1;
-   dazu ohne sichtbare Änderung: die *Auswahl* entflechten (1652), `seite.js` teilen (1541),
-   *Ablage* heißt auch im Code *Armeeliste* (2221). „zurück“ (AUF-17) entfällt samt Test,
-   ebenso die *Sperre* ‚nicht wählbar‘ beim Ziehen auf eine *Armeeliste* (AUF-8.4): Das
-   *Modell* springt still zurück (2220 F4 A, 2410). Zuletzt die Kommentare im Code, die
+   zuerst, vor Vertrag und Tests, die Kommentare im Code, die
    [Es 8](../prozess/praemissen/es.md) verbietet (deine Antwort A zu
-   [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md)).
+   [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md)). Dann ohne sichtbare
+   Änderung: die *Auswahl* entflechten (1652), `seite.js` teilen (1541), *Ablage* heißt auch
+   im Code *Armeeliste* (2221). „zurück“ (AUF-17) entfällt samt Test, ebenso die *Sperre*
+   ‚nicht wählbar‘ beim Ziehen auf eine *Armeeliste* (AUF-8.4): Das *Modell* springt still
+   zurück (2220 F4 A, 2410).
 2. [Einheit zurücklegen](../domaene/items/einheitZuruecklegen.md): Schritte 2, 3 und 5.
 
 Reihenfolge 1, 2: Item 1 räumt auf, wo Item 2 baut. Das Risiko liegt bei Item 1.
 
-Kommentare: Ab „Freigabe Plan 7“ prüft die DoD auch `technik/`. Dort stehen 78 verbotene
-Kommentare in 30 Dateien, 48 im Code, 30 in Tests. Bis sie fort sind, ist die DoD jedes Items
-rot; darum Item 1. Kosten: je ein Durchgang für Testautor und Implementierer, am Bildschirm
-nichts. Was ein Kommentar erklärt, geht in einen Namen oder einzeiligen Docstring.
+Kommentare: Ab „Freigabe Plan 7“ prüft der Commit-Hook auch `technik/`. Dort stehen 78
+verbotene Kommentare in 30 Dateien: 29 in Akzeptanztests (Testautor), 48 im Code und einer in
+einem Einheitstest (Implementierer). Bis sie fort sind, scheitert jeder Commit; darum zuerst
+([2510](anliegen/2510-kommentareZuerstNichtZuletzt.md)). Beide laufen gleichzeitig, der
+Koordinator committet einmal nach beiden; davor committet niemand in der Technikphase. Kosten:
+je ein Durchgang, am Bildschirm nichts. Was ein Kommentar erklärt, steht danach im Namen, in
+einem einzeiligen Docstring oder in der Architektur, auf die er verweist; was dort schon
+steht, entfällt.
 
 ## Abweichung vom Zyklusziel
 Review 6 nennt drei Schritte; nach deinem Schnitt bleibt nur „Einheit zurücklegen“.

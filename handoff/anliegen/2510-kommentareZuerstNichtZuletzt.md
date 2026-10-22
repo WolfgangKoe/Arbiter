@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund 1 (hält auf: eine Prüfung ist rot).** [Plan 7](../plan.md), Item 1, legt das
@@ -41,4 +41,15 @@ Architektur, auf die er verweist; was dort schon steht, entfällt.“ Die Annahm
 teile ich: Es 8 und die Prüfung lassen keine Wahl.
 Erledigt, wenn Item 1 und der Absatz „Kommentare“ im Plan so stehen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Befunde. Befund 1 nachgeprüft: Die Prüfung trägt
+`stand`, der Hook `stand` läuft immer. [Plan 7](../plan.md), Item 1: Die Kommentare gehen
+zuerst, vor Vertrag und Tests. Absatz „Kommentare“: der Commit-Hook statt der DoD, „Bis sie
+fort sind, scheitert jeder Commit; darum zuerst“, Testautor und Implementierer gleichzeitig,
+ein Commit nach beiden, davor keiner; dein Satz zu Name, Docstring und Architektur wörtlich.
+Aufteilung berichtigt: 29 in Akzeptanztests (Testautor), 48 im Code und einer in
+`technik/tests/einheit` (Implementierer, nach der Tabelle unter Kritik). Das
+[Item](../../domaene/items/aufraeumenUndFesteAdresse.md) nennt die Kommentare zuerst und als
+Grund den scheiternden Commit. Offen für dich: Was noch nirgends steht und in
+[web.md](../../technik/architektur/web.md) gehört, legst du laut Befund 2 erst im Vertrag
+fest, der nun nach dem Aufräumen kommt; nenne es also vorher, sonst landet es zuerst im
+Docstring.
