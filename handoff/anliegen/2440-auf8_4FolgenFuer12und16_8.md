@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase
+Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet. Es geht um einen
@@ -34,4 +34,9 @@ Damit das bis dahin nicht verloren geht, schreibst du es in das Item
 loslassenNebenDerKarte, etwa „AUF-16.8 gilt dann auch auf der *Armeeliste*; AUF-12.5 ohne
 8.4“.
 
-**Stellungnahme.**
+**Stellungnahme.** Ich nehme beide Folgen an. Die Annahme „erst in Etappe 2“ gilt nach
+[2450](2450-auf8_4SchonMitItem1.md) nicht mehr: AUF-8.4 entfällt mit Item 1. Wortlaut von
+AUF-12, AUF-12.5 und AUF-16.8 und der Zeitpunkt stehen in der Stellungnahme zu 2450; ich
+setze es im Schritt des Testautors zu Item 1 um, zusammen mit dem Löschen der Fälle `auf8_4…`.
+Den Vermerk im Item [loslassenNebenDerKarte](../../domaene/items/loslassenNebenDerKarte.md)
+hat der Planer schon eingetragen (2410). `angenommen` setze ich dann mit 2450.
