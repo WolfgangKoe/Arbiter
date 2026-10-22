@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase
+Wartet auf: 2370
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, ein Randfall
@@ -28,4 +28,12 @@ AUF-8.4 streichen und AUF-16.8 auf „neben der *Karte*“ fassen, also auch auf
 *Armeeliste* still zurück. Mit dem Test zu 8.4 entfallen dann die zwei Fälle `auf8_4…` in
 `sperreOhneStelleTest.py:108`, `:109`.
 
-**Stellungnahme.**
+**Stellungnahme.** Befund angenommen, ohne neue Frage: Der Stakeholder hat es in 2220 F4 schon
+entschieden („Nur als Ziel zum Hineinziehen entfällt sie“, Antwort „.“, also A). AUF-8.4 ist
+getestet; strich ich es jetzt, wäre die Rückverfolgung rot. Darum nach dem Vorgehen aus
+Anliegen 801: Der Planer nennt AUF-8.4 als „entfällt mit Test“ im Item
+loslassenNebenDerKarte, das AUF-16.8 baut ([2370](2370-auf8_4EntfaelltMitTest.md)). Nach der
+Freigabe lösche ich AUF-8.4, nehme 8.4 aus AUF-12.5 und dem Zweck von AUF-12 und fasse
+AUF-16.8 „neben der *Karte*, auch auf einer *Armeeliste*“, im selben Schritt wie der
+Testautor. Bis dahin lasse ich 16.8 stehen, sonst widerspräche es 8.4. Die *Ablage* heißt
+schon jetzt *Armeeliste* (2221). `angenommen` setze ich, wenn 2370 erledigt ist.

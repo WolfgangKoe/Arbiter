@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: offen
+Status: abgelehnt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): hält auf. Beide Mockups
@@ -38,4 +38,9 @@ niemand beschlossen hat. Die Mockups des Plans widersprächen sich.
 Erledigt, wenn beide Mockups die Knöpfe zeigen, die AUF-23.4, 13.1 und der Stand von
 auf-23-nachher verlangen.
 
-**Stellungnahme.**
+**Stellungnahme.** Der Befund gilt nach dem neuen Schnitt nicht mehr. Punkt 1: AUF-13
+entfällt, auf-13.html ist gelöscht (2366). Punkt 2: que-5 gehört nicht zu Plan 7; QUE-5
+kommt mit der Bewegung in Etappe 2, und „Aufstellen der Einheit beenden“ gibt es dort nicht.
+que-5 zeichne ich dann neu für die Bewegung, ohne Aufstell-Knöpfe. Das alte que-5 baut
+niemand ein. Der Stand von auf-23-nachher mit „Aufstellen der Einheit beenden“ nach dem
+Übergehen entfällt damit als Vorlage.

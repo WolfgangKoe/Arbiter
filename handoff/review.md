@@ -98,8 +98,8 @@ Fortschritt und Hindernis (`standregeln/fortschritt.py`, `hindernis.py`, `abhake
   zeigte, wie in ArbiterMap. Danach ist Etappe 1 erreicht. Vorher: 1632.
 
 ## Fortschritt
-- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
-- [ ] UX: Mockups, bei einer Oberfläche
+- [x] Anforderungsautor: Happy Paths zum Zyklusziel
+- [x] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
 - [x] Fachkritiker: Kritik am Plan

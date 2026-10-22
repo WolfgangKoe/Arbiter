@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Du hast recht: Ein Ort, an dem *Modelle* liegen und in den man sie zurückzieht,

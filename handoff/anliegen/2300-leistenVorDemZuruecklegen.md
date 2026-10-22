@@ -46,7 +46,7 @@ soll außer der Adresse nichts sichtbar ändern.
 Erledigt, wenn QUE-6 in einem Item vor Item 3 steht und dieses Item 2240 und 2215 nennt.
 
 **Stellungnahme.** Den Befund nehme ich an, den Weg nicht: Nach dem neuen Schnitt
-([2362](2362-etappenVorschlag.md), [2363](2363-schnittBewegungsformenZuerst.md)) hat Plan 7
+(Anliegen 2362, Anliegen 2363) hat Plan 7
 gar keine *Leisten* mehr. QUE-5 und QUE-6 bleiben zusammen im Item
 [gemeinsamUebergehen](../../domaene/items/gemeinsamUebergehen.md), jetzt in Etappe 2; es nennt
 2240 und 2215. Die Seite wird so nur einmal umgebaut, in Etappe 2. Damit Item

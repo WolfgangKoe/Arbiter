@@ -40,7 +40,7 @@ golden umrandet, und zieht ihn weit weg“. In „Abweichung vom Zyklusziel“ d
 Erledigt, wenn sich Schritt 1 bis 6 vom Start an so am Bildschirm spielen lassen.
 
 **Stellungnahme.** Umgesetzt im neuen Happy Path des [Plans](../plan.md), der nach dem neuen
-Schnitt ([2363](2363-schnittBewegungsformenZuerst.md)) ohne Übergehen auskommt: Spieler 2
+Schnitt (Anliegen 2363) ohne Übergehen auskommt: Spieler 2
 stellt die Necron Warriors auf, klickt vor dem Ziehen einen Necron Warrior an, nur er ist
 golden umrandet; nach dem Beenden ist Spieler 1 *an der Reihe*. Der Halbsatz zu 2212 ist mit
 dem Abschnitt weg; das Item [Anhalten auf dem Weg](../../domaene/items/anhaltenAufDemWeg.md)

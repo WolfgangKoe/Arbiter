@@ -2,10 +2,10 @@
 
 Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 ---|---|---|---
-Ablage | – | Ablage | Spalte neben der *Karte* mit den nicht *aufgestellten* *Einheiten* eines *Spielers*, in der er eine per Klick auswählt; kein Ziel zum Hineinziehen. Jeder *Spieler* hat eine (Etappe 1, Anliegen 145 F1 A, 2220, Name: 2221).
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
 Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
+Armeeliste | – | Armeeliste | Spalte neben der *Karte* mit den nicht *aufgestellten* *Einheiten* eines *Spielers*, in der er eine per Klick auswählt; kein Ziel zum Hineinziehen. Jeder *Spieler* hat eine (Anliegen 145 F1 A, 2220 F4 A, 2221 F1 A, Vorbild `Arbiter-old/src/uiLayout/armyList.py`).
 aufgestellt | deployed | aufgestellt | Zustand einer *Einheit*, für die *Aufstellen der Einheit beenden* gelungen ist (`core_rules.txt:2322`).
 Aufstellen der Einheit beenden | – | aufstellenDerEinheitBeenden | Handlung, mit der die *Spieler* die *Einheit in Aufstellung* abschließen.
 Aufstellung | deploy forces | Aufstellung | Schritt 4 der Mission Only War: Die *Spieler* stellen abwechselnd je eine *Einheit* auf, bis beide alle aufgestellt haben (`core_rules.txt:2322`).
@@ -22,7 +22,7 @@ Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
 Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, wie es `domaene/daten/formation.yaml` vorgibt (Anliegen 374 F2 A, 377 F1 A).
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
-gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll* (`domaene/ziel.md`).
+gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll*; nie bei ‚keine Kohärenz‘ (`domaene/ziel.md`, `core_rules.txt:434`, Anliegen 2361 F1 A).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
@@ -34,10 +34,10 @@ Missionsvorbereitung | – | Missionsvorbereitung | Schritte 1 bis 3 der *Missio
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
 Name | unit name | name | Name einer *Einheit*, wie ihn ihr Datenblatt nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte in `domaene/daten/ausgangslage.yaml` unter `Einheit`.
-Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`, Etappe 1).
+Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).
 Roll-off | roll-off | RollOff | Beide *Spieler* würfeln je einen W6, der höhere gewinnt; bei Gleichstand wird wiederholt, kein Würfel darf neu gewürfelt oder verändert werden (`core_rules.txt:506`).
 setzen | set up | setzen | Handlung, die ein *Modell* an eine *Stelle* bringt; danach ist es gesetzt (`core_rules.txt:2322`).
-Sperre | – | Sperre | Arbiter verweigert eine regelwidrige Handlung und nennt den *Grund*; Übergehen nach `domaene/ziel.md`.
+Sperre | – | Sperre | Arbiter verweigert eine regelwidrige Handlung und nennt den *Grund*; *gemeinsam übergehen* nach `domaene/ziel.md`, außer ‚keine Kohärenz‘ (Anliegen 2361 F1 A).
 Spieler | player | Spieler | Einer der zwei Menschen am Gerät; jeder führt eine *Armee* (`core_rules.txt:305`).
 Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht geschlagen wird; die *Mission* nennt die Größe (`core_rules.txt:452`).
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: abgelehnt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, QUE-7 ist nicht
@@ -23,4 +22,7 @@ Knöpfe erscheinen und verschwinden, ohne die *Karte* zu verschieben.
 **Gegenvorschlag.** que-7.html wie auf-13.html nach 2311 nachziehen, sobald QUE-7 in einen
 Plan kommt oder gleich mit 2311.
 
-**Stellungnahme.**
+**Stellungnahme.** Der Befund gilt nicht mehr. QUE-7 kommt mit Etappe 2, in der Bewegung;
+dort gibt es keine *Einheit in Aufstellung* und kein „Einheit zurücklegen“ (AUF-23.4). Das
+heutige que-7 zeigt das Aufstellen und wird für die Bewegung neu gezeichnet, sobald QUE-7 in
+einen Plan kommt. Mit diesem Zug ist 2311 Punkt 1 ebenfalls hinfällig.

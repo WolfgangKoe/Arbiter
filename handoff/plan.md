@@ -1,7 +1,7 @@
 # Plan · Zyklus 7
 
 Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md), neu gefasst nach deinem Schnitt
-([2361](anliegen/2361-schnittDerEtappen.md) bis [2364](anliegen/2364-fahrzeugMoralSiegpunkte.md));
+(Anliegen 2361 bis Anliegen 2364);
 die nächste ist [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
 Zyklusziel aus [Review 6](review.md).
 
