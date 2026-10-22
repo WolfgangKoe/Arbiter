@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
+Status: abgelehnt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): hält nicht auf. Der Plan
@@ -29,4 +29,7 @@ wenn das Item die Abhängigkeit auch nennt.
 
 Erledigt, wenn das Item gemeinsamUebergehen Item 2 als Abhängigkeit nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Der Befund entfällt: AUF-13 entfällt nach der Antwort des Stakeholders
+([2361](2361-schnittDerEtappen.md) F1 A, [2362](2362-etappenVorschlag.md)), ‚keine Kohärenz‘
+ist nicht zu übergehen. Das Item [gemeinsamUebergehen](../../domaene/items/gemeinsamUebergehen.md)
+umfasst nur noch QUE-5 und QUE-6, kommt in Etappe 2 und hängt nicht mehr am *Zurücklegen*.

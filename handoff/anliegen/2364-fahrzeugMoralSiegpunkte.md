@@ -4,7 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Beim Prüfen des Schnitts in [2363](2363-schnittBewegungsformenZuerst.md) fallen

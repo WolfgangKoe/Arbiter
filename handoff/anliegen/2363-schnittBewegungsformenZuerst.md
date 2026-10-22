@@ -4,7 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Kommentar in [2362](2362-etappenVorschlag.md) ist eingearbeitet, deine

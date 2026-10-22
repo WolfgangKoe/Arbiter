@@ -4,8 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: 2363
+Status: erledigt
 
 ## Runde 1
 **Befund.** Deine Vorgaben stehen im [Vorschlag](2362-etappenVorschlag.md): Etappe 1 endet mit

@@ -1,9 +1,9 @@
 # Gemeinsam übergehen mit Protokoll
 
-Umfang: AUF-13, QUE-5, QUE-6.
+Umfang: QUE-5, QUE-6.
 
-Warum jetzt: Zyklusziel aus Review 6 und Ziel: eine Sperre einvernehmlich übergehen,
-protokolliert.
+Warum jetzt: Etappe 2, mit den ersten Sperren des Normal Move; Ziel: eine Sperre
+einvernehmlich übergehen, protokolliert. ‚keine Kohärenz‘ ist nie zu übergehen (2361 F1).
 
-Abhängigkeit: Item aufraeumenUndFesteAdresse; Anliegen 2241 (Griff).
-Mockup: [auf-13](../mockups/auf-13.html), que-5.
+Abhängigkeit: Sperren der Bewegungsphase (Anliegen 2365); Anliegen 2240 und 2215 (Leisten).
+Mockup: que-5, neu für die Bewegung (Anliegen 2366).

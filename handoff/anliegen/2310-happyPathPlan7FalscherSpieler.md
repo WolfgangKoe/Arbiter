@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): hält auf, ein Schritt
@@ -39,4 +39,9 @@ golden umrandet, und zieht ihn weit weg“. In „Abweichung vom Zyklusziel“ d
 2212 streichen.
 Erledigt, wenn sich Schritt 1 bis 6 vom Start an so am Bildschirm spielen lassen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt im neuen Happy Path des [Plans](../plan.md), der nach dem neuen
+Schnitt ([2363](2363-schnittBewegungsformenZuerst.md)) ohne Übergehen auskommt: Spieler 2
+stellt die Necron Warriors auf, klickt vor dem Ziehen einen Necron Warrior an, nur er ist
+golden umrandet; nach dem Beenden ist Spieler 1 *an der Reihe*. Der Halbsatz zu 2212 ist mit
+dem Abschnitt weg; das Item [Anhalten auf dem Weg](../../domaene/items/anhaltenAufDemWeg.md)
+hängt nicht mehr an 2212.

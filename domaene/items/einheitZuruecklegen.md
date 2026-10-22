@@ -1,8 +1,9 @@
-# Einheit zurücklegen, Loslassen neben der Karte
+# Einheit zurücklegen
 
-Umfang: AUF-23, AUF-28.1, AUF-16.8.
+Umfang: AUF-23.
 
-Warum jetzt: Zyklusziel aus Review 6; Knopf statt Zug in die Ablage (Anliegen 2062, 2220).
+Warum jetzt: Letzter Schritt von Etappe 1; ohne Kohärenz ist das Zurücklegen neben dem
+Umsetzen der Ausweg (Anliegen 2361 F1, 2362). Knopf statt Zug in die Armeeliste (2062, 2220).
 
-Abhängigkeit: Item aufraeumenUndFesteAdresse.
+Abhängigkeit: Item aufraeumenUndFesteAdresse; Anliegen 2366 (Mockup mit den Spalten).
 Mockup: [auf-23-vorher](../mockups/auf-23-vorher.html), auf-23-nachher.
