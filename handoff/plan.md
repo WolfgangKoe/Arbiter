@@ -34,7 +34,7 @@ Review 6 nennt drei Schritte. Nach deinem Schnitt bleibt in Plan 7 nur „Einhei
 zurücklegen“. Gemeinsam übergehen und das *Protokoll* kommen mit den *Sperren* des Normal
 Move in Etappe 2, ebenso das Loslassen neben der *Karte*, das der Normal Move mitbenutzt
 (2361 F1, F2); mit ihm entfällt AUF-8.4, denn in die *Armeeliste* zieht man nicht
-mehr (2220 F4 A, [2370](anliegen/2370-auf8_4EntfaelltMitTest.md)). Davor kommt Item 1
+mehr (2220 F4 A, Anliegen 2370). Davor kommt Item 1
 (deine Entscheidungen 1650, 1652). Nach Plan 7 ist Etappe 1 erreicht, wie das Zyklusziel sagt. Die Randfälle nur des Aufstellens (Item
 randfaelleDesAufstellens) warten auf Etappe 7.
 
