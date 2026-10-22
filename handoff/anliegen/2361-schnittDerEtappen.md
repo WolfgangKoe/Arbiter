@@ -4,7 +4,8 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
+Wartet auf: 2363
 
 ## Runde 1
 **Befund.** Deine Vorgaben stehen im [Vorschlag](2362-etappenVorschlag.md): Etappe 1 endet mit
@@ -29,7 +30,7 @@ gemeinsam übergehen.
 Empfehlung: A. Dieselbe Regelstelle, dieselbe Begründung wie deine fürs Aufstellen. Bei A
 schlage ich vor, dass du im [Ziel](../../domaene/ziel.md) die Ausnahme ergänzt; das Ziel
 änderst nur du.
-Antwort: .
+Antwort: A
 
 **F2 · Wohin mit dem, was Etappe 1 verlässt?** A: Ziehen und Loslassen (AUF-28.1, 16.8, 8.7,
 12.8, 16.7), ruhige *Karte* (QUE-7) und *Leisten* (QUE-6) in Etappe 2; Anhalten auf dem Weg
@@ -37,13 +38,13 @@ Antwort: .
 in Etappe 6. B: alles in Etappe 2. C: alles in Etappe 6.
 Empfehlung: A. Was der Normal Move mitbenutzt, kommt mit ihm; was nur das Aufstellen
 bequemer macht, kommt nach der Regelkonformität.
-Antwort: .
+Antwort: A
 
 **F3 · Wer hat den ersten Zug?** Nach der Regel würfelt ihr einen Roll-off, der Gewinner
 wählt den ersten oder zweiten Zug (`core_rules.txt:2329`). A: Der Roll-off bleibt am Tisch,
 der Gewinner wählt am Bildschirm, wer beginnt. B: Vorläufig legt Arbiter es fest, wie beim
 Start des Aufstellens ([AUF-6](../../domaene/anforderungen/phasen/aufstellen/vorlaeufigerStart.md)).
 Empfehlung: A. Ein Klick, regelgerecht, und jedes Probespiel kann mit jedem Spieler beginnen.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**

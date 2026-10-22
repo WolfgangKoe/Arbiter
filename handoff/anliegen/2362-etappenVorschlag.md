@@ -4,7 +4,8 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
+Wartet auf: 2363
 
 ## Runde 1
 **Befund.** Deine Vorgaben zu Etappe 1 bis 3, umgesetzt als Schnitt in sechs Etappen.
@@ -63,6 +64,8 @@ Anforderungsautor in einem Anliegen um die Änderungen oben.
 **F1 · Gibst du den Schnitt frei?** A: Ja. B: Mit deinem Kommentar darunter.
 Empfehlung: A. Jede Etappe fügt die Zustände hinzu, die Arbiter-old für einen Zug nennt, in
 der Reihenfolge der Phasen.
-Antwort: .
+Antwort: B
 
 **Stellungnahme.**
+Kommentar: Grundsätzlich sieht das schon gut aus. Ich würde den Schnitt allerdings so machen, dass wir zunächst alle "Bewegungsformen" entlang der Phasen umsetzen. 1. Wie von dir hier beschrieben. 2. Phasen und Bewegungsphase mit normaler Bewegung und Vorrücken wie in Arbiter-Old angesetzt. Jede dieser Bewegungen sollte zurückgesetzt werden können. Die technische Bewegung sollte aus ArbiterMap entnommen werden können. Zurückziehen ist explizit noch nicht Teil des Ganzen. Das machen wir dann, sobald wir eine neue Runde beginnen. Das ist ja letztendlich eine "normale Bewegung" unter bestimmten Bedingungen und mit bestimmten Folgen auf folgende Phasen. Die sollten erst alle gebaut sein. Hier müssen die bestehenden Armeen etwas erweitert werden: Es bräuchte bei den Orks einen Psioniker und bei den Necrons eine Canoptech-Spinne. Wir brauchen jeweils auch ein passendes Fahrzeug. 3. Psi-Phase und Fernkampfphase bleiben erst mal "leer" bzw. dort kann "markiert" werden, welche Einheit als "hat eine Psi-Kraft versucht zu manifestieren" und "hat geschossen" betrachtet wird, sofern sie das mit ihrer Bewaffnung darf. Wir gehen damit zur Angriffsphase, wo wir eine Logik von Arbiter-old und ArbiterMap aufgreifen sollten. IN diese Etappen kann dann auch die Rückzugsbewegung für die Bewegungsphase implementiert werden. Dafür sollte dann alles wichtige vorhanden sein. 4. Wir implementieren die Attackensequenz aus Arbiter-old. Diese kann dann in die Fernkampfphase und die Nahkampfphase integriert werden. Die Logik, wie viele Modelle und welche Einheiten und wie viele Schuss bei welcher Distanz gegen wen abgegeben werden können, wäre komplett Teil dieser Etappe. 5. Implementierung von Psi- und Moralphase 6. HIer sollten wir dann anfangen, die App etwas mehr mit den Features aus Arbiter-old zu befüllen. GameHeader, armyCards und unitCards, datasheets, gameProtocol 7. Ich denke, dass wir hier die Datenbanken für die Orks und die Necrons anlegen und die "Start"-Seite für die Spielvorbereitung. 8. Armybuilder zum zusammenstellen einer Necron- und Ork-Armee 9. Ergänzung weiterer Armeen. Wichtig wäre, dass diese Etappen alle nicht fixiert sein müssen. Nach jedem ABschluss einer Etappe muss ich neu orüfen, ob dieser Plan hier noch funktionieren kann. Bitte diesen Schnitt prüfen. Lege nicht jedes Wort auf die Goldwaage, sondern sei gerne kritisch. Wichtig wäre mir zunächst, dass wir die wesentlichen FUnktionen zügig bauen, bevor wir die Randfälle angehen. Das Produkt soll eine Art MVP-Status erreichen, um eine Party mit Necrons und Orks spielen zu können. Auf Gefechtsoptionen und Fähigkeiten können wir erstmal noch verzichten.
+Stellungnahme: Eingearbeitet als neuer Schnitt in [2363](2363-schnittBewegungsformenZuerst.md), kritische Punkte als Fragen in [2364](2364-fahrzeugMoralSiegpunkte.md). Erledigt setze ich, sobald die Etappen nach deiner Freigabe geschrieben sind.
