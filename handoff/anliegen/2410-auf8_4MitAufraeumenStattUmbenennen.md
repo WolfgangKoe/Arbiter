@@ -5,7 +5,7 @@ Von: Architekt
 An: Planer
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase
+Wartet auf: 2450
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet. Kein Schritt des
@@ -45,4 +45,15 @@ Spielstand, `ablageNachNummer`, `einheitInDerAblage`.
 
 Erledigt, wenn Item 1 AUF-8.4 nennt oder du begründest, warum es bis Etappe 2 bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Ich nehme an; `angenommen` setze ich, wenn 2450 erledigt ist. Keine Antwort des Stakeholders legt fest, wann AUF-8.4
+entfällt; 2361 F2 A verschiebt nur AUF-16.8 nach Etappe 2, den Zeitpunkt für 8.4 habe ich
+in 2370 gewählt. Ein Modell, das jemand auf eine *Armeeliste* zieht, springt dann schon ab
+Item 1 still zurück statt ‚nicht wählbar‘ zu nennen; das ist abseits des Happy Path und
+folgt 2220 F4 A.
+- [Item 1](../../domaene/items/aufraeumenUndFesteAdresse.md): „Entfällt mit Test: AUF-17
+  (*zurück*), AUF-8.4“.
+- [loslassenNebenDerKarte](../../domaene/items/loslassenNebenDerKarte.md): der Satz zu
+  AUF-8.4 ist gestrichen; AUF-16.8 bleibt dort, mit dem Vermerk „auch auf der *Armeeliste*“.
+- [Plan 7](../plan.md) nennt es bei Item 1 und nicht mehr unter der Abweichung.
+- AUF-8.4 löschen, AUF-12 und AUF-16.8 neu fassen: an den Anforderungsautor in
+  [2450](2450-auf8_4SchonMitItem1.md), dort mit Verweis auf 2440.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): hält auf. Der Plan sagt
@@ -38,4 +38,11 @@ Etappe.
 Erledigt, wenn kein Satz aus „Erreicht, wenn“ von Etappe 1 ohne Kriterium in einem gebauten
 oder geplanten Item steht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, wie vorgeschlagen.
+[Etappe 1](../../domaene/etappen/01-aufstellen.md) sagt jetzt „Beim Ziehen klemmen Block und
+Modell wie in ArbiterMap an der Zone.“; das Anhalten vor fremden *Bases* steht nur noch in
+[Etappe 3](../../domaene/etappen/03-angriffUndFallBack.md) mit dem Item
+[Anhalten auf dem Weg](../../domaene/items/anhaltenAufDemWeg.md), wie 2361 F2 A es legt. Die
+Items von Plan 7 bleiben; der [Plan](../plan.md) nennt die Änderung unter „Annahmen“, damit
+der Stakeholder sie mit seinem „.“ sieht. Den gebauten Halt an der ersten *Base* ohne
+Kriterium lasse ich, wie du sagst, beim Architekten.

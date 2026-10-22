@@ -23,7 +23,9 @@ Zyklusziel aus [Review 6](review.md).
    dazu ohne sichtbare Änderung: die *Auswahl* entflechten (deine Antwort in 1652),
    `seite.js` teilen, die über dem Höchstmaß liegt (1541), *Ablage* heißt auch in Code und
    Tests *Armeeliste* (2221), und „zurück“ ohne *Sperre* (AUF-17) samt Test entfernen, denn
-   „zurück“ gibt es nicht mehr.
+   „zurück“ gibt es nicht mehr. Ebenso die *Sperre* ‚nicht wählbar‘ für ein *Modell*, das
+   jemand auf eine *Armeeliste* zieht (AUF-8.4): Dort springt es künftig still zurück, denn
+   in die *Armeeliste* zieht man nicht mehr (2220 F4 A, Anliegen 2410).
 2. [Einheit zurücklegen](../domaene/items/einheitZuruecklegen.md): Schritte 2, 3 und 5.
 
 Reihenfolge 1, 2: Item 1 räumt die Stellen auf, an denen Item 2 baut. Beide sind klein;
@@ -33,13 +35,14 @@ das Risiko liegt bei Item 1, wo *Auswahl*, `seite.js` und Adresse getrennt laufe
 Review 6 nennt drei Schritte. Nach deinem Schnitt bleibt in Plan 7 nur „Einheit
 zurücklegen“. Gemeinsam übergehen und das *Protokoll* kommen mit den *Sperren* des Normal
 Move in Etappe 2, ebenso das Loslassen neben der *Karte*, das der Normal Move mitbenutzt
-(2361 F1, F2); mit ihm entfällt AUF-8.4, denn in die *Armeeliste* zieht man nicht
-mehr (2220 F4 A, Anliegen 2370). Davor kommt Item 1
+(2361 F1, F2). Davor kommt Item 1
 (deine Entscheidungen 1650, 1652). Nach Plan 7 ist Etappe 1 erreicht, wie das Zyklusziel sagt. Die Randfälle nur des Aufstellens (Item
 randfaelleDesAufstellens) warten auf Etappe 7.
 
 ## Annahmen
-- Etappen 1 und 2 gelten, wie sie jetzt stehen; dein „.“ gibt sie frei.
+- Etappen 1 und 2 gelten, wie sie jetzt stehen; dein „.“ gibt sie frei. Das Anhalten vor
+  fremden *Bases* steht nur noch in Etappe 3, wie deine Antwort 2361 F2 A es legt (Anliegen
+  2420).
 
 ## Empfehlung
 Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen. Ergänze bitte im
