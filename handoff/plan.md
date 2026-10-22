@@ -20,34 +20,39 @@ Zyklusziel aus [Review 6](review.md).
 
 ## Items
 1. [Aufräumen und feste Adresse](../domaene/items/aufraeumenUndFesteAdresse.md): Schritt 1;
-   dazu ohne sichtbare Änderung: die *Auswahl* entflechten (deine Antwort in 1652),
-   `seite.js` teilen, die über dem Höchstmaß liegt (1541), *Ablage* heißt auch in Code und
-   Tests *Armeeliste* (2221), und „zurück“ ohne *Sperre* (AUF-17) samt Test entfernen, denn
-   „zurück“ gibt es nicht mehr. Ebenso die *Sperre* ‚nicht wählbar‘ für ein *Modell*, das
-   jemand auf eine *Armeeliste* zieht (AUF-8.4): Dort springt es künftig still zurück, denn
-   in die *Armeeliste* zieht man nicht mehr (2220 F4 A, Anliegen 2410).
+   dazu ohne sichtbare Änderung: die *Auswahl* entflechten (1652), `seite.js` teilen (1541),
+   *Ablage* heißt auch im Code *Armeeliste* (2221). „zurück“ (AUF-17) entfällt samt Test,
+   ebenso die *Sperre* ‚nicht wählbar‘ beim Ziehen auf eine *Armeeliste* (AUF-8.4): Das
+   *Modell* springt still zurück (2220 F4 A, 2410). Zuletzt die Kommentare im Code, die
+   [Es 8](../prozess/praemissen/es.md) verbietet (deine Antwort A zu
+   [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md)).
 2. [Einheit zurücklegen](../domaene/items/einheitZuruecklegen.md): Schritte 2, 3 und 5.
 
-Reihenfolge 1, 2: Item 1 räumt die Stellen auf, an denen Item 2 baut. Beide sind klein;
-das Risiko liegt bei Item 1, wo *Auswahl*, `seite.js` und Adresse getrennt laufen.
+Reihenfolge 1, 2: Item 1 räumt auf, wo Item 2 baut. Das Risiko liegt bei Item 1.
+
+Kommentare: Ab „Freigabe Plan 7“ prüft die DoD auch `technik/`. Dort stehen 78 verbotene
+Kommentare in 30 Dateien, 48 im Code, 30 in Tests. Bis sie fort sind, ist die DoD jedes Items
+rot; darum Item 1. Kosten: je ein Durchgang für Testautor und Implementierer, am Bildschirm
+nichts. Was ein Kommentar erklärt, geht in einen Namen oder einzeiligen Docstring.
 
 ## Abweichung vom Zyklusziel
-Review 6 nennt drei Schritte. Nach deinem Schnitt bleibt in Plan 7 nur „Einheit
-zurücklegen“. Gemeinsam übergehen und das *Protokoll* kommen mit den *Sperren* des Normal
-Move in Etappe 2, ebenso das Loslassen neben der *Karte*, das der Normal Move mitbenutzt
-(2361 F1, F2). Davor kommt Item 1
-(deine Entscheidungen 1650, 1652). Nach Plan 7 ist Etappe 1 erreicht, wie das Zyklusziel sagt. Die Randfälle nur des Aufstellens (Item
-randfaelleDesAufstellens) warten auf Etappe 7.
+Review 6 nennt drei Schritte; nach deinem Schnitt bleibt nur „Einheit zurücklegen“.
+Gemeinsam übergehen, das *Protokoll* und das Loslassen neben der *Karte* kommen mit dem
+Normal Move in Etappe 2 (2361 F1, F2). Davor kommt Item 1 (1650, 1652). Nach Plan 7 ist
+Etappe 1 erreicht. Die Randfälle nur des Aufstellens warten auf Etappe 7.
 
 ## Annahmen
-- Etappen 1 und 2 gelten, wie sie jetzt stehen; dein „.“ gibt sie frei. Das Anhalten vor
-  fremden *Bases* steht nur noch in Etappe 3, wie deine Antwort 2361 F2 A es legt (Anliegen
-  2420).
+- Deine Antwort A nennt die 38 Kommentare `Regel:`. Ich nehme die 40 `Warum:` dazu: Es 8
+  verbietet sie ebenso, sonst bliebe die DoD rot. Sollen sie bleiben, braucht Es 8 eine
+  Ausnahme (Organisationsentwickler).
 
 ## Empfehlung
-Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen. Ergänze bitte im
-[Ziel](../domaene/ziel.md) die Ausnahme: ‚keine Kohärenz‘ ist nicht zu übergehen (2361 F1 A,
-das Ziel änderst nur du); bis dahin gilt deine Antwort dort.
+Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
+
+Das [Ziel](../domaene/ziel.md) sagt: Jede *Sperre* können die Spieler einvernehmlich
+übergehen. Deine Antwort 2361 F1 A nimmt ‚keine Kohärenz‘ aus. Das Ziel ändert nur du,
+darum liegt es bei dir. Vorschlag: „Die Spieler können eine Sperre einvernehmlich übergehen,
+außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine Antwort.
 
 ## Offene Anliegen
 - An dich: keine. Vorschläge des Anforderungsautors: keine.
@@ -78,5 +83,10 @@ das Ziel änderst nur du); bis dahin gilt deine Antwort dort.
 
 ## Freigabe
 Freigabe: offen
-Kommentar: .
+Kommentar: Es hieß, folgendes läge noch bei mir: 
+„.“ für Etappe 1 in der geänderten Fassung, ohne „vor fremden Bases“: 01-aufstellen.md. -> Das hier verstehe ich nicht. Wir haben die Etappen überarbeitet. Es sollte doch jetzt alles passen.
+Die Ausnahme „keine Kohärenz“ im Ziel ergänzen, wie der Planer in plan.md empfiehlt. Was soll hier ergänzt werden. Warum liegt das bei mir?
+In der Retro den Haken „Koordinator: nach dev gepusht“, falls er noch fehlt. -> Ist schon lange gesetzt.
+Stellungnahme: Etappen: Die Annahme ist gestrichen, sie gelten, wie sie stehen. Ziel: unter
+Empfehlung erklärt, mit Vorschlag für den Satz. Retro-Haken: nichts für mich. 
 
