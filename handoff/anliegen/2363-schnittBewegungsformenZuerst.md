@@ -4,7 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Dein Kommentar in [2362](2362-etappenVorschlag.md) ist eingearbeitet, deine
@@ -51,6 +51,7 @@ und Plan 7. Den Anforderungsautor bitte ich in einem Anliegen um die Änderungen
 
 **F1 · Gibst du den Schnitt frei?** A: Ja. B: Mit deinem Kommentar darunter.
 Empfehlung: A. Er folgt deinem Kommentar, die Abweichungen stehen als Fragen in 2364.
-Antwort: .
+Antwort: B
 
 **Stellungnahme.**
+Kommentar: Wir machen es wie bei A mit der Berücksichtigung meiner Antworten unter 2364, die den Plan hier beeinflussen könnten.

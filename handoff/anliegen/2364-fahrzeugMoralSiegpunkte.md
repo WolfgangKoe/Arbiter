@@ -4,7 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Beim Prüfen des Schnitts in [2363](2363-schnittBewegungsformenZuerst.md) fallen
@@ -25,7 +25,7 @@ der Etappe „Jede Baseform“, die dein Schnitt nicht mehr nennt.
 Empfehlung: B. Etappe 2 ist ohnehin die größte. Spätestens in Etappe 4 braucht ihr die Hulls,
 weil die Reichweite von der *Base* oder dem Hull aus gemessen wird. Psioniker und Spinne
 kommen in Etappe 2, sofern ihre *Base* rund ist; sonst kommen sie mit dem Fahrzeug.
-Antwort: .
+Antwort: B, übernimm die Konzepte von ArbiterMap, da ist schon viel angelegt. Wichtig ist, dass wir hier SOLID und Clean Code schreiben
 
 **F2 · Moral mit den Verlusten?** Ab Etappe 4 entfernt ihr Verluste. Ohne Moralphase fehlen
 die Moraltests (`core_rules.txt:2095`), und eine zerrissene *Einheit* bleibt auf der *Karte*
@@ -34,7 +34,7 @@ stehen (`:2143`). So hast du es in Anliegen 09 (F13 A) entschieden.
 - B: Wie in deinem Schnitt, beide in Etappe 5.
 
 Empfehlung: A. Kohärenz prüfen und *Modelle* entfernen gibt es dann schon.
-Antwort: .
+Antwort: B, wir können fürs erste auf die Verluste in der Moralphase verzichten, als ob das dort nicht passieren würde.
 
 **F3 · Missionsziele und Siegpunkte?** Dein Schnitt nennt sie nicht. Bei Only War entscheiden
 die Siegpunkte, wer gewinnt, wenn keine Armee vernichtet ist (`core_rules.txt:2339`).
@@ -43,7 +43,7 @@ die Siegpunkte, wer gewinnt, wenn keine Armee vernichtet ist (`core_rules.txt:23
 - C: später, den Sieger bestimmt ihr am Tisch.
 
 Empfehlung: A.
-Antwort: .
+Antwort: A
 
 **F4 · Bis wann lässt sich eine Bewegung zurücksetzen?** Die Regel bewegt jede *Einheit*
 höchstens einmal je Bewegungsphase (`core_rules.txt:738`).
@@ -52,6 +52,6 @@ höchstens einmal je Bewegungsphase (`core_rules.txt:738`).
 
 Empfehlung: A. Ein Fehler fällt oft erst bei der nächsten *Einheit* auf. Zurückgesetzt steht
 die *Einheit*, wo sie vorher stand, und darf neu bewegen.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
