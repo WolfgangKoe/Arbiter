@@ -49,8 +49,10 @@ Etappe 1 erreicht. Die Randfälle nur des Aufstellens warten auf Etappe 7.
 ## Empfehlung
 Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
 
-Das [Ziel](../domaene/ziel.md) sagt: Jede *Sperre* können die Spieler einvernehmlich
-übergehen. Deine Antwort 2361 F1 A nimmt ‚keine Kohärenz‘ aus. Das Ziel ändert nur du,
+Ausnahme im Ziel: Das [Ziel](../domaene/ziel.md) verspricht: „Die Spieler können eine
+Sperre einvernehmlich übergehen.“ In 2361 F1 A hast du entschieden: Steht eine Einheit ohne
+*Kohärenz*, bietet Arbiter das Übergehen gar nicht an, beim Aufstellen wie bei jeder
+Bewegung. So widersprechen sich Ziel und deine Antwort. `domaene/ziel.md` ändert nur du,
 darum liegt es bei dir. Vorschlag: „Die Spieler können eine Sperre einvernehmlich übergehen,
 außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine Antwort.
 
@@ -87,6 +89,7 @@ Kommentar: Es hieß, folgendes läge noch bei mir:
 „.“ für Etappe 1 in der geänderten Fassung, ohne „vor fremden Bases“: 01-aufstellen.md. -> Das hier verstehe ich nicht. Wir haben die Etappen überarbeitet. Es sollte doch jetzt alles passen.
 Die Ausnahme „keine Kohärenz“ im Ziel ergänzen, wie der Planer in plan.md empfiehlt. Was soll hier ergänzt werden. Warum liegt das bei mir?
 In der Retro den Haken „Koordinator: nach dev gepusht“, falls er noch fehlt. -> Ist schon lange gesetzt.
-Stellungnahme: Etappen: Die Annahme ist gestrichen, sie gelten, wie sie stehen. Ziel: unter
-Empfehlung erklärt, mit Vorschlag für den Satz. Retro-Haken: nichts für mich. 
+Stellungnahme: Etappen: Du hast recht, sie passen; die Annahme dazu ist gestrichen. Ziel:
+unter Empfehlung erklärt, warum und mit welchem Satz. Retro-Haken: ein veralteter Punkt aus
+der Übergabe des Koordinators, nichts zu tun. 
 
