@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Folgen aus Antworten des Stakeholders fehlen in den Items:
