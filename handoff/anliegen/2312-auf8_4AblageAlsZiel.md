@@ -11,7 +11,7 @@ Wartet auf: Domänenphase
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet, ein Randfall
 abseits des Happy Path; die Tests zu AUF-8.4 und 16.8 widersprechen sich nicht.
 Das [Glossar](../../domaene/glossar.md) sagt zur *Ablage* „kein Ziel zum Hineinziehen“, der
-Stakeholder in [2220](2220-knopfZuruecklegen.md): „Eine Ablage braucht es in deinem
+Stakeholder in Anliegen 2220: „Eine Ablage braucht es in deinem
 Verständnis nicht.“ [AUF-8.4](../../domaene/anforderungen/phasen/aufstellen/ziehen.md) gibt
 aber genau dem Hineinziehen eine Bedeutung: Ein Boy einer *aufgestellten* *Einheit*, auf
 eine *Ablage* gezogen, bringt die *Sperre* ‚nicht wählbar‘. Daneben losgelassen springt er

@@ -23,7 +23,7 @@ wartet nur auf deine Freigabe. Danach folgen P1 bis P5.
   Anliegen 1070.
 - Testautor: Nachprüfung Anliegen 1320
   (Antwort Ja steht); AUF-22, 23, 27, 13, 11, 16.7, 18.7, 3.9, QUE-5 bis 7 warten auf ihn.
-- Anforderungsautor: Nachprüfung [1400](anliegen/1400-nahkampfreichweiteBeimLoslassen.md)
+- Anforderungsautor: Nachprüfung Anliegen 1400
   (Antwort Ja steht).
 - Wartend (Domänenphase 7): 978, 1213, 1362, 1400, 1480, 1541, 1610, 1653, 1655, 1820;
   (Technikphase 7): 1750, 1752, 1761; dazu 1191 auf 1213, 1651 auf 1655, 1654 auf 1653,

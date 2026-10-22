@@ -9,7 +9,7 @@ Wartet auf: Technikphase
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
-Technikphase. In [2230](2230-leistenAufKomponentenseite.md) habe ich *Leiste*, *Griff*, den
+Technikphase. In Anliegen 2230 habe ich *Leiste*, *Griff*, den
 Inhalt der *Leiste*, das *Protokoll* und den Protokolleintrag als Komponenten entschieden. Ux
 hat ihre Regeln in [vorschlag.css](../../domaene/mockups/vorschlag.css) übernommen. In
 [komponenten.css](../../technik/frontend/komponenten.css) und

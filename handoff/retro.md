@@ -68,7 +68,7 @@ Freigabe samt 1860, dann P1, danach P2 bis P5 und Anliegen 1790
 - [x] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
 - [x] Regelumsetzer: P4
-- [ ] Regelumsetzer: P5
+- [x] Regelumsetzer: P5
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe

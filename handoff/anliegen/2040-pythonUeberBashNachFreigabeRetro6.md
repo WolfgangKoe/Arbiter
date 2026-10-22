@@ -25,7 +25,7 @@ Regeln nur in der Prozessphase) greift dort nicht.
 **Gegenvorschlag.** In `rollenregeln/bashSchreiben.py`: Python aus der Eingabe oder mit `-c`
 nur nach `cd /tmp` und ohne Pfad ins Projekt, sonst gesperrt mit dem Hinweis „Nimm Write und
 Edit oder ein Skript in /tmp mit Pfaden als Argument“. Ob die Sandbox das ersetzt, entscheidet
-[Anliegen 1970](1970-sandboxFuerBashSchreibenNichtPruefbar.md).
+Anliegen 1970.
 
 **Stellungnahme.** Der Befund stimmt. Der Stakeholder hat die Sandbox gewählt (1970); die
 Heuristik baue ich nicht: Die Sandbox sperrt `python3` und jedes andere Bash-Schreiben in
@@ -35,7 +35,7 @@ Scheiter-Test: `rollenregeln/sandboxGrenzenTest.py`. Offen bleibt die Wurzel (ne
 das Skript in einer Datei (510); bleibt das zu häufig, wird es ein Item der Retro 7.
 
 **Neue Stellungnahme.** Der Stakeholder hat P3 gestrichen, die Sandbox entfällt
-([1970](1970-sandboxFuerBashSchreibenNichtPruefbar.md)). Damit trägt meine Begründung nicht
+(Anliegen 1970). Damit trägt meine Begründung nicht
 mehr, und ohne Auftrag baue ich die Heuristik nicht ([Ich 1](../../prozess/praemissen/ich.md)).
 Das Anliegen bleibt gültig: Rollen schreiben per Python über Bash vorbei an der Schreibgrenze.
 Die Lücke steht in [Regeln](../../prozess/regeln.md#rollenregeln) bei `schreibgrenze.py`.

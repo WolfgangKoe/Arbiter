@@ -56,7 +56,7 @@ dazu ist AUF-29.2 noch offen, 2212) und die Randfälle: AUF-18.7, 27, 22, 20.6, 
 Gib die drei Items frei, wenn Schritte 1 bis 6 deinem Bild entsprechen.
 
 ## Offene Anliegen
-- Vor der Freigabe: Ux [2241](anliegen/2241-griffPfeilEingefahren.md) (Pfeil am *Griff*,
+- Vor der Freigabe: Ux Anliegen 2241 (Pfeil am *Griff*,
   Item 3).
 - An dich: [2221](anliegen/2221-ablageHeisstArmeeliste.md) (Nachprüfung). Vorschläge des
   Anforderungsautors: keine weiteren.

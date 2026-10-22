@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase
 
 ## Runde 1
-**Befund.** Befund für die Retro. In [Anliegen 2160](2160-sitzungsbusAusDerSandboxSperren.md)
+**Befund.** Befund für die Retro. In Anliegen 2160
 empfahl ich dem Stakeholder, in `.claude/settings.json` eine Zeile zu löschen (`allowAllUnixSockets`).
 Ich hatte es nicht erprobt. Er löschte sie; danach scheiterte jeder Befehl aller Rollen, auch
 `echo`, weil die Sandbox nicht mehr startete. Er musste die Zeile wieder einsetzen.

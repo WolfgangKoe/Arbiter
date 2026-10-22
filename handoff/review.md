@@ -20,7 +20,7 @@ Block oder ein *Modell* allein verschieben, beenden, bis alle vier stehen.
 Belegt durch die Bildschirmtests gegen den echten Server, mit Maus und Finger (ebeneTest,
 blockAlsGanzesTest, modellPerKlickTest, anhaltenAnEinerBaseTest). Von Hand am laufenden Arbiter
 habe ich den Pfad in diesem Lauf nicht durchgespielt; der Fachkritiker hat Schritte 4 und 5
-mit der Maus nachgespielt ([1610](anliegen/1610-ziehenUeberDieKanteUndGreifpunkt.md)).
+mit der Maus nachgespielt (Anliegen 1610).
 Abweichungen von ArbiterMap: Loslassen über der Kante der *Karte* springt zurück, Greifpunkt
 springt in die Mitte (1610, wartet auf die Domänenphase).
 
@@ -37,7 +37,7 @@ springt in die Mitte (1610, wartet auf die Domänenphase).
    Funde, nachdem der Implementierer `anwendung.py:26` angepasst hat (Anliegen 1630,
    erledigt).
 3. **Erfüllt mit Vorbehalt.** Items gelöscht; der Zweck von AUF-26 verspricht mehr, als gebaut
-   ist ([1610](anliegen/1610-ziehenUeberDieKanteUndGreifpunkt.md), Punkt 3, wartet).
+   ist (Anliegen 1610, Punkt 3, wartet).
 4. **Erfüllt.** Der Fachkritiker hat beide Items abgenommen (1610).
 
 Oberfläche: **Erfüllt.** Bildschirmtests grün; die Mockups der Items hat Ux gelöscht

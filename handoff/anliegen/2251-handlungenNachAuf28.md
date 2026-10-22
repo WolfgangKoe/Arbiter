@@ -16,7 +16,7 @@ Neu gilt [AUF-28.1](../../domaene/anforderungen/phasen/aufstellen/loslassenWoDie
 Ziehst du die Boyz über den Rand des Spielfelds hinaus und lässt dort los, bleiben sie da
 stehen, wo die *Karte* sie zuletzt gezeigt hat. Bisher sprangen sie zurück
 (AUF-16.6, gestrichen), und auf der *Ablage* des anderen kam ‚nicht wählbar‘ (AUF-16.3,
-gestrichen; [2210](2210-loslassenNebenDerKarteWiderspruechlich.md)).
+gestrichen; Anliegen 2210).
 [handlungen.md](../../technik/architektur/handlungen.md) beschreibt noch den alten Stand:
 - Zeile 13 begründet die Anfrage für das Loslassen auf einer *Ablage* mit AUF-16.3 und 16.6.
 - Zeile 27: Das Loslassen auf der eigenen *Ablage* ändert nichts (AUF-16.6).
@@ -24,7 +24,7 @@ gestrichen; [2210](2210-loslassenNebenDerKarteWiderspruechlich.md)).
   wieder den alten Stand. Die Boyz springen also zurück, und das widerspricht AUF-28.1.
 
 Ob es die *Ablage* als Ziel beim Loslassen überhaupt noch gibt, klärt der Anforderungsautor
-gerade in [2220](2220-knopfZuruecklegen.md). Daran hängt Zeile 13.
+gerade in Anliegen 2220. Daran hängt Zeile 13.
 
 **Kosten.** Baut der Implementierer nach den Zeilen 55 bis 57, springen die Boyz am Rand
 weiter zurück. Damit fehlt ein Schritt des Zyklusziels aus [Review 6](../review.md): Loslassen
