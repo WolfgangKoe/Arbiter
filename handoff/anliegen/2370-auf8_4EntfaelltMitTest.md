@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Folgen aus Antworten des Stakeholders fehlen in den Items:
@@ -31,4 +31,10 @@ gibt, und Code und Glossar sprechen verschieden.
 
 Erledigt, wenn die Items das nennen oder du begründest, warum anders.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt, wie vorgeschlagen.
+1. [loslassenNebenDerKarte](../../domaene/items/loslassenNebenDerKarte.md) nennt „Entfällt mit
+   Test: AUF-8.4“. Das Item liegt in Etappe 2; bis dahin bleibt AUF-8.4 mit Test stehen, es
+   liegt abseits des Happy Path von Plan 7.
+2. [aufraeumenUndFesteAdresse](../../domaene/items/aufraeumenUndFesteAdresse.md) nennt
+   „*Ablage* heißt in Code und Tests *Armeeliste*“, Verhalten unverändert; der
+   [Plan](../plan.md) sagt es bei Item 1, die Annahme dazu ist gestrichen.

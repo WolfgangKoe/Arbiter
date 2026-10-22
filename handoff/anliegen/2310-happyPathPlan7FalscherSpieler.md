@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): hält auf, ein Schritt

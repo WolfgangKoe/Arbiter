@@ -21,8 +21,9 @@ Zyklusziel aus [Review 6](review.md).
 ## Items
 1. [Aufräumen und feste Adresse](../domaene/items/aufraeumenUndFesteAdresse.md): Schritt 1;
    dazu ohne sichtbare Änderung: die *Auswahl* entflechten (deine Antwort in 1652),
-   `seite.js` teilen, die über dem Höchstmaß liegt (1541), und „zurück“ ohne *Sperre*
-   (AUF-17) samt Test entfernen, denn „zurück“ gibt es nicht mehr.
+   `seite.js` teilen, die über dem Höchstmaß liegt (1541), *Ablage* heißt auch in Code und
+   Tests *Armeeliste* (2221), und „zurück“ ohne *Sperre* (AUF-17) samt Test entfernen, denn
+   „zurück“ gibt es nicht mehr.
 2. [Einheit zurücklegen](../domaene/items/einheitZuruecklegen.md): Schritte 2, 3 und 5.
 
 Reihenfolge 1, 2: Item 1 räumt die Stellen auf, an denen Item 2 baut. Beide sind klein;
@@ -32,13 +33,12 @@ das Risiko liegt bei Item 1, wo *Auswahl*, `seite.js` und Adresse getrennt laufe
 Review 6 nennt drei Schritte. Nach deinem Schnitt bleibt in Plan 7 nur „Einheit
 zurücklegen“. Gemeinsam übergehen und das *Protokoll* kommen mit den *Sperren* des Normal
 Move in Etappe 2, ebenso das Loslassen neben der *Karte*, das der Normal Move mitbenutzt
-(2361 F1, F2). Davor kommt Item 1 (deine Entscheidungen 1650, 1652). Nach Plan 7 ist
-Etappe 1 erreicht, wie das Zyklusziel sagt. Die Randfälle nur des Aufstellens (Item
+(2361 F1, F2); mit ihm entfällt AUF-8.4, denn in die *Armeeliste* zieht man nicht
+mehr (2220 F4 A, [2370](anliegen/2370-auf8_4EntfaelltMitTest.md)). Davor kommt Item 1
+(deine Entscheidungen 1650, 1652). Nach Plan 7 ist Etappe 1 erreicht, wie das Zyklusziel sagt. Die Randfälle nur des Aufstellens (Item
 randfaelleDesAufstellens) warten auf Etappe 7.
 
 ## Annahmen
-- Die Spalte heißt *Armeeliste* (2221, deine Antwort A); bis zur Umbenennung steht im
-  Glossar noch *Ablage*.
 - Etappen 1 und 2 gelten, wie sie jetzt stehen; dein „.“ gibt sie frei.
 
 ## Empfehlung
@@ -47,12 +47,7 @@ Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen. Ergänze
 das Ziel änderst nur du); bis dahin gilt deine Antwort dort.
 
 ## Offene Anliegen
-- Vor der Freigabe: Anforderungsautor [2365](anliegen/2365-anforderungenNachDemSchnitt.md)
-  (AUF-13 und AUF-17 streichen, Glossar), Ux [2366](anliegen/2366-mockupsNachDemSchnitt.md)
-  (Mockup zu AUF-23 mit den Spalten von heute, daran hängt
-  [2300](anliegen/2300-leistenVorDemZuruecklegen.md)).
-- An dich: [2221](anliegen/2221-ablageHeisstArmeeliste.md) (Nachprüfung). Vorschläge des
-  Anforderungsautors: keine weiteren.
+- An dich: keine. Vorschläge des Anforderungsautors: keine.
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt
