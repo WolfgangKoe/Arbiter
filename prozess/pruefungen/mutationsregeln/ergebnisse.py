@@ -5,8 +5,6 @@ import json
 from pathlib import Path
 from typing import NamedTuple
 
-# Regel: Retro 6, P2: Ein Ergebnis gilt, solange technik/, pyproject.toml, domaene/daten gleich
-# Warum: Dazu der Mutantenbauer, denn ein anderer baut andere Mutanten.
 standQuellen = ("technik", "pyproject.toml", "domaene/daten")
 mutantenbauer = "prozess/pruefungen/mutationsregeln/mutanten.py"
 ohneStand = ("__pycache__", "node_modules", ".egg-info")

@@ -7,7 +7,7 @@ from anliegenregeln.anliegenDran import dran
 from lesen.anliegenKopf import stakeholder
 
 adresse = "127.0.0.1"
-lokalesSchema = "http"  # Warum: nur auf dieser Maschine, ohne Netz; TLS hätte hier keinen Sinn
+lokalesSchema = "http"
 vorgabePort = 8765
 öffnenBefehl = "python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer"
 öffnenAdresse = f"{lokalesSchema}://{adresse}:{vorgabePort}/"

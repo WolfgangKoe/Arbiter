@@ -14,7 +14,7 @@ from standregeln.fortschritt import (
 )
 from standregeln.phasenfolge import lage
 
-aufrufteile = 2  # Warum: Rolle und Schritt
+aufrufteileRolleUndSchritt = 2
 
 
 def gleicheRolle(zeile: Zeile, rolle: str) -> bool:
@@ -63,8 +63,12 @@ def abhaken(wurzel: Path, rolle: str, schritt: str) -> list[str]:
 
 
 def hauptprogramm(argumente: list[str]) -> int:
-    if len(argumente) != aufrufteile:
-        print("Aufruf: abhaken.py <Rolle> <Schritt>", file=sys.stderr)
+    if len(argumente) != aufrufteileRolleUndSchritt:
+        print(
+            "Aufruf: python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken"
+            " <Rolle> <Schritt>",
+            file=sys.stderr,
+        )
         return 1
     rolle, schritt = argumente
     wurzel = projektordner()

@@ -82,7 +82,7 @@ def zeilenzugÜbernehmen(wurzel: Path, schlüssel: str, art: str, wert: str) -> 
     bisher = bisherigeZeilen(inhalt)
     abgehakt, zusatz = bisher.get(schlüssel, (False, []))
     if art == hakenArt:
-        abgehakt = wert == abgehaktWert
+        abgehakt = abgehakt or wert == abgehaktWert
     else:
         nummer = anliegenAnlegen(wurzel, zeile, str(rolle), text)
         zusatz.append(f"  Kommentar: {text} (Anliegen {nummer})")

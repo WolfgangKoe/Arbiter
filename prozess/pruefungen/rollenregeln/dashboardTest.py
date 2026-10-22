@@ -29,7 +29,7 @@ from rollenregeln.laufLog import (
 )
 
 höchstwörter = 5
-tabellenJeSeite = 2  # Warum: Läufe der Sitzung und Verteilung je Rolle
+tabellenJeSeite = 2
 zeitpunkt = datetime(2026, 10, 4, 12, 30, tzinfo=UTC)
 
 

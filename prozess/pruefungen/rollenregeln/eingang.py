@@ -11,10 +11,10 @@ verworfenDatei = "prozess/dashboard/verworfen.jsonl"
 @dataclass(frozen=True)
 class Zug:
     nummer: int
-    art: str  # Warum: status, runde, antwort oder kommentar; `zuegeUebernehmen` kennt sie
+    art: str
     wert: str = ""
     frage: str = ""
-    zeile: str = ""  # Warum: Schlüssel einer Zeile im Fortschritt; `nummer` gilt dann nicht
+    zeile: str = ""
 
     def beschreibung(self) -> str:
         if self.zeile:
@@ -44,7 +44,7 @@ def zeilenLesen(datei: Path) -> list[dict]:
         try:
             eintraege.append(json.loads(zeile))
         except json.JSONDecodeError:
-            continue  # Warum: eine halb geschriebene Zeile darf das Dashboard nicht stoppen
+            continue
     return eintraege
 
 

@@ -117,9 +117,7 @@ def optionen(werte: list[str]) -> str:
     )
 
 
-def wartendeHtml(
-    ordner: Path, bereiche: list[tuple[str, list[Anliegen]]], verweis: Verweis
-) -> str:
+def wartendeHtml(ordner: Path, bereiche: list[tuple[str, list[Anliegen]]], verweis: Verweis) -> str:
     return "".join(
         f'<div class="anliegen-bereich"><h3>{html.escape(titel)} ({len(anliegen)})</h3>'
         + "".join(
@@ -143,8 +141,7 @@ def anliegenAbschnitt(ordner: Path, verweis: Verweis = dateiVerweis) -> str:
     spaltenHtml = "".join(
         f'<div class="anliegen-spalte"><h3>{html.escape(rolle)} ({len(nummern)})</h3>'
         + "".join(
-            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis)
-            for nummer in sorted(nummern)
+            anliegenKarte(nachNummer[nummer], rolle, ordner, verweis) for nummer in sorted(nummern)
         )
         + "</div>"
         for rolle, nummern in sorted(spalten.items())

@@ -55,7 +55,7 @@ def weiterleitung(ort: str) -> Antwort:
 
 
 def tokenbericht(ordner: Path) -> Antwort:
-    datei = dashboardSchreiben(ordner)  # Warum: der Hinweis auf offene Fragen soll aktuell sein
+    datei = dashboardSchreiben(ordner)
     zusatz = (
         f"<style>{seitenStil}</style>{navigation('Tokenbericht')}<script>{neuladenSkript}</script>"
     )
@@ -170,7 +170,7 @@ def quellenStand(ordner: Path) -> tuple[tuple[str, int], ...]:
         try:
             stand.append((str(skript), skript.stat().st_mtime_ns))
         except FileNotFoundError:
-            continue  # Warum: Eine Rolle löscht oder ersetzt die Datei gerade
+            continue
     return tuple(stand)
 
 
@@ -186,7 +186,7 @@ class Wächter:
     def schritt(self) -> None:
         aktuell = quellenStand(self.ordner)
         if self.kind is not None and aktuell == self.letzterStand:
-            return  # Warum: Stürzt das Kind ab, wartet der Wächter auf die nächste Änderung
+            return
         self.beenden()
         self.letzterStand = aktuell
         self.kind = subprocess.Popen(self.befehl)

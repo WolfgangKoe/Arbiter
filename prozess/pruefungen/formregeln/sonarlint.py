@@ -14,14 +14,12 @@ geprüfteOrdner = ("technik/arbiter", "technik/tests/einheit", akzeptanzOrdner, 
 erweiterungenOrdner = Path.home() / ".vscode" / "extensions"
 umgebungsvariable = "SONARLINT_ERWEITERUNG"
 wartezeitSekunden = 120
-# Warum: Ein Update der Erweiterung brächte still neue Regeln; die Version hebt man bewusst.
 erwarteteVersion = "6.1."
 dateiAnfrage = "sonarlint/listFilesInFolder"
 offenAnfrage = "sonarlint/isOpenInEditor"
 konfigurationAnfrage = "workspace/configuration"
 
 
-# Warum: Bezeichner und Dateinamen sind camelCase (wir.md, 1 und 2), das Profil will snake_case.
 abgeschalteteRegeln = (
     "python:S100",
     "python:S101",
@@ -31,8 +29,6 @@ abgeschalteteRegeln = (
     "python:S1578",
 )
 
-# Warum: In `web/` sind beide Funde unbegründet (V4: kein POST, kein CORS; nur `127.0.0.1`).
-# Warum: Ausgenommen sind Datei und Regel, nicht der Ordner.
 ausnahmen = (
     (f"{webOrdner}/anwendung.py", "python:S4502"),
     (f"{webOrdner}/server.py", "python:S5332"),
@@ -59,7 +55,6 @@ def versionszahlen(ordner: Path) -> tuple[int, ...]:
 def erweiterungFinden() -> Path:
     """Ordner der SonarLint-Erweiterung: `SONARLINT_ERWEITERUNG` oder die neueste in VS Code."""
     vorgabe = os.environ.get(umgebungsvariable)
-    # Warum: VS Code lässt alte, auch halb gelöschte Versionsordner liegen; sie zählen nicht.
     gefunden = (
         [Path(vorgabe)]
         if vorgabe
@@ -246,7 +241,6 @@ class Sitzung:
         self.senden(öffnen(self.erwartet))
 
     def lauf(self) -> list[str]:
-        # Warum: Alle Dateien zugleich geöffnet liefern je Lauf andere Funde, nacheinander stabil.
         self.senden(initialisierung(self.ordner))
         while not (self.bereit and not self.übrige):
             nachricht = nachrichtLesen(self.server.stdout)

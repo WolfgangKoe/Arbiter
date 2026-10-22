@@ -4,6 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from formregeln.technikphase import technikGeprüft
 from gemeinsam.pfade import frontendOrdner, projektordner
 
 
@@ -17,9 +18,12 @@ def werkzeugAufrufen(wurzel: Path, werkzeug: str, *argumente: str) -> str:
     return f"{lauf.stdout}{lauf.stderr}" if lauf.returncode else ""
 
 
-def eslintVerstöße(wurzel: Path) -> str:
+def eslintVerstöße(wurzel: Path, kommentareGeprüft: bool = True) -> str:  # noqa: FBT001, FBT002
     ziel = f"{frontendOrdner}/**/*.js"
-    return werkzeugAufrufen(wurzel, "eslint", "--no-error-on-unmatched-pattern", ziel)
+    ohneKommentarregel = [] if kommentareGeprüft else ["--rule", "arbiter/kommentare: off"]
+    return werkzeugAufrufen(
+        wurzel, "eslint", "--no-error-on-unmatched-pattern", *ohneKommentarregel, ziel
+    )
 
 
 def stylelintVerstöße(wurzel: Path) -> str:
@@ -28,7 +32,7 @@ def stylelintVerstöße(wurzel: Path) -> str:
 
 
 def verstöße(wurzel: Path) -> list[str]:
-    meldungen = (eslintVerstöße(wurzel), stylelintVerstöße(wurzel))
+    meldungen = (eslintVerstöße(wurzel, technikGeprüft(wurzel)), stylelintVerstöße(wurzel))
     return [meldung for meldung in meldungen if meldung]
 
 

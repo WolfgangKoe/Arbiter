@@ -16,7 +16,6 @@ etappenOrdner = "domaene/etappen"
 itemsOrdner = "domaene/items"
 
 nurLesbar = ("VORGEHEN.md", f"{handoffOrdner}/kritik-entwickler.md", "Arbiter-old/", "ArbiterMap/")
-# Warum: Ordner unter `nurLesbar` (Eintrag mit `/` am Ende) sind der Altbestand; ihn prüft nichts.
 altbestandOrdner = tuple(eintrag.rstrip("/") for eintrag in nurLesbar if eintrag.endswith("/"))
 
 

@@ -142,5 +142,5 @@ def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
 if __name__ == "__main__":
     try:
         protokollieren(HookEingabe.aus(eingabeLesen()), projektordner())
-    except Exception:  # Warum: eine Messung, die scheitert, darf keinen Rollenlauf beenden
+    except Exception:
         pass

@@ -38,7 +38,6 @@ def prozessphaseFreigegeben(wurzel: Path) -> bool:
 
 
 def regelnGesperrt(relativ: str, wurzel: Path, rolle: str | None = None) -> bool:
-    # Regel: Ablauf, Prozessphase (Anliegen 1900): `regeln.md` pflegt der Regelumsetzer.
     if relativ == regelnDatei and rolle == regelumsetzer:
         return False
     return istGeschützt(relativ) and not prozessphaseFreigegeben(wurzel)

@@ -26,7 +26,6 @@ from rollenregeln.eingang import (
 )
 from standregeln.zeilenZug import zeilenzugÜbernehmen
 
-# Regel: Ablauf, Anliegen: Zug, setzt, Status; `seiten` nennt, auf welcher Seite er stehen darf
 statusZüge = (
     (("empfänger",), {Status.offen}, {Status.angenommen, Status.rückfrage, Status.abgelehnt}),
     (
@@ -74,7 +73,6 @@ def rundeSenken(text: str, zug: Zug) -> str | None:  # noqa: ARG001
 
 def antwortSetzen(text: str, zug: Zug) -> str | None:
     zeilen = text.splitlines(keepends=True)
-    # Warum: Nach einer Rückfrage kehrt dieselbe Frage in einer späteren Runde wieder
     start = next(
         (
             stelle
@@ -167,7 +165,6 @@ def übernehmen(ordner: Path) -> tuple[int, int]:
     """Legt alle vorgemerkten Züge in die Dateien; gibt (übernommen, verworfen) zurück."""
     sperre = ordner / sperrDatei
     sperre.parent.mkdir(parents=True, exist_ok=True)
-    # Warum: Dashboard und Hook übernehmen sonst denselben Zug zweimal
     with sperre.open("a", encoding="utf-8") as griff:
         fcntl.flock(griff, fcntl.LOCK_EX)
         return unterSperreÜbernehmen(ordner)
@@ -176,7 +173,6 @@ def übernehmen(ordner: Path) -> tuple[int, int]:
 def unterSperreÜbernehmen(ordner: Path) -> tuple[int, int]:
     züge = vorgemerkte(ordner)
     verworfen = 0
-    # Warum: das Formular merkt den Status vor die Antwort; nach dem Status gälte sie nicht mehr
     for zug in sorted(züge, key=lambda eintrag: eintrag.art != "antwort"):
         abgelehnt = einzelnenÜbernehmen(ordner, zug)
         if abgelehnt:
@@ -203,5 +199,5 @@ if __name__ == "__main__":
     try:
         if löstAus(HookEingabe.aus(eingabeLesen())):
             übernehmen(projektordner())
-    except Exception:  # Warum: ein Fehler hier darf weder Rollenstart noch Commit verhindern
+    except Exception:
         pass

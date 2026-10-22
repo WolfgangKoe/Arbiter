@@ -1,6 +1,5 @@
 import kommentare from "./prozess/pruefungen/frontendregeln/eslintKommentare.mjs";
 
-// Regel: prozess/praemissen/es.md 1, 5, 8 und prozess/ablauf.md (Werkzeuge) für technik/frontend/.
 const meldung = "Markup aus einer <template> der Seite klonen (Architektur, Web, O1)";
 const aufJedemObjekt = ["createElement", "createElementNS", "parseFromString", "createContextualFragment", "setHTMLUnsafe"];
 const aufDocument = ["write", "writeln"];

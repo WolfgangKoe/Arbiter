@@ -98,6 +98,5 @@ def testNurDieAbdeckungstestsTragenDieMarkeAbdeckung():
 
 
 def testDasLöschenErledigterAnliegenLäuftNichtImCommitHook():
-    # Warum: Der Stash von pre-commit vernichtet fremde, uncommittete Arbeit (Anliegen 610).
     assert "erledigteLoeschen" not in hooksLesen(alsHooks)
     assert "erledigteLoeschen" not in alsHooks

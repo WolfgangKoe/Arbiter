@@ -5,7 +5,6 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-# Warum: Nur hier stehen die Feldnamen der Hook-Eingabe; `formregeln/einzelstellen.py` prüft das.
 feldnamen = {
     "rolle": "agent_type",
     "werkzeug": "tool_name",

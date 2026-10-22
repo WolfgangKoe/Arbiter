@@ -11,7 +11,6 @@ from pathlib import Path
 from typing import NamedTuple
 
 schwelle = 95
-# Warum: vulture endet mit 0 ohne Fund und mit 3 bei totem Code; alles andere ist ein Fehler
 vultureGültig = (0, 3)
 
 
@@ -82,7 +81,6 @@ def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None =
         if auswahl:
             aufruf += ["-m", auswahl]
         lauf = coverageAufrufen(wurzel, umgebung, *aufruf, tests)
-        # Warum: `patch = subprocess` schreibt je Prozess eine Datei; erst `combine` vereint sie
         vereint = coverageAufrufen(wurzel, umgebung, "combine", "-q")
         assert messdatei.exists(), (
             f"coverage ist nicht installiert (pyproject.toml): {lauf.stderr}{vereint.stderr}"

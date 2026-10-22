@@ -16,7 +16,6 @@ from kriterienregeln.kriterium import (
 )
 
 überschriftPräfix = "### "
-# Warum: Diese Werkzeuge der Domäne haben keine Anforderung (Architektur, Grundschnitt).
 modulOhneAnforderung = {"messen.py", "sperre.py"}
 
 

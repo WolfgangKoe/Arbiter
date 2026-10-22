@@ -34,11 +34,11 @@ def plan(tmp_path, gitRepo):
     return datei
 
 
-def testDerHakenDesStakeholdersSetztUndNimmtDieZeile(tmp_path, plan):
+def testDerHakenDesStakeholdersSetztDieZeileUndNimmtSieNieWieder(tmp_path, plan):
     assert zeilenzugÜbernehmen(tmp_path, zeile, "haken", "x") is None
     assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
     assert zeilenzugÜbernehmen(tmp_path, zeile, "haken", "") is None
-    assert f"- [ ] {zeile}\n" in plan.read_text(encoding="utf-8")
+    assert f"- [x] {zeile}\n" in plan.read_text(encoding="utf-8")
 
 
 def testDerHakenAufEineZeileMitFaktWirdAbgewiesen(tmp_path, plan):

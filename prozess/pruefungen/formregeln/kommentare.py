@@ -1,30 +1,52 @@
-"""Prüft Kommentare und Docstrings nach `prozess/praemissen/wir.md` (Regel 8)."""
+"""Prüft Kommentare und Docstrings nach `prozess/praemissen/es.md` (Punkt 8)."""
 
 import ast
 import io
 import re
 import sys
 import tokenize
+from collections.abc import Iterator
 from pathlib import Path
 
 from formregeln.benennung import geprüfteDateien
+from formregeln.technikphase import technikGeprüft, zeilenVorDerTechnikphase
 from gemeinsam.pfade import projektordner
 
-erlaubterKommentar = re.compile(r"^# (Regel|Warum): \S")
-werkzeugkommentar = re.compile(r"^(#!|# ?(noqa|type:|pragma|ruff:|fmt:|cspell:|pyright:|mypy:))")
+höchstzahlOffenerPunkte = 3
 offenerPunkt = re.compile(r"\b(TODO|FIXME)\b")
+todoKommentar = re.compile(r"^(#|//) TODO: \S")
+werkzeugkommentar = re.compile(
+    r"^(#!"
+    r"|# (ruff: )?noqa: [A-Z]+\d+(, [A-Z]+\d+)*$"
+    r"|# (type|pyright): ignore\[[\w-]+\]$"
+    r"|// eslint-disable-next-line \S)"
+)
+zeilenkommentarJavaScript = re.compile(r"^\s*(//.*)$")
+javaScriptEndungen = (".js", ".mjs")
 
 
-def kommentarVerstöße(quelltext: str) -> list[str]:
-    verstöße = []
+def kommentare(quelltext: str, endung: str) -> Iterator[tuple[int, str]]:
+    """Zeile und Text jedes Kommentars; in JavaScript nur Zeilenkommentare am Zeilenanfang."""
+    if endung in javaScriptEndungen:
+        for zeile, text in enumerate(quelltext.splitlines(), start=1):
+            if treffer := zeilenkommentarJavaScript.match(text):
+                yield zeile, treffer.group(1)
+        return
     for art, text, (zeile, _), _, _ in tokenize.generate_tokens(io.StringIO(quelltext).readline):
-        if art != tokenize.COMMENT:
-            continue
-        if offenerPunkt.search(text):
-            verstöße.append(f"Zeile {zeile}: TODO oder FIXME")
-        elif not (erlaubterKommentar.match(text) or werkzeugkommentar.match(text)):
-            verstöße.append(f"Zeile {zeile}: Kommentar nur als `# Regel:` oder `# Warum:`")
-    return verstöße
+        if art == tokenize.COMMENT:
+            yield zeile, text
+
+
+def kommentarVerstöße(quelltext: str, endung: str = ".py") -> list[str]:
+    return [
+        f"Zeile {zeile}: Kommentar nur als Werkzeugkommentar mit Regelcode oder `TODO: <was>`"
+        for zeile, text in kommentare(quelltext, endung)
+        if not (todoKommentar.match(text) or werkzeugkommentar.match(text))
+    ]
+
+
+def todoZeilen(quelltext: str, endung: str = ".py") -> list[int]:
+    return [zeile for zeile, text in kommentare(quelltext, endung) if todoKommentar.match(text)]
 
 
 def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
@@ -49,15 +71,32 @@ def docstringVerstöße(quelltext: str) -> list[str]:
     return verstöße
 
 
+def geprüfteQuelltexte(wurzel: Path) -> list[Path]:
+    """Python- und JavaScript-Dateien der Prüfung, dazu die `.mjs` der Werkzeugkonfiguration."""
+    dateien = [pfad for pfad in geprüfteDateien(wurzel) if pfad.suffix in (".py", ".js")]
+    dateien += sorted(wurzel.glob("*.mjs")) + sorted((wurzel / "prozess").rglob("*.mjs"))
+    return dateien
+
+
 def verstöße(wurzel: Path) -> list[str]:
     meldungen = []
-    for pfad in geprüfteDateien(wurzel):
-        if pfad.suffix != ".py":
-            continue
-        quelltext = pfad.read_text(encoding="utf-8")
+    gesamtzahl = 0
+    mitTechnik = technikGeprüft(wurzel)
+    for pfad in geprüfteQuelltexte(wurzel):
         relativ = pfad.relative_to(wurzel).as_posix()
-        for grund in kommentarVerstöße(quelltext) + docstringVerstöße(quelltext):
-            meldungen.append(f"{relativ}: {grund}")
+        quelltext = pfad.read_text(encoding="utf-8")
+        gründe = docstringVerstöße(quelltext) if pfad.suffix == ".py" else []
+        if mitTechnik or not relativ.startswith("technik/"):
+            gründe += kommentarVerstöße(quelltext, pfad.suffix)
+            offene = todoZeilen(quelltext, pfad.suffix)
+            gesamtzahl += len(offene)
+            gründe += [
+                f"Zeile {zeile}: TODO von vor der laufenden Technikphase"
+                for zeile in zeilenVorDerTechnikphase(wurzel, relativ, offene)
+            ]
+        meldungen += [f"{relativ}: {grund}" for grund in gründe]
+    if gesamtzahl > höchstzahlOffenerPunkte:
+        meldungen.append(f"{gesamtzahl} TODOs, höchstens {höchstzahlOffenerPunkte} erlaubt")
     return meldungen
 
 

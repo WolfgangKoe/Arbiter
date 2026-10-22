@@ -1,4 +1,3 @@
-// Regel: technik/architektur/web.md O3 und vorschlag.css: Farbwerte stehen nur in `:root`, sonst als Variable.
 import stylelint from "stylelint";
 
 const regelName = "arbiter/farbenNurInRoot";

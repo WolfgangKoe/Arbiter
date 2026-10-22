@@ -130,6 +130,6 @@ def entscheide(daten: dict, wurzel: Path) -> dict | None:
 if __name__ == "__main__":
     try:
         antwort = entscheide(eingabeLesen(), projektordner())
-    except Exception:  # Warum: eine Messung, die scheitert, darf keinen Werkzeugaufruf sperren
+    except Exception:
         antwort = None
     antwortAusgeben(antwort)

@@ -80,7 +80,6 @@ def läufeLesen(wurzel: Path) -> list[Lauf]:
         if spät and spät.stoppWiederholt:
             platz = platzVon[lauf.agentId]
             behalten = ergebnis[platz]
-            # Warum: gilt dem Auftrag davor
             ergebnis[platz] = behalten._replace(ziel=lauf.ziel, dauer=dauerSumme(behalten, lauf))
             continue
         if lauf.agentId:

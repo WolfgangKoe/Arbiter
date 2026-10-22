@@ -3,7 +3,6 @@
 import ast
 from typing import NamedTuple
 
-# Regel: Ein Mutant tauscht einen Operator gegen sein Gegenteil, nicht gegen einen beliebigen.
 vergleichTausch: dict[type, type] = {
     ast.Lt: ast.LtE,
     ast.LtE: ast.Lt,
@@ -55,7 +54,6 @@ class Einbauer(ast.NodeTransformer):
         return True
 
     def visit(self, knoten: ast.AST) -> ast.AST:
-        # Warum: Die Methoden heißen camelCase (es.md); `ast` suchte `visit_<Art>`.
         besucher = getattr(self, f"besuche{type(knoten).__name__}", self.generic_visit)
         return besucher(knoten)
 
@@ -111,7 +109,6 @@ class Einbauer(ast.NodeTransformer):
         return knoten
 
     def besucheAnnAssign(self, knoten: ast.AnnAssign) -> ast.AST:
-        # Warum: Typangaben haben keine Laufzeitwirkung; Fehler darin bemerkt kein Test.
         if knoten.value is not None:
             knoten.value = self.visit(knoten.value)
         return knoten

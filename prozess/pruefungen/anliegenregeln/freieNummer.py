@@ -5,12 +5,15 @@ import sys
 from gemeinsam.pfade import projektordner
 from lesen.anliegenKopf import freieNummer
 
-aufrufteile = 2  # Warum: erste und letzte Nummer des Bereichs
+aufrufteileErsteUndLetzteNummer = 2
+aufruf = "python3 prozess/pruefungen/gemeinsam/lauf.py anliegenregeln.freieNummer <erste> <letzte>"
 
 
 def hauptprogramm(argumente: list[str]) -> int:
-    if len(argumente) != aufrufteile or not all(teil.isdigit() for teil in argumente):
-        print("Aufruf: freieNummer.py <erste> <letzte>", file=sys.stderr)
+    if len(argumente) != aufrufteileErsteUndLetzteNummer or not all(
+        teil.isdigit() for teil in argumente
+    ):
+        print(f"Aufruf: {aufruf}", file=sys.stderr)
         return 1
     erste, letzte = (int(teil) for teil in argumente)
     nummer = freieNummer(projektordner(), range(erste, letzte + 1))

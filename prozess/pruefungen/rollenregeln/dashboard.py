@@ -15,7 +15,7 @@ from standregeln.phasenfolge import lage
 
 dashboardDatei = "dashboard.html"
 minute = 60
-fehlt = "–"  # Warum: Wert fehlt im Eintrag
+fehlt = "–"
 
 
 def dauerText(sekunden: int | None) -> str:
@@ -112,10 +112,10 @@ def hauptlauf(argumente: list[str]) -> int:
     try:
         ziel = dashboardSchreiben(wurzel)
     except Exception:
-        if "--still" in argumente:  # Warum: als Hook bei SubagentStart darf ein Fehler nicht stören
+        if "--still" in argumente:
             return 0
-        raise  # Warum: von Hand will man den Traceback sehen
-    if "--still" not in argumente:  # Warum: Hook-Ausgabe ginge in den Kontext des Agenten
+        raise
+    if "--still" not in argumente:
         print(ziel)
     return 0
 

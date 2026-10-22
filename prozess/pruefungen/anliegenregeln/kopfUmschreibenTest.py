@@ -31,6 +31,13 @@ def testFreieNummerAlsBefehlNenntDieNummerOderScheitert(tmp_path, monkeypatch, c
     assert hauptprogramm(["x"]) == 1
 
 
+def testDieHilfemeldungNenntDenBefehlAusDenRegeln(capsys):
+    regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
+    assert hauptprogramm([]) == 1
+    aufruf = capsys.readouterr().err.removeprefix("Aufruf: ").strip()
+    assert f"`{aufruf}`" in regeln
+
+
 def testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess():
     regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
     zeile = next(zeile for zeile in regeln.splitlines() if "anliegenregeln.freieNummer" in zeile)

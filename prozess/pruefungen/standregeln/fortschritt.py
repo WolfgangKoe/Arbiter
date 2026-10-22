@@ -79,7 +79,6 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
 def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
     name = itemName.removesuffix(".md")
     gelöscht = not (wurzel / itemsOrdner / itemName).is_file()
-    # Regel: Ablauf, Technikphase 5 (gelöscht wird erst nach der Abnahme)
     folge = gelöscht or None
     return [
         Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften", folge),
@@ -136,7 +135,6 @@ def zielUndZeilen(wurzel: Path, aktuell: Lage) -> tuple[Path, list[Zeile]] | Non
     """Die Datei der laufenden Phase und ihre Zeilen; `None`, wo es den Abschnitt nicht gibt."""
     handoff = wurzel / handoffOrdner
     if aktuell.phase == Phase.domänenphase:
-        # Regel: Ablauf, Fortschritt (in Zyklus 1 gibt es kein Review)
         if zyklus(handoff / reviewName) != aktuell.zyklus - 1:
             return None
         return handoff / reviewName, domänenzeilen(wurzel, aktuell)
@@ -232,13 +230,11 @@ def abschnittSchreiben(
 
 def fortschrittSchreiben(wurzel: Path) -> str | None:
     """Schreibt den Abschnitt für die Phase davor, die laufende und die nächste; nennt geänderte."""
-    # Warum: Die vorige Phase erhält ihren Endstand, die nächste steht vor ihrem Beginn offen da.
     aktuell = lage(wurzel)
     ziele = [zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell))]
     folgendes = zielUndZeilen(wurzel, nächsteLage(aktuell))
     geschrieben = [abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None]
     if folgendes is not None:
-        # Warum: Was der Stakeholder vor der Phase kommentiert, soll bleiben; Älteres fällt weg
         bleibt = fürDiesenZyklusGeschrieben(folgendes)
         geschrieben.append(abschnittSchreiben(wurzel, alleOffen(folgendes), bisherAusDatei=bleibt))
     änderungen = [name for name in geschrieben if name]

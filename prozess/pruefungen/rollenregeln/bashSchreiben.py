@@ -40,7 +40,6 @@ def ohneAnführung(wort: str) -> str:
 
 def zerlegen(befehl: str) -> list[list[str]]:
     """Die Wörter je Teilbefehl; Zeilenumbrüche, `;`, `&&`, `||` und `|` trennen."""
-    # Warum: Ohne `posix` behalten Wörter ihre Anführungszeichen, `'>'` bleibt kein Operator.
     lexer = shlex.shlex(befehl.replace("\n", " ; "), posix=False, punctuation_chars=True)
     lexer.whitespace_split = True
     teile: list[list[str]] = [[]]
@@ -104,7 +103,6 @@ def entfernenName(wörter: list[str]) -> str:
 def grundGegenEntfernen(wörter: list[str], entfernen: Entfernen, *, gewechselt: bool) -> str | None:
     wörter = ohneUmhüllung(wörter)
     name = PurePosixPath(wörter[0]).name
-    # Warum: Nach einem `cd` ins Projekt sind relative Pfade nicht mehr prüfbar.
     return f"{name} nach cd" if gewechselt else entfernen(name, wörter[1:])
 
 

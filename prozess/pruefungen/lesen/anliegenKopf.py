@@ -21,7 +21,6 @@ class Status(StrEnum):
 
 typWerte = ("Kritik", "Fragen", "Anliegen", "Auftrag")
 höchstRunde = 3
-# Warum: Bis alle Köpfe umgeschrieben sind, liest das Modul auch die alte Zeile in Zeile 3
 alteKopfzeile = re.compile(
     rf"^(?P<nummer>\d+) · (?P<typ>\w+) · von (?P<absender>[^\s(]+)(?: \([^)]+\))?"
     rf" → (?P<empfänger>[^\s(]+)(?: \([^)]+\))?"
@@ -44,7 +43,7 @@ class Anliegen:
     absender: str
     empfänger: str
     runde: int
-    status: Status | str  # Warum: ein unbekannter Text bleibt Text, `kopfVerstöße` meldet ihn
+    status: Status | str
     wartetAuf: str | None = None
 
 
@@ -135,7 +134,7 @@ def kopfFelder(anliegen: Anliegen) -> dict[str, str]:
         "Status": str(anliegen.status),
     }
     if anliegen.wartetAuf:
-        felder[wartetAufName] =anliegen.wartetAuf.removeprefix("die ")
+        felder[wartetAufName] = anliegen.wartetAuf.removeprefix("die ")
     return felder
 
 

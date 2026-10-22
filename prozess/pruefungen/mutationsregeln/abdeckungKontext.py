@@ -8,7 +8,6 @@ import sys
 from pathlib import Path
 from typing import NamedTuple
 
-# Warum: Eine Zeile im Kontext "" läuft beim Import oder in einem Kindprozess: alle Tests.
 ohneTest = ""
 konfiguration = """[run]
 patch = subprocess
@@ -88,7 +87,6 @@ def auswahl(karte: Karte | None, zeile: int) -> tuple[str, ...] | None:
     dateien = karte.dateien.get(zeile)
     if dateien is None:
         return None
-    # Regel: Einheitstests zuerst, denn sie scheitern am schnellsten.
     return tuple(sorted(dateien, key=einheitZuerst))
 
 

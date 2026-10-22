@@ -10,7 +10,7 @@ from frontendregeln.frontend import eslintVerstöße, stylelintVerstöße, verst
 from gemeinsam.pfade import frontendOrdner, wurzel
 
 verstoßFreiesJavaScript = (
-    "// Regel: wir.md 5, Achsen heißen x und y\n"
+    "// TODO: Achsen prüfen\n"
     "export function abstand(x, y) {\n"
     "  const weite = x - y;\n"
     "  return weite;\n"
@@ -40,6 +40,16 @@ def probeAnlegen(tmp_path, name: str, inhalt: str):
 def testSauberesJavaScriptIstGrün(tmp_path):
     probeAnlegen(tmp_path, "seite.js", verstoßFreiesJavaScript)
     assert eslintVerstöße(tmp_path) == ""
+
+
+def testEinWerkzeugkommentarMitRegelIstGrün(tmp_path):
+    probeAnlegen(tmp_path, "seite.js", "// eslint-disable-next-line no-var\nexport var eins = 1;\n")
+    assert eslintVerstöße(tmp_path) == ""
+
+
+def testOhneKommentarprüfungBleibtEinProsakommentarGrün(tmp_path):
+    probeAnlegen(tmp_path, "seite.js", "// erklärt nur\nexport const eins = 1;\n")
+    assert eslintVerstöße(tmp_path, kommentareGeprüft=False) == ""
 
 
 def testDasKlonenDerTemplateIstGrün(tmp_path):
@@ -132,7 +142,9 @@ def testSauberesCssIstGrün(tmp_path):
         pytest.param("no-restricted-syntax", "export const bild = new Image();\n", id="Image"),
         pytest.param("arbiter/kommentare", "// erklärt nur\nexport const eins = 1;\n", id="Prosa"),
         pytest.param("arbiter/kommentare", "/* Block */\nexport const eins = 1;\n", id="Block"),
-        pytest.param("arbiter/kommentare", "// Warum: TODO\nexport const eins = 1;\n", id="TODO"),
+        pytest.param("arbiter/kommentare", "// TODO\nexport const eins = 1;\n", id="TODO leer"),
+        pytest.param("arbiter/kommentare", "// Warum: weil\nexport const eins = 1;\n", id="Warum"),
+        pytest.param("arbiter/kommentare", "// Regel: V8\nexport const eins = 1;\n", id="Regel"),
     ],
 )
 def testEinVerstoßGegenDieJavaScriptRegelIstRot(tmp_path, regel, quelltext):

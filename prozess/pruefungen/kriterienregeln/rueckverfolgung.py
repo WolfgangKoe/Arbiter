@@ -118,7 +118,6 @@ def testdateiWählen(
 
 def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[Zuordnung]:
     """Je Anforderung der Datei die Testdatei, die für sie gilt, und ihre Kriterien."""
-    # Regel: Architektur T1
     anforderungen = anforderungenDerDatei(anforderungsdatei)
     if not anforderungen:
         return []

@@ -27,18 +27,16 @@ akzeptanzTestName = re.compile(r"^test[A-ZÄÖÜ][a-zäöüß]*\d+_\d+[A-ZÄÖÜ
 pythonDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.py$")
 markdownDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.md$")
 frontendDatei = re.compile(r"^[a-z][a-zA-Z0-9]*\.(js|css|html)$")
-# Warum: Eine Kriterienkennung (`Auf8_4`) behält ihren Unterstrich, wie in Testnamen.
 anliegenDatei = re.compile(r"^\d+-[a-z](?:[a-zA-Z0-9]|(?<=\d)_(?=\d))*\.md$")
 
 testEndung = "Test.py"
-dateinameFalsch ="Dateiname nicht in camelCase, ASCII"
+dateinameFalsch = "Dateiname nicht in camelCase, ASCII"
 frontendEndungen = (".js", ".css", ".html")
 mindestlänge = 3
 achsen = {"x", "y"}
 typgenerika = {"tuple", "list", "dict", "set", "frozenset", "Callable", "Literal", "Union"}
 ersteBenannteAnliegenNummer = 28
 werkzeugnamen = {"tmp_path", "tmp_path_factory"}
-# Warum: In conftest.py gibt pytest die Hooks `pytest_<hook>` vor.
 werkzeugdateien = {"conftest.py", "__init__.py", "__main__.py", "CLAUDE.md", "README.md"}
 ausgeschlosseneOrdner = {
     *altbestandOrdner,

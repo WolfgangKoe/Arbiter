@@ -2,7 +2,6 @@ import ast
 
 from mutationsregeln.mutanten import mutantenVon
 
-# Warum: nicht, Verknüpfung, Vergleich, Zahl, raise, Summe und Rückgabe der Quelle unten
 stellenDerQuelle = 7
 
 

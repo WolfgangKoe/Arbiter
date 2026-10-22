@@ -1,17 +1,9 @@
-// Regel: prozess/praemissen/es.md 8: Kommentare nur einzeilig als `// Regel:` oder `// Warum:`.
-const erlaubterKommentar = /^ (Regel|Warum): \S/;
-const werkzeugkommentar = /^\s*(eslint|global|globals|exported)\b/;
-const offenerPunkt = /\b(TODO|FIXME)\b/;
+const offenerPunkt = /^ TODO: \S/;
+const werkzeugkommentar = /^ eslint-disable-next-line \S/;
 
-function verstoßGrund(kommentar) {
-  if (offenerPunkt.test(kommentar.value)) {
-    return "offenerPunkt";
-  }
-  if (werkzeugkommentar.test(kommentar.value)) {
-    return null;
-  }
-  const istErlaubt = kommentar.type === "Line" && erlaubterKommentar.test(kommentar.value);
-  return istErlaubt ? null : "form";
+function istErlaubt(kommentar) {
+  return kommentar.type === "Line"
+    && (offenerPunkt.test(kommentar.value) || werkzeugkommentar.test(kommentar.value));
 }
 
 export default {
@@ -19,17 +11,15 @@ export default {
     type: "suggestion",
     schema: [],
     messages: {
-      form: "Kommentar nur einzeilig als `// Regel: …` oder `// Warum: …`",
-      offenerPunkt: "Kein TODO oder FIXME",
+      form: "Kommentar nur als `// eslint-disable-next-line <Regel>` oder `// TODO: <was>`",
     },
   },
   create(kontext) {
     return {
       Program() {
         for (const kommentar of kontext.sourceCode.getAllComments()) {
-          const grund = verstoßGrund(kommentar);
-          if (grund) {
-            kontext.report({loc: kommentar.loc, messageId: grund});
+          if (!istErlaubt(kommentar)) {
+            kontext.report({loc: kommentar.loc, messageId: "form"});
           }
         }
       },

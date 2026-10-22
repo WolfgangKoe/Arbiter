@@ -24,13 +24,11 @@ from mutationsregeln.mutanten import Mutant, mutantenVon
 
 testpfade = ("technik/tests",)
 produktOrdner = "technik/arbiter"
-# Regel: Anliegen 720, F1: mindestens 95 % gefangene Mutanten je Lauf.
 schwelle = 95
 sekundenMindestens = 10
 wartefaktor = 3
 volleProzent = 100
 vollerLauf = "--voll"
-# Warum: Ohne Bytecode-Datei läuft kein Mutant in der zwischengespeicherten Fassung des Vorgängers.
 ohneBytecode = {"PYTHONDONTWRITEBYTECODE": "1"}
 
 
@@ -66,7 +64,9 @@ def testenAufrufen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> boo
     befehl = [sys.executable, "-m", "pytest", "-x", "-q", "-p", "no:cacheprovider", *pfade]
     try:
         lauf = subprocess.run(
-            befehl, cwd=kopie, env={**os.environ, **ohneBytecode},
+            befehl,
+            cwd=kopie,
+            env={**os.environ, **ohneBytecode},
             capture_output=True,
             check=False,
             timeout=wartezeit,
@@ -80,7 +80,6 @@ def kopieAnlegen(wurzel: Path, ziel: Path) -> None:
     ignorieren = shutil.ignore_patterns("__pycache__", "node_modules", "*.pyc")
     shutil.copytree(wurzel / "technik", ziel / "technik", ignore=ignorieren)
     shutil.copy(wurzel / "pyproject.toml", ziel / "pyproject.toml")
-    # Warum: Der Katalog liest seine Daten aus `domaene/daten`, zwei Ordner über dem Produkt.
     daten = wurzel / "domaene" / "daten"
     if daten.is_dir():
         shutil.copytree(daten, ziel / "domaene" / "daten")
@@ -94,7 +93,6 @@ def überlebt(
         return True
     if ausgewählt is None:
         return testenAufrufen(kopie, pfade, wartezeit)
-    # Warum: Eine Fixture, die nur im ersten Test läuft, ließe die Zeile den falschen Tests.
     return testenAufrufen(kopie, ausgewählt, wartezeit) and testenAufrufen(kopie, pfade, wartezeit)
 
 

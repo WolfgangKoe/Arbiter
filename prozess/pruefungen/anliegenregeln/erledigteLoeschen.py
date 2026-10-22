@@ -43,7 +43,6 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 def erledigteLöschen(wurzel: Path) -> list[str]:
     """Löscht erledigte Anliegen, die unverändert im letzten Commit stehen; nennt die Dateinamen."""
     gelöscht: dict[Path, str] = {}
-    # Warum: `ls-files` nennt den Index; `ls-tree HEAD` nennt, was git sicher bewahrt.
     bekannt = set(
         gitAusgabe(
             wurzel, "ls-tree", "-r", "--name-only", "HEAD", "--", anliegenOrdner

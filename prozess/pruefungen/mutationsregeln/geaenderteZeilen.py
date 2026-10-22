@@ -7,7 +7,6 @@ from gemeinsam.gitAufruf import freigaben, gitAusgabe
 
 planFreigabe = "Freigabe Plan "
 ohneAnführung = ("-c", "core.quotepath=false")
-# Regel: `-U0` nennt je Änderung `@@ -alt +neu,anzahl @@`; fehlt die Anzahl, ist es eine Zeile.
 kopfzeile = re.compile(r"^@@ -\S+ \+(\d+)(?:,(\d+))? @@")
 neuePräfix = "+++ b/"
 

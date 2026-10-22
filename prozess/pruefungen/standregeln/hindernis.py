@@ -18,7 +18,7 @@ from standregeln.fortschritt import (
 )
 from standregeln.phasenfolge import lage
 
-aufrufteile = 4  # Warum: Rolle, Schritt, Beseitiger und Text
+aufrufteileRolleSchrittBeseitigerText = 4
 längeDesNamens = 40
 umlaute = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
 vorlage = """# Hindernis: {schritt}
@@ -69,9 +69,7 @@ def beseitigerName(wurzel: Path, genannt: str) -> str | None:
     return bekannt.get(genannt.casefold())
 
 
-def anliegenSchreiben(
-    wurzel: Path, zeile: Zeile, beseitiger: str, text: str, nummer: int
-) -> Path:
+def anliegenSchreiben(wurzel: Path, zeile: Zeile, beseitiger: str, text: str, nummer: int) -> Path:
     fragt = beseitiger == stakeholder
     inhalt = vorlage.format(
         schritt=zeile.schritt,
@@ -126,8 +124,12 @@ def hindernisMelden(
 
 
 def hauptprogramm(argumente: list[str]) -> int:
-    if len(argumente) != aufrufteile:
-        print("Aufruf: hindernis.py <Rolle> <Schritt> <Beseitiger> <Text>", file=sys.stderr)
+    if len(argumente) != aufrufteileRolleSchrittBeseitigerText:
+        print(
+            "Aufruf: python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.hindernis"
+            " <Rolle> <Schritt> <Beseitiger> <Text>",
+            file=sys.stderr,
+        )
         return 1
     rolle, schritt, beseitiger, text = argumente
     nummer = hindernisMelden(projektordner(), rolle, schritt, beseitiger, text)

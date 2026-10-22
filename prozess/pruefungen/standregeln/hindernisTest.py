@@ -77,9 +77,7 @@ def testEineFremdeOderUnbekannteZeileMeldetNichts(tmp_path, plan):
     assert "Hindernis:" not in plan.read_text(encoding="utf-8")
 
 
-def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(
-    tmp_path, gitRepo, plan
-):
+def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_path, gitRepo, plan):
     hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
     gitRepo.festhalten("Hindernis gemeldet")
     fortschrittSchreiben(tmp_path)

@@ -36,7 +36,6 @@ def abhakenFürAndere(befehl: str, rolle: str | None) -> bool:
 
 
 def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
-    # Warum: Der Hauptchat läuft als Koordinator (`agent` in settings.json) und committet.
     if eingabe.rolle == koordinator:
         return None
     if abhakenFürAndere(str(eingabe.angaben.get("command") or ""), eingabe.rolle):
@@ -58,7 +57,6 @@ def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
 
 
 def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
-    # Warum: Ohne Rolle spricht die Hauptsitzung, für sie gilt keine Grenze.
     rolle = eingabe.rolle
     if not rolle:
         return None
@@ -77,7 +75,6 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
             return verweigerung(f"Schreibgrenze: {relativ}: {meldung}")
     if not außerhalb and regelnGesperrt(relativ, wurzel, rolle):
         return verweigerung(f"Schreibgrenze: {relativ}: {regelnMeldung}")
-    # Regel: Ich 2, Write und Edit in /tmp sind frei, die Pfadsperren gelten weiter.
     if (außerhalb and liegtInTmp(relativ)) or darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
         return None
     return verweigerung(
