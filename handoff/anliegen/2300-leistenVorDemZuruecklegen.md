@@ -50,6 +50,6 @@ gar keine *Leisten* mehr. QUE-5 und QUE-6 bleiben zusammen im Item
 [gemeinsamUebergehen](../../domaene/items/gemeinsamUebergehen.md), jetzt in Etappe 2; es nennt
 2240 und 2215. Die Seite wird so nur einmal umgebaut, in Etappe 2. Damit Item
 einheitZuruecklegen die Spalten von heute baut, zeichnet Ux die Mockups zu AUF-23 ohne
-*Leisten* ([2366](2366-mockupsNachDemSchnitt.md)). Erledigt: Die Mockups zu
+*Leisten* (Anliegen 2366). Erledigt: Die Mockups zu
 [einheitZuruecklegen](../../domaene/items/einheitZuruecklegen.md) zeigen die Spalten von
 heute, der Stakeholder hat sie abgenommen.
