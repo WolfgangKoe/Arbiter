@@ -76,9 +76,6 @@ class Aufstellung:
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)
 
-    def ebene(self, einheit: Einheit) -> Einheit | Modell | None:
-        return self._auswahl.ebene(einheit)
-
     def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
         return self._auswahl.ganzeEinheitIstEbene(einheit)
 

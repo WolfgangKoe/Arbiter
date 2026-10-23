@@ -30,7 +30,8 @@ async function zeichneAntwort(antwort) {
 }
 
 async function handlungSenden(pfad, methode, körper) {
-  const antwort = await senden(pfad, methode, körper)
+  const antwort = await senden(pfad, methode, körper).catch(() => null)
+  if (!antwort) return neuZeichnen(letzterSpielstand)
   if (antwort.ok) {
     gründeDerLetztenSperre = []
     return neuZeichnen(await antwort.json())

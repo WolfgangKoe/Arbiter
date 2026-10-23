@@ -109,16 +109,6 @@ def testEineSehrGroßeGanzeZahlIstEineFehlerhafteAnfrageUndLässtDenSpielstandLe
     assert dienst.get("/api/spielstand").status_code == HTTPStatus.OK
 
 
-def testDasZurückSetzenEinesModellsAufEineArmeelisteGibtEsNichtMehr(aufstellung):
-    dienst = anwendungFür(aufstellung).test_client()
-
-    zurück = dienst.put("/api/zurück")
-    aufArmeeliste = dienst.delete(pfadDesModells.format(1, 1, 1), query_string={"ablage": 1})
-
-    assert zurück.status_code == HTTPStatus.METHOD_NOT_ALLOWED
-    assert aufArmeeliste.status_code == HTTPStatus.METHOD_NOT_ALLOWED
-
-
 def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -43,4 +43,8 @@ In `komponenten.html` gilt das Markup aus
 Erledigt, wenn jede neue Klasse aus `vorschlag.css` in `komponenten.html` vorkommt (O3: keine
 tote Klasse) und `frontendregeln.frontend` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt in
+[komponenten.css](../../technik/frontend/komponenten.css) und
+[komponenten.html](../../technik/frontend/komponenten.html), wie vorgeschlagen. Einzige
+Abweichung: Jede `<aside class="leiste …">` trägt ein `aria-label`, weil SonarLint (Web:S5255)
+sonst warnt; `vorschlag.css` ist davon nicht berührt.

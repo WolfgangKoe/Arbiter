@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Recherche zu deinem Kommentar in Anliegen 2570:
@@ -43,7 +43,7 @@ Regelumsetzer in der Prozessphase; sie prüft nichts, sie zeigt.
   Code als A.
 - C: keine Karte; der Importvertrag zeigt im Review zwei Tabellen: Pfeile und Zeichen je
   Schicht. Folge: am billigsten, aber kein Bild.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
 Kommentar: So wie ich dich verstehe, haben wir schon alle Tests zur Architektur. Das wäre fein. Wäre es dennoch möglich, für eine Art Karte im Dashboard für die Architektur zur Verfügung zu stellen?
@@ -56,3 +56,4 @@ dafür neu gefasst. Mit der Gliederung aus 2570 (je Ordner eine Datei) ist „Ze
 Architektur“ je Kasten die Größe seiner Datei. Zu 2570, F2: Ja, C war die Empfehlung; die
 Kennzahl ändert [3050](3050-hoechstmassDerArchitekturNach2570.md), das Umordnen kommt
 mit [3051](3051-architekturUmordnenInPlan8.md) in Plan 8.
+Kommentar: Setze es mal um, und dann gebe ich ggf. Feedback

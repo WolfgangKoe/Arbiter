@@ -26,12 +26,6 @@ class Auswahl:
     def ausgewählt(self, einheit: Einheit) -> bool:
         return einheit is self._einheit
 
-    def ebene(self, einheit: Einheit) -> Einheit | Modell | None:
-        """Das Modell, sonst die Einheit, die Ziehen bewegt; None ohne Auswahl."""
-        if not self.ausgewählt(einheit):
-            return None
-        return einheit if self._modellAlsEbene is None else self._modellAlsEbene
-
     def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
         """Ob Ziehen die ganze ausgewählte Einheit bewegt (AUF-21.1)."""
         return self.ausgewählt(einheit) and self._modellAlsEbene is None

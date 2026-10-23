@@ -9,20 +9,20 @@ def aufstellung():
     return aufstellungVon(spielerMit(1), spielerMit(1))
 
 
-def testDieAdresseNenntDenPortDesServers(aufstellung):
-    server = serverStarten(aufstellung)
+@pytest.fixture
+def server(aufstellung):
+    laufenderServer = serverStarten(aufstellung)
+    yield laufenderServer
+    laufenderServer.beenden()
 
-    assert server.adresse.startswith("http://127.0.0.1:")
-    assert server.adresse == adresseMitPort(int(server.adresse.split(":")[-1].rstrip("/")))
-    server.beenden()
+
+def testDerServerLauschtAufDemFreienPortDesRechners(server):
+    assert server.port > 0
+    assert server.adresse == adresseMitPort(server.port)
 
 
-def testEinBelegterPortIstEineBelegteAdresse(aufstellung):
-    ersterServer = serverStarten(aufstellung)
-    belegterPort = int(ersterServer.adresse.split(":")[-1].rstrip("/"))
-
+def testEinBelegterPortIstEineBelegteAdresse(server, aufstellung):
     with pytest.raises(AdresseBelegt) as fehler:
-        serverStarten(aufstellung, belegterPort)
+        serverStarten(aufstellung, server.port)
 
-    assert fehler.value.adresse == adresseMitPort(belegterPort)
-    ersterServer.beenden()
+    assert fehler.value.adresse == adresseMitPort(server.port)

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -23,3 +23,6 @@ erlaubt; der nächste Aufrufer greift wieder zu ihr statt zur benannten Frage (E
 braucht, oder fällt mit, wenn die beiden benannten Fragen ihn tragen.
 
 Erledigt: `Aufstellung.ebene` gestrichen, Tests grün.
+
+**Stellungnahme.** Angenommen und umgesetzt: `Aufstellung.ebene` und, wie in 2821, auch
+`Auswahl.ebene` sind gestrichen; auswahlTest.py fragt die beiden benannten Fragen.

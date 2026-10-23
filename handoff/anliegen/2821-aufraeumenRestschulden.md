@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -52,4 +52,13 @@ Pfad zurückkehrt.
 
 Erledigt: 1 bis 6 umgesetzt oder begründet abgelehnt, Tests grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen; 1, 2, 4, 5 und 6 umgesetzt, 3 zum Teil.
+1: `ebene` gestrichen, auswahlTest.py fragt `ganzeEinheitIstEbene` und `modellIstEbene`.
+2: Binden nach dem Bauen der Anwendung; `fd` trägt den Port. 4: `einheitAusgewählt` in
+[bedienung.js](../../technik/frontend/bedienung.js), früher `return`. 5: Fixture mit `yield`
+und `beenden()`, Port über `Server.port`, der Test auf die eigene Adresse ist durch einen auf
+den freien Port ersetzt. 6: Test gestrichen.
+3: Der Port wird als erste Zeile von `starten` gelesen, und `--port` außerhalb von 0 bis 65535
+lehnt argparse ab (Unit-Test in [befehlTest.py](../../technik/tests/einheit/befehlTest.py)).
+Nicht umgesetzt: die einzeilige Meldung bei `PermissionError`. Dazu fehlt ein Kriterium, und
+ohne Test baue ich kein Verhalten (Ich 1); der Anforderungsautor entscheidet das bei QUE-8.

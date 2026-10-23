@@ -26,8 +26,8 @@ function stelleAufDerKarte(ereignis) {
   return imSpielfeld ? { x: punkt.x, y: punkt.y } : null
 }
 
-function ausgewählteKarteVon(modell) {
-  return document.querySelector(`.einheitenKarte.ausgewählt[data-spieler="${modell.spieler}"][data-einheit="${modell.einheit}"]`)
+function einheitAusgewählt(modell) {
+  return document.querySelector(`.einheitenKarte.ausgewählt[data-spieler="${modell.spieler}"][data-einheit="${modell.einheit}"]`) !== null
 }
 
 function ziehenZurücknehmen(start) {
@@ -63,7 +63,10 @@ function klicken(ereignis, ziel) {
   const einheitenKarte = ziel.closest(".einheitenKarte")
   if (einheitenKarte) return auswahlSenden(einheitenKarte.dataset, einheitenKarte.classList.contains("ausgewählt"))
   const modell = ziel.closest(".karte .modell")
-  if (modell) return ausgewählteKarteVon(modell.dataset) && ebeneSenden(modell.dataset, Boolean(modell.dataset.ebene))
+  if (modell) {
+    if (!einheitAusgewählt(modell.dataset)) return
+    return ebeneSenden(modell.dataset, Boolean(modell.dataset.ebene))
+  }
   if (!ziel.closest(".karte")) return
   const stelle = stelleAufDerKarte(ereignis)
   if (stelle) return karteAnklicken(stelle)

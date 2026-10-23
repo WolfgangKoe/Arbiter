@@ -16,6 +16,10 @@ class Stelle:
     x: Fraction
     y: Fraction
 
+    def __post_init__(self) -> None:
+        if not (isinstance(self.x, Fraction) and isinstance(self.y, Fraction)):
+            raise TypeError("Eine Stelle besteht aus exakten Zahlen (Fraction)")
+
 
 @dataclass(frozen=True)
 class Spielfeld:

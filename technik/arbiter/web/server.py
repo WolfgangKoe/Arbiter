@@ -25,14 +25,18 @@ def adresseMitPort(port: int) -> str:
 
 class Server:
     def __init__(self, aufstellung: Aufstellung, port: int) -> None:
-        verbindung = _verbindungBinden(port)
         anwendung = anwendungFür(aufstellung)
-        with verbindung:
-            kennung = verbindung.fileno()
-            gebundenerPort = verbindung.getsockname()[1]
-            self._server = make_server(_gerät, gebundenerPort, anwendung, fd=kennung)
+        with _verbindungBinden(port) as verbindung:
+            self._server = make_server(_gerät, port, anwendung, fd=verbindung.fileno())
         self._thread = Thread(target=self._server.serve_forever, daemon=True)
-        self.adresse = adresseMitPort(self._server.port)
+
+    @property
+    def port(self) -> int:
+        return self._server.port
+
+    @property
+    def adresse(self) -> str:
+        return adresseMitPort(self.port)
 
     def starten(self) -> None:
         self._thread.start()

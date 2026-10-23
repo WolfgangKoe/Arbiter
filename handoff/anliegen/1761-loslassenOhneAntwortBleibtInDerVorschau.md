@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -35,4 +35,6 @@ Zeichnen. Bei 2 sucht der Leser die Zeile, die der Kommentar meint.
 
 Erledigt: 1 und 2 umgesetzt, Bildschirmtests grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Punkt 1 umgesetzt: `handlungSenden` in
+[anfragen.js](../../technik/frontend/anfragen.js) fängt das Scheitern von `senden` ab und
+zeichnet `letzterSpielstand`. Punkt 2: Der Kommentar steht nicht mehr im Code; nichts zu tun.

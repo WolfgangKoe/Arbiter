@@ -12,24 +12,27 @@
     <div class="kopfzeileSpieler spieler2">Spieler 2</div>
   </header>
   <main class="spielbereich">
-    <aside class="spalte">
-      <div class="armeeKarte spieler1">
-        <h2 class="armeeKartenName">Spieler 1</h2>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Boyz</span><span class="einheitenKartenModelle">10</span></div>
-      </section>
-      <section class="einheitenKarte ausgewählt">
-        <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
-      </section>
-      </div>
-      <div class="armeeKarte spieler1">
-        <h2 class="armeeKartenName">Spieler 1</h2>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Boyz</span></div>
-      </section>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
-      </section>
+    <aside class="leiste leisteLinks" aria-label="Leiste Spieler 1">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Ablage Spieler 1">◀</button>
+      <div class="leistenInhalt">
+        <div class="armeeKarte spieler1">
+          <h2 class="armeeKartenName">Spieler 1</h2>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Boyz</span><span class="einheitenKartenModelle">10</span></div>
+        </section>
+        <section class="einheitenKarte ausgewählt">
+          <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+        </div>
+        <div class="armeeKarte spieler1">
+          <h2 class="armeeKartenName">Spieler 1</h2>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Boyz</span></div>
+        </section>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Warboss</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+        </div>
       </div>
     </aside>
     <div class="spalte spalteMitte">
@@ -47,23 +50,43 @@
       <circle class="modell spieler2 ausgewählt" cx="37.4" cy="28" r="0.630"/>
     </svg>
     </div>
-    <aside class="spalte">
-      <div class="armeeKarte spieler2">
-        <h2 class="armeeKartenName">Spieler 2</h2>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Necron Warriors</span><span class="einheitenKartenModelle">10</span></div>
-      </section>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
-      </section>
-      </div>
-      <div class="armeeKarte spieler2">
-        <h2 class="armeeKartenName">Spieler 2</h2>
-      <section class="einheitenKarte">
-        <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
-      </section>
+    <aside class="leiste leisteRechts" aria-label="Leiste Spieler 2">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Ablage Spieler 2">▶</button>
+      <div class="leistenInhalt">
+        <div class="armeeKarte spieler2">
+          <h2 class="armeeKartenName">Spieler 2</h2>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Necron Warriors</span><span class="einheitenKartenModelle">10</span></div>
+        </section>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+        </div>
+        <div class="armeeKarte spieler2">
+          <h2 class="armeeKartenName">Spieler 2</h2>
+        <section class="einheitenKarte">
+          <div class="einheitenKartenName"><span>Overlord</span><span class="einheitenKartenModelle">1</span></div>
+        </section>
+        </div>
       </div>
     </aside>
   </main>
+  <aside class="leiste leisteUnten" aria-label="Leiste Protokoll">
+    <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll">▼</button>
+    <div class="leistenInhalt">
+      <ul class="protokoll">
+        <li class="protokollEintrag spieler1">
+          <span class="protokollEinheit">Boyz</span>
+          <span class="protokollSpieler">Spieler 1</span>
+          <span class="protokollGrund">keine Kohärenz</span>
+        </li>
+        <li class="protokollEintrag spieler2">
+          <span class="protokollEinheit">Overlord</span>
+          <span class="protokollSpieler">Spieler 2</span>
+          <span class="protokollGrund">nicht ganz in der Zone</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
 </body>
 </html>

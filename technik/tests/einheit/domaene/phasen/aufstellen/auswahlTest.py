@@ -23,7 +23,7 @@ def einheitenUndModelle(spieler):
 def testOhneAuswahlGibtEsKeineEbeneUndKeinModellIstAusgewählt(auswahl, spieler):
     ersteEinheit, _, erstesModell, _ = einheitenUndModelle(spieler)
 
-    assert auswahl.ebene(ersteEinheit) is None
+    assert not auswahl.ganzeEinheitIstEbene(ersteEinheit)
     assert not auswahl.modellAusgewählt(erstesModell)
 
 
@@ -32,7 +32,7 @@ def testEineAusgewählteEinheitIstSelbstDieEbeneUndAlleModelleSindAusgewählt(au
 
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.ebene(ersteEinheit) is ersteEinheit
+    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
     assert auswahl.modellAusgewählt(erstesModell)
     assert auswahl.modellAusgewählt(zweitesModell)
 
@@ -43,7 +43,7 @@ def testDieEbeneEinesModellsMachtNurDiesesModellAusgewählt(auswahl, spieler):
 
     auswahl.ebeneWählen(erstesModell)
 
-    assert auswahl.ebene(ersteEinheit) is erstesModell
+    assert auswahl.modellIstEbene(erstesModell)
     assert auswahl.modellAusgewählt(erstesModell)
     assert not auswahl.modellAusgewählt(zweitesModell)
 
@@ -82,7 +82,7 @@ def testDieEbeneAbwählenKehrtZurEinheitZurück(auswahl, spieler):
 
     auswahl.ebeneAbwählen(erstesModell)
 
-    assert auswahl.ebene(ersteEinheit) is ersteEinheit
+    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
 
 
 def testEineNeueAuswahlSetztDieEbeneZurück(auswahl, spieler):
@@ -93,7 +93,7 @@ def testEineNeueAuswahlSetztDieEbeneZurück(auswahl, spieler):
     auswahl.auswählen(zweiteEinheit)
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.ebene(ersteEinheit) is ersteEinheit
+    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
 
 
 def testDieselbeEinheitErneutAuswählenBehältDieEbene(auswahl, spieler):
@@ -103,7 +103,7 @@ def testDieselbeEinheitErneutAuswählenBehältDieEbene(auswahl, spieler):
 
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.ebene(ersteEinheit) is erstesModell
+    assert auswahl.modellIstEbene(erstesModell)
 
 
 def testEinModellEinerNichtAusgewähltenEinheitKannNichtAbgewähltWerden(auswahl, spieler):

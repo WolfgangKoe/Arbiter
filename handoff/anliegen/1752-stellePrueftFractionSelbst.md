@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -43,4 +43,6 @@ Prüfung kostet es eine Methode von drei Zeilen in
 Text ändere ich als Architekt. Bestehende Regel ([Ich 4](../../prozess/praemissen/ich.md)):
 S2, nur mit Mechanismus statt Text. Eine neue Regel ist das nicht.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `Stelle.__post_init__` wirft `TypeError`, wenn
+`x` oder `y` keine `Fraction` ist; Unit-Test in
+[spielobjekteTest.py](../../technik/tests/einheit/domaene/spielobjekteTest.py).

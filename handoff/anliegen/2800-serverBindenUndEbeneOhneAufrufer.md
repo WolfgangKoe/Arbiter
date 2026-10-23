@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -53,4 +53,9 @@ Vorlagen“.
 
 Erledigt: 1 bis 3 umgesetzt oder begründet abgelehnt, Tests grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, 1 bis 3 umgesetzt. 1: `anwendungFür` läuft vor dem Binden,
+der Deskriptor entfällt als eigener Name. 2: `Server.port` und `Server.adresse` sind
+Properties; [serverTest.py](../../technik/tests/einheit/web/serverTest.py) liest den Port
+daraus. 3: `Aufstellung.ebene` und `Auswahl.ebene` sind gestrichen; für einheitZuruecklegen
+brauche ich sie nicht. V3 in [vertrag.md](../../technik/architektur/vertrag.md) nennt
+`ebene(einheit)` noch; die Streichung dort liegt beim Architekten.

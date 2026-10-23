@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -27,4 +27,5 @@ goldenen aus seinem freigegebenen Plan.
 `var(--spielerFarbe)` durch `var(--akzentHell)` ersetzen, wörtlich wie in `vorschlag.css`
 ([DoR 5](../../prozess/ablauf.md#dor-item-bereit)). `.modell.ausgewählt` bleibt, wie es ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt: `.einheitenKarte.ausgewählt` in
+[komponenten.css](../../technik/frontend/komponenten.css) nutzt `var(--akzentHell)`.

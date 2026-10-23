@@ -31,7 +31,7 @@ body {
   margin: 0;
   height: 100vh;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   background: var(--hintergrund);
   color: var(--text);
   font-family: system-ui, sans-serif;
@@ -164,7 +164,7 @@ body {
 }
 
 .einheitenKarte.ausgewählt {
-  outline: 2px solid var(--spielerFarbe);
+  outline: 2px solid var(--akzentHell);
   outline-offset: 2px;
 }
 
@@ -203,5 +203,93 @@ body {
 
 .knopf:hover {
   border-color: var(--akzentHell);
+  color: var(--akzentHell);
+}
+
+.spielbereich:has(> .leiste) {
+  grid-template-columns: auto 1fr auto;
+}
+
+.leiste {
+  display: flex;
+  min-height: 0;
+  background: var(--fläche);
+  border: 1px solid var(--rand);
+}
+
+.leisteRechts {
+  flex-direction: row-reverse;
+}
+
+.leisteUnten {
+  flex-direction: column-reverse;
+}
+
+.leistenInhalt {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.leisteLinks .leistenInhalt,
+.leisteRechts .leistenInhalt {
+  width: 16rem;
+}
+
+.leisteUnten .leistenInhalt {
+  max-height: 9rem;
+}
+
+.leiste:has(> .leistenGriff[aria-expanded="false"]) .leistenInhalt {
+  display: none;
+}
+
+.leistenGriff {
+  padding: 0;
+  background: var(--hintergrund);
+  border: 0;
+  color: var(--akzent);
+  cursor: pointer;
+}
+
+.leisteLinks .leistenGriff,
+.leisteRechts .leistenGriff {
+  width: 1.5rem;
+}
+
+.leisteUnten .leistenGriff {
+  height: 1.5rem;
+}
+
+.leistenGriff[aria-expanded="false"] {
+  transform: scale(-1);
+}
+
+.leistenGriff:hover {
+  color: var(--akzentHell);
+}
+
+.protokoll {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.protokollEintrag {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--rand);
+}
+
+.protokollEinheit {
+  font-weight: 600;
+}
+
+.protokollSpieler {
+  color: var(--spielerFarbe);
+}
+
+.protokollGrund {
   color: var(--akzentHell);
 }
