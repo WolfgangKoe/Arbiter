@@ -83,8 +83,8 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Architekt: Kritik an den Tests zu Item einheitZuruecklegen
   Hindernis: Anliegen 2780: Benennung rot (m, Zeile 130), Bildschirmtests mit page.route und den Beispielen zu AUF-23.1, 23.3, 23.4 fehlen (Anliegen 2782); beseitigt: Commit „aufraeumenUndFesteAdresse: Kommentare aufgeräumt, AUF-8.4 und AUF-17 entfernt, feste Adresse, Tests zu einheitZuruecklegen“
 - [x] Implementierer: Tests zu Item einheitZuruecklegen grün
-- [ ] Architekt: Kritik am Code zu Item einheitZuruecklegen
-- [ ] Reviewer: Kritik am Code zu Item einheitZuruecklegen
+- [x] Architekt: Kritik am Code zu Item einheitZuruecklegen
+- [x] Reviewer: Kritik am Code zu Item einheitZuruecklegen
 - [ ] Fachkritiker: Item einheitZuruecklegen abgenommen
 - [ ] Planer: Item einheitZuruecklegen gelöscht
 - [ ] Reviewer: DoD über das Inkrement

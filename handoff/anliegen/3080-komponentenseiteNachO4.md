@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Technikphase
 
 ## Runde 1
