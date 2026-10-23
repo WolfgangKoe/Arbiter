@@ -89,7 +89,7 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [ ] Stakeholder: Freigabe Review 7
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: Es hieß, folgendes läge noch bei mir: 
 „.“ für Etappe 1 in der geänderten Fassung, ohne „vor fremden Bases“: 01-aufstellen.md. -> Das hier verstehe ich nicht. Wir haben die Etappen überarbeitet. Es sollte doch jetzt alles passen.
 Die Ausnahme „keine Kohärenz“ im Ziel ergänzen, wie der Planer in plan.md empfiehlt. Was soll hier ergänzt werden. Warum liegt das bei mir?
