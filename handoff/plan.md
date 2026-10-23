@@ -79,7 +79,7 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Testautor: Tests zu Item einheitZuruecklegen
 - [x] Fachkritiker: Kritik an den Tests zu Item einheitZuruecklegen
   Hindernis: Anliegen 2770: AUF-23.1 ungeprüft, während andere Einheiten auf der Karte stehen (Anliegen 2783); beseitigt: Commit „aufraeumenUndFesteAdresse: Kommentare aufgeräumt, AUF-8.4 und AUF-17 entfernt, feste Adresse, Tests zu einheitZuruecklegen“
-- [ ] Architekt: Kritik an den Tests zu Item einheitZuruecklegen
+- [x] Architekt: Kritik an den Tests zu Item einheitZuruecklegen
   Hindernis: Anliegen 2780: Benennung rot (m, Zeile 130), Bildschirmtests mit page.route und den Beispielen zu AUF-23.1, 23.3, 23.4 fehlen (Anliegen 2782); beseitigt: Commit „aufraeumenUndFesteAdresse: Kommentare aufgeräumt, AUF-8.4 und AUF-17 entfernt, feste Adresse, Tests zu einheitZuruecklegen“
 - [ ] Implementierer: Tests zu Item einheitZuruecklegen grün
 - [ ] Architekt: Kritik am Code zu Item einheitZuruecklegen

@@ -44,5 +44,5 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
     Zweig in `zeichnen.js`.
   - `zeichnen.js`: Spielstand, `gründe` und Knöpfe → Markup (O1), ohne `fetch` und Zustand.
 
-  Warum: Zeichnen liest sich ohne Server, Bedienung ohne Markup. Prüft: Verhalten die
+  Warum: Zeichnen liest sich ohne Server, Bedienung ohne Vorlagen. Prüft: Verhalten die
   Bildschirmtests; Richtung und Größe nur Text, Kritik am Code.
