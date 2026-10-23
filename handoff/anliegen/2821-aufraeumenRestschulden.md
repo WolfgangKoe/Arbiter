@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Lesbarkeit seit `Freigabe Plan 7`, alles wartet nach
@@ -62,3 +61,10 @@ den freien Port ersetzt. 6: Test gestrichen.
 lehnt argparse ab (Unit-Test in [befehlTest.py](../../technik/tests/einheit/befehlTest.py)).
 Nicht umgesetzt: die einzeilige Meldung bei `PermissionError`. Dazu fehlt ein Kriterium, und
 ohne Test baue ich kein Verhalten (Ich 1); der Anforderungsautor entscheidet das bei QUE-8.
+
+**Nachprüfung.** Erledigt. 1, 2, 4, 5, 6 wie beschrieben; `befehlTest.py`, `serverTest.py`,
+`auswahlTest.py` grün. 3: Die Meldung bei `PermissionError` entfällt, ein Kriterium braucht
+es nicht: `--port` gibt es nur für Tests ([Web, W5](../../technik/architektur/web.md)), ohne
+Angabe gilt 8040. Meine Kosten (ein Spieler sieht einen Traceback) treffen darauf nicht zu.
+SonarLint `python:S5332` in `server.py` ist eine Ausnahme nach Anliegen 261
+([Regeln](../../prozess/regeln.md#formregeln)), kein Befund.

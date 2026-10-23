@@ -3,9 +3,7 @@
 Pfade und JSON zwischen `web/` und `frontend/`
 ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); Aufbau beider:
 [Web](web.md). Eine neue Route ist ein Anliegen an den Architekten. Routen gibt es nur nach
-V1, V2, V5, V9 und V10. Mit Test entfallen `PUT /api/zurück` und
-`DELETE …/modelle/<m>/stelle?ablage=` samt `zurück` und `modellAufAblageLoslassen` in
-Domäne, `web/` und Seite; Flask antwortet dort 404 und 405 (W3).
+V1, V2, V5, V9 und V10.
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:
   [spielstand.json](vertrag/spielstand.json): Spieler 2 ist *an der Reihe*, seine erste
@@ -29,9 +27,8 @@ Domäne, `web/` und Seite; Flask antwortet dort 404 und 405 (W3).
   Tür ist `Aufstellung`: `auswählen(einheit)` (AUF-5.11, 20.2), `abwählen(einheit)`,
   `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2),
   `ganzeEinheitAlsEbene(einheit)` (AUF-23.3; ist sie nicht *ausgewählt*, nichts), Abfragen
-  `ausgewählt(einheit)`, `modellAusgewählt(modell)`, `ebene(einheit)` → *Einheit*, *Modell*
-  oder `None`; dazu `ganzeEinheitIstEbene(einheit)` (AUF-21.1) und `modellIstEbene(modell)`
-  (AUF-25.1), die Aufrufer und `web/` statt `is` fragen. `Auswahl` kennt nur *Einheit* und
+  `ausgewählt(einheit)`, `modellAusgewählt(modell)`, `ganzeEinheitIstEbene(einheit)`
+  (AUF-21.1) und `modellIstEbene(modell)` (AUF-25.1). `Auswahl` kennt nur *Einheit* und
   *Ebene*; ob eine *Einheit* zur Partie gehört und nicht *aufgestellt* ist, prüft
   `Aufstellung` vor dem Auswählen (Anliegen 1651). AUF-5.10 gilt dort, nicht in `web/`. Auswählen ist keine Handlung (Glossar,
   *ausgewählt*): ohne Sperre, darum ohne D2.

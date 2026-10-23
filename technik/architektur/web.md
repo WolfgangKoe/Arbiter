@@ -10,8 +10,8 @@ Gilt ab dem ersten Item mit Oberfläche. Übersicht und Schichten: [Architektur]
   (`webVerstöße`), die Fälle nennt [Regeln](../../prozess/regeln.md).
 - **W2** `web/` ist dünn, je Modul ein Grund zur Änderung:
   - `server.py`: `serverStarten(aufstellung, port=0)` startet den Werkzeug-Server im eigenen
-    Thread (W5) und gibt `Server` mit `adresse` (`adresseMitPort(port)`) und `beenden()`
-    zurück; Port 0 heißt ein freier. `make_server` ohne `threaded`, denn `Aufstellung` ist
+    Thread (W5) und gibt `Server` mit `port`, `adresse` (`adresseMitPort(port)`) und
+    `beenden()` zurück; Port 0 heißt ein freier. `make_server` ohne `threaded`, denn `Aufstellung` ist
     nicht threadsicher. Den Socket bindet `socket.create_server`, `make_server` bekommt ihn
     als `fd`; bei `errno.EADDRINUSE` wirft es `AdresseBelegt(adresse)`, sonst beendete
     Werkzeug den Prozess mit englischer Meldung (Wegwerf-Versuch).

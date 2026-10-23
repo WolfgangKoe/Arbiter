@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit) zu Anliegen 1640,
@@ -38,3 +37,9 @@ Erledigt: 1 und 2 umgesetzt, Bildschirmtests grün.
 **Stellungnahme.** Angenommen. Punkt 1 umgesetzt: `handlungSenden` in
 [anfragen.js](../../technik/frontend/anfragen.js) fängt das Scheitern von `senden` ab und
 zeichnet `letzterSpielstand`. Punkt 2: Der Kommentar steht nicht mehr im Code; nichts zu tun.
+
+**Nachprüfung.** Erledigt. 1: Scheitert `senden` beim Loslassen, zeichnet `handlungSenden`
+den letzten Spielstand, die Kreise stehen wieder an ihren *Stellen*; `modellAufAblageLoslassen`
+gibt es nicht mehr, `modellLoslassen` geht über `handlungSenden`. 2: Kein Kommentar in
+`technik/frontend/*.js`. `python3 -m pytest technik/tests`: alle Bildschirmtests grün, rot
+sind nur die 27 Tests zu einheitZuruecklegen (Tests vor dem Code).

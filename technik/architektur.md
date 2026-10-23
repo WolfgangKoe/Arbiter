@@ -55,7 +55,8 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
 - **S2** Gerechnet wird exakt mit `fractions.Fraction`, ohne Toleranz und ohne Wurzel:
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
   übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz.
-  Prüft: die Grenzfälle der Akzeptanztests.
+  Prüft: `Stelle` ohne `Fraction` wirft `TypeError` (`spielobjekteTest.py`), die Grenzfälle
+  der Akzeptanztests.
 - **S3** Anhalten (AUF-29.1, [V10](architektur/handlungen.md)): Die Berührung ist eine
   Wurzel, darum hält Arbiter auf einem Raster des Wegs an: Anteil k/n mit
   n = ⌈100 · (|Δx| + |Δy|)⌉, das größte k vor der ersten Überdeckung, exakt nachgeprüft (S2);
