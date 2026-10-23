@@ -1,58 +1,54 @@
 # Moderation
 
-Stand vor „Freigabe Plan 7“. Keine Frage hält die Freigabe auf. Item 1 hängt an den
-Kommentar-Anliegen 2540 und 2541; sie warten auf die Technikphase, die mit der Freigabe beginnt.
+Stand vor „Freigabe Review 7“. Hält auf: nur [3250](anliegen/3250-review7RundgangUndSchritt1.md)
+(Reviewer). Keine Frage hält die Freigabe auf; keine Annahme nach [Ich 1](../prozess/praemissen/ich.md).
 
 ## Dran
-- Stakeholder: nichts außer der Freigabe. Keine offene Frage in den Anliegen.
-- Organisationsentwickler (Prozessphase, blockiert Plan 7 nicht):
-  [2040](anliegen/2040-pythonUeberBashNachFreigabeRetro6.md) und
-  Anliegen 2140, beide abgelehnt, er entscheidet über
-  neue Runde oder `erledigt`; [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md) (Es 8).
-- Wartend, hält Item 1 auf (Kommentare zuerst, Plan 7):
-  - Anliegen 2540 (Implementierer löscht, Architekt
-    trägt die sechs Sätze gleichzeitig in die Architektur ein) und
-    Anliegen 2541 (Testautor, drei Sätze in
-    `web.md`).
-  - Anliegen 2450 und
-    Anliegen 2440 (Anforderungsautor), danach
-    Anliegen 2410 (Planer setzt `angenommen`).
-  - Anliegen 1651 und
-    Anliegen 1761 (Implementierer, in Item 1).
-- Wartend, hält nicht auf: Implementierer
-  Anliegen 1750,
-  Anliegen 1752,
-  Anliegen 2130,
-  Anliegen 2240; Architekt
-  [2215](anliegen/2215-leistenOhneEigenenNamen.md),
-  Anliegen 2251.
-- Prozessphase: [2201](anliegen/2201-aenderungenDesStakeholdersVorherErproben.md)
-  (Organisationsentwickler), [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md)
-  (Regelumsetzer).
+- Reviewer, hält Review 7 auf: [3250](anliegen/3250-review7RundgangUndSchritt1.md)
+  (Rundgang: vier Dateien fehlen; Satz zu Schritt 1 gesehen oder nur im Test).
+  Danach schreibt er `review.md` neu, unter 4.000 Zeichen.
+- Reviewer, hält nicht auf (Kopf: Technikphase, also Review 8):
+  [3200](anliegen/3200-review7KlickpfadUndNochNicht.md) (Weggefallenes im Klickpfad,
+  Zyklusziel nennt jede *Sperre*) und
+  [3251](anliegen/3251-reviewLinksBelegeUndGlossar.md) (Links, Belege, *Modell*).
+- Organisationsentwickler (Prozessphase):
+  [2040](anliegen/2040-pythonUeberBashNachFreigabeRetro6.md),
+  [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md),
+  [2590](anliegen/2590-ablaufUndRegelnInUnterordner.md),
+  [2591](anliegen/2591-innenIchDesStakeholdersInDenPraemissen.md),
+  [2201](anliegen/2201-aenderungenDesStakeholdersVorherErproben.md),
+  [3050](anliegen/3050-hoechstmassDerArchitekturNach2570.md).
+- Regelumsetzer (Prozessphase):
+  [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md),
+  [2592](anliegen/2592-sedInSchleifeUmgehtSchreibgrenze.md),
+  [2720](anliegen/2720-rueckverfolgungNenntEinzeldateiStattT1.md),
+  [3120](anliegen/3120-architekturkarteImDashboard.md).
+- Ux (Domänenphase): [2920](anliegen/2920-leistenNamenInDenMockups.md),
+  [3040](anliegen/3040-que7MockupZeigtZurueckUndUebergehenBeiKohaerenz.md).
+- Planer (Domänenphase): [3051](anliegen/3051-architekturUmordnenInPlan8.md), wartet auf F1.
+- Architekt: [2215](anliegen/2215-leistenOhneEigenenNamen.md) wartet auf 2920,
+  [2740](anliegen/2740-gemesseneUndBeschriebeneArchitektur.md) auf 3120.
+- Fachkritiker: [3200](anliegen/3200-review7KlickpfadUndNochNicht.md) fängt Plan 8 selbst ab
+  (Domänenphase, Etappe 2 mit Kohärenz); nichts zu tun.
 
 ## Vorschläge
-- Anforderungsautor, ein Lauf: 2450 und 2440 sind dieselbe Änderung (AUF-8.4 löschen, AUF-12
-  und AUF-16.8 neu); danach Planer: `angenommen` in 2410 und 2450.
-- Zusammen: 2540 und 2541 sind dasselbe Thema (Kommentar löschen, Satz in die Architektur);
-  der Architekt trägt beide Seiten in einem Lauf ein, ein Commit nach dem Aufräumen.
-  Zusammenlegen dürfen nur die Absender; die Empfänger (Implementierer, Testautor) bleiben getrennt.
-- Architekt, ein Lauf: 2251, die AUF-8.4-Zeile aus 2410 und die Einträge zu 2540/2541 berühren
-  `handlungen.md`, `web.md`; 2215 gehört zu den Leisten wie 2240.
-- Implementierer: 2130 und 2240 zusammen (`komponenten.css`); 1651 und 1761 im Lauf von Item 1;
-  1750 und 1752 getrennt davon.
-- Organisationsentwickler: 2140 ist gegenstandslos (Sandbox entfällt, 1970); der Absender
-  schließt. 2040 bleibt als weiterer Beleg gegen [Ich 2](../prozess/praemissen/ich.md) für Retro 7;
-  2201 gehört mit dem zweiten Fall in dieselbe Retro.
-- 2360 Teil 2: Das Entfernen der `# Regel:`-Kommentare deckt Item 1 in [Plan 7](plan.md) ab,
-  zusammen mit 2540 und 2541; Es 8 ändert der Organisationsentwickler erst in der Prozessphase.
-- Stränge Technikphase 7: Implementierer und Testautor löschen gleichzeitig (getrennte Dateien),
-  der Architekt trägt gleichzeitig ein; danach je Item die Kette Architekt (Vertrag), Testautor,
-  Kritiker, Implementierer. Parallel zur Kette nur 2215 und 2251 (Architekt) vorher. Prozess:
-  Organisationsentwickler und Regelumsetzer getrennt, nur ein Lauf mit Hook-Code.
+- Reviewer, ein Lauf für Review 8: 3200 und 3251 betreffen dasselbe Review (Klickpfad,
+  Zyklusziel, Belege, Begriffe). Zusammenlegen dürfen die Absender (Fachkritiker,
+  Organisationsentwickler); der Reviewer arbeitet beide in einem Durchgang ab.
+- 3250 Punkt 1 und 3251 Punkt 1 (Dateien als Link) überlappen: Der Reviewer setzt in Review 7
+  die vier Dateien gleich als Link; 3251 Punkt 1 bleibt für die übrigen Stellen.
+- Der Stakeholder sagt im Chat: Fachlich sei alles in Ordnung, „Einheit zurücklegen“ gehe wie
+  gewünscht. 3200 verlangt nur Klarheit im Review, nichts am Gebauten; es hält nicht auf.
+- 3250 schließt der Organisationsentwickler nach Nachprüfung; ändert der Reviewer den Status,
+  gilt der neue Stand. 3200 und 3251 bleiben bis Review 8 offen.
+- Platz: Review 7 hat 3.934 von 4.000 Zeichen; Punkt 1 „Aus Review 6 behoben“ im Rundgang kann
+  für 3250 weichen (Vorschlag des Absenders).
+- Stränge: Prozessphase: Organisationsentwickler und Regelumsetzer getrennt, nur ein Lauf mit
+  Hook-Code; 2460, 2592, 2720 und 3120 berühren `prozess/pruefungen/`, also nacheinander.
+  2590 und 2591 ändern `ablauf.md`, `regeln.md` und die Prämissen: ein Lauf, danach 2360.
+  Domänenphase: Ux (2920, 3040) und Planer (3051) gleichzeitig; Architekt danach 2215.
+- 2040 und 2201 sind Belege für Retro 7, keine Arbeit vorher.
 
 ## Fragen an dich
-Keine offenen Fragen (`F<n>`) in den Anliegen.
-
-Annahme im Plan, nicht in einem Anliegen: Der Planer nimmt die 40 Kommentare `Warum:` zu den
-38 `Regel:` hinzu, weil [Es 8](../prozess/praemissen/es.md) sie ebenso verbietet. Sollen sie
-bleiben, braucht Es 8 eine Ausnahme; sag es mit deiner Freigabe.
+- [3051 · F1](anliegen/3051-architekturUmordnenInPlan8.md): Nimmst du das Umordnen der
+  Architektur als erstes Item in Plan 8? Empfehlung ja; hält die Freigabe von Review 7 nicht auf.

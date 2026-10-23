@@ -9,62 +9,61 @@ zurücklegen, beenden.
 1. Start: Arbiter nennt `http://127.0.0.1:8040/`. Ein zweiter Start sagt „Die Adresse … ist
    belegt. Läuft Arbiter schon?“ und startet nicht.
 2. „Necron Warriors“ anklicken, in die rote Zone klicken: *Formation*, daneben „Einheit
-   zurücklegen“ und „Aufstellen der Einheit beenden“.
-3. „Einheit zurücklegen“: *Karte* leer, der Knopf ist fort, die Necron Warriors bleiben
+   zurücklegen“ und „Aufstellen der Einheit beenden“; ein Knopf „zurück“ fehlt.
+3. Ein *Modell* auf eine *Armeeliste* ziehen, loslassen: Es springt zurück, ohne *Grund*.
+4. „Einheit zurücklegen“: *Karte* leer, der Knopf ist fort, die Necron Warriors bleiben
    *ausgewählt*; ein Klick in die Zone stellt sie neu auf.
-4. Einen Kreis anklicken, weit wegziehen, beenden: ‚keine Kohärenz‘, nichts zum Übergehen.
-5. „Einheit zurücklegen“, neu klicken, beenden: Spieler 1 ist *an der Reihe*.
+5. Ein *Modell* weit wegziehen, beenden: ‚keine Kohärenz‘, nichts zum Übergehen.
+6. „Einheit zurücklegen“, neu klicken, beenden: Spieler 1 ist *an der Reihe*.
 
-Ich bin 1 bis 5 am laufenden Arbiter im Browser durchgegangen (auf `--port`, Port 8040 belegt
-`festeAdresseTest`); jedes Bild wie beschrieben.
+Am laufenden Arbiter gesehen: 2 bis 6 auf anderem Port, da 8040 belegt war; von 1 der
+zweite Start. Dass der erste 8040 nennt, zeigt nur
+[festeAdresseTest](../technik/tests/akzeptanz/querschnitt/festeAdresseTest.py).
 
 ## DoD
 1. **Erfüllt.** `python3 -m pytest technik/tests`: 655 grün; Abdeckung über 95 %.
-2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 771 grün, mit ruff, eslint,
-   stylelint und der Kommentarregel; SonarLint: keine Funde. Kein Kommentar, kein TODO
-   unter `technik/`.
-3. **Erfüllt.** Beide Items gelöscht;
+2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 771 grün; SonarLint ohne Fund.
+3. **Erfüllt.** Items gelöscht,
    [AUF-23](../domaene/anforderungen/phasen/aufstellen/einheitZuruecklegen.md) beschreibt das
-   Gebaute, AUF-17 und AUF-8.4 sind samt Tests fort.
+   Gebaute, AUF-17 und AUF-8.4 sind fort.
 4. **Erfüllt.** Der Fachkritiker hat beide Items abgenommen.
 
 Oberfläche: **Erfüllt.** Bildschirmtests grün, Mockups auf-23 gelöscht.
-Mutation: **Erfüllt.** Alle 30 Mutanten der seit „Freigabe Plan 7“ geänderten Domänenzeilen
-gefangen.
+Mutation: **Erfüllt.** Alle 30 Mutanten der geänderten Domänenzeilen gefangen.
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 7“:
-kein Befund. „zurück“ und Loslassen auf die *Armeeliste* sind ohne Rest fort, die *Auswahl*
-kennt nur *Einheit* und *Ebene*. Anliegen 3140 (Vertrag V3) ist erledigt.
+kein Befund.
 
 ## Empfehlung
-Die DoD ist erfüllt, nichts hält auf: Gib Review 7 frei. Die offenen Anliegen warten auf
-spätere Phasen ([Moderation](moderation.md)).
+Die DoD ist erfüllt, nichts hält auf: Gib Review 7 frei, und gib Rundgang 1 und 2 dem
+Regelumsetzer. Die offenen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
 
 ## Rundgang Prüfcode
-Seit „Freigabe Review 6“ rund 1.800 Zeilen in `prozess/pruefungen/`: gezielte Mutation
-(`mutationsregeln/`), Kommentarregel ab Technikphase 7 (`formregeln/kommentare.py`,
-`technikphase.py`), Fortschritt im Dashboard (`rollenregeln/dashboardFortschritt.py`,
-`standregeln/zeilenZug.py`), `anliegenregeln/freieNummer.py`.
-1. Aus Review 6 behoben: „DoD über das Inkrement“ hakt nur der Befehl ab
-   (`standregeln/fortschritt.py:100`); ein Mutant startet nur die Tests seiner Zeile.
-2. `standregeln/hindernis.py` (`nächsteNummer`) und `zeilenZug.py` nehmen die höchste Nummer
-   plus eins statt `freieNummer`; laufen zwei Rollen, belegt ein Hindernis womöglich eine
-   Nummer der anderen (2460).
-3. `mutationsregeln/ergebnisse.py`: Ein gleichwertiger Mutant gilt je Quelltext der Zeile;
-   zwei gleiche Zeilen im Modul deckt eine Begründung.
+Seit „Freigabe Review 6“ rund 1.800 Zeilen in [prozess/pruefungen](../prozess/pruefungen):
+Mutation nur geänderter Zeilen, Kommentarregel, Anliegen mit Kopf als Felder, Anliegenboard nach
+Phasen, Fortschritt im Dashboard, freie Nummern.
+1. `lesen/anliegenKopf.py:24, 111` liest die alte Kopfzeile,
+   `anliegenregeln/kopfUmschreiben.py` schreibt sie um; kein Anliegen trägt sie mehr, auch
+   nicht in „Freigabe Plan 7“. Rest, kann weg, ebenso `die ` vor der Phase
+   (`anliegenKopf.py:107`, `rollenregeln/dashboardAnliegen.py:13`).
+2. Kommentare im Frontend prüfen `frontendregeln/eslintKommentare.mjs` und
+   `formregeln/kommentare.py:76` doppelt; eine Regel genügt.
+3. `standregeln/hindernis.py:60` nimmt die höchste Nummer plus eins statt `freieNummer`;
+   bei zwei Rollen womöglich eine fremde (2460).
 
 ## Nächstes Vorgehen
 - **Produktziel:** Etappe 1 von 10 ist erreicht
-  ([Aufstellen](../domaene/etappen/01-aufstellen.md)). Am meisten fehlt die Partie selbst:
-  Schlachtrunden, Phasen, Bewegen.
-- **Etappenziel:** Etappe 1 ist gebaut und abgenommen; ihre Randfälle warten auf Etappe 7.
-  Etappe 2 ([Bewegen](../domaene/etappen/02-bewegen.md)) schätze ich auf drei bis vier Zyklen.
+  ([Aufstellen](../domaene/etappen/01-aufstellen.md)). Am meisten fehlt die Partie selbst.
+- **Etappenziel:** Ihre Randfälle, 13 AUF-Kriterien ohne Test, warten nach [Plan 7](plan.md)
+  auf Etappe 7. [Etappe 2](../domaene/etappen/02-bewegen.md) nennt 14 Teile; Plan 8 nimmt 8,
+  die übrigen 6 schätze ich auf zwei bis drei Zyklen.
 - **Zyklusziel:** Plan 8: Nach dem Aufstellen wählt ihr, wer den ersten Zug hat; Arbiter zeigt
-  Schlachtrunde, Spieler am Zug und Phase, ihr beendet die leeren Phasen, und in der
-  Bewegungsphase macht eine *Einheit* einen Normal Move, gesperrt über M und über fremde
-  *Bases*. Noch nicht: Advance, gemeinsam übergehen mit *Protokoll*, Loslassen neben der
-  *Karte*. Vorher: die Architektur umordnen, ohne sichtbare Änderung
+  Schlachtrunde, Spieler am Zug und Phase, ihr beendet die leeren Phasen, nach der fünften
+  Schlachtrunde endet die Schlacht. In der Bewegungsphase macht eine *Einheit* einen Normal
+  Move, gesperrt über M, über fremde *Bases* und am Ende ohne *Kohärenz*. Noch nicht: Advance,
+  Zurücksetzen, über die Kante, Engagement Range, gemeinsam übergehen mit *Protokoll*, neue
+  Modelle, Loslassen neben der *Karte*. Vorher: die Architektur umordnen
   ([3051](anliegen/3051-architekturUmordnenInPlan8.md)).
 
 ## Fortschritt

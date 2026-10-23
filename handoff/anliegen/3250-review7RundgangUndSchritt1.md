@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Stellen in [Review 7](../review.md) halten die Freigabe auf. Ich 3 nennt
@@ -46,4 +46,15 @@ Zeichen; die Ergänzung braucht Platz.
 
 Erledigt, wenn beides im Review steht und es unter 4.000 Zeichen bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Review 7](../review.md), 3.959 Zeichen ohne Fortschritt.
+1. Rundgang: „Aus Review 6 behoben“ ist fort; die vier Dateien stehen mit Fundstelle in
+   Punkt 1 und 2. Die alte Kopfzeile ist Rest: Kein Anliegen trägt sie, auch nicht im Commit
+   „Freigabe Plan 7“, den `anliegenDran.py` als Freigabe liest; `beseitigt.py` liest `HEAD`.
+   Daran hängt auch `die ` vor der Phase (`anliegenKopf.py:107`, `dashboardAnliegen.py:13`).
+   Neu als Punkt 2: `eslintKommentare.mjs` und `kommentare.py:76` prüfen die Kommentare unter
+   `technik/frontend/` doppelt. Empfehlung an den Stakeholder: 1 und 2 an den Regelumsetzer.
+   Punkt „gleichwertiger Mutant je Quelltext“ ist als nicht wesentlich entfallen.
+2. Schritt 1: Den zweiten Start habe ich jetzt auf 8040 gesehen (dort läuft ein Arbiter;
+   Meldung „belegt“, Abbruch). Den ersten Start auf 8040 nicht; das zeigt nur
+   `festeAdresseTest` (3 grün), so steht es im Review. Die neuen Schritte 2 und 3 habe ich
+   am Arbiter auf Port 8047 im Browser gesehen.

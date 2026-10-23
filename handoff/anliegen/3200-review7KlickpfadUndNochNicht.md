@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Lücken in [Review 7](../review.md), keine hält auf: Der Stakeholder hat im
@@ -47,4 +46,13 @@ auch die *Kohärenz* am Ende der Bewegung.
 
 Erledigt, wenn Review 8 beides zeigt.
 
-**Stellungnahme.**
+**Stellungnahme.** Schon in [Review 7](../review.md), weil es dran war und das Review noch
+offen ist; ab Review 8 halte ich es so.
+1. Schritt 2 nennt den fehlenden Knopf „zurück“, Schritt 3 das Loslassen auf eine
+   *Armeeliste*: Das *Modell* springt zurück, ohne *Grund*. Beides am Arbiter im Browser
+   gesehen, für die eigene und die fremde *Armeeliste*.
+2. Das Zyklusziel teilt jeden Teil von „Erreicht, wenn“ der Etappe 2 in machbar oder „noch
+   nicht“. Meine Empfehlung ändert sich dabei: ‚keine *Kohärenz*‘ am Ende der Bewegung und
+   das Ende nach der fünften Schlachtrunde gehören in Plan 8. Die Kohärenz prüft Arbiter
+   schon beim Aufstellen, und sie ist die eine Sperre ohne Übergehen. Über die Kante,
+   Engagement Range und Zurücksetzen stehen unter „noch nicht“.
