@@ -4,7 +4,7 @@ let gründeDerLetztenSperre = []
 let letzterSpielstand = null
 
 const knöpfe = [
-  { text: "Aufstellen der Einheit beenden", handlung: () => handlungSenden("/api/aufstellenDerEinheitBeenden", "PUT") },
+  { text: "Aufstellen der Einheit beenden", handlung: aufstellenDerEinheitBeenden },
 ]
 
 function neuZeichnen(spielstand) {
@@ -70,6 +70,10 @@ export async function ebeneSenden(modell, istEbene) {
 
 export function modellLoslassen(modell, stelle) {
   return handlungSenden(`${modellPfad(modell)}/stelle`, "PUT", stelle)
+}
+
+function aufstellenDerEinheitBeenden() {
+  return handlungSenden("/api/aufstellenDerEinheitBeenden", "PUT")
 }
 
 export function karteAnklicken(stelle) {

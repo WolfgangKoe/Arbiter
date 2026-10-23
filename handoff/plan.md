@@ -73,6 +73,7 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Implementierer: Tests zu Item aufraeumenUndFesteAdresse grün
 - [x] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [ ] Reviewer: Kritik am Code zu Item aufraeumenUndFesteAdresse
+  Hindernis: Anliegen 2820: Pfeilfunktion als Hülle um einen Aufruf in anfragen.js (Es 7) (Anliegen 2861)
 - [ ] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
 - [ ] Planer: Item aufraeumenUndFesteAdresse gelöscht
 - [x] Architekt: Vertrag zu Item einheitZuruecklegen, bei beiden Hälften

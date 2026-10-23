@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Ich habe [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py) und
@@ -51,4 +50,12 @@ jeder Anforderung zur *Ebene*.
 
 Erledigt: 1 bis 5 umgesetzt oder begründet abgelehnt, Tests grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, 1 bis 5 sind umgesetzt.
+1. Die `Aufstellung` prüft selbst (`_prüfenDassZurAufstellung`); `Auswahl` kennt nur *Einheit* und *Ebene*.
+2. `ganzeEinheitIstEbene` und `modellIstEbene` stehen in `Auswahl` und werden von `Aufstellung`
+   durchgereicht; die Aufrufer fragen sie.
+3. `beideSpieler` heißt das Paar, `spieler` nur einen.
+4. `_aufgerundeteWurzel` rundet mit `math.ceil` auf.
+5. Die Reihenfolge ist Abfragen, Handlungen, Auswahl, private Helfer. Die Durchreichungen bleiben:
+   Die Oberfläche kennt nur `Aufstellung` (Vertrag V3), `aufstellung.auswahl` würde `Auswahl` nach
+   außen öffnen.
