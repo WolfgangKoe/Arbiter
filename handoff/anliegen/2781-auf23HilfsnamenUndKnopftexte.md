@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die nächste Technikphase).** Keine Prüfung ist rot, kein Kriterium
@@ -38,3 +38,7 @@ Stakeholder den Text, muss man ihn an vier Stellen finden.
 den ungenutzten Parameter beide als `_modell`. 3: `beendenKnopf` und `zurücklegenKnopf`
 stehen in `bildschirm.py`; `einheitZuruecklegenTest.py`, `sperreOhneStelleTest.py` und
 `beendenTest.py` importieren sie.
+
+**Nachprüfung.** Erledigt: `ausgewählt`, `_modell` in beiden, die Knopftexte stehen nur noch
+in `bildschirm.py`. Die Tests zu AUF-23 sind rot, weil `zurücklegen` noch nicht gebaut ist;
+`sperreOhneStelleTest.py` und `beendenTest.py` sind grün.

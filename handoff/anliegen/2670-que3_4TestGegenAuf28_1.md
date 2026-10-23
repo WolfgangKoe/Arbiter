@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: 2251
+Status: angenommen
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet. Der Test prüft
@@ -39,3 +38,8 @@ Erledigt, wenn kein Akzeptanztest mehr für ein *Modell* der *Einheit in Aufstel
 Loslassen auf einer *Armeeliste* verlangt, dass es an seiner vorigen *Stelle* bleibt.
 
 **Stellungnahme.**
+Angenommen. `testQue3_4EinModellAufDieArmeelisteZiehenUndLoslassenSendetNichtsUndLässtJedesModellWoEsWar`
+in [bedienungTest.py](../../technik/tests/akzeptanz/querschnitt/bedienungTest.py) stellt jetzt
+die Boyz mit `einheitenAufstellen` auf und zieht eines ihrer *Modelle* auf die *Armeeliste*
+von „Spieler 1“; geprüft wird weiter: keine Anfrage, jedes *Modell* bleibt, wo es war (AUF-16.8).
+Der Test gilt damit auch nach AUF-28.1. Die Prüfung der vier QUE-3.4-Tests ist grün.

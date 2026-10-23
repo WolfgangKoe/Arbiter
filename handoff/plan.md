@@ -74,7 +74,7 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [x] Reviewer: Kritik am Code zu Item aufraeumenUndFesteAdresse
   Hindernis: Anliegen 2820: Pfeilfunktion als Hülle um einen Aufruf in anfragen.js (Es 7) (Anliegen 2861); beseitigt: Commit „aufraeumenUndFesteAdresse: Knopf ohne Hülle, Anliegen 1651, 2820 und 2861 angenommen“
-- [ ] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
+- [x] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
 - [ ] Planer: Item aufraeumenUndFesteAdresse gelöscht
 - [x] Architekt: Vertrag zu Item einheitZuruecklegen, bei beiden Hälften
 - [x] Testautor: Tests zu Item einheitZuruecklegen

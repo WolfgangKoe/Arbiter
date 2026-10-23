@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Bei der Nachprüfung von 2572 und 2573 fiel auf,
@@ -49,3 +49,6 @@ verspricht, was geprüft wird.
 Fixture `sperrendesLoslassen` hat nur noch die Einheitennamen als Parameter, die `ids`
 bleiben. 4: Der Test prüft jetzt die *Karte* (`kreiseDerKarte` zeigt beide *Modelle* an
 ihren *Stellen*); der Name bleibt, denn er verspricht nur das.
+
+**Nachprüfung.** Erledigt: 1 bis 3 wie vorgeschlagen; 4 prüft die *Karte*
+(`kreiseDerKarte`), der Name verspricht nur das. Die Tests sind grün.

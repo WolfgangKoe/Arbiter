@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Erlaubt sind je Datei 6.000 Zeichen, zusammen 24.000

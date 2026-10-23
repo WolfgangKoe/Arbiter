@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die nächste Technikphase).** Keine Prüfung ist rot, das Kriterium ist
@@ -24,3 +24,5 @@ falsch und muss erst den Rumpf lesen.
 
 **Stellungnahme.** Angenommen, der Name ist der Vorschlag:
 `testAuf23_3MitEinemModellAlsEbeneLässtDerDienstDieEinheitMitDerGanzenEinheitAlsEbeneAusgewählt`.
+
+**Nachprüfung.** Erledigt: Der Name nennt erst den Ausgangszustand, dann das Ergebnis.

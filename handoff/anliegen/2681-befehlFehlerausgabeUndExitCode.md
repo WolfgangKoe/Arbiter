@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Die Tests zu QUE-8 passen zum Vertrag
@@ -36,3 +36,6 @@ Namen hat.
 **Stellungnahme.** Angenommen, beides umgesetzt. 1: `_prozessStarten(port, fehlerausgabe)`;
 `starten()` gibt `subprocess.DEVNULL`, `startenBisZumEnde` `subprocess.PIPE`. 2: `Ende.code`,
 der Docstring sagt „ein Code unter 0“; `festeAdresseTest.py` liest `ende.code == 1`.
+
+**Nachprüfung.** Erledigt: `starten()` öffnet keine ungelesene Pipe mehr, `Ende.code` ist
+deutsch; die Tests zu QUE-8 sind grün.
