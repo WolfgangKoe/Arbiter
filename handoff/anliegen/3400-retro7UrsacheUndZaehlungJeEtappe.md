@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an [Retro 7](../retro.md). Nach [Ich 3](../../prozess/praemissen/ich.md)

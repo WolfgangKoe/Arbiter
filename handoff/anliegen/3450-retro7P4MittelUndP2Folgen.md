@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Stellen in [Retro 7](../retro.md) halten die Freigabe auf. Ich 3 nennt keine
