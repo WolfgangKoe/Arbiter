@@ -402,7 +402,7 @@ def testGelberHinweisErscheintBeiOffenerFrageUndVerschwindetMitDerAntwort(tmp_pa
     ordner = tmp_path / "handoff" / "anliegen"
     ordner.mkdir(parents=True)
     anliegen = ordner / "10-frage.md"
-    kopf = "# Frage\n\n10 · Fragen · von planer → Stakeholder · Runde 1/3 · {status}\n"
+    kopf = "# Frage\n\nForm: Fragen\nVon: planer\nAn: Stakeholder\nRunde: 1/3\nStatus: {status}\n"
     anliegen.write_text(kopf.format(status="offen"), encoding="utf-8")
     assert 'class="offene-frage"' in hinweise(tmp_path)
     assert "(10)" in hinweise(tmp_path)

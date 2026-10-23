@@ -10,7 +10,6 @@ from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
 from standregeln.phasenfolge import Phase, lage
 
 Verweis = Callable[[Anliegen, Path], str]
-phasenanfang = "die "
 
 filterStil = """
 .anliegen-filter{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
@@ -67,14 +66,9 @@ def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
     auf: dict[str, list[Anliegen]] = {}
     for nummer, ziel in wartende(ordner).items():
         auf.setdefault(ziel, []).append(nachNummer[nummer])
-    aufAnliegen = [
-        anliegen
-        for ziel, liste in auf.items()
-        if not ziel.startswith(phasenanfang)
-        for anliegen in liste
-    ]
+    aufAnliegen = [anliegen for ziel, liste in auf.items() if ziel.isdigit() for anliegen in liste]
     bereiche = [("Wartet auf ein anderes Anliegen", aufAnliegen)] if aufAnliegen else []
-    if any(ziel.startswith(phasenanfang) for ziel in auf):
+    if any(not ziel.isdigit() for ziel in auf):
         bereiche += vorgemerktJePhase(ordner, auf)
     return bereiche
 
@@ -86,14 +80,15 @@ def vorgemerktJePhase(
     phasen = list(Phase)
     nächste = phasen.index(lage(ordner).phase) + 1
     versetzt = phasen[nächste:] + phasen[:nächste]
-    folge = [f"{phasenanfang}{phase}" for phase in versetzt]
-    return [(f"Vorgemerkt für {ziel}", auf[ziel]) for ziel in folge if ziel in auf]
+    folge = [str(phase) for phase in versetzt]
+    return [(f"Vorgemerkt für die {ziel}", auf[ziel]) for ziel in folge if ziel in auf]
 
 
 def wartetAufText(anliegen: Anliegen) -> str:
     if anliegen.wartetAuf is None:
         return ""
-    return f" · wartet auf {anliegen.wartetAuf}"
+    artikel = "" if anliegen.wartetAuf.isdigit() else "die "
+    return f" · wartet auf {artikel}{anliegen.wartetAuf}"
 
 
 def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:

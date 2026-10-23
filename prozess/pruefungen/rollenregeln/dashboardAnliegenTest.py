@@ -18,7 +18,7 @@ def ordner(tmp_path):
 
 def anliegenAnlegen(ordner: Path, nummer, form, richtung, status, titel="Titel"):  # noqa: PLR0913
     absender, empfänger = richtung
-    kopf = f"{nummer} · {form} · von {absender} → {empfänger} · Runde 2/3 · {status}"
+    kopf = f"Form: {form}\nVon: {absender}\nAn: {empfänger}\nRunde: 2/3\nStatus: {status}"
     datei = ordner / "handoff" / "anliegen" / f"{nummer}-titel.md"
     datei.write_text(f"# {titel}\n\n{kopf}\n", encoding="utf-8")
 

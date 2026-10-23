@@ -1,14 +1,17 @@
+import os
+import re
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from anliegenregeln.anliegen import kopfVerstöße
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
+from anliegenregeln.freieNummer import hauptprogramm
 from gemeinsam.pfade import wurzel
 from lesen.anliegenKopf import Status, anliegenDateien, freieNummer, kopfLesen, kopfÄndern
 
 guterKopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen"
-alterKopf = "12 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
 
 
 def wartetAuf(ziel):
@@ -65,7 +68,6 @@ def testStakeholderAlsRolleIstErlaubt(tmp_path):
         pytest.param("Architekt", "Gärtner", id="unbekannte Rolle"),
         pytest.param("Planer", "planer", id="Rolle klein geschrieben"),
         pytest.param(guterKopf, "Von Architekt an Planer · Runde 1/3", id="freier Text"),
-        pytest.param(guterKopf, alterKopf, id="alte Kopfzeile"),
         pytest.param("Runde: 1/3\n", "", id="Feld fehlt"),
     ],
 )
@@ -183,23 +185,11 @@ def testStatusIstEinWertDerAufzählungUnbekannterBleibtText(tmp_path):
 def testWartetAufImKopfIstGrün(tmp_path, zusatz):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf(zusatz))
     assert kopfVerstöße(datei, tmp_path) == []
-    erwartet = zusatz if zusatz.isdigit() else f"die {zusatz}"
-    assert kopfLesen(datei).wartetAuf == erwartet
+    assert kopfLesen(datei).wartetAuf == zusatz
 
 
 def testWartetAufEinenUnbekanntenTextIstRot(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf("x"))
-    assert kopfVerstöße(datei, tmp_path) != []
-
-
-def testDieAlteKopfzeileWirdNochGelesenAberNichtGeduldet(tmp_path):
-    datei = anliegenAnlegen(tmp_path, "12-probe.md", alterKopf + " · wartet auf die Prozessphase")
-    gelesen = kopfLesen(datei)
-    assert (gelesen.nummer, gelesen.absender, gelesen.wartetAuf) == (
-        12,
-        "Architekt",
-        "die Prozessphase",
-    )
     assert kopfVerstöße(datei, tmp_path) != []
 
 
@@ -222,7 +212,7 @@ def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
 def testEinAnliegenAufDieTechnikphaseIstInDerDomänenphaseNichtDran(gitRepo):
     anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Technikphase"))
     assert dran(gitRepo.ordner) == {}
-    assert wartende(gitRepo.ordner) == {12: "die Technikphase"}
+    assert wartende(gitRepo.ordner) == {12: "Technikphase"}
     (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
     assert dran(gitRepo.ordner) == {"Planer": [12]}
@@ -239,7 +229,7 @@ def testEinAnliegenAufDieDomänenphaseIstInDerTechnikphaseNichtDran(gitRepo):
 def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
     anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Prozessphase"))
     assert dran(gitRepo.ordner) == {}
-    assert wartende(gitRepo.ordner) == {12: "die Prozessphase"}
+    assert wartende(gitRepo.ordner) == {12: "Prozessphase"}
     plan = "# Plan · Zyklus 3\n"
     (gitRepo.ordner / "handoff" / "plan.md").write_text(plan, encoding="utf-8")
     (gitRepo.ordner / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
@@ -273,13 +263,6 @@ def testKopfÄndernSchreibtDieFelderUndLässtDenRestStehen(tmp_path):
     assert neu == datei.read_text(encoding="utf-8").replace("Status: offen", "Status: angenommen")
 
 
-def testKopfÄndernSchreibtDieAlteZeileAlsFelder(tmp_path):
-    datei = anliegenAnlegen(tmp_path, "12-probe.md", alterKopf + " · wartet auf 13")
-    neu = kopfÄndern(datei.read_text(encoding="utf-8"), {"Runde": "2/3"})
-    erwartet = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 2/3\nStatus: offen\nWartet auf: 13"
-    assert neu == f"# Titel\n\n{erwartet}\n\n## Runde 1\n"
-
-
 def testKopfÄndernOhneKopfGibtNichtsZurück():
     assert kopfÄndern("# Titel\n\nText\n", {"Status": "offen"}) is None
 
@@ -297,3 +280,36 @@ def testFreieNummerNimmtDieErsteNochNieVergebeneImBereich(gitRepo):
 def testFreieNummerMeldetEinenVollenBereich(tmp_path):
     anliegenAnlegen(tmp_path, "1980-erste.md", guterKopf)
     assert freieNummer(tmp_path, range(1980, 1981)) is None
+
+
+def testFreieNummerAlsBefehlNenntDieNummerOderScheitert(tmp_path, monkeypatch, capsys):
+    anliegenAnlegen(tmp_path, "1980-erste.md", guterKopf)
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    assert hauptprogramm(["1980", "1981"]) == 0
+    assert capsys.readouterr().out == "1981\n"
+    assert hauptprogramm(["1980", "1980"]) == 1
+    assert hauptprogramm(["x"]) == 1
+
+
+def testDieHilfemeldungNenntDenBefehlAusDenRegeln(capsys):
+    regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
+    assert hauptprogramm([]) == 1
+    aufruf = capsys.readouterr().err.removeprefix("Aufruf: ").strip()
+    assert f"`{aufruf}`" in regeln
+
+
+def testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess():
+    regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
+    zeile = next(zeile for zeile in regeln.splitlines() if "anliegenregeln.freieNummer" in zeile)
+    befehl = re.search(r"`(python3 [^`]*anliegenregeln\.freieNummer <erste> <letzte>)`", zeile)
+    assert befehl, "Regeln nennen keinen Befehl mit <erste> <letzte>"
+    lauf = subprocess.run(
+        befehl.group(1).replace("<erste>", "9000").replace("<letzte>", "9001").split(),
+        cwd=wurzel,
+        env={name: wert for name, wert in os.environ.items() if name != "PYTHONPATH"},
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert lauf.returncode == 0, lauf.stderr
+    assert lauf.stdout.strip() == "9000"

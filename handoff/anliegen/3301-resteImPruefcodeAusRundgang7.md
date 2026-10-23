@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -41,4 +41,11 @@ Zeilenkommentare am Zeilenanfang, eslint auch Block- und angehängte Kommentare)
 Erledigt, wenn keine Prüfung die alte Kopfzeile kennt, `die ` nur noch im Text steht und ein
 Prosa-Kommentar im Frontend genau einmal rot ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Prozess-Item P6 (Retro 7). (1) `kopfUmschreiben.py` samt Test,
+`alteKopfzeile`, `alterKopfAusZeile` und `kopfAlsFelder` sind gelöscht; `wartetAuf` trägt die
+Phase ohne `die `, beide Konstanten `phasenanfang` entfallen, `die ` steht nur noch in den
+Anzeigetexten. Der Test für `freieNummer` als Befehl zog nach `anliegenTest.py`; die Tests mit
+alter Kopfzeile als Vorlage nutzen die Felder. (2) `kommentare.py` prüft die Form in `.js` nicht
+mehr, zählt dort die TODOs; Scheiter-Test `testDieFormEinesKommentarsImFrontendPrüftNurEslintDieTodosZähltDiese`,
+die einmalige Meldung belegt `frontendTest.py` (Prosa-Kommentar). Eintrag in
+[Regeln](../../prozess/regeln.md#anliegenregeln).

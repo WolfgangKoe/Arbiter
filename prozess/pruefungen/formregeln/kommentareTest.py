@@ -26,8 +26,8 @@ def testDasRepoHältDieKommentarregel():
         pytest.param("# TODO:\n", ".py", id="TODO ohne Text"),
         pytest.param("x = 1  # noqa\n", ".py", id="noqa ohne Regelcode"),
         pytest.param("x = 1  # type: ignore\n", ".py", id="type ignore ohne Regelcode"),
-        pytest.param("// erklärt nur\n", ".js", id="JavaScript Prosa"),
-        pytest.param("// Warum: weil\n", ".js", id="JavaScript Warum"),
+        pytest.param("// erklärt nur\n", ".mjs", id="Konfiguration Prosa"),
+        pytest.param("// Warum: weil\n", ".mjs", id="Konfiguration Warum"),
         pytest.param("// eslint-disable-next-line\n", ".mjs", id="eslint ohne Regel"),
     ],
 )
@@ -80,6 +80,17 @@ def testDieVerstößeEinesVerzeichnissesNennenDateiUndGrund(tmp_path):
     meldungen = verstöße(tmp_path)
     assert len(meldungen) == 1
     assert meldungen[0].startswith("prozess/schlecht.py: ")
+
+
+def testDieFormEinesKommentarsImFrontendPrüftNurEslintDieTodosZähltDiese(tmp_path, gitRepo):
+    (tmp_path / "technik" / "frontend").mkdir(parents=True)
+    gitRepo.festhalten("Freigabe Plan 7")
+    frontend = tmp_path / "technik" / "frontend" / "seite.js"
+    frontend.write_text("// erklärt nur\n", encoding="utf-8")
+    assert verstöße(tmp_path) == []
+    todos = "".join(f"// TODO: Fall {nummer}\n" for nummer in range(höchstzahlOffenerPunkte + 1))
+    frontend.write_text(todos, encoding="utf-8")
+    assert verstöße(tmp_path) == [f"{höchstzahlOffenerPunkte + 1} TODOs, höchstens 3 erlaubt"]
 
 
 def testMehrTodosAlsDerDeckelSindRot(tmp_path):

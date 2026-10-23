@@ -10,8 +10,8 @@ from gemeinsam.pfade import anliegenOrdner, projektordner
 from lesen.anliegenKopf import (
     Anliegen,
     Status,
+    felderLesen,
     höchstRunde,
-    kopfAlsFelder,
     kopfAusText,
     kopfÄndern,
     stakeholder,
@@ -66,7 +66,7 @@ def statusSetzen(text: str, zug: Zug) -> str | None:
 
 
 def rundeSenken(text: str, zug: Zug) -> str | None:  # noqa: ARG001
-    felder, _ = kopfAlsFelder(text)
+    felder = felderLesen(text.splitlines())
     runde = int(felder["Runde"].partition("/")[0])
     return kopfÄndern(text, {"Runde": f"{runde - 1}/{höchstRunde}"})
 

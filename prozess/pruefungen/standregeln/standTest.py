@@ -25,7 +25,7 @@ def repo(gitRepo):
 
 
 def anliegen(repo, nummer, status, absender="Architekt", empfänger="Planer"):
-    kopf = f"{nummer} · Kritik · von {absender} (Technik) → {empfänger} · Runde 1/3 · {status}"
+    kopf = f"Form: Kritik\nVon: {absender}\nAn: {empfänger}\nRunde: 1/3\nStatus: {status}"
     repo.datei(f"handoff/anliegen/{nummer}-probe.md", f"# Probe\n\n{kopf}\n")
 
 
@@ -71,13 +71,13 @@ def testStandNenntJeOffenemAnliegenWerDranIst(repo):
 
 
 def testWartetAufÄndertNichtsAmDran(repo):
-    kopf = "15 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen"
+    kopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen"
     repo.datei("handoff/anliegen/15-probe.md", f"# Probe\n\n{kopf}\n\nwartet auf 16\n")
     assert "Dran: Planer (15)" in stand(repo.wurzel)
 
 
 def testStandZähltWartendeNichtUnterDran(repo):
-    kopf = "15 · Kritik · von Architekt (Technik) → Planer · Runde 1/3 · offen · wartet auf 16"
+    kopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen\nWartet auf: 16"
     repo.datei("handoff/anliegen/15-probe.md", f"# Probe\n\n{kopf}\n")
     anliegen(repo, "16", "offen", absender="Architekt", empfänger="Regelumsetzer")
     text = stand(repo.wurzel)

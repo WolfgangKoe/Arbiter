@@ -6,8 +6,6 @@ from gemeinsam.gitAufruf import dateiBeiCommit, letzteFreigabe
 from lesen.anliegenKopf import Anliegen, Status, gelesene, kopfAusText, stakeholder
 from standregeln.phasenfolge import lage
 
-phasenanfang = "die "
-
 
 def nachprüfungen(wurzel: Path) -> dict[str, list[int]]:
     """Fällige Nachprüfungen je Rolle: `angenommen` prüft der Absender, Wartende nicht."""
@@ -47,8 +45,8 @@ def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
     """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf die Prozessphase."""
     if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
         return False
-    if anliegen.wartetAuf.startswith(phasenanfang):
-        return anliegen.wartetAuf != f"{phasenanfang}{lage(wurzel).phase}"
+    if not anliegen.wartetAuf.isdigit():
+        return anliegen.wartetAuf != str(lage(wurzel).phase)
     return int(anliegen.wartetAuf) in {andere.nummer for andere in gelesene(wurzel)}
 
 

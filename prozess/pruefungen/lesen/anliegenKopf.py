@@ -21,12 +21,6 @@ class Status(StrEnum):
 
 typWerte = ("Kritik", "Fragen", "Anliegen", "Auftrag")
 höchstRunde = 3
-alteKopfzeile = re.compile(
-    rf"^(?P<nummer>\d+) · (?P<typ>\w+) · von (?P<absender>[^\s(]+)(?: \([^)]+\))?"
-    rf" → (?P<empfänger>[^\s(]+)(?: \([^)]+\))?"
-    rf" · Runde (?P<runde>\d+)/{höchstRunde} · (?P<status>\w+)"
-    rf"(?: · wartet auf (?P<wartetAuf>\d+|die (?:Domänen|Technik|Prozess)phase))?$"
-)
 stakeholder = "Stakeholder"
 wartetAufName = "Wartet auf"
 feldNamen = ("Form", "Von", "An", "Runde", "Status", wartetAufName)
@@ -76,11 +70,8 @@ def nummerAusDatei(datei: Path) -> int | None:
 
 
 def kopfAusText(text: str, datei: Path) -> Anliegen | None:
-    zeilen = text.splitlines()
-    felder = felderLesen(zeilen)
-    if felder:
-        return anliegenAusFeldern(felder, datei)
-    return alterKopfAusZeile(zeilen[2:3], datei)
+    felder = felderLesen(text.splitlines())
+    return anliegenAusFeldern(felder, datei) if felder else None
 
 
 def ohnePerspektive(rolle: str) -> str:
@@ -104,56 +95,17 @@ def anliegenAusFeldern(felder: dict[str, str], datei: Path) -> Anliegen | None:
         empfänger=ohnePerspektive(felder["An"]),
         runde=int(runde[1]),
         status=statusAusText(felder["Status"]),
-        wartetAuf=(wartet["nummer"] or f"die {wartet['phase']}") if wartet else None,
+        wartetAuf=(wartet["nummer"] or wartet["phase"]) if wartet else None,
     )
-
-
-def alterKopfAusZeile(zeilen: list[str], datei: Path) -> Anliegen | None:
-    treffer = alteKopfzeile.match(zeilen[0]) if zeilen else None
-    if treffer is None:
-        return None
-    return Anliegen(
-        datei=datei,
-        nummer=int(treffer["nummer"]),
-        typ=treffer["typ"],
-        absender=treffer["absender"],
-        empfänger=treffer["empfänger"],
-        runde=int(treffer["runde"]),
-        status=statusAusText(treffer["status"]),
-        wartetAuf=treffer["wartetAuf"],
-    )
-
-
-def kopfFelder(anliegen: Anliegen) -> dict[str, str]:
-    """Die Felder des Kopfes in der Reihenfolge des Ablaufs."""
-    felder = {
-        "Form": anliegen.typ,
-        "Von": anliegen.absender,
-        "An": anliegen.empfänger,
-        "Runde": f"{anliegen.runde}/{höchstRunde}",
-        "Status": str(anliegen.status),
-    }
-    if anliegen.wartetAuf:
-        felder[wartetAufName] = anliegen.wartetAuf.removeprefix("die ")
-    return felder
-
-
-def kopfAlsFelder(text: str) -> tuple[dict[str, str], int]:
-    """Die Felder des Kopfes (auch aus der alten Zeile) und die Zeile nach ihm; leer ohne Kopf."""
-    zeilen = text.splitlines()
-    felder = felderLesen(zeilen)
-    if felder:
-        return felder, 2 + len(felder)
-    alt = alterKopfAusZeile(zeilen[2:3], Path())
-    return (kopfFelder(alt), 3) if alt else ({}, 2)
 
 
 def kopfÄndern(text: str, änderungen: dict[str, str]) -> str | None:
-    """Der Text mit dem Kopf in neuer Form und den geänderten Feldern; `None` ohne Kopf."""
+    """Der Text mit den geänderten Feldern im Kopf; `None` ohne Kopf."""
     zeilen = text.splitlines()
-    felder, ende = kopfAlsFelder(text)
+    felder = felderLesen(zeilen)
     if not felder:
         return None
+    ende = 2 + len(felder)
     felder = {**felder, **änderungen}
     kopf = [f"{name}: {felder[name]}" for name in feldNamen if name in felder]
     neu = [*zeilen[:2], *kopf, *zeilen[ende:]]

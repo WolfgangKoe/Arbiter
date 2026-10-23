@@ -17,7 +17,7 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
 
 
 def worauf(ziel: str) -> str:
-    return ziel if ziel.startswith("die ") else f"{int(ziel):02d}"
+    return f"{int(ziel):02d}" if ziel.isdigit() else f"die {ziel}"
 
 
 def wartendeAnliegenAlsText(wurzel: Path) -> str:
