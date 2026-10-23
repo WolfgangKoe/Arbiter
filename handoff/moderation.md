@@ -17,7 +17,7 @@ Kommentar-Anliegen 2540 und 2541; sie warten auf die Technikphase, die mit der F
   - Anliegen 2450 und
     Anliegen 2440 (Anforderungsautor), danach
     Anliegen 2410 (Planer setzt `angenommen`).
-  - [1651](anliegen/1651-auswahlUndAufstellungImplizit.md) und
+  - Anliegen 1651 und
     [1761](anliegen/1761-loslassenOhneAntwortBleibtInDerVorschau.md) (Implementierer, in Item 1).
 - Wartend, hält nicht auf: Implementierer
   [1750](anliegen/1750-testLegtFestWasAuf27AndersRegelt.md),
@@ -25,7 +25,7 @@ Kommentar-Anliegen 2540 und 2541; sie warten auf die Technikphase, die mit der F
   [2130](anliegen/2130-goldenerRahmenInKomponentenCss.md),
   [2240](anliegen/2240-leistenInKomponentenseiteEintragen.md); Architekt
   [2215](anliegen/2215-leistenOhneEigenenNamen.md),
-  [2251](anliegen/2251-handlungenNachAuf28.md).
+  Anliegen 2251.
 - Prozessphase: [2201](anliegen/2201-aenderungenDesStakeholdersVorherErproben.md)
   (Organisationsentwickler), [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md)
   (Regelumsetzer).

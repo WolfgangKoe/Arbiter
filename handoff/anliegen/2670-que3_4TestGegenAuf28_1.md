@@ -25,7 +25,7 @@ wo es war. Das Kriterium, zu dem dieses stille Zurückspringen gehört,
 ein *Modell* einer *aufgestellten* *Einheit*.
 
 AUF-28.1 kommt erst mit Item [loslassenNebenDerKarte](../../domaene/items/loslassenNebenDerKarte.md)
-(Etappe 2), der Vertrag folgt ihm mit [2251](2251-handlungenNachAuf28.md).
+(Etappe 2), der Vertrag folgt ihm mit Anliegen 2251.
 
 **Kosten.** Bleibt es so, wird der Test mit loslassenNebenDerKarte rot und muss umgeschrieben
 werden. Bis dahin hält er ein Verhalten fest, das kein Kriterium verlangt. Die Änderung ist
