@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Stand und Dashboard zeigen „78 von 108 Kriterien belegt“, gezählt über alle
@@ -26,7 +26,7 @@ baut der Regelumsetzer als Item der Retro 8.
 B: Nur über alle Kriterien wie heute; der Eintrag im Backlog entfällt.
 Empfehlung: A, wie deine Wahl in 630. So siehst du in jeder Phase, ob die laufende Etappe
 vorankommt.
-Antwort: .
+Antwort: A
 
 Bis zu deiner Antwort bleibt der Eintrag im Backlog; Retro 7 legt dafür kein Item an.
 

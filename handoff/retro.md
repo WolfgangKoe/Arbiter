@@ -79,5 +79,5 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
