@@ -21,15 +21,17 @@ für die Retro. Mechanismus: nur Text.
   freigegebenen Plans nennt (`kriterienregeln/rueckverfolgung.py`); grün ist es dann nach
   DoD 1. Gezählt ohne Testlauf über alle Kriterien; je Etappe: [Backlog](backlog.md).
   Schwelle: kein Zuwachs in einem Zyklus. Reaktion: Die Retro nennt die Ursache; ihre
-  Prozess-Items gelten nur ihr (Anliegen 630, 691). Mechanismus: nur Text; Anzeige im Stand: Retro 5, P2.
+  Prozess-Items gelten nur ihr, Aufträge des Stakeholders und eine wiederholt verletzte
+  Prämisse bleiben erlaubt (Anliegen 630, 691, 3451). Mechanismus: nur Text; Anzeige im Stand: Retro 5, P2.
 
 ## Höchstmaße
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,
 `handoff/moderation.md` (4.000), Plan, Review, Retro je 4.000 (jede Zeile `Kommentar:` zählt
 als `Kommentar: .`, Anliegen 167; ohne den Abschnitt
-[Fortschritt](ablauf.md#fortschritt), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur
-(`technik/architektur.md` und je Datei in `technik/architektur/`) 6.000, zusammen 24.000
-(Anliegen 159, 211), Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
+[Fortschritt](ablauf.md#fortschritt), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur:
+Regeln (`technik/architektur.md` und je Datei in `technik/architektur/`) je 6.000, zusammen
+24.000 (Anliegen 159, 211); Vertrag je Phase eine Datei in `technik/architektur/vertrag/` zu
+je 6.000, ohne Summe (Anliegen 2570); Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
 `prozess/praemissen/` 3.000.
 
 Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß wird daraus ein Item bis

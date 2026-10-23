@@ -3,9 +3,10 @@
 Zurückgestellt, bis ein Befund es auslöst. Was ausgelöst ist, wird ein Prozess-Item der Retro.
 Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
 
-- Belegte Kriterien je Etappe zählen ([Kennzahlen](kennzahlen.md)): Kein Kriterium nennt
-  seine Etappe; Frage an Planer und Anforderungsautor (Anliegen 691). Auslöser: Etappe 1
-  ist erreicht, dann zählen alle Kriterien nicht mehr nur die laufende.
+- Belegte Kriterien je Etappe zählen ([Kennzahlen](kennzahlen.md)): Stand und Dashboard
+  zeigen „Etappe <n>: x von y Kriterien belegt“, daneben alle (Anliegen 3550, A). Wie ein
+  Kriterium seine Etappe nennt, legen Planer und Anforderungsautor in Domänenphase 8 fest
+  (Anliegen 3661); dann wird die Zählung ein Item der Retro 8 für den Regelumsetzer.
 - Mechanismus für „Der Empfänger setzt nie `erledigt`“ ([Ablauf, Anliegen](ablauf.md#anliegen)):
   Die Schreibgrenze sperrt Write und Edit, die `erledigt` in den Kopf schreiben, wenn die
   Rolle nicht der Absender ist (Gegenvorschlag in Anliegen 1591). Auslöser: Ein Empfänger

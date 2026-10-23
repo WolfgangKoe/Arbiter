@@ -4,8 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Befund für die Retro. In Anliegen 2160
@@ -36,6 +35,13 @@ Meine Erwartung ist, dass du mich über die Konsequenzen meiner eigenen Vorschl�
 Und so etwas gehört dazu. Es ist gut, wenn du möglichst eingeschränkt bist. Aber du musst
 auch arbeiten können. Und das Committen gehört dazu. P5 wartet schon ewig und das finde ich
 wichtiger, weil es den Code weniger zumüllt.“
+
+Angenommen mit Retro 7, P1, in [Ich 5](../../prozess/praemissen/ich.md), der Regel zu
+Empfehlungen an den Stakeholder (näher als Ich 1 und Ich 4): Eine Empfehlung, die
+Einstellungen, Hooks oder Prüfungen ändert, ist an einer Kopie in `/tmp` erprobt, auch ob
+danach alle Rollen arbeiten und committen, und nennt den Rückweg; ohne Probe sagt sie das.
+Ebenso nennt der Koordinator die Folgen eines Vorschlags des Stakeholders, bevor eine Rolle
+ihn umsetzt. Mechanismus: nur Text. Was ihn dabei bewegt, nimmt P3 (Innen-Ich) auf.
 
 Für die Retro daraus: Die Pflicht reicht weiter als der Gegenvorschlag oben. Nicht nur eine
 Empfehlung einer Rolle, auch ein Vorschlag des Stakeholders selbst wird vor dem Umsetzen auf

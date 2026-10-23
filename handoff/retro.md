@@ -68,12 +68,12 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 7
-- [ ] Organisationsentwickler: P1
+- [x] Organisationsentwickler: P1
 - [ ] Organisationsentwickler: P2
 - [ ] Organisationsentwickler: P3
 - [ ] Regelumsetzer: P4
 - [ ] Regelumsetzer: P5
-- [ ] Regelumsetzer: P6
+- [x] Regelumsetzer: P6
 - [ ] Regelumsetzer: P7
 - [ ] Regelumsetzer: P8
 - [ ] Koordinator: nach dev gepusht

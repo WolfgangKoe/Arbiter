@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Die [Höchstmaße](../../prozess/kennzahlen.md#höchstmaße) erlauben der Architektur
@@ -27,4 +26,6 @@ Datei in `technik/architektur/`) 6.000, zusammen 24.000“: „Architektur: Rege
 Summe (Anliegen 2570)“. Den Ordner `vertrag/` lege ich beim Umordnen an. Bestehende Regel,
 die das abdeckt: die Zeile selbst, angepasst.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen mit Retro 7, P1, wörtlich nach dem Gegenvorschlag in den
+[Höchstmaßen](../../prozess/kennzahlen.md#höchstmaße): Regeln je 6.000, zusammen 24.000;
+Vertrag je Phase eine Datei in `technik/architektur/vertrag/` zu je 6.000, ohne Summe.

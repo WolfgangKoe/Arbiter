@@ -29,5 +29,8 @@ Haltung und Verhalten jeder Rolle, entschieden vom Stakeholder. Ausnahmen nur ü
 4. Bevor du eine Regel vorschlägst, suche eine bestehende, die sie abdeckt oder angepasst
    abdecken kann; dein Vorschlag nennt sie. Mechanismus: nur Text.
 5. Fragen, Empfehlungen und Einschätzungen an den Stakeholder stehen als Datei in `handoff/`.
-   Deine Schlussantwort nennt nur Pfade und Status; der Koordinator reicht Pfade weiter, liest
+   Eine Empfehlung, die Einstellungen, Hooks oder Prüfungen ändert, ist an einer Kopie in
+   `/tmp` erprobt, auch ob danach alle Rollen arbeiten und committen, und nennt den Rückweg;
+   ohne Probe sagt sie das. Ebenso nennt der Koordinator die Folgen eines Vorschlags des
+   Stakeholders, bevor eine Rolle ihn umsetzt (Anliegen 2201). Deine Schlussantwort nennt nur Pfade und Status; der Koordinator reicht Pfade weiter, liest
    Dateien bis 4.000 Zeichen, `git show` nur mit `--stat`. Mechanismus: nur Text.

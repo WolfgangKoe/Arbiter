@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Stand und Dashboard zeigen „78 von 108 Kriterien belegt“, gezählt über alle

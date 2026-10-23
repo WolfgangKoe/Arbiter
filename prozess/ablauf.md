@@ -103,8 +103,8 @@ Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechan
    Prüfkonfiguration): die Dateien und die wesentlichen Probleme, je mit Fundstelle. Der
    Stakeholder kommentiert; was er beauftragt, wird in der Nachkorrektur ein Anliegen an den
    Regelumsetzer. Mechanismus: nur Text.
-7. Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare)) → Koordinator committet
-   `Freigabe Review <n>`. Danach Prozessphase. Mechanismus: nur Text.
+7. Kritik am Review ([Kritik](#kritik)), dann Freigabe ([Freigabe und Kommentare](#freigabe-und-kommentare))
+   → Koordinator committet `Freigabe Review <n>`. Danach Prozessphase. Mechanismus: nur Text.
 
 Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest danach),
 technisches Neuland (Wegwerf-Versuch, dann Test).
@@ -266,14 +266,15 @@ Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran
 Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Architekt, Reviewer: je Kritik am Code | Befehl
 Technik 4 | Reviewer: DoD über das Inkrement | Befehl
 Technik 5 je Item | Fachkritiker: Item <k> abgenommen · Planer: Item <k> gelöscht | Befehl · Fakt: Datei weg
-Technik 6, 7 | Reviewer: Review geschrieben · Stakeholder: Freigabe Review | Fakt: `# Review · Zyklus <n>` · Fakt: Commit
+Technik 6, 7 | Reviewer: Review geschrieben · je Kritiker: Kritik am Review · Stakeholder: Freigabe Review | Fakt: `# Review · Zyklus <n>` · Befehl · Fakt: Commit
 Prozess 1 | Organisationsentwickler: Retro geschrieben | Fakt: `# Retro · Zyklus <n>`
 Prozess 2, 3 | je Kritiker: Kritik an der Retro · Organisationsentwickler: Nachkorrektur | Befehl
 Prozess 4 | Stakeholder: Freigabe Retro | Fakt: Commit
 Prozess 5 je Prozess-Item | Rolle des Items: P<k> | Fakt: Commit `P<k>:`
 Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
 
-Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln));
+Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Regeln](regeln.md#standregeln);
+die Zeilen „Kritik am Review“ nur Text, Anliegen 3660);
 Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
 `standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
 Sperre der Zeilen mit Fakt), `standregeln/zeilenZug.py` (weist den Haken darauf ab; Anliegen
@@ -309,6 +310,7 @@ Anforderungen, Mockups (Domäne 5) | Anforderungsautor, UX | Fachkritiker (Ziel,
 Plan, Items, Anforderungen, Mockups (Domäne 7) | Planer, Anforderungsautor, UX | Architekt (prüfbar, Kosten, Schnitt, vorhandene Komponenten), Fachkritiker (Etappe)
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
 `technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Architekt (Architektur), Reviewer (Lesbarkeit)
+Review | Reviewer | Fachkritiker (Klickpfad und Zyklusziel gegen Plan und Etappe), Organisationsentwickler (Form nach Technikphase 6, Rundgang vollständig, [Wir 5](praemissen/wir.md))
 Retro | Organisationsentwickler | Fachkritiker, Architekt
 `pyproject.toml`, Linter-Konfiguration | Regelumsetzer | Architekt (schränkt sie die Technik richtig ein?)
 
@@ -368,12 +370,14 @@ Wartet auf: Prozessphase
 ```
 Die Nummer steht nur im Dateinamen. `Wartet auf:` steht, solange erst ein anderes Anliegen
 erledigt sein muss (`Wartet auf: 1213`) oder es nach [Ich 3](praemissen/ich.md) auf eine
-Phase wartet (`Domänenphase`, `Technikphase`, `Prozessphase`). Rolle: Name aus
+Phase wartet (`Domänenphase`, `Technikphase`, `Prozessphase`). Ohne Zyklus ist es dran,
+sobald die Phase läuft, auch die laufende; die Phase eines späteren Zyklus nennt ihn
+(`Technikphase 8`), dann wartet es bis dahin (Anliegen 3200, 3251). Rolle: Name aus
 `.claude/agents/` oder Stakeholder, ohne Perspektive (Anliegen 420). Ein Modul liest und
 schreibt den Kopf für alle Skripte.
 Mechanismus: `anliegenregeln/anliegen.py`, `lesen/anliegenKopf.py`
 ([Regeln](regeln.md#anliegenregeln)); eine Perspektive in Klammern lässt es durch, ohne
-Perspektive: nur Text.
+Perspektive: nur Text; Phase mit Zyklus: nur Text, bis Retro 7, P5 sie baut.
 
 Form | der Empfänger soll | Absender
 ---|---|---

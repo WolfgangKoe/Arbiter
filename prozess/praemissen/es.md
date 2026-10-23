@@ -27,8 +27,8 @@ deutsch mit Umlauten, Dateinamen ASCII.
 8. Der Code erklärt sich selbst. Kommentare nur aus einer festen Liste: Werkzeugkommentare mit
    Regelcode (`# noqa: <Code>`, `// eslint-disable-next-line <Regel>`) und `TODO: <was>`,
    höchstens drei; ein TODO von vor der laufenden Technikphase macht die DoD über das
-   Inkrement rot. Docstrings einzeilig (Anliegen 1660, 1860). Mechanismus: nur Text, bis
-   Retro 6, P5 `formregeln/kommentare.py` umbaut.
+   Inkrement rot. Docstrings einzeilig (Anliegen 1660, 1860). Mechanismus:
+   `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`.
 9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele, die
    sich nur in Daten unterscheiden, als Tabelle; viele mit eigenem Verhalten als eigene Typen.
    Urteil des Reviewers, Schwellen: [Ablauf, DoD](../ablauf.md#dod-item-fertig).

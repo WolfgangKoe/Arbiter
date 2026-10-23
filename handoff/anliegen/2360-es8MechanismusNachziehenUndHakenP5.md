@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** P5 (Retro 6, Anliegen 1660, 1860) ist gebaut und grün: [Regeln, Formregeln](../../prozess/regeln.md#formregeln),
@@ -32,3 +31,5 @@ läuft Technikphase 7. Die Retro 7 beschreibt die Änderung; nach ihrer Freigabe
 die Schwelle steht in den [Regeln](../../prozess/regeln.md#formregeln). Dann setze ich `angenommen`.
 Teil 2 ist erledigt: Der Haken „Regelumsetzer: P5“ in der [Retro](../retro.md) ist gesetzt.
 Die Kommentare unter `technik/` sind entfernt (kein `# Regel:` und `// Regel:` mehr).
+Teil 1 umgesetzt mit Retro 7, P1: [Es 8](../../prozess/praemissen/es.md) endet mit
+„Mechanismus: `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`.“
