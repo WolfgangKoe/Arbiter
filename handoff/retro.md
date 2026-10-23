@@ -61,7 +61,7 @@ Am Bildschirm ändert sich nichts.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
-- [ ] Fachkritiker: Kritik an der Retro
+- [x] Fachkritiker: Kritik an der Retro
 - [ ] Architekt: Kritik an der Retro
 - [ ] Organisationsentwickler: Nachkorrektur
 - [ ] Stakeholder: Freigabe Retro 7

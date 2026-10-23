@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Planer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Im Auftrag des Stakeholders: In der Freigabe von [Review 7](../review.md) schreibt
@@ -29,4 +29,13 @@ Plan 8 auf, nicht die Retro.
 
 Erledigt, wenn die Datei gelöscht ist und der Stand Etappe 2 nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei Punkte.
+1. `01-aufstellen.md` ist gelöscht; der Stand nennt „Etappe 2 von 10 (Phasen und
+   Bewegungsphase)“.
+2. Der Link in Plan 7 bleibt, bis Plan 8 die Datei ersetzt; den freigegebenen Plan ändere
+   ich nicht.
+3. Plan 8 nennt [Etappe 2](../../domaene/etappen/02-bewegen.md) und bittet in der Freigabe
+   um ihr „.“.
+
+Die übrigen Verweise auf Etappe 1 in Daten, Glossar und zwei Anforderungen gehen an den
+Anforderungsautor ([3500](3500-verweiseAufEtappe1.md)), sie warten auf die Domänenphase.
