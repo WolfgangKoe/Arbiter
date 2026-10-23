@@ -1,16 +1,16 @@
 # Moderation
 
-Stand vor „Freigabe Review 7“. Hält auf: nur [3250](anliegen/3250-review7RundgangUndSchritt1.md)
+Stand vor „Freigabe Review 7“. Hält auf: nur Anliegen 3250
 (Reviewer). Keine Frage hält die Freigabe auf; keine Annahme nach [Ich 1](../prozess/praemissen/ich.md).
 
 ## Dran
-- Reviewer, hält Review 7 auf: [3250](anliegen/3250-review7RundgangUndSchritt1.md)
+- Reviewer, hält Review 7 auf: Anliegen 3250
   (Rundgang: vier Dateien fehlen; Satz zu Schritt 1 gesehen oder nur im Test).
   Danach schreibt er `review.md` neu, unter 4.000 Zeichen.
 - Reviewer, hält nicht auf (Kopf: Technikphase, also Review 8):
-  [3200](anliegen/3200-review7KlickpfadUndNochNicht.md) (Weggefallenes im Klickpfad,
+  Anliegen 3200 (Weggefallenes im Klickpfad,
   Zyklusziel nennt jede *Sperre*) und
-  [3251](anliegen/3251-reviewLinksBelegeUndGlossar.md) (Links, Belege, *Modell*).
+  Anliegen 3251 (Links, Belege, *Modell*).
 - Organisationsentwickler (Prozessphase):
   [2040](anliegen/2040-pythonUeberBashNachFreigabeRetro6.md),
   [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md),
@@ -28,7 +28,7 @@ Stand vor „Freigabe Review 7“. Hält auf: nur [3250](anliegen/3250-review7Ru
 - Planer (Domänenphase): [3051](anliegen/3051-architekturUmordnenInPlan8.md), wartet auf F1.
 - Architekt: [2215](anliegen/2215-leistenOhneEigenenNamen.md) wartet auf 2920,
   [2740](anliegen/2740-gemesseneUndBeschriebeneArchitektur.md) auf 3120.
-- Fachkritiker: [3200](anliegen/3200-review7KlickpfadUndNochNicht.md) fängt Plan 8 selbst ab
+- Fachkritiker: Anliegen 3200 fängt Plan 8 selbst ab
   (Domänenphase, Etappe 2 mit Kohärenz); nichts zu tun.
 
 ## Vorschläge

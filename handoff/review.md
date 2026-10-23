@@ -76,5 +76,5 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
 - [ ] Stakeholder: Freigabe Plan 8
 
 ## Freigabe
-Freigabe: offen
-Kommentar: .
+Freigabe: ja
+Kommentar: Ich habe alles soweit geprüft. Wir können Etappe 1 somit auch abschließen und die Datei löschen. Auch alles für die Prozessphase habe ich soweit adressiert. Bitte Retro.md vorbereiten
