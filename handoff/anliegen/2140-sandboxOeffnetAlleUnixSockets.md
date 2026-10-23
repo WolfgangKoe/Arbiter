@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: abgelehnt
+Status: erledigt
 
 ## Runde 1
 **Befund.** Bestehende Regel: [Regeln](../../prozess/regeln.md#rollenregeln), Zeile

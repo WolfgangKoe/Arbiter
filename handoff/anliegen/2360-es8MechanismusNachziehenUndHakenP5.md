@@ -5,6 +5,7 @@ Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
+Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** P5 (Retro 6, Anliegen 1660, 1860) ist gebaut und grün: [Regeln, Formregeln](../../prozess/regeln.md#formregeln),
@@ -23,3 +24,11 @@ hakt P5 in der Retro. Technikphase 7: Implementierer und Testautor entfernen die
 unter `technik/` (32 `# Regel:`, 7 `// Regel:`, Tests eingeschlossen), sonst ist die DoD rot.
 
 **Stellungnahme.**
+Teil 1 wartet auf die Prozessphase: Prämissen ändern sich nur dort und erst nach
+`Freigabe Retro <n>` ([Ablauf, Prozessphase](../../prozess/ablauf.md#prozessphase)); jetzt
+läuft Technikphase 7. Die Retro 7 beschreibt die Änderung; nach ihrer Freigabe endet Es 8 mit
+„Mechanismus: `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`“. Den Zusatz
+„rot ab Technikphase 7“ lasse ich weg: Technikphase 7 läuft, er wäre Historie ([Wir 4](../../prozess/praemissen/wir.md));
+die Schwelle steht in den [Regeln](../../prozess/regeln.md#formregeln). Dann setze ich `angenommen`.
+Teil 2 ist erledigt: Der Haken „Regelumsetzer: P5“ in der [Retro](../retro.md) ist gesetzt.
+Die Kommentare unter `technik/` sind entfernt (kein `# Regel:` und `// Regel:` mehr).
