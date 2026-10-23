@@ -61,13 +61,13 @@ def zweitesBoyzModellOhneEbene(request, aufstellungNachDerZonenwahl, boyzSetzen,
 
 
 def testAuf25_1EinKlickAufEinModellMachtEsZurEbeneGleichWasDavorWar(
-    aufstellungNachDerZonenwahl, boyz, zweitesBoyzModellOhneEbene
+    aufstellungNachDerZonenwahl, zweitesBoyzModellOhneEbene
 ):
     zweites, _ = zweitesBoyzModellOhneEbene
 
     aufstellungNachDerZonenwahl.ebeneWählen(zweites)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is zweites
+    assert aufstellungNachDerZonenwahl.modellIstEbene(zweites)
 
 
 def testAuf25_1EinKlickAufEinModellNachDemSetzenPerKlickMachtEsZurEbene(
@@ -80,7 +80,7 @@ def testAuf25_1EinKlickAufEinModellNachDemSetzenPerKlickMachtEsZurEbene(
 
     aufstellungNachDerZonenwahl.ebeneWählen(letztes)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is letztes
+    assert aufstellungNachDerZonenwahl.modellIstEbene(letztes)
 
 
 def testAuf25_1DerDienstGleichtNachDemKlickAufEinModellDemBeispielDesVertrags(
@@ -97,7 +97,7 @@ def testAuf25_1DerDienstGleichtNachDemKlickAufEinModellDemBeispielDesVertrags(
 
 @mitMausUndFinger
 def testAuf25_1DieSeiteSendetBeimKlickAufEinModellOhneEbeneEinPutUndDieEbeneIstDasModell(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, zweitesBoyzModellOhneEbene, eingabe
+    bildschirm, aufstellungNachDerZonenwahl, zweitesBoyzModellOhneEbene, eingabe
 ):
     zweites, stelleZweites = zweitesBoyzModellOhneEbene
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
@@ -107,7 +107,7 @@ def testAuf25_1DieSeiteSendetBeimKlickAufEinModellOhneEbeneEinPutUndDieEbeneIstD
 
     assert antwort.value.request.method == "PUT"
     assert antwort.value.status == HTTPStatus.OK
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is zweites
+    assert aufstellungNachDerZonenwahl.modellIstEbene(zweites)
 
 
 def testAuf25_1DieSeiteAdressiertImBeispielDesVertragsDasAngeklickteModell(
@@ -138,7 +138,7 @@ def testAuf25_1NachDemZiehenDerEinheitIstDieEbeneDieGanzeEinheit(
 
     modellZiehen(seite, stelleErstes, ziel, eingabe)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
     assert aufstellungNachDerZonenwahl.ausgewählt(boyz)
 
 
@@ -155,7 +155,7 @@ def testAuf25_1NachDemZiehenDesModellsDasDieEbeneIstBleibtEsDieEbene(
     modellZiehen(seite, stelleErstes, ziel, eingabe)
 
     assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(erstes), ziel)
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is erstes
+    assert aufstellungNachDerZonenwahl.modellIstEbene(erstes)
 
 
 def testAuf25_2EinKlickAufDasModellDerEbeneMachtWiederDieGanzeEinheitZurEbene(
@@ -167,7 +167,7 @@ def testAuf25_2EinKlickAufDasModellDerEbeneMachtWiederDieGanzeEinheitZurEbene(
 
     aufstellungNachDerZonenwahl.ebeneAbwählen(erstes)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
 def testAuf25_2EinZweiterKlickAufDasModellMachtDieGanzeEinheitZurEbeneAuchBeiAnderemModell(
@@ -180,7 +180,7 @@ def testAuf25_2EinZweiterKlickAufDasModellMachtDieGanzeEinheitZurEbeneAuchBeiAnd
 
     aufstellungNachDerZonenwahl.ebeneAbwählen(zweites)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
 def testAuf25_2DerDienstGleichtNachDemZweitenKlickDemBeispielVonV1(
@@ -210,7 +210,7 @@ def testAuf25_2DieSeiteSendetBeimKlickAufDasModellDerEbeneEinDeleteUndDieEbeneIs
 
     assert antwort.value.request.method == "DELETE"
     assert antwort.value.status == HTTPStatus.OK
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
 @mitMausUndFinger
@@ -274,7 +274,7 @@ def testAuf25_3DasAbwählenDerEbeneÄndertAuswahlModelleEinheitInAufstellungUndR
     assert zustandOhneEbene(aufstellungNachDerZonenwahl, boyz) == zustandDavor
 
 
-def testAuf25_3DerDienstLässtBeimWählenDerEbeneAblagenStellenUndReiheGleich(
+def testAuf25_3DerDienstLässtBeimWählenDerEbeneArmeelistenStellenUndReiheGleich(
     dienst, aufstellungNachDerZonenwahl, boyzSetzen, boyz
 ):
     [(erstes, _), *_] = boyzSetzen(3)
@@ -305,7 +305,7 @@ def testAuf25_3DieSeiteLässtBeimKlickAufEinModellDieEinheitAusgewähltUndDieMod
     expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(1)
     assert ausgewählteEinheiten(seite) == {"Boyz"}
     assert zustandOhneEbene(aufstellungNachDerZonenwahl, boyz) == zustandDavor
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is erstes
+    assert aufstellungNachDerZonenwahl.modellIstEbene(erstes)
 
 
 def testAuf25_4IstDieEbeneEinModellIstNurDiesesModellAusgewählt(

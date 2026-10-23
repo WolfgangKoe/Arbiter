@@ -5,6 +5,7 @@ import select
 import subprocess
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 import pytest
 from playwright.sync_api import Browser, sync_playwright
@@ -26,6 +27,15 @@ from tests.akzeptanz.handgriffe import (
 
 _technik = Path(__file__).parents[2]
 _sekundenBisZurAdresse = 15
+_freierPort = 0
+
+
+class Ende(NamedTuple):
+    """Was ein beendeter Befehl hinterließ; ein Exit-Code unter 0 heißt, er lief weiter."""
+
+    ausgabe: str
+    fehlerausgabe: str
+    exitCode: int
 
 
 class Befehl:
@@ -35,19 +45,32 @@ class Befehl:
         self._prozesse: list[subprocess.Popen] = []
 
     def starten(self) -> str:
-        """Startet Arbiter neu und gibt die Adresse aus der ersten Zeile zurück."""
-        # Warum: Ungepuffert wie an einem Terminal, sonst käme die Adresse in der Pipe zu spät
+        """Startet Arbiter auf einem freien Port; gibt die Adresse der ersten Zeile zurück."""
+        prozess = self._prozessStarten(_freierPort)
+        bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
+        return prozess.stdout.readline().strip() if bereit else ""
+
+    def startenBisZumEnde(self, port: int) -> Ende:
+        """Startet Arbiter auf dem Port und wartet auf sein Ende; läuft er weiter, endet er hier."""
+        prozess = self._prozessStarten(port)
+        try:
+            ausgabe, fehlerausgabe = prozess.communicate(timeout=_sekundenBisZurAdresse)
+        except subprocess.TimeoutExpired:
+            prozess.terminate()
+            ausgabe, fehlerausgabe = prozess.communicate()
+        return Ende(ausgabe, fehlerausgabe, prozess.returncode)
+
+    def _prozessStarten(self, port: int) -> subprocess.Popen:
         umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
         prozess = subprocess.Popen(
-            [sys.executable, "-m", "arbiter"],
+            [sys.executable, "-m", "arbiter", "--port", str(port)],
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             text=True,
             env=umgebung,
         )
         self._prozesse.append(prozess)
-        bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
-        return prozess.stdout.readline().strip() if bereit else ""
+        return prozess
 
     def beenden(self) -> None:
         for prozess in self._prozesse:

@@ -1,5 +1,7 @@
 """Startet den Werkzeug-Server in einem eigenen Thread (web.md, W2)."""
 
+import errno
+import socket
 from threading import Thread
 
 from werkzeug.serving import make_server
@@ -11,11 +13,26 @@ _gerät = "127.0.0.1"
 _freierPort = 0
 
 
+class AdresseBelegt(Exception):
+    def __init__(self, adresse: str) -> None:
+        super().__init__(adresse)
+        self.adresse = adresse
+
+
+def adresseMitPort(port: int) -> str:
+    return f"http://{_gerät}:{port}/"
+
+
 class Server:
-    def __init__(self, aufstellung: Aufstellung) -> None:
-        self._server = make_server(_gerät, _freierPort, anwendungFür(aufstellung))
+    def __init__(self, aufstellung: Aufstellung, port: int) -> None:
+        verbindung = _verbindungBinden(port)
+        anwendung = anwendungFür(aufstellung)
+        with verbindung:
+            kennung = verbindung.fileno()
+            gebundenerPort = verbindung.getsockname()[1]
+            self._server = make_server(_gerät, gebundenerPort, anwendung, fd=kennung)
         self._thread = Thread(target=self._server.serve_forever, daemon=True)
-        self.adresse = f"http://{_gerät}:{self._server.port}/"
+        self.adresse = adresseMitPort(self._server.port)
 
     def starten(self) -> None:
         self._thread.start()
@@ -29,7 +46,17 @@ class Server:
         self._thread.join()
 
 
-def serverStarten(aufstellung: Aufstellung) -> Server:
-    server = Server(aufstellung)
+def serverStarten(aufstellung: Aufstellung, port: int = _freierPort) -> Server:
+    server = Server(aufstellung, port)
     server.starten()
     return server
+
+
+def _verbindungBinden(port: int) -> socket.socket:
+    """Bindet den Socket selbst, damit eine belegte Adresse als `AdresseBelegt` ankommt."""
+    try:
+        return socket.create_server((_gerät, port))
+    except OSError as fehler:
+        if fehler.errno == errno.EADDRINUSE:
+            raise AdresseBelegt(adresseMitPort(port)) from fehler
+        raise

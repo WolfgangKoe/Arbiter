@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Item 1 in [Plan 7](../plan.md) entfernt zuerst die
@@ -33,3 +32,7 @@ Kommentare in den Tests nach Plan 7.
 Erledigt, wenn keiner der Kommentare beider Listen mehr steht, auch nicht als Docstring.
 
 **Stellungnahme.**
+Angenommen. Alle 29 Kommentare `Warum:` und `Regel:` in den Akzeptanztests sind gelöscht, die
+sieben Kommentare der beiden Listen ersatzlos und ohne Docstring; die übrigen entfallen
+ebenso, weil der Name des Bezeichners das Gesagte trägt. 508 Tests werden weiter gesammelt.
+Die Sätze für B2, B3 und B4 trägt der Architekt in web.md ein.

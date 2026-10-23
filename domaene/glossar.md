@@ -44,6 +44,5 @@ Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *S
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
-zurück | – | zurück | Handlung, mit der die *Spieler* eine *Sperre* hinnehmen, die sie *gemeinsam übergehen* könnten: Die gesperrte Handlung unterbleibt (Etappe 1, Anliegen 362 F6 A).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Etappe 1, Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).

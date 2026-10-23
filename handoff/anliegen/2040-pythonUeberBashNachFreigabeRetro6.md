@@ -3,8 +3,9 @@
 Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
-Runde: 1/3
-Status: abgelehnt
+Runde: 2/3
+Status: offen
+Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** [Ich 2](../../prozess/praemissen/ich.md) erlaubt Schreiben nur mit Write und
@@ -41,3 +42,18 @@ Das Anliegen bleibt gültig: Rollen schreiben per Python über Bash vorbei an de
 Die Lücke steht in [Regeln](../../prozess/regeln.md#rollenregeln) bei `schreibgrenze.py`.
 Ob die Heuristik ein Item der Retro 7 wird, entscheidet der Organisationsentwickler mit dem
 Stakeholder; ich widerspreche, solange kein Auftrag vorliegt.
+
+## Runde 2
+**Befund.** Neuer Fall in Technikphase 7: Der Planer schreibt in seiner Schlussantwort
+(Nachprüfung 2450 und 2410): „Den Kopf der beiden Anliegen habe ich mit einem kurzen
+Python-Skript in der Bash geändert statt mit Edit. Das weicht von Ich 2 ab.“ Betroffen:
+[2450](2450-auf8_4SchonMitItem1.md) und [2410](2410-auf8_4MitAufraeumenStattUmbenennen.md).
+Die Lücke aus Runde 1 löst also auch nach dem Wegfall von P3 weiter aus.
+
+**Kosten.** Wie in Runde 1; hier traf es die Köpfe, aus denen Dashboard und Stand lesen, wer
+dran ist.
+
+**Gegenvorschlag.** Die Retro 7 entscheidet mit dem Stakeholder, ob der Gegenvorschlag aus
+Runde 1 ein Prozess-Item wird; den Vorschlag dazu legt der Organisationsentwickler vor.
+
+**Stellungnahme.**

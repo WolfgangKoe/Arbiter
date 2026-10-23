@@ -5,7 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.handgriffe import gerade, schräg, sperrgründe
+from tests.akzeptanz.handgriffe import gerade, schrägOhneWurzel, sperrgründe
 
 
 def testQue1_1VorDemSetzenIstDasModellNichtGesetzt(aufstellung, ersteEinheitDesSpielersAnDerReihe):
@@ -91,7 +91,13 @@ def testQue1_2AuchDasModellEinerAufgestelltenEinheitWirdÜberdeckt(
 
 @pytest.mark.parametrize(
     "lage",
-    [(1, gerade), (1, schräg), (Fraction(1, 2), gerade), (0, gerade), (-Fraction(1, 2), gerade)],
+    [
+        (1, gerade),
+        (1, schrägOhneWurzel),
+        (Fraction(1, 2), gerade),
+        (0, gerade),
+        (-Fraction(1, 2), gerade),
+    ],
     ids=["einZoll", "einZollSchräg", "halberZoll", "berührend", "überdeckend"],
 )
 def testQue1_3InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesperrt(
@@ -108,7 +114,7 @@ def testQue1_3InNahkampfreichweiteEinesGesetztenModellsDesAnderenSpielersIstGesp
     assert not aufstellung.gesetzt(modell)
 
 
-@pytest.mark.parametrize("richtung", [gerade, schräg], ids=["gerade", "schräg"])
+@pytest.mark.parametrize("richtung", [gerade, schrägOhneWurzel], ids=["gerade", "schräg"])
 def testQue1_3JenseitsVonEinemZollIstNichtInNahkampfreichweite(
     aufstellung, einheitNachDemAnderenSpieler, richtung, platz
 ):

@@ -16,7 +16,6 @@ def angehalten(
     ziel = neue[gezogenes]
     weg = messen.wegZwischen(davor, ziel)
     bewegte = [(modell.base, stellen[modell]) for modell in neue]
-    # Regel: AUF-26.2 und 26.3, die Modelle des Blocks halten einander nicht an
     ruhende = [(modell.base, stelle) for modell, stelle in stellen.items() if modell not in neue]
     anteil = messen.anteilBisZurBerührung(bewegte, ruhende, weg)
     kurz = messen.teilDesWegs(weg, anteil)

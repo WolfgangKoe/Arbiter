@@ -17,9 +17,7 @@ from tests.akzeptanz.handgriffe import (
 )
 
 ersteZone, zweiteZone = list(Aufstellungszone)
-# Warum: Gesperrt wird vor jeder Prüfung der Stelle (AUF-3.8), welche Stelle ist gleich.
 irgendeineStelle = Stelle(x=Fraction(3, 2), y=Fraction(1))
-# Warum: Der Spieler an der Reihe ist der zweite, die erste Zone gehört dem anderen.
 stelleInDerZoneDesAnderenSpielers = stelleInZone(ersteZone, Fraction(3, 2), Fraction(3))
 
 

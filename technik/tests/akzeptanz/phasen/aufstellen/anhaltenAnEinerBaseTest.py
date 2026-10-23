@@ -37,7 +37,6 @@ from tests.akzeptanz.ziehen import (
     modellZiehen,
 )
 
-# Warum: Ziel in Zoll; erwartet als (Zoll, Radien) für Tiefe und Länge des Modells
 hineinrücken = pytest.mark.parametrize(
     ("ziel", "erwartet"),
     [
@@ -141,7 +140,6 @@ def testAuf26_1DieSeiteRücktDasModellInnerhalbDerKarteHineinOhneGrund(
     assert sperrmeldungenDerSeite(seite) == []
 
 
-# Warum: Ohne fremde Base im Weg hält AUF-29 nicht an, die Abfrage zeigt nur AUF-8.2 und 26.1
 zügeFürDieAbfrage = pytest.mark.parametrize(
     "zug", [freiesZiel, hineinrückenOhneBase], ids=["freiesZiel", "hineinrückenOhneBase"]
 )

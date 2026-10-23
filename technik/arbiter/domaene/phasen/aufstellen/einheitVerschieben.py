@@ -12,7 +12,6 @@ def verschobeneStellen(
 ) -> dict[Modell, Stelle]:
     """Jedes Modell der Gruppe um den Weg des gezogenen; das gezogene steht am Ziel."""
     davor = gruppe.get(gezogenes)
-    # Warum: Ein noch nicht gesetztes Modell hat keinen Weg, die Gruppe bleibt, wo sie steht
     if davor is None:
         return {gezogenes: ziel}
     weg = messen.wegZwischen(davor, ziel)

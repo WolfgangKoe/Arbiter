@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Item 1 in [Plan 7](../plan.md) entfernt zuerst die
@@ -35,4 +34,5 @@ gleichzeitig unter `technik/architektur/` ein; beides geht in den einen Commit n
 Aufräumen. Die übrigen Kommentare im Code (Domäne, Katalog) nach Plan 7.
 Erledigt, wenn keiner der Kommentare beider Listen mehr steht, auch nicht als Docstring.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Die sechs Kommentare und alle weiteren der beiden Listen sind
+ersatzlos gelöscht, ohne Docstring; Verhalten unverändert.

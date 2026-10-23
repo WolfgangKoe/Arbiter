@@ -72,7 +72,7 @@ def kreiseDerKarte(seite: Page) -> frozenset[tuple[float, float]]:
 
 
 def inhaltDerSeite(seite: Page) -> str:
-    """Kopfzeile, Ablagen und Karte, wie der Browser sie zeigt."""
+    """Kopfzeile, Armeelisten und Karte, wie der Browser sie zeigt."""
     return seite.evaluate(
         "() => ['.kopfzeile', '.spielbereich'].map(a => document.querySelector(a).innerHTML).join()"
     )
@@ -90,7 +90,7 @@ def strichVon(element: Locator) -> str:
 
 
 def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Locator:
-    return ablageVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
+    return armeelisteVon(seite, spielername).locator(".einheitenKarte", has_text=einheitenname)
 
 
 def spielerAnDerReihe(seite: Page) -> Locator:
@@ -107,7 +107,7 @@ def _aufDasSpielfeldWarten(seite: Page) -> None:
     seite.wait_for_selector(".karte .spielfeld")
 
 
-def ablageVon(seite: Page, spielername: str) -> Locator:
+def armeelisteVon(seite: Page, spielername: str) -> Locator:
     name = seite.locator(".armeeKartenName", has_text=spielername)
     return seite.locator(".armeeKarte").filter(has=name)
 
@@ -151,7 +151,6 @@ def _liefern(antwort: dict, anfrage: Route) -> None:
     anfrage.fulfill(json=antwort)
 
 
-# Warum: Länger als das wartet Playwright nicht; dann antwortet der Server nicht
 wartezeitInMillisekunden = 5000
 
 

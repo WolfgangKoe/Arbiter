@@ -23,7 +23,7 @@ from tests.akzeptanz.dienst import (
     ausgewählteModelleIm,
     auswählen,
     dienstFür,
-    einheitenDerAblagen,
+    einheitenDerArmeelisten,
     spielstandDesVertrags,
     spielstandVon,
     stelleImSpielstand,
@@ -240,7 +240,7 @@ def testAuf5_8EinKlickAufEineAndereEinheitLässtDieEinheitInAufstellungUndIhreMo
         assert aufstellung.stelle(modell) == dict(gesetzte).get(modell)
 
 
-def testAuf5_8EinKlickAufDieAblageDesSpielersNichtAnDerReiheLässtSeineModelleUngesetzt(
+def testAuf5_8EinKlickAufDieArmeelisteDesSpielersNichtAnDerReiheLässtSeineModelleUngesetzt(
     bildschirm, aufstellungNachDerZonenwahl, spielerZwei
 ):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
@@ -294,7 +294,7 @@ def testAuf5_9NachDemStartIstKeineEinheitAusgewählt(adresseDesBefehls, bildschi
 def testAuf5_9DerSpielstandNachDemStartKenntKeineAusgewählteEinheit(ausgangsaufstellung):
     spielstand = spielstandVon(dienstFür(ausgangsaufstellung))
 
-    assert einheitenDerAblagen(spielstand)
+    assert einheitenDerArmeelisten(spielstand)
     assert ausgewählteEinheitenIm(spielstand) == frozenset()
     assert ausgewählteModelleIm(spielstand) == frozenset()
 
@@ -417,9 +417,9 @@ def testAuf5_11DerDienstSetztDieAusgewählteEinheitDesAnderenSpielersAb(dienst):
 @pytest.mark.parametrize(
     ("spielername", "einheitenname"),
     [("Spieler 1", "Warboss"), ("Spieler 2", "Necron Warriors")],
-    ids=["ablageVonSpielerEins", "ablageVonSpielerZwei"],
+    ids=["armeelisteVonSpielerEins", "armeelisteVonSpielerZwei"],
 )
-def testAuf5_12DieAblageKennzeichnetDieAusgewählteEinheit(
+def testAuf5_12DieArmeelisteKennzeichnetDieAusgewählteEinheit(
     bildschirm, aufstellungNachDerZonenwahl, spielername, einheitenname
 ):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
@@ -431,7 +431,7 @@ def testAuf5_12DieAblageKennzeichnetDieAusgewählteEinheit(
     expect(karte).to_have_class(ausgewähltGekennzeichnet)
 
 
-def testAuf5_12DieAblageKennzeichnetNachZweiKlicksNurDieZuletztAusgewählteEinheit(
+def testAuf5_12DieArmeelisteKennzeichnetNachZweiKlicksNurDieZuletztAusgewählteEinheit(
     bildschirm, aufstellungNachDerZonenwahl
 ):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
@@ -445,7 +445,7 @@ def testAuf5_12DieAblageKennzeichnetNachZweiKlicksNurDieZuletztAusgewählteEinhe
     expect(overlord).to_have_class(ausgewähltGekennzeichnet)
 
 
-def testAuf5_12DieAblageKennzeichnetImBeispielDesVertragsNurDieAusgewählteEinheit(
+def testAuf5_12DieArmeelisteKennzeichnetImBeispielDesVertragsNurDieAusgewählteEinheit(
     bildschirm, ausgangsaufstellung
 ):
     spielstand = spielstandDesVertrags()
@@ -460,7 +460,7 @@ def testAuf5_12DerSpielstandKennzeichnetNurDieAusgewählteEinheit(dienst):
 
     antwort = auswählen(dienst, "Overlord")
 
-    einheiten = einheitenDerAblagen(antwort.get_json())
+    einheiten = einheitenDerArmeelisten(antwort.get_json())
     ausgewähltJeEinheit = {name: einheit["ausgewählt"] for name, einheit in einheiten.items()}
     assert ausgewähltJeEinheit == {
         "Boyz": False,

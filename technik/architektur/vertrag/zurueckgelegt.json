@@ -1,0 +1,29 @@
+{
+  "spielfeld": {"breite": 44.0, "länge": 60.0},
+  "zonen": [
+    {"x": 0.0, "y": 0.0, "breite": 9.0, "länge": 60.0, "spieler": 1},
+    {"x": 35.0, "y": 0.0, "breite": 9.0, "länge": 60.0, "spieler": 2}
+  ],
+  "modelle": [],
+  "einheitInAufstellung": null,
+  "spieler": [
+    {
+      "nummer": 1,
+      "name": "Spieler 1",
+      "anDerReihe": false,
+      "armeeliste": [
+        {"nummer": 1, "name": "Boyz", "nichtGesetzt": 10, "ausgewählt": false},
+        {"nummer": 2, "name": "Warboss", "nichtGesetzt": 1, "ausgewählt": false}
+      ]
+    },
+    {
+      "nummer": 2,
+      "name": "Spieler 2",
+      "anDerReihe": true,
+      "armeeliste": [
+        {"nummer": 1, "name": "Necron Warriors", "nichtGesetzt": 10, "ausgewählt": true},
+        {"nummer": 2, "name": "Overlord", "nichtGesetzt": 1, "ausgewählt": false}
+      ]
+    }
+  ]
+}

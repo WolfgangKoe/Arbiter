@@ -46,7 +46,6 @@ from tests.akzeptanz.ziehen import (
 
 mitteDerZone = Fraction(9, 2)
 abstandInDerFormation = Fraction(3, 2)
-# Warum: Deutlich über der Zugschwelle von 4 px (V8), aber innerhalb von Karte und Einheitenkarte
 weiteDesZugsInPixeln = 12
 
 
@@ -424,13 +423,13 @@ def testAuf18_3RagtDieFormationAusDerZoneRücktSieAufKürzestemWegHinein(
     unveränderteAchse = klick.y if ändertSich == "x" else klick.x
     entlangDerAchse = attrgetter("y" if ändertSich == "x" else "x")
     mittlereAchse = mittelwert([entlangDerAchse(stelle) for stelle in stellen])
+    berührtDieGrenze = bool({*grenzenInX, *grenzenInY} & set(ränder))
     assert all(
         messen.ganzIn(modell.base, stelle, *grenzen)
         for modell, stelle in zip(boyz.modelle, stellen, strict=True)
     )
     assert mittlereAchse == unveränderteAchse
-    # Warum: Auf kürzestem Weg heißt, eine Base berührt danach die Grenze der Zone
-    assert {*grenzenInX, *grenzenInY} & set(ränder)
+    assert berührtDieGrenze
 
 
 def testAuf18_5HatDieEinheitNurGesetzteModelleÄndertDerKlickNichtsUndNenntKeinenGrund(

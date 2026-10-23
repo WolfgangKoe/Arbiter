@@ -29,7 +29,6 @@ def _ganzeZahlÜberNull(zahl: object, was: str) -> int:
 
 
 def _durchmesserLesen(zahl: object) -> int:
-    # Warum: gerechnet wird mit ganzen mm (technik/architektur.md, S2)
     return _ganzeZahlÜberNull(zahl, "Der Durchmesser in mm")
 
 
@@ -83,7 +82,6 @@ def ausgangslageAus(ausgangslage: dict, onlyWar: dict, formation: dict) -> Ausga
     breite, länge = onlyWar["Spielfeld"]
     tiefen = {}
     for name, zone in onlyWar["Aufstellungszone"].items():
-        # Regel: Die Zonen liegen an den langen Kanten, entlang der zweiten Seitenlänge (S1)
         if zone["Spielfeldkante"] != länge:
             raise ValueError(f"Die Zone {name} liegt nicht an einer Kante der Länge {länge}")
         if name not in Aufstellungszone.__members__:

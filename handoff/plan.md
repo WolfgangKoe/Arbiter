@@ -66,19 +66,21 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt
-- [ ] Architekt: Vertrag zu Item aufraeumenUndFesteAdresse, bei beiden Hälften
-- [ ] Testautor: Tests zu Item aufraeumenUndFesteAdresse
-- [ ] Fachkritiker: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
-- [ ] Architekt: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
-- [ ] Implementierer: Tests zu Item aufraeumenUndFesteAdresse grün
+- [x] Architekt: Vertrag zu Item aufraeumenUndFesteAdresse, bei beiden Hälften
+- [x] Testautor: Tests zu Item aufraeumenUndFesteAdresse
+- [x] Fachkritiker: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
+- [x] Architekt: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
+- [x] Implementierer: Tests zu Item aufraeumenUndFesteAdresse grün
 - [ ] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [ ] Reviewer: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [ ] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
 - [ ] Planer: Item aufraeumenUndFesteAdresse gelöscht
-- [ ] Architekt: Vertrag zu Item einheitZuruecklegen, bei beiden Hälften
-- [ ] Testautor: Tests zu Item einheitZuruecklegen
+- [x] Architekt: Vertrag zu Item einheitZuruecklegen, bei beiden Hälften
+- [x] Testautor: Tests zu Item einheitZuruecklegen
 - [ ] Fachkritiker: Kritik an den Tests zu Item einheitZuruecklegen
+  Hindernis: Anliegen 2770: AUF-23.1 ungeprüft, während andere Einheiten auf der Karte stehen (Anliegen 2783)
 - [ ] Architekt: Kritik an den Tests zu Item einheitZuruecklegen
+  Hindernis: Anliegen 2780: Benennung rot (m, Zeile 130), Bildschirmtests mit page.route und den Beispielen zu AUF-23.1, 23.3, 23.4 fehlen (Anliegen 2782)
 - [ ] Implementierer: Tests zu Item einheitZuruecklegen grün
 - [ ] Architekt: Kritik am Code zu Item einheitZuruecklegen
 - [ ] Reviewer: Kritik am Code zu Item einheitZuruecklegen

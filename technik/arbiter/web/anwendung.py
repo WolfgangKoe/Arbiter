@@ -14,14 +14,13 @@ from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.darstellung import spielstand, stellenBeimLoslassen, texteDerGründe
 from arbiter.web.kennungen import (
-    ablageNachNummer,
+    armeelisteNachNummer,
     einheitenNachNummer,
     modelleNachNummer,
     spielerNachNummer,
 )
 
 _frontend = Path(__file__).parents[2] / "frontend"
-# Regel: vertrag.md, V4 (nur diese Hosts, gegen DNS-Rebinding)
 _erlaubteHosts = ["127.0.0.1", "localhost"]
 _jsonZahlText = re.compile(r"-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?", re.ASCII)
 
@@ -30,14 +29,12 @@ def _zahl(körper: dict, name: str) -> Fraction:
     wert = körper.get(name)
     if isinstance(wert, bool) or not isinstance(wert, int | float):
         abort(HTTPStatus.BAD_REQUEST)
-    # Warum: Die Seite rechnet in double; was dort nicht darstellbar ist, ist keine Zahl
     try:
         endlich = isfinite(float(wert))
     except OverflowError:
         endlich = False
     if not endlich:
         abort(HTTPStatus.BAD_REQUEST)
-    # Regel: architektur.md, S2, die Dezimalzahl wie gesendet
     return Fraction(str(wert))
 
 
@@ -49,18 +46,15 @@ def _stelleDerAnfrage() -> Stelle:
 
 
 def _jsonZahl(text: str | None) -> object:
-    # Warum: Nur was JSON als Zahl schreibt (V5); float nähme auch "1_0" und " 3 "
     if text is None or not _jsonZahlText.fullmatch(text):
         return None
     try:
         return json.loads(text)
     except ValueError:
-        # Warum: Python verweigert Ganzzahlen mit mehr als 4.300 Ziffern
         return None
 
 
 def _stelleDerAbfrage() -> Stelle:
-    # Regel: vertrag.md, V10, Zahlen wie V5; fehlt eine oder ist sie keine Zahl: 400
     angaben = {name: _jsonZahl(request.args.get(name)) for name in ("x", "y")}
     return Stelle(x=_zahl(angaben, "x"), y=_zahl(angaben, "y"))
 
@@ -81,15 +75,9 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
             abort(HTTPStatus.NOT_FOUND)
         return spieler
 
-    def ablageDerAnfrage() -> Spieler:
-        ablage = request.args.get("ablage", type=int)
-        if ablage is None:
-            abort(HTTPStatus.BAD_REQUEST)
-        return spielerMit(ablage)
-
-    def einheitInDerAblage(spielernummer: int, einheitennummer: int) -> Einheit:
+    def einheitInDerArmeeliste(spielernummer: int, einheitennummer: int) -> Einheit:
         spieler = spielerMit(spielernummer)
-        einheit = ablageNachNummer(aufstellung, spieler).get(einheitennummer)
+        einheit = armeelisteNachNummer(aufstellung, spieler).get(einheitennummer)
         if einheit is None:
             abort(HTTPStatus.NOT_FOUND)
         return einheit
@@ -131,11 +119,11 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         return spielstandLiefern()
 
     def einheitAuswählen(spielernummer: int, einheitennummer: int):
-        aufstellung.auswählen(einheitInDerAblage(spielernummer, einheitennummer))
+        aufstellung.auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def einheitAbwählen(spielernummer: int, einheitennummer: int):
-        aufstellung.abwählen(einheitInDerAblage(spielernummer, einheitennummer))
+        aufstellung.abwählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def modellLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
@@ -148,17 +136,8 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         abfrage = aufstellung.stellenBeimLoslassen(modell, _stelleDerAbfrage())
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
-    def modellAufAblageLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
-        modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        aufstellung.modellAufAblageLoslassen(modell, ablageDerAnfrage())
-        return spielstandLiefern()
-
     def karteAnklicken():
         aufstellung.karteAnklicken(_stelleDerAnfrage())
-        return spielstandLiefern()
-
-    def zurück():
-        aufstellung.zurück()
         return spielstandLiefern()
 
     def aufstellenDerEinheitBeenden():
@@ -179,14 +158,12 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
     anwendung.add_url_rule(pfadDerAuswahl, view_func=einheitAuswählen, methods=["PUT"])
     anwendung.add_url_rule(pfadDerAuswahl, view_func=einheitAbwählen, methods=["DELETE"])
     anwendung.add_url_rule(pfadDesModells, view_func=modellLoslassen, methods=["PUT"])
-    anwendung.add_url_rule(pfadDesModells, view_func=modellAufAblageLoslassen, methods=["DELETE"])
     pfadDerAbfrage = f"{pfadDerEinheit}/modelle/<int:modellnummer>/stelleBeimLoslassen"
     anwendung.add_url_rule(pfadDerAbfrage, view_func=stelleBeimLoslassen)
     pfadDerEbene = f"{pfadDerEinheit}/modelle/<int:modellnummer>/ebene"
     anwendung.add_url_rule(pfadDerEbene, view_func=modellAlsEbene, methods=["PUT"])
     anwendung.add_url_rule(pfadDerEbene, view_func=einheitAlsEbene, methods=["DELETE"])
     anwendung.add_url_rule("/api/karteAnklicken", view_func=karteAnklicken, methods=["PUT"])
-    anwendung.add_url_rule("/api/zurück", view_func=zurück, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]
     )

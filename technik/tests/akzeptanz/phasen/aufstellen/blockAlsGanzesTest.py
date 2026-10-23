@@ -47,12 +47,12 @@ from tests.akzeptanz.ziehen import (
     zollJePixel,
 )
 
-# Warum: Radius und Durchmesser, vor und zurück, damit keine Prüfreihenfolge verschont bleibt
 verschiebungenInRadien = pytest.mark.parametrize(
     "radien", [1, -1, 2, -2], ids=["umEinenRadiusVor", "umEinenRadiusZurück", "vor2", "zurück2"]
 )
 tiefeDerReihe = 4
 längeDesErsten = 20
+rundungDesGesendetenWegs = 1e-9
 
 
 def stellenDerReihe(aufstellung, radius) -> list[Stelle]:
@@ -66,7 +66,6 @@ def stellenDerReihe(aufstellung, radius) -> list[Stelle]:
 
 
 def verschobeneStelle(stelle: Stelle, radien: int, radius) -> Stelle:
-    # Warum: Die Reihe liegt entlang y, die Tiefe x bleibt
     return Stelle(x=stelle.x, y=stelle.y + radien * radius)
 
 
@@ -115,11 +114,11 @@ def testAuf24_2DerDienstAntwortetOhneSperreUndSetztBeideModelleAnDieNeueStelle(
         for nummer, stelle in enumerate(stellen, start=1)
     }
     assert antwort.status_code == HTTPStatus.OK
-    # Warum: der Dienst liest den Weg des Gezogenen wie gesendet (S2), ein Float-Schritt Abweichung.
     gemeldet = stellenDerEinheitIm(antwort.get_json(), "Boyz")
     assert gemeldet.keys() == erwartet.keys()
     assert gemeldet == {
-        nummer: pytest.approx(stelle, abs=1e-9) for nummer, stelle in erwartet.items()
+        nummer: pytest.approx(stelle, abs=rundungDesGesendetenWegs)
+        for nummer, stelle in erwartet.items()
     }
 
 
@@ -157,7 +156,6 @@ def testAuf24_2KeinModellIstGesperrtWennBeimHineinrückenEinesAufDieVorigeStelle
     einheit = ersteEinheitDesSpielersAnDerReihe
     erstes, zweites = einheit.modelle
     radius = radiusInZoll(erstes)
-    # Warum: Quer zur Grenze; 21.2 rückt um 2 Radien zurück, das erste auf das zweite
     tiefeErstes = inZoll((tiefeDerZone, -5), radius)
     tiefeZweites = inZoll((tiefeDerZone, -3), radius)
     stellen = [
@@ -182,7 +180,6 @@ def testAuf24_2KeinModellIstGesperrtWennBeimHineinrückenEinesAufDieVorigeStelle
     assert aufstellung.stelle(zweites) == nachDemHineinrücken
 
 
-# Warum: Ziel in Tiefe und Länge in Zoll; der Block aus drei Boyz verschiebt sich, rückt hinein
 zieleDesBlocks = pytest.mark.parametrize(
     "ziel", [(4, 20), (12, 20)], ids=["verschieben", "hineinrücken"]
 )
@@ -282,7 +279,6 @@ def seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung):
     )
 
 
-# Regel: handlungen.md, V10, das Beispiel gilt für x=35 und y=28
 stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
 
 

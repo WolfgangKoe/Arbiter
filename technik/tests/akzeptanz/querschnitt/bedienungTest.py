@@ -10,6 +10,7 @@ from tests.akzeptanz.auswahl import (
     tippenUndWarten,
 )
 from tests.akzeptanz.bildschirm import (
+    armeelisteVon,
     inhaltDerSeite,
     neuLaden,
     seiteMitEingabe,
@@ -22,8 +23,10 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import (
     liegtEinPixelGenauAn,
-    modellAufDieAblageZiehen,
+    mitteVon,
     modellZiehen,
+    punktAufDerKarte,
+    ziehenOhneAnfrage,
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])
@@ -33,7 +36,7 @@ def kreisAufDerKarte(seite):
     return seite.locator(".karte .modell").first
 
 
-def testQue3_1EinTippenAufEineKarteInDerAblageMachtDieEinheitAusgewähltWieEinKlick(
+def testQue3_1EinTippenAufEineKarteInDerArmeelisteMachtDieEinheitAusgewähltWieEinKlick(
     bildschirm, aufstellungNachDerZonenwahl
 ):
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
@@ -78,7 +81,7 @@ def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
 
 
 @pytest.mark.parametrize("erneut", ["neuLaden", "adresseErneutÖffnen"])
-def testQue3_2ÖffnetEinSpielerDieAdresseErneutZeigenKarteUndAblagenDasselbeWieDavor(
+def testQue3_2ÖffnetEinSpielerDieAdresseErneutZeigenKarteUndArmeelistenDasselbeWieDavor(
     bildschirm, aufstellungNachDerZonenwahl, boyz, erneut
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -108,7 +111,7 @@ def testQue3_2DerDienstLiefertAufJedeWeitereAnfrageDenselbenSpielstandWieDavor(
     assert spielstandVon(dienst) == davor
 
 
-def testQue3_3NachDemNeustartZeigenKarteUndAblagenDieAusgangslageStattDesStandsDavor(
+def testQue3_3NachDemNeustartZeigenKarteUndArmeelistenDieAusgangslageStattDesStandsDavor(
     befehl, bildschirm
 ):
     adresseDavor = befehl.starten()
@@ -141,13 +144,16 @@ def testQue3_4EinModellAufDieKarteZiehenUndLoslassenSetztEsAnDieStelleDesLoslass
 
 
 @mitMausUndFinger
-def testQue3_4EinModellAufDieAblageZiehenUndLoslassenLässtJedesModellWoEsWar(
+def testQue3_4EinModellAufDieArmeelisteZiehenUndLoslassenSendetNichtsUndLässtJedesModellWoEsWar(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
 ):
     (erstesModell, ersteStelle), (zweitesModell, stelleDavor) = boyzSetzen(2)
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
+    start = punktAufDerKarte(seite, stelleDavor)
+    mitteDerArmeeliste = mitteVon(armeelisteVon(seite, "Spieler 1"))
 
-    modellAufDieAblageZiehen(seite, stelleDavor, "Spieler 1", eingabe)
+    anfragen = ziehenOhneAnfrage(seite, start, mitteDerArmeeliste, eingabe)
 
+    assert anfragen == []
     assert aufstellungNachDerZonenwahl.stelle(zweitesModell) == stelleDavor
     assert aufstellungNachDerZonenwahl.stelle(erstesModell) == ersteStelle

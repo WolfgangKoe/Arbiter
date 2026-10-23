@@ -11,7 +11,6 @@ class ModellMitKennungen(NamedTuple):
     spielernummer: int
     einheitennummer: int
     modellnummer: int
-    einheit: Einheit
     modell: Modell
 
 
@@ -32,12 +31,19 @@ def modelleMitKennungen(aufstellung: Aufstellung) -> Iterator[ModellMitKennungen
     for spielernummer, spieler in spielerNachNummer(aufstellung).items():
         for einheitennummer, einheit in einheitenNachNummer(spieler).items():
             for modellnummer, modell in modelleNachNummer(einheit).items():
-                yield ModellMitKennungen(
-                    spielernummer, einheitennummer, modellnummer, einheit, modell
-                )
+                yield ModellMitKennungen(spielernummer, einheitennummer, modellnummer, modell)
 
 
-def ablageNachNummer(aufstellung: Aufstellung, spieler: Spieler) -> dict[int, Einheit]:
+def kennungenDerEinheit(aufstellung: Aufstellung, einheit: Einheit) -> tuple[int, int]:
+    """Spielernummer und Einheitennummer der Einheit."""
+    for spielernummer, spieler in spielerNachNummer(aufstellung).items():
+        for einheitennummer, andere in einheitenNachNummer(spieler).items():
+            if andere is einheit:
+                return spielernummer, einheitennummer
+    raise ValueError("Die Einheit gehört nicht zur Aufstellung")
+
+
+def armeelisteNachNummer(aufstellung: Aufstellung, spieler: Spieler) -> dict[int, Einheit]:
     return {
         nummer: einheit
         for nummer, einheit in einheitenNachNummer(spieler).items()

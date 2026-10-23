@@ -17,7 +17,6 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     aufstellenDerEinheitBeenden,
     dienstFür,
-    modellAufAblageLoslassen,
     modellLoslassen,
     spielstandVon,
 )
@@ -29,7 +28,7 @@ from tests.akzeptanz.handgriffe import (
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
-from tests.akzeptanz.ziehen import modellAufDieAblageZiehen, modellZiehen
+from tests.akzeptanz.ziehen import modellZiehen
 
 beenden = "Aufstellen der Einheit beenden"
 übergehen = "gemeinsam übergehen"
@@ -37,34 +36,24 @@ beenden = "Aufstellen der Einheit beenden"
 
 @dataclass(frozen=True)
 class Loslassen:
-    """Ein Modell, losgelassen auf der Karte (`stelle`) oder auf der Ablage von Spieler `ablage`."""
+    """Ein Modell, losgelassen auf der Karte an der `stelle`."""
 
     einheit: Einheit
     modell: Modell
-    stelle: Stelle | None = None
-    ablage: int | None = None
+    stelle: Stelle
 
 
 def inDerDomäneLoslassen(aufstellung, fall: Loslassen) -> None:
-    if fall.ablage is None:
-        aufstellung.modellLoslassen(fall.modell, fall.stelle)
-        return
-    ausgangslage = aufstellung.ausgangslage
-    spielerDerAblage = {1: ausgangslage.ersterSpieler, 2: ausgangslage.zweiterSpieler}[fall.ablage]
-    aufstellung.modellAufAblageLoslassen(fall.modell, spielerDerAblage)
+    aufstellung.modellLoslassen(fall.modell, fall.stelle)
 
 
 def imDienstLoslassen(dienst, aufstellung, fall: Loslassen):
-    if fall.ablage is None:
-        return modellLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.stelle)
-    return modellAufAblageLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.ablage)
+    return modellLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.stelle)
 
 
 def amBildschirmLoslassen(seite, aufstellung, fall: Loslassen):
     start = aufstellung.stelle(fall.modell)
-    if fall.ablage is None:
-        return modellZiehen(seite, start, fall.stelle)
-    return modellAufDieAblageZiehen(seite, start, f"Spieler {fall.ablage}")
+    return modellZiehen(seite, start, fall.stelle)
 
 
 def freieStelleDesSpielersAnDerReihe(aufstellung) -> Stelle:
@@ -83,30 +72,14 @@ def einModellEinerAufgestelltenEinheit(aufstellung, einheit) -> Loslassen:
     return Loslassen(einheit, modell, stelle=freieStelleDesSpielersAnDerReihe(aufstellung))
 
 
-def einAufgestelltesModellAufDerEigenenAblage(aufstellung, einheit) -> Loslassen:
-    einheitenAufstellen(aufstellung, 2)
-    modell, *_ = einheit.modelle
-    return Loslassen(einheit, modell, ablage=1)
-
-
-def einAufgestelltesModellAufDerAblageDesAnderen(aufstellung, einheit) -> Loslassen:
-    einheitenAufstellen(aufstellung, 2)
-    modell, *_ = einheit.modelle
-    return Loslassen(einheit, modell, ablage=2)
-
-
 @pytest.fixture(
     params=[
         (einModellDesSpielersNichtAnDerReihe, "necronWarriors"),
         (einModellEinerAufgestelltenEinheit, "boyz"),
-        (einAufgestelltesModellAufDerEigenenAblage, "boyz"),
-        (einAufgestelltesModellAufDerAblageDesAnderen, "boyz"),
     ],
     ids=[
         "auf7_2ModellDesSpielersNichtAnDerReihe",
         "auf7_2ModellEinerAufgestelltenEinheit",
-        "auf8_4AufgestelltesModellAufDerEigenenAblage",
-        "auf8_4AufgestelltesModellAufDerAblageDesAnderen",
     ],
 )
 def sperrendesLoslassen(request, aufstellungNachDerZonenwahl) -> Loslassen:
@@ -183,9 +156,10 @@ def testAuf12_6DieSeiteNenntDenGrundUndBietetGemeinsamÜbergehenNichtAn(
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
 
-def einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellung, boyz) -> None:
+def einAufgestelltesModellAufDieKarteZiehen(seite, aufstellung, boyz) -> None:
     aufgestelltesModell, *_ = boyz.modelle
-    modellAufDieAblageZiehen(seite, aufstellung.stelle(aufgestelltesModell), "Spieler 1")
+    freieStelle = freieStelleDesSpielersAnDerReihe(aufstellung)
+    modellZiehen(seite, aufstellung.stelle(aufgestelltesModell), freieStelle)
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
 
 
@@ -194,7 +168,7 @@ def testAuf12_6DieSeiteNenntDenGrundNochNachDemAuswählen(
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellungNachDerZonenwahl, boyz)
+    einAufgestelltesModellAufDieKarteZiehen(seite, aufstellungNachDerZonenwahl, boyz)
 
     klickenUndWarten(seite, "Spieler 1", "Warboss")
 
@@ -207,7 +181,7 @@ def testAuf12_6DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
     einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
     (_, stelleDesWarboss), *_ = modelleSetzen(aufstellungNachDerZonenwahl, warboss, 1)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    einAufgestelltesModellAufDieEigeneAblageZiehen(seite, aufstellungNachDerZonenwahl, boyz)
+    einAufgestelltesModellAufDieKarteZiehen(seite, aufstellungNachDerZonenwahl, boyz)
     neueStelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
 
     modellZiehen(seite, stelleDesWarboss, neueStelle)

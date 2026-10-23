@@ -62,7 +62,7 @@ def testAuf20_2DieEbeneEinerAusgewähltenEinheitIstDieGanzeEinheit(
 ):
     aufstellungNachDerZonenwahl.auswählen(boyz)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
 def testAuf20_2WiederAusgewähltIstDieEbeneDieGanzeEinheitAuchNachEinemModell(
@@ -75,7 +75,7 @@ def testAuf20_2WiederAusgewähltIstDieEbeneDieGanzeEinheitAuchNachEinemModell(
 
     aufstellungNachDerZonenwahl.auswählen(boyz)
 
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
 def testAuf20_2DerDienstKennzeichnetNachDemWiederAuswählenKeinModellAlsEbene(
@@ -191,7 +191,7 @@ def testAuf20_5NachDemSetzenDerFormationBleibtDieEinheitAusgewähltMitIhrerEbene
     aufstellungNachDerZonenwahl.karteAnklicken(klick)
 
     assert aufstellungNachDerZonenwahl.ausgewählt(boyz)
-    assert aufstellungNachDerZonenwahl.ebene(boyz) is boyz
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
     assert all(aufstellungNachDerZonenwahl.modellAusgewählt(modell) for modell in boyz.modelle)
 
 

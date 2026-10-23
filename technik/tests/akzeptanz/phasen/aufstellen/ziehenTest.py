@@ -4,13 +4,10 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.handgriffe import (
-    einheitAufstellen,
     nachDerWahlDerAufstellungszone,
     radiusInZoll,
-    sperrgründe,
     stelleDesErstenModells,
     stelleInDerZoneVon,
     stellenAllerModelle,
@@ -24,7 +21,6 @@ from tests.akzeptanz.ziehen import (
     zollJePixel,
 )
 
-# Regel: Architektur V8, ab dieser Abweichung beginnt ein Zug
 zugschwelleInPixeln = 4
 abweichungUnterDerSchwelle = zugschwelleInPixeln - 1
 
@@ -76,20 +72,3 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
 
     assert anfragen == []
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
-
-
-@pytest.mark.parametrize("ablage", ["eigeneAblage", "ablageDesAnderen"])
-def testAuf8_4EinModellEinerAufgestelltenEinheitIstAufEinerAblageNichtWählbar(
-    aufstellung, ersterSpieler, zweiterSpieler, ablage
-):
-    nachDerWahlDerAufstellungszone(aufstellung, gewinner=ersterSpieler)
-    aufgestellteEinheit, _ = zweiterSpieler.armee.einheiten
-    modell, _ = aufgestellteEinheit.modelle
-    einheitAufstellen(aufstellung, aufgestellteEinheit)
-    stelleDavor = aufstellung.stelle(modell)
-    spielerDerAblage = zweiterSpieler if ablage == "eigeneAblage" else ersterSpieler
-
-    gründe = sperrgründe(aufstellung.modellAufAblageLoslassen, modell, spielerDerAblage)
-
-    assert gründe == {Grund.nichtWählbar}
-    assert aufstellung.stelle(modell) == stelleDavor

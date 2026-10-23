@@ -8,7 +8,8 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.kennungen import (
-    ablageNachNummer,
+    armeelisteNachNummer,
+    kennungenDerEinheit,
     modelleMitKennungen,
     spielerNachNummer,
 )
@@ -22,6 +23,7 @@ def spielstand(aufstellung: Aufstellung) -> dict:
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
         "zonen": [_zone(aufstellung, zone, spielerNummern) for zone in Aufstellungszone],
         "modelle": _modelle(aufstellung),
+        "einheitInAufstellung": _einheitInAufstellung(aufstellung),
         "spieler": [
             _spieler(aufstellung, spielernummer, einer)
             for spielernummer, einer in spielerNummern.items()
@@ -67,15 +69,22 @@ def _zone(
     }
 
 
-def _modell(aufstellung: Aufstellung, modell: Modell, einheit: Einheit, stelle: Stelle) -> dict:
+def _einheitInAufstellung(aufstellung: Aufstellung) -> dict | None:
+    einheit = aufstellung.einheitInAufstellung
+    if einheit is None:
+        return None
+    spielernummer, einheitennummer = kennungenDerEinheit(aufstellung, einheit)
+    return {"spieler": spielernummer, "einheit": einheitennummer}
+
+
+def _modell(aufstellung: Aufstellung, modell: Modell, stelle: Stelle) -> dict:
     beschreibung = {
         "x": float(stelle.x),
         "y": float(stelle.y),
         "radius": float(radiusInZoll(modell.base)),
         "ausgewählt": aufstellung.modellAusgewählt(modell),
     }
-    # Regel: V1, `ebene` steht nur am Modell, das die Ebene ist
-    if aufstellung.ebene(einheit) is modell:
+    if aufstellung.modellIstEbene(modell):
         beschreibung["ebene"] = True
     return beschreibung
 
@@ -83,7 +92,7 @@ def _modell(aufstellung: Aufstellung, modell: Modell, einheit: Einheit, stelle: 
 def _modelle(aufstellung: Aufstellung) -> list[dict]:
     return [
         {
-            **_modell(aufstellung, kennungen.modell, kennungen.einheit, stelle),
+            **_modell(aufstellung, kennungen.modell, stelle),
             "spieler": kennungen.spielernummer,
             "einheit": kennungen.einheitennummer,
             "nummer": kennungen.modellnummer,
@@ -103,9 +112,9 @@ def _spieler(aufstellung: Aufstellung, spielernummer: int, spieler: Spieler) -> 
         "nummer": spielernummer,
         "name": f"Spieler {spielernummer}",
         "anDerReihe": aufstellung.anDerReihe is spieler,
-        "ablage": [
+        "armeeliste": [
             _einheit(aufstellung, einheitennummer, einheit)
-            for einheitennummer, einheit in ablageNachNummer(aufstellung, spieler).items()
+            for einheitennummer, einheit in armeelisteNachNummer(aufstellung, spieler).items()
         ],
     }
 

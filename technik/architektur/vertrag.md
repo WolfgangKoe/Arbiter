@@ -2,29 +2,38 @@
 
 Pfade und JSON zwischen `web/` und `frontend/`
 ([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); Aufbau beider:
-[Web](web.md). Eine neue Route ist ein Anliegen an den Architekten.
+[Web](web.md). Eine neue Route ist ein Anliegen an den Architekten. Routen gibt es nur nach
+V1, V2, V5, V9 und V10. Mit Test entfallen `PUT /api/zurück` und
+`DELETE …/modelle/<m>/stelle?ablage=` samt `zurück` und `modellAufAblageLoslassen` in
+Domäne, `web/` und Seite; Flask antwortet dort 404 und 405 (W3).
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:
   [spielstand.json](vertrag/spielstand.json): Spieler 2 ist *an der Reihe*, seine erste
   *Einheit* ist *Einheit in Aufstellung* mit drei *gesetzten* *Modellen* und *ausgewählt*.
   Kennungen nach [W4](web.md#aufbau), je ab 1: `spieler[].nummer` in der Reihenfolge der
-  Ausgangslage, `ablage[].nummer` in der der *Armee*, auch wenn eine frühere *Einheit* nicht
-  mehr in der *Ablage* liegt. `ausgewählt` an der *Einheit* nach AUF-5.12, am *Modell* nach
+  Ausgangslage, `armeeliste[].nummer` in der der *Armee*, auch wenn eine frühere *Einheit*
+  nicht mehr in der *Armeeliste* steht; die Klasse `armeeKarte` bleibt (O3). `ausgewählt` an der *Einheit* nach AUF-5.12, am *Modell* nach
   AUF-5.7 und 25.4; `ebene: true` nur am *Modell*, das die *Ebene* ist (AUF-25.1), sonst fehlt
   der Schlüssel. Warum: So gelten die Beispiele ohne *Ebene* unverändert.
+  `einheitInAufstellung` nennt `spieler` und `einheit` der *Einheit in Aufstellung*, ohne
+  eine `null` (AUF-7.1); daran bietet die Seite „Einheit zurücklegen“ an (V7).
   `modelle[]` nennt die *gesetzten* *Modelle* mit Kennung `einheit` (Reihenfolge der *Armee*)
   und `nummer` (Reihenfolge der *Einheit*). Handlungen: [V5 bis V8](handlungen.md).
 - **V2** `PUT /api/spieler/<nummer>/einheiten/<nummer>/ausgewählt` macht die *Einheit*
   *ausgewählt* (AUF-5.11), `DELETE` nicht (AUF-5.4); beide 200 mit dem Spielstand. Das
   Beispiel ist der Stand nach `PUT` auf `…/spieler/1/einheiten/2/…`, dann
-  `…/spieler/2/einheiten/1/…`. Keine *Einheit* in der *Ablage* des *Spielers*: 404. Die Seite
+  `…/spieler/2/einheiten/1/…`. Keine *Einheit* in der *Armeeliste* des *Spielers*: 404. Die Seite
   schickt `DELETE`, wenn sie die Karte *ausgewählt* gezeichnet hat, sonst `PUT`. Warum kein
   Umschalten: Zwei Seiten (QUE-3.2) oder ein doppelter Klick schalteten sonst zurück.
 - **V3** Die *Auswahl* hält die Domäne in `Auswahl` ([Grundschnitt](../architektur.md)), die
   Tür ist `Aufstellung`: `auswählen(einheit)` (AUF-5.11, 20.2), `abwählen(einheit)`,
-  `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2), Abfragen
+  `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2),
+  `ganzeEinheitAlsEbene(einheit)` (AUF-23.3; ist sie nicht *ausgewählt*, nichts), Abfragen
   `ausgewählt(einheit)`, `modellAusgewählt(modell)`, `ebene(einheit)` → *Einheit*, *Modell*
-  oder `None`. AUF-5.10 gilt dort, nicht in `web/`. Auswählen ist keine Handlung (Glossar,
+  oder `None`; dazu `ganzeEinheitIstEbene(einheit)` (AUF-21.1) und `modellIstEbene(modell)`
+  (AUF-25.1), die Aufrufer und `web/` statt `is` fragen. `Auswahl` kennt nur *Einheit* und
+  *Ebene*; ob eine *Einheit* zur Partie gehört und nicht *aufgestellt* ist, prüft
+  `Aufstellung` vor dem Auswählen (Anliegen 1651). AUF-5.10 gilt dort, nicht in `web/`. Auswählen ist keine Handlung (Glossar,
   *ausgewählt*): ohne Sperre, darum ohne D2.
 - **V4** Schutz vor fremden Seiten im selben Browser, statt eines CSRF-Tokens: Eine Route,
   die etwas ändert, nimmt nur `PUT` oder `DELETE` an, nie `GET` oder `POST`; `web/` gibt kein

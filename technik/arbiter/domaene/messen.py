@@ -7,9 +7,7 @@ from math import ceil, floor
 
 from arbiter.domaene.spielobjekte import Base, Stelle
 
-# Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 _millimeterJeZoll = Fraction(254, 10)
-# Regel: architektur.md, S3, der Halt liegt höchstens 1/100″ vor der Berührung
 _rasterJeZoll = 100
 
 type BaseAnStelle = tuple[Base, Stelle]
@@ -88,8 +86,8 @@ def rückungInDieFläche(
 
 
 def _rückung(vorn: Fraction, hinten: Fraction, grenzen: tuple[Fraction, Fraction]) -> Fraction:
+    """Zu weit vorn rückt hinein, zu weit hinten zurück; passt beides nicht, gilt vorn."""
     von, bis = grenzen
-    # Warum: Zu weit vorn rückt hinein, zu weit hinten zurück; passt beides nicht, gilt vorn
     return max(von - vorn, Fraction(0)) or min(bis - hinten, Fraction(0))
 
 
@@ -103,6 +101,7 @@ def _überdecktAm(bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, anteil: 
 def _ersterÜberdeckenderSchritt(
     bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, schritte: int
 ) -> int | None:
+    """Erster Schritt mit Überdeckung; der Abstand fällt bis zum nächsten Punkt, dann steigt er."""
     _, start = bewegt
     _, ort = ruhend
     wegInX, wegInY = weg
@@ -110,7 +109,6 @@ def _ersterÜberdeckenderSchritt(
     def überdecktBeiSchritt(schritt: int) -> bool:
         return _überdecktAm(bewegt, ruhend, weg, Fraction(schritt, schritte))
 
-    # Warum: Der Abstand der Mittelpunkte fällt bis zum nächsten Punkt des Wegs, dann steigt er
     anteilDesNächsten = -((start.x - ort.x) * wegInX + (start.y - ort.y) * wegInY) / (
         wegInX**2 + wegInY**2
     )
@@ -118,20 +116,18 @@ def _ersterÜberdeckenderSchritt(
     danach = min(davor + 1, schritte)
     if not überdecktBeiSchritt(davor):
         return danach if überdecktBeiSchritt(danach) else None
-    # Warum: Vor dem nächsten Punkt überdeckt die Base ab einem Schritt jeden folgenden
     return bisect_left(range(davor), x=True, key=überdecktBeiSchritt)
 
 
 def anteilBisZurBerührung(
     bewegte: BasenAnStellen, hindernisse: BasenAnStellen, weg: Weg
 ) -> Fraction:
-    """Der Anteil des Wegs bis zur ersten Überdeckung auf dem Raster von S3, sonst 1."""
+    """Der Anteil bis vor die erste Überdeckung auf dem Raster von S3; 1, wenn das Ende frei ist."""
     wegInX, wegInY = weg
     schritte = ceil(_rasterJeZoll * (abs(wegInX) + abs(wegInY)))
     if schritte == 0:
         return Fraction(1)
     paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]
-    # Regel: AUF-26.2, angehalten wird nur, wenn das Ende des Wegs eine Base überdeckt
     if not any(_überdecktAm(bewegt, hindernis, weg, Fraction(1)) for bewegt, hindernis in paare):
         return Fraction(1)
     erste = [

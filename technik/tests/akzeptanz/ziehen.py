@@ -6,7 +6,7 @@ import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.bildschirm import ablageVon, aufDieHandlungWarten, kreiseDerKarte
+from tests.akzeptanz.bildschirm import aufDieHandlungWarten, kreiseDerKarte
 
 
 @dataclass(frozen=True)
@@ -132,13 +132,6 @@ def modellZiehen(seite: Page, von: Stelle, nach: Stelle, eingabe: str = "maus") 
     )
 
 
-def modellAufDieAblageZiehen(
-    seite: Page, von: Stelle, spielername: str, eingabe: str = "maus"
-) -> Response:
-    ziel = mitteVon(ablageVon(seite, spielername))
-    return _ziehenBisZurAntwort(seite, eingabe, punktAufDerKarte(seite, von), ziel)
-
-
 _bildaufbauAbwarten = "() => new Promise(fertig => requestAnimationFrame(() => fertig()))"
 
 
@@ -198,13 +191,13 @@ class Abfragen:
         return self.gestellt > 0 and self.gestellt == self.erledigt
 
 
-# Warum: Erst wenn eine Weile keine Anfrage offen ist, zeigt die Karte den Stand zum Zeigerpunkt
 _pausenInMillisekunden = 50
 _ruhigeProben = 4
 _höchstensProben = 200
 
 
 def aufDieAntwortenWarten(seite: Page, abfragen: Abfragen) -> None:
+    """Wartet auf vier ruhige Proben zu 50 ms; erst dann zeigt die Karte den Zeigerpunkt."""
     ruhige = 0
     for _ in range(_höchstensProben):
         seite.wait_for_timeout(_pausenInMillisekunden)

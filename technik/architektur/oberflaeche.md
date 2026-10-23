@@ -8,9 +8,11 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
 - **O1** HTML, CSS mit Variablen in `.css`, JavaScript-Module in `.js`; kein `<style>`, kein
   `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
   Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Das Markup steht
-  in `<template>` der Seite; `seite.js` klont und füllt es und erzeugt keine Elemente.
-  Prüft: eslint und stylelint über `.js` und `.css` (`frontendregeln/frontend.py`), „keine
-  Elemente“ mit `no-restricted-properties` und `no-restricted-syntax`; sonst nur Text.
+  in `<template>` der Seite; `zeichnen.js` (O5) klont und füllt es, kein Modul erzeugt Elemente. Die
+  Vorlage eines Elements der Karte steht in einem `<svg>` im `<template>`, sonst verliert es
+  den SVG-Namensraum. Prüft: eslint und stylelint über `.js` und `.css`
+  (`frontendregeln/frontend.py`), „keine Elemente“ mit `no-restricted-properties` und
+  `no-restricted-syntax`; das `<svg>` die Bildschirmtests zu QUE-2; sonst nur Text.
 - **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
   Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
   (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
@@ -30,3 +32,17 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
   lässt den Zustand; beim Laden gilt das Markup. Eine ausgefahrene Leiste nimmt der Karte
   Platz und verdeckt sie nicht, sonst läge eine *Aufstellungszone* darunter; die Karte
   skaliert (O2). Prüft: Bildschirmtests zu den Kriterien der Leisten.
+- **O5** Die Seite sind JavaScript-Module mit je einer Aufgabe, je höchstens 8.000 Zeichen
+  ([Kennzahlen](../../prozess/kennzahlen.md#höchstmaße)), Importe nur in Pfeilrichtung:
+  `seite.js` → `bedienung.js` → `anfragen.js` → `zeichnen.js`, dazu `seite.js` → `anfragen.js`.
+  - `seite.js`: Einstieg aus `index.html`; meldet die Ereignisse von `bedienung.js` am
+    Dokument an und zeichnet den ersten Spielstand.
+  - `bedienung.js`: was Zeiger und Klick bedeuten (V8, V10), mit dem Zustand des Zugs.
+  - `anfragen.js`: Pfade, `fetch`, Antworten (V1, V2, V5, V9, V10); hält den letzten
+    Spielstand und die `gründe` der letzten 409 (V7). Die Knöpfe der `knopfGruppe` als
+    Tabelle Text → Handlung und wann angeboten (V7); ein neuer Knopf ist eine Zeile, kein
+    Zweig in `zeichnen.js`.
+  - `zeichnen.js`: Spielstand, `gründe` und Knöpfe → Markup (O1), ohne `fetch` und Zustand.
+
+  Warum: Zeichnen liest sich ohne Server, Bedienung ohne Markup. Prüft: Verhalten die
+  Bildschirmtests; Richtung und Größe nur Text, Kritik am Code.

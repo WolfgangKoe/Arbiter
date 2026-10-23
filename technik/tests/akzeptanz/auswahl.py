@@ -9,7 +9,7 @@ from tests.akzeptanz.bildschirm import einheitenKarteVon, elementeDerSeite
 
 
 def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
-    """Die Namen der Einheiten, deren Karte in einer Ablage als ausgewählt gekennzeichnet ist."""
+    """Die Namen der Einheiten, die eine Armeeliste als ausgewählt kennzeichnet."""
     namen = seite.locator(".einheitenKarte.ausgewählt .einheitenKartenName span:first-child")
     return frozenset(namen.all_text_contents())
 

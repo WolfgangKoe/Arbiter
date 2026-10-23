@@ -101,7 +101,6 @@ def testMiv1_3DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
 
 
 def testMiv1_3JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
-    # Regel: je Eintrag unter `durchmesser` in ausgangslage.yaml ein Modell
     zahlenDerModelle = sorted(
         tuple(len(einheit.modelle) for einheit in spieler.armee.einheiten)
         for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
@@ -111,7 +110,6 @@ def testMiv1_3JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
 
 
 def testMiv1_3DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
-    # Regel: Durchmesser in mm je Modell, ausgangslage.yaml
     orks = ((32,) * 10, (40,))
     necrons = ((32,) * 10, (32,))
 
@@ -121,7 +119,6 @@ def testMiv1_3DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
 
 
 def testMiv1_4DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
-    # Regel: Spielfeld 44″ × 60″ (onlyWar.yaml)
     seitenlängen = ausgangslage.spielfeld.seitenlängen
 
     assert seitenlängen == (Fraction(44), Fraction(60))

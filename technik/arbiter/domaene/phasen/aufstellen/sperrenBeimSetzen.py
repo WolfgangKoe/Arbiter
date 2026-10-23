@@ -9,11 +9,9 @@ from arbiter.domaene.querschnitt import baseÜberdeckt
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
 
-# Regel: Nahkampfreichweite ist ein Abstand von höchstens 1″ (domaene/glossar.md)
 _nahkampfreichweite = Fraction(1)
 
 
-# Regel: Nahkampfreichweite (core_rules.txt:447)
 def inNahkampfreichweite(
     modell: Modell, stelle: Stelle, stellen: Mapping[Modell, Stelle], eigene: Collection[Modell]
 ) -> bool:
@@ -37,7 +35,6 @@ def gründeGegenDieStelle(
     gegeben = {
         Grund.nichtGanzInDerZone: not messen.ganzIn(modell.base, stelle, *zone),
         Grund.baseÜberdeckt: baseÜberdeckt(modell, stelle, stellen),
-        # Regel: Aufstellen nicht in Nahkampfreichweite (core_rules.txt:450)
         Grund.nahkampfreichweite: inNahkampfreichweite(modell, stelle, stellen, eigene),
     }
     return {grund for grund, trifft in gegeben.items() if trifft}

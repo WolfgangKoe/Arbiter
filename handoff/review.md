@@ -104,7 +104,7 @@ Fortschritt und Hindernis (`standregeln/fortschritt.py`, `hindernis.py`, `abhake
 - [x] Planer: Plan geschrieben
 - [x] Fachkritiker: Kritik am Plan
 - [x] Architekt: Kritik am Plan
-- [ ] Stakeholder: Freigabe Plan 7
+- [x] Stakeholder: Freigabe Plan 7
 
 ## Freigabe
 Freigabe: ja

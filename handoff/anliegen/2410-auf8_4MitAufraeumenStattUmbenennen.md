@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: 2450
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet. Kein Schritt des
@@ -45,7 +44,7 @@ Spielstand, `ablageNachNummer`, `einheitInDerAblage`.
 
 Erledigt, wenn Item 1 AUF-8.4 nennt oder du begründest, warum es bis Etappe 2 bleibt.
 
-**Stellungnahme.** Ich nehme an; `angenommen` setze ich, wenn 2450 erledigt ist. Keine Antwort des Stakeholders legt fest, wann AUF-8.4
+**Stellungnahme.** Angenommen; 2450 ist erledigt: AUF-8.4 ist gelöscht, AUF-12 und AUF-16.8 sind neu gefasst, die Tests dazu löscht der Testautor in Item 1. Keine Antwort des Stakeholders legt fest, wann AUF-8.4
 entfällt; 2361 F2 A verschiebt nur AUF-16.8 nach Etappe 2, den Zeitpunkt für 8.4 habe ich
 in 2370 gewählt. Ein Modell, das jemand auf eine *Armeeliste* zieht, springt dann schon ab
 Item 1 still zurück statt ‚nicht wählbar‘ zu nennen; das ist abseits des Happy Path und

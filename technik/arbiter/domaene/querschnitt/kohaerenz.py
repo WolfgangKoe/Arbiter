@@ -6,12 +6,10 @@ from fractions import Fraction
 from arbiter.domaene import messen
 from arbiter.domaene.spielobjekte import Modell, Stelle
 
-# Regel: QUE-4.2, Kohärenz heißt ein Abstand von höchstens 2″ (core_rules.txt:434)
 _kohärenzabstand = Fraction(2)
 _größteEinheitMitEinemPartner = 5
 
 
-# Regel: QUE-4, die gesetzten Modelle einer Einheit stehen beisammen (core_rules.txt:434)
 def inKohärenz(stellen: Mapping[Modell, Stelle]) -> bool:
     if len(stellen) <= 1:
         return True

@@ -27,7 +27,6 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import liegtEinPixelGenauAn, mitMausUndFinger, modellZiehen
 
-# Warum: Ziel in Zoll; erwartet als (Zoll, Radien) für Tiefe und Länge des ersten Modells
 hineinrücken = pytest.mark.parametrize(
     ("ziel", "erwartet"),
     [
@@ -143,10 +142,9 @@ def testAuf21_2RagtDerBlockAusDerZoneRücktAlleGemeinsamAufKürzestemWegHinein(
     aufstellung.auswählen(einheit)
     radius = radiusInZoll(erstes)
     zielTiefe, zielLänge = ziel
-    # Warum: Das gezogene Modell lässt man so los, dass der Block als Ganzes dort ankommt
-    versatz = 2 * radius if zweitesGezogen else 0
+    versatzDesGezogenenImBlock = 2 * radius if zweitesGezogen else 0
     stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(
-        aufstellung, zielTiefe, zielLänge + versatz
+        aufstellung, zielTiefe, zielLänge + versatzDesGezogenenImBlock
     )
 
     aufstellung.modellLoslassen(gezogenes, stelleDesLoslassens)

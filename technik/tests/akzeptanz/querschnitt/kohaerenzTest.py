@@ -6,14 +6,12 @@ import pytest
 
 from tests.akzeptanz.handgriffe import (
     aufstellungVon,
+    millionstel,
     nachDerWahlDerAufstellungszone,
     radiusInZoll,
     spielerMit,
     stelleInDerZoneVon,
 )
-
-# Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
-millionstel = Fraction(1, 1_000_000)
 
 
 def aufstellungMitEinheitVon(modellzahl: int):

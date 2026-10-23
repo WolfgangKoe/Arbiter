@@ -8,7 +8,6 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from tests.akzeptanz.bildschirm import elementeDerSeite, modellfarben
 from tests.akzeptanz.handgriffe import anzahlGesetzterModelle, einheitenAufstellen, radiusInZoll
 
-# Warum: getBoundingClientRect misst Bruchteile von Pixeln; QUE-2.2 bis QUE-2.7 prüfen Zoll exakt
 _pixelgenauigkeit = 1e-4
 
 
@@ -19,7 +18,6 @@ def fenster(request) -> dict[str, int]:
 
 
 def testQue2_1DerBefehlNenntInDerErstenZeileEineAdresseNurFürDasEigeneGerät(adresseDesBefehls):
-    # Warum: Zwei Spieler an einem Gerät, darum nur 127.0.0.1 (Architektur, W5)
     adresse = urlparse(adresseDesBefehls)
 
     assert (adresse.scheme, adresse.hostname) == ("http", "127.0.0.1")

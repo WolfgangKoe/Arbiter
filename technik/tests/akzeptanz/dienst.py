@@ -11,7 +11,6 @@ from arbiter.web.anwendung import anwendungFür
 
 _vertrag = Path(__file__).parents[2] / "architektur" / "vertrag"
 
-# Warum: web/ vergibt die Kennungen aus der Reihenfolge der Ausgangslage (web.md, W4)
 kennungenDerEinheiten = {
     "Boyz": (1, 1),
     "Warboss": (1, 2),
@@ -37,6 +36,11 @@ def spielstandDesVertrags() -> dict:
 def sperreDesVertrags() -> dict:
     """Das Beispiel von V6 aus `sperre.json`, nicht kopiert."""
     return _beispielDesVertrags("sperre.json")
+
+
+def zurückgelegtDesVertrags() -> dict:
+    """Das Beispiel von V6 aus `zurueckgelegt.json`, nicht kopiert."""
+    return _beispielDesVertrags("zurueckgelegt.json")
 
 
 def stelleBeimLoslassenDesVertrags() -> dict:
@@ -105,13 +109,6 @@ def stellenDerAbfrage(
     }
 
 
-def modellAufAblageLoslassen(
-    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, spielernummer: int
-):
-    pfad = pfadDesModells(aufstellung, einheit, modell)
-    return dienst.delete(f"{pfad}/stelle", query_string={"ablage": spielernummer})
-
-
 def karteAnklicken(dienst, stelle: Stelle):
     return dienst.put("/api/karteAnklicken", json=körperDerStelle(stelle))
 
@@ -120,8 +117,8 @@ def aufstellenDerEinheitBeenden(dienst):
     return dienst.put("/api/aufstellenDerEinheitBeenden")
 
 
-def zurück(dienst):
-    return dienst.put("/api/zurück")
+def zurücklegen(dienst):
+    return dienst.put("/api/zurücklegen")
 
 
 def pfadDerAuswahl(einheitenname: str) -> str:
@@ -171,14 +168,16 @@ def spielstandVon(dienst) -> dict:
     return dienst.get("/api/spielstand").get_json()
 
 
-def einheitenDerAblagen(spielstand: dict) -> dict[str, dict]:
+def einheitenDerArmeelisten(spielstand: dict) -> dict[str, dict]:
     return {
-        einheit["name"]: einheit for einer in spielstand["spieler"] for einheit in einer["ablage"]
+        einheit["name"]: einheit
+        for einer in spielstand["spieler"]
+        for einheit in einer["armeeliste"]
     }
 
 
 def ausgewählteEinheitenIm(spielstand: dict) -> frozenset[str]:
-    einheiten = einheitenDerAblagen(spielstand)
+    einheiten = einheitenDerArmeelisten(spielstand)
     return frozenset(name for name, einheit in einheiten.items() if einheit["ausgewählt"])
 
 

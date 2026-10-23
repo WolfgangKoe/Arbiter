@@ -3,13 +3,12 @@
 from collections.abc import Mapping
 from fractions import Fraction
 from itertools import accumulate, pairwise
-from math import isqrt
+from math import ceil, isqrt
 
 from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Formation, Grenzen
 from arbiter.domaene.spielobjekte import Base, Einheit, Modell, Stelle
 
-# Regel: domaene/daten/formation.yaml, die Mittelpunkte benachbarter Reihen liegen auf 1/100″ genau
 _hundertstel = 100
 
 
@@ -67,5 +66,5 @@ def _lagenDerReihe(anzahl: int, schritt: Fraction) -> list[Fraction]:
 
 
 def _aufgerundeteWurzel(quadrat: Fraction) -> int:
-    ganze = isqrt(-(-quadrat.numerator // quadrat.denominator))
+    ganze = isqrt(ceil(quadrat))
     return ganze if ganze**2 >= quadrat else ganze + 1

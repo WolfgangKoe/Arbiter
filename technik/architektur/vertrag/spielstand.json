@@ -9,12 +9,13 @@
     {"x": 37.4, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 2, "ausgewählt": true},
     {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 3, "ausgewählt": true}
   ],
+  "einheitInAufstellung": {"spieler": 2, "einheit": 1},
   "spieler": [
     {
       "nummer": 1,
       "name": "Spieler 1",
       "anDerReihe": false,
-      "ablage": [
+      "armeeliste": [
         {"nummer": 1, "name": "Boyz", "nichtGesetzt": 10, "ausgewählt": false},
         {"nummer": 2, "name": "Warboss", "nichtGesetzt": 1, "ausgewählt": false}
       ]
@@ -23,7 +24,7 @@
       "nummer": 2,
       "name": "Spieler 2",
       "anDerReihe": true,
-      "ablage": [
+      "armeeliste": [
         {"nummer": 1, "name": "Necron Warriors", "nichtGesetzt": 7, "ausgewählt": true},
         {"nummer": 2, "name": "Overlord", "nichtGesetzt": 1, "ausgewählt": false}
       ]

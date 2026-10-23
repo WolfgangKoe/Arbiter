@@ -17,7 +17,7 @@ def aufstellung():
 
 @pytest.mark.parametrize(("spielernummer", "einheitennummer"), [(0, 1), (3, 1), (1, 0), (1, 3)])
 @pytest.mark.parametrize("methode", ["put", "delete"])
-def testEinPfadOhneEinheitInDerAblageIstNichtGefunden(
+def testEinPfadOhneEinheitInDerArmeelisteIstNichtGefunden(
     aufstellung, spielernummer, einheitennummer, methode
 ):
     dienst = anwendungFür(aufstellung).test_client()
@@ -27,7 +27,7 @@ def testEinPfadOhneEinheitInDerAblageIstNichtGefunden(
     assert antwort.status_code == HTTPStatus.NOT_FOUND
 
 
-def testEineAufgestellteEinheitIstNichtMehrInDerAblageUndNichtGefunden(aufstellung):
+def testEineAufgestellteEinheitIstNichtMehrInDerArmeelisteUndNichtGefunden(aufstellung):
     aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     alleEinheitenAufstellen(aufstellung)
@@ -45,14 +45,13 @@ eineStelle = {"x": 3, "y": 20}
 @pytest.mark.parametrize(
     ("spielernummer", "einheitennummer", "modellnummer"), [(3, 1, 1), (1, 3, 1), (1, 1, 3)]
 )
-@pytest.mark.parametrize("methode", ["put", "delete"])
 def testEinModellOhneKennungIstNichtGefunden(
-    aufstellung, spielernummer, einheitennummer, modellnummer, methode
+    aufstellung, spielernummer, einheitennummer, modellnummer
 ):
     dienst = anwendungFür(aufstellung).test_client()
     pfad = pfadDesModells.format(spielernummer, einheitennummer, modellnummer)
 
-    antwort = getattr(dienst, methode)(pfad, json=eineStelle)
+    antwort = dienst.put(pfad, json=eineStelle)
 
     assert antwort.status_code == HTTPStatus.NOT_FOUND
 
@@ -110,20 +109,14 @@ def testEineSehrGroßeGanzeZahlIstEineFehlerhafteAnfrageUndLässtDenSpielstandLe
     assert dienst.get("/api/spielstand").status_code == HTTPStatus.OK
 
 
-def testEinModellOhneAblageZumZurücklegenIstEineFehlerhafteAnfrage(aufstellung):
+def testDasZurückSetzenEinesModellsAufEineArmeelisteGibtEsNichtMehr(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 
-    antwort = dienst.delete(pfadDesModells.format(1, 1, 1))
+    zurück = dienst.put("/api/zurück")
+    aufArmeeliste = dienst.delete(pfadDesModells.format(1, 1, 1), query_string={"ablage": 1})
 
-    assert antwort.status_code == HTTPStatus.BAD_REQUEST
-
-
-def testEinModellAufDieAblageEinesUnbekanntenSpielersIstNichtGefunden(aufstellung):
-    dienst = anwendungFür(aufstellung).test_client()
-
-    antwort = dienst.delete(pfadDesModells.format(1, 1, 1) + "?ablage=3")
-
-    assert antwort.status_code == HTTPStatus.NOT_FOUND
+    assert zurück.status_code == HTTPStatus.METHOD_NOT_ALLOWED
+    assert aufArmeeliste.status_code == HTTPStatus.METHOD_NOT_ALLOWED
 
 
 def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):

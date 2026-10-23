@@ -13,14 +13,11 @@ from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 
-# Regel: 1 Zoll sind 25,4 mm (domaene/glossar.md, Durchmesser)
 millimeterJeZoll = Fraction(254, 10)
 
-# Warum: Schon ein Millionstel Zoll entscheidet, damit Grenzfälle ohne Toleranz gelten.
 millionstel = Fraction(1, 1_000_000)
 
 
-# Warum: Lage der Zonen, Ursprung und Achsen der Stelle stehen in technik/architektur.md, S1
 breiteDesSpielfelds = 44
 längeDerSpielfeldkante = 60
 tiefeDerZone = 9
@@ -29,9 +26,8 @@ tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
 anzahlGesetzterModelle = 3
 
-# Regel: Richtung als Anteile von x und y; 3-4-5 hält die Entfernung exakt
 gerade = (1, 0)
-schräg = (Fraction(3, 5), Fraction(4, 5))
+schrägOhneWurzel = (Fraction(3, 5), Fraction(4, 5))
 
 
 def spielerMit(*modellzahlen: int) -> Spieler:

@@ -10,8 +10,8 @@ def spieler():
 
 
 @pytest.fixture
-def auswahl(spieler):
-    return Auswahl([spieler], set())
+def auswahl():
+    return Auswahl()
 
 
 def einheitenUndModelle(spieler):
@@ -46,6 +46,33 @@ def testDieEbeneEinesModellsMachtNurDiesesModellAusgewählt(auswahl, spieler):
     assert auswahl.ebene(ersteEinheit) is erstesModell
     assert auswahl.modellAusgewählt(erstesModell)
     assert not auswahl.modellAusgewählt(zweitesModell)
+
+
+def testNurDieAusgewählteEinheitOhneModellAlsEbeneIstGanzDieEbene(auswahl, spieler):
+    ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
+    ohneAuswahl = auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    auswahl.auswählen(ersteEinheit)
+    ganz = auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    anderer = auswahl.ganzeEinheitIstEbene(zweiteEinheit)
+
+    auswahl.ebeneWählen(erstesModell)
+
+    assert not ohneAuswahl
+    assert ganz
+    assert not anderer
+    assert not auswahl.ganzeEinheitIstEbene(ersteEinheit)
+
+
+def testNurDasGewählteModellIstEbene(auswahl, spieler):
+    ersteEinheit, _, erstesModell, zweitesModell = einheitenUndModelle(spieler)
+    auswahl.auswählen(ersteEinheit)
+    ohneEbene = auswahl.modellIstEbene(erstesModell)
+
+    auswahl.ebeneWählen(erstesModell)
+
+    assert not ohneEbene
+    assert auswahl.modellIstEbene(erstesModell)
+    assert not auswahl.modellIstEbene(zweitesModell)
 
 
 def testDieEbeneAbwählenKehrtZurEinheitZurück(auswahl, spieler):
