@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -54,4 +54,6 @@ Erledigt, wenn Befund 1 die Zahlen und eine Ursache nennt, zu der die Prozess-It
 der Backlog-Eintrag erst mit der Antwort des Stakeholders fällt und P3 die Quellen der
 Domäne nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Retro 7](../retro.md). 1: Zahlen nachgezählt und in
+Befund 1, Ursache erfundene Anforderungen, ihr gilt P3; der Satz vor den Items begründet P4
+und P5 (3451). 2: Eintrag bleibt, Frage in 3550. 3: P3 nennt die Quellen der Domäne.

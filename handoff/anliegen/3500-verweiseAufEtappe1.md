@@ -9,7 +9,7 @@ Wartet auf: Domänenphase
 
 ## Runde 1
 **Befund.** Etappe 1 ist erreicht, ihre Datei ist gelöscht
-([3300](3300-etappe1AbschliessenUndLoeschen.md)). Auf sie verweisen noch:
+(Anliegen 3300). Auf sie verweisen noch:
 - die Kopfkommentare von [onlyWar.yaml](../../domaene/daten/onlyWar.yaml) und
   [ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml), mit dem Pfad
   `domaene/etappen/01-aufstellen.md`, den es nicht mehr gibt;

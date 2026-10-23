@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -27,4 +27,7 @@ der Kennzahl selbst, angepasst, in P1: „ihre Prozess-Items gelten nur ihr; Auf
 Stakeholders und eine wiederholt verletzte Prämisse bleiben erlaubt“. In Retro 7 nennt P4
 diesen Grund.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in [Retro 7](../retro.md). P1 passt die Reaktion der
+Kennzahl an: Ohne Zuwachs bleiben Aufträge des Stakeholders und eine wiederholt verletzte
+Prämisse als Item erlaubt; in `prozess/kennzahlen.md` nach „Freigabe Retro 7“ mit P1. Der
+Satz vor den Items nennt den Grund je Item, für P4 die verletzte Prämisse (Befund 3).

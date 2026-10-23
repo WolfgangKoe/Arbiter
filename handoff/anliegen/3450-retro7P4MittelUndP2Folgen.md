@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Stellen in [Retro 7](../retro.md) halten die Freigabe auf. Ich 3 nennt keine
@@ -53,4 +53,7 @@ sich Dateien teilen).
    P6, damit sie einen Haken hat; geliefert mit P2 in einem Commit. Die Links in `technik/`
    ziehe ich im selben Commit nach.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, [Retro 7](../retro.md); Doku und `bashSchreiben.py`
+bestätigen den Befund. 1: P4 nach Gegenvorschlag 1, ohne Ausnahme für `/tmp`. 2: Neues
+Item P8 (Regelumsetzer): `regelnDatei` als Ordner, übrige Pfade in Prüfungen und Tests;
+ein Commit mit P2 samt deinen Links in `technik/`.

@@ -54,7 +54,7 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
 
 ## Nächstes Vorgehen
 - **Produktziel:** Etappe 1 von 10 (Aufstellen) ist erreicht, ihre Datei löscht der Planer
-  ([3300](anliegen/3300-etappe1AbschliessenUndLoeschen.md)). Am meisten fehlt die Partie selbst.
+  (Anliegen 3300). Am meisten fehlt die Partie selbst.
 - **Etappenziel:** Ihre Randfälle, 13 AUF-Kriterien ohne Test, warten nach [Plan 7](plan.md)
   auf Etappe 7. [Etappe 2](../domaene/etappen/02-bewegen.md) nennt 14 Teile; Plan 8 nimmt 8,
   die übrigen 6 schätze ich auf zwei bis drei Zyklen.
@@ -79,7 +79,7 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
 Freigabe: ja
 Kommentar: Ich habe alles soweit geprüft. Wir können Etappe 1 somit auch abschließen und die Datei löschen. Auch alles für die Prozessphase habe ich soweit adressiert. Bitte Retro.md vorbereiten
 Stellungnahme: Etappe 1 abschließen geht an den Planer
-([3300](anliegen/3300-etappe1AbschliessenUndLoeschen.md)), im Produktziel steht sie ohne Link
+(Anliegen 3300), im Produktziel steht sie ohne Link
 auf die Datei. Rundgang 1 und 2 gehen an den Regelumsetzer
 ([3301](anliegen/3301-resteImPruefcodeAusRundgang7.md)), Rundgang 3 steht in
 [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md). Die Retro schreibt der
