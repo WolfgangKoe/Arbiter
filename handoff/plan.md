@@ -87,8 +87,8 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Reviewer: Kritik am Code zu Item einheitZuruecklegen
 - [x] Fachkritiker: Item einheitZuruecklegen abgenommen
 - [x] Planer: Item einheitZuruecklegen gelöscht
-- [ ] Reviewer: DoD über das Inkrement
-- [ ] Reviewer: Review geschrieben
+- [x] Reviewer: DoD über das Inkrement
+- [x] Reviewer: Review geschrieben
 - [ ] Stakeholder: Freigabe Review 7
 
 ## Freigabe

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu Item einheitZuruecklegen (Commit „Item einheitZuruecklegen
