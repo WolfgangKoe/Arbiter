@@ -18,7 +18,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   [2720](anliegen/2720-rueckverfolgungNenntEinzeldateiStattT1.md) (P5),
   [3301](anliegen/3301-resteImPruefcodeAusRundgang7.md) (P6),
   [3120](anliegen/3120-architekturkarteImDashboard.md) (P7).
-- Stakeholder: [3550](anliegen/3550-belegteKriterienJeEtappeZaehlen.md).
+- Stakeholder: Anliegen 3550.
 - Spätere Phase, nichts zu tun: Planer
   [3051](anliegen/3051-architekturUmordnenInPlan8.md); Ux
   [2920](anliegen/2920-leistenNamenInDenMockups.md),
@@ -42,7 +42,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
 - Reihenfolge wie die Empfehlung der Retro: P6 neben P1, P2 mit P8, P3 neben P4, dann P5, P7.
 
 ## Fragen an dich
-- [3550 · F1](anliegen/3550-belegteKriterienJeEtappeZaehlen.md): Zählen Stand und Dashboard die
+- Anliegen 3550: Zählen Stand und Dashboard die
   belegten Kriterien je Etappe (A, Empfehlung) oder weiter über alle (B)? Hält die
   Freigabe nicht auf; Retro 7 legt dafür kein Item an.
 - [3051 · F1](anliegen/3051-architekturUmordnenInPlan8.md): Nimmst du das Umordnen der

@@ -27,7 +27,7 @@ vor deiner Freigabe vier Dateien, die der Rundgang ausließ (3250).
 
 Nicht bestätigt: 3250 und 3251 lagen im Auftrag.
 Ausgelöst im [Backlog](../prozess/backlog.md): „Belegte Kriterien je Etappe“, Frage dazu:
-[3550](anliegen/3550-belegteKriterienJeEtappeZaehlen.md).
+Anliegen 3550.
 
 ## Prozess-Items
 P3 gilt der Ursache (1), P4 der verletzten Prämisse (3), P5 deinem Auftrag 2460 und dem
