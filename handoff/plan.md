@@ -34,7 +34,7 @@ Reihenfolge 1, 2: Item 1 räumt auf, wo Item 2 baut. Das Risiko liegt bei Item 1
 Kommentare: Ab „Freigabe Plan 7“ prüft der Commit-Hook auch `technik/`. Dort stehen 78
 verbotene Kommentare in 30 Dateien: 29 in Akzeptanztests (Testautor), 48 im Code und einer in
 einem Einheitstest (Implementierer). Bis sie fort sind, scheitert jeder Commit; darum zuerst
-([2510](anliegen/2510-kommentareZuerstNichtZuletzt.md)). Beide laufen gleichzeitig, der
+(Anliegen 2510). Beide laufen gleichzeitig, der
 Koordinator committet einmal nach beiden; davor committet niemand in der Technikphase. Kosten:
 je ein Durchgang, am Bildschirm nichts. Was ein Kommentar erklärt, steht danach im Namen, in
 einem einzeiligen Docstring oder in der Architektur, auf die er verweist; was dort schon

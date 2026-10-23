@@ -10,7 +10,7 @@ Wartet auf: Technikphase
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Item 1 in [Plan 7](../plan.md) entfernt zuerst die
 Kommentare, die [Es 8](../../prozess/praemissen/es.md) verbietet; was einer erklärt, steht
-danach im Namen, im Docstring oder in der Architektur ([2510](2510-kommentareZuerstNichtZuletzt.md)).
+danach im Namen, im Docstring oder in der Architektur (Anliegen 2510).
 Sechs Kommentare erklären etwas an der Schnittstelle, das noch nirgends steht. Ein Docstring
 hielte es an einer Funktion fest, es gilt aber für Web und Seite:
 
