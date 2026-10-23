@@ -138,6 +138,10 @@ def sperrmeldungenDerSeite(seite: Page) -> list[str]:
     return [text.strip() for text in meldungen.all_text_contents()]
 
 
+beendenKnopf = "Aufstellen der Einheit beenden"
+zurücklegenKnopf = "Einheit zurücklegen"
+
+
 def knopfDerSeite(seite: Page, text: str) -> Locator:
     gleicherText = re.compile(rf"^\s*{re.escape(text)}\s*$")
     return seite.locator(".knopfGruppe .knopf").filter(has_text=gleicherText)

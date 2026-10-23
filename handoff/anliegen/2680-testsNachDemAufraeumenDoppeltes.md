@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund (wartet auf die Technikphase).** Bei der Nachprüfung von 2572 und 2573 fiel auf,
@@ -42,3 +42,10 @@ geprüft.
 
 Erledigt, wenn 1 bis 3 umgesetzt sind und 4 entweder die *Karte* prüft oder der Name nur
 verspricht, was geprüft wird.
+
+**Stellungnahme.** Angenommen, alle vier umgesetzt. 1: Der Docstring von
+`aufDieAntwortenWarten` nennt keine Zahlen mehr. 2: `_ziehenBisZurAntwort` ist in
+`modellZiehen` aufgegangen. 3: `einModellAnEinerFreienStelle` ersetzt beide Aufbauten; die
+Fixture `sperrendesLoslassen` hat nur noch die Einheitennamen als Parameter, die `ids`
+bleiben. 4: Der Test prüft jetzt die *Karte* (`kreiseDerKarte` zeigt beide *Modelle* an
+ihren *Stellen*); der Name bleibt, denn er verspricht nur das.

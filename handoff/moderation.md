@@ -7,7 +7,7 @@ Kommentar-Anliegen 2540 und 2541; sie warten auf die Technikphase, die mit der F
 - Stakeholder: nichts außer der Freigabe. Keine offene Frage in den Anliegen.
 - Organisationsentwickler (Prozessphase, blockiert Plan 7 nicht):
   [2040](anliegen/2040-pythonUeberBashNachFreigabeRetro6.md) und
-  [2140](anliegen/2140-sandboxOeffnetAlleUnixSockets.md), beide abgelehnt, er entscheidet über
+  Anliegen 2140, beide abgelehnt, er entscheidet über
   neue Runde oder `erledigt`; [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md) (Es 8).
 - Wartend, hält Item 1 auf (Kommentare zuerst, Plan 7):
   - Anliegen 2540 (Implementierer löscht, Architekt

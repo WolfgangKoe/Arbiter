@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Ich habe [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py) und

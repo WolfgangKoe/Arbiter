@@ -17,7 +17,7 @@ def testQue8_2IstDieAdresseBelegtStartetArbiterNichtUndNenntKeineAndere(adresseD
 
     ende = befehl.startenBisZumEnde(belegterPort)
 
-    assert ende.exitCode == 1
+    assert ende.code == 1
     assert ende.ausgabe == ""
 
 

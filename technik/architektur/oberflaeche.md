@@ -26,12 +26,17 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
   Text.
 - **O4** Drei Leisten wie in ArbiterMap: links, rechts, unten (Inhalt: Anliegen 366). Je
   Leiste ein `<aside class="leiste">` im festen Markup, nicht im `<template>`, mit Griff
-  (`<button class="leistenGriff" aria-expanded>`). Ein- und Ausfahren ist Zustand der Seite,
-  nicht des Spiels: ohne `fetch`, ohne Domäne; `leisten.js` kennt nur Griff und Leiste, wie
-  `ArbiterMap/frontend/static/js/sidebar_handle.js`. Das Zeichnen füllt nur den Inhalt und
-  lässt den Zustand; beim Laden gilt das Markup. Eine ausgefahrene Leiste nimmt der Karte
-  Platz und verdeckt sie nicht, sonst läge eine *Aufstellungszone* darunter; die Karte
-  skaliert (O2). Prüft: Bildschirmtests zu den Kriterien der Leisten.
+  (`<button class="leistenGriff" aria-expanded>`). Das `aria-label` der Leiste nennt ihren
+  Inhalt mit Begriffen des Glossars, „Armeeliste Spieler 1“, „Armeeliste Spieler 2“,
+  „Protokoll“, das des Griffs dazu „ein- und ausfahren“ („Protokoll ein- und ausfahren“), wie
+  `ArbiterMap/frontend/templates/map.html:122`, `:169`. Warum: Gleichartige Bereiche
+  unterscheidet ein Screenreader nur am Namen (SonarLint Web:S5255). Ein- und Ausfahren ist
+  Zustand der Seite, nicht des Spiels: ohne `fetch`, ohne Domäne; `leisten.js` kennt nur
+  Griff und Leiste, wie `ArbiterMap/frontend/static/js/sidebar_handle.js`. Das Zeichnen
+  füllt nur den Inhalt und lässt den Zustand; beim Laden gilt das Markup. Eine ausgefahrene
+  Leiste nimmt der Karte Platz und verdeckt sie nicht, sonst läge eine *Aufstellungszone*
+  darunter; die Karte skaliert (O2). Prüft: Bildschirmtests zu den Kriterien der Leisten;
+  sie finden Leiste und Griff über Rolle und Namen (`get_by_role`).
 - **O5** Die Seite sind JavaScript-Module mit je einer Aufgabe, je höchstens 8.000 Zeichen
   ([Kennzahlen](../../prozess/kennzahlen.md#höchstmaße)), Importe nur in Pfeilrichtung:
   `seite.js` → `bedienung.js` → `anfragen.js` → `zeichnen.js`, dazu `seite.js` → `anfragen.js`.

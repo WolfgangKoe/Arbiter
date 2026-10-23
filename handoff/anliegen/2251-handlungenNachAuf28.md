@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
@@ -35,4 +34,27 @@ Neben dem Spielfeld schickt die Seite die *Stelle*, die die *Karte* zuletzt zeig
 Erledigt, wenn `handlungen.md` kein gestrichenes Kriterium mehr nennt und das Loslassen neben
 dem Spielfeld so beschreibt, wie AUF-28.1 es verlangt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [handlungen.md](../../technik/architektur/handlungen.md).
+2220 ist entschieden (F4 A: die *Armeeliste* ist kein Ziel). Die Zeilen zu AUF-16.3 und 16.6
+hatte Item 1 schon entfernt; `handlungen.md` nennt kein gestrichenes Kriterium mehr.
+- V8 sagt nur noch: im *Spielfeld* `modellLoslassen`, daneben nach V10, auch auf einer
+  `armeeKarte`.
+- V10, Seite: Neben dem *Spielfeld* schickt die Seite V5 mit dem Punkt der letzten 200 dieses
+  Zugs (AUF-28.1, mit Item loslassenNebenDerKarte). Ohne eine solche Antwort schickt sie
+  nichts und zeichnet den letzten Stand. Die Seite schickt den Punkt, nicht die gezeigten
+  *Stellen*: Zum selben Punkt *setzt* `modellLoslassen` genau, was die Abfrage zeigte, und
+  welche *Modelle* mitgehen, entscheidet weiter die Domäne. Beispiel: Du ziehst die Boyz bis
+  an den Rand, die *Karte* zeigt sie dort, du ziehst weiter auf die *Armeeliste* und lässt
+  los. Die Seite schickt den letzten Punkt am Rand, und die Boyz stehen, wo die *Karte* sie
+  zeigte.
+- AUF-16.8 folgt daraus, ohne dass die Seite selbst prüft: Für ein *Modell* einer
+  *aufgestellten* *Einheit* antwortet V10 nur 409 (`prüfenDassWählbar`). Es gibt also keine
+  200, und die Seite schickt nichts.
+- Prüft: Der Bildschirmtest zu AUF-28.1 wartet auf die Antwort und liest `cx`, `cy`. Dann
+  lässt er neben dem *Spielfeld* los, und die *Stelle* danach gleicht den gelesenen Werten (B3).
+
+Offen bleibt AUF-16.7, das *Modell*, das eine zweite Seite noch zeigt. Ob die Domäne es beim
+Loslassen *setzt*, regelt V10 nicht; das kommt mit den Tests des Items. Für
+[2670](2670-que3_4TestGegenAuf28_1.md) stimmt der Gegenvorschlag des Fachkritikers auch nach
+dieser Regel. Kosten: `handlungen.md` wächst um rund 300 Zeichen auf 8.119. Das fängt die
+Teilung des Vertrags nach [2570](2570-architekturUeberDemHoechstmass.md) auf.

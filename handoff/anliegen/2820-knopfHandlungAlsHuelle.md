@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [anfragen.js](../../technik/frontend/anfragen.js), Zeile 7, neu in diesem Item:

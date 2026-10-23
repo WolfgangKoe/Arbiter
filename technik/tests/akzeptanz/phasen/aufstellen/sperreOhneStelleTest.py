@@ -10,6 +10,7 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from tests.akzeptanz.auswahl import klickenUndWarten
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
+    beendenKnopf,
     gründeAlsText,
     knopfDerSeite,
     sperrmeldungWarten,
@@ -30,7 +31,6 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import modellZiehen
 
-beenden = "Aufstellen der Einheit beenden"
 übergehen = "gemeinsam übergehen"
 
 
@@ -60,31 +60,22 @@ def freieStelleDesSpielersAnDerReihe(aufstellung) -> Stelle:
     return stelleInDerZoneVon(aufstellung, aufstellung.anDerReihe, 4, 40)
 
 
-def einModellDesSpielersNichtAnDerReihe(aufstellung, einheit) -> Loslassen:
-    einheitenAufstellen(aufstellung, 2)
-    modell, *_ = einheit.modelle
-    return Loslassen(einheit, modell, stelle=freieStelleDesSpielersAnDerReihe(aufstellung))
-
-
-def einModellEinerAufgestelltenEinheit(aufstellung, einheit) -> Loslassen:
+def einModellAnEinerFreienStelle(aufstellung, einheit) -> Loslassen:
     einheitenAufstellen(aufstellung, 2)
     modell, *_ = einheit.modelle
     return Loslassen(einheit, modell, stelle=freieStelleDesSpielersAnDerReihe(aufstellung))
 
 
 @pytest.fixture(
-    params=[
-        (einModellDesSpielersNichtAnDerReihe, "necronWarriors"),
-        (einModellEinerAufgestelltenEinheit, "boyz"),
-    ],
+    params=["necronWarriors", "boyz"],
     ids=[
         "auf7_2ModellDesSpielersNichtAnDerReihe",
         "auf7_2ModellEinerAufgestelltenEinheit",
     ],
 )
 def sperrendesLoslassen(request, aufstellungNachDerZonenwahl) -> Loslassen:
-    aufbau, einheitenname = request.param
-    return aufbau(aufstellungNachDerZonenwahl, request.getfixturevalue(einheitenname))
+    einheit = request.getfixturevalue(request.param)
+    return einModellAnEinerFreienStelle(aufstellungNachDerZonenwahl, einheit)
 
 
 def ohneEinheitInAufstellung(aufstellung):
@@ -228,7 +219,7 @@ def testAuf12_7DieSeiteNenntDenGrundNachDemKlickAufAufstellenDerEinheitBeenden(
     seite = bildschirm.seiteZu(aufstellung)
 
     with aufDieHandlungWarten(seite):
-        knopfDerSeite(seite, beenden).click()
+        knopfDerSeite(seite, beendenKnopf).click()
 
     assert sperrmeldungWarten(seite, {grund}) == gründeAlsText({grund})
 
@@ -236,7 +227,7 @@ def testAuf12_7DieSeiteNenntDenGrundNachDemKlickAufAufstellenDerEinheitBeenden(
 def testAuf12_7DieSeiteNenntDenGrundNochNachDemAuswählen(bildschirm, aufstellungNachDerZonenwahl):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     with aufDieHandlungWarten(seite):
-        knopfDerSeite(seite, beenden).click()
+        knopfDerSeite(seite, beendenKnopf).click()
     sperrmeldungWarten(seite, {Grund.nichtInAufstellung})
 
     klickenUndWarten(seite, "Spieler 1", "Warboss")
@@ -258,7 +249,7 @@ def testAuf12_7DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
     nebenDemErsten = stelleInDerZoneVon(aufstellung, spielerAnDerReihe, 4, 12)
     seite = bildschirm.seiteZu(aufstellung)
     with aufDieHandlungWarten(seite):
-        knopfDerSeite(seite, beenden).click()
+        knopfDerSeite(seite, beendenKnopf).click()
     sperrmeldungWarten(seite, {Grund.keineKohärenz})
 
     modellZiehen(seite, stelleDesZweitenModells, nebenDemErsten)

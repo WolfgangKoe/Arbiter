@@ -31,11 +31,11 @@ _freierPort = 0
 
 
 class Ende(NamedTuple):
-    """Was ein beendeter Befehl hinterließ; ein Exit-Code unter 0 heißt, er lief weiter."""
+    """Was ein beendeter Befehl hinterließ; ein Code unter 0 heißt, er lief weiter."""
 
     ausgabe: str
     fehlerausgabe: str
-    exitCode: int
+    code: int
 
 
 class Befehl:
@@ -46,13 +46,13 @@ class Befehl:
 
     def starten(self) -> str:
         """Startet Arbiter auf einem freien Port; gibt die Adresse der ersten Zeile zurück."""
-        prozess = self._prozessStarten(_freierPort)
+        prozess = self._prozessStarten(_freierPort, subprocess.DEVNULL)
         bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
         return prozess.stdout.readline().strip() if bereit else ""
 
     def startenBisZumEnde(self, port: int) -> Ende:
         """Startet Arbiter auf dem Port und wartet auf sein Ende; läuft er weiter, endet er hier."""
-        prozess = self._prozessStarten(port)
+        prozess = self._prozessStarten(port, subprocess.PIPE)
         try:
             ausgabe, fehlerausgabe = prozess.communicate(timeout=_sekundenBisZurAdresse)
         except subprocess.TimeoutExpired:
@@ -60,12 +60,12 @@ class Befehl:
             ausgabe, fehlerausgabe = prozess.communicate()
         return Ende(ausgabe, fehlerausgabe, prozess.returncode)
 
-    def _prozessStarten(self, port: int) -> subprocess.Popen:
+    def _prozessStarten(self, port: int, fehlerausgabe: int) -> subprocess.Popen:
         umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
         prozess = subprocess.Popen(
             [sys.executable, "-m", "arbiter", "--port", str(port)],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stderr=fehlerausgabe,
             text=True,
             env=umgebung,
         )

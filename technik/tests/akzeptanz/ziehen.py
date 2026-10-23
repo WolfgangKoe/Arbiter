@@ -119,17 +119,13 @@ def mitDemFingerZiehen(seite: Page, von: Bildpunkt, nach: Bildpunkt) -> None:
 eingaben = {"maus": mitDerMausZiehen, "finger": mitDemFingerZiehen}
 
 
-def _ziehenBisZurAntwort(seite: Page, eingabe: str, von: Bildpunkt, nach: Bildpunkt) -> Response:
-    with aufDieHandlungWarten(seite) as antwort:
-        eingaben[eingabe](seite, von, nach)
-    return antwort.value
-
-
 def modellZiehen(seite: Page, von: Stelle, nach: Stelle, eingabe: str = "maus") -> Response:
     """Zieht das Modell an der Stelle auf die Karte und wartet auf die Antwort."""
-    return _ziehenBisZurAntwort(
-        seite, eingabe, punktAufDerKarte(seite, von), punktAufDerKarte(seite, nach)
-    )
+    anfang = punktAufDerKarte(seite, von)
+    ende = punktAufDerKarte(seite, nach)
+    with aufDieHandlungWarten(seite) as antwort:
+        eingaben[eingabe](seite, anfang, ende)
+    return antwort.value
 
 
 _bildaufbauAbwarten = "() => new Promise(fertig => requestAnimationFrame(() => fertig()))"
@@ -197,7 +193,7 @@ _höchstensProben = 200
 
 
 def aufDieAntwortenWarten(seite: Page, abfragen: Abfragen) -> None:
-    """Wartet auf vier ruhige Proben zu 50 ms; erst dann zeigt die Karte den Zeigerpunkt."""
+    """Wartet, bis die Abfragen eine Weile ruhen; erst dann zeigt die Karte den Zeigerpunkt."""
     ruhige = 0
     for _ in range(_höchstensProben):
         seite.wait_for_timeout(_pausenInMillisekunden)

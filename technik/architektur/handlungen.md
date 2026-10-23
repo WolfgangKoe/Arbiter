@@ -56,9 +56,8 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
   *Ebene* ein *Modell*, tragen die anderen *Modelle* kein `ausgewählt` (AUF-25.4).
   Gezogen wird nur ein `.karte .modell`: Es folgt dem Zeiger; trägt es `ausgewählt`, folgen
   alle mit `ausgewählt` um denselben Weg (AUF-21.1). Beim Loslassen im *Spielfeld*
-  `modellLoslassen`, auch über dem Startpunkt (AUF-8.2), sonst keine Anfrage, auch auf einer
-  `armeeKarte`: Die Seite zeichnet den letzten Stand (AUF-16.8; neben dem *Spielfeld* nach
-  AUF-28.1: Anliegen 2251). Ein Zug wählt nie aus.
+  `modellLoslassen`, auch über dem Startpunkt (AUF-8.2), daneben nach V10, auch auf einer
+  `armeeKarte`. Ein Zug wählt nie aus.
   Beim Druck auf ein gezogenes Element verhindert die Seite Markieren und das eigene Ziehen
   des Browsers (`preventDefault` auf `pointerdown` und `dragstart`, `user-select: none` an
   `.armeeKarte`); sonst bricht `pointercancel` den Zug ab.
@@ -84,7 +83,12 @@ und Schutz: [Vertrag](vertrag.md), Aufbau: [Web](web.md).
     höchstens eine Anfrage zugleich, danach nur mit dem jüngsten Punkt. Auf 200 setzt sie
     `cx`, `cy` jedes genannten Kreises, sonst bleibt jeder, wo er ist, auch bei 409 (ohne
     `sperrmeldung`: keine Handlung). Eine Antwort nach dem Loslassen verwirft sie. Beim
-    Loslassen schickt sie V5 mit dem Punkt des Zeigers, nicht dem gezeigten.
+    Loslassen schickt sie V5 mit dem Punkt des Zeigers, nicht dem gezeigten; neben dem
+    *Spielfeld* mit dem Punkt der letzten 200 dieses Zugs (AUF-28.1, mit Item
+    loslassenNebenDerKarte), ohne sie keine Anfrage: Sie zeichnet den letzten Stand (AUF-16.8,
+    eine *aufgestellte* *Einheit* bekommt nur 409). Warum der Punkt: Zu ihm *setzt*
+    `modellLoslassen` die gezeigten *Stellen*, und welche *Modelle* mitgehen, entscheidet die
+    Domäne (V5).
 
 Prüft: Der Testautor je Kriterium mit dem Flask-Testclient gegen V5, V6, V9 und V10 (409 bei
 AUF-10.3 gleich `sperre.json`, 200 bei AUF-23.1 und 23.3 gleich `zurueckgelegt.json`) und mit Bildschirmtests nach [B1 bis B5](web.md#bildschirmtests), denen
@@ -92,5 +96,5 @@ AUF-10.3 gleich `sperre.json`, 200 bei AUF-23.1 und 23.3 gleich `zurueckgelegt.j
 `tests/einheit/web/anwendungTest.py`. Zu V10: AUF-29.1 mit einem Weiterrücken ab der *gesetzten*
 *Stelle*, an der *Stelle* nach dem Loslassen (28.2): auf der Strecke zur *Stelle*, wie `web/` sie liest (S2, exakt kollinear), keine *Base* *überdeckt*, zur ersten
 angestoßenen `abstandHöchstens` 1/100″; den Raster prüfen nur Unit-Tests. AUF-24.3, 26.5 am
-Bildschirm: halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt loslassen;
-die *Stelle* danach gleicht den gelesenen Werten exakt (B3).
+Bildschirm: halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt loslassen, bei
+AUF-28.1 neben dem *Spielfeld*; die *Stelle* danach gleicht den gelesenen Werten exakt (B3).

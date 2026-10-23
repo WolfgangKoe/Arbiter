@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund (wartet auf die nächste Technikphase).** Keine Prüfung ist rot, kein Kriterium
@@ -33,4 +33,8 @@ Stakeholder den Text, muss man ihn an vier Stellen finden.
 3. Die Knopftexte einmal in [bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py)
    neben `knopfDerSeite`, etwa `beendenKnopf` und `zurücklegenKnopf`, und von dort importieren.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei umgesetzt. 1: `ausgewählt` statt
+`ganzeEinheitAlsEbene`, die `ids` bleiben. 2: `ohneAuswahl` und `ausgewählt` kennzeichnen
+den ungenutzten Parameter beide als `_modell`. 3: `beendenKnopf` und `zurücklegenKnopf`
+stehen in `bildschirm.py`; `einheitZuruecklegenTest.py`, `sperreOhneStelleTest.py` und
+`beendenTest.py` importieren sie.

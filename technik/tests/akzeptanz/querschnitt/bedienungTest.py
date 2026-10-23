@@ -12,6 +12,7 @@ from tests.akzeptanz.auswahl import (
 from tests.akzeptanz.bildschirm import (
     armeelisteVon,
     inhaltDerSeite,
+    kreiseDerKarte,
     neuLaden,
     seiteMitEingabe,
 )
@@ -147,7 +148,7 @@ def testQue3_4EinModellAufDieKarteZiehenUndLoslassenSetztEsAnDieStelleDesLoslass
 def testQue3_4EinModellAufDieArmeelisteZiehenUndLoslassenSendetNichtsUndLässtJedesModellWoEsWar(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
 ):
-    (erstesModell, ersteStelle), (zweitesModell, stelleDavor) = boyzSetzen(2)
+    (_, ersteStelle), (_, stelleDavor) = boyzSetzen(2)
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
     start = punktAufDerKarte(seite, stelleDavor)
     mitteDerArmeeliste = mitteVon(armeelisteVon(seite, "Spieler 1"))
@@ -155,5 +156,7 @@ def testQue3_4EinModellAufDieArmeelisteZiehenUndLoslassenSendetNichtsUndLässtJe
     anfragen = ziehenOhneAnfrage(seite, start, mitteDerArmeeliste, eingabe)
 
     assert anfragen == []
-    assert aufstellungNachDerZonenwahl.stelle(zweitesModell) == stelleDavor
-    assert aufstellungNachDerZonenwahl.stelle(erstesModell) == ersteStelle
+    assert kreiseDerKarte(seite) == {
+        (float(ersteStelle.x), float(ersteStelle.y)),
+        (float(stelleDavor.x), float(stelleDavor.y)),
+    }

@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Architekt
 Runde: 1/3
 Status: offen
-Wartet auf: Technikphase
+Wartet auf: 2920
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
@@ -31,4 +31,15 @@ Inhalt mit den Begriffen des Glossars nennt: links „Ablage Spieler 1“, recht
 Namen trägt. Wird das nicht übernommen, die Warnung in O4 mit Begründung als bewusst
 hingenommen festhalten. Ux zieht danach auf-13.html und que-5.html nach.
 
-**Stellungnahme.**
+**Stellungnahme.** Übernommen, mit einer Änderung an den Namen.
+[O4](../../technik/architektur/oberflaeche.md) legt jetzt fest: Das `aria-label` der *Leiste*
+nennt ihren Inhalt, „Armeeliste Spieler 1“, „Armeeliste Spieler 2“, „Protokoll“; der *Griff*
+heißt dazu „… ein- und ausfahren“. Statt „Ablage“ steht *Armeeliste*, denn so heißt sie seit
+Anliegen 2221. Den *Griff* benennt O4 nach seiner Handlung, wie ArbiterMap
+(`map.html:122`, `:169`): Ein Screenreader liest dann „Armeeliste Spieler 1, Schaltfläche
+Armeeliste Spieler 1 ein- und ausfahren, ausgeklappt“. Die Bildschirmtests finden *Leiste* und
+*Griff* über Rolle und Namen; das prüft die Namen mit. Die *Leisten* gibt es noch nicht im
+Code, also kostet die Entscheidung jetzt nur die Mockups. Die Mockups zieht Ux mit
+[2920](2920-leistenNamenInDenMockups.md) nach (auf-13.html gibt es nicht mehr, dafür
+que-7.html). Wenn 2920 erledigt ist, setze ich `angenommen`. Für [2240](2240-leistenInKomponentenseiteEintragen.md)
+gilt O4 schon jetzt.

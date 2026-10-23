@@ -9,6 +9,7 @@ from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
+    beendenKnopf,
     knopfDerSeite,
     sperrmeldungWarten,
     spielerAnDerReihe,
@@ -51,7 +52,7 @@ def testAuf10_1EinKlickAufAufstellenDerEinheitBeendenWähltAufstellenDerEinheitB
     einheit, _ = zweiterSpieler.armee.einheiten
     modelleSetzen(aufstellung, einheit, len(einheit.modelle))
     seite = bildschirm.seiteZu(aufstellung)
-    knopf = knopfDerSeite(seite, "Aufstellen der Einheit beenden")
+    knopf = knopfDerSeite(seite, beendenKnopf)
 
     with aufDieHandlungWarten(seite):
         knopf.click()
@@ -121,7 +122,7 @@ def testAuf10_3DieSeiteNenntBeimBeendenDenGrundDerSperreImBeispiel(bildschirm, a
     stand = sperreDesVertrags()["spielstand"]
     seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, stand)
     seite.route("**/api/aufstellenDerEinheitBeenden", antwortMitDerSperreDesVertrags)
-    knopf = knopfDerSeite(seite, "Aufstellen der Einheit beenden")
+    knopf = knopfDerSeite(seite, beendenKnopf)
 
     with aufDieHandlungWarten(seite):
         knopf.click()

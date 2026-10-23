@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Anliegen 2820: Pfeilfunktion als Hülle um einen Aufruf in anfragen.js (Es 7) Das hält den Schritt „Kritik am Code zu Item aufraeumenUndFesteAdresse“ von Reviewer im Fortschritt auf.

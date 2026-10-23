@@ -6,7 +6,12 @@ import pytest
 from playwright.sync_api import expect
 
 from tests.akzeptanz.auswahl import ausgewählteEinheiten
-from tests.akzeptanz.bildschirm import aufDieHandlungWarten, knopfDerSeite
+from tests.akzeptanz.bildschirm import (
+    aufDieHandlungWarten,
+    beendenKnopf,
+    knopfDerSeite,
+    zurücklegenKnopf,
+)
 from tests.akzeptanz.dienst import (
     auswählen,
     modellAlsEbene,
@@ -18,16 +23,14 @@ from tests.akzeptanz.dienst import (
 from tests.akzeptanz.handgriffe import einheitAufstellen, modelleSetzen, stellenAllerModelle
 
 zurücklegenAdresse = "**/api/zur%C3%BCcklegen"
-zurücklegenKnopf = "Einheit zurücklegen"
-beendenKnopf = "Aufstellen der Einheit beenden"
 anzahlGesetzter = 3
 
 
-def ohneAuswahl(aufstellung, einheit, modell):
+def ohneAuswahl(aufstellung, einheit, _modell):
     """Die Einheit bleibt, wie sie ist: nicht ausgewählt."""
 
 
-def ganzeEinheitAlsEbene(aufstellung, einheit, _modell):
+def ausgewählt(aufstellung, einheit, _modell):
     aufstellung.auswählen(einheit)
 
 
@@ -38,13 +41,13 @@ def einModellAlsEbene(aufstellung, einheit, modell):
 
 mitJederEbene = pytest.mark.parametrize(
     "ebeneWählen",
-    [ohneAuswahl, ganzeEinheitAlsEbene, einModellAlsEbene],
+    [ohneAuswahl, ausgewählt, einModellAlsEbene],
     ids=["nichtAusgewählt", "ganzeEinheit", "einModell"],
 )
 
 mitAusgewählterEinheit = pytest.mark.parametrize(
     "ebeneWählen",
-    [ganzeEinheitAlsEbene, einModellAlsEbene],
+    [ausgewählt, einModellAlsEbene],
     ids=["ganzeEinheit", "einModell"],
 )
 
@@ -191,7 +194,7 @@ def testAuf23_3EineAusgewählteEinheitBleibtNachDemZurücklegenAusgewähltMitDer
     )
 
 
-def testAuf23_3DerDienstLässtNachDemZurücklegenDieEinheitMitEinemModellAlsEbeneAusgewählt(
+def testAuf23_3MitEinemModellAlsEbeneLässtDerDienstDieEinheitMitDerGanzenEinheitAlsEbeneAusgewählt(
     dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors
 ):
     auswählen(dienstDesBeispiels, "Necron Warriors")
