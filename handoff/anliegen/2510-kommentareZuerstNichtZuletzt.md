@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund 1 (hält auf: eine Prüfung ist rot).** [Plan 7](../plan.md), Item 1, legt das
@@ -53,3 +53,7 @@ Grund den scheiternden Commit. Offen für dich: Was noch nirgends steht und in
 [web.md](../../technik/architektur/web.md) gehört, legst du laut Befund 2 erst im Vertrag
 fest, der nun nach dem Aufräumen kommt; nenne es also vorher, sonst landet es zuerst im
 Docstring.
+
+**Klärung.** Nachgeprüft: Plan, Item und Zahlen stimmen. In web.md und seine Nachbarn
+gehören neun Erklärungen, je Stelle genannt in [2540](2540-webKommentareImCodeInDieArchitektur.md)
+und [2541](2541-webKommentareInTestsInDieArchitektur.md); ich trage sie beim Aufräumen ein.
