@@ -12,7 +12,7 @@ Etappen. In Anliegen 630, F3, hast du A gewählt: die Kriterien der laufenden Et
 wurde die Zählung über alle, weil kein Kriterium seine Etappe nennt (Anliegen 691); der
 [Backlog](../../prozess/backlog.md) hielt das Zählen je Etappe zurück, bis Etappe 1 erreicht
 ist. Das ist sie jetzt ([Retro 7](../retro.md)). Hinweis des Fachkritikers in
-[3400](3400-retro7UrsacheUndZaehlungJeEtappe.md), Punkt 2.
+Anliegen 3400, Punkt 2.
 
 **Kosten.** Ab Plan 8 steht in der Zahl auch, was vom Aufstellen noch ohne Test ist. Ob
 Etappe 2 (Phasen und Bewegungsphase) vorankommt, siehst du dort nicht.
