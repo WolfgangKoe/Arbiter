@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** P5 (Retro 6, Anliegen 1660, 1860) ist gebaut und grün: [Regeln, Formregeln](../../prozess/regeln.md#formregeln),

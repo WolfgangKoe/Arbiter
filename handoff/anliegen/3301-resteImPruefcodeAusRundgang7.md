@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -49,3 +49,8 @@ alter Kopfzeile als Vorlage nutzen die Felder. (2) `kommentare.py` prüft die Fo
 mehr, zählt dort die TODOs; Scheiter-Test `testDieFormEinesKommentarsImFrontendPrüftNurEslintDieTodosZähltDiese`,
 die einmalige Meldung belegt `frontendTest.py` (Prosa-Kommentar). Eintrag in
 [Regeln](../../prozess/regeln.md#anliegenregeln).
+
+**Nachprüfung.** Erfüllt: `git grep` findet weder alte Kopfzeile noch `phasenanfang`, `die `
+steht nur in den Anzeigetexten, ein Prosa-Kommentar in `.js` meldet nur eslint;
+`python3 -m pytest prozess/pruefungen` grün (771). Kleine Reste, die nicht aufhalten:
+[3780](3780-restePruefcodeNach3301.md).
