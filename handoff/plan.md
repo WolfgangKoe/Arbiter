@@ -71,7 +71,7 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Fachkritiker: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
 - [x] Architekt: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
 - [x] Implementierer: Tests zu Item aufraeumenUndFesteAdresse grün
-- [ ] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
+- [x] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [ ] Reviewer: Kritik am Code zu Item aufraeumenUndFesteAdresse
 - [ ] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
 - [ ] Planer: Item aufraeumenUndFesteAdresse gelöscht
