@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu Item einheitZuruecklegen (Commit „Item einheitZuruecklegen
@@ -38,4 +37,9 @@ als Methode von `Auswahl` nennen, die nur `zurücklegen` ruft (V5). Bestehende R
 
 Erledigt, wenn V3 die Methode nicht mehr als Tür der `Aufstellung` nennt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen. Der Code bestätigt den Befund:
+`Auswahl.ganzeEinheitAlsEbene` hat als einzigen Aufrufer `Aufstellung.zurücklegen`.
+[Vertrag, V3](../../technik/architektur/vertrag.md) nennt die Methode nicht mehr als Tür der
+`Aufstellung`, sondern als Methode nur in `Auswahl`, die nur `zurücklegen` ruft (V5). Der
+Verweis in [Handlungen, V5](../../technik/architektur/handlungen.md) auf V3 stimmt damit
+weiter. Am Code nichts.

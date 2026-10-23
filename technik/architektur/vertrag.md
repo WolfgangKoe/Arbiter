@@ -25,10 +25,11 @@ V1, V2, V5, V9 und V10.
   Umschalten: Zwei Seiten (QUE-3.2) oder ein doppelter Klick schalteten sonst zurück.
 - **V3** Die *Auswahl* hält die Domäne in `Auswahl` ([Grundschnitt](../architektur.md)), die
   Tür ist `Aufstellung`: `auswählen(einheit)` (AUF-5.11, 20.2), `abwählen(einheit)`,
-  `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2),
-  `ganzeEinheitAlsEbene(einheit)` (AUF-23.3; ist sie nicht *ausgewählt*, nichts), Abfragen
+  `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2), Abfragen
   `ausgewählt(einheit)`, `modellAusgewählt(modell)`, `ganzeEinheitIstEbene(einheit)`
-  (AUF-21.1) und `modellIstEbene(modell)` (AUF-25.1). `Auswahl` kennt nur *Einheit* und
+  (AUF-21.1) und `modellIstEbene(modell)` (AUF-25.1). Nur in `Auswahl`, ohne Tür:
+  `ganzeEinheitAlsEbene(einheit)` (AUF-23.3; ist sie nicht *ausgewählt*, nichts), die nur
+  `zurücklegen` ruft ([V5](handlungen.md)). `Auswahl` kennt nur *Einheit* und
   *Ebene*; ob eine *Einheit* zur Partie gehört und nicht *aufgestellt* ist, prüft
   `Aufstellung` vor dem Auswählen (Anliegen 1651). AUF-5.10 gilt dort, nicht in `web/`. Auswählen ist keine Handlung (Glossar,
   *ausgewählt*): ohne Sperre, darum ohne D2.
