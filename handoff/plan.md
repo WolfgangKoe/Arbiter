@@ -22,7 +22,7 @@ Zyklusziel aus [Review 6](review.md).
 1. [Aufräumen und feste Adresse](../domaene/items/aufraeumenUndFesteAdresse.md): Schritt 1;
    zuerst, vor Vertrag und Tests, die Kommentare im Code, die
    [Es 8](../prozess/praemissen/es.md) verbietet (deine Antwort A zu
-   [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md)). Dann ohne sichtbare
+   Anliegen 2360). Dann ohne sichtbare
    Änderung: die *Auswahl* entflechten (1652), `seite.js` teilen (1541), *Ablage* heißt auch
    im Code *Armeeliste* (2221). „zurück“ (AUF-17) entfällt samt Test, ebenso die *Sperre*
    ‚nicht wählbar‘ beim Ziehen auf eine *Armeeliste* (AUF-8.4): Das *Modell* springt still

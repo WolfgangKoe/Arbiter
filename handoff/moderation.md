@@ -6,9 +6,9 @@ stehen in der [Retro](retro.md). Offene Annahme nach [Ich 1](../prozess/praemiss
 ## Dran
 Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
 - Organisationsentwickler:
-  [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md),
-  [3050](anliegen/3050-hoechstmassDerArchitekturNach2570.md),
-  [2201](anliegen/2201-aenderungenDesStakeholdersVorherErproben.md) (alle P1),
+  Anliegen 2360,
+  Anliegen 3050,
+  Anliegen 2201 (alle P1),
   [2590](anliegen/2590-ablaufUndRegelnInUnterordner.md) (P2),
   [2591](anliegen/2591-innenIchDesStakeholdersInDenPraemissen.md) (P3).
 - Regelumsetzer:
@@ -16,7 +16,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   [2592](anliegen/2592-sedInSchleifeUmgehtSchreibgrenze.md) (P4),
   [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md) und
   [2720](anliegen/2720-rueckverfolgungNenntEinzeldateiStattT1.md) (P5),
-  [3301](anliegen/3301-resteImPruefcodeAusRundgang7.md) (P6),
+  Anliegen 3301 (P6),
   [3120](anliegen/3120-architekturkarteImDashboard.md) (P7).
 - Stakeholder: Anliegen 3550.
 - Spätere Phase, nichts zu tun: Planer

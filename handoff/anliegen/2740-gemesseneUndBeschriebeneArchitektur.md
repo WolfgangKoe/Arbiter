@@ -55,7 +55,7 @@ entsteht mit dem ersten Modul dort. 7 sind nur teilweise geprüft (A2, D3, W2, W
 O5), etwa welches Modul der Seite welches nutzen darf (O5). Die Karte ist möglich, F1 ist
 dafür neu gefasst. Mit der Gliederung aus 2570 (je Ordner eine Datei) ist „Zeichen
 Architektur“ je Kasten die Größe seiner Datei. Zu 2570, F2: Ja, C war die Empfehlung; die
-Kennzahl ändert [3050](3050-hoechstmassDerArchitekturNach2570.md), das Umordnen kommt
+Kennzahl ändert Anliegen 3050, das Umordnen kommt
 mit [3051](3051-architekturUmordnenInPlan8.md) in Plan 8.
 Kommentar: Setze es mal um, und dann gebe ich ggf. Feedback
 Stellungnahme: Bauen darf die Karte nur der Regelumsetzer, und erst in der Prozessphase

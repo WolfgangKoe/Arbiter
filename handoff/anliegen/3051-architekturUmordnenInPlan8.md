@@ -14,7 +14,7 @@ einer Datei (F2, C); umgeordnet wird in Plan 8 als erstes Item, ohne sichtbare �
 (F3). Was Plan 7 streicht, fällt dabei weg.
 
 **Kosten.** Fehlt das Item, bleibt die Architektur über ihrem Höchstmaß
-([3050](3050-hoechstmassDerArchitekturNach2570.md)); jede Rolle liest dann Regeln aller
+(Anliegen 3050); jede Rolle liest dann Regeln aller
 Schichten, bevor sie an einer baut.
 
 **Gegenvorschlag.**
