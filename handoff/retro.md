@@ -67,7 +67,7 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Fachkritiker: Kritik an der Retro
 - [x] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
-- [ ] Stakeholder: Freigabe Retro 7
+- [x] Stakeholder: Freigabe Retro 7
 - [ ] Organisationsentwickler: P1
 - [ ] Organisationsentwickler: P2
 - [ ] Organisationsentwickler: P3
