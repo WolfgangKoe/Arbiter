@@ -12,8 +12,8 @@
     <div class="kopfzeileSpieler spieler2">Spieler 2</div>
   </header>
   <main class="spielbereich">
-    <aside class="leiste leisteLinks" aria-label="Leiste Spieler 1">
-      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Ablage Spieler 1">◀</button>
+    <aside class="leiste leisteLinks" aria-label="Armeeliste Spieler 1">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 1 ein- und ausfahren">◀</button>
       <div class="leistenInhalt">
         <div class="armeeKarte spieler1">
           <h2 class="armeeKartenName">Spieler 1</h2>
@@ -49,9 +49,15 @@
       <circle class="modell spieler2" cx="36.0" cy="28" r="0.630"/>
       <circle class="modell spieler2 ausgewählt" cx="37.4" cy="28" r="0.630"/>
     </svg>
+    <ul class="sperrmeldung">
+      <li class="sperrmeldungGrund">keine Kohärenz</li>
+    </ul>
+    <div class="knopfGruppe">
+      <button class="knopf" type="button">Aufstellen der Einheit beenden</button>
     </div>
-    <aside class="leiste leisteRechts" aria-label="Leiste Spieler 2">
-      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Ablage Spieler 2">▶</button>
+    </div>
+    <aside class="leiste leisteRechts" aria-label="Armeeliste Spieler 2">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 2 ein- und ausfahren">▶</button>
       <div class="leistenInhalt">
         <div class="armeeKarte spieler2">
           <h2 class="armeeKartenName">Spieler 2</h2>
@@ -71,8 +77,8 @@
       </div>
     </aside>
   </main>
-  <aside class="leiste leisteUnten" aria-label="Leiste Protokoll">
-    <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll">▼</button>
+  <aside class="leiste leisteUnten" aria-label="Protokoll">
+    <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll ein- und ausfahren">▼</button>
     <div class="leistenInhalt">
       <ul class="protokoll">
         <li class="protokollEintrag spieler1">

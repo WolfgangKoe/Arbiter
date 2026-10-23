@@ -3,13 +3,16 @@ import { zeichnen } from "./zeichnen.js"
 let gründeDerLetztenSperre = []
 let letzterSpielstand = null
 
-const knöpfe = [
-  { text: "Aufstellen der Einheit beenden", handlung: aufstellenDerEinheitBeenden },
-]
+const zurücklegenKnopf = { text: "Einheit zurücklegen", handlung: zurücklegen }
+const beendenKnopf = { text: "Aufstellen der Einheit beenden", handlung: aufstellenDerEinheitBeenden }
+
+function knöpfeZu(spielstand) {
+  return spielstand.einheitInAufstellung ? [zurücklegenKnopf, beendenKnopf] : [beendenKnopf]
+}
 
 function neuZeichnen(spielstand) {
   letzterSpielstand = spielstand
-  zeichnen(spielstand, gründeDerLetztenSperre, knöpfe)
+  zeichnen(spielstand, gründeDerLetztenSperre, knöpfeZu(spielstand))
 }
 
 function senden(pfad, methode, körper) {
@@ -75,6 +78,10 @@ export function modellLoslassen(modell, stelle) {
 
 function aufstellenDerEinheitBeenden() {
   return handlungSenden("/api/aufstellenDerEinheitBeenden", "PUT")
+}
+
+function zurücklegen() {
+  return handlungSenden("/api/zurücklegen", "PUT")
 }
 
 export function karteAnklicken(stelle) {

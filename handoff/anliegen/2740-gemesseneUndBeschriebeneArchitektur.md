@@ -5,6 +5,7 @@ Von: Architekt
 An: Stakeholder
 Runde: 1/3
 Status: angenommen
+Wartet auf: 3120
 
 ## Runde 1
 **Befund.** Recherche zu deinem Kommentar in Anliegen 2570:
@@ -57,3 +58,7 @@ Architektur“ je Kasten die Größe seiner Datei. Zu 2570, F2: Ja, C war die Em
 Kennzahl ändert [3050](3050-hoechstmassDerArchitekturNach2570.md), das Umordnen kommt
 mit [3051](3051-architekturUmordnenInPlan8.md) in Plan 8.
 Kommentar: Setze es mal um, und dann gebe ich ggf. Feedback
+Stellungnahme: Bauen darf die Karte nur der Regelumsetzer, und erst in der Prozessphase
+nach Retro 7. Den Auftrag mit allen Kästen, Pfeilen und Zahlen von F1 hat er in
+[3120](3120-architekturkarteImDashboard.md). Sobald die Karte im Dashboard steht, prüfe
+ich sie nach; dein Feedback nehme ich hier auf.

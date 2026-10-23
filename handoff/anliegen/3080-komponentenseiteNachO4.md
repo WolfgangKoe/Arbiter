@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -30,7 +30,7 @@ von Plan 7 ist betroffen.
 
    Die *Griffe* stammen aus [que-5.html](../../domaene/mockups/que-5.html), das O4 noch
    widerspricht ([2920](2920-leistenNamenInDenMockups.md), an Ux). Mein Gegenvorschlag in
-   [2240](2240-leistenInKomponentenseiteEintragen.md) nannte que-5.html und O4 zugleich und
+   Anliegen 2240 nannte que-5.html und O4 zugleich und
    sagte nicht, was gilt; das geht auf mich. Es gilt O4: Die Komponentenseite ist die Vorlage
    der Mockups (O3), nicht umgekehrt.
 2. Älter als der Commit, in derselben Datei: `knopf`, `knopfGruppe`, `sperrmeldung` und
@@ -57,4 +57,9 @@ Bestehende Regel ([Ich 4](../../prozess/praemissen/ich.md)): O3 und O4, keine ne
 Erledigt, wenn `komponenten.html` die Namen nach O4 trägt, jede Klasse aus `komponenten.css`
 darin vorkommt und `frontendregeln.frontend` grün ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt in
+[komponenten.html](../../technik/frontend/komponenten.html): Die sechs `aria-label` tragen die
+Namen nach O4; unter der *Karte* in `spalteMitte` stehen `ul.sperrmeldung` mit
+`li.sperrmeldungGrund` („keine Kohärenz“) und `div.knopfGruppe` mit `button.knopf`
+(„Aufstellen der Einheit beenden“), ohne `sperrmeldungZusatz`. `frontendregeln.frontend` und alle
+Prüfungen sind grün.

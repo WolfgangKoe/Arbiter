@@ -43,6 +43,11 @@ class Auswahl:
         if self.modellIstEbene(modell):
             self._modellAlsEbene = None
 
+    def ganzeEinheitAlsEbene(self, einheit: Einheit) -> None:
+        """Macht die ganze Einheit zur Ebene, wenn sie ausgewählt ist (AUF-23.3)."""
+        if self.ausgewählt(einheit):
+            self._modellAlsEbene = None
+
     def modellAusgewählt(self, modell: Modell) -> bool:
         """Alle Modelle der ausgewählten Einheit; ist ein Modell die Ebene, nur dieses."""
         gehörtDazu = self._einheit is not None and modell in self._einheit.modelle

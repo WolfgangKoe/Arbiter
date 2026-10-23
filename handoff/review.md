@@ -62,9 +62,9 @@ Warboss oder Overlord in die Zone, rechnet Arbiter seine *Stelle* wieder exakt; 
 Unit-Test fängt den alten Fehler. Die zwei nur umgeformten Zeilen lesen sich wieder fachlich.
 Die Änderung selbst: kein weiterer Befund. Der Architekt schlägt dazu eine Prüfung vor, die
 eine ungenaue *Stelle* künftig sofort meldet
-([1752](anliegen/1752-stellePrueftFractionSelbst.md), wartet auf die Technikphase). Ein Befund
+(Anliegen 1752, wartet auf die Technikphase). Ein Befund
 wartet:
-[1761](anliegen/1761-loslassenOhneAntwortBleibtInDerVorschau.md). Antwortet Arbiter beim
+Anliegen 1761. Antwortet Arbiter beim
 Loslassen nicht, bleiben die Kreise an der Vorschau stehen. 1656 ist umgesetzt.
 
 ## Empfehlung

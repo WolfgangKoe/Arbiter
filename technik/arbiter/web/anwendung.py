@@ -144,6 +144,10 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         aufstellung.aufstellenDerEinheitBeenden()
         return spielstandLiefern()
 
+    def zurücklegen():
+        aufstellung.zurücklegen()
+        return spielstandLiefern()
+
     def sperreMelden(sperre: Sperre):
         gründe = texteDerGründe(sperre.gründe)
         antwort = jsonify({"gründe": gründe, "spielstand": spielstand(aufstellung)})
@@ -167,5 +171,6 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]
     )
+    anwendung.add_url_rule("/api/zurücklegen", view_func=zurücklegen, methods=["PUT"])
     anwendung.register_error_handler(Sperre, sperreMelden)
     return anwendung

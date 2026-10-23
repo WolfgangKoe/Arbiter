@@ -22,7 +22,7 @@ aber in die Sicht des Stakeholders.
 
 **Kosten.** Nach O3 übernimmt der Implementierer das Markup der Mockups ohne Umschreiben. Ohne
 Entscheidung erben die Spielseite und die Komponentenseite dieselben Warnungen
-([2240](2240-leistenInKomponentenseiteEintragen.md) trägt die *Leisten* dort ein). Wird es
+(Anliegen 2240 trägt die *Leisten* dort ein). Wird es
 später geändert, müssen Mockups, Komponentenseite und Seite noch einmal angepasst werden.
 
 **Gegenvorschlag.** In O4 entscheiden, ob jede *Leiste* ein `aria-label` bekommt, das ihren
@@ -41,5 +41,5 @@ Armeeliste Spieler 1 ein- und ausfahren, ausgeklappt“. Die Bildschirmtests fin
 *Griff* über Rolle und Namen; das prüft die Namen mit. Die *Leisten* gibt es noch nicht im
 Code, also kostet die Entscheidung jetzt nur die Mockups. Die Mockups zieht Ux mit
 [2920](2920-leistenNamenInDenMockups.md) nach (auf-13.html gibt es nicht mehr, dafür
-que-7.html). Wenn 2920 erledigt ist, setze ich `angenommen`. Für [2240](2240-leistenInKomponentenseiteEintragen.md)
+que-7.html). Wenn 2920 erledigt ist, setze ich `angenommen`. Für Anliegen 2240
 gilt O4 schon jetzt.

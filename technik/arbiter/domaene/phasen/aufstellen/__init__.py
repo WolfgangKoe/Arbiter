@@ -146,6 +146,15 @@ class Aufstellung:
         self._einheitInAufstellung = None
         self._anDerReihe = nächsterAnDerReihe(self._beideSpieler, bisher, self._aufgestellt)
 
+    def zurücklegen(self) -> None:
+        einheit = self._einheitInAufstellung
+        if einheit is None:
+            return
+        for modell in einheit.modelle:
+            self._stellen.pop(modell, None)
+        self._einheitInAufstellung = None
+        self._auswahl.ganzeEinheitAlsEbene(einheit)
+
     def auswählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)
         if einheit in self._aufgestellt:
