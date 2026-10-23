@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet. Der Test prüft
@@ -43,3 +43,7 @@ in [bedienungTest.py](../../technik/tests/akzeptanz/querschnitt/bedienungTest.py
 die Boyz mit `einheitenAufstellen` auf und zieht eines ihrer *Modelle* auf die *Armeeliste*
 von „Spieler 1“; geprüft wird weiter: keine Anfrage, jedes *Modell* bleibt, wo es war (AUF-16.8).
 Der Test gilt damit auch nach AUF-28.1. Die Prüfung der vier QUE-3.4-Tests ist grün.
+
+**Nachprüfung.** Erledigt: Der Test stellt die Boyz zuerst auf, Spieler 1 ist nach der
+Zonenwahl an der Reihe. Damit prüft er AUF-16.8. Kein anderer Akzeptanztest zieht ein
+*Modell* der *Einheit in Aufstellung* auf eine *Armeeliste*. Die vier Tests zu QUE-3.4 sind grün.

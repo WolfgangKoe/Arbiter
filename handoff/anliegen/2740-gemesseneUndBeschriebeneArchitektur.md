@@ -7,7 +7,7 @@ Runde: 1/3
 Status: offen
 
 ## Runde 1
-**Befund.** Recherche zu deinem Kommentar in [2570](2570-architekturUeberDemHoechstmass.md):
+**Befund.** Recherche zu deinem Kommentar in Anliegen 2570:
 [Mammutmap](https://github.com/MichiSpebach/mammutmap) zeigt ein Projekt als Karte zum
 Zoomen, Ordner und Dateien als Kästen, Importe als Pfeile, in VS Code und im Browser. Die
 Pfeile zieht ein Plugin für TypeScript; `from a.b import c`, wie Arbiter alle 60 Importe
