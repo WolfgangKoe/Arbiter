@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Anliegen 2770: AUF-23.1 ungeprüft, während andere Einheiten auf der Karte stehen Das hält den Schritt „Kritik an den Tests zu Item einheitZuruecklegen“ von Fachkritiker im Fortschritt auf.

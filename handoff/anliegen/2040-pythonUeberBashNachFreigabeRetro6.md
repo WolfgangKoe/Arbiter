@@ -47,7 +47,7 @@ Stakeholder; ich widerspreche, solange kein Auftrag vorliegt.
 **Befund.** Neuer Fall in Technikphase 7: Der Planer schreibt in seiner Schlussantwort
 (Nachprüfung 2450 und 2410): „Den Kopf der beiden Anliegen habe ich mit einem kurzen
 Python-Skript in der Bash geändert statt mit Edit. Das weicht von Ich 2 ab.“ Betroffen:
-[2450](2450-auf8_4SchonMitItem1.md) und [2410](2410-auf8_4MitAufraeumenStattUmbenennen.md).
+Anliegen 2450 und Anliegen 2410.
 Die Lücke aus Runde 1 löst also auch nach dem Wegfall von P3 weiter aus.
 
 **Kosten.** Wie in Runde 1; hier traf es die Köpfe, aus denen Dashboard und Stand lesen, wer

@@ -10,13 +10,13 @@ Kommentar-Anliegen 2540 und 2541; sie warten auf die Technikphase, die mit der F
   [2140](anliegen/2140-sandboxOeffnetAlleUnixSockets.md), beide abgelehnt, er entscheidet über
   neue Runde oder `erledigt`; [2360](anliegen/2360-es8MechanismusNachziehenUndHakenP5.md) (Es 8).
 - Wartend, hält Item 1 auf (Kommentare zuerst, Plan 7):
-  - [2540](anliegen/2540-webKommentareImCodeInDieArchitektur.md) (Implementierer löscht, Architekt
+  - Anliegen 2540 (Implementierer löscht, Architekt
     trägt die sechs Sätze gleichzeitig in die Architektur ein) und
-    [2541](anliegen/2541-webKommentareInTestsInDieArchitektur.md) (Testautor, drei Sätze in
+    Anliegen 2541 (Testautor, drei Sätze in
     `web.md`).
-  - [2450](anliegen/2450-auf8_4SchonMitItem1.md) und
-    [2440](anliegen/2440-auf8_4FolgenFuer12und16_8.md) (Anforderungsautor), danach
-    [2410](anliegen/2410-auf8_4MitAufraeumenStattUmbenennen.md) (Planer setzt `angenommen`).
+  - Anliegen 2450 und
+    Anliegen 2440 (Anforderungsautor), danach
+    Anliegen 2410 (Planer setzt `angenommen`).
   - [1651](anliegen/1651-auswahlUndAufstellungImplizit.md) und
     [1761](anliegen/1761-loslassenOhneAntwortBleibtInDerVorschau.md) (Implementierer, in Item 1).
 - Wartend, hält nicht auf: Implementierer
