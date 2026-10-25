@@ -5,7 +5,7 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: Prozessphase
+Wartet auf: 3820
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Mein Eindruck auch nach dem Refinement, in dem wir die
@@ -37,4 +37,7 @@ bis es auffällt.
    Ich), was es enthält und was statt des Erfundenen gilt; Höchstmaß 3.000 Zeichen je Prämisse.
    Seine Haltung schreibt er selbst oder gibt sie frei.
 
-**Stellungnahme.**
+**Stellungnahme.** Suche und Vorschlag (Retro 7, P3) stehen in
+[3820](3820-innenIchAlsPraemisse.md): wo du Frust zeigtest, wo Zyklus 7 von den Quellen der
+Domäne abwich, Ort und Entwurf deines Innen-Ichs und was statt des Erfundenen gilt.
+`angenommen` setze ich, wenn die Prämisse nach deinen Antworten dort steht.

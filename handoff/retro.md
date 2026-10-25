@@ -69,8 +69,8 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 7
 - [x] Organisationsentwickler: P1
-- [ ] Organisationsentwickler: P2
-- [ ] Organisationsentwickler: P3
+- [x] Organisationsentwickler: P2
+- [x] Organisationsentwickler: P3
 - [ ] Regelumsetzer: P4
 - [ ] Regelumsetzer: P5
 - [x] Regelumsetzer: P6
