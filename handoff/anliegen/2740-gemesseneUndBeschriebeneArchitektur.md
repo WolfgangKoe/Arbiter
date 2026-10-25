@@ -4,8 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: 3120
+Status: erledigt
 
 ## Runde 1
 **Befund.** Recherche zu deinem Kommentar in Anliegen 2570:
@@ -62,3 +61,6 @@ Stellungnahme: Bauen darf die Karte nur der Regelumsetzer, und erst in der Proze
 nach Retro 7. Den Auftrag mit allen Kästen, Pfeilen und Zahlen von F1 hat er in
 Anliegen 3120. Sobald die Karte im Dashboard steht, prüfe
 ich sie nach; dein Feedback nehme ich hier auf.
+Kommentar: Mir gefällt nicht, dass die Architektur-Abbildung im Token-Bericht ist. Das sollte einen eigenen Reiter bekommen. Auf der ganzen Seite wäre dann auch Platz für mehr Details. Ich möchte daraus gerne nachvollziehen können, welche konkreten Dateien ausgeführt werden und diese auch im Repo finden. Sind das da immer die "init"-Dateien? Lege die Abbildung so an, dass sie interaktiv erweitert werden kann. So ähnlich wie in mammutmap. Ich will natürlich nicht alle Dateien in der Darstellung sehen, aber ich will bis auf die Dateien des Produktivcodes sehen können und welche Datei welche andere Datei aufruft. Kommen mit der Zeit Dateien hinzu, muss das Bild automatisch aktualisiert werden. Am besten wäre daher ein Skript, dass regelmäßig (z.B. nach Abschluss der Technikphase), dieses Bild aktualisiert.
+Stellungnahme: Aufgenommen in [4140](4140-architekturAlsReiterBisZuDenDateien.md) für die
+Prozessphase, samt Antwort zu den init-Dateien; bis dahin bleibt die Karte, wie sie ist.

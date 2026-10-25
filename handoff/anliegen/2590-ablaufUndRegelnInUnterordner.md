@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Bitte halte die für Prozessphase fest, dass wir

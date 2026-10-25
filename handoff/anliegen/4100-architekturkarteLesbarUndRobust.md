@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nachprüfung von Anliegen 3120: Die Tests sind
