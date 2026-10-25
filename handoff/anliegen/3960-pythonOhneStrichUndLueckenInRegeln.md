@@ -9,8 +9,8 @@ Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** Nachprüfung von P4 (Retro 7): Die Formen aus
-[2040](2040-pythonUeberBashNachFreigabeRetro6.md) und
-[2592](2592-sedInSchleifeUmgehtSchreibgrenze.md) sind gesperrt, beide erledigt; die Tests
+Anliegen 2040 und
+Anliegen 2592 sind gesperrt, beide erledigt; die Tests
 sind grün. Selbst erprobt als Organisationsentwickler: Gesperrt sind `python3 - <<'E'`,
 `python3 -c` nach `cd /tmp`, in `for` und als `/usr/bin/python3 -c`. Frei laufen:
 - `python3 <<'E'` … `E` (Heredoc ohne `-`), das Muster aus 2040 nur ohne Strich,

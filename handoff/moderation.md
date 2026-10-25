@@ -12,8 +12,8 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   [2590](anliegen/2590-ablaufUndRegelnInUnterordner.md) (P2),
   [2591](anliegen/2591-innenIchDesStakeholdersInDenPraemissen.md) (P3).
 - Regelumsetzer:
-  [2040](anliegen/2040-pythonUeberBashNachFreigabeRetro6.md) und
-  [2592](anliegen/2592-sedInSchleifeUmgehtSchreibgrenze.md) (P4),
+  Anliegen 2040 und
+  Anliegen 2592 (P4),
   [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md) und
   [2720](anliegen/2720-rueckverfolgungNenntEinzeldateiStattT1.md) (P5),
   Anliegen 3301 (P6),
