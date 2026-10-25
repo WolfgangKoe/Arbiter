@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase 8
 
 ## Runde 1
-**Befund.** Wortlaut des Stakeholders (Kommentar in [2590](2590-ablaufUndRegelnInUnterordner.md)):
+**Befund.** Wortlaut des Stakeholders (Kommentar in Anliegen 2590):
 „Bitte halte als Anliegen für die nächste Prozessphase fest, noch mal sorgfältig durch alle
 Regeln zu gehen inkl. der Ablaufdateien, ob man diese noch sinnvoll verschlanken kann.
 Vorsicht! So wie es jetzt läuft und lief, scheint es gut zu funktionieren. Das muss auf jeden

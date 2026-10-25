@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Auftrag [2591](2591-innenIchDesStakeholdersInDenPraemissen.md). Frust zeigtest
@@ -92,7 +92,7 @@ auch das Handwerk am Code.
 Empfehlung: A. Die vierte Prämisse kommt dazu, und was heute läuft, bleibt (dein Kommentar
 in 2590). Anders als in Runde 1 steht sie gleichrangig neben den anderen und ist nicht auf
 1.200 Zeichen beschränkt.
-Antwort: .
+Antwort: s. runde 2
 
 **F2 · Gilt dieser Entwurf?** Nur du änderst ihn. „.“: Er gilt so; sonst schreib ihn um.
 > Was mich antreibt. Ihr handelt nach außen und bringt die Kompetenzen mit, die ich nicht habe.
@@ -120,7 +120,7 @@ Antwort: .
 
 Empfehlung: Gilt. Er enthält den Entwurf aus Runde 1 und dazu, warum du Arbiter willst, wie
 du entscheidest und wo du uns vertraust.
-Antwort: .
+Antwort: s. runde 2
 
 **F3 · Steht an jeder Antwortmöglichkeit, woher sie kommt?** Wobei es hilft: Fragen wir
 dich, kann eine Antwortmöglichkeit aus dem Regeltext stammen, aus ArbiterMap, aus
@@ -132,6 +132,6 @@ A: Hinter jeder Antwortmöglichkeit steht in Klammern ihre Quelle, etwa „(Arbi
 wo du genauer hinschauen solltest. B: wie bisher.
 Empfehlung: A. Es setzt Satz 3 des Entwurfs („Erfindet nichts dazu“) bei jeder Frage um und
 kostet ein Wort je Antwortmöglichkeit.
-Antwort: .
+Antwort: s. runde 2
 
 **Stellungnahme.**

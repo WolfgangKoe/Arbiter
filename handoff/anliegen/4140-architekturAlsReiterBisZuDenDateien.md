@@ -9,7 +9,7 @@ Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** Feedback des Stakeholders zur Karte aus Anliegen 3120, im Wortlaut aus
-[2740](2740-gemesseneUndBeschriebeneArchitektur.md):
+Anliegen 2740:
 > Mir gefällt nicht, dass die Architektur-Abbildung im Token-Bericht ist. Das sollte einen eigenen Reiter bekommen. Auf der ganzen Seite wäre dann auch Platz für mehr Details. Ich möchte daraus gerne nachvollziehen können, welche konkreten Dateien ausgeführt werden und diese auch im Repo finden. Sind das da immer die "init"-Dateien? Lege die Abbildung so an, dass sie interaktiv erweitert werden kann. So ähnlich wie in mammutmap. Ich will natürlich nicht alle Dateien in der Darstellung sehen, aber ich will bis auf die Dateien des Produktivcodes sehen können und welche Datei welche andere Datei aufruft. Kommen mit der Zeit Dateien hinzu, muss das Bild automatisch aktualisiert werden. Am besten wäre daher ein Skript, dass regelmäßig (z.B. nach Abschluss der Technikphase), dieses Bild aktualisiert.
 
 Seine Frage: Nein, nicht immer die init-Dateien. `arbiter` startet `technik/arbiter/__main__.py`.
@@ -19,7 +19,7 @@ Ordner; Python führt sie aus, sobald der Ordner zum ersten Mal gebraucht wird. 
 sind leer und tun nichts. Code tragen zwei: `domaene/phasen/aufstellen/__init__.py` (die Phase
 Aufstellen) und `domaene/querschnitt/__init__.py` (Überdeckung der Bases).
 
-[4100](4100-architekturkarteLesbarUndRobust.md) geht hierin auf: Seine Punkte 1 und 2 richten
+Anliegen 4100 geht hierin auf: Seine Punkte 1 und 2 richten
 die feste Lage der heutigen Kästen, die dieses Bild ersetzt; 3 und 4 stehen unten als 5 und 6.
 Beide warten auf dieselbe Prozessphase, erst richten und dann ersetzen wäre doppelte Arbeit.
 

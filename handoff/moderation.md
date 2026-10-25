@@ -9,7 +9,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   Anliegen 2360,
   Anliegen 3050,
   Anliegen 2201 (alle P1),
-  [2590](anliegen/2590-ablaufUndRegelnInUnterordner.md) (P2),
+  Anliegen 2590 (P2),
   [2591](anliegen/2591-innenIchDesStakeholdersInDenPraemissen.md) (P3).
 - Regelumsetzer:
   Anliegen 2040 und

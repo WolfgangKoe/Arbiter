@@ -37,5 +37,11 @@ darunter als `**Klärung.**`; beide kosten keine Runde. Unter jeder Frage an den
 (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`; „.“ heißt bei `angenommen`: Die
 Empfehlung gilt. Arbeitet der Absender mit der Empfehlung weiter ([Ich 1](../praemissen/ich.md)),
 steht darüber `Annahme: <was er damit tut>`. Mechanismus: nur Text.
+Hinter jeder Antwortmöglichkeit einer Frage an den Stakeholder steht in Klammern ihre Quelle
+nach der [Domäne](../../domaene/CLAUDE.md) oder eine bestehende Regel, etwa „(Regeltext)“,
+„(ArbiterMap)“, „(Anliegen 2362)“, „(Ich 4)“, sonst „(neu)“; eine neue empfiehlt die Rolle nur
+mit Grund aus dem Ziel ([Absicht 3](../praemissen/absicht.md), Anliegen 3820). Ja oder Nein
+zum Gegenvorschlag desselben Anliegens trägt dessen Quelle, so die Frage aus
+`standregeln/hindernis.py`. Mechanismus: nur Text.
 
 Status, Züge und wer dran ist: [Status der Anliegen](anliegenStatus.md).

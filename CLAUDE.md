@@ -10,15 +10,21 @@ Reihenfolge; in jeder arbeitet eine Perspektive, die anderen kritisieren.
 und Retro gibt er frei und kommentiert ([Ablauf](prozess/ablauf/freigabe.md)).
 
 ## Prämissen
-- Ich, Haltung jeder Rolle: [ich.md](prozess/praemissen/ich.md), unten geladen.
-- Wir, gemeinsame Sprache: [wir.md](prozess/praemissen/wir.md), unten geladen.
-- Es, Handwerk am Code (Lesbarkeit, SOLID): [es.md](prozess/praemissen/es.md).
-- System, Phasen, Status, Mechanismen: [Ablauf](prozess/ablauf/), [Regeln](prozess/regeln/),
-  Offenes: [Backlog](prozess/backlog.md).
+Nach den vier Quadranten von Ken Wilber: Der Stakeholder treibt innen an, die Rollen
+handeln außen.
+- Innen, einzeln: Absicht, was den Stakeholder antreibt:
+  [absicht.md](prozess/praemissen/absicht.md), unten zuerst geladen.
+- Innen, gemeinsam: Wir, gemeinsame Sprache: [wir.md](prozess/praemissen/wir.md), unten geladen.
+- Außen, einzeln: Ich, Haltung jeder Rolle: [ich.md](prozess/praemissen/ich.md), unten
+  geladen; Es, Handwerk am Code (Lesbarkeit, SOLID): [es.md](prozess/praemissen/es.md).
+- Außen, gemeinsam: System, Phasen, Status, Mechanismen: [Ablauf](prozess/ablauf/),
+  [Regeln](prozess/regeln/), Offenes: [Backlog](prozess/backlog.md).
 
 ## Technik-Rahmen
 Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask noch die
 Datenbank. Akzeptanztests entstehen vor dem Code.
+
+@prozess/praemissen/absicht.md
 
 @prozess/praemissen/ich.md
 

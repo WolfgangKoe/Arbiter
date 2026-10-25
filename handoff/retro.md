@@ -57,10 +57,11 @@ Testpfad der neuen (2720), P6 löscht Prüfcode vor Neuem (2); sonst deine Auftr
   verbotene in Rot (3120).
 - P8 Prüfungen nach P2 (Regelumsetzer): Seine Regeln trägt er auch in den neuen Dateien in
   jeder Phase ein; Commit mit P2 und den Links des Architekten (3450).
+- P9 Deine Absicht (Organisationsentwickler): vierte Prämisse, zuerst geladen;
+  Optionen an dich nennen ihre Quelle. Deine Wahl: vor Plan 8 (3820).
 
 ## Empfehlung
-Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinander
-(Prüfcode). Am Bildschirm ändert sich nichts.
+Am Bildschirm ändert sich nichts.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
@@ -76,7 +77,8 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
 - [x] Regelumsetzer: P8
-- [ ] Koordinator: nach dev gepusht
+- [ ] Organisationsentwickler: P9
+- [x] Koordinator: nach dev gepusht
 
 ## Freigabe
 Freigabe: ja

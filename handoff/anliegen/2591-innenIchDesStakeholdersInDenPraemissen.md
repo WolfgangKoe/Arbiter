@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 3820
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Mein Eindruck auch nach dem Refinement, in dem wir die
@@ -37,7 +36,10 @@ bis es auffällt.
    Ich), was es enthält und was statt des Erfundenen gilt; Höchstmaß 3.000 Zeichen je Prämisse.
    Seine Haltung schreibt er selbst oder gibt sie frei.
 
-**Stellungnahme.** Suche und Vorschlag (Retro 7, P3) stehen in
-[3820](3820-innenIchAlsPraemisse.md): wo du Frust zeigtest, wo Zyklus 7 von den Quellen der
-Domäne abwich, Ort und Entwurf deines Innen-Ichs und was statt des Erfundenen gilt.
-`angenommen` setze ich, wenn die Prämisse nach deinen Antworten dort steht.
+**Stellungnahme.** Umgesetzt mit Retro 7, P9, nach deinen Antworten in 3820: Dein Innen-Ich
+steht als vierte Prämisse [Absicht](../../prozess/praemissen/absicht.md), dein Entwurf
+wörtlich. Die [CLAUDE.md](../../CLAUDE.md) ordnet die Prämissen nach den vier Quadranten und
+lädt die Absicht für jede Rolle zuerst. Was statt des Erfundenen gilt: die Quellen der
+[Domäne](../../domaene/CLAUDE.md) und Absicht 3; jede Antwortmöglichkeit einer Frage an dich
+nennt nun ihre Quelle oder „(neu)“ ([Anliegen](../../prozess/ablauf/anliegen.md)). Ich, Wir
+und Es bleiben, wie sie sind.
