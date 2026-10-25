@@ -1,3 +1,4 @@
+from functools import partial
 from pathlib import Path
 
 import pytest
@@ -5,7 +6,10 @@ import pytest
 from anliegenregeln.anliegen import kopfVerstöße
 from lesen.anliegenKopf import kopfLesen
 from standregeln.fortschritt import fortschrittSchreiben
-from standregeln.hindernis import dateiname, hindernisMelden
+from standregeln.hindernis import dateiname, hindernisMelden, zielLesen
+
+bereich = range(1, 10)
+vorhandene = 77
 
 planText = (
     "# Plan · Zyklus 1\n\n## Items\n1. [Stellen](../domaene/items/stellen.md)\n\n"
@@ -37,7 +41,7 @@ def anliegenDateien(wurzel: Path) -> list[Path]:
 
 
 def testEinHindernisLegtAnliegenUndZeileAn(tmp_path, plan):
-    nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
+    nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     assert nummer == 1
     zeile = "- [ ] Implementierer: Tests zu Item stellen grün\n"
     assert f"{zeile}  Hindernis: {hindernis} (Anliegen 1)\n" in plan.read_text(encoding="utf-8")
@@ -50,7 +54,7 @@ def testEinHindernisLegtAnliegenUndZeileAn(tmp_path, plan):
 
 
 def testEinHindernisAnDenStakeholderIstEineFrageMitAntwort(tmp_path, plan):
-    hindernisMelden(tmp_path, "Implementierer", "grün", "stakeholder", hindernis)
+    hindernisMelden(tmp_path, "Implementierer", "grün", "stakeholder", hindernis, bereich)
     (datei,) = anliegenDateien(tmp_path)
     assert kopfLesen(datei).typ == "Fragen"
     assert "**F1 · " in datei.read_text(encoding="utf-8")
@@ -59,26 +63,52 @@ def testEinHindernisAnDenStakeholderIstEineFrageMitAntwort(tmp_path, plan):
 
 
 @pytest.mark.usefixtures("plan")
-def testDieNummerIstGrößerAlsJedeVorhandeneUndGelöschte(tmp_path, gitRepo):
+def testDieNummerKommtAusDemBereichDesAuftragsOhneVergebeneUndGelöschte(tmp_path, gitRepo):
     schreiben(tmp_path, "handoff/anliegen/40-alt.md", "x\n")
     gitRepo.festhalten("alt")
     (tmp_path / "handoff/anliegen/40-alt.md").unlink()
     gitRepo.festhalten("alt gelöscht")
-    schreiben(tmp_path, "handoff/anliegen/07-neu.md", "x\n")
-    nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
+    schreiben(tmp_path, "handoff/anliegen/99-fremd.md", "x\n")
+    nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, range(40, 43))
     assert nummer == nummerNachDerGelöschten
 
 
+@pytest.mark.usefixtures("plan")
+def testEinVollerBereichMeldetNichts(tmp_path):
+    schreiben(tmp_path, "handoff/anliegen/05-belegt.md", "x\n")
+    assert (
+        hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, range(5, 6))
+        is None
+    )
+    assert [datei.name for datei in anliegenDateien(tmp_path)] == ["05-belegt.md"]
+
+
+def testEinVorhandenesAnliegenWirdGenanntStattEinNeuesAnzulegen(tmp_path, plan):
+    schreiben(tmp_path, "handoff/anliegen/77-kritik.md", "x\n")
+    nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, vorhandene)
+    assert nummer == vorhandene
+    assert f"  Hindernis: {hindernis} (Anliegen 77)\n" in plan.read_text(encoding="utf-8")
+    assert len(anliegenDateien(tmp_path)) == 1
+    assert hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, 78) is None
+
+
+def testDerBefehlNimmtBereichOderNummerAlsLetztesArgument():
+    assert zielLesen("3940-3959") == range(3940, 3960)
+    assert zielLesen("77") == vorhandene
+    assert zielLesen("später") is None
+
+
 def testEineFremdeOderUnbekannteZeileMeldetNichts(tmp_path, plan):
-    assert hindernisMelden(tmp_path, "Reviewer", "abgenommen", "Planer", hindernis) is None
-    assert hindernisMelden(tmp_path, "Implementierer", "grün", "Niemand", hindernis) is None
-    assert hindernisMelden(tmp_path, "Implementierer", "gibtEsNicht", "Planer", hindernis) is None
+    melden = partial(hindernisMelden, tmp_path, ziel=bereich, text=hindernis)
+    assert melden(rolle="Reviewer", schritt="abgenommen", beseitiger="Planer") is None
+    assert melden(rolle="Implementierer", schritt="grün", beseitiger="Niemand") is None
+    assert melden(rolle="Implementierer", schritt="gibtEsNicht", beseitiger="Planer") is None
     assert anliegenDateien(tmp_path) == []
     assert "Hindernis:" not in plan.read_text(encoding="utf-8")
 
 
 def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_path, gitRepo, plan):
-    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
+    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     gitRepo.festhalten("Hindernis gemeldet")
     fortschrittSchreiben(tmp_path)
     assert "beseitigt" not in plan.read_text(encoding="utf-8")
@@ -97,7 +127,7 @@ def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_p
 
 
 def testEinGelöschtesErledigtesAnliegenBeseitigtMitDemCommitDavor(tmp_path, gitRepo, plan):
-    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis)
+    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     (datei,) = anliegenDateien(tmp_path)
     datei.write_text(
         datei.read_text(encoding="utf-8").replace("Status: offen", "Status: erledigt"),

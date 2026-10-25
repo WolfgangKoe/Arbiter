@@ -24,7 +24,9 @@ höchstRunde = 3
 stakeholder = "Stakeholder"
 wartetAufName = "Wartet auf"
 feldNamen = ("Form", "Von", "An", "Runde", "Status", wartetAufName)
-wartetAufFeld = re.compile(r"^(?P<nummer>\d+)$|^(?P<phase>(?:Domänen|Technik|Prozess)phase)$")
+wartetAufFeld = re.compile(
+    r"^(?P<nummer>\d+)$|^(?P<phase>(?:Domänen|Technik|Prozess)phase(?: \d+)?)$"
+)
 rundeFeld = re.compile(rf"^(\d+)/{höchstRunde}$")
 dateinummer = re.compile(rf"{anliegenOrdner}/(\d+)-")
 

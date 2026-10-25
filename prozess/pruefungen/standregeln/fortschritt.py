@@ -13,11 +13,14 @@ from lesen.agenten import rollennamen
 from lesen.plan import itemNamen, zyklus
 from standregeln.beseitigt import beseitigtErgänzen
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
+from standregeln.planFassung import neuGefasst
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
 kritiker = ("Fachkritiker", "Architekt")
 codekritiker = ("Architekt", "Reviewer")
+reviewkritiker = ("Fachkritiker", "Organisationsentwickler")
 umsetzer = "Regelumsetzer"
+kritikAmPlan = "Kritik am Plan"
 stakeholderRolle = "Stakeholder"
 itemzeile = re.compile(r"^- (P\d+) [^\n(]*\(([^),:]+)", re.MULTILINE)
 zeilenmuster = re.compile(r"^- \[([ x])\] (.+)$")
@@ -71,7 +74,7 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
         Zeile("UX", "Mockups, bei einer Oberfläche"),
         Zeile("Fachkritiker", "Kritik an Anforderungen und Mockups"),
         Zeile("Planer", "Plan geschrieben", planFertig),
-        *(Zeile(rolle, "Kritik am Plan") for rolle in kritiker),
+        *(Zeile(rolle, kritikAmPlan) for rolle in kritiker),
         Zeile("Stakeholder", f"Freigabe Plan {aktuell.zyklus}", freigegeben),
     ]
 
@@ -99,6 +102,7 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
         *zeilen,
         Zeile("Reviewer", "DoD über das Inkrement"),
         Zeile("Reviewer", "Review geschrieben", review),
+        *(Zeile(rolle, "Kritik am Review") for rolle in reviewkritiker),
         Zeile("Stakeholder", f"Freigabe Review {aktuell.zyklus}", freigegeben),
     ]
 
@@ -211,8 +215,20 @@ def fürDiesenZyklusGeschrieben(ziel: tuple[Path, list[Zeile]]) -> bool:
     return any(name in bisherigeZeilen(datei.read_text(encoding="utf-8")) for name in freigaben)
 
 
+def kritikAmPlanÖffnen(bisher: Bisher) -> Bisher:
+    """Die Haken der Kritik am Plan fallen; Hindernis und Kommentar darunter bleiben."""
+    return {
+        schlüssel: (abgehakt and not schlüssel.endswith(f": {kritikAmPlan}"), zusatz)
+        for schlüssel, (abgehakt, zusatz) in bisher.items()
+    }
+
+
 def abschnittSchreiben(
-    wurzel: Path, ziel: tuple[Path, list[Zeile]], *, bisherAusDatei: bool = True
+    wurzel: Path,
+    ziel: tuple[Path, list[Zeile]],
+    *,
+    bisherAusDatei: bool = True,
+    planNeuGefasst: bool = False,
 ) -> str | None:
     datei, zeilen = ziel
     text = datei.read_text(encoding="utf-8")
@@ -221,6 +237,8 @@ def abschnittSchreiben(
         schlüssel: (abgehakt, beseitigtErgänzen(wurzel, zusatz))
         for schlüssel, (abgehakt, zusatz) in bisher.items()
     }
+    if planNeuGefasst:
+        bisher = kritikAmPlanÖffnen(bisher)
     neu = abschnittEinsetzen(text, abschnittBauen(zeilen, bisher))
     if neu == text:
         return None
@@ -231,9 +249,12 @@ def abschnittSchreiben(
 def fortschrittSchreiben(wurzel: Path) -> str | None:
     """Schreibt den Abschnitt für die Phase davor, die laufende und die nächste; nennt geänderte."""
     aktuell = lage(wurzel)
+    neu = aktuell.phase == Phase.domänenphase and neuGefasst(wurzel, aktuell.zyklus)
     ziele = [zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell))]
     folgendes = zielUndZeilen(wurzel, nächsteLage(aktuell))
-    geschrieben = [abschnittSchreiben(wurzel, ziel) for ziel in ziele if ziel is not None]
+    geschrieben = [
+        abschnittSchreiben(wurzel, ziel, planNeuGefasst=neu) for ziel in ziele if ziel is not None
+    ]
     if folgendes is not None:
         bleibt = fürDiesenZyklusGeschrieben(folgendes)
         geschrieben.append(abschnittSchreiben(wurzel, alleOffen(folgendes), bisherAusDatei=bleibt))

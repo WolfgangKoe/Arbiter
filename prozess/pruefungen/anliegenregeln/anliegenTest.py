@@ -239,6 +239,20 @@ def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
     assert wartende(gitRepo.ordner) == {}
 
 
+def testEinAnliegenAufDiePhaseEinesSpäterenZyklusWartetBisDahin(gitRepo):
+    datei = anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Technikphase 4"))
+    assert kopfVerstöße(datei, gitRepo.ordner) == []
+    assert kopfLesen(datei).wartetAuf == "Technikphase 4"
+    plan = gitRepo.ordner / "handoff" / "plan.md"
+    plan.write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    assert dran(gitRepo.ordner) == {}
+    assert wartende(gitRepo.ordner) == {12: "Technikphase 4"}
+    plan.write_text("# Plan · Zyklus 4\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 4")
+    assert dran(gitRepo.ordner) == {"Planer": [12]}
+
+
 def testEineWartendeNachprüfungIstErstInDerProzessphaseFällig(gitRepo):
     kopf = wartetAuf("Prozessphase").replace("offen", "angenommen")
     anliegenAnlegen(gitRepo.ordner, "12-probe.md", kopf)

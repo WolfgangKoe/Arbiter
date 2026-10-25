@@ -65,7 +65,7 @@ def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
     auf: dict[str, list[Anliegen]] = {}
     for nummer, ziel in wartende(ordner).items():
-        auf.setdefault(ziel, []).append(nachNummer[nummer])
+        auf.setdefault(ziel.partition(" ")[0], []).append(nachNummer[nummer])
     aufAnliegen = [anliegen for ziel, liste in auf.items() if ziel.isdigit() for anliegen in liste]
     bereiche = [("Wartet auf ein anderes Anliegen", aufAnliegen)] if aufAnliegen else []
     if any(not ziel.isdigit() for ziel in auf):

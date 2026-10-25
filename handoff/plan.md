@@ -89,6 +89,8 @@ außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine An
 - [x] Planer: Item einheitZuruecklegen gelöscht
 - [x] Reviewer: DoD über das Inkrement
 - [x] Reviewer: Review geschrieben
+- [ ] Fachkritiker: Kritik am Review
+- [ ] Organisationsentwickler: Kritik am Review
 - [x] Stakeholder: Freigabe Review 7
 
 ## Freigabe

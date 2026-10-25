@@ -287,10 +287,19 @@ def testEinzeldateiDerEinzigenAnforderungIstGrünUndNichtWartend(tmp_path):
     assert wartende(tmp_path) == []
 
 
-def testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieEinzeldatei(tmp_path, gitRepo):
+def testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieDateiNachT1(tmp_path, gitRepo):
     einzigeAnforderung(tmp_path, {})
     planMitUmfang(gitRepo, "AUF-1")
-    assert verstöße(tmp_path) == ["technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py fehlt"]
+    assert verstöße(tmp_path) == ["technik/tests/akzeptanz/phasen/aufstellenTest.py fehlt"]
+
+
+def testFehltJedeDateiUndEinPlanUmfasstEineSpätereNenntDieMeldungDieEinzeldatei(tmp_path, gitRepo):
+    zweiAnforderungenMitTests(tmp_path, {})
+    planMitUmfang(gitRepo, "AUF-1 und AUF-2")
+    assert verstöße(tmp_path) == [
+        "technik/tests/akzeptanz/phasen/aufstellen/auf1Test.py fehlt",
+        "technik/tests/akzeptanz/phasen/aufstellen/auf2Test.py fehlt",
+    ]
 
 
 def testTestsOhneAnforderungNennenDieKennungen(tmp_path):

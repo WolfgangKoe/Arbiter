@@ -42,11 +42,13 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
 
 
 def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
-    """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf die Prozessphase."""
+    """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf seine Phase samt Zyklus."""
     if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
         return False
     if not anliegen.wartetAuf.isdigit():
-        return anliegen.wartetAuf != str(lage(wurzel).phase)
+        phase, _, zyklus = anliegen.wartetAuf.partition(" ")
+        jetzt = lage(wurzel)
+        return phase != str(jetzt.phase) or (zyklus != "" and jetzt.zyklus < int(zyklus))
     return int(anliegen.wartetAuf) in {andere.nummer for andere in gelesene(wurzel)}
 
 

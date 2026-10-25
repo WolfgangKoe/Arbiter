@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 2/3
-Status: angenommen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Ich 2](../../prozess/praemissen/ich.md) erlaubt Schreiben nur mit Write und

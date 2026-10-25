@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from standregeln.abhaken import abhaken
 from standregeln.fortschritt import fortschrittSchreiben
 
 freigabeAbschnitt = "## Freigabe\nFreigabe: offen\nKommentar: .\n"
@@ -121,6 +122,39 @@ def testDieDomänenphaseSchreibtInsReviewUndHaktDenPlanAb(tmp_path, gitRepo):
     text = review.read_text(encoding="utf-8")
     assert "- [x] Planer: Plan geschrieben\n" in text
     assert "- [ ] Stakeholder: Freigabe Plan 2\n" in text
+
+
+def testEinNeuGefasstesPlanÖffnetSeineKritikWiederUndEinHinweisBleibt(tmp_path, gitRepo):
+    review = schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    plan = schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    gitRepo.festhalten("Freigabe Plan 1")
+    gitRepo.festhalten("Freigabe Review 1")
+    gitRepo.festhalten("Freigabe Retro 1")
+    plan.write_text("# Plan · Zyklus 2\n\n## Items\n1. Eins\n", encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    abhaken(tmp_path, "Architekt", "Kritik am Plan")
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Architekt: Kritik am Plan\n" in review.read_text(encoding="utf-8")
+    plan.write_text("# Plan · Zyklus 2\n\n## Items\n1. Zwei\n", encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    assert "- [ ] Architekt: Kritik am Plan\n" in review.read_text(encoding="utf-8")
+
+
+def testNachDemReviewFolgtJeKritikerDieKritikAmReviewVorDerFreigabe(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    zeilen = [
+        "- [ ] Reviewer: Review geschrieben\n",
+        "- [ ] Fachkritiker: Kritik am Review\n",
+        "- [ ] Organisationsentwickler: Kritik am Review\n",
+        "- [ ] Stakeholder: Freigabe Review 1\n",
+    ]
+    stellen = [text.index(zeile) for zeile in zeilen]
+    assert stellen == sorted(stellen)
+    assert abhaken(tmp_path, "Organisationsentwickler", "Kritik am Review") == ["Kritik am Review"]
+    assert "- [x] Organisationsentwickler: Kritik am Review\n" in plan.read_text(encoding="utf-8")
 
 
 def testInZyklusEinsGibtEsKeinReviewAbschnittNurDenDesPlans(tmp_path):

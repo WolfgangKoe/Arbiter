@@ -17,16 +17,17 @@ def perspektive(rolle: str, wurzel: Path) -> str | None:
 
 def kontext(rolle: str, wurzel: Path) -> str:
     teile = [stand(wurzel)]
+    befehl = f"python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken {rolle}"
+    hindernis = befehl.replace("abhaken", "hindernis")
+    hinweis = (
+        f"Am Ende abhaken: {befehl} <Schritt>\n"
+        f"Hält etwas auf: {hindernis} <Schritt> <Rolle, die es beseitigen kann> <Text>"
+        " <Nummernbereich des Auftrags, z. B. 3940-3959, oder Nummer des Anliegens, das schon"
+        " als Kritik besteht>"
+    )
     offen = offeneZeilen(wurzel, rolle)
-    if offen:
-        befehl = f"python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken {rolle}"
-        schritte = "".join(f"\n- {schritt}" for schritt in offen)
-        hindernis = befehl.replace("abhaken", "hindernis")
-        hinweis = (
-            f"Am Ende abhaken: {befehl} <Schritt>\n"
-            f"Hält etwas auf: {hindernis} <Schritt> <Rolle, die es beseitigen kann> <Text>"
-        )
-        teile.append(f"Offene Schritte im Fortschritt:{schritte}\n{hinweis}")
+    schritte = "".join(f"\n- {schritt}" for schritt in offen) or " keine"
+    teile.append(f"Offene Schritte im Fortschritt:{schritte}\n{hinweis}")
     ordner = perspektive(rolle, wurzel)
     datei = wurzel / ordner / "CLAUDE.md" if ordner else None
     if datei and datei.is_file():

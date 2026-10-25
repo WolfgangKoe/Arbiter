@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from standregeln.abhaken import abhaken, offeneZeilen
+from standregeln.abhaken import abhaken, bereitsAbgehakt, hauptprogramm, offeneZeilen
 from standregeln.fortschritt import fortschrittSchreiben
 
 planText = (
@@ -32,6 +32,21 @@ def testDieRolleHaktIhrenSchrittAbUndSonstNichts(tmp_path, plan):
     assert "- [x] Reviewer: Kritik am Code zu Item stellen\n" in text
     assert "- [ ] Fachkritiker: Item stellen abgenommen\n" in text
     assert "- [ ] Reviewer: Review geschrieben\n" in text
+
+
+def testEinSchonGesetzterHakenWirdAlsSolcherGemeldetUndNichtNochmalAbgehakt(
+    tmp_path, plan, monkeypatch, capsys
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    assert hauptprogramm(["Reviewer", "Kritik am Code"]) == 0
+    assert capsys.readouterr().out.startswith("Abgehakt: ")
+    assert abhaken(tmp_path, "Reviewer", "Kritik am Code") == []
+    assert bereitsAbgehakt(tmp_path, "Reviewer", "Kritik am Code") == [
+        "Kritik am Code zu Item stellen"
+    ]
+    assert hauptprogramm(["Reviewer", "Kritik am Code"]) == 0
+    assert capsys.readouterr().out.startswith("Schon abgehakt")
+    assert "- [x] Reviewer: Kritik am Code zu Item stellen\n" in plan.read_text(encoding="utf-8")
 
 
 def testEineFremdeZeileBleibtOffen(tmp_path, plan):

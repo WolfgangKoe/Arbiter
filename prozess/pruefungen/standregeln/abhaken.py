@@ -40,22 +40,43 @@ def offeneZeilen(wurzel: Path, rolle: str) -> list[str]:
     return [zeile.schritt for zeile in zeilen if not bisher.get(zeile.schlüssel, (False,))[0]]
 
 
+def passt(zeile: Zeile, rolle: str, schritt: str) -> bool:
+    """Die Zeile gehört der Rolle, kein Fakt hakt sie ab, und der Schritt enthält den Text."""
+    return (
+        gleicheRolle(zeile, rolle)
+        and zeile.fakt is None
+        and schritt.casefold() in zeile.schritt.casefold()
+    )
+
+
+def bereitsAbgehakt(wurzel: Path, rolle: str, schritt: str) -> list[str]:
+    """Die Schritte der Rolle zum Text, deren Haken schon steht."""
+    ziel = zielUndZeilen(wurzel, lage(wurzel))
+    if ziel is None:
+        return []
+    datei, zeilen = ziel
+    bisher = bisherigeZeilen(datei.read_text(encoding="utf-8"))
+    return [
+        zeile.schritt
+        for zeile in zeilen
+        if passt(zeile, rolle, schritt) and bisher.get(zeile.schlüssel, (False,))[0]
+    ]
+
+
 def abhaken(wurzel: Path, rolle: str, schritt: str) -> list[str]:
-    """Hakt die Zeilen der Rolle ab, deren Schritt den Text enthält; nennt sie."""
+    """Hakt die offenen Zeilen der Rolle ab, deren Schritt den Text enthält; nennt sie."""
     fortschrittSchreiben(wurzel)
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:
         return []
     datei, zeilen = ziel
+    text = datei.read_text(encoding="utf-8")
+    bisher = bisherigeZeilen(text)
     treffer = [
         zeile
         for zeile in zeilen
-        if gleicheRolle(zeile, rolle)
-        and zeile.fakt is None
-        and schritt.casefold() in zeile.schritt.casefold()
+        if passt(zeile, rolle, schritt) and not bisher.get(zeile.schlüssel, (False,))[0]
     ]
-    text = datei.read_text(encoding="utf-8")
-    bisher = bisherigeZeilen(text)
     for zeile in treffer:
         bisher[zeile.schlüssel] = (True, bisher.get(zeile.schlüssel, (True, []))[1])
     datei.write_text(abschnittEinsetzen(text, abschnittBauen(zeilen, bisher)), encoding="utf-8")
@@ -73,6 +94,10 @@ def hauptprogramm(argumente: list[str]) -> int:
     rolle, schritt = argumente
     wurzel = projektordner()
     gehakt = abhaken(wurzel, rolle, schritt)
+    schon = [] if gehakt else bereitsAbgehakt(wurzel, rolle, schritt)
+    if schon:
+        print("Schon abgehakt, nichts geändert: " + "; ".join(schon))
+        return 0
     if not gehakt:
         offen = "; ".join(offeneZeilen(wurzel, rolle)) or "keiner"
         print(f"Kein Schritt von {rolle} passt zu „{schritt}“. Offen: {offen}", file=sys.stderr)

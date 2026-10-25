@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Im Auftrag des Stakeholders, am Code bestätigt. Nach [Ich 3](../../prozess/praemissen/ich.md):
@@ -49,4 +48,7 @@ schreibe ich.
 3. Kein Zurücksetzen fremder Arbeit beim Commit: erst die Bordmittel von pre-commit und Claude
    Code prüfen, sonst committet der Koordinator nur, wenn keine Rolle läuft.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 7, P5, Regeln in [Standregeln](../../prozess/regeln/standregeln.md).
+1. `standregeln/hindernis.py` nimmt als letztes Argument den Nummernbereich des Auftrags oder die Nummer eines vorhandenen Anliegens (dann entsteht keines); die Frage, ob das Hindernis bei Kritik unter der Zeile steht, liegt beim Stakeholder (Anliegen 3940, Empfehlung Ja).
+2. Ein neu gefasster Plan öffnet „Kritik am Plan“ (`standregeln/planFassung.py`, Merkzettel in `.git/arbiter`; der erste Lauf merkt nur, die bereits abgehakte Kritik an Plan 7 bleibt); der Start nennt beide Befehle immer; `abhaken.py` meldet einen schon gesetzten Haken als solchen. Den Aufruf über `lauf.py` im Ablauf schreibt der Organisationsentwickler.
+3. Nicht gebaut: pre-commit bietet kein Mittel, das Beiseitelegen fremder Änderungen abzuschalten; ein eigener Hook statt `.git/hooks/pre-commit` ist ungeprüft und Hook-Code für alle Rollen. Es bleibt dein Rückfall: Der Koordinator committet nur, wenn keine Rolle läuft ([Commits](../../prozess/ablauf/commits.md)), Text für dich.

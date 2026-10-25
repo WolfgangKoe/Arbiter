@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Für AUF-23 meldet `kriterienregeln/rueckverfolgung.py`
@@ -27,4 +26,4 @@ und ein Plan eine spätere umfasst. Bestehende Regel, die das abdeckt: [Regeln](
 Zeile „Kriterium ↔ Test“, „Testdatei je Anforderung nach T1“. Erledigt, wenn
 `rueckverfolgungTest.py` diesen Fall prüft.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 7, P5 (`kriterienregeln/rueckverfolgung.py`, `zuordnungen`): Fehlt jede Testdatei und umfasst kein Plan eine spätere Anforderung, nennt die Meldung die Datei nach T1; die Einzeldatei nur sonst. Test: `kriterienregeln/rueckverfolgungTest.py` (`testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieDateiNachT1`); Regel in [Kriterienregeln](../../prozess/regeln/kriterienregeln.md).

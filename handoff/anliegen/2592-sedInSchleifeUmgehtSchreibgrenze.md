@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Aus der Schlussantwort des Testautors (Technikphase 7, Kommentare in den

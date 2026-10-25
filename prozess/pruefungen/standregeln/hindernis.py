@@ -6,7 +6,14 @@ from pathlib import Path
 
 from gemeinsam.pfade import anliegenOrdner, projektordner
 from lesen.agenten import rollennamen
-from lesen.anliegenKopf import belegteNummern, höchstRunde, stakeholder
+from lesen.anliegenKopf import (
+    anliegenDateien,
+    belegteNummern,
+    freieNummer,
+    höchstRunde,
+    nummerAusDatei,
+    stakeholder,
+)
 from standregeln.abhaken import gleicheRolle
 from standregeln.fortschritt import (
     Zeile,
@@ -18,7 +25,8 @@ from standregeln.fortschritt import (
 )
 from standregeln.phasenfolge import lage
 
-aufrufteileRolleSchrittBeseitigerText = 4
+aufrufteileRolleSchrittBeseitigerTextZiel = 5
+bereichsmuster = re.compile(r"(\d+)-(\d+)")
 längeDesNamens = 40
 umlaute = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
 vorlage = """# Hindernis: {schritt}
@@ -102,18 +110,28 @@ def eigeneZeile(wurzel: Path, rolle: str, schritt: str) -> tuple[Path, list[Zeil
     return (datei, zeilen, treffer[0]) if len(treffer) == 1 else None
 
 
-def hindernisMelden(
-    wurzel: Path, rolle: str, schritt: str, beseitiger: str, text: str
+def anliegenVorhanden(wurzel: Path, nummer: int) -> bool:
+    return any(nummerAusDatei(datei) == nummer for datei in anliegenDateien(wurzel))
+
+
+def hindernisMelden(  # noqa: PLR0913
+    wurzel: Path, rolle: str, schritt: str, beseitiger: str, text: str, ziel: range | int
 ) -> int | None:
-    """Legt das Anliegen an, schreibt `Hindernis:` unter die Zeile; nennt die Nummer."""
+    """Schreibt `Hindernis:` unter die Zeile; neues Anliegen aus dem Bereich oder vorhandenes."""
     fortschrittSchreiben(wurzel)
     gefunden = eigeneZeile(wurzel, rolle, schritt)
     name = beseitigerName(wurzel, beseitiger)
     if gefunden is None or name is None:
         return None
     datei, zeilen, zeile = gefunden
-    nummer = nächsteNummer(wurzel)
-    anliegenSchreiben(wurzel, zeile, name, einzeiler(text), nummer)
+    if isinstance(ziel, int):
+        nummer = ziel if anliegenVorhanden(wurzel, ziel) else None
+    else:
+        nummer = freieNummer(wurzel, ziel)
+        if nummer is not None:
+            anliegenSchreiben(wurzel, zeile, name, einzeiler(text), nummer)
+    if nummer is None:
+        return None
     inhalt = datei.read_text(encoding="utf-8")
     bisher = bisherigeZeilen(inhalt)
     abgehakt, zusatz = bisher.get(zeile.schlüssel, (False, []))
@@ -123,20 +141,31 @@ def hindernisMelden(
     return nummer
 
 
+def zielLesen(text: str) -> range | int | None:
+    """`3940-3959` ist ein Bereich für ein neues Anliegen, `3941` ein vorhandenes."""
+    bereich = bereichsmuster.fullmatch(text)
+    if bereich:
+        return range(int(bereich[1]), int(bereich[2]) + 1)
+    return int(text) if text.isdigit() else None
+
+
 def hauptprogramm(argumente: list[str]) -> int:
-    if len(argumente) != aufrufteileRolleSchrittBeseitigerText:
+    ziel = zielLesen(argumente[-1]) if argumente else None
+    if len(argumente) != aufrufteileRolleSchrittBeseitigerTextZiel or ziel is None:
         print(
             "Aufruf: python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.hindernis"
-            " <Rolle> <Schritt> <Beseitiger> <Text>",
+            " <Rolle> <Schritt> <Beseitiger> <Text> <erste>-<letzte> | <Nummer>\n"
+            "Der Bereich aus dem Auftrag legt ein neues Anliegen an; die Nummer nennt das"
+            " Anliegen, das schon als Kritik besteht.",
             file=sys.stderr,
         )
         return 1
-    rolle, schritt, beseitiger, text = argumente
-    nummer = hindernisMelden(projektordner(), rolle, schritt, beseitiger, text)
+    rolle, schritt, beseitiger, text, _ = argumente
+    nummer = hindernisMelden(projektordner(), rolle, schritt, beseitiger, text, ziel)
     if nummer is None:
         print(
-            f"Kein einzelner Schritt von {rolle} passt zu „{schritt}“, oder {beseitiger} "
-            "ist keine Rolle.",
+            f"Kein einzelner Schritt von {rolle} passt zu „{schritt}“, {beseitiger} "
+            "ist keine Rolle, der Bereich ist voll oder das Anliegen fehlt.",
             file=sys.stderr,
         )
         return 1

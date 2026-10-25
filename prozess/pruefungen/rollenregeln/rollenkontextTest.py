@@ -39,6 +39,14 @@ def testRolleOhneSchreibpfadeBekommtKeineOrdnerClaudeMd(wurzel):
     assert "REGELN" not in kontext("leser", wurzel)
 
 
+def testDieBeidenBefehleStehenAuchOhneOffenenSchritt(wurzel):
+    rolle(wurzel, "reviewer", "handoff/review.md")
+    ergebnis = kontext("reviewer", wurzel)
+    assert "standregeln.abhaken reviewer <Schritt>" in ergebnis
+    assert "standregeln.hindernis reviewer <Schritt>" in ergebnis
+    assert "Nummernbereich des Auftrags" in ergebnis
+
+
 def testRolleBekommtIhreOffenenSchritteUndDenBefehlZumAbhaken(wurzel, gitRepo):
     rolle(wurzel, "reviewer", "handoff/review.md")
     (wurzel / "handoff").mkdir()

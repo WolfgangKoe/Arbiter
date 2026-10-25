@@ -98,9 +98,11 @@ def sammeldateiGilt(
     sammeldatei: Path, spätereVerlangt: list[set[Kriterium]], itemTexte: list[str]
 ) -> bool:
     """Die Sammeldatei liegt vor, und kein Plan umfasst eine spätere Anforderung."""
-    return sammeldatei.is_file() and not any(
-        anforderungUmfasst(itemTexte, verlangt) for verlangt in spätereVerlangt
-    )
+    return sammeldatei.is_file() and keineSpätereUmfasst(spätereVerlangt, itemTexte)
+
+
+def keineSpätereUmfasst(spätereVerlangt: list[set[Kriterium]], itemTexte: list[str]) -> bool:
+    return not any(anforderungUmfasst(itemTexte, verlangt) for verlangt in spätereVerlangt)
 
 
 def testdateiWählen(
@@ -128,7 +130,11 @@ def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> 
     for kriterium in kriterien(anforderungsdatei):
         verlangt[kriterium.anforderung].add(kriterium)
     späterVerlangt = [verlangt[nummer] for nummer in spätere]
-    gilt = sammeldateiGilt(sammeldateiZu(wurzel, anforderungsdatei), späterVerlangt, itemTexte)
+    sammeldatei = sammeldateiZu(wurzel, anforderungsdatei)
+    ersteEinzeldatei = einzeldateiZu(wurzel, anforderungsdatei, erste)
+    gilt = sammeldateiGilt(sammeldatei, späterVerlangt, itemTexte) or (
+        not ersteEinzeldatei.is_file() and keineSpätereUmfasst(späterVerlangt, itemTexte)
+    )
     return [
         Zuordnung(
             anforderung,
