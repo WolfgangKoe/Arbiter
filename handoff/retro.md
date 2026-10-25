@@ -71,11 +71,11 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Organisationsentwickler: P1
 - [x] Organisationsentwickler: P2
 - [x] Organisationsentwickler: P3
-- [ ] Regelumsetzer: P4
+- [x] Regelumsetzer: P4
 - [ ] Regelumsetzer: P5
 - [x] Regelumsetzer: P6
 - [ ] Regelumsetzer: P7
-- [ ] Regelumsetzer: P8
+- [x] Regelumsetzer: P8
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
