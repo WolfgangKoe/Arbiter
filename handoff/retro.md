@@ -77,7 +77,7 @@ Am Bildschirm ändert sich nichts.
 - [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
 - [x] Regelumsetzer: P8
-- [ ] Organisationsentwickler: P9
+- [x] Organisationsentwickler: P9
 - [x] Koordinator: nach dev gepusht
 
 ## Freigabe
