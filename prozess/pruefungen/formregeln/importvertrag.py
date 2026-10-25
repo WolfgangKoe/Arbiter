@@ -4,6 +4,7 @@ import ast
 import sys
 from pathlib import Path
 
+from formregeln.erlaubteImporte import kastenDesModuls, pfeilErlaubt
 from formregeln.glossar import domaeneOrdner
 from gemeinsam.pfade import akzeptanzOrdner, projektordner, webOrdner
 
@@ -45,7 +46,11 @@ def istOderUnter(modul: str, name: str) -> bool:
 
 
 def erlaubt(modul: str) -> bool:
-    return istOderUnter(modul, eigenesPaket) or modul.split(".")[0] in sys.stdlib_module_names
+    """Aus der Domäne erlaubt: die Standardbibliothek und nach der Tabelle nur die Domäne selbst."""
+    kasten = kastenDesModuls(modul)
+    if kasten is not None:
+        return pfeilErlaubt("domaene", kasten, frozenset())
+    return modul.split(".")[0] in sys.stdlib_module_names
 
 
 def istVorlagenName(name: str) -> bool:

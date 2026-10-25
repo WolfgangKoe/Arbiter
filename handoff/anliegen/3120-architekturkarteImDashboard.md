@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [2740](2740-gemesseneUndBeschriebeneArchitektur.md)
@@ -43,4 +42,13 @@ Erledigt, wenn ein Test an einem Baum unter `/tmp` einen verbotenen Pfeil rot un
 Kasten ohne Code gestrichelt zeigt, `importvertragTest.py` grün bleibt und das Dashboard
 heute keinen roten Pfeil zeigt.
 
-**Stellungnahme.**
+**Stellungnahme.** Gebaut als P7 (Retro 7). Das Dashboard zeigt über dem Tokenbericht die
+Karte: sieben Kästen mit Zeichen Code gegen Architektur („keine Datei“, wo
+`technik/architektur/<ordner>.md` fehlt; Start ohne Architekturzeile), Pfeile mit Anzahl der
+Importzeilen, verbotene rot, Seite → Web fest als „HTTP“, leere Kästen gestrichelt, darunter
+eine Zeile mit Übersicht und Vertrag. Die erlaubten Pfeile stehen einmal als Tabelle in
+`formregeln/erlaubteImporte.py`; der Importvertrag liest A1 daraus, die Karte alle Pfeile.
+Messung: `rollenregeln/architekturMessung.py`, Bild: `rollenregeln/dashboardArchitektur.py`.
+Test: `rollenregeln/dashboardArchitekturTest.py` (verbotener Pfeil Domäne → Katalog an einem
+Baum unter `tmp_path` rot, Anwendung ohne Code gestrichelt, das Repo ohne roten Pfeil);
+`importvertragTest.py` grün. Eintrag in [Regeln](../../prozess/regeln/rollenregeln.md).
