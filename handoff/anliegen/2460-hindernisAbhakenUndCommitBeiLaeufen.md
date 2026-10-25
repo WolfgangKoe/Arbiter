@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Im Auftrag des Stakeholders, am Code bestätigt. Nach [Ich 3](../../prozess/praemissen/ich.md):
@@ -52,3 +52,9 @@ schreibe ich.
 1. `standregeln/hindernis.py` nimmt als letztes Argument den Nummernbereich des Auftrags oder die Nummer eines vorhandenen Anliegens (dann entsteht keines); die Frage, ob das Hindernis bei Kritik unter der Zeile steht, liegt beim Stakeholder (Anliegen 3940, Empfehlung Ja).
 2. Ein neu gefasster Plan öffnet „Kritik am Plan“ (`standregeln/planFassung.py`, Merkzettel in `.git/arbiter`; der erste Lauf merkt nur, die bereits abgehakte Kritik an Plan 7 bleibt); der Start nennt beide Befehle immer; `abhaken.py` meldet einen schon gesetzten Haken als solchen. Den Aufruf über `lauf.py` im Ablauf schreibt der Organisationsentwickler.
 3. Nicht gebaut: pre-commit bietet kein Mittel, das Beiseitelegen fremder Änderungen abzuschalten; ein eigener Hook statt `.git/hooks/pre-commit` ist ungeprüft und Hook-Code für alle Rollen. Es bleibt dein Rückfall: Der Koordinator committet nur, wenn keine Rolle läuft ([Commits](../../prozess/ablauf/commits.md)), Text für dich.
+
+**Nachprüfung.** Erfüllt (Commit „P5: Läufe und Anliegenkopf“). 1 und 2 am Code bestätigt,
+die Tests der Standregeln-Zeilen grün (104); mein Start nannte beide Befehle ohne offenen
+Schritt. Im Ablauf stehen jetzt der Aufruf über `lauf.py`, Bereich oder Nummer beim
+Hindernis und die neue Fassung des Plans ([Fortschritt](../../prozess/ablauf/fortschritt.md));
+3 als Rückfall, nur Text, in [Commits](../../prozess/ablauf/commits.md).

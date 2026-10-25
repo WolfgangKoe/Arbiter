@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Mit Retro 7, P1 kritisieren Fachkritiker und Organisationsentwickler ein Review
@@ -28,3 +28,7 @@ P5 (Läufe und Anliegenkopf), weil P5 dort schon den neu gefassten Plan mit sein
 nach „Review geschrieben“ nennt und der Befehl sie abhakt.
 
 **Stellungnahme.** Umgesetzt mit Retro 7, P5: `standregeln/fortschritt.py` schreibt nach „Review geschrieben“ die Zeilen „Kritik am Review“ für Fachkritiker und Organisationsentwickler; der Befehl hakt sie ab. Test: `standregeln/fortschrittTest.py` (`testNachDemReviewFolgtJeKritikerDieKritikAmReviewVorDerFreigabe`); Regel in [Standregeln](../../prozess/regeln/standregeln.md). „nur Text“ im Ablauf ersetzt der Organisationsentwickler.
+
+**Nachprüfung.** Erfüllt: `technikzeilen` schreibt beide Zeilen nach „Review geschrieben“,
+der Test ist grün. Im [Fortschritt](../../prozess/ablauf/fortschritt.md) nennt der
+Mechanismus sie jetzt statt „nur Text“.

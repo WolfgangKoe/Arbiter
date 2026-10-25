@@ -12,3 +12,8 @@ von `python3 -m pytest prozess/pruefungen` beim Implementierer, bevor er fertig 
 beim Reviewer bei der DoD. Alles prüft der Regelumsetzer, bevor er fertig meldet
 (Anliegen 600, 1950). Mechanismus: `.pre-commit-config.yaml`, Hooks je Pfad, ohne
 Produkttests und Abdeckung (Anliegen 601, 1950, [Formregeln](../regeln/formregeln.md)); sonst nur Text.
+
+Der Koordinator committet nur, wenn keine Rolle läuft: Der Hook legt beim Commit alle übrigen
+Änderungen beiseite und setzt die Pfade des Commits für seine Dauer zurück, laufende Rollen
+sähen alte Stände, Geschriebenes ginge verloren. pre-commit kann das Beiseitelegen nicht
+abschalten (Anliegen 2460). Mechanismus: nur Text.

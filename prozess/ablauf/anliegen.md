@@ -21,7 +21,8 @@ sobald die Phase läuft, auch die laufende; die Phase eines späteren Zyklus nen
 schreibt den Kopf für alle Skripte.
 Mechanismus: `anliegenregeln/anliegen.py`, `lesen/anliegenKopf.py`
 ([Anliegenregeln](../regeln/anliegenregeln.md)); eine Perspektive in Klammern lässt es durch, ohne
-Perspektive: nur Text; Phase mit Zyklus: nur Text, bis Retro 7, P5 sie baut.
+Perspektive: nur Text; `Wartet auf`, auch mit Zyklus: `anliegenregeln/anliegenDran.py`
+([Standregeln](../regeln/standregeln.md)).
 
 Form | der Empfänger soll | Absender
 ---|---|---

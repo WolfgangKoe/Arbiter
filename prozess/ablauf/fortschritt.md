@@ -17,10 +17,14 @@ Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, ang
 `; beseitigt: Commit „<Betreff>“`, und ein Kommentar des Stakeholders
 `Kommentar: <Text> (Anliegen <nr>)`.
 - Fakt: Ein Hook hakt nach jedem Rollenlauf ab, was die Tabelle als Fakt nennt.
-- Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs mit dem Befehl ab, als Kritiker,
-  wenn keiner seiner Befunde mehr aufhält ([Kritik](kritik.md)). Hält sie etwas auf, meldet
-  sie es mit dem Befehl und nennt die Rolle, die es beseitigen kann; das Skript legt das Anliegen an (Kritik, an den
-  Stakeholder Fragen) und schreibt die Zeile `Hindernis:`.
+- Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs ab, als Kritiker, wenn keiner
+  seiner Befunde mehr aufhält ([Kritik](kritik.md)):
+  `python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken <Rolle> <Schritt>`; ein
+  schon gesetzter Haken wird als solcher gemeldet. Hält sie etwas auf, meldet sie es mit
+  `… standregeln.hindernis <Rolle> <Schritt> <Rolle, die es beseitigen kann> <Text> <Ziel>`.
+  Ziel ist der Nummernbereich des Auftrags (`3940-3959`), dann legt das Skript das Anliegen an
+  (Kritik, an den Stakeholder Fragen), oder die Nummer des Anliegens, das schon als Kritik
+  besteht; es schreibt die Zeile `Hindernis:`. Der Start nennt beide Befehle (Anliegen 2460).
 - Dashboard: Der Fortschritt der laufenden Phase steht als kompakte Liste neben dem
   Anliegenboard. Der Stakeholder hakt eine Zeile, die kein Fakt abhakt, mit einem Klick ab;
   ein gesetzter Haken bleibt, alle Haken sehen gleich aus und heben sich deutlich vom leeren
@@ -33,7 +37,7 @@ Domäne 1 bis 3, nur ohne Etappe | Planer: Etappe · Architekt: Kritik an der Et
 Domäne 4 | Anforderungsautor: Happy Paths zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
 Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
 Domäne 6 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
-Domäne 7 | je Kritiker: Kritik am Plan | Befehl
+Domäne 7 | je Kritiker: Kritik am Plan, offen wieder bei neuer Fassung des Plans | Befehl
 Domäne 8 | Stakeholder: Freigabe Plan | Fakt: Commit
 Technik 1 je Item mit beiden Hälften | Architekt: Vertrag zu Item <k>, bei beiden Hälften | Befehl
 Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
@@ -48,8 +52,9 @@ Prozess 5 je Prozess-Item | Rolle des Items: P<k> | Fakt: Commit `P<k>:`
 Prozess 6 | Koordinator: nach `dev` gepusht | Fakt: `origin/dev` enthält den letzten Commit
 
 Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `alleOffen`, [Standregeln](../regeln/standregeln.md);
-die Zeilen „Kritik am Review“ nur Text, Anliegen 3660);
-Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2); Hindernis: `standregeln/hindernis.py`,
-`standregeln/beseitigt.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
+auch die Zeilen „Kritik am Review“, Anliegen 3660); neue Fassung des Plans:
+`standregeln/planFassung.py`; Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2);
+Hindernis: `standregeln/hindernis.py` (Bereich oder vorhandenes Anliegen, Retro 7, P5),
+`standregeln/beseitigt.py`; beide Befehle beim Start: `rollenregeln/rollenkontext.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
 Sperre der Zeilen mit Fakt), `standregeln/zeilenZug.py` (weist den Haken darauf ab; Anliegen
 2061); ob sich die Haken deutlich abheben: Urteil des Stakeholders.
