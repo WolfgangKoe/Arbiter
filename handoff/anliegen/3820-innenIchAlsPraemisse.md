@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Dein Auftrag [2591](2591-innenIchDesStakeholdersInDenPraemissen.md). Frust zeigtest
@@ -38,7 +38,7 @@ Abschnitt in Ich; Ich hat 2.768 von 3.000 Zeichen und müsste gekürzt werden. C
 Innen-Ich, die Regeln der Rollen ziehen in eine neue Datei; alle Verweise „Ich 1“ bis „Ich 5“
 ändern sich.
 Empfehlung: A. Ich und Wir bleiben, wie sie sind; nur eine Zeile in der CLAUDE.md kommt dazu.
-Antwort: .
+Antwort: Bitte nochmal überdenken. Die Prämissen orientieren sich an dem Vier-Quadranten-Modell von Ken Wilber. Wir haben aber nur 3 drei Prämissen. Die vierte fehlt! Und zwar diejenige, welche Das pendant zur Kultur "Wir.md" repräsentiert. Das KI-Agenten-System orientiert sich an meinen Werten, Vorstellungen und Denkweisen. Ihr handelt "nach außen" und bringt die Kompetenzen mit die ich nicht habe. Doch ich treibe es an. Eure Initiativen kommen auf Basis meiner Motivation.
 
 **F2 · Gilt dieser Entwurf?** Nur du änderst ihn. „.“: Er gilt so; sonst schreib ihn um.
 > Was mich als Stakeholder bewegt.
@@ -52,7 +52,7 @@ Antwort: .
 > 7. Sauberer Code nach SOLID; ihr seid eingeschränkt, könnt aber arbeiten und committen.
 
 Empfehlung: Gilt. Jeder Satz geht auf deinen Wortlaut zurück (Plan 6, 2201, 2362, 2364).
-Antwort: .
+Antwort: Das geht schon in die richtige Richtung. Z.T. kommt es mir noch etwas zu kurz. Daher die Rückfrage abseits dessen, was du bereits als Befund zusammengetragen hast. Was müsst ihr von mir wissen, um im meinen Sinne quasi als mein verlängerter Arm handeln zu können? WIr sollten es natürlich kurz halten, aber jeder Agent des Systems muss manches eben wissen.
 
 **F3 · Nennt jede Empfehlung an dich ihre Quelle?** A: Jede Antwortmöglichkeit einer Frage an
 dich nennt ihre Quelle nach der Domäne oder heißt „neu“; „neu“ empfiehlt eine Rolle nur mit
@@ -60,6 +60,6 @@ Grund aus dem Ziel. Das ergänzt die Form der Fragen im
 [Ablauf, Anliegen](../../prozess/ablauf/anliegen.md), Ich 1 verlinkt dorthin; Mechanismus:
 nur Text. B: Wie bisher.
 Empfehlung: A. So hätte 362 F6 „zurück“ als „neu“ gezeigt.
-Antwort: .
+Antwort: Genau diese Frage verstehe ich beispielsweise nicht. Wobei kann uns das helfen?
 
 **Stellungnahme.**
