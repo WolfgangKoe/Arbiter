@@ -292,14 +292,14 @@ def testFreieNummerAlsBefehlNenntDieNummerOderScheitert(tmp_path, monkeypatch, c
 
 
 def testDieHilfemeldungNenntDenBefehlAusDenRegeln(capsys):
-    regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
+    regeln = (wurzel / "prozess" / "regeln" / "anliegenregeln.md").read_text(encoding="utf-8")
     assert hauptprogramm([]) == 1
     aufruf = capsys.readouterr().err.removeprefix("Aufruf: ").strip()
     assert f"`{aufruf}`" in regeln
 
 
 def testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess():
-    regeln = (wurzel / "prozess" / "regeln.md").read_text(encoding="utf-8")
+    regeln = (wurzel / "prozess" / "regeln" / "anliegenregeln.md").read_text(encoding="utf-8")
     zeile = next(zeile for zeile in regeln.splitlines() if "anliegenregeln.freieNummer" in zeile)
     befehl = re.search(r"`(python3 [^`]*anliegenregeln\.freieNummer <erste> <letzte>)`", zeile)
     assert befehl, "Regeln nennen keinen Befehl mit <erste> <letzte>"

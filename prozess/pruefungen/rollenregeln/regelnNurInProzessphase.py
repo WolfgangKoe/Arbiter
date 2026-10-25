@@ -16,7 +16,8 @@ geschützteMuster = (
 )
 ausgenommen = ("prozess/backlog.md", "prozess/pruefungen/*")
 regelumsetzer = "regelumsetzer"
-regelnDatei = "prozess/regeln.md"
+regelnMuster = "prozess/regeln/*.md"
+regelnAusnahme = "prozess/regeln/CLAUDE.md"
 regelnMeldung = (
     "Prozessregeln, Prämissen und Rollen ändern sich nur in der Prozessphase nach "
     "`Freigabe Retro <n>`; davor beschreibt die Retro die Änderung."
@@ -38,6 +39,6 @@ def prozessphaseFreigegeben(wurzel: Path) -> bool:
 
 
 def regelnGesperrt(relativ: str, wurzel: Path, rolle: str | None = None) -> bool:
-    if relativ == regelnDatei and rolle == regelumsetzer:
+    if rolle == regelumsetzer and fnmatch(relativ, regelnMuster) and relativ != regelnAusnahme:
         return False
     return istGeschützt(relativ) and not prozessphaseFreigegeben(wurzel)

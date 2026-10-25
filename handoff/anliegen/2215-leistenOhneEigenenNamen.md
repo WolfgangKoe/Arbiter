@@ -16,7 +16,7 @@ drei `<aside class="leiste">`; einen Namen haben nur ihre *Griffe* („Ablage Sp
 „Ablage Spieler 2“, „Protokoll“), nicht die *Leisten* selbst. Das Markup der *Leiste* legt
 [Oberfläche, O4](../../technik/architektur/oberflaeche.md) fest. Kein Schritt des Happy Path
 fehlt, keine *Sperre* ist betroffen, und keine Prüfung ist rot, denn SonarLint prüft nach
-[Ablauf](../../prozess/ablauf.md#technikphase) nur Python (Anliegen 280). Barrierefreiheit
+[Ablauf](../../prozess/ablauf/technikphase.md) nur Python (Anliegen 280). Barrierefreiheit
 steht nicht im [Ziel](../../domaene/ziel.md); fachlich ist das deshalb kein Mangel, es fällt
 aber in die Sicht des Stakeholders.
 

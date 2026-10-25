@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -21,7 +21,7 @@ Teilbefehls ist. In `/tmp` nachgeprüft, `verbotenesSchreiben` meldet nichts bei
 Allein steht `sed -i … technik/x.py` gesperrt. Das ist nicht die Lücke aus
 [2040](2040-pythonUeberBashNachFreigabeRetro6.md) und 510 (ein Skript, das selbst schreibt): Der
 Befehl steht hier lesbar im Text, die Erkennung übersieht ihn. Bestehende Regel
-([Ich 4](../../prozess/praemissen/ich.md)): [Regeln, Rollenregeln](../../prozess/regeln.md#rollenregeln),
+([Ich 4](../../prozess/praemissen/ich.md)): [Regeln, Rollenregeln](../../prozess/regeln/rollenregeln.md),
 Zeile zu `schreibgrenze.py`; sie nennt diese Lücke nicht. Nach
 [Ich 3](../../prozess/praemissen/ich.md) wartet das auf die Prozessphase: Kein Schritt des Happy
 Path fehlt, keine Prüfung ist rot.
@@ -37,4 +37,11 @@ Prozessphase; die Schreibgrenze greift dann nicht.
 3. Die Zeile in Regeln nennt, was die Erkennung noch nicht sieht.
 Vorher prüfen, ob die Bordmittel von Claude Code (Rechteregeln für Bash) das abdecken.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in P4 (Retro 7), zusammen mit 2040. Die Bordmittel decken
+`sed -i` in `for`, `while`, `if` und nach `cd` ab (an einer Kopie in `/tmp` erprobt, siehe
+2040: `permissions.deny` in `.claude/settings.json`). Für die Umwege, die sie nicht
+erkennen, erkennt `rollenregeln/bashSchreiben.py` jetzt `do`, `then`, `else`, `elif`, `{`,
+`!`, `if`, `while`, `until` und `xargs` samt Optionen als Umhüllung und prüft die Befehle
+hinter `find -exec`, `-execdir`, `-ok`, `-okdir`. Scheiter-Tests je Form:
+`rollenregeln/schreibgrenzeTest.py`. Lücken: `bash -c` und `rm` unter `find` in `/tmp`
+(gesperrt, weil `{}` nicht prüfbar ist). `erledigt` folgt dem Haken von P4.

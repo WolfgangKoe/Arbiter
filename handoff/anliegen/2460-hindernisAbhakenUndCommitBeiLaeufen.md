@@ -12,10 +12,10 @@ Wartet auf: Prozessphase
 wartet auf die Prozessphase; kein Schritt des Happy Path fehlt, keine Prüfung ist rot.
 1. Hindernis: `standregeln/hindernis.py`, `nächsteNummer` (Zeile 60 bis 62), nimmt die höchste
    belegte Nummer plus eins statt `freieNummer` aus dem Bereich des Auftrags, wie Retro 6, P4 und
-   [Regeln](../../prozess/regeln.md#anliegenregeln) es für alle Skripte verlangen. Der Befehl legt
+   [Regeln](../../prozess/regeln/anliegenregeln.md) es für alle Skripte verlangen. Der Befehl legt
    immer ein neues Anliegen an; der Kritiker schreibt seinen Befund nach
-   [Kritik](../../prozess/ablauf.md#kritik) aber schon als Anliegen, mit dem Befehl entstünde ein
-   zweites ([Fortschritt](../../prozess/ablauf.md#fortschritt) widerspricht). Deshalb meldete der
+   [Kritik](../../prozess/ablauf/kritik.md) aber schon als Anliegen, mit dem Befehl entstünde ein
+   zweites ([Fortschritt](../../prozess/ablauf/fortschritt.md) widerspricht). Deshalb meldete der
    Fachkritiker 2420 nicht, unter seiner Zeile im [Review](../review.md) fehlt `Hindernis:`.
 2. Abhaken: „Fachkritiker: Kritik am Plan“ und „Architekt: Kritik am Plan“ sind seit dem Commit
    „Domänenphase 7 als Zwischenstand…“ abgehakt, für die erste Fassung von Plan 7. „Etappen neu
@@ -38,7 +38,7 @@ wartet auf die Prozessphase; kein Schritt des Happy Path fehlt, keine Prüfung i
 **Kosten.** (1) Nummern kollidieren mit dem Bereich eines Nachbarn; Hindernisse fehlen im
 Fortschritt oder stehen doppelt. (2) Der Fortschritt meldet eine Kritik als getan, die zur
 gültigen Fassung aussteht. (3) Commits scheitern beim ersten Versuch, gleichzeitig Geschriebenes
-kann verloren gehen, gegen [Gleichzeitige Läufe](../../prozess/ablauf.md#gleichzeitige-läufe).
+kann verloren gehen, gegen [Gleichzeitige Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md).
 
 **Gegenvorschlag.** In Retro 7 ein Prozess-Item; der Regelumsetzer baut, den Text im Ablauf
 schreibe ich.

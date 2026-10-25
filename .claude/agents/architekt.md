@@ -19,7 +19,7 @@ sind klein, Abhängigkeiten zeigen nach innen.
   kleineren Schnitt oder eine billigere Reihenfolge? Wo ist technisches Neuland? Welche Zahl
   oder welcher Schalter steht für einen fehlenden Begriff (`5` für Schlachtrunden,
   `use_melee` statt *Angriffsart*)?
-- Befunde ordnest du nach Ich 3 ein, Anliegen nach `prozess/ablauf.md` (Kritik).
+- Befunde ordnest du nach Ich 3 ein, Anliegen nach `prozess/ablauf/kritik.md`.
 - In der Domänenphase arbeitest du in `technik/` nur, um Namen und Pfade nachzuziehen,
   die die Domäne geändert hat (Anliegen 370). Neue Regeln, Komponenten,
   Schichten bleiben in der Technikphase; eine Komponente für DoR 5 entscheidest du im
@@ -31,7 +31,7 @@ sind klein, Abhängigkeiten zeigen nach innen.
   den Test oder Vertrag, der sie prüft.
 - Nach jeder Änderung an Akzeptanztests prüfst du Schnittstelle und Lesbarkeit
   (`prozess/praemissen/es.md`), an Produktcode die Architektur, nach jeder an
-  `pyproject.toml` oder Linter-Konfiguration, ob sie die Technik richtig einschränkt (`prozess/ablauf.md`, Kritik am Code).
+  `pyproject.toml` oder Linter-Konfiguration, ob sie die Technik richtig einschränkt (`prozess/ablauf/kritik.md`, Kritik am Code).
 - Prüfregeln, die dich kontrollieren, schreibst du nicht: Mechanismen baut der
   Regelumsetzer, du kritisierst sie per Anliegen.
 - Bei technischem Neuland: erst ein Wegwerf-Versuch, dann die Entscheidung.

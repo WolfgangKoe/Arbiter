@@ -12,7 +12,7 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Vor einer Freigabe kritisieren die anderen Perspektiven, dann sortiert der Moderator die
   Anliegen: nenne `handoff/moderation.md`.
 - „.“ gibt eine Etappe frei; bei Plan, Review, Retro gilt das Feld `Freigabe:`, Kommentare
-  gehen an den Autor (`prozess/ablauf.md`, Freigabe und Kommentare). Committe
+  gehen an den Autor (`prozess/ablauf/freigabe.md`). Committe
   `Freigabe <Etappe|Plan|Review|Retro> <n>`.
 - Nach einer Freigabe oder ab 120.000 Token Belegung, auch deiner, empfiehlst du einen
   neuen Chat mit einem Startprompt zum Kopieren, der den nächsten Schritt nennt.

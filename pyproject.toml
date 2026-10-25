@@ -23,7 +23,7 @@ extend-exclude = ["Arbiter-old", "ArbiterMap"]
 src = ["prozess/pruefungen", "technik"]
 
 [tool.ruff.lint]
-# Warum: Stil, ARG, PLR2004, PLR0913, FBT, ERA nach prozess/ablauf.md (Technikphase, Werkzeuge).
+# Warum: Stil, ARG, PLR2004, PLR0913, FBT, ERA nach prozess/ablauf/werkzeuge.md.
 select = ["E", "W", "F", "I", "N", "UP", "B", "ARG", "PLR2004", "PLR0912", "PLR0913", "FBT", "ERA"]
 # Warum: Bezeichner sind camelCase (wir.md), Ausnahmen heißen deutsch ohne „Error“ (N818);
 # die Namensprüfung übernimmt prozess/pruefungen/formregeln/benennung.py.
@@ -34,7 +34,7 @@ ignore = ["N802", "N803", "N806", "N815", "N816", "N818", "N999"]
 known-first-party = ["arbiter"]
 
 [tool.ruff.lint.pylint]
-# Warum: Zahl der Fälle einer Funktion höchstens 12 (prozess/ablauf.md, Werkzeuge); die
+# Warum: Zahl der Fälle einer Funktion höchstens 12 (prozess/ablauf/werkzeuge.md); die
 # Verschachtelung begrenzt complexipy.
 max-branches = 12
 

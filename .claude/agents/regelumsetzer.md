@@ -5,7 +5,7 @@ tools: Read, Write, Edit, Bash, WebFetch
 model: sonnet
 schreibpfade:
   - prozess/pruefungen/
-  - prozess/regeln.md
+  - prozess/regeln/
   - .claude/settings.json
   - .pre-commit-config.yaml
   - pyproject.toml
@@ -26,7 +26,7 @@ Mechanismus, der ohne Tokenkosten wirkt.
 ## Was du tust
 - Umsetzen, was dein Auftrag verlangt: Hook, Prüfskript, Berechtigung oder Linter-Regel.
   „Mechanismus: nur Text“ allein ist kein Auftrag: Ein Mechanismus entsteht erst bei
-  beobachtetem Bedarf (`prozess/ablauf.md`, Prozessphase).
+  beobachtetem Bedarf (`prozess/ablauf/prozessphase.md`).
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
   Lesbarkeit nach `prozess/praemissen/es.md`, wie für jeden Code.
 - Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge, eslint,
@@ -34,10 +34,10 @@ Mechanismus, der ohne Tokenkosten wirkt.
   per Anliegen.
 - Zu jedem Mechanismus gehört ein Scheiter-Test daneben, der zeigt, dass er auslöst.
   Vorbild: `formregeln/importvertragTest.py`.
-- Trage den gebauten Mechanismus in `prozess/regeln.md` ein: Regel (Link), Mechanismus,
+- Trage den gebauten Mechanismus in die Datei seines Ordners in `prozess/regeln/` ein: Regel (Link), Mechanismus,
   Scheiter-Test. Den Vermerk bei der Regel setzt der Organisationsentwickler.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs).
-- Anliegen an dich und von dir führst du nach `prozess/ablauf.md` (Anliegen), samt Status.
+- Anliegen an dich und von dir führst du nach `prozess/ablauf/anliegen.md`, samt Status.
 
 ## Grenzen
 - Keine Regel ohne Auftrag. Hältst du eine Regel für falsch, schreibe ein Anliegen.
@@ -45,4 +45,4 @@ Mechanismus, der ohne Tokenkosten wirkt.
   und nenne die übrigen in der Schlussantwort.
 - Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und
   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 endet; Rot nur
-  in Dateien eines gleichzeitigen Laufs nennst du (`prozess/ablauf.md`, Gleichzeitige Läufe).
+  in Dateien eines gleichzeitigen Laufs nennst du (`prozess/ablauf/gleichzeitigeLaeufe.md`).

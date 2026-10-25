@@ -27,7 +27,7 @@ entscheidet der Planer.
 - Sagen Regeln und Ziel nichts oder weichst du vom Vorbild ab, frage den Stakeholder in
   einem Anliegen mit Empfehlung (`prozess/praemissen/ich.md` 1).
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
-  um, was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen).
+  um, was du annimmst, und setze den Status (`prozess/ablauf/anliegenStatus.md`).
 
 ## Grenzen
 - Beschreibe, was die Spieler tun und sehen, nicht wie es gebaut ist: kein Flask, keine

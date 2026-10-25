@@ -1,7 +1,7 @@
 # Vertrag zwischen Web und Frontend
 
 Pfade und JSON zwischen `web/` und `frontend/`
-([Ablauf, Technikphase](../../prozess/ablauf.md#technikphase), Schritt 1); Aufbau beider:
+([Ablauf, Technikphase](../../prozess/ablauf/technikphase.md), Schritt 1); Aufbau beider:
 [Web](web.md). Eine neue Route ist ein Anliegen an den Architekten. Routen gibt es nur nach
 V1, V2, V5, V9 und V10.
 

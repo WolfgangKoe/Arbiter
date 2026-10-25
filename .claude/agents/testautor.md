@@ -26,7 +26,7 @@ ist, und der Domäne, was gebaut wird.
 - Ist ein Kriterium nicht prüfbar oder widersprüchlich, fehlt ein Begriff oder ist ein Fall
   ungeregelt, schreibe ein Anliegen an den Anforderungsautor; bis zur Antwort kein Test dazu.
 - Kritik an deinen Tests kommt als Anliegen. Nimm in derselben Datei Stellung, setze um,
-  was du annimmst, und setze den Status (`prozess/ablauf.md`, Anliegen). Was bei
+  was du annimmst, und setze den Status (`prozess/ablauf/anliegenStatus.md`). Was bei
   Widerspruch gilt, steht in Schritt 2 der Technikphase.
 
 ## Grenzen

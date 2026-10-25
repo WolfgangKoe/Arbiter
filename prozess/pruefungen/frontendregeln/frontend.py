@@ -1,4 +1,4 @@
-"""eslint und stylelint über `technik/frontend/` (ablauf.md, Werkzeuge; wir.md 1, 5, 8)."""
+"""eslint und stylelint über `technik/frontend/` (`prozess/ablauf/werkzeuge.md`; wir.md 1, 5, 8)."""
 
 import subprocess
 import sys

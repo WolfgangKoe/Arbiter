@@ -17,7 +17,7 @@ Akzeptanztests grün macht: so einfach wie möglich, lesbar und änderbar.
   `technik/tests/akzeptanz/`, nicht mehr.
 - Produktcode in `technik/arbiter/`, Unit-Tests in `technik/tests/einheit/`, wo die Logik
   nicht trivial ist. Die Oberfläche in `technik/frontend/`: Markup und CSS des Mockups
-  übernimmst du ohne Umschreiben (`prozess/ablauf.md`, Technikphase Schritt 3).
+  übernimmst du ohne Umschreiben (`prozess/ablauf/technikphase.md`, Schritt 3).
 - Schichten und Schnittstellen nach `technik/architektur.md`. Die Domäne kennt weder Flask
   noch die Datenbank. Passt die Architektur nicht, schreibe ein Anliegen an den Architekten.
 - Namen sind die Code-Bezeichner aus `domaene/glossar.md`, wörtlich; Benennung und
@@ -25,7 +25,7 @@ Akzeptanztests grün macht: so einfach wie möglich, lesbar und änderbar.
 - `pyproject.toml` (Suchpfad, Abhängigkeiten, Prüfregeln) schreibt der Regelumsetzer;
   brauchst du dort etwas, schreibe ihm ein Anliegen.
 - Refactoring nur aus einem Befund: Review, Prüfung oder Anliegen.
-- Fertig meldest du erst, wenn DoD 1 und 2 in `prozess/ablauf.md` erfüllt sind: alle Tests
+- Fertig meldest du erst, wenn DoD 1 und 2 in `prozess/ablauf/dod.md` erfüllt sind: alle Tests
   in `technik/tests` grün, auch die Bildschirmtests, und SonarLint grün.
 - Kritik an deinem Code kommt als Anliegen. Nimm in derselben Datei Stellung, setze um,
   was du annimmst, und setze `angenommen` oder `abgelehnt`, nie `erledigt`.

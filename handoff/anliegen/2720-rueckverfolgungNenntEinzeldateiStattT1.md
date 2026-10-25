@@ -23,7 +23,7 @@ auf, denn die Datei nach T1 macht die Prüfung grün.
 
 **Gegenvorschlag.** Fehlt jede Testdatei, nennt die Meldung die Datei nach T1
 (`sammeldateiZu`); die Einzeldatei nur, wenn die Anforderungsdatei mehrere Anforderungen hat
-und ein Plan eine spätere umfasst. Bestehende Regel, die das abdeckt: [Regeln](../../prozess/regeln.md#kriterienregeln),
+und ein Plan eine spätere umfasst. Bestehende Regel, die das abdeckt: [Regeln](../../prozess/regeln/kriterienregeln.md),
 Zeile „Kriterium ↔ Test“, „Testdatei je Anforderung nach T1“. Erledigt, wenn
 `rueckverfolgungTest.py` diesen Fall prüft.
 

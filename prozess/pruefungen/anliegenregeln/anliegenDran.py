@@ -25,7 +25,7 @@ def beantwortetDurchFreigabe(wurzel: Path, anliegen: Anliegen, freigabe: str | N
 
 
 def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | None:
-    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf.md`."""
+    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf/anliegenStatus.md`."""
     if anliegen.status == Status.offen:
         beantwortet = beantwortetDurchFreigabe(wurzel, anliegen, freigabe)
         return anliegen.absender if beantwortet else anliegen.empfänger

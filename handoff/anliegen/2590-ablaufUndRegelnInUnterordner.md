@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Bitte halte die für Prozessphase fest, dass wir
@@ -13,8 +12,8 @@ Wartet auf: Prozessphase
 Unterordner legen. Die Dateien haben shcon für Text.“
 
 Festgehalten vom Organisationsentwickler, umgesetzt wird in der Prozessphase.
-[Ablauf](../../prozess/ablauf.md) hat 33.664 Zeichen in 12 Abschnitten,
-[Regeln](../../prozess/regeln.md) 33.772 Zeichen in 8 Abschnitten, je einer je Ordner unter
+Ablauf hat 33.664 Zeichen in 12 Abschnitten,
+Regeln 33.772 Zeichen in 8 Abschnitten, je einer je Ordner unter
 `prozess/pruefungen/`. Auf beide verweisen 41 Dateien, meist mit Anker
 (`ablauf.md#anliegen`); 8 Prüfskripte und Tests nennen die Pfade.
 Bestehende Regeln ([Ich 4](../../prozess/praemissen/ich.md)): die Höchstmaße der Dateien in der
@@ -28,4 +27,10 @@ Bestehende Regeln ([Ich 4](../../prozess/praemissen/ich.md)): die Höchstmaße d
    Datei und eine CLAUDE.md je Ordner nach Anliegen 255.
 3. Verweise und Pfade in Prüfskripten umstellen; den Mechanismus baut der Regelumsetzer.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 7, P2. Gelesen als „Die Dateien haben schon viel
+Text“. Der [Ablauf](../../prozess/ablauf/) steht je Abschnitt in einer Datei, höchstens
+6.000 Zeichen; der Abschnitt Anliegen ist deshalb zweigeteilt (Kopf, Status). Die
+[Regeln](../../prozess/regeln/) stehen je Ordner der Prüfungen in einer Datei, höchstens
+12.000, gekürzt auf 8.000. Jeder Ordner hat eine CLAUDE.md mit Format und Höchstmaß.
+Prüfungen und Schreibrecht des Regelumsetzers auf die neuen Dateien folgen mit P8, die
+Links in der Architektur zieht der Architekt nach; alles in einem Commit.

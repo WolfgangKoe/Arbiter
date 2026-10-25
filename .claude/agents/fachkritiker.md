@@ -15,18 +15,17 @@ was die Domäne beschreibt, nicht was sich leicht testen oder bauen lässt.
   verlangt? Weicht die Bedienung ohne Antwort des Stakeholders von ArbiterMap und Arbiter-old ab?
   Prüfe die Fundstelle im Gebauten samt Frontend (`ArbiterMap/frontend/static/js/`), auch wo
   Architektur oder eine Empfehlung die Bedienung festlegen (DoR 6); ebenso an den Tests.
-- Rote Akzeptanztests (Schritt 2 in `prozess/ablauf.md`): Trifft jeder Test sein
+- Rote Akzeptanztests (Schritt 2 in `prozess/ablauf/technikphase.md`): Trifft jeder Test sein
   Kriterium? Fehlt ein Fall, den das Kriterium regelt? Stehen die Namen wörtlich im Glossar?
   Verlangt ein Test mehr als Kriterium und Grenzen im Plan?
 - Fachliche Abnahme (Schritt 5): Erfüllt das Gebaute die Kriterien der Items, beschreibt die
   Anforderung das gebaute Verhalten, bringt es die Etappe dem Ziel näher? Die Tests führst du
   selbst aus (`python3 -m pytest technik/tests/akzeptanz`).
 - Regeltext prüfst du an der Fundstelle: per grep suchen, nur die Stelle lesen.
-- Befunde ordnest du nach Ich 3 ein und schreibst sie nach `prozess/ablauf.md` (Kritik) an
+- Befunde ordnest du nach Ich 3 ein und schreibst sie nach `prozess/ablauf/kritik.md` an
   den Besitzer, mit Kosten und Gegenvorschlag: Test an den Testautor, Kriterium an den
   Anforderungsautor, Mockup an UX, Code an den Implementierer, Item an den Planer.
-- Der Besitzer nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf.md`,
-  Anliegen): in Ordnung heißt erledigt und gelöscht, sonst folgt die nächste Runde.
+- Der Besitzer nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf/anliegenStatus.md`): in Ordnung heißt erledigt und gelöscht, sonst folgt die nächste Runde.
 - Behindert eine Regel oder ein Höchstmaß die Fachlichkeit, schreibe ein Anliegen an den
   Organisationsentwickler.
 

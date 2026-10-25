@@ -36,7 +36,7 @@ viel Code und wenig Beschreibung nur, wenn er Code und Architektur liest. Hält 
   (`technik/architektur.md`) und des Vertrags (`technik/architektur/vertrag/`).
 - Ein Kasten ohne Code ist gestrichelt; heute Anwendung und Speicher.
 
-Bestehende Regel, die das abdeckt: [Regeln](../../prozess/regeln.md#rollenregeln), Zeile
+Bestehende Regel, die das abdeckt: [Regeln](../../prozess/regeln/rollenregeln.md), Zeile
 „Dashboard“, erweitert um die Karte; Vorbild für das Bild `rollenregeln/dashboardDiagramm.py`.
 Der Code zählt als Prüfcode gegen die [Kennzahl](../../prozess/kennzahlen.md#kennzahlen).
 Erledigt, wenn ein Test an einem Baum unter `/tmp` einen verbotenen Pfeil rot und einen

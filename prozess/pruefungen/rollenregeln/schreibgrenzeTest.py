@@ -97,7 +97,7 @@ def testBacklogIstInJederPhaseFrei(wurzel):
 @pytest.mark.parametrize(
     "pfad",
     [
-        "prozess/ablauf.md",
+        "prozess/ablauf/dod.md",
         "prozess/praemissen/ich.md",
         ".claude/agents/probe.md",
         ".claude/skills/x/SKILL.md",
@@ -122,27 +122,30 @@ def testRegelnSindInDerProzessphaseErstNachDerFreigabeDerRetroFrei(wurzel, gitRe
     (wurzel / "handoff" / "retro.md").write_text(retro, encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
     gitRepo.festhalten("Freigabe Review 3")
-    ablauf = schreiben(wurzel / "prozess" / "ablauf.md")
+    ablauf = schreiben(wurzel / "prozess" / "ablauf" / "dod.md")
     antwort = entscheide(ablauf, wurzel)
     assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
     gitRepo.festhalten("Freigabe Retro 3")
     assert entscheide(ablauf, wurzel) is None
 
 
-def testRegelnMdIstFürDenRegelumsetzerInJederPhaseFrei(wurzel, gitRepo):
+def testRegelnDateienSindFürDenRegelumsetzerInJederPhaseFrei(wurzel, gitRepo):
     (wurzel / ".claude" / "agents" / "regelumsetzer.md").write_text(
         rollenkopf.replace("probe", "regelumsetzer"), encoding="utf-8"
     )
     (wurzel / "handoff").mkdir()
     (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
-    regeln = wurzel / "prozess" / "regeln.md"
+    regeln = wurzel / "prozess" / "regeln" / "formregeln.md"
     assert entscheide(schreiben(regeln, rolle="regelumsetzer"), wurzel) is None
     antwort = entscheide(schreiben(regeln), wurzel)
     assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
-    ablauf = schreiben(wurzel / "prozess" / "ablauf.md", rolle="regelumsetzer")
-    antwort = entscheide(ablauf, wurzel)
-    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    for gesperrt in (
+        wurzel / "prozess" / "ablauf" / "dod.md",
+        wurzel / "prozess" / "regeln" / "CLAUDE.md",
+    ):
+        antwort = entscheide(schreiben(gesperrt, rolle="regelumsetzer"), wurzel)
+        assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
 
 
 def testStakeholderOhneRolleIstFrei(wurzel):
@@ -217,6 +220,17 @@ def bash(befehl, rolle="probe"):
         pytest.param("git rm x", id="git rm"),
         pytest.param("git mv x y", id="git mv"),
         pytest.param("echo a > /tmp/../prozess/x.md", id="Umweg über /tmp/.."),
+        pytest.param("for f in a b; do sed -i 's/a/b/' $f; done", id="sed -i in for"),
+        pytest.param("while read f; do sed -i x $f; done < l", id="sed -i in while"),
+        pytest.param("if true; then sed -i x a.md; fi", id="sed -i nach then"),
+        pytest.param("if false; then ls; else sed -i x a.md; fi", id="sed -i nach else"),
+        pytest.param("ls technik | xargs sed -i x", id="sed -i über xargs"),
+        pytest.param("ls technik | xargs -n 1 -I {} sed -i x {}", id="xargs mit Optionen"),
+        pytest.param("ls | xargs rm", id="rm über xargs"),
+        pytest.param("find technik -name '*.py' -exec sed -i x {} +", id="find -exec mit plus"),
+        pytest.param("find technik -execdir sed -i x {} \\;", id="find -execdir mit Semikolon"),
+        pytest.param("find technik -exec rm {} \\;", id="rm über find"),
+        pytest.param("for f in a; do echo x > $f; done", id="Umleitung in for"),
     ],
 )
 def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
@@ -236,16 +250,20 @@ def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
         pytest.param("echo a > /tmp/probe.md", id="Umleitung nach /tmp"),
         pytest.param("ls 2>/dev/null", id="nach /dev/null"),
         pytest.param("ls 2>&1 | grep a", id="Fehlerkanal"),
-        pytest.param("grep '>' prozess/ablauf.md", id="Größerzeichen in Anführungszeichen"),
-        pytest.param("sed -n 1,5p prozess/ablauf.md", id="sed lesend"),
+        pytest.param("grep '>' prozess/ablauf/dod.md", id="Größerzeichen in Anführungszeichen"),
+        pytest.param("sed -n 1,5p prozess/ablauf/dod.md", id="sed lesend"),
         pytest.param("rm /tmp/probe.md", id="rm in /tmp"),
         pytest.param("rm -rf /tmp/kopie /tmp/probe", id="rm -rf in /tmp"),
         pytest.param("mv -T /tmp/a /tmp/b", id="mv in /tmp mit jeder Option"),
         pytest.param("python3 -c 'print(1)'", id="python3 -c"),
         pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
-        pytest.param("cp prozess/ablauf.md /tmp/ablauf.md", id="cp nach /tmp"),
+        pytest.param("cp prozess/ablauf/dod.md /tmp/dod.md", id="cp nach /tmp"),
         pytest.param("git -C /tmp/repo commit -m x", id="git -C /tmp"),
         pytest.param("cd /tmp/repo && git add x", id="cd /tmp"),
+        pytest.param("for f in a b; do echo $f; done", id="for lesend"),
+        pytest.param("ls | xargs grep a", id="xargs lesend"),
+        pytest.param("find prozess -name '*.md' -exec grep -l a {} +", id="find -exec lesend"),
+        pytest.param("find prozess -name x | xargs cp -t /tmp", id="xargs cp nach /tmp"),
     ],
 )
 def testBashLesenPrüfenUndTmpBleibenFrei(wurzel, befehl):

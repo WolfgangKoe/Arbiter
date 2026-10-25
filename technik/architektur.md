@@ -79,7 +79,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Grund → Befund im Modul ihrer Anforderung (`sperrenBeimSetzen.py`, `beenden.py`); die
   Handlung sammelt ein, ein neuer Grund ist eine Zeile; ein ausschließender Grund bleibt
   Wächter. Prüft: `formregeln/gruendeTabellen.py`
-  ([Regeln](../prozess/regeln.md#formregeln)).
+  ([Regeln](../prozess/regeln/formregeln.md)).
 - **M1** Die Baseform kennt in der Domäne nur `messen.py`; Phasen messen nur mit dessen
   Messungen: *überdecken*, *Abstand* höchstens, *ganz in* einer Fläche, der kürzeste Weg,
   der *Bases* gemeinsam *ganz in* eine Fläche rückt, der Anteil eines Wegs bis zur ersten
@@ -96,7 +96,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   `formregeln/benennung.py`, 1 bis 3 `formregeln/spiegel.py`; 4 Kritik am Code.
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
-  `testAuf7_3…`). Spur: [Regeln](../prozess/regeln.md).
+  `testAuf7_3…`). Spur: [Regeln](../prozess/regeln/kriterienregeln.md).
 - `tests/einheit/` spiegelt `arbiter/`. Jeder Ordner dort hat `__init__.py`, sonst
   kollidieren Dateinamen mit Akzeptanztests. Prüft: `pytest technik/tests` bricht ab.
 - `arbiter` liegt über `pythonpath` (`pyproject.toml`) im Pfad, ohne `sys.path`. Prüft: nur Text.

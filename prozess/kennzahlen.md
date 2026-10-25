@@ -28,16 +28,18 @@ für die Retro. Mechanismus: nur Text.
 In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md, Anliegen,
 `handoff/moderation.md` (4.000), Plan, Review, Retro je 4.000 (jede Zeile `Kommentar:` zählt
 als `Kommentar: .`, Anliegen 167; ohne den Abschnitt
-[Fortschritt](ablauf.md#fortschritt), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur:
+[Fortschritt](ablauf/fortschritt.md), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur:
 Regeln (`technik/architektur.md` und je Datei in `technik/architektur/`) je 6.000, zusammen
 24.000 (Anliegen 159, 211); Vertrag je Phase eine Datei in `technik/architektur/vertrag/` zu
 je 6.000, ohne Summe (Anliegen 2570); Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
+`prozess/ablauf/` ([CLAUDE.md](ablauf/CLAUDE.md), Anliegen 2590), je Datei in
 `prozess/praemissen/` 3.000.
 
 Lebende Artefakte haben Höchst- und Kürzungsmaß: Über dem Höchstmaß wird daraus ein Item bis
 zum Kürzungsmaß; bis dahin wächst die Datei nicht. Kürzen heißt aufteilen, weil Read die
 ganze Datei lädt. Code-Modul (auch `conftest.py`, Anliegen 251) und Einheitstest-Datei
 12.000/8.000, Akzeptanztest-Datei 20.000/12.000 (darüber wird die Anforderung geteilt:
-Architektur, T1), Backlog je Perspektive 3.000/2.000.
+Architektur, T1), Backlog je Perspektive 3.000/2.000, je Datei in `prozess/regeln/`
+([CLAUDE.md](regeln/CLAUDE.md), Anliegen 2590).
 
 Mechanismus: nur Text.

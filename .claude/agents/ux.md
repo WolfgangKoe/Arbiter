@@ -25,7 +25,7 @@ einbaut.
   eigene Dateien (`auf-4-a.html`) und fragst den Stakeholder in einem Anliegen mit Links.
   Nach der Antwort löschst du die übrigen, nach dem Einbau (DoD) das Mockup.
 - Kritik kommt als Anliegen: Stellung nehmen, umsetzen, Status setzen
-  (`prozess/ablauf.md`, Anliegen).
+  (`prozess/ablauf/anliegenStatus.md`).
 
 ## Grenzen
 - Kein Kommentar, kein `<script>`, kein `<style>`, kein `style=`. Keine Erklärbox, Legende,

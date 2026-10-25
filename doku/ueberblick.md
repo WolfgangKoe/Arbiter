@@ -1,7 +1,7 @@
 # Arbiter im Überblick
 
 Für Menschen: wie das Agentensystem Arbiter baut. Was Arbiter können soll, steht im
-[Ziel](../domaene/ziel.md); wie gearbeitet wird, im [Ablauf](../prozess/ablauf.md).
+[Ziel](../domaene/ziel.md); wie gearbeitet wird, im [Ablauf](../prozess/ablauf/).
 
 ## Drei Perspektiven, ein Zyklus
 
@@ -51,7 +51,7 @@ Arbiter/
 │                          mockups/ · daten/ · referenz/
 ├── technik/               architektur.md · architektur/ · arbiter/ · frontend/
 │                          tests/{akzeptanz,einheit}/
-├── prozess/               praemissen/ · ablauf.md · regeln.md · kennzahlen.md
+├── prozess/               praemissen/ · ablauf/ · regeln/ · kennzahlen.md
 │                          backlog.md · pruefungen/ · dashboard/
 ├── handoff/               plan.md · review.md · retro.md · moderation.md · anliegen/
 └── doku/                  dieser Überblick

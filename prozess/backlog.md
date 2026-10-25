@@ -7,7 +7,7 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
   zeigen „Etappe <n>: x von y Kriterien belegt“, daneben alle (Anliegen 3550, A). Wie ein
   Kriterium seine Etappe nennt, legen Planer und Anforderungsautor in Domänenphase 8 fest
   (Anliegen 3661); dann wird die Zählung ein Item der Retro 8 für den Regelumsetzer.
-- Mechanismus für „Der Empfänger setzt nie `erledigt`“ ([Ablauf, Anliegen](ablauf.md#anliegen)):
+- Mechanismus für „Der Empfänger setzt nie `erledigt`“ ([Ablauf, Status der Anliegen](ablauf/anliegenStatus.md)):
   Die Schreibgrenze sperrt Write und Edit, die `erledigt` in den Kopf schreiben, wenn die
   Rolle nicht der Absender ist (Gegenvorschlag in Anliegen 1591). Auslöser: Ein Empfänger
   setzt erneut `erledigt`.

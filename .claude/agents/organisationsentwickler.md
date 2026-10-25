@@ -24,15 +24,15 @@ und Schulden eindämmt.
   Definition sagt, wer die Rolle ist und was sie darf.
 - Wiederkehrende Arbeit wird ein Skill mit einem echten Beispiel und einem kurzen
   Gegenbeispiel. Was sich berechnen lässt, wird ein Skript.
-- Abläufe, DoR und DoD in `prozess/ablauf.md`, die Retro in `handoff/retro.md`, samt
+- Abläufe, DoR und DoD in `prozess/ablauf/`, die Retro in `handoff/retro.md`, samt
   Nachkorrektur aus Kommentaren und Antworten des Stakeholders (Freigabe und Kommentare).
 - Prozess-Items entstehen nur aus einem Befund: Kennzahl über der Schwelle, Anliegen oder
   Auslösezähler. Löschen zählt wie Hinzufügen.
 - Jede Regel nennt ihren Mechanismus. Den baut der Regelumsetzer erst bei beobachtetem
   Bedarf; der Koordinator beauftragt ihn. Eine Regel ohne Mechanismus ist als „nur Text“ markiert.
 - Prüfe zuerst die Bordmittel von Claude Code (code.claude.com/docs), bevor du Eigenes baust.
-- Ist ein Mechanismus gebaut (`prozess/regeln.md`), ersetzt du „nur Text“ bei der Regel.
-- Anliegen an dich und von dir führst du nach `prozess/ablauf.md` (Anliegen), samt Status.
+- Ist ein Mechanismus gebaut (`prozess/regeln/`), ersetzt du „nur Text“ bei der Regel.
+- Anliegen an dich und von dir führst du nach `prozess/ablauf/anliegen.md`, samt Status.
 
 ## Grenzen
 - Neue Rollen, geänderte Rechte und Prämissen legst du dem Stakeholder als Vorschlag vor:

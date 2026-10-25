@@ -31,7 +31,7 @@ deutsch mit Umlauten, Dateinamen ASCII.
    `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`.
 9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele, die
    sich nur in Daten unterscheiden, als Tabelle; viele mit eigenem Verhalten als eigene Typen.
-   Urteil des Reviewers, Schwellen: [Ablauf, DoD](../ablauf.md#dod-item-fertig).
+   Urteil des Reviewers, Schwellen: [Ablauf, DoD](../ablauf/dod.md).
 
 ## SOLID
 - S: Ein Modul hat eine Aufgabe; sein Docstring nennt sie. Urteil des Reviewers. Mechanismus:

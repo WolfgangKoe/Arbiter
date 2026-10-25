@@ -12,16 +12,16 @@ jeweils nur ihre eigenen Anliegen; du siehst alle.
 
 ## Was du tust
 - Du läufst vor jeder Freigabe und auf Auftrag des Koordinators. Lies alle offenen Anliegen
-  in `handoff/anliegen/`; Kopf, Status und wer dran ist: `prozess/ablauf.md` (Anliegen).
+  in `handoff/anliegen/`; Kopf, Status und wer dran ist: `prozess/ablauf/anliegen.md`, `anliegenStatus.md`.
 - Schreibe `handoff/moderation.md` jedes Mal neu, erste Zeile `# Moderation`, höchstens
   4.000 Zeichen, drei Abschnitte:
   1. `## Dran`: je Rolle die Anliegen, die sie bearbeiten muss; zuerst, was das Inkrement
      blockiert (Items in `handoff/plan.md`).
   2. `## Vorschläge`: was dasselbe Thema trägt und zusammengeht, was nur Entscheidungen
      ablegt, was geschlossen werden kann; je Vorschlag die Rolle, die es tun darf. Je Rolle
-     die Stränge nach `prozess/ablauf.md` (Gleichzeitige Läufe).
+     die Stränge nach `prozess/ablauf/gleichzeitigeLaeufe.md`.
   3. `## Fragen an dich`: jede offene Frage an den Stakeholder mit Pfad und `F<n>`; er
-     antwortet im Anliegen. Zuoberst die mit `Annahme:` (`prozess/ablauf.md`, Anliegen).
+     antwortet im Anliegen. Zuoberst die mit `Annahme:` (`prozess/ablauf/anliegen.md`).
      Eigene Fragen stellst du nicht.
 - Deine Vorschläge, auch zur Reihenfolge, korrigiert der Stakeholder mit einer Zeile
   `Kommentar:` darunter. Lies sie vor dem Neuschreiben; sie gehen deinen Vorschlägen vor.

@@ -10,7 +10,7 @@ Status: offen
 **Befund.** Nachprüfung von Anliegen 3301 (P6, Retro 7, `git diff 257ddd6 22bc1a9`): erfüllt,
 diese Reste blieben. Nach [Ich 3](../../prozess/praemissen/ich.md) hält keiner auf (keine
 Prüfung rot, Randfälle und Ablage von Hilfsfunktionen); du bist ohnehin in der Prozessphase dran.
-1. [Regeln](../../prozess/regeln.md#anliegenregeln), Zeile „Anliegen: Kopf und Status“, sagt noch
+1. [Regeln](../../prozess/regeln/anliegenregeln.md), Zeile „Anliegen: Kopf und Status“, sagt noch
    „die alte Zeile ist rot“. Die alte Zeile kennt keine Prüfung mehr, kein Test nutzt sie.
 2. TODOs im Frontend: `formregeln/kommentare.py` zählt nur `//` am Zeilenanfang
    (`zeilenkommentarJavaScript`). eslint (`frontendregeln/eslintKommentare.mjs`) lässt auch
@@ -30,7 +30,7 @@ zwischen den beiden Sprachen nennt Anliegen 3301 als Kosten. (3) Eine stille Lü
 `.js` dazukommt. (4) Eine dritte Art von Ziel und eine geänderte Anzeige betreffen jeweils
 mehrere Stellen.
 
-**Gegenvorschlag.** Bestehende Regeln: [Regeln](../../prozess/regeln.md#anliegenregeln), Zeilen
+**Gegenvorschlag.** Bestehende Regeln: [Regeln](../../prozess/regeln/anliegenregeln.md), Zeilen
 „Anliegen“ und „Kommentare“; keine neue.
 1. „; die alte Zeile ist rot“ streichen.
 2. In `eslint.config.mjs` die eingebaute Regel `no-inline-comments` einschalten. Dann steht im

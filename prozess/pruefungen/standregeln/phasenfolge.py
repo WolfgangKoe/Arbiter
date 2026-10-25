@@ -80,7 +80,7 @@ def technikschritt(wurzel: Path, plan: int, review: int | None) -> tuple[Phase, 
 
 
 def lage(wurzel: Path) -> Lage:
-    """Wo der Zyklus steht, nach `prozess/ablauf.md`."""
+    """Wo der Zyklus steht, nach `prozess/ablauf/`."""
     handoff = wurzel / handoffOrdner
     plan, review, retro = (zyklus(handoff / f"{name}.md") for name in ("plan", "review", "retro"))
     etappe = aktuelleEtappe(wurzel)

@@ -39,6 +39,16 @@
       "Bash(python3 -m pytest prozess/pruefungen*)"
     ],
     "deny": [
+      "Bash(sed -i*)",
+      "Bash(sed * -i*)",
+      "Bash(sed --in-place*)",
+      "Bash(sed * --in-place*)",
+      "Bash(python3 -c*)",
+      "Bash(python3 -)",
+      "Bash(python3 - *)",
+      "Bash(python -c*)",
+      "Bash(python -)",
+      "Bash(python - *)",
       "Agent(claude)",
       "Agent(general-purpose)",
       "Agent(Explore)",

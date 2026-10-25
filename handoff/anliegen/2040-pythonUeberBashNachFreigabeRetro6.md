@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 2/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -39,7 +39,7 @@ das Skript in einer Datei (510); bleibt das zu häufig, wird es ein Item der Ret
 (Anliegen 1970). Damit trägt meine Begründung nicht
 mehr, und ohne Auftrag baue ich die Heuristik nicht ([Ich 1](../../prozess/praemissen/ich.md)).
 Das Anliegen bleibt gültig: Rollen schreiben per Python über Bash vorbei an der Schreibgrenze.
-Die Lücke steht in [Regeln](../../prozess/regeln.md#rollenregeln) bei `schreibgrenze.py`.
+Die Lücke steht in [Regeln](../../prozess/regeln/rollenregeln.md) bei `schreibgrenze.py`.
 Ob die Heuristik ein Item der Retro 7 wird, entscheidet der Organisationsentwickler mit dem
 Stakeholder; ich widerspreche, solange kein Auftrag vorliegt.
 
@@ -56,4 +56,12 @@ dran ist.
 **Gegenvorschlag.** Die Retro 7 entscheidet mit dem Stakeholder, ob der Gegenvorschlag aus
 Runde 1 ein Prozess-Item wird; den Vorschlag dazu legt der Organisationsentwickler vor.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in P4 (Retro 7), als Bordmittel statt Heuristik: Die Rechteregeln
+in `.claude/settings.json` (`permissions.deny`) sperren `sed -i`, `sed --in-place`,
+`python3 -c`, `python3 -` und dieselben für `python`, auch in Schleifen und in `/tmp`, für
+jede Rolle. An einer Kopie in `/tmp` mit Claude Code erprobt: gesperrt `sed -i` allein, in
+`for`, nach `cd`, `python3 -c`, `python3 -` per Pipe; frei `python3 -m pytest`,
+`python3 --version`, `git log` und der Commit. Ein Skript in `/tmp` mit Pfaden als Argument
+bleibt erlaubt. Nicht erprobt: `python3 - <<EOF` mit Heredoc (das Muster `python3 - *`
+deckt es). Lücke: `bash -c`. Scheiter-Test: `rollenregeln/bashVerboteTest.py`.
+Rückweg: die zehn Einträge aus `deny` entfernen. `erledigt` folgt dem Haken von P4.

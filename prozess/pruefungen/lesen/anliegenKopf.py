@@ -1,4 +1,4 @@
-"""Liest und schreibt den Kopf der Anliegen und vergibt freie Nummern (`prozess/ablauf.md`)."""
+"""Liest und schreibt den Kopf der Anliegen und vergibt freie Nummern (`ablauf/anliegen.md`)."""
 
 import re
 from dataclasses import dataclass

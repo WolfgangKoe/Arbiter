@@ -8,8 +8,8 @@ Status: offen
 
 ## Runde 1
 **Befund.** Mit Retro 7, P1 kritisieren Fachkritiker und Organisationsentwickler ein Review
-([Ablauf, Kritik](../../prozess/ablauf.md#kritik); Technikphase 7). Die Tabelle im
-[Fortschritt](../../prozess/ablauf.md#fortschritt) hat dafür in „Technik 6, 7“ die Zeilen
+([Ablauf, Kritik](../../prozess/ablauf/kritik.md); Technikphase 7). Die Tabelle im
+[Fortschritt](../../prozess/ablauf/fortschritt.md) hat dafür in „Technik 6, 7“ die Zeilen
 `je Kritiker: Kritik am Review`, abgehakt per Befehl. `standregeln/fortschritt.py` schreibt
 nach „Reviewer: Review geschrieben“ gleich „Stakeholder: Freigabe Review <n>“
 (`fortschritt.py:100–102`); die Zeilen fehlen, im Ablauf stehen sie als „nur Text“.

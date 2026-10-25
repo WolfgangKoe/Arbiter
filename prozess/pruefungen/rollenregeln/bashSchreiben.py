@@ -12,6 +12,10 @@ ablage = PurePosixPath(tempfile.gettempdir())
 trennzeichen = {";", "&&", "||", "|", "&", "(", ")", "|&"}
 umleitungen = {">", ">>", ">|"}
 umhüllungen = {"sudo", "env", "command", "time", "nohup", "nice"}
+schlüsselwörter = {"do", "then", "else", "elif", "{", "!", "if", "while", "until"}
+xargsOptionenMitWert = {"-I", "-n", "-P", "-d", "-L", "-s", "-E", "-a"}
+findAusführen = {"-exec", "-execdir", "-ok", "-okdir"}
+findEnden = {"\\", "\\;", ";", "+"}
 gitÄnderungen = {"add", "commit", "checkout", "restore", "reset", "stash", "rm", "mv"}
 alleZieleFrei = {"rm", "mv", "touch", "tee"}
 nurZielFrei = {"cp"}
@@ -48,7 +52,8 @@ def zerlegen(befehl: str) -> list[list[str]]:
             teile.append([])
         else:
             teile[-1].append(ohneAnführung(wort))
-    return [teil for teil in teile if teil]
+    teile = [teil for teil in teile if teil]
+    return teile + [aufruf for teil in teile for aufruf in findAufrufe(teil) if aufruf]
 
 
 def umleitungImProjekt(wörter: list[str]) -> str | None:
@@ -60,14 +65,41 @@ def umleitungImProjekt(wörter: list[str]) -> str | None:
 
 
 def istUmhüllung(wort: str) -> bool:
-    return wort in umhüllungen or "=" in wort.split("/")[0]
+    return wort in umhüllungen or wort in schlüsselwörter or "=" in wort.split("/")[0]
+
+
+def hinterXargs(wörter: list[str], stelle: int) -> int:
+    """Die Stelle nach `xargs` und seinen Optionen samt Werten."""
+    stelle += 1
+    while stelle < len(wörter) and wörter[stelle].startswith("-"):
+        stelle += 2 if wörter[stelle] in xargsOptionenMitWert else 1
+    return stelle
 
 
 def ohneUmhüllung(wörter: list[str]) -> list[str]:
     stelle = 0
-    while stelle < len(wörter) and istUmhüllung(wörter[stelle]):
-        stelle += 1
+    while stelle < len(wörter):
+        if wörter[stelle] == "xargs":
+            stelle = hinterXargs(wörter, stelle)
+        elif istUmhüllung(wörter[stelle]):
+            stelle += 1
+        else:
+            break
     return wörter[stelle:]
+
+
+def findAufrufe(wörter: list[str]) -> list[list[str]]:
+    """Die Befehle hinter `-exec`, `-execdir` und `-ok` eines `find`."""
+    wörter = ohneUmhüllung(wörter)
+    if not wörter or PurePosixPath(wörter[0]).name != "find":
+        return []
+    aufrufe: list[list[str]] = []
+    for stelle, wort in enumerate(wörter):
+        if wort in findAusführen:
+            rest = wörter[stelle + 1 :]
+            ende = next((pos for pos, rand in enumerate(rest) if rand in findEnden), len(rest))
+            aufrufe.append(rest[:ende])
+    return aufrufe
 
 
 def argumente(wörter: list[str]) -> list[str]:

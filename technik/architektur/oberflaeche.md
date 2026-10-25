@@ -21,7 +21,7 @@ Tot ist eine Komponente ohne Template. Messbare Gestaltungsregeln werden Prüfun
   Markup und CSS der Mockups übernimmt der Implementierer ohne Umschreiben. Klassen und
   Variablen deutsch, camelCase (`prozess/praemissen/wir.md`). Keine tote Klasse; eine neue
   Klasse in Mockups und `technik/frontend/*.html` nur über DoR 5
-  ([Ablauf](../../prozess/ablauf.md#dor-item-bereit)): vom Architekten entschieden, in
+  ([Ablauf](../../prozess/ablauf/dor.md)): vom Architekten entschieden, in
   `vorschlag.css` übernommen, vom Implementierer in `komponenten.css` eingetragen. Prüft: nur
   Text.
 - **O4** Drei Leisten wie in ArbiterMap: links, rechts, unten (Inhalt: Anliegen 366). Je
