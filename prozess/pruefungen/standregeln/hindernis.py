@@ -110,6 +110,11 @@ def eigeneZeile(wurzel: Path, rolle: str, schritt: str) -> tuple[Path, list[Zeil
     return (datei, zeilen, treffer[0]) if len(treffer) == 1 else None
 
 
+def hindernisZeile(zeile: Zeile, beseitiger: str, text: str, nummer: int) -> str:
+    """`Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`, lesbar ohne das Anliegen."""
+    return f"  Hindernis: {zeile.rolle} → {beseitiger}: {einzeiler(text)} (Anliegen {nummer})"
+
+
 def anliegenVorhanden(wurzel: Path, nummer: int) -> bool:
     return any(nummerAusDatei(datei) == nummer for datei in anliegenDateien(wurzel))
 
@@ -135,7 +140,7 @@ def hindernisMelden(  # noqa: PLR0913
     inhalt = datei.read_text(encoding="utf-8")
     bisher = bisherigeZeilen(inhalt)
     abgehakt, zusatz = bisher.get(zeile.schlüssel, (False, []))
-    zusatz.append(f"  Hindernis: {einzeiler(text)} (Anliegen {nummer})")
+    zusatz.append(hindernisZeile(zeile, name, text, nummer))
     bisher[zeile.schlüssel] = (abgehakt, zusatz)
     datei.write_text(abschnittEinsetzen(inhalt, abschnittBauen(zeilen, bisher)), encoding="utf-8")
     return nummer

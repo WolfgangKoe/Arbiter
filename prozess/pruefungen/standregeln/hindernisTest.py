@@ -44,7 +44,8 @@ def testEinHindernisLegtAnliegenUndZeileAn(tmp_path, plan):
     nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     assert nummer == 1
     zeile = "- [ ] Implementierer: Tests zu Item stellen grün\n"
-    assert f"{zeile}  Hindernis: {hindernis} (Anliegen 1)\n" in plan.read_text(encoding="utf-8")
+    erwartet = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 1)\n"
+    assert zeile + erwartet in plan.read_text(encoding="utf-8")
     (datei,) = anliegenDateien(tmp_path)
     gelesen = kopfLesen(datei)
     beteiligte = (gelesen.typ, gelesen.absender, gelesen.empfänger)
@@ -87,7 +88,8 @@ def testEinVorhandenesAnliegenWirdGenanntStattEinNeuesAnzulegen(tmp_path, plan):
     schreiben(tmp_path, "handoff/anliegen/77-kritik.md", "x\n")
     nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, vorhandene)
     assert nummer == vorhandene
-    assert f"  Hindernis: {hindernis} (Anliegen 77)\n" in plan.read_text(encoding="utf-8")
+    erwartet = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 77)\n"
+    assert erwartet in plan.read_text(encoding="utf-8")
     assert len(anliegenDateien(tmp_path)) == 1
     assert hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, 78) is None
 
@@ -121,7 +123,8 @@ def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_p
     assert "beseitigt" not in plan.read_text(encoding="utf-8")
     gitRepo.festhalten("Pfad freigegeben")
     fortschrittSchreiben(tmp_path)
-    zeile = f"  Hindernis: {hindernis} (Anliegen 1); beseitigt: Commit „Pfad freigegeben“\n"
+    vermerk = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 1)"
+    zeile = f"{vermerk}; beseitigt: Commit „Pfad freigegeben“\n"
     assert zeile in plan.read_text(encoding="utf-8")
     assert fortschrittSchreiben(tmp_path) is None
 
