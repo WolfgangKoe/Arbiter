@@ -60,5 +60,5 @@ mit [3051](3051-architekturUmordnenInPlan8.md) in Plan 8.
 Kommentar: Setze es mal um, und dann gebe ich ggf. Feedback
 Stellungnahme: Bauen darf die Karte nur der Regelumsetzer, und erst in der Prozessphase
 nach Retro 7. Den Auftrag mit allen Kästen, Pfeilen und Zahlen von F1 hat er in
-[3120](3120-architekturkarteImDashboard.md). Sobald die Karte im Dashboard steht, prüfe
+Anliegen 3120. Sobald die Karte im Dashboard steht, prüfe
 ich sie nach; dein Feedback nehme ich hier auf.

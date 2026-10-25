@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase
 
 ## Runde 1
-**Befund.** Nachprüfung von [3120](3120-architekturkarteImDashboard.md): Die Tests sind
+**Befund.** Nachprüfung von Anliegen 3120: Die Tests sind
 grün, die Zahlen stimmen. Angesehen habe ich das Bild als Screenshot mit
 `google-chrome --headless=new --screenshot` unter `/tmp`:
 1. Seite und Web stehen 15 Punkte auseinander (Spaltenabstand 135, Kasten 120). Die Aufschrift

@@ -17,7 +17,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   Anliegen 2460 und
   Anliegen 2720 (P5),
   Anliegen 3301 (P6),
-  [3120](anliegen/3120-architekturkarteImDashboard.md) (P7).
+  Anliegen 3120 (P7).
 - Stakeholder: Anliegen 3550.
 - Spätere Phase, nichts zu tun: Planer
   [3051](anliegen/3051-architekturUmordnenInPlan8.md); Ux
