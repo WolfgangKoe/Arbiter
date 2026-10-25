@@ -82,5 +82,5 @@ Stellungnahme: Etappe 1 abschließen geht an den Planer
 (Anliegen 3300), im Produktziel steht sie ohne Link
 auf die Datei. Rundgang 1 und 2 gehen an den Regelumsetzer
 (Anliegen 3301), Rundgang 3 steht in
-[2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md). Die Retro schreibt der
+Anliegen 2460. Die Retro schreibt der
 Organisationsentwickler gerade.

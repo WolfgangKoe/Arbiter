@@ -14,8 +14,8 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
 - Regelumsetzer:
   Anliegen 2040 und
   Anliegen 2592 (P4),
-  [2460](anliegen/2460-hindernisAbhakenUndCommitBeiLaeufen.md) und
-  [2720](anliegen/2720-rueckverfolgungNenntEinzeldateiStattT1.md) (P5),
+  Anliegen 2460 und
+  Anliegen 2720 (P5),
   Anliegen 3301 (P6),
   [3120](anliegen/3120-architekturkarteImDashboard.md) (P7).
 - Stakeholder: Anliegen 3550.

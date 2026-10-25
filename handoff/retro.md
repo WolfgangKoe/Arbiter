@@ -74,7 +74,7 @@ Gib frei. Dann P6 neben P1, danach P2 mit P8, dann P3 neben P4, P5, P7 nacheinan
 - [x] Regelumsetzer: P4
 - [x] Regelumsetzer: P5
 - [x] Regelumsetzer: P6
-- [ ] Regelumsetzer: P7
+- [x] Regelumsetzer: P7
 - [x] Regelumsetzer: P8
 - [ ] Koordinator: nach dev gepusht
 
