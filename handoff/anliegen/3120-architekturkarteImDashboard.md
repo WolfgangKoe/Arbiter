@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [2740](2740-gemesseneUndBeschriebeneArchitektur.md)
@@ -52,3 +52,8 @@ Messung: `rollenregeln/architekturMessung.py`, Bild: `rollenregeln/dashboardArch
 Test: `rollenregeln/dashboardArchitekturTest.py` (verbotener Pfeil Domäne → Katalog an einem
 Baum unter `tmp_path` rot, Anwendung ohne Code gestrichelt, das Repo ohne roten Pfeil);
 `importvertragTest.py` grün. Eintrag in [Regeln](../../prozess/regeln/rollenregeln.md).
+
+**Nachprüfung.** Erfüllt: Tests grün, das Repo zeigt keinen roten Pfeil. Im Screenshot sind
+„HTTP“ und die 11 an Web → Domäne schlecht lesbar, ein unbekannter Ordner bricht die Karte
+ab: [4100](4100-architekturkarteLesbarUndRobust.md). 2740 kann schließen, sobald der
+Stakeholder die Karte gesehen hat (Tokenbericht, oben); sein Feedback geht in 4100.
