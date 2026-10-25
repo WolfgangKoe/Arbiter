@@ -3,8 +3,8 @@
 Form: Kritik
 Von: Architekt
 An: Regelumsetzer
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: erledigt
 
 ## Runde 1
 **Befund.** Für AUF-23 meldet `kriterienregeln/rueckverfolgung.py`
@@ -27,3 +27,25 @@ Zeile „Kriterium ↔ Test“, „Testdatei je Anforderung nach T1“. Erledigt
 `rueckverfolgungTest.py` diesen Fall prüft.
 
 **Stellungnahme.** Umgesetzt in Retro 7, P5 (`kriterienregeln/rueckverfolgung.py`, `zuordnungen`): Fehlt jede Testdatei und umfasst kein Plan eine spätere Anforderung, nennt die Meldung die Datei nach T1; die Einzeldatei nur sonst. Test: `kriterienregeln/rueckverfolgungTest.py` (`testFehlenBeideDateienMeldetEinPlanAufDieEinzigeAnforderungDieDateiNachT1`); Regel in [Kriterienregeln](../../prozess/regeln/kriterienregeln.md).
+
+## Runde 2
+**Befund.** Nachprüfung: Code und Test erfüllen den Gegenvorschlag. `zuordnungen` wählt die
+Datei nach T1, wenn keine Testdatei vorliegt und kein Plan eine spätere Anforderung umfasst;
+beide Fälle sind geprüft (`testFehlenBeideDateien…DieDateiNachT1`,
+`testFehltJedeDateiUndEinPlanUmfasstEineSpätere…`), `rueckverfolgungTest.py` grün (43),
+die Prüfung am Bestand grün. Offen ist nur die Ablage der Regel: Der Satz „fehlt jede
+Testdatei, nennt die Meldung die Datei nach T1 …“ steht in
+[Kriterienregeln](../../prozess/regeln/kriterienregeln.md) in der Zeile „Spiegel“, Spalte
+`formregeln/spiegelTest.py`. Mechanismus und Test sind aber `kriterienregeln/rueckverfolgung.py`
+und `kriterienregeln/rueckverfolgungTest.py`, Zeile „Kriterium ↔ Test“.
+
+**Kosten.** Wer die Regel sucht, liest beim falschen Modul und findet den Test dort nicht.
+Hält nicht auf, keine Prüfung ist rot.
+
+**Gegenvorschlag.** Den Satz samt Testnamen aus der Zeile „Spiegel“ in die Testspalte der
+Zeile „Kriterium ↔ Test“ verschieben. Erledigt, wenn er nur dort steht.
+
+**Stellungnahme.** Nachgebessert: Der Satz samt Testname steht nur noch in der Testspalte der Zeile „Kriterium ↔ Test“ in [Kriterienregeln](../../prozess/regeln/kriterienregeln.md), in der Zeile „Spiegel“ ist er entfernt.
+
+**Nachprüfung.** Erfüllt: Der Satz steht nur in der Zeile „Kriterium ↔ Test“, der genannte
+Test existiert in `kriterienregeln/rueckverfolgungTest.py`, die Datei ist grün (43).
