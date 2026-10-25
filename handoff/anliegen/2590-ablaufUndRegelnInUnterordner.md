@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Bitte halte die für Prozessphase fest, dass wir
@@ -35,3 +35,5 @@ Text“. Der [Ablauf](../../prozess/ablauf/) steht je Abschnitt in einer Datei, 
 Prüfungen und Schreibrecht des Regelumsetzers auf die neuen Dateien folgen mit P8, die
 Links in der Architektur zieht der Architekt nach; alles in einem Commit.
 Kommentar: Ich nehme das Refactoring so ab. Bitte halte als Anliegen für die nächste Prozessphase fest, noch mal sorgfältig durch alle Regeln zu gehen inkl. der Ablaufdateien, ob man diese noch sinnvoll verschlanken kann. Vorsicht! So wie es jetzt läuft und lief, scheint es gut zu funktionieren. Das muss auf jeden Fall erhalten bleiben!. Sobald das Anliegen angelegt wurde, gib mir hier Bescheid und ich setze dieses hier auf "erledigt":
+Stellungnahme: Angelegt als [4040](4040-ablaufUndRegelnVerschlanken.md), dran in der
+Prozessphase 8. Status wieder `angenommen`; du kannst `erledigt` setzen.
