@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Domänenphase 9
 
 ## Runde 1
-**Befund.** Der Stakeholder hat in [4800](4800-ablageDerKatalogwerte.md) F2 B gewählt: je
+**Befund.** Der Stakeholder hat in Anliegen 4800 F2 B gewählt: je
 Datenblatt seine Modellarten mit eigenem Profil, Zahlen in der Einheit des Glossars, der
 *Durchmesser* bei der Modellart; die Ausgangslage nennt je *Einheit* Datenblatt und Zahl der
 *Modelle*. Zu F3 A verlangt er eine Struktur, die sich jederzeit ergänzen oder füllen lässt,
@@ -29,7 +29,7 @@ Etappe 2) ins alte Format, wird jede einzeln umgebaut, samt `katalog/` und seine
    schlägst du dem Stakeholder als Begriffe vor; er gibt sie mit Plan 9 frei. Ob Modellart
    einen Regelbegriff hat, prüfst du am Regeltext (`:562`, „No.“).
 2. Die vier Datenblätter schreibst du nach der Gliederung aus
-   [4880](4880-gliederungDerKatalogwerte.md) (K1 bis K6) in
+   Anliegen 4880 (K1 bis K6) in
    `domaene/daten/katalog/orks/datenblaetter.yaml` und `.../necrons/datenblaetter.yaml`, nur
    mit `bewegungsweite` und `durchmesser`, je Wert mit Fundstelle.
 3. `ausgangslage.yaml` nennt je *Einheit* Datenblatt und je Modellart die Anzahl; welche

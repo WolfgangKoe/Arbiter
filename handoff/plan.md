@@ -44,7 +44,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 
 ## Offene Anliegen
 - An dich: keine. Deine Antworten aus Anliegen 4280 stehen in den Items; das Datenmodell
-  aus F7 prüft der Architekt in [Anliegen 4621](anliegen/4621-datenmodellDerKatalogwerte.md).
+  aus F7 prüft der Architekt in Anliegen 4621.
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt

@@ -8,9 +8,9 @@ Status: offen
 Wartet auf: Domänenphase 9
 
 ## Runde 1
-**Befund.** Aus [4800](4800-ablageDerKatalogwerte.md) (F1 A, F2 B, F3 A mit der Auflage einer
+**Befund.** Aus Anliegen 4800 (F1 A, F2 B, F3 A mit der Auflage einer
 Struktur, die sich jederzeit ergänzen lässt) folgt ein Umbau: neue Gliederung der Daten
-([4880](4880-gliederungDerKatalogwerte.md)), Begriffe und Daten beim Anforderungsautor
+(Anliegen 4880), Begriffe und Daten beim Anforderungsautor
 ([4881](4881-datenblaetterImGlossarUndInDenDaten.md)), dazu `katalog/` und seine Tests:
 `ausgangslage.py` (103 Zeilen) liest heute `durchmesser` je Modell und, nach Item normalMove,
 `bewegungsweite` je *Einheit*. Am Bildschirm ändert sich nichts.
