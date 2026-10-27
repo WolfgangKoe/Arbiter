@@ -63,7 +63,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Fachkritiker → Testautor: QUE-10.3 und 10.4 prüfen den ersten Zug nur bei Spieler 1 (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
   Hindernis: Fachkritiker → Testautor: QUE-10.1 prüft die Nummer der Schlachtrunde nur bei 1 (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
 - [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
-- [ ] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
+- [x] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
 - [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
 - [ ] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
 - [ ] Fachkritiker: Item phasenUndSchlachtrunden abgenommen

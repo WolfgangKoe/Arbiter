@@ -5,6 +5,7 @@ from collections.abc import Collection, Mapping
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.kennungen import (
@@ -15,19 +16,35 @@ from arbiter.web.kennungen import (
 )
 
 
-def spielstand(aufstellung: Aufstellung) -> dict:
+def spielstand(aufstellung: Aufstellung, schlacht: Schlacht | None = None) -> dict:
+    """Der Spielstand; mit `schlacht` kommen Stellen und Auswahl von ihr (Schlacht, V11)."""
     ausgangslage = aufstellung.ausgangslage
     spielerNummern = spielerNachNummer(aufstellung)
     breite, länge = ausgangslage.spielfeld.seitenlängen
-    return {
+    stand = {
         "spielfeld": {"breite": float(breite), "länge": float(länge)},
         "zonen": [_zone(aufstellung, zone, spielerNummern) for zone in Aufstellungszone],
-        "modelle": _modelle(aufstellung),
+        "modelle": _modelle(aufstellung, schlacht or aufstellung),
         "einheitInAufstellung": _einheitInAufstellung(aufstellung),
         "spieler": [
             _spieler(aufstellung, spielernummer, einer)
             for spielernummer, einer in spielerNummern.items()
         ],
+    }
+    if schlacht is not None:
+        stand["schlacht"] = _schlacht(schlacht, spielerNummern)
+    return stand
+
+
+def _schlacht(schlacht: Schlacht, spielerNummern: dict[int, Spieler]) -> dict:
+    nummern = {spieler: nummer for nummer, spieler in spielerNummern.items()}
+    return {
+        "ersterZug": nummern.get(schlacht.ersterZug),
+        "amZug": nummern.get(schlacht.amZug),
+        "schlachtrunde": schlacht.schlachtrunde,
+        "phase": schlacht.phase.value,
+        "beendet": schlacht.beendet,
+        "einheitInBewegung": None,
     }
 
 
@@ -77,28 +94,28 @@ def _einheitInAufstellung(aufstellung: Aufstellung) -> dict | None:
     return {"spieler": spielernummer, "einheit": einheitennummer}
 
 
-def _modell(aufstellung: Aufstellung, modell: Modell, stelle: Stelle) -> dict:
+def _modell(quelle: Aufstellung | Schlacht, modell: Modell, stelle: Stelle) -> dict:
     beschreibung = {
         "x": float(stelle.x),
         "y": float(stelle.y),
         "radius": float(radiusInZoll(modell.base)),
-        "ausgewählt": aufstellung.modellAusgewählt(modell),
+        "ausgewählt": quelle.modellAusgewählt(modell),
     }
-    if aufstellung.modellIstEbene(modell):
+    if quelle.modellIstEbene(modell):
         beschreibung["ebene"] = True
     return beschreibung
 
 
-def _modelle(aufstellung: Aufstellung) -> list[dict]:
+def _modelle(aufstellung: Aufstellung, quelle: Aufstellung | Schlacht) -> list[dict]:
     return [
         {
-            **_modell(aufstellung, kennungen.modell, stelle),
+            **_modell(quelle, kennungen.modell, stelle),
             "spieler": kennungen.spielernummer,
             "einheit": kennungen.einheitennummer,
             "nummer": kennungen.modellnummer,
         }
         for kennungen in modelleMitKennungen(aufstellung)
-        if (stelle := aufstellung.stelle(kennungen.modell))
+        if (stelle := quelle.stelle(kennungen.modell))
     ]
 
 

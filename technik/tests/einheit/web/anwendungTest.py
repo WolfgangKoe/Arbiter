@@ -141,3 +141,82 @@ def testEineEbeneOhneGesetztesModellDerAusgewähltenEinheitIstNichtGefunden(aufs
 
     assert ohneAuswahl.status_code == HTTPStatus.NOT_FOUND
     assert ohneGesetztesModell.status_code == HTTPStatus.NOT_FOUND
+
+
+pfadDesErstenZugs = "/api/spieler/{}/ersterZug"
+pfadPhaseBeenden = "/api/phaseBeenden"
+kommandophaseVonSpielerEins = {"schlachtrunde": 1, "spieler": 1, "phase": "Kommandophase"}
+
+
+@pytest.fixture
+def dienstNachDerAufstellung(aufstellung):
+    aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
+    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    alleEinheitenAufstellen(aufstellung)
+    return anwendungFür(aufstellung).test_client()
+
+
+def testSchlachtHandlungenSindVorDemEndeDerAufstellungNichtGefunden(aufstellung):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    ersterZug = dienst.put(pfadDesErstenZugs.format(1))
+    phaseBeenden = dienst.put(pfadPhaseBeenden, json=kommandophaseVonSpielerEins)
+
+    assert ersterZug.status_code == HTTPStatus.NOT_FOUND
+    assert phaseBeenden.status_code == HTTPStatus.NOT_FOUND
+    assert "schlacht" not in dienst.get("/api/spielstand").get_json()
+
+
+@pytest.mark.parametrize("spielernummer", [0, 3])
+def testEinUnbekannterSpielerKannDenErstenZugNichtHaben(dienstNachDerAufstellung, spielernummer):
+    antwort = dienstNachDerAufstellung.put(pfadDesErstenZugs.format(spielernummer))
+
+    assert antwort.status_code == HTTPStatus.NOT_FOUND
+
+
+def testDerErsteZugÄndertSichNichtBeimZweitenKlick(dienstNachDerAufstellung):
+    dienstNachDerAufstellung.put(pfadDesErstenZugs.format(1))
+
+    antwort = dienstNachDerAufstellung.put(pfadDesErstenZugs.format(2))
+
+    assert antwort.get_json()["schlacht"]["ersterZug"] == 1
+
+
+@pytest.mark.parametrize(
+    "körper",
+    [
+        None,
+        [],
+        {"spieler": 1, "phase": "Kommandophase"},
+        {"schlachtrunde": 1, "phase": "Kommandophase"},
+        {"schlachtrunde": True, "spieler": 1, "phase": "Kommandophase"},
+        {"schlachtrunde": 1, "spieler": 1.5, "phase": "Kommandophase"},
+        {"schlachtrunde": 1, "spieler": 1},
+        {"schlachtrunde": 1, "spieler": 1, "phase": "Spielphase"},
+        {"schlachtrunde": 1, "spieler": 1, "phase": ["Kommandophase"]},
+    ],
+)
+def testPhaseBeendenMitUnvollständigemKörperIstEineFalscheAnfrage(dienstNachDerAufstellung, körper):
+    dienstNachDerAufstellung.put(pfadDesErstenZugs.format(1))
+
+    antwort = dienstNachDerAufstellung.put(pfadPhaseBeenden, json=körper)
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+@pytest.mark.parametrize(
+    "körper",
+    [
+        {"schlachtrunde": 2, "spieler": 1, "phase": "Kommandophase"},
+        {"schlachtrunde": 1, "spieler": 2, "phase": "Kommandophase"},
+        {"schlachtrunde": 1, "spieler": 1, "phase": "Bewegungsphase"},
+    ],
+)
+def testPhaseBeendenMitFremdemStandÄndertNichts(dienstNachDerAufstellung, körper):
+    dienstNachDerAufstellung.put(pfadDesErstenZugs.format(1))
+    davor = dienstNachDerAufstellung.get("/api/spielstand").get_json()
+
+    antwort = dienstNachDerAufstellung.put(pfadPhaseBeenden, json=körper)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert antwort.get_json() == davor

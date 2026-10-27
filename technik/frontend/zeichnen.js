@@ -11,22 +11,36 @@ function mitSpieler(element, nummer) {
   return element
 }
 
-function kopfzeilenSpieler(spieler) {
+function amZugAnzeigen(feld, schlacht) {
+  const anzeige = ausVorlage("kopfzeileAmZug")
+  anzeige.textContent = `Schlachtrunde ${schlacht.schlachtrunde} · ${schlacht.phase}`
+  feld.classList.add("amZug")
+  feld.append(anzeige)
+}
+
+function kopfzeilenSpieler(spieler, schlacht) {
   const feld = mitSpieler(ausVorlage("kopfzeileSpieler"), spieler.nummer)
   feld.firstChild.nodeValue = spieler.name
   if (!spieler.anDerReihe) {
     feld.classList.remove("anDerReihe")
     feld.querySelector(".kopfzeileAnDerReihe").remove()
   }
+  if (schlacht?.amZug === spieler.nummer) amZugAnzeigen(feld, schlacht)
   return feld
+}
+
+function kopfzeilenTitel(schlacht) {
+  const titel = ausVorlage("kopfzeileTitel")
+  if (schlacht?.beendet) titel.append(ausVorlage("kopfzeileSchlachtBeendet"))
+  return titel
 }
 
 function kopfzeile(spielstand) {
   const [ersterSpieler, zweiterSpieler] = spielstand.spieler
   return [
-    kopfzeilenSpieler(ersterSpieler),
-    ausVorlage("kopfzeileTitel"),
-    kopfzeilenSpieler(zweiterSpieler),
+    kopfzeilenSpieler(ersterSpieler, spielstand.schlacht),
+    kopfzeilenTitel(spielstand.schlacht),
+    kopfzeilenSpieler(zweiterSpieler, spielstand.schlacht),
   ]
 }
 
@@ -43,10 +57,11 @@ function einheitenKarte(spieler, einheit) {
   return karte
 }
 
-function armeeKarte(spieler) {
+function armeeKarte(spieler, knöpfe) {
   const karte = mitSpieler(ausVorlage("armeeKarte"), spieler.nummer)
   karte.querySelector(".armeeKartenName").textContent = spieler.name
   karte.dataset.spieler = spieler.nummer
+  if (knöpfe.length > 0) karte.append(knopfGruppe(knöpfe))
   karte.append(...spieler.armeeliste.map(einheit => einheitenKarte(spieler, einheit)))
   return karte
 }
@@ -111,7 +126,7 @@ function karte(spielstand, gründe, knöpfe) {
   }
   zeichnung.append(...spielstand.modelle.map(modellKreis))
   if (gründe.length > 0) mitte.append(sperrmeldung(gründe))
-  mitte.append(knopfGruppe(knöpfe))
+  if (knöpfe.length > 0) mitte.append(knopfGruppe(knöpfe))
   return mitte
 }
 
@@ -119,8 +134,8 @@ export function zeichnen(spielstand, gründe, knöpfe) {
   const [ersterSpieler, zweiterSpieler] = spielstand.spieler
   document.querySelector(".kopfzeile").replaceChildren(...kopfzeile(spielstand))
   document.querySelector(".spielbereich").replaceChildren(
-    spalte(armeeKarte(ersterSpieler)),
-    karte(spielstand, gründe, knöpfe),
-    spalte(armeeKarte(zweiterSpieler)),
+    spalte(armeeKarte(ersterSpieler, knöpfe.armee(ersterSpieler.nummer))),
+    karte(spielstand, gründe, knöpfe.mitte),
+    spalte(armeeKarte(zweiterSpieler, knöpfe.armee(zweiterSpieler.nummer))),
   )
 }

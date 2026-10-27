@@ -6,8 +6,18 @@ let letzterSpielstand = null
 const zurücklegenKnopf = { text: "Einheit zurücklegen", handlung: zurücklegen }
 const beendenKnopf = { text: "Aufstellen der Einheit beenden", handlung: aufstellenDerEinheitBeenden }
 
+function mitteZu(spielstand) {
+  if (!spielstand.schlacht) return spielstand.einheitInAufstellung ? [zurücklegenKnopf, beendenKnopf] : [beendenKnopf]
+  return spielstand.schlacht.amZug === null ? [] : [{ text: "Phase beenden", handlung: phaseBeenden }]
+}
+
+function armeeZu(spielstand, spielernummer) {
+  const ohneErstenZug = spielstand.schlacht && spielstand.schlacht.ersterZug === null
+  return ohneErstenZug ? [{ text: "Erster Zug", handlung: () => ersterZugWählen(spielernummer) }] : []
+}
+
 function knöpfeZu(spielstand) {
-  return spielstand.einheitInAufstellung ? [zurücklegenKnopf, beendenKnopf] : [beendenKnopf]
+  return { mitte: mitteZu(spielstand), armee: spieler => armeeZu(spielstand, spieler) }
 }
 
 function neuZeichnen(spielstand) {
@@ -82,6 +92,15 @@ function aufstellenDerEinheitBeenden() {
 
 function zurücklegen() {
   return handlungSenden("/api/zurücklegen", "PUT")
+}
+
+function ersterZugWählen(spielernummer) {
+  return handlungSenden(`/api/spieler/${spielernummer}/ersterZug`, "PUT")
+}
+
+function phaseBeenden() {
+  const { schlachtrunde, amZug, phase } = letzterSpielstand.schlacht
+  return handlungSenden("/api/phaseBeenden", "PUT", { schlachtrunde, spieler: amZug, phase })
 }
 
 export function karteAnklicken(stelle) {

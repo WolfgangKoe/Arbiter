@@ -1,4 +1,4 @@
-"""Flask: liefert Frontend und Spielstand, nimmt Auswahl und Handlungen an (web.md; vertrag.md)."""
+"""Flask: liefert Frontend und Spielstand, nimmt Auswahl und Handlungen an (web.md; vertrag/)."""
 
 import json
 import re
@@ -10,6 +10,7 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.querschnitt.schlachtrunden import Phase, Schlacht
 from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.darstellung import spielstand, stellenBeimLoslassen, texteDerGründe
@@ -59,15 +60,71 @@ def _stelleDerAbfrage() -> Stelle:
     return Stelle(x=_zahl(angaben, "x"), y=_zahl(angaben, "y"))
 
 
-def anwendungFür(aufstellung: Aufstellung) -> Flask:
+def _ganzeZahl(körper: dict, name: str) -> int:
+    wert = körper.get(name)
+    if isinstance(wert, bool) or not isinstance(wert, int):
+        abort(HTTPStatus.BAD_REQUEST)
+    return wert
+
+
+def _phaseDerAnfrage(körper: dict) -> Phase:
+    try:
+        return Phase(körper.get("phase"))
+    except ValueError:
+        abort(HTTPStatus.BAD_REQUEST)
+
+
+class _SchlachtDerAnwendung:
+    """Hält die Schlacht und baut sie beim ersten Bedarf nach der Aufstellung (Schlacht, V11)."""
+
+    def __init__(self, aufstellung: Aufstellung, schlacht: Schlacht | None) -> None:
+        self._aufstellung = aufstellung
+        self._schlacht = schlacht
+
+    def laufende(self) -> Schlacht | None:
+        if self._schlacht is None and self._aufstellung.beendet:
+            self._schlacht = Schlacht(self._aufstellung)
+        return self._schlacht
+
+    def laufendeOder404(self) -> Schlacht:
+        schlacht = self.laufende()
+        if schlacht is None:
+            abort(HTTPStatus.NOT_FOUND)
+        return schlacht
+
+
+def _phaseBeenden(schlacht: Schlacht, aufstellung: Aufstellung) -> None:
+    """Beendet die Phase nur, wenn der Körper die laufende nennt (V13)."""
+    körper = request.get_json(silent=True)
+    if not isinstance(körper, dict):
+        abort(HTTPStatus.BAD_REQUEST)
+    gesehen = (
+        _ganzeZahl(körper, "schlachtrunde"),
+        _ganzeZahl(körper, "spieler"),
+        _phaseDerAnfrage(körper),
+    )
+    nummern = {spieler: nummer for nummer, spieler in spielerNachNummer(aufstellung).items()}
+    laufende = (schlacht.schlachtrunde, nummern.get(schlacht.amZug), schlacht.phase)
+    if gesehen == laufende:
+        schlacht.phaseBeenden()
+
+
+def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) -> Flask:
     anwendung = Flask(__name__, static_folder=_frontend, static_url_path="")
     anwendung.config["TRUSTED_HOSTS"] = _erlaubteHosts
+    schlachtDerAnwendung = _SchlachtDerAnwendung(aufstellung, schlacht)
+    laufendeSchlacht = schlachtDerAnwendung.laufende
+
+    def spiel() -> Aufstellung | Schlacht:
+        return laufendeSchlacht() or aufstellung
+
+    schlachtOder404 = schlachtDerAnwendung.laufendeOder404
 
     def startseite():
         return send_from_directory(_frontend, "index.html")
 
     def spielstandLiefern():
-        return jsonify(spielstand(aufstellung))
+        return jsonify(spielstand(aufstellung, laufendeSchlacht()))
 
     def spielerMit(spielernummer: int) -> Spieler:
         spieler = spielerNachNummer(aufstellung).get(spielernummer)
@@ -102,38 +159,38 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
     ) -> Modell:
         einheit = einheitDerArmee(spielernummer, einheitennummer)
         modell = modellDerEinheit(einheit, modellnummer)
-        if not (aufstellung.ausgewählt(einheit) and aufstellung.gesetzt(modell)):
+        if not (spiel().ausgewählt(einheit) and spiel().gesetzt(modell)):
             abort(HTTPStatus.NOT_FOUND)
         return modell
 
     def modellAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        aufstellung.ebeneWählen(
+        spiel().ebeneWählen(
             gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
         )
         return spielstandLiefern()
 
     def einheitAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        aufstellung.ebeneAbwählen(
+        spiel().ebeneAbwählen(
             gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
         )
         return spielstandLiefern()
 
     def einheitAuswählen(spielernummer: int, einheitennummer: int):
-        aufstellung.auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
+        spiel().auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def einheitAbwählen(spielernummer: int, einheitennummer: int):
-        aufstellung.abwählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
+        spiel().abwählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def modellLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        aufstellung.modellLoslassen(modell, _stelleDerAnfrage())
+        spiel().modellLoslassen(modell, _stelleDerAnfrage())
         return spielstandLiefern()
 
     def stelleBeimLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        abfrage = aufstellung.stellenBeimLoslassen(modell, _stelleDerAbfrage())
+        abfrage = spiel().stellenBeimLoslassen(modell, _stelleDerAbfrage())
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
     def karteAnklicken():
@@ -148,9 +205,19 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         aufstellung.zurücklegen()
         return spielstandLiefern()
 
+    def ersterZugWählen(spielernummer: int):
+        spieler = spielerMit(spielernummer)
+        schlachtOder404().ersterZugWählen(spieler)
+        return spielstandLiefern()
+
+    def phaseBeenden():
+        _phaseBeenden(schlachtOder404(), aufstellung)
+        return spielstandLiefern()
+
     def sperreMelden(sperre: Sperre):
         gründe = texteDerGründe(sperre.gründe)
-        antwort = jsonify({"gründe": gründe, "spielstand": spielstand(aufstellung)})
+        stand = spielstand(aufstellung, laufendeSchlacht())
+        antwort = jsonify({"gründe": gründe, "spielstand": stand})
         antwort.status_code = HTTPStatus.CONFLICT
         return antwort
 
@@ -172,5 +239,9 @@ def anwendungFür(aufstellung: Aufstellung) -> Flask:
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]
     )
     anwendung.add_url_rule("/api/zurücklegen", view_func=zurücklegen, methods=["PUT"])
+    anwendung.add_url_rule(
+        "/api/spieler/<int:spielernummer>/ersterZug", view_func=ersterZugWählen, methods=["PUT"]
+    )
+    anwendung.add_url_rule("/api/phaseBeenden", view_func=phaseBeenden, methods=["PUT"])
     anwendung.register_error_handler(Sperre, sperreMelden)
     return anwendung

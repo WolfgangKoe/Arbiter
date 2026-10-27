@@ -7,6 +7,7 @@ from threading import Thread
 from werkzeug.serving import make_server
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
 from arbiter.web.anwendung import anwendungFür
 
 _gerät = "127.0.0.1"
@@ -24,8 +25,8 @@ def adresseMitPort(port: int) -> str:
 
 
 class Server:
-    def __init__(self, aufstellung: Aufstellung, port: int) -> None:
-        anwendung = anwendungFür(aufstellung)
+    def __init__(self, aufstellung: Aufstellung, port: int, schlacht: Schlacht | None) -> None:
+        anwendung = anwendungFür(aufstellung, schlacht)
         with _verbindungBinden(port) as verbindung:
             self._server = make_server(_gerät, port, anwendung, fd=verbindung.fileno())
         self._thread = Thread(target=self._server.serve_forever, daemon=True)
@@ -50,8 +51,10 @@ class Server:
         self._thread.join()
 
 
-def serverStarten(aufstellung: Aufstellung, port: int = _freierPort) -> Server:
-    server = Server(aufstellung, port)
+def serverStarten(
+    aufstellung: Aufstellung, port: int = _freierPort, *, schlacht: Schlacht | None = None
+) -> Server:
+    server = Server(aufstellung, port, schlacht)
     server.starten()
     return server
 

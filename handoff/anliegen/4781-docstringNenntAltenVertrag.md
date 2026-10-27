@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Docstring von `technik/arbiter/web/anwendung.py` nennt „(web.md; vertrag.md)“.
@@ -17,4 +17,4 @@ Datei ohnehin.
 
 **Gegenvorschlag.** „(web.md; vertrag/)“, beim nächsten Eingriff in die Datei.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Der Docstring von `web/anwendung.py` nennt jetzt „(web.md; vertrag/)“, umgesetzt beim Eingriff für Item phasenUndSchlachtrunden.
