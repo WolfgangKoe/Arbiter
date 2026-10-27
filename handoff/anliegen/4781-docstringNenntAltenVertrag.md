@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Docstring von `technik/arbiter/web/anwendung.py` nennt „(web.md; vertrag.md)“.

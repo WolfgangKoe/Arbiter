@@ -18,6 +18,7 @@ from arbiter.web.kennungen import (
     armeelisteNachNummer,
     einheitenNachNummer,
     modelleNachNummer,
+    nummerDesSpielers,
     spielerNachNummer,
 )
 
@@ -103,8 +104,11 @@ def _phaseBeenden(schlacht: Schlacht, aufstellung: Aufstellung) -> None:
         _ganzeZahl(körper, "spieler"),
         _phaseDerAnfrage(körper),
     )
-    nummern = {spieler: nummer for nummer, spieler in spielerNachNummer(aufstellung).items()}
-    laufende = (schlacht.schlachtrunde, nummern.get(schlacht.amZug), schlacht.phase)
+    laufende = (
+        schlacht.schlachtrunde,
+        nummerDesSpielers(aufstellung, schlacht.amZug),
+        schlacht.phase,
+    )
     if gesehen == laufende:
         schlacht.phaseBeenden()
 
@@ -159,28 +163,28 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     ) -> Modell:
         einheit = einheitDerArmee(spielernummer, einheitennummer)
         modell = modellDerEinheit(einheit, modellnummer)
-        if not (spiel().ausgewählt(einheit) and spiel().gesetzt(modell)):
+        if not (aufstellung.ausgewählt(einheit) and aufstellung.gesetzt(modell)):
             abort(HTTPStatus.NOT_FOUND)
         return modell
 
     def modellAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        spiel().ebeneWählen(
+        aufstellung.ebeneWählen(
             gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
         )
         return spielstandLiefern()
 
     def einheitAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        spiel().ebeneAbwählen(
+        aufstellung.ebeneAbwählen(
             gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
         )
         return spielstandLiefern()
 
     def einheitAuswählen(spielernummer: int, einheitennummer: int):
-        spiel().auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
+        aufstellung.auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def einheitAbwählen(spielernummer: int, einheitennummer: int):
-        spiel().abwählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
+        aufstellung.abwählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
 
     def modellLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
-Wartet auf: 5180
+Status: erledigt
 
 ## Runde 1
 **Befund.** Lauf über `technik/tests/akzeptanz/phasen`: 8 failed und 169 errors. Ursache ist
@@ -74,7 +73,9 @@ etwa fünf Tests. Ohne sie sind alle Tests grün, auch wenn Knopf, Route oder de
    steht der `Locator` in der Prüfung (QUE-9.1). In [schlachtrundenTest.py](../../technik/tests/akzeptanz/querschnitt/schlachtrundenTest.py)
    stehen in 10.1 die Anfragen im Aufbau und der `Locator` im Aufbau oder in der Prüfung,
    nie als Handlung. In 10.4 ist die Handlung `phaseBeenden` (V13) mit Prüfung der Antwort.
-3. Teils umgesetzt: V10 außerhalb der *Bewegungsphase* leer
+3. Umgesetzt (nach 5180 F5 entfallen Knopf, Route und `bewegung.json`): Die Tests des Dienstes
+   zu BEW-1.7 und BEW-3.1 prüfen 200 beim Loslassen und die Stellen der Abfrage gleich dem
+   Loslassen; BEW-4.1 prüft V17 am Dienst und am Bildschirm. Zuvor teils umgesetzt: V10 außerhalb der *Bewegungsphase* leer
    (`testQue10_5DerDienstNenntAußerhalbDerBewegungsphaseBeimZiehenKeinModellUndKeinenGrund`,
    je *Phase*) und V13 mit dem Körper einer beendeten *Phase*
    (`testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase`). Angenommen, aber

@@ -3,21 +3,19 @@ import { zeichnen } from "./zeichnen.js"
 let gründeDerLetztenSperre = []
 let letzterSpielstand = null
 
-const zurücklegenKnopf = { text: "Einheit zurücklegen", handlung: zurücklegen }
-const beendenKnopf = { text: "Aufstellen der Einheit beenden", handlung: aufstellenDerEinheitBeenden }
-
-function mitteZu(spielstand) {
-  if (!spielstand.schlacht) return spielstand.einheitInAufstellung ? [zurücklegenKnopf, beendenKnopf] : [beendenKnopf]
-  return spielstand.schlacht.amZug === null ? [] : [{ text: "Phase beenden", handlung: phaseBeenden }]
-}
-
-function armeeZu(spielstand, spielernummer) {
-  const ohneErstenZug = spielstand.schlacht && spielstand.schlacht.ersterZug === null
-  return ohneErstenZug ? [{ text: "Erster Zug", handlung: () => ersterZugWählen(spielernummer) }] : []
-}
+const knöpfe = [
+  { text: "Einheit zurücklegen", ort: "mitte", handlung: zurücklegen, angeboten: stand => !stand.schlacht && stand.einheitInAufstellung },
+  { text: "Aufstellen der Einheit beenden", ort: "mitte", handlung: aufstellenDerEinheitBeenden, angeboten: stand => !stand.schlacht },
+  { text: "Phase beenden", ort: "mitte", handlung: phaseBeenden, angeboten: stand => stand.schlacht && stand.schlacht.amZug !== null },
+  { text: "Erster Zug", ort: "armee", handlung: ersterZugWählen, angeboten: stand => stand.schlacht?.ersterZug === null },
+]
 
 function knöpfeZu(spielstand) {
-  return { mitte: mitteZu(spielstand), armee: spieler => armeeZu(spielstand, spieler) }
+  const angeboten = knöpfe.filter(knopf => knopf.angeboten(spielstand))
+  return {
+    mitte: angeboten.filter(knopf => knopf.ort === "mitte"),
+    armee: angeboten.filter(knopf => knopf.ort === "armee"),
+  }
 }
 
 function neuZeichnen(spielstand) {

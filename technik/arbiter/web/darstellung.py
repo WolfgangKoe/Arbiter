@@ -12,6 +12,7 @@ from arbiter.web.kennungen import (
     armeelisteNachNummer,
     kennungenDerEinheit,
     modelleMitKennungen,
+    nummerDesSpielers,
     spielerNachNummer,
 )
 
@@ -32,19 +33,17 @@ def spielstand(aufstellung: Aufstellung, schlacht: Schlacht | None = None) -> di
         ],
     }
     if schlacht is not None:
-        stand["schlacht"] = _schlacht(schlacht, spielerNummern)
+        stand["schlacht"] = _schlacht(aufstellung, schlacht)
     return stand
 
 
-def _schlacht(schlacht: Schlacht, spielerNummern: dict[int, Spieler]) -> dict:
-    nummern = {spieler: nummer for nummer, spieler in spielerNummern.items()}
+def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
     return {
-        "ersterZug": nummern.get(schlacht.ersterZug),
-        "amZug": nummern.get(schlacht.amZug),
+        "ersterZug": nummerDesSpielers(aufstellung, schlacht.ersterZug),
+        "amZug": nummerDesSpielers(aufstellung, schlacht.amZug),
         "schlachtrunde": schlacht.schlachtrunde,
         "phase": schlacht.phase.value,
         "beendet": schlacht.beendet,
-        "einheitInBewegung": None,
     }
 
 

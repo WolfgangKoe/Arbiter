@@ -19,6 +19,12 @@ def spielerNachNummer(aufstellung: Aufstellung) -> dict[int, Spieler]:
     return dict(enumerate((ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler), start=1))
 
 
+def nummerDesSpielers(aufstellung: Aufstellung, spieler: Spieler | None) -> int | None:
+    """Die Spielernummer des Spielers, ohne Spieler `None`."""
+    nummern = {einer: nummer for nummer, einer in spielerNachNummer(aufstellung).items()}
+    return nummern.get(spieler)
+
+
 def einheitenNachNummer(spieler: Spieler) -> dict[int, Einheit]:
     return dict(enumerate(spieler.armee.einheiten, start=1))
 

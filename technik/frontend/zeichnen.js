@@ -61,7 +61,7 @@ function armeeKarte(spieler, knöpfe) {
   const karte = mitSpieler(ausVorlage("armeeKarte"), spieler.nummer)
   karte.querySelector(".armeeKartenName").textContent = spieler.name
   karte.dataset.spieler = spieler.nummer
-  if (knöpfe.length > 0) karte.append(knopfGruppe(knöpfe))
+  if (knöpfe.length > 0) karte.append(knopfGruppe(knöpfe, spieler.nummer))
   karte.append(...spieler.armeeliste.map(einheit => einheitenKarte(spieler, einheit)))
   return karte
 }
@@ -89,16 +89,16 @@ function sperrmeldung(gründe) {
   return liste
 }
 
-function knopf({ text, handlung }) {
+function knopf(spielernummer, { text, handlung }) {
   const neu = ausVorlage("knopf")
   neu.textContent = text
-  neu.addEventListener("click", handlung)
+  neu.addEventListener("click", handlung.bind(null, spielernummer))
   return neu
 }
 
-function knopfGruppe(knöpfe) {
+function knopfGruppe(knöpfe, spielernummer) {
   const gruppe = ausVorlage("knopfGruppe")
-  gruppe.append(...knöpfe.map(knopf))
+  gruppe.append(...knöpfe.map(knopf.bind(null, spielernummer)))
   return gruppe
 }
 
@@ -134,8 +134,8 @@ export function zeichnen(spielstand, gründe, knöpfe) {
   const [ersterSpieler, zweiterSpieler] = spielstand.spieler
   document.querySelector(".kopfzeile").replaceChildren(...kopfzeile(spielstand))
   document.querySelector(".spielbereich").replaceChildren(
-    spalte(armeeKarte(ersterSpieler, knöpfe.armee(ersterSpieler.nummer))),
+    spalte(armeeKarte(ersterSpieler, knöpfe.armee)),
     karte(spielstand, gründe, knöpfe.mitte),
-    spalte(armeeKarte(zweiterSpieler, knöpfe.armee(zweiterSpieler.nummer))),
+    spalte(armeeKarte(zweiterSpieler, knöpfe.armee)),
   )
 }

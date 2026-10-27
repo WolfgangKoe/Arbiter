@@ -4,8 +4,7 @@
     "amZug": 1,
     "schlachtrunde": 1,
     "phase": "Bewegungsphase",
-    "beendet": false,
-    "einheitInBewegung": null
+    "beendet": false
   },
   "spieler": [
     {"nummer": 1, "name": "Spieler 1", "anDerReihe": false, "armeeliste": []},

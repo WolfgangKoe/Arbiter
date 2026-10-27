@@ -109,7 +109,6 @@ def testQue9_2DerDienstSetztDenSpielerMitDemErstenZugAmZugInDieKommandophaseDerS
         "schlachtrunde": 1,
         "phase": "Kommandophase",
         "beendet": False,
-        "einheitInBewegung": None,
     }
 
 

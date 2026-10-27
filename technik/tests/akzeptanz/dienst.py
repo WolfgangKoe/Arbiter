@@ -58,11 +58,6 @@ def schlachtDesVertrags() -> dict:
     return _beispielDesVertrags("schlacht.json")
 
 
-def weiterAlsBDesVertrags() -> dict:
-    """Das Beispiel der Sperre ‚weiter als B‘ aus `weiterAlsB.json`, nicht kopiert."""
-    return _beispielDesVertrags("weiterAlsB.json")
-
-
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
     """Die Stellen der Modelle des Spielers im Beispiel, in der Reihenfolge der Datei."""
     return [

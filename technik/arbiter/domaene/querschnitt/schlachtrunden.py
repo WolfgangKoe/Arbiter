@@ -2,6 +2,7 @@
 
 from collections.abc import Mapping
 from enum import Enum
+from itertools import pairwise
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
 from arbiter.domaene.phasen.aufstellen import Aufstellung
@@ -19,7 +20,7 @@ class Phase(Enum):
     moralphase = "Moralphase"
 
 
-_phasen = tuple(Phase)
+_nächstePhase = dict(pairwise(Phase))
 _ersteSchlachtrunde = 1
 
 
@@ -76,10 +77,11 @@ class Schlacht:
     def phaseBeenden(self) -> None:
         if self._amZug is None:
             return
-        if self._phase is not _phasen[-1]:
-            self._phase = _phasen[_phasen.index(self._phase) + 1]
+        nächste = _nächstePhase.get(self._phase)
+        if nächste is not None:
+            self._phase = nächste
             return
-        self._phase = _phasen[0]
+        self._phase = Phase.kommandophase
         self._zugBeenden()
 
     def gesetzt(self, modell: Modell) -> bool:
@@ -111,15 +113,6 @@ class Schlacht:
 
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
-
-    def abwählen(self, einheit: Einheit) -> None:
-        self._auswahl.abwählen(einheit)
-
-    def ebeneWählen(self, modell: Modell) -> None:
-        self._auswahl.ebeneWählen(modell)
-
-    def ebeneAbwählen(self, modell: Modell) -> None:
-        self._auswahl.ebeneAbwählen(modell)
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:

@@ -10,7 +10,7 @@ Die *Schlacht* nach der *Aufstellung* (QUE-9, QUE-10); was alle Phasen teilen:
   *Stellen* der beendeten *Aufstellung* (AUF-1.7); danach gehören sie ihr, gelesen mit
   `schlacht.stelle(modell)`. Die *Aufstellung* ändert sich nicht mehr; Zonen und Ausgangslage
   liest `web/` weiter an ihr (W2). Abfragen: `ausgangslage` (wie `Aufstellung`), `ersterZug`, `amZug`,
-  `schlachtrunde`, `phase`, `beendet`, dazu die der *Auswahl* wie `Aufstellung` (V3). Die Regeln der *Bewegungsphase*
+  `schlachtrunde`, `phase`, `beendet`, `inKohärenz(einheit)` (QUE-4), dazu die der *Auswahl* wie `Aufstellung` (V3). Die Regeln der *Bewegungsphase*
   liegen in `phasen/bewegung/` ([Grundschnitt](../domaene.md)); `Schlacht` gibt ihnen Ziehen
   und Beenden weiter, außerhalb der *Bewegungsphase* ändert Loslassen nichts, ohne `Sperre`
   (QUE-10.5).
@@ -26,8 +26,7 @@ Die *Schlacht* nach der *Aufstellung* (QUE-9, QUE-10); was alle Phasen teilen:
 Schlüssel `schlacht` (V1), nur bei beendeter *Aufstellung*, sonst fehlt er; so gelten die
 Beispiele der *Aufstellung* unverändert:
 `{"ersterZug": <Spieler>|null, "amZug": <Spieler>|null, "schlachtrunde": <n>, "phase":
-<Phase.value>, "beendet": <bool>, "einheitInBewegung": …}` (letzter Schlüssel:
-[Bewegung](bewegung.md)), Spieler als `nummer` nach W4. `einheitInAufstellung` ist `null`,
+<Phase.value>, "beendet": <bool>}`, Spieler als `nummer` nach W4. `einheitInAufstellung` ist `null`,
 jede `armeeliste` leer (AUF-1.7), `anDerReihe` überall `false`. Beispiel
 [schlacht.json](schlacht.json), nur `schlacht` und `spieler`: Stand nach
 `PUT /api/spieler/1/ersterZug` und `PUT /api/phaseBeenden` mit
