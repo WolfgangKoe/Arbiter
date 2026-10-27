@@ -15,9 +15,10 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from tests.akzeptanz.bildschirm import Bildschirm
-from tests.akzeptanz.dienst import dienstFür, stellenDesVertrags
+from tests.akzeptanz.dienst import dienstFür, dienstFürSchlacht, stellenDesVertrags
 from tests.akzeptanz.handgriffe import (
     Platz,
+    alleEinheitenAufstellen,
     aufstellungVon,
     einheitAufstellen,
     modelleAnStellenSetzen,
@@ -176,6 +177,12 @@ def necronWarriors(spielerZwei: Spieler) -> Einheit:
 
 
 @pytest.fixture
+def overlord(spielerZwei: Spieler) -> Einheit:
+    _, einheit = spielerZwei.armee.einheiten
+    return einheit
+
+
+@pytest.fixture
 def ausgangsaufstellung(ausgangslage: Ausgangslage) -> Aufstellung:
     return Aufstellung(ausgangslage)
 
@@ -251,3 +258,67 @@ def dienst(aufstellungNachDerZonenwahl: Aufstellung):
 def dienstDesBeispiels(aufstellungDesBeispiels: Aufstellung):
     """Der Flask-Testclient der Anwendung über dem Stand des Beispiels im Vertrag."""
     return dienstFür(aufstellungDesBeispiels)
+
+
+@pytest.fixture
+def beendeteAufstellung(ausgangsaufstellung: Aufstellung, spielerEins: Spieler) -> Aufstellung:
+    """Spieler 1 hat die erste Zone; beide Armeen sind aufgestellt, die Aufstellung ist beendet."""
+    ausgangsaufstellung.gewinnerWählen(spielerEins)
+    ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
+    alleEinheitenAufstellen(ausgangsaufstellung)
+    return ausgangsaufstellung
+
+
+@pytest.fixture
+def schlacht(beendeteAufstellung: Aufstellung):
+    """Die Schlacht nach der Aufstellung; der Import hier lässt nur sie rot sein."""
+    from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
+
+    return Schlacht(beendeteAufstellung)
+
+
+@pytest.fixture
+def dienstNachDerAufstellung(beendeteAufstellung: Aufstellung):
+    """Der Flask-Testclient über der beendeten Aufstellung; die Schlacht baut `web/` selbst."""
+    return dienstFür(beendeteAufstellung)
+
+
+@pytest.fixture
+def dienstDerSchlacht(beendeteAufstellung: Aufstellung, schlacht):
+    """Der Flask-Testclient über derselben Schlacht, die der Test in der Hand hält."""
+    return dienstFürSchlacht(beendeteAufstellung, schlacht)
+
+
+@pytest.fixture
+def schlachtInDerKommandophase(schlacht, spielerEins: Spieler):
+    """Spieler 1 hat den ersten Zug und ist am Zug in der Kommandophase der Schlachtrunde 1."""
+    schlacht.ersterZugWählen(spielerEins)
+    return schlacht
+
+
+@pytest.fixture
+def schlachtInDerBewegungsphase(schlachtInDerKommandophase):
+    """Spieler 1 ist am Zug in der Bewegungsphase der Schlachtrunde 1."""
+    schlachtInDerKommandophase.phaseBeenden()
+    return schlachtInDerKommandophase
+
+
+@pytest.fixture
+def schlachtInDerBewegungsphaseDesZweitenSpielers(schlacht, spielerZwei: Spieler):
+    """Spieler 2 hat den ersten Zug und ist am Zug in der Bewegungsphase der Schlachtrunde 1."""
+    schlacht.ersterZugWählen(spielerZwei)
+    schlacht.phaseBeenden()
+    return schlacht
+
+
+@pytest.fixture(params=["ersterSpieler", "zweiterSpieler"])
+def spielerMitDemErstenZug(request, spielerEins: Spieler, spielerZwei: Spieler) -> Spieler:
+    return {"ersterSpieler": spielerEins, "zweiterSpieler": spielerZwei}[request.param]
+
+
+@pytest.fixture(params=["einheitDesSpielersAmZug", "einheitDesAnderenSpielers"])
+def einheitJederSeite(request, boyz: Einheit, necronWarriors: Einheit) -> Einheit:
+    """Spieler 1 ist am Zug; die Einheit gehört ihm oder dem anderen Spieler."""
+    return {"einheitDesSpielersAmZug": boyz, "einheitDesAnderenSpielers": necronWarriors}[
+        request.param
+    ]

@@ -20,8 +20,7 @@ ersten Handlung über HTTP (Wählen oder Setzen); die Anzeige der Ausgangslage b
 - Die Domäne bleibt die einzige Prüfinstanz: Jede wiederholte Handlung läuft durch dieselben
   Sperren. Sie braucht keine Schnittstelle zur Datenbank (A2); `speicher/` legt Befehle als
   Art und Angaben ab, an die Domäne gibt sie der Dienst.
-- „Zurück“ heißt, die letzte Handlung weglassen; das Protokoll des Übergehens ist dieselbe
-  Tabelle.
+- Das *Protokoll* des Übergehens ist dieselbe Tabelle.
 - Das Schema wächst nicht mit jedem Spielobjekt. Gegenbeispiel ArbiterMap: eigene Tabellen
   für Einheiten und Modelle, `ArbiterMap/backend/app/repository/schema.sql` hat 10.000
   Zeichen.

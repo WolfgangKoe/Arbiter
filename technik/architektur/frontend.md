@@ -1,6 +1,8 @@
-# Oberfläche
+# Frontend: Oberfläche und Seite
 
-Was der Browser zeigt; Aufbau von `web/` und Bildschirmtests: [Web](web.md).
+Was der Browser zeigt. Übersicht: [Architektur](../architektur.md); Aufbau von `web/`:
+[Web](web.md); Pfade und JSON: [Vertrag](vertrag/querschnitt.md); Bildschirmtests:
+[Tests](tests.md#bildschirmtests).
 
 Das Design-System gehört der Technik: die Komponentenseite (O3) als Doku und Vorlage der
 Mockups. Eine neue Komponente ist ein Anliegen an die Technik.

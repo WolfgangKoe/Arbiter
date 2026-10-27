@@ -48,28 +48,30 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt
-- [ ] Architekt: Vertrag zu Item architekturUmordnen, bei beiden Hälften
-- [ ] Testautor: Tests zu Item architekturUmordnen
-- [ ] Fachkritiker: Kritik an den Tests zu Item architekturUmordnen
-- [ ] Architekt: Kritik an den Tests zu Item architekturUmordnen
-- [ ] Implementierer: Tests zu Item architekturUmordnen grün
-- [ ] Architekt: Kritik am Code zu Item architekturUmordnen
-- [ ] Reviewer: Kritik am Code zu Item architekturUmordnen
-- [ ] Fachkritiker: Item architekturUmordnen abgenommen
-- [ ] Planer: Item architekturUmordnen gelöscht
-- [ ] Architekt: Vertrag zu Item phasenUndSchlachtrunden, bei beiden Hälften
-- [ ] Testautor: Tests zu Item phasenUndSchlachtrunden
+- [x] Architekt: Vertrag zu Item architekturUmordnen, bei beiden Hälften
+- [x] Testautor: Tests zu Item architekturUmordnen
+- [x] Fachkritiker: Kritik an den Tests zu Item architekturUmordnen
+- [x] Architekt: Kritik an den Tests zu Item architekturUmordnen
+- [x] Implementierer: Tests zu Item architekturUmordnen grün
+- [x] Architekt: Kritik am Code zu Item architekturUmordnen
+- [x] Reviewer: Kritik am Code zu Item architekturUmordnen
+- [x] Fachkritiker: Item architekturUmordnen abgenommen
+- [x] Planer: Item architekturUmordnen gelöscht
+- [x] Architekt: Vertrag zu Item phasenUndSchlachtrunden, bei beiden Hälften
+- [x] Testautor: Tests zu Item phasenUndSchlachtrunden
 - [ ] Fachkritiker: Kritik an den Tests zu Item phasenUndSchlachtrunden
-- [ ] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
+  Hindernis: Fachkritiker → Testautor: QUE-10.3 und 10.4 prüfen den ersten Zug nur bei Spieler 1 (Anliegen 4900)
+- [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
 - [ ] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
 - [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
 - [ ] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
 - [ ] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
 - [ ] Planer: Item phasenUndSchlachtrunden gelöscht
-- [ ] Architekt: Vertrag zu Item normalMove, bei beiden Hälften
-- [ ] Testautor: Tests zu Item normalMove
+- [x] Architekt: Vertrag zu Item normalMove, bei beiden Hälften
+- [x] Testautor: Tests zu Item normalMove
 - [ ] Fachkritiker: Kritik an den Tests zu Item normalMove
-- [ ] Architekt: Kritik an den Tests zu Item normalMove
+  Hindernis: Fachkritiker → Testautor: BEW-2.4 ohne Überdeckung, Distanz nur auf Achsen, BEW-2.3 nie zwei Gründe (Anliegen 4900)
+- [x] Architekt: Kritik an den Tests zu Item normalMove
 - [ ] Implementierer: Tests zu Item normalMove grün
 - [ ] Architekt: Kritik am Code zu Item normalMove
 - [ ] Reviewer: Kritik am Code zu Item normalMove

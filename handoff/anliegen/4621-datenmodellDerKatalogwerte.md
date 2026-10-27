@@ -4,8 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder will über die Daten aus Arbiter-old im nächsten Zyklus
@@ -40,4 +39,10 @@ Empfehlung: A. Aus Sicht der Domäne genügt YAML für Orks gegen Necrons, und d
 liegt schon vor; ob sie technisch trägt, prüfst du.
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Geprüft und vorgelegt in [4800](4800-ablageDerKatalogwerte.md). YAML trägt
+(F1 A dort); die Gliederung aus Arbiter-old auch, ihr Inhalt nicht wie er ist: Werte als Text
+(`5"`), ein Profil je *Einheit* statt je *Modell* (`core_rules.txt:561`), Fähigkeiten mit
+Verhalten als Daten. Darum empfehle ich dort F2 B (nur Werte, Profil je Modellart, Zahlen in
+der Einheit des Glossars) und F3 A (Werte je Etappe, alle in Etappe 8). Für dich folgt aus B:
+Datenblatt, Profil und Modellart kommen ins Glossar, die Ausgangslage verweist auf
+Datenblätter. Fundstelle je Wert als Kommentar am Zeilenende wie in `ausgangslage.yaml`.

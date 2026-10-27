@@ -5,6 +5,7 @@ Von: Regelumsetzer
 An: Regelumsetzer
 Runde: 1/3
 Status: offen
+Wartet auf: Prozessphase 8
 
 ## Runde 1
 **Befund.** Der Stand sagt „Nächster Schritt: Regelumsetzer: Prozess-Item P2 aus Retro 7“,

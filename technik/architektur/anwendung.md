@@ -19,4 +19,4 @@ Prüft: nur Text; Auslöser: erstes Modul in `anwendung/`.
 Heute fehlt `anwendung/`, `web/` ruft die `Aufstellung` (W2). Mit dem ersten Item zum
 Speicher (Anliegen 692) ziehen `kennungen.py` und `darstellung.py` nach `anwendung/`,
 `web/anwendung.py` heißt `routen.py`, und Bildschirmtests geben `serverStarten` Dienste mit
-einem Speicher im Arbeitsspeicher (B1).
+einem Speicher im Arbeitsspeicher ([B1](tests.md#bildschirmtests)).

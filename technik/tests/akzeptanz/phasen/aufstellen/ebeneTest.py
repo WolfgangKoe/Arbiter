@@ -18,12 +18,14 @@ from tests.akzeptanz.dienst import (
     ebenenIm,
     karteAnklicken,
     modellAlsEbene,
+    modellAnklicken,
     modellLoslassen,
     spielstandVon,
     stelleImSpielstand,
     stellenDerEinheitIm,
 )
 from tests.akzeptanz.handgriffe import stelleInDerZoneVon
+from tests.akzeptanz.schlacht import seiteDerSchlachtMitEingabe, stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import (
     klickenMit,
     liegtEinPixelGenauAn,
@@ -223,3 +225,116 @@ def testAuf20_5DieSeiteZeigtNachDemSetzenDieEinheitUndAlleIhreModelleAusgewählt
 
     expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(boyz.modelle))
     assert ausgewählteEinheiten(seite) == {"Boyz"}
+
+
+def testAuf20_6EinKlickAufEinModellWähltSeineEinheitMitDerGanzenEinheitAlsEbene(
+    schlachtInDerBewegungsphase, einheitJederSeite
+):
+    angeklickt, *_ = einheitJederSeite.modelle
+
+    schlachtInDerBewegungsphase.modellAnklicken(angeklickt)
+
+    assert schlachtInDerBewegungsphase.ausgewählt(einheitJederSeite)
+    assert schlachtInDerBewegungsphase.ganzeEinheitIstEbene(einheitJederSeite)
+
+
+def testAuf20_6EinKlickAufEinModellWähltKeineAndereEinheit(
+    schlachtInDerBewegungsphase, boyz, warboss
+):
+    schlachtInDerBewegungsphase.auswählen(warboss)
+    angeklickt, *_ = boyz.modelle
+
+    schlachtInDerBewegungsphase.modellAnklicken(angeklickt)
+
+    assert schlachtInDerBewegungsphase.ausgewählt(boyz)
+    assert not schlachtInDerBewegungsphase.ausgewählt(warboss)
+
+
+def testAuf20_6EinKlickAufEinGesetztesModellInDerAufstellungWähltDieGanzeEinheit(
+    aufstellungNachDerZonenwahl, boyzSetzen, boyz
+):
+    [(angeklickt, _), *_] = boyzSetzen(3)
+
+    aufstellungNachDerZonenwahl.modellAnklicken(angeklickt)
+
+    assert aufstellungNachDerZonenwahl.ausgewählt(boyz)
+    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
+
+
+def testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitOhneEbene(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, einheitJederSeite
+):
+    angeklickt, *_ = einheitJederSeite.modelle
+
+    antwort = modellAnklicken(dienstDerSchlacht, beendeteAufstellung, einheitJederSeite, angeklickt)
+
+    spielstand = antwort.get_json()
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteModelleIm(spielstand) == stellenDerEinheitAlsZahlen(
+        schlachtInDerBewegungsphase, einheitJederSeite
+    )
+    assert ebenenIm(spielstand) == frozenset()
+
+
+def testAuf20_6DerDienstWähltBeimAnklickenEinesModellsKeineAndereEinheit(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, warboss
+):
+    schlachtInDerBewegungsphase.auswählen(warboss)
+    angeklickt, *_ = boyz.modelle
+
+    antwort = modellAnklicken(dienstDerSchlacht, beendeteAufstellung, boyz, angeklickt)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteModelleIm(antwort.get_json()) == stellenDerEinheitAlsZahlen(
+        schlachtInDerBewegungsphase, boyz
+    )
+
+
+def testAuf20_6DerDienstWähltBeimAnklickenEinesGesetztenModellsInDerAufstellungDieGanzeEinheit(
+    dienst, aufstellungNachDerZonenwahl, boyzSetzen, boyz
+):
+    gesetzte = boyzSetzen(3)
+    [(angeklickt, _), *_] = gesetzte
+
+    antwort = modellAnklicken(dienst, aufstellungNachDerZonenwahl, boyz, angeklickt)
+
+    spielstand = antwort.get_json()
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(spielstand) == {"Boyz"}
+    assert ausgewählteModelleIm(spielstand) == {
+        stelleImSpielstand(stelle) for _, stelle in gesetzte
+    }
+    assert ebenenIm(spielstand) == frozenset()
+
+
+@mitMausUndFinger
+def testAuf20_6DieSeiteKennzeichnetNachDemKlickAufEinModellInDerSchlachtAlleModelleDerEinheit(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, einheitJederSeite, eingabe
+):
+    angeklickt, *_ = einheitJederSeite.modelle
+    stelle = schlachtInDerBewegungsphase.stelle(angeklickt)
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
+    )
+
+    klickenMit[eingabe](seite, punktAufDerKarte(seite, stelle))
+
+    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(einheitJederSeite.modelle))
+    assert ausgewählteModelle(seite) == stellenDerEinheitAlsZahlen(
+        schlachtInDerBewegungsphase, einheitJederSeite
+    )
+
+
+@mitMausUndFinger
+def testAuf20_6DieSeiteKennzeichnetNachDemKlickAufEinModellInDerAufstellungDieGanzeEinheit(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
+):
+    gesetzte = boyzSetzen(3)
+    [(_, stelle), *_] = gesetzte
+    seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
+
+    klickenMit[eingabe](seite, punktAufDerKarte(seite, stelle))
+
+    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(gesetzte))
+    assert ausgewählteEinheiten(seite) == {"Boyz"}
+    assert ausgewählteModelle(seite) == {stelleImSpielstand(stelle) for _, stelle in gesetzte}

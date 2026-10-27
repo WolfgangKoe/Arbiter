@@ -147,8 +147,32 @@ def knopfDerSeite(seite: Page, text: str) -> Locator:
     return seite.locator(".knopfGruppe .knopf").filter(has_text=gleicherText)
 
 
+def knopfDerArmeeliste(seite: Page, spielername: str, text: str) -> Locator:
+    gleicherText = re.compile(rf"^\s*{re.escape(text)}\s*$")
+    knöpfe = armeelisteVon(seite, spielername).locator(".knopfGruppe .knopf")
+    return knöpfe.filter(has_text=gleicherText)
+
+
+def kopfzeileVon(seite: Page, spielername: str) -> Locator:
+    return seite.locator(".kopfzeileSpieler", has_text=spielername)
+
+
+def spielerAmZug(seite: Page) -> Locator:
+    """Die Kopfzeile des Spielers, die ‚am Zug‘ trägt."""
+    return seite.locator(".kopfzeileSpieler.amZug")
+
+
+amZugGekennzeichnet = re.compile(r"\bamZug\b")
+
+
 def seiteMitEingabe(bildschirm: "Bildschirm", aufstellung: Aufstellung, eingabe: str) -> Page:
     return bildschirm.seiteZu(aufstellung, berührbar=eingabe == "finger")
+
+
+def seiteDerSchlachtMitEingabe(
+    bildschirm: "Bildschirm", aufstellung: Aufstellung, schlacht, eingabe: str
+) -> Page:
+    return bildschirm.seiteZuSchlacht(aufstellung, schlacht, berührbar=eingabe == "finger")
 
 
 def _liefern(antwort: dict, anfrage: Route) -> None:
@@ -196,6 +220,14 @@ class Bildschirm:
     def seiteZu(self, aufstellung: Aufstellung, *, berührbar: bool = False) -> Page:
         """Startet den Server mit dem Spielstand im selben Prozess und öffnet seine Seite."""
         server = serverStarten(aufstellung)
+        self._server.append(server)
+        return self.seiteBei(server.adresse, berührbar=berührbar)
+
+    def seiteZuSchlacht(
+        self, aufstellung: Aufstellung, schlacht, *, berührbar: bool = False
+    ) -> Page:
+        """Startet den Server mit der Aufstellung und dieser Schlacht und öffnet seine Seite."""
+        server = serverStarten(aufstellung, schlacht=schlacht)
         self._server.append(server)
         return self.seiteBei(server.adresse, berührbar=berührbar)
 

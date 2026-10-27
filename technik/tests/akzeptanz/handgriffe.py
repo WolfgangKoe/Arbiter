@@ -24,6 +24,7 @@ tiefeDerZone = 9
 abstandDerReihen = Fraction(5, 2)
 tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
+bewegungsweiteDerTestmodelle = Fraction(5)
 anzahlGesetzterModelle = 3
 
 gerade = (1, 0)
@@ -36,7 +37,11 @@ def spielerMit(*modellzahlen: int) -> Spieler:
         Einheit(
             name=f"Einheit {nummer}",
             modelle=tuple(
-                Modell(base=Base(durchmesser=durchmesserDerTestmodelle)) for _ in range(zahl)
+                Modell(
+                    base=Base(durchmesser=durchmesserDerTestmodelle),
+                    bewegungsweite=bewegungsweiteDerTestmodelle,
+                )
+                for _ in range(zahl)
             ),
         )
         for nummer, zahl in enumerate(modellzahlen, start=1)
@@ -111,7 +116,11 @@ class Platz:
 
     def __init__(self, zone: Aufstellungszone) -> None:
         self._zone = zone
-        self.radius = radiusInZoll(Modell(base=Base(durchmesser=durchmesserDerTestmodelle)))
+        testmodell = Modell(
+            base=Base(durchmesser=durchmesserDerTestmodelle),
+            bewegungsweite=bewegungsweiteDerTestmodelle,
+        )
+        self.radius = radiusInZoll(testmodell)
         self.millionstel = millionstel
         self.breiteDesSpielfelds = breiteDesSpielfelds
         self.längeDerSpielfeldkante = längeDerSpielfeldkante
@@ -221,11 +230,12 @@ def stelleInDerZoneDesSpielersAnDerReihe(
     return stelleInDerZoneVon(aufstellung, aufstellung.anDerReihe, tiefe, länge)
 
 
-def stellenAllerModelle(aufstellung: Aufstellung) -> dict[Modell, Stelle | None]:
-    ausgangslage = aufstellung.ausgangslage
+def stellenAllerModelle(spielstand) -> dict[Modell, Stelle | None]:
+    """Die Stelle jedes Modells beider Spieler; der Spielstand nennt seine `ausgangslage`."""
+    ausgangslage = spielstand.ausgangslage
     spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
     return {
-        modell: aufstellung.stelle(modell) for einer in spieler for modell in einer.armee.modelle
+        modell: spielstand.stelle(modell) for einer in spieler for modell in einer.armee.modelle
     }
 
 

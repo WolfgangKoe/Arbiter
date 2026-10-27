@@ -23,6 +23,11 @@ def dienstFür(aufstellung: Aufstellung):
     return anwendungFür(aufstellung).test_client()
 
 
+def dienstFürSchlacht(aufstellung: Aufstellung, schlacht):
+    """Der Flask-Testclient über der Aufstellung und genau dieser Schlacht (Schlacht, V11)."""
+    return anwendungFür(aufstellung, schlacht=schlacht).test_client()
+
+
 def _beispielDesVertrags(datei: str) -> dict:
     with (_vertrag / datei).open(encoding="utf-8") as quelle:
         return json.load(quelle)
@@ -46,6 +51,16 @@ def zurückgelegtDesVertrags() -> dict:
 def stelleBeimLoslassenDesVertrags() -> dict:
     """Das Beispiel von V10 aus `stelleBeimLoslassen.json`, nicht kopiert."""
     return _beispielDesVertrags("stelleBeimLoslassen.json")
+
+
+def schlachtDesVertrags() -> dict:
+    """Das Beispiel der Schlacht aus `schlacht.json`, nicht kopiert."""
+    return _beispielDesVertrags("schlacht.json")
+
+
+def weiterAlsBDesVertrags() -> dict:
+    """Das Beispiel der Sperre ‚weiter als B‘ aus `weiterAlsB.json`, nicht kopiert."""
+    return _beispielDesVertrags("weiterAlsB.json")
 
 
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
@@ -179,6 +194,20 @@ def einheitenDerArmeelisten(spielstand: dict) -> dict[str, dict]:
 def ausgewählteEinheitenIm(spielstand: dict) -> frozenset[str]:
     einheiten = einheitenDerArmeelisten(spielstand)
     return frozenset(name for name, einheit in einheiten.items() if einheit["ausgewählt"])
+
+
+def ersterZugWählen(dienst, spielernummer: int):
+    return dienst.put(f"/api/spieler/{spielernummer}/ersterZug")
+
+
+def phaseBeenden(dienst, schlachtrunde: int, spielernummer: int, phase):
+    """Beendet die Phase, die die Seite im letzten Spielstand sah (Schlacht, V13)."""
+    körper = {"schlachtrunde": schlachtrunde, "spieler": spielernummer, "phase": phase.value}
+    return dienst.put("/api/phaseBeenden", json=körper)
+
+
+def modellAnklicken(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):
+    return dienst.put(f"{pfadDesModells(aufstellung, einheit, modell)}/anklicken")
 
 
 def ausgewählteModelleIm(spielstand: dict) -> frozenset[tuple[float, float]]:

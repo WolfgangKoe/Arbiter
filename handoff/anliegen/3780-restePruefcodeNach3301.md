@@ -5,6 +5,7 @@ Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
 Status: offen
+Wartet auf: Prozessphase 8
 
 ## Runde 1
 **Befund.** Nachprüfung von Anliegen 3301 (P6, Retro 7, `git diff 257ddd6 22bc1a9`): erfüllt,
