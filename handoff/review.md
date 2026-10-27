@@ -68,9 +68,9 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
 
 ## Fortschritt
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel
-- [ ] UX: Mockups, bei einer Oberfläche
+- [x] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
-- [ ] Planer: Plan geschrieben
+- [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 8

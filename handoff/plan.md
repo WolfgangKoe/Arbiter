@@ -1,105 +1,87 @@
-# Plan · Zyklus 7
+# Plan · Zyklus 8
 
-Etappe: [1 · Aufstellen](../domaene/etappen/01-aufstellen.md), neu gefasst nach deinem Schnitt
-(Anliegen 2361 bis Anliegen 2364);
-die nächste ist [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
-Zyklusziel aus [Review 6](review.md).
+Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
+Zyklusziel aus [Review 7](review.md), ohne Abweichung.
 
-## Dein Happy Path nach Zyklus 7
-1. Du startest Arbiter, er nennt immer `http://127.0.0.1:8040/`. Läuft er schon, startet er
-   nicht und sagt, dass die Adresse belegt ist. (Item 1)
-2. Spieler 2 klickt die Necron Warriors in seiner *Armeeliste* an und klickt in seine Zone:
-   Sie stehen als *Formation* da, neben „Aufstellen der Einheit beenden“ steht „Einheit
-   zurücklegen“. (gebaut, Knopf: Item 2)
-3. Er klickt „Einheit zurücklegen“: Die *Karte* ist leer, die Necron Warriors bleiben
-   *ausgewählt*, ein Klick in die Zone stellt sie neu auf. (Item 2)
-4. Er klickt einen Necron Warrior an, nur er ist golden umrandet, und zieht ihn weit weg.
-   „Aufstellen der Einheit beenden“ bringt ‚keine Kohärenz‘, nichts zum Übergehen. (gebaut)
-5. Er klickt „Einheit zurücklegen“ und stellt die Necron Warriors per Klick neu auf.
-   „Aufstellen der Einheit beenden“: Spieler 1 ist *an der Reihe*. (Item 2)
+## Dein Happy Path nach Zyklus 8
+1. Ihr stellt beide Armeen auf wie bisher. Wer am Tisch den Roll-off gewinnt, wählt am
+   Bildschirm, wer den ersten Zug hat. (Item 2)
+2. Arbiter zeigt Schlachtrunde 1, den Spieler am Zug und die Phase. Jede Phase außer der
+   Bewegungsphase ist leer, ihr beendet sie ohne Spielhandlung. (Item 2)
+3. In der Bewegungsphase zieht ihr eine *Einheit* in einem Normal Move. Weiter als M, über
+   eine fremde *Base* oder am Ende ohne *Kohärenz* sperrt Arbiter. (Item 3)
+4. Nach der fünften Schlachtrunde endet die Schlacht. (Item 2)
+
+Noch nicht: Advance, Zurücksetzen, über die Kante, Engagement Range, gemeinsam übergehen mit
+*Protokoll*, Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*. Sie bleiben für
+die nächsten zwei bis drei Zyklen von Etappe 2.
 
 ## Items
-1. [Aufräumen und feste Adresse](../domaene/items/aufraeumenUndFesteAdresse.md): Schritt 1;
-   zuerst, vor Vertrag und Tests, die Kommentare im Code, die
-   [Es 8](../prozess/praemissen/es.md) verbietet (deine Antwort A zu
-   Anliegen 2360). Dann ohne sichtbare
-   Änderung: die *Auswahl* entflechten (1652), `seite.js` teilen (1541), *Ablage* heißt auch
-   im Code *Armeeliste* (2221). „zurück“ (AUF-17) entfällt samt Test, ebenso die *Sperre*
-   ‚nicht wählbar‘ beim Ziehen auf eine *Armeeliste* (AUF-8.4): Das *Modell* springt still
-   zurück (2220 F4 A, 2410).
-2. [Einheit zurücklegen](../domaene/items/einheitZuruecklegen.md): Schritte 2, 3 und 5.
+1. [Architektur umordnen](../domaene/items/architekturUmordnen.md): am Bildschirm nichts.
+   Deine Entscheidung aus Anliegen 2570 (F3), Anliegen 3051.
+2. [Phasen und Schlachtrunden](../domaene/items/phasenUndSchlachtrunden.md): Schritte 1, 2, 4.
+3. [Normal Move](../domaene/items/normalMove.md): Schritt 3.
 
-Reihenfolge 1, 2: Item 1 räumt auf, wo Item 2 baut. Das Risiko liegt bei Item 1.
+Reihenfolge 1, 2, 3: Item 1 ordnet die Regeln, nach denen 2 und 3 gebaut werden; der Normal
+Move braucht die Bewegungsphase aus Item 2. Das Risiko liegt bei Item 3, dem ersten Ziehen
+außerhalb des Aufstellens.
 
-Kommentare: Ab „Freigabe Plan 7“ prüft der Commit-Hook auch `technik/`. Dort stehen 78
-verbotene Kommentare in 30 Dateien: 29 in Akzeptanztests (Testautor), 48 im Code und einer in
-einem Einheitstest (Implementierer). Bis sie fort sind, scheitert jeder Commit; darum zuerst
-(Anliegen 2510). Beide laufen gleichzeitig, der
-Koordinator committet einmal nach beiden; davor committet niemand in der Technikphase. Kosten:
-je ein Durchgang, am Bildschirm nichts. Was ein Kommentar erklärt, steht danach im Namen, in
-einem einzeiligen Docstring oder in der Architektur, auf die er verweist; was dort schon
-steht, entfällt.
-
-## Abweichung vom Zyklusziel
-Review 6 nennt drei Schritte; nach deinem Schnitt bleibt nur „Einheit zurücklegen“.
-Gemeinsam übergehen, das *Protokoll* und das Loslassen neben der *Karte* kommen mit dem
-Normal Move in Etappe 2 (2361 F1, F2). Davor kommt Item 1 (1650, 1652). Nach Plan 7 ist
-Etappe 1 erreicht. Die Randfälle nur des Aufstellens warten auf Etappe 7.
+## Noch nicht bereit
+Zu Items 2 und 3 fehlen die Anforderungen; der Anforderungsautor schreibt sie
+([4220](anliegen/4220-anforderungenZuPlan8.md)), danach Ux die Mockups, dann der
+Fachkritiker. Erst dann nennen die Items ihre Kriterien und der Plan ist zur Freigabe
+bereit.
 
 ## Annahmen
-- Deine Antwort A nennt die 38 Kommentare `Regel:`. Ich nehme die 40 `Warum:` dazu: Es 8
-  verbietet sie ebenso, sonst bliebe die DoD rot. Sollen sie bleiben, braucht Es 8 eine
-  Ausnahme (Organisationsentwickler).
+- [3051](anliegen/3051-architekturUmordnenInPlan8.md) F1: Item 1 steht nach der Empfehlung
+  im Plan. Dein „.“ bestätigt es; willst du es nicht, streiche Item 1.
+- [3661](anliegen/3661-kriteriumNenntSeineEtappe.md): Jede Anforderung nennt ihre Etappe
+  (`Etappe: 2`). So zählt der Stand ab Retro 8 „Etappe 2: x von y Kriterien belegt“, wie
+  du in Anliegen 3550 gewählt hast.
 
 ## Empfehlung
-Gib die zwei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
-
-Ausnahme im Ziel: Das [Ziel](../domaene/ziel.md) verspricht: „Die Spieler können eine
-Sperre einvernehmlich übergehen.“ In 2361 F1 A hast du entschieden: Steht eine Einheit ohne
-*Kohärenz*, bietet Arbiter das Übergehen gar nicht an, beim Aufstellen wie bei jeder
-Bewegung. So widersprechen sich Ziel und deine Antwort. `domaene/ziel.md` ändert nur du,
-darum liegt es bei dir. Vorschlag: „Die Spieler können eine Sperre einvernehmlich übergehen,
-außer ‚keine Kohärenz‘; das wird protokolliert.“ Bis dahin gilt deine Antwort.
+Gib die drei Items frei, sobald die Kriterien stehen und Schritte 1 bis 4 deinem Bild
+entsprechen.
 
 ## Offene Anliegen
-- An dich: keine. Vorschläge des Anforderungsautors: keine.
+- An dich: [3051](anliegen/3051-architekturUmordnenInPlan8.md) F1 (siehe Annahmen).
+  Vorschläge des Anforderungsautors: keine.
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt
-- [x] Architekt: Vertrag zu Item aufraeumenUndFesteAdresse, bei beiden Hälften
-- [x] Testautor: Tests zu Item aufraeumenUndFesteAdresse
-- [x] Fachkritiker: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
-- [x] Architekt: Kritik an den Tests zu Item aufraeumenUndFesteAdresse
-- [x] Implementierer: Tests zu Item aufraeumenUndFesteAdresse grün
-- [x] Architekt: Kritik am Code zu Item aufraeumenUndFesteAdresse
-- [x] Reviewer: Kritik am Code zu Item aufraeumenUndFesteAdresse
-  Hindernis: Anliegen 2820: Pfeilfunktion als Hülle um einen Aufruf in anfragen.js (Es 7) (Anliegen 2861); beseitigt: Commit „aufraeumenUndFesteAdresse: Knopf ohne Hülle, Anliegen 1651, 2820 und 2861 angenommen“
-- [x] Fachkritiker: Item aufraeumenUndFesteAdresse abgenommen
-- [x] Planer: Item aufraeumenUndFesteAdresse gelöscht
-- [x] Architekt: Vertrag zu Item einheitZuruecklegen, bei beiden Hälften
-- [x] Testautor: Tests zu Item einheitZuruecklegen
-- [x] Fachkritiker: Kritik an den Tests zu Item einheitZuruecklegen
-  Hindernis: Anliegen 2770: AUF-23.1 ungeprüft, während andere Einheiten auf der Karte stehen (Anliegen 2783); beseitigt: Commit „aufraeumenUndFesteAdresse: Kommentare aufgeräumt, AUF-8.4 und AUF-17 entfernt, feste Adresse, Tests zu einheitZuruecklegen“
-- [x] Architekt: Kritik an den Tests zu Item einheitZuruecklegen
-  Hindernis: Anliegen 2780: Benennung rot (m, Zeile 130), Bildschirmtests mit page.route und den Beispielen zu AUF-23.1, 23.3, 23.4 fehlen (Anliegen 2782); beseitigt: Commit „aufraeumenUndFesteAdresse: Kommentare aufgeräumt, AUF-8.4 und AUF-17 entfernt, feste Adresse, Tests zu einheitZuruecklegen“
-- [x] Implementierer: Tests zu Item einheitZuruecklegen grün
-- [x] Architekt: Kritik am Code zu Item einheitZuruecklegen
-- [x] Reviewer: Kritik am Code zu Item einheitZuruecklegen
-- [x] Fachkritiker: Item einheitZuruecklegen abgenommen
-- [x] Planer: Item einheitZuruecklegen gelöscht
-- [x] Reviewer: DoD über das Inkrement
-- [x] Reviewer: Review geschrieben
+- [ ] Architekt: Vertrag zu Item architekturUmordnen, bei beiden Hälften
+- [ ] Testautor: Tests zu Item architekturUmordnen
+- [ ] Fachkritiker: Kritik an den Tests zu Item architekturUmordnen
+- [ ] Architekt: Kritik an den Tests zu Item architekturUmordnen
+- [ ] Implementierer: Tests zu Item architekturUmordnen grün
+- [ ] Architekt: Kritik am Code zu Item architekturUmordnen
+- [ ] Reviewer: Kritik am Code zu Item architekturUmordnen
+- [ ] Fachkritiker: Item architekturUmordnen abgenommen
+- [ ] Planer: Item architekturUmordnen gelöscht
+- [ ] Architekt: Vertrag zu Item phasenUndSchlachtrunden, bei beiden Hälften
+- [ ] Testautor: Tests zu Item phasenUndSchlachtrunden
+- [ ] Fachkritiker: Kritik an den Tests zu Item phasenUndSchlachtrunden
+- [ ] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
+- [ ] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
+- [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
+- [ ] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
+- [ ] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
+- [ ] Planer: Item phasenUndSchlachtrunden gelöscht
+- [ ] Architekt: Vertrag zu Item normalMove, bei beiden Hälften
+- [ ] Testautor: Tests zu Item normalMove
+- [ ] Fachkritiker: Kritik an den Tests zu Item normalMove
+- [ ] Architekt: Kritik an den Tests zu Item normalMove
+- [ ] Implementierer: Tests zu Item normalMove grün
+- [ ] Architekt: Kritik am Code zu Item normalMove
+- [ ] Reviewer: Kritik am Code zu Item normalMove
+- [ ] Fachkritiker: Item normalMove abgenommen
+- [ ] Planer: Item normalMove gelöscht
+- [ ] Reviewer: DoD über das Inkrement
+- [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
 - [ ] Organisationsentwickler: Kritik am Review
-- [x] Stakeholder: Freigabe Review 7
+- [ ] Stakeholder: Freigabe Review 8
 
 ## Freigabe
-Freigabe: ja
-Kommentar: Es hieß, folgendes läge noch bei mir: 
-„.“ für Etappe 1 in der geänderten Fassung, ohne „vor fremden Bases“: 01-aufstellen.md. -> Das hier verstehe ich nicht. Wir haben die Etappen überarbeitet. Es sollte doch jetzt alles passen.
-Die Ausnahme „keine Kohärenz“ im Ziel ergänzen, wie der Planer in plan.md empfiehlt. Was soll hier ergänzt werden. Warum liegt das bei mir?
-In der Retro den Haken „Koordinator: nach dev gepusht“, falls er noch fehlt. -> Ist schon lange gesetzt.
-Stellungnahme: Etappen: Du hast recht, sie passen; die Annahme dazu ist gestrichen. Ziel:
-unter Empfehlung erklärt, warum und mit welchem Satz. Retro-Haken: ein veralteter Punkt aus
-der Übergabe des Koordinators, nichts zu tun. 
-
+Freigabe: offen
+Kommentar: .

@@ -4,8 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 2570 entschieden: Die Architektur gliedert sich
@@ -26,4 +25,6 @@ Prüfungen grün sind. Ich schreibe die Dateien, Tests ändern sich nicht. Folge
 (Bewegen) beginnt mit einer Architektur, in der je Ordner eine Datei steht.
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Ja, wie empfohlen und wie in 2570 F3 entschieden: Item 1 von
+[Plan 8](../plan.md), [architekturUmordnen](../../domaene/items/architekturUmordnen.md), mit
+deinem Maß für fertig. Phasen und Normal Move bauen darauf.

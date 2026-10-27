@@ -4,8 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 3550 A gewählt: Stand und Dashboard zählen die belegten Kriterien je Etappe („Etappe 2: x von y
@@ -31,4 +30,8 @@ Empfehlung: A. Die Angabe steht beim Kriterium, das Höchstmaß der Etappe bleib
 Das Format in `domaene/CLAUDE.md` trägt der Organisationsentwickler in der Prozessphase 8
 nach; die Kennungen setzt der Anforderungsautor.
 
-**Stellungnahme.**
+**Stellungnahme.** A. Ergänzt: Ein Kriterium ohne beides gehört zu einer erreichten Etappe;
+Etappe 1 erhält keine Angabe, ihre Datei ist gelöscht (Anliegen 3500). Die Zuordnung der
+bestehenden Kriterien nach den Items und die neuen Anforderungen mit `Etappe: 2` gehen an
+den Anforderungsautor ([4220](4220-anforderungenZuPlan8.md)). Die Zeile zählt zum Höchstmaß
+von 1.200 Zeichen.
