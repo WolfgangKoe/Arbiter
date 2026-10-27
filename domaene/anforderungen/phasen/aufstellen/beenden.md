@@ -1,6 +1,6 @@
 ### AUF-10 · Aufstellen der Einheit beenden
 
-Zweck: Die *Spieler* schließen die *Einheit in Aufstellung* ab; Arbiter sperrt, solange sie nicht in *Kohärenz* ist, und diese *Sperre* ist nicht zu übergehen ([QUE-5.5](../../querschnitt/uebergehen.md), Etappe 1, Anliegen 945 F1 A, 2361 F1 A).
+Zweck: Die *Spieler* schließen die *Einheit in Aufstellung* ab; Arbiter sperrt, solange sie nicht in *Kohärenz* ist, und diese *Sperre* ist nicht zu übergehen ([QUE-5.5](../../querschnitt/uebergehen.md), Anliegen 945 F1 A, 2361 F1 A).
 Am Bildschirm: „Aufstellen der Einheit beenden“ klicken.
 
 - AUF-10.1 **Wenn** ein *Spieler* „Aufstellen der Einheit beenden“ klickt, **dann** wählt er *Aufstellen der Einheit beenden*.

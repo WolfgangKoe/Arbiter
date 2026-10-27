@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Etappe 1 ist erreicht, ihre Datei ist gelöscht
@@ -27,4 +26,10 @@ fest. Hält nichts auf, abseits des Happy Path: wartet auf die Domänenphase.
 die Anforderung verweisen, die die Werte verlangt; „Etappe 1“ als Fundstelle streichen, wo
 Anliegen oder Regeltext daneben stehen, bei der Base „bis Etappe 4 rund“.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen. Die Kopfkommentare von
+[onlyWar.yaml](../../domaene/daten/onlyWar.yaml) und
+[ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml) verweisen auf
+[MIV-1](../../domaene/anforderungen/missionsvorbereitung/ausgangslage.md), die die Werte
+verlangt. Im [Glossar](../../domaene/glossar.md) steht bei Ausgangslage „(MIV-1)“, bei Base
+„Bis Etappe 4 rund“; bei zurücklegen und überdecken, in AUF-10 und AUF-3.7 ist „Etappe 1“
+gestrichen, die Anliegen bleiben als Fundstelle. Kein Kriterium ändert seinen Inhalt.

@@ -11,10 +11,10 @@ Aufstellen der Einheit beenden | – | aufstellenDerEinheitBeenden | Handlung, m
 Aufstellung | deploy forces | Aufstellung | Schritt 4 der Mission Only War: Die *Spieler* stellen abwechselnd je eine *Einheit* auf, bis beide alle aufgestellt haben (`core_rules.txt:2322`).
 Aufstellungskarte | deployment map | Aufstellungskarte | Karte einer *Mission* mit ihren *Aufstellungszonen* (`core_rules.txt:2182`); einen Namen hat eine Zone nur, wenn die Karte ihn zeigt, etwa die des Angreifers (`open_play.txt:235`, `narrative_play.txt:2001`).
 Aufstellungszone | deployment zone | Aufstellungszone (erste, zweite) | Fläche des *Spielfelds*, in der ein *Spieler* die *Modelle* seiner *Armee* aufstellt; die *Aufstellungskarte* der *Mission* legt sie fest (`core_rules.txt:2182`). Only War hat zwei ohne Namen, gezählt (`core_rules.txt:2322`).
-Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, *Spielfeld* und *Aufstellungszonen* (Etappe 1); Werte in `domaene/daten/ausgangslage.yaml` und `onlyWar.yaml`.
+Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, *Spielfeld* und *Aufstellungszonen* (MIV-1); Werte in `domaene/daten/ausgangslage.yaml` und `onlyWar.yaml`.
 ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; ist ihre *Ebene* eines ihrer *Modelle*, ist von ihren *Modellen* nur dieses ausgewählt (Anliegen 980). Erlaubt keine Handlung, zeigt nur, was gemeint ist.
 Auswahl | – | Auswahl | Die *ausgewählte* *Einheit* mit ihrer *Ebene*, höchstens eine für beide *Spieler* zusammen (Anliegen 309, 960 F3 A, 980).
-Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. In Etappe 1 rund, mit einem *Durchmesser*.
+Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
 Ebene | – | ebene | Was Ziehen eines *Modells* einer *ausgewählten* *Einheit* bewegt: ist sie die ganze *Einheit*, alle ihre *gesetzten* *Modelle*; ist sie eines ihrer *Modelle*, nur das gezogene. Jede *ausgewählte* *Einheit* hat eine (Anliegen 980, Vorbild `ArbiterMap/…/model_selection.js:110`).
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
@@ -44,5 +44,5 @@ Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *S
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
-zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Etappe 1, Anliegen 890 F1, 2062, 2220 F2).
-überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Etappe 1, Anliegen 09 F12 A, git).
+zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Anliegen 890 F1, 2062, 2220 F2).
+überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Anliegen 09 F12 A, git).
