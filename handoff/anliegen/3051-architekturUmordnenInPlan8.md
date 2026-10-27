@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 2570 entschieden: Die Architektur gliedert sich

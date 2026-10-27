@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 3550 A gewählt: Stand und Dashboard zählen die belegten Kriterien je Etappe („Etappe 2: x von y

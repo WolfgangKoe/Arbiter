@@ -18,7 +18,7 @@ die nächsten zwei bis drei Zyklen von Etappe 2.
 
 ## Items
 1. [Architektur umordnen](../domaene/items/architekturUmordnen.md): am Bildschirm nichts.
-   Deine Entscheidung aus Anliegen 2570 (F3), Anliegen 3051.
+   Deine Entscheidung aus Anliegen 2570 (F3).
 2. [Phasen und Schlachtrunden](../domaene/items/phasenUndSchlachtrunden.md): Schritte 1, 2, 4.
 3. [Normal Move](../domaene/items/normalMove.md): Schritt 3.
 
@@ -30,22 +30,15 @@ außerhalb des Aufstellens.
 Zu Items 2 und 3 fehlen die Anforderungen; der Anforderungsautor schreibt sie
 ([4220](anliegen/4220-anforderungenZuPlan8.md)), danach Ux die Mockups, dann der
 Fachkritiker. Erst dann nennen die Items ihre Kriterien und der Plan ist zur Freigabe
-bereit.
-
-## Annahmen
-- [3051](anliegen/3051-architekturUmordnenInPlan8.md) F1: Item 1 steht nach der Empfehlung
-  im Plan. Dein „.“ bestätigt es; willst du es nicht, streiche Item 1.
-- [3661](anliegen/3661-kriteriumNenntSeineEtappe.md): Jede Anforderung nennt ihre Etappe
-  (`Etappe: 2`). So zählt der Stand ab Retro 8 „Etappe 2: x von y Kriterien belegt“, wie
-  du in Anliegen 3550 gewählt hast.
+bereit. Jede Anforderung nennt dann ihre Etappe; so zählt der Stand ab Retro 8 „Etappe 2: x
+von y Kriterien belegt“, wie du in Anliegen 3550 gewählt hast (Anliegen 3661).
 
 ## Empfehlung
 Gib die drei Items frei, sobald die Kriterien stehen und Schritte 1 bis 4 deinem Bild
 entsprechen.
 
 ## Offene Anliegen
-- An dich: [3051](anliegen/3051-architekturUmordnenInPlan8.md) F1 (siehe Annahmen).
-  Vorschläge des Anforderungsautors: keine.
+- An dich: keine. Vorschläge des Anforderungsautors: keine.
 - Sonst: [Moderation](moderation.md).
 
 ## Fortschritt
