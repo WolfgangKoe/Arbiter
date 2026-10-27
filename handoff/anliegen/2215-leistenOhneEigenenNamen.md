@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: 2920
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
@@ -41,5 +40,5 @@ Armeeliste Spieler 1 ein- und ausfahren, ausgeklappt“. Die Bildschirmtests fin
 *Griff* über Rolle und Namen; das prüft die Namen mit. Die *Leisten* gibt es noch nicht im
 Code, also kostet die Entscheidung jetzt nur die Mockups. Die Mockups zieht Ux mit
 [2920](2920-leistenNamenInDenMockups.md) nach (auf-13.html gibt es nicht mehr, dafür
-que-7.html). Wenn 2920 erledigt ist, setze ich `angenommen`. Für Anliegen 2240
+que-7.html); 2920 ist erledigt, beide Mockups tragen die Namen nach O4. Für Anliegen 2240
 gilt O4 schon jetzt.

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Ux
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Einordnung nach [Ich 3](../../prozess/praemissen/ich.md): wartet auf die
@@ -32,4 +31,6 @@ Markup, das O4 widerspricht, und SonarLint meldet je Datei dreimal Web:S5255.
 Erledigt, wenn in `domaene/mockups/` jede `<aside class="leiste …">` und jeder `leistenGriff`
 den Namen nach O4 trägt und „Ablage“ dort nicht mehr vorkommt.
 
-**Stellungnahme.**
+**Stellungnahme.** Einverstanden, umgesetzt. In [que-5.html](../../domaene/mockups/que-5.html)
+und [que-7.html](../../domaene/mockups/que-7.html) trägt jede *Leiste* ihren Namen und jeder
+*Griff* „… ein- und ausfahren“ nach O4; „Ablage“ kommt nicht mehr vor.
