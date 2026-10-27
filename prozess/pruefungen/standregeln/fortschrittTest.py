@@ -141,6 +141,28 @@ def testEinNeuGefasstesPlanÖffnetSeineKritikWiederUndEinHinweisBleibt(tmp_path,
     assert "- [ ] Architekt: Kritik am Plan\n" in review.read_text(encoding="utf-8")
 
 
+def testEinGelöschtesAnliegenImPlanÖffnetDieKritikNichtWiederEinInhaltDochSchon(tmp_path, gitRepo):
+    review = schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    plan = schreiben(tmp_path, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    gitRepo.festhalten("Freigabe Plan 1")
+    gitRepo.festhalten("Freigabe Review 1")
+    gitRepo.festhalten("Freigabe Retro 1")
+    mitLink = "# Plan · Zyklus 2\n\n- [4280](anliegen/4280-begriffe.md). Text\n"
+    plan.write_text(mitLink, encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    abhaken(tmp_path, "Architekt", "Kritik am Plan")
+    fortschrittSchreiben(tmp_path)
+    link = "[4280](anliegen/4280-begriffe.md)"
+    ersetzt = plan.read_text(encoding="utf-8").replace(link, "Anliegen 4280")
+    plan.write_text(ersetzt, encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Architekt: Kritik am Plan\n" in review.read_text(encoding="utf-8")
+    plan.write_text(ersetzt.replace("Text", "Anderer Text"), encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    assert "- [ ] Architekt: Kritik am Plan\n" in review.read_text(encoding="utf-8")
+
+
 def testNachDemReviewFolgtJeKritikerDieKritikAmReviewVorDerFreigabe(tmp_path, gitRepo):
     plan = planMitItem(tmp_path, gitRepo)
     fortschrittSchreiben(tmp_path)

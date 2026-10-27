@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [architekturUmordnen](../../domaene/items/architekturUmordnen.md) sagt „Fertig:
@@ -32,4 +32,8 @@ Stakeholders, oder Item 1 bleibt offen, und Item 2 und 3 warten darauf.
 unter 6.000 Zeichen, zusammen unter 24.000; der Vertrag je Phase eine Datei in
 `technik/architektur/vertrag/` unter 6.000, ohne Summe; Prüfungen grün (2570 F2 C, 3051).“
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in [architekturUmordnen](../../domaene/items/architekturUmordnen.md)
+umgesetzt: „Fertig: Regeln je Datei unter 6.000 Zeichen, zusammen unter 24.000; Vertrag je
+Datei unter 6.000, ohne Summe ([Höchstmaße](../../prozess/kennzahlen.md#höchstmaße));
+Prüfungen grün (3051).“ Kürzer als dein Wortlaut, weil ein Item höchstens 400 Zeichen hat;
+„je Phase eine Datei“ steht schon im Umfang, den Ordner nennen die Höchstmaße.

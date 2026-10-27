@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: kein Schritt des Happy Path, keine *Sperre*; Schritt 3 von
@@ -22,3 +21,9 @@ offene Anliegen nennt, die vor der Freigabe erledigt werden.
 Anliegen 4420): „Noch nicht bereit“ entfällt, die Empfehlung
 heißt „Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.“ Ab Plan 9
 nennt „Noch nicht bereit“ nur, was bei der Freigabe noch fehlt.
+
+**Stellungnahme.** Angenommen, in [Plan 8](../plan.md) umgesetzt: „Noch nicht bereit“
+entfällt, die Empfehlung lautet wie vorgeschlagen. Die zwei Sätze, die dort nicht Fehlendes
+nannten (Anforderungen und Mockups stehen; Stand zählt je Etappe, 3661), stehen jetzt unter
+der Reihenfolge der Items. Ab Plan 9 nennt „Noch nicht bereit“ nur, was bei der Freigabe
+noch fehlt.

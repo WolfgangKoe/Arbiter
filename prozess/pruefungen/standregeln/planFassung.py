@@ -9,17 +9,19 @@ from lesen.plan import zyklus
 
 merkzettelOrdner = Path(".git") / "arbiter"
 merkzettelName = "planFassung.txt"
+anliegenLink = re.compile(r"\[[^\]]*\]\((?:\.\./)?(?:handoff/)?anliegen/(\d+)-[^)\s]*\)")
 abschnittNachDemPlan = re.compile(r"^## (?:Fortschritt|Freigabe)", re.MULTILINE)
 
 
 def fassungVon(wurzel: Path, zyklusNummer: int) -> str | None:
-    """Zyklus und Prüfsumme des Plans ohne Fortschritt und Freigabe; `None` ohne diesen Plan."""
+    """Fassung des Plans ohne Fortschritt und Freigabe, Anliegenlinks als „Anliegen <nr>“."""
     plan = wurzel / handoffOrdner / "plan.md"
     if not plan.is_file() or zyklus(plan) != zyklusNummer:
         return None
     text = plan.read_text(encoding="utf-8")
     ende = abschnittNachDemPlan.search(text)
     inhalt = text[: ende.start()] if ende else text
+    inhalt = anliegenLink.sub(r"Anliegen \1", inhalt)
     return f"{zyklusNummer}:{hashlib.sha256(inhalt.encode('utf-8')).hexdigest()}"
 
 

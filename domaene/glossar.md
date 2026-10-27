@@ -20,7 +20,7 @@ Bewegung der Einheit beenden | – | bewegungDerEinheitBeenden | Handlung, mit d
 Bewegungsphase | Movement phase | bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
-Distanz | distance a model moves | distanz | Summe der geraden Strecken zwischen den *Stellen*, an die ein *Modell* in der laufenden *Bewegungsphase* nacheinander *gesetzt* wurde, in *Zoll* (`core_rules.txt:729`, `:734`, Anliegen 02 F5, 4402, git).
+Distanz | distance a model moves | distanz | Summe der geraden Strecken von der *Stelle* eines *Modells* zu Beginn der laufenden *Bewegungsphase* über jede *Stelle*, an die es darin nacheinander *gesetzt* wurde, in *Zoll* (`core_rules.txt:729`, `:734`, Anliegen 02 F5, 4402, git).
 Ebene | – | ebene | Was Ziehen eines *Modells* einer *ausgewählten* *Einheit* bewegt: ist sie die ganze *Einheit*, alle ihre *gesetzten* *Modelle*; ist sie eines ihrer *Modelle*, nur das gezogene. Jede *ausgewählte* *Einheit* hat eine (Anliegen 980, Vorbild `ArbiterMap/…/model_selection.js:110`).
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die zusammen bewegen und kämpfen (`core_rules.txt:420`).

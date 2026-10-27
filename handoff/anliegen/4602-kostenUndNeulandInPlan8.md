@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Plan 8](../plan.md) sagt: „Das Risiko liegt bei Item 3, dem ersten Ziehen
@@ -42,4 +41,8 @@ nicht mehr der *Aufstellung*. Neu ist in Item 3 nur das exakte Messen der *Dista
 streicht in „Offene Anliegen“ F6 und F7, sobald 4280 geschlossen ist. Sonst gilt 1 bis 3 für
 die Schätzung in Plan 9.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in [Plan 8](../plan.md) umgesetzt: Der Satz zum Risiko lautet
+wie vorgeschlagen. 4280 ist geschlossen; „Offene Anliegen“ nennt an den Stakeholder keines
+mehr und verweist für F7 auf Anliegen 4621. Ebenso im Item
+[normalMove](../../domaene/items/normalMove.md): „F3 bis F6“ statt „F6 offen“. Punkte 1 bis 3
+nehme ich in die Schätzung von Plan 9.

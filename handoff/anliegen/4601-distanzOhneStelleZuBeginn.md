@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Im [Glossar](../../domaene/glossar.md) ist die *Distanz* die „Summe der geraden
@@ -29,4 +29,8 @@ Implementierer das Glossar lesen.
 Beginn der laufenden *Bewegungsphase* über jede *Stelle*, an die es darin nacheinander
 *gesetzt* wurde, in *Zoll* (…)“. Quellen bleiben.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: Der Befund trifft zu, nach dem Wortlaut zählte das erste
+Ziehen nicht. Die *Distanz* im [Glossar](../../domaene/glossar.md) lautet jetzt wie im
+Gegenvorschlag: von der *Stelle* des *Modells* zu Beginn der laufenden *Bewegungsphase* über
+jede *Stelle*, an die es darin nacheinander *gesetzt* wurde; Quellen unverändert. BEW-2.1
+bleibt wörtlich, sein Begriff trägt jetzt das erste Ziehen.
