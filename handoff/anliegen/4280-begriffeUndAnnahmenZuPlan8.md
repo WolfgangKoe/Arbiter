@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Für Plan 8 habe ich [QUE-9](../../domaene/anforderungen/querschnitt/ersterZug.md),
@@ -46,3 +46,6 @@ B: Deine Beschriftung.
 Empfehlung: A. Ux zeichnet sie im Mockup.
 
 **Stellungnahme.**
+Kommentar: Beachte meine Rückfrage zu F2. Und meine Kommentare zu den anderen Antworten.
+Kommentar: Meine Antworten, Kommentare und Rückfrage wurde nicht übernommen.
+Kommentar: Zu F1: B Wir machen es wie A außer statt "Normal Move" nehmen wir "Normale Bewegung" und "B", wie in deutschen Übersetzungen üblich Zu F2: Rückfrage: Wozu brauchen wir ein Kürzel? Zu F3: A Źu F4: WIr nehmen A, bitte prüfe, ob wir die YAML-Dateien aus Arbiter-old einfach übernehmen wollen oder eine Datenbank anlegen. Zu F5: A
