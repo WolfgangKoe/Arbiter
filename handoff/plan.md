@@ -36,10 +36,10 @@ ersten Ziehen außerhalb des Aufstellens.
 
 ## Noch nicht bereit
 Anforderungen, Mockups und ihre Prüfung stehen; die Items verlinken ihre Mockups. Es fehlen:
-- [4402](anliegen/4402-distanzUeberDiePhaseHinaus.md): Die *Distanz* zählt noch über
+- Anliegen 4402: Die *Distanz* zählt noch über
   „Phase beenden“ hinaus; vergisst ihr „Bewegung der Einheit beenden“, sperrt ‚weiter als B‘
   in eurer nächsten Bewegungsphase zu Unrecht. Der Anforderungsautor berichtigt es.
-- [4421](anliegen/4421-grundWeiterAlsBImMockup.md): Ux schreibt ‚weiter als B‘ ins Mockup.
+- Anliegen 4421: Ux schreibt ‚weiter als B‘ ins Mockup.
 
 Jede Anforderung nennt ihre Etappe; so zählt der Stand ab Retro 8 „Etappe 2: x von y
 Kriterien belegt“, wie du in Anliegen 3550 gewählt hast (Anliegen 3661).

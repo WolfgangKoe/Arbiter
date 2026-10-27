@@ -44,7 +44,7 @@ Kommentar: Zu F1: B Wir machen es wie A außer statt "Normal Move" nehmen wir "N
 fehlte; mein Fehler, jetzt steht sie überall. Umgesetzt: F1 B im Glossar, in BEW-1 und BEW-2,
 die *Sperre* heißt ‚weiter als B‘; F3 bis F5 standen schon so. Plan, Items und Etappe 2
 berichtigt der Planer ([4420](4420-normaleBewegungInPlanUndItems.md)), das Mockup Ux
-([4421](4421-grundWeiterAlsBImMockup.md)).
+(Anliegen 4421).
 
 Wozu ein Kürzel: Jedes Kriterium heißt `<Kürzel>-<n>.<m>`, sein Test trägt die Kennung im
 Namen (`testBew2_1…`, [Es 4](../../prozess/praemissen/es.md)); daran ordnet die Prüfung
