@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Arbiter</title>
+  <link rel="stylesheet" href="../../technik/frontend/komponenten.css">
+</head>
+<body>
+  <header class="kopfzeile">
+    <div class="kopfzeileSpieler spieler1 amZug">Spieler 1<span class="kopfzeileAmZug">Schlachtrunde 1 · Bewegungsphase</span></div>
+    <div class="kopfzeileTitel">ARBITER</div>
+    <div class="kopfzeileSpieler spieler2">Spieler 2</div>
+  </header>
+  <main class="spielbereich">
+    <aside class="leiste leisteLinks" aria-label="Armeeliste Spieler 1">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 1 ein- und ausfahren">◀</button>
+      <div class="leistenInhalt">
+        <div class="armeeKarte spieler1">
+          <h2 class="armeeKartenName">Spieler 1</h2>
+        </div>
+      </div>
+    </aside>
+    <div class="spalte spalteMitte">
+      <svg class="karte" viewBox="0 0 44 60" role="img" aria-label="Karte">
+      <rect class="spielfeld" x="0" y="0" width="44" height="60"/>
+      <rect class="aufstellungszone spieler1" x="0" y="0" width="9" height="60"/>
+      <rect class="aufstellungszone spieler2" x="35" y="0" width="9" height="60"/>
+      <circle class="modell spieler1" cx="5.11" cy="27.24" r="0.630"/>
+      <circle class="modell spieler1" cx="5.11" cy="30.0" r="0.630"/>
+      <circle class="modell spieler1" cx="5.11" cy="32.76" r="0.630"/>
+      <circle class="modell spieler1" cx="7.5" cy="25.86" r="0.630"/>
+      <circle class="modell spieler1 ausgewählt" cx="7.5" cy="28.62" r="0.630"/>
+      <circle class="modell spieler1" cx="7.5" cy="31.38" r="0.630"/>
+      <circle class="modell spieler1" cx="7.5" cy="34.14" r="0.630"/>
+      <circle class="modell spieler1" cx="9.89" cy="27.24" r="0.630"/>
+      <circle class="modell spieler1" cx="9.89" cy="30.0" r="0.630"/>
+      <circle class="modell spieler1" cx="11.7" cy="28.62" r="0.630"/>
+      <circle class="modell spieler1" cx="4.5" cy="38.0" r="0.787"/>
+      <circle class="modell spieler2" cx="36.0" cy="26.0" r="0.630"/>
+      <circle class="modell spieler2" cx="36.0" cy="28.76" r="0.630"/>
+      <circle class="modell spieler2" cx="36.0" cy="31.52" r="0.630"/>
+      <circle class="modell spieler2" cx="38.39" cy="24.62" r="0.630"/>
+      <circle class="modell spieler2" cx="38.39" cy="27.38" r="0.630"/>
+      <circle class="modell spieler2" cx="38.39" cy="30.14" r="0.630"/>
+      <circle class="modell spieler2" cx="38.39" cy="32.9" r="0.630"/>
+      <circle class="modell spieler2" cx="40.78" cy="26.0" r="0.630"/>
+      <circle class="modell spieler2" cx="40.78" cy="28.76" r="0.630"/>
+      <circle class="modell spieler2" cx="40.78" cy="31.52" r="0.630"/>
+      <circle class="modell spieler2" cx="40.0" cy="40.0" r="0.630"/>
+      </svg>
+      <div class="knopfGruppe">
+        <button class="knopf" type="button">Bewegung der Einheit beenden</button>
+        <button class="knopf" type="button">Phase beenden</button>
+      </div>
+    </div>
+    <aside class="leiste leisteRechts" aria-label="Armeeliste Spieler 2">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 2 ein- und ausfahren">▶</button>
+      <div class="leistenInhalt">
+        <div class="armeeKarte spieler2">
+          <h2 class="armeeKartenName">Spieler 2</h2>
+        </div>
+      </div>
+    </aside>
+  </main>
+  <aside class="leiste leisteUnten" aria-label="Protokoll">
+    <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll ein- und ausfahren">▼</button>
+    <div class="leistenInhalt">
+      <ul class="protokoll">
+      </ul>
+    </div>
+  </aside>
+</body>
+</html>

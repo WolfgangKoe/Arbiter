@@ -47,6 +47,7 @@ body {
 }
 
 .kopfzeileTitel {
+  text-align: center;
   color: var(--akzent);
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -65,11 +66,14 @@ body {
   text-align: right;
 }
 
-.kopfzeileSpieler.anDerReihe {
+.kopfzeileSpieler.anDerReihe,
+.kopfzeileSpieler.amZug {
   border-bottom-color: var(--akzentHell);
 }
 
-.kopfzeileAnDerReihe {
+.kopfzeileAnDerReihe,
+.kopfzeileAmZug,
+.kopfzeileSchlachtBeendet {
   display: block;
   color: var(--akzentHell);
   font-size: 0.75rem;
