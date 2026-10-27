@@ -7,6 +7,16 @@ from itertools import pairwise
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
+from arbiter.domaene.phasen.aufstellen.beenden import gesetzteModelle
+from arbiter.domaene.phasen.aufstellen.einheitVerschieben import verschobeneStellen
+from arbiter.domaene.phasen.aufstellen.reihenfolge import einheitVon
+from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
+    anDerBewegungsweiteAngehalten,
+)
+from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
+from arbiter.domaene.phasen.bewegung.sperrenBeimZiehen import gründeBeimZiehen
+from arbiter.domaene.querschnitt.kohaerenz import inKohärenz
+from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 
@@ -37,6 +47,7 @@ class Schlacht:
             for modell in spieler.armee.modelle
             if (stelle := aufstellung.stelle(modell))
         }
+        self._stellenZuBeginn = dict(self._stellen)
         self._auswahl = Auswahl()
         self._ersterZug: Spieler | None = None
         self._amZug: Spieler | None = None
@@ -75,11 +86,18 @@ class Schlacht:
         self._amZug = spieler
 
     def phaseBeenden(self) -> None:
-        if self._amZug is None:
+        spieler = self._amZug
+        if spieler is None:
             return
+        if self._phase is Phase.bewegungsphase:
+            gründe = gründeGegenDasBeenden(spieler.armee.einheiten, self._stellen)
+            if gründe:
+                raise Sperre(*gründe)
         nächste = _nächstePhase.get(self._phase)
         if nächste is not None:
             self._phase = nächste
+            if nächste is Phase.bewegungsphase:
+                self._stellenZuBeginn = dict(self._stellen)
             return
         self._phase = Phase.kommandophase
         self._zugBeenden()
@@ -90,14 +108,32 @@ class Schlacht:
     def stelle(self, modell: Modell) -> Stelle | None:
         return self._stellen.get(modell)
 
+    def inKohärenz(self, einheit: Einheit) -> bool:
+        return inKohärenz(gesetzteModelle(einheit, self._stellen))
+
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
-        """Außerhalb der Bewegungsphase bewegt sich kein Modell (QUE-10.5)."""
-        del modell, stelle
-        return {}
+        """Die Stellen, an die `modellLoslassen` die Modelle setzen würde (QUE-10.5)."""
+        spieler = self._amZug
+        if self._phase is not Phase.bewegungsphase or spieler is None:
+            return {}
+        if modell not in spieler.armee.modelle:
+            return {}
+        einheit = einheitVon(self._beideSpieler, modell)
+        ebene = self._ebeneVon(einheit, modell)
+        verschoben = verschobeneStellen(ebene, modell, stelle)
+        neue = anDerBewegungsweiteAngehalten(ebene, verschoben, self._stellenZuBeginn)
+        fremde = {anderes: ort for anderes, ort in self._stellen.items() if anderes not in neue}
+        gründe = gründeBeimZiehen(ebene, neue, fremde, spieler.armee.modelle)
+        if gründe:
+            raise Sperre(*gründe)
+        return neue
 
     def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
-        """Außerhalb der Bewegungsphase ändert Loslassen nichts (QUE-10.5)."""
-        del modell, stelle
+        self._stellen.update(self.stellenBeimLoslassen(modell, stelle))
+
+    def modellAnklicken(self, modell: Modell) -> None:
+        if self.gesetzt(modell):
+            self._auswahl.auswählen(einheitVon(self._beideSpieler, modell))
 
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)
@@ -113,6 +149,12 @@ class Schlacht:
 
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
+
+    def _ebeneVon(self, einheit: Einheit, modell: Modell) -> dict[Modell, Stelle]:
+        """Die Stellen der Modelle, die Ziehen bewegt: die ganze Einheit oder das eine Modell."""
+        if self.ganzeEinheitIstEbene(einheit):
+            return gesetzteModelle(einheit, self._stellen)
+        return {modell: self._stellen[modell]}
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:

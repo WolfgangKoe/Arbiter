@@ -20,7 +20,7 @@ from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import (
     bewegungsweite,
     einModellAusDerKohärenzZiehen,
-    hältAmB,
+    hältAnDerBewegungsweite,
     jetzigeStellen,
     schrägOhneHindernis,
     stellenAlsZahlen,
@@ -29,7 +29,7 @@ from tests.akzeptanz.schlacht import (
 from tests.akzeptanz.ziehen import (
     halten,
     haltenUndLosslassen,
-    hältAmBAufEinenPixelGenau,
+    hältAnDerBewegungsweiteAufEinenPixelGenau,
     mitMausUndFinger,
 )
 
@@ -37,7 +37,7 @@ nichts = Fraction(0)
 einigeZoll = (Fraction(3), nichts)
 ausDerZoneHinaus = (Fraction(9, 2), nichts)
 nachNorden = (nichts, Fraction(3))
-überDieHälfteVonB = Fraction(3, 5)
+überDieHälfteDerBewegungsweite = Fraction(3, 5)
 
 
 def zuWeitNachOsten(einheitenname: str) -> tuple[Fraction, Fraction]:
@@ -96,13 +96,13 @@ def testBew1_5FehlendeKohärenzSperrtBeimLoslassenNicht(schlachtInDerBewegungsph
     assert not schlachtInDerBewegungsphase.inKohärenz(boyz)
 
 
-def testBew1_6EineSchonGezogeneEinheitLässtSichNachEinerAnderenAuchBeiLängerenStreckenAlsBZiehen(
+def testBew1_6EineSchonGezogeneEinheitLässtSichNachEinerAnderenAuchLängerAlsDieBewegungsweiteZiehen(
     schlachtInDerBewegungsphase, warboss, boyz
 ):
     (modellDesWarboss,) = warboss.modelle
     *_, letztesModellDerBoyz = boyz.modelle
     start = schlachtInDerBewegungsphase.stelle(modellDesWarboss)
-    mehrAlsDieHälfte = (bewegungsweite("Warboss") * überDieHälfteVonB, nichts)
+    mehrAlsDieHälfte = (bewegungsweite("Warboss") * überDieHälfteDerBewegungsweite, nichts)
     schlachtInDerBewegungsphase.modellLoslassen(modellDesWarboss, versetzt(start, mehrAlsDieHälfte))
     stelleDerBoyz = schlachtInDerBewegungsphase.stelle(letztesModellDerBoyz)
     schlachtInDerBewegungsphase.modellLoslassen(
@@ -149,7 +149,9 @@ def testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand(schlachtInDerBewe
     assert jetzigeStellen(schlachtInDerBewegungsphase, boyz) == davor
 
 
-def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsBAmBAn(schlachtInDerBewegungsphase, warboss):
+def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAn(
+    schlachtInDerBewegungsphase, warboss
+):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
     ziel = versetzt(davor, zuWeitNachOsten("Warboss"))
@@ -157,7 +159,7 @@ def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsBAmBAn(schlachtInDerBewegung
     stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel)
 
     (stelle,) = stellen.values()
-    assert hältAmB(davor, stelle, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, stelle, bewegungsweite("Warboss"))
 
 
 def testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
@@ -195,7 +197,7 @@ def testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell(
     assert len(antwort.get_json()["modelle"]) == 1
 
 
-def testBew1_7DerDienstNenntBeimZiehenWeiterAlsBDieStelleDesAnhaltensWieDasLoslassen(
+def testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDasLoslassen(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -277,7 +279,7 @@ def testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenSt
 
 
 @mitMausUndFinger
-def testBew1_7DieKarteZeigtBeimHaltenWeiterAlsBDasModellAmBOhneSperrmeldung(
+def testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
@@ -291,5 +293,7 @@ def testBew1_7DieKarteZeigtBeimHaltenWeiterAlsBDasModellAmBOhneSperrmeldung(
     halten(seite, davor, zuWeit, eingabe)
 
     (gezeigt,) = kreiseDerKarte(seite) - kreiseDavor
-    assert hältAmBAufEinenPixelGenau(seite, davor, gezeigt, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweiteAufEinenPixelGenau(
+        seite, davor, gezeigt, bewegungsweite("Warboss")
+    )
     assert sperrmeldungenDerSeite(seite) == []

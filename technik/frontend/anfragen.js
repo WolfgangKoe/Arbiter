@@ -80,6 +80,10 @@ export async function ebeneSenden(modell, istEbene) {
   await zeichneAntwort(await senden(`${modellPfad(modell)}/ebene`, istEbene ? "DELETE" : "PUT"))
 }
 
+export async function modellAnklickenSenden(modell) {
+  await zeichneAntwort(await senden(`${modellPfad(modell)}/anklicken`, "PUT"))
+}
+
 export function modellLoslassen(modell, stelle) {
   return handlungSenden(`${modellPfad(modell)}/stelle`, "PUT", stelle)
 }

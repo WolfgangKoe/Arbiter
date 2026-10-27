@@ -1,27 +1,12 @@
 """Die Gründe gegen eine Stelle beim Setzen und Loslassen eines Modells (AUF-3, D4)."""
 
 from collections.abc import Collection, Mapping
-from fractions import Fraction
 
 from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Grenzen
-from arbiter.domaene.querschnitt import baseÜberdeckt
+from arbiter.domaene.querschnitt import gründeDesSetzens
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
-
-_nahkampfreichweite = Fraction(1)
-
-
-def inNahkampfreichweite(
-    modell: Modell, stelle: Stelle, stellen: Mapping[Modell, Stelle], eigene: Collection[Modell]
-) -> bool:
-    return any(
-        anderes not in eigene
-        and messen.abstandHöchstens(
-            modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
-        )
-        for anderes, andereStelle in stellen.items()
-    )
 
 
 def gründeGegenDieStelle(
@@ -32,9 +17,7 @@ def gründeGegenDieStelle(
     zone: Grenzen,
 ) -> set[Grund]:
     """Die Gründe gegen die Stelle; `eigene` sind die Modelle des Spielers an der Reihe."""
-    gegeben = {
-        Grund.nichtGanzInDerZone: not messen.ganzIn(modell.base, stelle, *zone),
-        Grund.baseÜberdeckt: baseÜberdeckt(modell, stelle, stellen),
-        Grund.nahkampfreichweite: inNahkampfreichweite(modell, stelle, stellen, eigene),
-    }
-    return {grund for grund, trifft in gegeben.items() if trifft}
+    gründe = gründeDesSetzens(modell, stelle, stellen, eigene)
+    if not messen.ganzIn(modell.base, stelle, *zone):
+        gründe.add(Grund.nichtGanzInDerZone)
+    return gründe

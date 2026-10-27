@@ -5,6 +5,7 @@ from arbiter.domaene.messen import (
     anteilBisZurBerührung,
     ganzIn,
     rückungInDieFläche,
+    streckeÜberdeckt,
     teilDesWegs,
     verschoben,
     wegZwischen,
@@ -203,3 +204,17 @@ def testDerWegBleibtLeerWennDieBaseSchonAnDerBaseSteht(zehnZoll):
     anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, (Fraction(5), Fraction(0)))
 
     assert anteil == 0
+
+
+def testEineStreckeÜberdecktEineBaseAmWegAuchWennEndeUndAnfangFreiSind(zehnZoll):
+    hindernis = Stelle(x=Fraction(15), y=Fraction(0))
+    ende = Stelle(x=Fraction(30), y=Fraction(0))
+
+    assert streckeÜberdeckt(zehnZoll, ursprung, ende, zehnZoll, hindernis)
+
+
+def testEineStreckeNebenDerBaseÜberdecktSieNicht(zehnZoll):
+    hindernis = Stelle(x=Fraction(15), y=Fraction(10))
+    ende = Stelle(x=Fraction(30), y=Fraction(0))
+
+    assert not streckeÜberdeckt(zehnZoll, ursprung, ende, zehnZoll, hindernis)

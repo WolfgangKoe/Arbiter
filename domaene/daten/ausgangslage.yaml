@@ -3,7 +3,7 @@
 # Spielfeld und Aufstellungszonen: onlyWar.yaml.
 # Je Einheit ein Eintrag je Modell: Durchmesser seiner runden Base in mm.
 # Quelle der Durchmesser: ArbiterMap/data/poc/units/<datei>:<zeile> (count, base_mm).
-# bewegungsweite: B jedes Modells der Einheit in Zoll (Glossar B, BEW-3.1); Quelle:
+# bewegungsweite: Bewegungsweite jedes Modells der Einheit in Zoll (Glossar, BEW-3.1); Quelle:
 # Arbiter-old/data/wh40k_9e/<fraktion>/units.yaml:<zeile> (move).
 
 Armee:

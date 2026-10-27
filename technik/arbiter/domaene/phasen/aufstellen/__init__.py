@@ -165,6 +165,11 @@ class Aufstellung:
         self._prüfenDassZurAufstellung(einheit)
         self._auswahl.abwählen(einheit)
 
+    def modellAnklicken(self, modell: Modell) -> None:
+        einheit = einheitVon(self._beideSpieler, modell)
+        if self.gesetzt(modell) and not self.aufgestellt(einheit):
+            self._auswahl.auswählen(einheit)
+
     def ebeneWählen(self, modell: Modell) -> None:
         self._auswahl.ebeneWählen(modell)
 

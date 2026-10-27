@@ -19,7 +19,7 @@ def radiusInZoll(base: Base) -> Fraction:
     return Fraction(base.durchmesser, 2) / _millimeterJeZoll
 
 
-def _quadratDerMittelpunkte(ersteStelle: Stelle, zweiteStelle: Stelle) -> Fraction:
+def abstandImQuadrat(ersteStelle: Stelle, zweiteStelle: Stelle) -> Fraction:
     return (ersteStelle.x - zweiteStelle.x) ** 2 + (ersteStelle.y - zweiteStelle.y) ** 2
 
 
@@ -27,14 +27,14 @@ def überdecken(
     ersteBase: Base, ersteStelle: Stelle, zweiteBase: Base, zweiteStelle: Stelle
 ) -> bool:
     radien = radiusInZoll(ersteBase) + radiusInZoll(zweiteBase)
-    return _quadratDerMittelpunkte(ersteStelle, zweiteStelle) < radien**2
+    return abstandImQuadrat(ersteStelle, zweiteStelle) < radien**2
 
 
 def abstandHöchstens(
     ersteBase: Base, ersteStelle: Stelle, zweiteBase: Base, zweiteStelle: Stelle, zoll: Fraction
 ) -> bool:
     reichweite = radiusInZoll(ersteBase) + radiusInZoll(zweiteBase) + zoll
-    return _quadratDerMittelpunkte(ersteStelle, zweiteStelle) <= reichweite**2
+    return abstandImQuadrat(ersteStelle, zweiteStelle) <= reichweite**2
 
 
 def ganzIn(
@@ -119,12 +119,31 @@ def _ersterÜberdeckenderSchritt(
     return bisect_left(range(davor), x=True, key=überdecktBeiSchritt)
 
 
+def schritteDesWegs(weg: Weg) -> int:
+    """Die Anzahl n der Schritte auf dem Raster von S3."""
+    wegInX, wegInY = weg
+    return ceil(_rasterJeZoll * (abs(wegInX) + abs(wegInY)))
+
+
+def streckeÜberdeckt(
+    bewegteBase: Base, von: Stelle, nach: Stelle, ruhendeBase: Base, ort: Stelle
+) -> bool:
+    """Ob die bewegte Base auf der geraden Strecke von `von` bis `nach` die ruhende überdeckt."""
+    wegInX, wegInY = wegZwischen(von, nach)
+    länge = wegInX**2 + wegInY**2
+    if länge == 0:
+        return überdecken(bewegteBase, von, ruhendeBase, ort)
+    nächster = ((ort.x - von.x) * wegInX + (ort.y - von.y) * wegInY) / länge
+    anteil = min(max(nächster, Fraction(0)), Fraction(1))
+    stelle = verschoben(von, teilDesWegs((wegInX, wegInY), anteil))
+    return überdecken(bewegteBase, stelle, ruhendeBase, ort)
+
+
 def anteilBisZurBerührung(
     bewegte: BasenAnStellen, hindernisse: BasenAnStellen, weg: Weg
 ) -> Fraction:
     """Der Anteil bis vor die erste Überdeckung auf dem Raster von S3; 1, wenn das Ende frei ist."""
-    wegInX, wegInY = weg
-    schritte = ceil(_rasterJeZoll * (abs(wegInX) + abs(wegInY)))
+    schritte = schritteDesWegs(weg)
     if schritte == 0:
         return Fraction(1)
     paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]

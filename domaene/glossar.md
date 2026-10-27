@@ -15,8 +15,8 @@ Aufstellungszone | deployment zone | Aufstellungszone (erste, zweite) | Fläche 
 Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, *Spielfeld* und *Aufstellungszonen* (MIV-1); Werte in `domaene/daten/ausgangslage.yaml` und `onlyWar.yaml`.
 ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; ist ihre *Ebene* eines ihrer *Modelle*, ist von ihren *Modellen* nur dieses ausgewählt (Anliegen 980). Erlaubt keine Handlung, zeigt nur, was gemeint ist.
 Auswahl | – | Auswahl | Die *ausgewählte* *Einheit* mit ihrer *Ebene*, höchstens eine für beide *Spieler* zusammen (Anliegen 309, 960 F3 A, 980).
-B | Move (M) | bewegungsweite | Wie weit ein *Modell* in der *Normalen Bewegung* höchstens zieht, in *Zoll*; jedes *Modell* hat eins (`core_rules.txt:565`, `:745`, Anliegen 4280 F1 B). Werte in `domaene/daten/ausgangslage.yaml`.
 Bewegungsphase | Movement phase | bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
+Bewegungsweite | Move (M) | bewegungsweite | Wie weit ein *Modell* in der *Normalen Bewegung* höchstens zieht, in *Zoll*; jedes *Modell* hat eine (`core_rules.txt:565`, `:745`, Anliegen 4280 F1 B). Die Anzeige kürzt sie mit B ab. Werte in `domaene/daten/ausgangslage.yaml`.
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
 Distanz | distance a model moves | distanz | Länge der geraden Strecke von der *Stelle* eines *Modells* zu Beginn der laufenden *Bewegungsphase* bis zu seiner jetzigen, in *Zoll*; wie oft es dazwischen *gesetzt* wurde, zählt nicht (`core_rules.txt:745`, Anliegen 5180 F5, 5400 F1 A).
@@ -40,7 +40,7 @@ Missionsvorbereitung | – | Missionsvorbereitung | Schritte 1 bis 3 der *Missio
 Moralphase | Morale phase | moralphase | Siebte und letzte *Phase* eines Zugs (`core_rules.txt:665`).
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
-Normale Bewegung | Normal Move | normaleBewegung | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* eine *Distanz* bis *B*; am Ende der *Bewegungsphase* in *Kohärenz* (`core_rules.txt:730`, `:745`, Anliegen 4280 F1 B, 5180 F5).
+Normale Bewegung | Normal Move | normaleBewegung | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* eine *Distanz* bis zu seiner *Bewegungsweite*; am Ende der *Bewegungsphase* in *Kohärenz* (`core_rules.txt:730`, `:745`, Anliegen 4280 F1 B, 5180 F5).
 Name | unit name | name | Name einer *Einheit*, wie ihn ihr Datenblatt nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte in `domaene/daten/ausgangslage.yaml` unter `Einheit`.
 Phase | phase | Phase (kommandophase, bewegungsphase, psiphase, schussphase, angriffsphase, nahkampfphase, moralphase) | Abschnitt eines Zugs; sieben in dieser Reihenfolge: *Kommandophase*, *Bewegungsphase*, Psiphase, Schussphase, Angriffsphase, Nahkampfphase, *Moralphase* (`core_rules.txt:639`).
 Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).

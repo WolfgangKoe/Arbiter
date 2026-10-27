@@ -24,6 +24,7 @@ from arbiter.web.kennungen import (
 
 _frontend = Path(__file__).parents[2] / "frontend"
 _erlaubteHosts = ["127.0.0.1", "localhost"]
+_größterNenner = 10**6
 _jsonZahlText = re.compile(r"-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?", re.ASCII)
 
 
@@ -37,7 +38,7 @@ def _zahl(körper: dict, name: str) -> Fraction:
         endlich = False
     if not endlich:
         abort(HTTPStatus.BAD_REQUEST)
-    return Fraction(str(wert))
+    return Fraction(str(wert)).limit_denominator(_größterNenner)
 
 
 def _stelleDerAnfrage() -> Stelle:
@@ -192,6 +193,10 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         spiel().modellLoslassen(modell, _stelleDerAnfrage())
         return spielstandLiefern()
 
+    def modellAnklicken(spielernummer: int, einheitennummer: int, modellnummer: int):
+        spiel().modellAnklicken(modellDerArmee(spielernummer, einheitennummer, modellnummer))
+        return spielstandLiefern()
+
     def stelleBeimLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
         abfrage = spiel().stellenBeimLoslassen(modell, _stelleDerAbfrage())
@@ -235,6 +240,8 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     anwendung.add_url_rule(pfadDesModells, view_func=modellLoslassen, methods=["PUT"])
     pfadDerAbfrage = f"{pfadDerEinheit}/modelle/<int:modellnummer>/stelleBeimLoslassen"
     anwendung.add_url_rule(pfadDerAbfrage, view_func=stelleBeimLoslassen)
+    pfadDesAnklickens = f"{pfadDerEinheit}/modelle/<int:modellnummer>/anklicken"
+    anwendung.add_url_rule(pfadDesAnklickens, view_func=modellAnklicken, methods=["PUT"])
     pfadDerEbene = f"{pfadDerEinheit}/modelle/<int:modellnummer>/ebene"
     anwendung.add_url_rule(pfadDerEbene, view_func=modellAlsEbene, methods=["PUT"])
     anwendung.add_url_rule(pfadDerEbene, view_func=einheitAlsEbene, methods=["DELETE"])

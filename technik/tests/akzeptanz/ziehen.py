@@ -55,10 +55,10 @@ def liegtEinPixelGenauAn(seite: Page, ist: Stelle, soll: Stelle) -> bool:
     return abweichungInX <= toleranz and abweichungInY <= toleranz
 
 
-def hältAmBAufEinenPixelGenau(
+def hältAnDerBewegungsweiteAufEinenPixelGenau(
     seite: Page, davor: Stelle, gezeigt: tuple[float, float], bewegungsweite: Fraction
 ) -> bool:
-    """Der gezeigte Punkt liegt höchstens B und höchstens 1/100″ davor von `davor`."""
+    """Der gezeigte Punkt liegt höchstens die Bewegungsweite und 1/100″ davor von `davor`."""
     gezeigtInX, gezeigtInY = gezeigt
     abstand = hypot(gezeigtInX - float(davor.x), gezeigtInY - float(davor.y))
     toleranz = zollJePixel(seite)

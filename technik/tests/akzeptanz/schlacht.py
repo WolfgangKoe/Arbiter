@@ -72,7 +72,7 @@ def zurLetztenSchlachtrunde(schlacht) -> None:
 
 
 def bewegungsweite(einheitenname: str) -> Fraction:
-    """B der Einheit in Zoll aus `ausgangslage.yaml`, nicht kopiert."""
+    """Bewegungsweite der Einheit in Zoll aus `ausgangslage.yaml`, nicht kopiert."""
     einheiten = (einheit for armee in _daten("ausgangslage.yaml")["Armee"] for einheit in armee)
     eintrag = next(einheit for einheit in einheiten if einheit["Einheit"] == einheitenname)
     return Fraction(eintrag["bewegungsweite"])
@@ -111,8 +111,8 @@ def abstandImQuadrat(von: Stelle, nach: Stelle) -> Fraction:
     return (nach.x - von.x) ** 2 + (nach.y - von.y) ** 2
 
 
-def hältAmB(davor: Stelle, danach: Stelle, bewegungsweite: Fraction) -> bool:
-    """Das Modell steht höchstens B von `davor` und höchstens 1/100″ davor (BEW-3.1)."""
+def hältAnDerBewegungsweite(davor: Stelle, danach: Stelle, bewegungsweite: Fraction) -> bool:
+    """Das Modell steht höchstens die Bewegungsweite und höchstens 1/100″ davor (BEW-3.1)."""
     abstand = abstandImQuadrat(davor, danach)
     return (bewegungsweite - hundertstelZoll) ** 2 <= abstand <= bewegungsweite**2
 

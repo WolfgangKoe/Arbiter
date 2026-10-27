@@ -11,6 +11,7 @@ class Grund(Enum):
     nichtGanzInDerZone = "nicht ganz in der Zone"
     baseÜberdeckt = "Base überdeckt"
     nahkampfreichweite = "Nahkampfreichweite"
+    überEineBase = "über eine Base"
 
 
 class Sperre(Exception):

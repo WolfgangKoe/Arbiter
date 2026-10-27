@@ -1,4 +1,4 @@
-"""BEW-3 · Anhalten am B."""
+"""BEW-3 · Anhalten an der Bewegungsweite."""
 
 from fractions import Fraction
 from http import HTTPStatus
@@ -10,7 +10,7 @@ from tests.akzeptanz.dienst import modellLoslassen
 from tests.akzeptanz.handgriffe import gestreckt, schrägOhneWurzel, versetzt, wegVon
 from tests.akzeptanz.schlacht import (
     bewegungsweite,
-    hältAmB,
+    hältAnDerBewegungsweite,
     jetzigeStellen,
     liegtAufDerGeradenVon,
     schrägOhneHindernis,
@@ -21,20 +21,20 @@ from tests.akzeptanz.ziehen import mitMausUndFinger, modellZiehen
 
 nichts = Fraction(0)
 dreiZoll = Fraction(3)
-weiterAlsBDesWarboss = bewegungsweite("Warboss") + 1
-weiterAlsBDerBoyz = bewegungsweite("Boyz") + 1
+weiterAlsDieBewegungsweiteDesWarboss = bewegungsweite("Warboss") + 1
+weiterAlsDieBewegungsweiteDerBoyz = bewegungsweite("Boyz") + 1
 
-wegeÜberB = pytest.mark.parametrize(
+wegeÜberDieBewegungsweite = pytest.mark.parametrize(
     "weg",
     [
-        (weiterAlsBDesWarboss, nichts),
-        gestreckt(schrägOhneWurzel, weiterAlsBDesWarboss),
+        (weiterAlsDieBewegungsweiteDesWarboss, nichts),
+        gestreckt(schrägOhneWurzel, weiterAlsDieBewegungsweiteDesWarboss),
     ],
     ids=["nachOsten", "schräg"],
 )
 
 
-def testBew3_1ZiehtEinModellGenauSoWeitWieSeinBHältArbiterEsNichtAn(
+def testBew3_1ZiehtEinModellGenauSoWeitWieSeineBewegungsweiteHältArbiterEsNichtAn(
     schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -45,7 +45,7 @@ def testBew3_1ZiehtEinModellGenauSoWeitWieSeinBHältArbiterEsNichtAn(
     assert schlachtInDerBewegungsphase.stelle(modell) == ziel
 
 
-def testBew3_1ZiehtEinModellSchrägGenauSoWeitWieSeinBHältArbiterEsNichtAn(
+def testBew3_1ZiehtEinModellSchrägGenauSoWeitWieSeineBewegungsweiteHältArbiterEsNichtAn(
     schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -59,7 +59,9 @@ def testBew3_1ZiehtEinModellSchrägGenauSoWeitWieSeinBHältArbiterEsNichtAn(
     assert schlachtInDerBewegungsphase.stelle(modell) == ziel
 
 
-def testBew3_1JedesModellHatSeinEigenesB(schlachtInDerBewegungsphaseDesZweitenSpielers, overlord):
+def testBew3_1JedesModellHatSeineEigeneBewegungsweite(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, overlord
+):
     (modell,) = overlord.modelle
     ziel = versetzt(
         schlachtInDerBewegungsphaseDesZweitenSpielers.stelle(modell),
@@ -71,8 +73,8 @@ def testBew3_1JedesModellHatSeinEigenesB(schlachtInDerBewegungsphaseDesZweitenSp
     assert schlachtInDerBewegungsphaseDesZweitenSpielers.stelle(modell) == ziel
 
 
-@wegeÜberB
-def testBew3_1ZiehtEinModellWeiterAlsBHältArbiterEsAmBAnOhneGrund(
+@wegeÜberDieBewegungsweite
+def testBew3_1ZiehtEinModellWeiterAlsDieBewegungsweiteHältArbiterEsAnDerBewegungsweiteAnOhneGrund(
     schlachtInDerBewegungsphase, warboss, weg
 ):
     (modell,) = warboss.modelle
@@ -82,7 +84,7 @@ def testBew3_1ZiehtEinModellWeiterAlsBHältArbiterEsAmBAnOhneGrund(
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAmB(davor, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
@@ -97,7 +99,8 @@ def testBew3_1DieDistanzZähltVonDerStelleZuBeginnDerBewegungsphase(
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
-    assert hältAmB(start, schlachtInDerBewegungsphase.stelle(modell), bewegungsweite("Warboss"))
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältAnDerBewegungsweite(start, danach, bewegungsweite("Warboss"))
 
 
 def testBew3_1DieDistanzBeginntMitJederBewegungsphaseNeu(schlachtInDerBewegungsphase, warboss):
@@ -113,7 +116,9 @@ def testBew3_1DieDistanzBeginntMitJederBewegungsphaseNeu(schlachtInDerBewegungsp
     assert schlachtInDerBewegungsphase.stelle(modell) == zweitesZiel
 
 
-def testBew3_1IstDieGanzeEinheitEbeneHältDerBlockAmBAn(schlachtInDerBewegungsphase, boyz):
+def testBew3_1IstDieGanzeEinheitEbeneHältDerBlockAnDerBewegungsweiteAn(
+    schlachtInDerBewegungsphase, boyz
+):
     schlachtInDerBewegungsphase.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
@@ -124,7 +129,7 @@ def testBew3_1IstDieGanzeEinheitEbeneHältDerBlockAmBAn(schlachtInDerBewegungsph
 
     danach = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     gesetzterWeg = wegVon(davor[gezogenes], danach[gezogenes])
-    assert hältAmB(davor[gezogenes], danach[gezogenes], bewegungsweite("Boyz"))
+    assert hältAnDerBewegungsweite(davor[gezogenes], danach[gezogenes], bewegungsweite("Boyz"))
     assert liegtAufDerGeradenVon(davor[gezogenes], ziel, danach[gezogenes])
     assert danach == stellenVersetzt(davor, gesetzterWeg)
 
@@ -146,11 +151,13 @@ def testBew3_1DasModellMitDerWeitestenDistanzBestimmtDenHaltepunktDesBlocks(
 
     danach = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     gesetzterWeg = wegVon(davor[gezogenes], danach[gezogenes])
-    assert hältAmB(startDesWeitenModells, danach[weitesModell], bewegungsweite("Boyz"))
+    assert hältAnDerBewegungsweite(
+        startDesWeitenModells, danach[weitesModell], bewegungsweite("Boyz")
+    )
     assert danach == stellenVersetzt(davor, gesetzterWeg)
 
 
-def testBew3_1HältArbiterAmBAnPrüftEsÜberEineBaseNurAnDerAngehaltenenStelle(
+def testBew3_1HältArbiterAnDerBewegungsweiteAnPrüftEsÜberEineBaseNurAnDerAngehaltenenStelle(
     schlachtInDerBewegungsphase, boyz, warboss
 ):
     (modellDesWarboss,) = warboss.modelle
@@ -160,29 +167,31 @@ def testBew3_1HältArbiterAmBAnPrüftEsÜberEineBaseNurAnDerAngehaltenenStelle(
         modellDesWarboss, versetzt(stelleDesWarboss, (bewegungsweite("Warboss"), nichts))
     )
     davor = schlachtInDerBewegungsphase.stelle(gezogenes)
-    ziel = versetzt(davor, (weiterAlsBDerBoyz, nichts))
+    ziel = versetzt(davor, (weiterAlsDieBewegungsweiteDerBoyz, nichts))
 
     schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
 
-    assert hältAmB(davor, schlachtInDerBewegungsphase.stelle(gezogenes), bewegungsweite("Boyz"))
+    danach = schlachtInDerBewegungsphase.stelle(gezogenes)
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Boyz"))
 
 
-def testBew3_1DerDienstHältWeiterAlsBAmBAnUndAntwortetOhneGrund(
+def testBew3_1DerDienstHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnUndAntwortetOhneGrund(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    ziel = versetzt(davor, (weiterAlsBDesWarboss, nichts))
+    ziel = versetzt(davor, (weiterAlsDieBewegungsweiteDesWarboss, nichts))
 
     antwort = modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, modell, ziel)
 
     assert antwort.status_code == HTTPStatus.OK
     assert "gründe" not in antwort.get_json()
-    assert hältAmB(davor, schlachtInDerBewegungsphase.stelle(modell), bewegungsweite("Warboss"))
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
 
 
 @mitMausUndFinger
-def testBew3_1DieSeiteHältWeiterAlsBAmBAnOhneSperrmeldung(
+def testBew3_1DieSeiteHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnOhneSperrmeldung(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
@@ -190,8 +199,10 @@ def testBew3_1DieSeiteHältWeiterAlsBAmBAnOhneSperrmeldung(
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
+    ziel = versetzt(davor, (weiterAlsDieBewegungsweiteDesWarboss, nichts))
 
-    modellZiehen(seite, davor, versetzt(davor, (weiterAlsBDesWarboss, nichts)), eingabe)
+    modellZiehen(seite, davor, ziel, eingabe)
 
     assert sperrmeldungenDerSeite(seite) == []
-    assert hältAmB(davor, schlachtInDerBewegungsphase.stelle(modell), bewegungsweite("Warboss"))
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))

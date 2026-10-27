@@ -3,6 +3,7 @@ import {
   ebeneSenden,
   karteAnklicken,
   letztenSpielstandZeichnen,
+  modellAnklickenSenden,
   modellLoslassen,
   stellenBeimLoslassen,
 } from "./anfragen.js"
@@ -64,7 +65,7 @@ function klicken(ereignis, ziel) {
   if (einheitenKarte) return auswahlSenden(einheitenKarte.dataset, einheitenKarte.classList.contains("ausgewählt"))
   const modell = ziel.closest(".karte .modell")
   if (modell) {
-    if (!einheitAusgewählt(modell.dataset)) return
+    if (!einheitAusgewählt(modell.dataset)) return modellAnklickenSenden(modell.dataset)
     return ebeneSenden(modell.dataset, Boolean(modell.dataset.ebene))
   }
   if (!ziel.closest(".karte")) return
