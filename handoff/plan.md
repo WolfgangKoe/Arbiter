@@ -8,9 +8,9 @@ Zyklusziel aus [Review 7](review.md), ohne Abweichung.
    seiner *Armeeliste* „Erster Zug“. (Item 2)
 2. Arbiter zeigt Schlachtrunde 1, den Spieler am Zug und die Phase. Jede Phase außer der
    Bewegungsphase ist leer, ihr beendet sie mit „Phase beenden“. (Item 2)
-3. In der Bewegungsphase zieht ihr eine *Einheit* in einer *Normalen Bewegung* und klickt
-   „Bewegung der Einheit beenden“. Weiter als *B* oder über eine fremde *Base* sperrt
-   Arbiter beim Loslassen, ohne *Kohärenz* beim Beenden. (Item 3)
+3. In der Bewegungsphase zieht ihr eine *Einheit* in einer *Normalen Bewegung* und
+   korrigiert sie nach Belieben. Weiter als *B* hält Arbiter sie an, über eine fremde *Base*
+   sperrt er beim Loslassen, „Phase beenden“ ohne *Kohärenz*. (Item 3)
 4. Nach der fünften Schlachtrunde endet die Schlacht. (Item 2)
 
 Noch nicht: jede *Einheit* nur einmal ziehen, Advance, Zurücksetzen, über die Kante,
@@ -27,6 +27,8 @@ Zyklen von Etappe 2.
 3. [Normale Bewegung](../domaene/items/normalMove.md): Schritt 3;
    [BEW-1](../domaene/anforderungen/phasen/bewegung/normaleBewegung.md),
    [BEW-2](../domaene/anforderungen/phasen/bewegung/sperrenBeimZiehen.md),
+   [BEW-3](../domaene/anforderungen/phasen/bewegung/anhaltenAmB.md),
+   [BEW-4](../domaene/anforderungen/phasen/bewegung/beenden.md),
    [AUF-20.6](../domaene/anforderungen/phasen/aufstellen/ebene.md): ein Klick auf ein
    *Modell* wählt die ganze *Einheit*, ein Zug verschiebt sie als Block.
 
@@ -65,6 +67,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
 - [x] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
 - [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
+  Hindernis: Architekt → Implementierer: Knöpfe nicht als Tabelle (O5), Spielernummer außerhalb kennungen.py (W2) (Anliegen 5680); beseitigt: Commit „phasenUndSchlachtrunden: Knöpfe als Tabelle, Auswahl bleibt bei der Aufstellung“
 - [ ] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
 - [ ] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
 - [ ] Planer: Item phasenUndSchlachtrunden gelöscht
@@ -73,6 +76,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [ ] Fachkritiker: Kritik an den Tests zu Item normalMove
   Hindernis: Fachkritiker → Testautor: BEW-2.4 ohne Überdeckung, Distanz nur auf Achsen, BEW-2.3 nie zwei Gründe (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
   Hindernis: Fachkritiker → Testautor: BEW-1.4 verlangt beim Halten über B ein Bild, das weder Kriterium noch V10 nennen (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
+  Hindernis: Fachkritiker → Testautor: Kein Test sperrt den Block, wenn ein nicht gezogenes Modell über eine fremde Base geht (BEW-2.5) (Anliegen 5760)
 - [x] Architekt: Kritik an den Tests zu Item normalMove
 - [ ] Implementierer: Tests zu Item normalMove grün
 - [ ] Architekt: Kritik am Code zu Item normalMove

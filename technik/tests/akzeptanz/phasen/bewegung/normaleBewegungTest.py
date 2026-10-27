@@ -10,48 +10,41 @@ from tests.akzeptanz.bildschirm import (
     sperrmeldungenDerSeite,
 )
 from tests.akzeptanz.dienst import (
+    modellLoslassen,
     spielstandVon,
     stelleBeimLoslassenAbfragen,
-    stelleImSpielstand,
     stellenDerAbfrage,
     stellenDerEinheitIm,
 )
-from tests.akzeptanz.handgriffe import millionstel, sperrgründe, versetzt
+from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import (
     bewegungsweite,
+    einModellAusDerKohärenzZiehen,
+    hältAmB,
     jetzigeStellen,
-    ostenUndNorden,
     schrägOhneHindernis,
     stellenAlsZahlen,
     stellenVersetzt,
 )
 from tests.akzeptanz.ziehen import (
-    Abfragen,
-    aufDieAntwortenWarten,
     halten,
     haltenUndLosslassen,
+    hältAmBAufEinenPixelGenau,
     mitMausUndFinger,
-    punktAufDerKarte,
 )
 
 nichts = Fraction(0)
 einigeZoll = (Fraction(3), nichts)
 ausDerZoneHinaus = (Fraction(9, 2), nichts)
-fünfZoll = Fraction(5)
+nachNorden = (nichts, Fraction(3))
+überDieHälfteVonB = Fraction(3, 5)
 
 
-def testBew1_1DasGezogeneModellMachtSeineEinheitZurEinheitInBewegung(
-    schlachtInDerBewegungsphase, warboss
-):
-    (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), einigeZoll)
-
-    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
-
-    assert schlachtInDerBewegungsphase.einheitInBewegung is warboss
+def zuWeitNachOsten(einheitenname: str) -> tuple[Fraction, Fraction]:
+    return bewegungsweite(einheitenname) + 1, nichts
 
 
-def testBew1_1DasModellStehtDanachAnDerStelleDesLoslassens(schlachtInDerBewegungsphase, warboss):
+def testBew1_5DasModellStehtDanachAnDerStelleDesLoslassens(schlachtInDerBewegungsphase, warboss):
     (modell,) = warboss.modelle
     ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), einigeZoll)
 
@@ -60,7 +53,7 @@ def testBew1_1DasModellStehtDanachAnDerStelleDesLoslassens(schlachtInDerBewegung
     assert schlachtInDerBewegungsphase.stelle(modell) == ziel
 
 
-def testBew1_1IstDieGanzeEinheitEbeneRücktJedesModellUmDieselbeStreckeVor(
+def testBew1_5IstDieGanzeEinheitEbeneRücktJedesModellUmDieselbeStreckeVor(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -75,7 +68,7 @@ def testBew1_1IstDieGanzeEinheitEbeneRücktJedesModellUmDieselbeStreckeVor(
     )
 
 
-def testBew1_1IstDieEinheitNichtAusgewähltStehenDieAnderenModelleWieDavor(
+def testBew1_5IstDieEinheitNichtAusgewähltStehenDieAnderenModelleWieDavor(
     schlachtInDerBewegungsphase, boyz
 ):
     *übrige, gezogenes = boyz.modelle
@@ -88,7 +81,7 @@ def testBew1_1IstDieEinheitNichtAusgewähltStehenDieAnderenModelleWieDavor(
     assert all(schlachtInDerBewegungsphase.stelle(modell) == davor[modell] for modell in übrige)
 
 
-def testBew1_1ArbiterRücktDasModellNichtInDieAufstellungszone(schlachtInDerBewegungsphase, warboss):
+def testBew1_5ArbiterRücktDasModellNichtInDieAufstellungszone(schlachtInDerBewegungsphase, warboss):
     (modell,) = warboss.modelle
     ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), ausDerZoneHinaus)
 
@@ -97,55 +90,31 @@ def testBew1_1ArbiterRücktDasModellNichtInDieAufstellungszone(schlachtInDerBewe
     assert schlachtInDerBewegungsphase.stelle(modell) == ziel
 
 
-def testBew1_1FehlendeKohärenzSperrtBeimLoslassenNicht(schlachtInDerBewegungsphase, boyz):
-    *_, gezogenes = boyz.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), (fünfZoll, nichts))
+def testBew1_5FehlendeKohärenzSperrtBeimLoslassenNicht(schlachtInDerBewegungsphase, boyz):
+    einModellAusDerKohärenzZiehen(schlachtInDerBewegungsphase, boyz)
 
-    schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
-
-    assert schlachtInDerBewegungsphase.einheitInBewegung is boyz
     assert not schlachtInDerBewegungsphase.inKohärenz(boyz)
 
 
-def testBew1_2OhneKohärenzSperrtBewegungDerEinheitBeendenMitDemGrundKeineKohärenz(
-    schlachtInDerBewegungsphase, boyz
+def testBew1_6EineSchonGezogeneEinheitLässtSichNachEinerAnderenAuchBeiLängerenStreckenAlsBZiehen(
+    schlachtInDerBewegungsphase, warboss, boyz
 ):
-    *_, gezogenes = boyz.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), (fünfZoll, nichts))
-    schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
-    davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
+    (modellDesWarboss,) = warboss.modelle
+    *_, letztesModellDerBoyz = boyz.modelle
+    start = schlachtInDerBewegungsphase.stelle(modellDesWarboss)
+    mehrAlsDieHälfte = (bewegungsweite("Warboss") * überDieHälfteVonB, nichts)
+    schlachtInDerBewegungsphase.modellLoslassen(modellDesWarboss, versetzt(start, mehrAlsDieHälfte))
+    stelleDerBoyz = schlachtInDerBewegungsphase.stelle(letztesModellDerBoyz)
+    schlachtInDerBewegungsphase.modellLoslassen(
+        letztesModellDerBoyz, versetzt(stelleDerBoyz, nachNorden)
+    )
 
-    gründe = sperrgründe(schlachtInDerBewegungsphase.bewegungDerEinheitBeenden)
+    schlachtInDerBewegungsphase.modellLoslassen(modellDesWarboss, start)
 
-    assert gründe == {Grund.keineKohärenz}
-    assert schlachtInDerBewegungsphase.einheitInBewegung is boyz
-    assert jetzigeStellen(schlachtInDerBewegungsphase, boyz) == davor
-
-
-def testBew1_3GelingtDasBeendenGibtEsKeineEinheitInBewegung(schlachtInDerBewegungsphase, warboss):
-    (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), einigeZoll)
-    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
-
-    schlachtInDerBewegungsphase.bewegungDerEinheitBeenden()
-
-    assert schlachtInDerBewegungsphase.einheitInBewegung is None
+    assert schlachtInDerBewegungsphase.stelle(modellDesWarboss) == start
 
 
-def testBew1_3GelingtDasBeendenEinerGanzenEinheitInKohärenzGibtEsKeineEinheitInBewegung(
-    schlachtInDerBewegungsphase, boyz
-):
-    schlachtInDerBewegungsphase.auswählen(boyz)
-    gezogenes, *_ = boyz.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), ostenUndNorden)
-    schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
-
-    schlachtInDerBewegungsphase.bewegungDerEinheitBeenden()
-
-    assert schlachtInDerBewegungsphase.einheitInBewegung is None
-
-
-def testBew1_4DieStellenBeimLoslassenSindDieStellenDesEinenModells(
+def testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells(
     schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -156,7 +125,7 @@ def testBew1_4DieStellenBeimLoslassenSindDieStellenDesEinenModells(
     assert stellen == {modell: ziel}
 
 
-def testBew1_4DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells(
+def testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -169,7 +138,7 @@ def testBew1_4DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModel
     assert stellen == stellenVersetzt(davor, schrägOhneHindernis)
 
 
-def testBew1_4DieStellenBeimLoslassenÄndernNichtsAmSpielstand(schlachtInDerBewegungsphase, boyz):
+def testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand(schlachtInDerBewegungsphase, boyz):
     schlachtInDerBewegungsphase.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
@@ -178,10 +147,20 @@ def testBew1_4DieStellenBeimLoslassenÄndernNichtsAmSpielstand(schlachtInDerBewe
     schlachtInDerBewegungsphase.stellenBeimLoslassen(gezogenes, ziel)
 
     assert jetzigeStellen(schlachtInDerBewegungsphase, boyz) == davor
-    assert schlachtInDerBewegungsphase.einheitInBewegung is None
 
 
-def testBew1_4DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
+def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsBAmBAn(schlachtInDerBewegungsphase, warboss):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    ziel = versetzt(davor, zuWeitNachOsten("Warboss"))
+
+    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel)
+
+    (stelle,) = stellen.values()
+    assert hältAmB(davor, stelle, bewegungsweite("Warboss"))
+
+
+def testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -199,7 +178,7 @@ def testBew1_4DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
     assert len(antwort.get_json()["modelle"]) == len(boyz.modelle)
 
 
-def testBew1_4DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell(
+def testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -216,7 +195,24 @@ def testBew1_4DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell(
     assert len(antwort.get_json()["modelle"]) == 1
 
 
-def testBew1_4DerDienstVerändertBeimAbfragenNichtsAmSpielstand(
+def testBew1_7DerDienstNenntBeimZiehenWeiterAlsBDieStelleDesAnhaltensWieDasLoslassen(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), zuWeitNachOsten("Warboss"))
+    abfrage = stelleBeimLoslassenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, warboss, modell, ziel
+    )
+
+    loslassen = modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, modell, ziel)
+
+    gesetzt = {modell: schlachtInDerBewegungsphase.stelle(modell)}
+    assert abfrage.status_code == HTTPStatus.OK
+    assert loslassen.status_code == HTTPStatus.OK
+    assert stellenDerEinheitIm(abfrage.get_json(), "Warboss") == stellenDerAbfrage(warboss, gesetzt)
+
+
+def testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -229,25 +225,24 @@ def testBew1_4DerDienstVerändertBeimAbfragenNichtsAmSpielstand(
     assert spielstandVon(dienstDerSchlacht) == spielstandDavor
 
 
-def testBew1_4DerDienstAntwortetBeiEinerSperreWieBeimLoslassenMitDemGrundUndDemStandWieDavor(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+def testBew1_7DerDienstAntwortetBeiEinerSperreWieBeimLoslassenMitDemGrundUndDemStandWieDavor(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
-    (modell,) = warboss.modelle
-    weg = (bewegungsweite("Warboss") + millionstel, nichts)
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), weg)
+    gezogenes, *_ = boyz.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), (Fraction(5), nichts))
     spielstandDavor = spielstandVon(dienstDerSchlacht)
 
     antwort = stelleBeimLoslassenAbfragen(
-        dienstDerSchlacht, beendeteAufstellung, warboss, modell, ziel
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogenes, ziel
     )
 
     assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json()["gründe"] == [Grund.weiterAlsB.value]
+    assert antwort.get_json()["gründe"] == [Grund.überEineBase.value]
     assert antwort.get_json()["spielstand"] == spielstandDavor
 
 
 @mitMausUndFinger
-def testBew1_4DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre(
+def testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, eingabe
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -265,7 +260,7 @@ def testBew1_4DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenS
 
 
 @mitMausUndFinger
-def testBew1_4DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre(
+def testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
@@ -282,23 +277,19 @@ def testBew1_4DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenSt
 
 
 @mitMausUndFinger
-def testBew1_4DieKarteZeigtBeimHaltenWeiterAlsBDieLetzteStelleOhneSperreOhneSperrmeldung(
+def testBew1_7DieKarteZeigtBeimHaltenWeiterAlsBDasModellAmBOhneSperrmeldung(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    erlaubt = versetzt(davor, einigeZoll)
-    zuWeit = versetzt(davor, (bewegungsweite("Warboss") + 1, nichts))
+    zuWeit = versetzt(davor, zuWeitNachOsten("Warboss"))
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
-    zeiger = halten(seite, davor, erlaubt, eingabe)
-    gezeigtBeiErlaubt = kreiseDerKarte(seite)
-    abfragen = Abfragen(seite)
+    kreiseDavor = kreiseDerKarte(seite)
 
-    zeiger.bewegen(punktAufDerKarte(seite, zuWeit))
-    aufDieAntwortenWarten(seite, abfragen)
+    halten(seite, davor, zuWeit, eingabe)
 
-    assert stelleImSpielstand(davor) not in gezeigtBeiErlaubt
-    assert kreiseDerKarte(seite) == gezeigtBeiErlaubt
+    (gezeigt,) = kreiseDerKarte(seite) - kreiseDavor
+    assert hältAmBAufEinenPixelGenau(seite, davor, gezeigt, bewegungsweite("Warboss"))
     assert sperrmeldungenDerSeite(seite) == []

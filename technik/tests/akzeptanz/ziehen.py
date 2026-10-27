@@ -1,12 +1,15 @@
 """Bedienung der Akzeptanztests: Klicken, Ziehen und Halten mit Maus und Finger."""
 
 from dataclasses import dataclass
+from fractions import Fraction
+from math import hypot
 
 import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import aufDieHandlungWarten, kreiseDerKarte
+from tests.akzeptanz.schlacht import hundertstelZoll
 
 
 @dataclass(frozen=True)
@@ -50,6 +53,17 @@ def liegtEinPixelGenauAn(seite: Page, ist: Stelle, soll: Stelle) -> bool:
     abweichungInX = abs(float(ist.x) - float(soll.x))
     abweichungInY = abs(float(ist.y) - float(soll.y))
     return abweichungInX <= toleranz and abweichungInY <= toleranz
+
+
+def hältAmBAufEinenPixelGenau(
+    seite: Page, davor: Stelle, gezeigt: tuple[float, float], bewegungsweite: Fraction
+) -> bool:
+    """Der gezeigte Punkt liegt höchstens B und höchstens 1/100″ davor von `davor`."""
+    gezeigtInX, gezeigtInY = gezeigt
+    abstand = hypot(gezeigtInX - float(davor.x), gezeigtInY - float(davor.y))
+    toleranz = zollJePixel(seite)
+    weite = float(bewegungsweite)
+    return weite - float(hundertstelZoll) - toleranz <= abstand <= weite + toleranz
 
 
 class Maus:

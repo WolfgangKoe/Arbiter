@@ -4,7 +4,7 @@ Form: Fragen
 Von: Testautor
 An: Architekt
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Querschnitt, V7](../../technik/architektur/vertrag/querschnitt.md) lässt die
@@ -31,4 +31,4 @@ der Phase (BEW-2.3). Auswählen (V2, V9, V14) und Abfragen (V1, V10) löschen ni
 auch für V10, das die alte Fassung ebenfalls nicht ausnahm; das Frontend hält es heute schon
 so (`handlungSenden` in `anfragen.js`). Ein Test zum Klick nach einer *Sperre* liegt abseits
 des Happy Path und wartet auf Technikphase 9. `istHandlung` in `bildschirm.py`:
-[Anliegen 5260](5260-schlachttestsImportUndVertrag.md), Punkt 5. Erledigt, wenn du zustimmst.
+Anliegen 5260, Punkt 5. Erledigt, wenn du zustimmst.

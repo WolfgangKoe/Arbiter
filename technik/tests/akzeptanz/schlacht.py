@@ -9,7 +9,7 @@ import yaml
 from arbiter.domaene.querschnitt.schlachtrunden import Phase
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from tests.akzeptanz.dienst import stelleImSpielstand
-from tests.akzeptanz.handgriffe import stellenAllerModelle
+from tests.akzeptanz.handgriffe import stellenAllerModelle, versetzt
 
 _datenordner = Path(__file__).parents[3] / "domaene" / "daten"
 schrägOhneHindernis = (Fraction(1), Fraction(2))
@@ -101,3 +101,33 @@ def stellenVersetzt(
         modell: Stelle(x=stelle.x + wegInX, y=stelle.y + wegInY)
         for modell, stelle in stellen.items()
     }
+
+
+hundertstelZoll = Fraction(1, 100)
+
+
+def abstandImQuadrat(von: Stelle, nach: Stelle) -> Fraction:
+    """Das Quadrat der geraden Strecke, exakt (Vertrag S2)."""
+    return (nach.x - von.x) ** 2 + (nach.y - von.y) ** 2
+
+
+def hältAmB(davor: Stelle, danach: Stelle, bewegungsweite: Fraction) -> bool:
+    """Das Modell steht höchstens B von `davor` und höchstens 1/100″ davor (BEW-3.1)."""
+    abstand = abstandImQuadrat(davor, danach)
+    return (bewegungsweite - hundertstelZoll) ** 2 <= abstand <= bewegungsweite**2
+
+
+def liegtAufDerGeradenVon(davor: Stelle, ziel: Stelle, danach: Stelle) -> bool:
+    """Die Stelle `danach` liegt von `davor` aus in Richtung `ziel`."""
+    zumZielInX, zumZielInY = ziel.x - davor.x, ziel.y - davor.y
+    danachInX, danachInY = danach.x - davor.x, danach.y - davor.y
+    parallel = zumZielInX * danachInY == zumZielInY * danachInX
+    gleicheRichtung = zumZielInX * danachInX + zumZielInY * danachInY > 0
+    return parallel and gleicheRichtung
+
+
+def einModellAusDerKohärenzZiehen(schlacht, einheit: Einheit) -> None:
+    """Das letzte Modell der Einheit geht fünf Zoll nach Osten, weit weg von seinen Nachbarn."""
+    *_, letztes = einheit.modelle
+    ziel = versetzt(schlacht.stelle(letztes), (Fraction(5), Fraction(0)))
+    schlacht.modellLoslassen(letztes, ziel)

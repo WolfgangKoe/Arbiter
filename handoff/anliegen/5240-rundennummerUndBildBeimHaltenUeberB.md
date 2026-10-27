@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
-Wartet auf: 5180
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: ein Test prüft sein Kriterium nicht).
@@ -49,7 +48,9 @@ Fixtures und Handgriffen.
    `spielerMitDemErstenZug`: nach `zügeBeenden(…, 2)` steht „Schlachtrunde 2 · Kommandophase“ in
    der Kopfzeile des *Spielers* mit dem *ersten Zug*. Eine feste „Schlachtrunde 1“ besteht
    ihn nicht.
-2. Angenommen, aber noch nicht umgesetzt: Der Test zu BEW-1.4 beim Ziehen über *B* bleibt, wie
+2. Umgesetzt nach 5180 F6 A: `testBew1_7DieKarteZeigtBeimHaltenWeiterAlsBDasModellAmBOhneSperrmeldung`
+   und die Tests zu BEW-3.1 verlangen den Kreis höchstens *B* von `davor`, höchstens 1/100″
+   davor, ohne Sperrmeldung. Früher: Der Test zu BEW-1.4 beim Ziehen über *B* bleibt, wie
    er ist, bis der Architekt den Vertrag nach 5180 F2 geändert hat. Dann schreibe ich ihn
    nach dem Gegenvorschlag (Kreis höchstens *B* von `davor`, nicht bei `zuWeit`, kein *Grund*)
    oder nach der Antwort schärfer neu. Darum steht `Wartet auf: 5180`.
@@ -58,4 +59,7 @@ Fixtures und Handgriffen.
 mit dem *ersten Zug*. Nach zwei ganzen Zügen verlangt er in der Kopfzeile dieses *Spielers*
 `amZug` und „Schlachtrunde 2 · Kommandophase“. Eine feste „Schlachtrunde 1“ fällt damit
 durch, ebenso eine Nummer, die Züge statt *Schlachtrunden* zählt (sie zeigte 3). Punkt 2 prüfe
-ich, wenn 5180 geklärt ist; bis dahin bleibt der Status.
+ich, wenn 5180 geklärt ist; bis dahin bleibt der Status. Punkt 2 in Ordnung:
+`testBew1_7DieKarteZeigtBeimHaltenWeiterAlsBDasModellAmBOhneSperrmeldung` verlangt den Kreis
+zwischen *B* − 1/100″ und *B* von `davor` (auf ein Pixel), also nicht bei `zuWeit` und nicht
+an einer Zwischenstelle, und keine Sperrmeldung; das trifft BEW-1.7 mit BEW-3.1 (5180 F6 A).

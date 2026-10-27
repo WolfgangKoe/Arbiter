@@ -200,6 +200,11 @@ def versetzt(stelle: Stelle, weg: tuple[Fraction, Fraction]) -> Stelle:
     return Stelle(x=stelle.x + wegInX, y=stelle.y + wegInY)
 
 
+def gestreckt(weg: tuple[Fraction, Fraction], faktor: Fraction) -> tuple[Fraction, Fraction]:
+    wegInX, wegInY = weg
+    return wegInX * faktor, wegInY * faktor
+
+
 def gezogenesUndRest(
     gesetzte: list[tuple[Modell, Stelle]], *, zweitesGezogen: bool
 ) -> tuple[tuple[Modell, Stelle], tuple[Modell, Stelle]]:

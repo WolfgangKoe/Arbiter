@@ -38,7 +38,7 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   Datei der Phase.
 - **V7** Die Seite zeigt (O1):
   - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409 einer
-    Handlung (Tabelle der Phase, V5), bis die nächste Handlung beantwortet ist (BEW-2.3);
+    Handlung (Tabelle der Phase, V5), bis die nächste Handlung beantwortet ist (BEW-2.6);
     Auswählen (V2, V9, V14) und Abfragen (V1, V10) sind keine (AUF-12.6, 12.7). Ohne *Grund*
     keine. Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
   - `knopfGruppe`: die Knöpfe, die die Datei der Phase nennt.

@@ -7,9 +7,9 @@ auf; die vier Annahmen aus 5180 gelten, bis du antwortest.
 ## Dran
 - Testautor: die Tests zu Item phasenUndSchlachtrunden und normalMove (Plan 8, Fortschritt);
   er arbeitet mit den Annahmen aus [5180](anliegen/5180-annahmenZurBewegungsphase.md) weiter.
-- Implementierer: [4781](anliegen/4781-docstringNenntAltenVertrag.md) (Docstring von
+- Implementierer: Anliegen 4781 (Docstring von
   `web/anwendung.py`); klein, hält nichts auf.
-- Regelumsetzer: [4780](anliegen/4780-linksNachDemUmordnenDerArchitektur.md) (Links auf die
+- Regelumsetzer: Anliegen 4780 (Links auf die
   alte Architektur). [3780](anliegen/3780-restePruefcodeNach3301.md) und
   [3900](anliegen/3900-standNenntFalscheRolleFuerProzessItems.md) warten auf die Prozessphase 8.
 - Stakeholder: [5180](anliegen/5180-annahmenZurBewegungsphase.md) F1 bis F4; hält nichts auf.

@@ -1,6 +1,6 @@
 # Normale Bewegung
 
-Umfang: BEW-1, BEW-2, AUF-20.6 (Klick wählt die *Einheit*, Anliegen 4281).
+Umfang: BEW-1 bis BEW-4, AUF-20.6 (Klick wählt die *Einheit*, Anliegen 4281).
 
 Warum jetzt: Etappe 2, Zyklusziel aus Review 7; der erste Zug einer Partie.
 

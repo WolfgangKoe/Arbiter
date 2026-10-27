@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Vier Fälle ohne Anforderung.
@@ -68,3 +68,13 @@ Antwort: A
 beauftragt der Koordinator Anforderungsautor und UX, ich ziehe den Vertrag nach.
 
 **Stellungnahme.**
+
+**Nachprüfung (Architekt).** F6, F7: A. F5 entscheidet deine Beschreibung: kein Ende je
+*Einheit*, ziehen und korrigieren nach Belieben, ‚keine Kohärenz‘ sperrt bei „Phase
+beenden“. Die Folge für die *Distanz* fragt [5400](5400-wieWeitEinKorrigiertesModellStehenDarf.md).
+Umgesetzt: [Bewegung](../../technik/architektur/vertrag/bewegung.md) V15 bis V17.
+Danach beauftragt der Koordinator, parallel: Anforderungsautor (BEW-1, BEW-2, Glossar nach
+F5, F6, 5400), UX (bew-1, bew-2 ohne Knopf), Planer (Schritt 3). Danach den Testautor:
+[5240](5240-rundennummerUndBildBeimHaltenUeberB.md) Punkt 2 (Kreis bei *B*, V16),
+Anliegen 5260 Punkt 3 (statt Knopf: V16, V17),
+Anliegen 5401.

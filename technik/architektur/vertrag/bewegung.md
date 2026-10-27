@@ -1,7 +1,7 @@
 # Vertrag: Bewegung
 
-Die *Bewegungsphase* der *Schlacht* (BEW-1, BEW-2) und der Klick auf ein *Modell*
-(AUF-20.6); Tür und Übergang: [Schlacht](schlacht.md), was alle Phasen teilen:
+Die *Bewegungsphase* der *Schlacht* (BEW-1 bis BEW-4, Anliegen 5180 F5 bis F7) und der Klick auf
+ein *Modell* (AUF-20.6); Tür und Übergang: [Schlacht](schlacht.md), was alle Phasen teilen:
 [Querschnitt](querschnitt.md).
 
 ## Auswahl
@@ -19,30 +19,35 @@ Die *Bewegungsphase* der *Schlacht* (BEW-1, BEW-2) und der Klick auf ein *Modell
 ## Handlungen
 Am Bildschirm | Anfrage (V5) | `Schlacht`
 ---|---|---
-*Modell* auf der *Karte* loslassen (BEW-1.1, BEW-2, QUE-10.5) | `PUT …/modelle/<m>/stelle`, `{"x": 39.5, "y": 30}` | `modellLoslassen`
-„Bewegung der Einheit beenden“ (BEW-1.2, 1.3) | `PUT /api/bewegungDerEinheitBeenden` | `bewegungDerEinheitBeenden`
+*Modell* auf der *Karte* loslassen (BEW-1.5, BEW-2, BEW-3, QUE-10.5) | `PUT …/modelle/<m>/stelle`, `{"x": 39.5, "y": 30}` | `modellLoslassen`
+„Phase beenden“ in der *Bewegungsphase* (BEW-4) | `PUT /api/phaseBeenden` (V13) | `phaseBeenden`
 
 - **V15** In der Domäne: Ob der Block oder ein *Modell* geht, entscheidet die *Ebene*
-  (BEW-1.1, AUF-20.4), nicht die Seite; die *Distanz* zählt die Domäne ab den *Stellen* zu
-  Beginn der *Bewegungsphase* (Glossar, S2). Jeder *Grund* aus QUE-1 und BEW-2 wirft
-  `Sperre` in der Reihenfolge von `Grund` (V6, BEW-2.3); fremd nach AUF-29.3 (BEW-2.2, 2.4).
-  Ohne *Einheit in Bewegung* ändert `bewegungDerEinheitBeenden` nichts, ohne `Sperre` (V5).
-- Spielstand: `schlacht.einheitInBewegung` ([Schlacht](schlacht.md#spielstand)) nennt
-  `spieler` und `einheit` wie `einheitInAufstellung` oder ist `null`.
-
-Beispiele (V6), nur die genannten Schlüssel: [bewegung.json](bewegung.json): `schlacht` nach
-den Anfragen von [schlacht.json](schlacht.json), dann
-`PUT /api/spieler/1/einheiten/2/modelle/1/stelle` 3″ weiter in x (Warboss, BEW-1.1).
-[weiterAlsB.json](weiterAlsB.json): `gründe` derselben Anfrage, aber weiter als sein *B*
-(BEW-2.1); `spielstand` gleich dem davor.
+  (BEW-1.5, AUF-20.4), nicht die Seite. Jede *Einheit* des *Spielers* *am Zug* zieht in der
+  *Bewegungsphase* beliebig oft, in beliebiger Reihenfolge, auch zurück (BEW-1.6); es gibt
+  keine *Einheit in Bewegung*. Die *Distanz* ist die gerade Strecke von der *Stelle* zu
+  Beginn der *Bewegungsphase* zur jetzigen, verglichen als Quadrat (S2, Anliegen 5400 F1 A).
+  Jeder *Grund* aus QUE-1 und BEW-2.5 wirft `Sperre` in der Reihenfolge von `Grund` (V6,
+  BEW-2.6); fremd nach AUF-29.3 (BEW-2.5, 2.7).
+- **V16** Anhalten am *B* (BEW-3.1): Stünde ein *Modell* der *Ebene* an der gezogenen
+  *Stelle* weiter als sein *B*, kürzt `modellLoslassen` den Zug auf der geraden Strecke von
+  der vorigen zur gezogenen *Stelle*, für alle *Modelle* der *Ebene* um denselben Anteil:
+  das größte k/n (n wie S3), bei dem jedes höchstens sein *B* steht, exakt nachgeprüft (S2).
+  So hält der Block, sobald eines sein *B* erreicht, höchstens 1/100″ davor. Erst danach
+  prüfen QUE-1 und BEW-2.5 die gekürzten *Stellen*. Anhalten ist kein *Grund*: 200.
+- **V17** `phaseBeenden` in der *Bewegungsphase*: Ist eine *Einheit* des *Spielers* *am Zug*
+  nicht in *Kohärenz*, `Sperre` ‚keine Kohärenz‘ (BEW-4.1, QUE-5.5), die *Phase* bleibt (D2);
+  409 mit `gründe` wie [sperre.json](sperre.json). `Schlacht` lässt das die Regeln in
+  `phasen/bewegung/` prüfen (V11).
+- Spielstand: kein eigener Schlüssel; die *Stellen* stehen in `modelle` (V1).
 
 ## Ziehen
 V10 in jeder *Phase* der *Schlacht*: `stellenBeimLoslassen(modell, stelle)` nennt jedes
-*Modell*, das `modellLoslassen` dort *setzen* würde (BEW-1.4), ohne Hineinrücken und
-Anhalten (BEW-1.1), mit denselben Wächtern und *Gründen*: bei einer *Sperre* 409, die
-*Karte* zeigt weiter die letzte 200 dieses Zugs. Außerhalb der *Bewegungsphase* ist die
-Antwort 200 mit leerem `modelle[]` (QUE-10.5). Warum 409: BEW-1.1 *setzt* nur ohne *Sperre*;
-die *Karte* zeigt keine *Stelle*, an die nichts *gesetzt* würde.
+*Modell*, das `modellLoslassen` dort *setzen* würde (BEW-1.7), mit Anhalten am *B* (V16),
+ohne Hineinrücken, mit denselben Wächtern und *Gründen*: bei einer *Sperre* 409, die *Karte*
+zeigt weiter die letzte 200 dieses Zugs. Außerhalb der *Bewegungsphase* ist die Antwort 200
+mit leerem `modelle[]` (QUE-10.5). Warum 409: BEW-1.5 *setzt* nur ohne *Sperre*; die *Karte*
+zeigt keine *Stelle*, an die nichts *gesetzt* würde.
 
 ## Seite
 - Klick (V8) auf ein *Modell*: in der *Schlacht* V14; in der *Aufstellung* V9 auf einem der
@@ -51,8 +56,11 @@ die *Karte* zeigt keine *Stelle*, an die nichts *gesetzt* würde.
   *Schlacht* nichts.
 - Zug (V8, V10): Trägt das gezogene *Modell* `ausgewählt`, folgen alle mit `ausgewählt`;
   Loslassen im *Spielfeld* V5, daneben nach V10.
-- Knöpfe (V7), Mockups bew-1, bew-2: „Bewegung der Einheit beenden“ vor „Phase beenden“,
-  wenn `einheitInBewegung` nicht `null` ist.
+- Knöpfe (V7): nur „Phase beenden“ ([Schlacht](schlacht.md#seite)); auf 409 die
+  `sperrmeldung` wie bei jeder Handlung.
 
-Prüft wie im Querschnitt: 200 nach dem Loslassen gleich `bewegung.json`, 409 gleich
-`weiterAlsB.json`; V14 mit `einheitJederSeite`; V10 außerhalb der *Bewegungsphase* leer.
+Prüft wie im Querschnitt: Loslassen über *B* hält nach V16, 200, die *Stellen* danach
+gleich denen, die V10 am selben Punkt nannte; Korrigieren einer schon gezogenen *Einheit*
+zählt ab der *Stelle* zu Beginn der *Bewegungsphase*; V17 mit 409 und unveränderter
+*Phase*, am Dienst und am Bildschirm; V14 mit `einheitJederSeite`; V10 außerhalb der
+*Bewegungsphase* leer.

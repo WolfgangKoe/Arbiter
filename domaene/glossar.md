@@ -16,15 +16,13 @@ Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, 
 ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; ist ihre *Ebene* eines ihrer *Modelle*, ist von ihren *Modellen* nur dieses ausgewählt (Anliegen 980). Erlaubt keine Handlung, zeigt nur, was gemeint ist.
 Auswahl | – | Auswahl | Die *ausgewählte* *Einheit* mit ihrer *Ebene*, höchstens eine für beide *Spieler* zusammen (Anliegen 309, 960 F3 A, 980).
 B | Move (M) | bewegungsweite | Wie weit ein *Modell* in der *Normalen Bewegung* höchstens zieht, in *Zoll*; jedes *Modell* hat eins (`core_rules.txt:565`, `:745`, Anliegen 4280 F1 B). Werte in `domaene/daten/ausgangslage.yaml`.
-Bewegung der Einheit beenden | – | bewegungDerEinheitBeenden | Handlung, mit der die *Spieler* die *Normale Bewegung* der *Einheit in Bewegung* abschließen (Anliegen 02 F6, git).
 Bewegungsphase | Movement phase | bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
-Distanz | distance a model moves | distanz | Summe der geraden Strecken von der *Stelle* eines *Modells* zu Beginn der laufenden *Bewegungsphase* über jede *Stelle*, an die es darin nacheinander *gesetzt* wurde, in *Zoll* (`core_rules.txt:729`, `:734`, Anliegen 02 F5, 4402, git).
+Distanz | distance a model moves | distanz | Länge der geraden Strecke von der *Stelle* eines *Modells* zu Beginn der laufenden *Bewegungsphase* bis zu seiner jetzigen, in *Zoll*; wie oft es dazwischen *gesetzt* wurde, zählt nicht (`core_rules.txt:745`, Anliegen 5180 F5, 5400 F1 A).
 Ebene | – | ebene | Was Ziehen eines *Modells* einer *ausgewählten* *Einheit* bewegt: ist sie die ganze *Einheit*, alle ihre *gesetzten* *Modelle*; ist sie eines ihrer *Modelle*, nur das gezogene. Jede *ausgewählte* *Einheit* hat eine (Anliegen 980, Vorbild `ArbiterMap/…/model_selection.js:110`).
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die zusammen bewegen und kämpfen (`core_rules.txt:420`).
-Einheit in Bewegung | – | einheitInBewegung | Die eine *Einheit*, deren *Normale Bewegung* begonnen und nicht beendet ist; zeitweise ist es keine (`core_rules.txt:710`).
 erster Zug | first turn | ersterZug | Der Zug, mit dem jede *Schlachtrunde* beginnt; ihn hat in allen derselbe *Spieler* (`core_rules.txt:639`, `:2329`).
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
 Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, wie es `domaene/daten/formation.yaml` vorgibt (Anliegen 374 F2 A, 377 F1 A).
@@ -42,7 +40,7 @@ Missionsvorbereitung | – | Missionsvorbereitung | Schritte 1 bis 3 der *Missio
 Moralphase | Morale phase | moralphase | Siebte und letzte *Phase* eines Zugs (`core_rules.txt:665`).
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
-Normale Bewegung | Normal Move | normaleBewegung | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* eine *Distanz* bis *B*; am Ende in *Kohärenz* (`core_rules.txt:730`, `:745`, Anliegen 4280 F1 B).
+Normale Bewegung | Normal Move | normaleBewegung | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* eine *Distanz* bis *B*; am Ende der *Bewegungsphase* in *Kohärenz* (`core_rules.txt:730`, `:745`, Anliegen 4280 F1 B, 5180 F5).
 Name | unit name | name | Name einer *Einheit*, wie ihn ihr Datenblatt nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte in `domaene/daten/ausgangslage.yaml` unter `Einheit`.
 Phase | phase | Phase (kommandophase, bewegungsphase, psiphase, schussphase, angriffsphase, nahkampfphase, moralphase) | Abschnitt eines Zugs; sieben in dieser Reihenfolge: *Kommandophase*, *Bewegungsphase*, Psiphase, Schussphase, Angriffsphase, Nahkampfphase, *Moralphase* (`core_rules.txt:639`).
 Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).
