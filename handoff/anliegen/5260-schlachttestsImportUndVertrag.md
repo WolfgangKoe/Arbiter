@@ -4,7 +4,8 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
+Wartet auf: 5180
 
 ## Runde 1
 **Befund.** Lauf über `technik/tests/akzeptanz/phasen`: 8 failed und 169 errors. Ursache ist
@@ -65,3 +66,19 @@ etwa fünf Tests. Ohne sie sind alle Tests grün, auch wenn Knopf, Route oder de
    erwartet]`; 5 ohne `/ebene` und `/anklicken`; 6 benennen; 7 mit 4921.
 
 **Stellungnahme.**
+1. Angenommen und umgesetzt: `seiteDerSchlachtMitEingabe` kommt in [ebeneTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ebeneTest.py),
+   [normaleBewegungTest.py](../../technik/tests/akzeptanz/phasen/bewegung/normaleBewegungTest.py)
+   und [sperrenBeimZiehenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/sperrenBeimZiehenTest.py)
+   aus `tests.akzeptanz.bildschirm`.
+2. Angenommen und umgesetzt: In [ersterZugTest.py](../../technik/tests/akzeptanz/querschnitt/ersterZugTest.py)
+   steht der `Locator` in der Prüfung (QUE-9.1). In [schlachtrundenTest.py](../../technik/tests/akzeptanz/querschnitt/schlachtrundenTest.py)
+   stehen in 10.1 die Anfragen im Aufbau und der `Locator` im Aufbau oder in der Prüfung,
+   nie als Handlung. In 10.4 ist die Handlung `phaseBeenden` (V13) mit Prüfung der Antwort.
+3. Teils umgesetzt: V10 außerhalb der *Bewegungsphase* leer
+   (`testQue10_5DerDienstNenntAußerhalbDerBewegungsphaseBeimZiehenKeinModellUndKeinenGrund`,
+   je *Phase*) und V13 mit dem Körper einer beendeten *Phase*
+   (`testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase`). Angenommen, aber
+   noch offen: 200 nach dem Loslassen gleich `bewegung.json` sowie Route und Knopf „Bewegung
+   der Einheit beenden“ (BEW-1.3); ihren Vertrag ändert der Architekt gerade nach 5180. Darum
+   steht `Wartet auf: 5180`.
+4. bis 7. nehme ich für die Technikphase 9 an.

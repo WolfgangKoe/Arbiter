@@ -4,7 +4,11 @@ from fractions import Fraction
 from http import HTTPStatus
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import kreiseDerKarte, sperrmeldungenDerSeite
+from tests.akzeptanz.bildschirm import (
+    kreiseDerKarte,
+    seiteDerSchlachtMitEingabe,
+    sperrmeldungenDerSeite,
+)
 from tests.akzeptanz.dienst import (
     spielstandVon,
     stelleBeimLoslassenAbfragen,
@@ -18,7 +22,6 @@ from tests.akzeptanz.schlacht import (
     jetzigeStellen,
     ostenUndNorden,
     schrägOhneHindernis,
-    seiteDerSchlachtMitEingabe,
     stellenAlsZahlen,
     stellenVersetzt,
 )

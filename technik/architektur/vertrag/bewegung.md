@@ -12,8 +12,9 @@ Die *Bewegungsphase* der *Schlacht* (BEW-1, BEW-2) und der Klick auf ein *Modell
   *ausgewählt* oder das *Modell* nicht *gesetzt*, ändert es nichts, ohne `Sperre` (V5). Wie
   V3 ist es keine Handlung: ohne D2. Warum eine eigene Route statt V2: V2 nimmt nur eine
   *Einheit* der *Armeeliste* (404), in der *Schlacht* ist jede leer.
-- Spielstand: `ausgewählt` an jedem *Modell* der *ausgewählten* *Einheit* (AUF-5.7); in der
-  *Schlacht* gibt es keine *Ebene* aus einem *Modell*, also kein `ebene` und kein V9.
+- Spielstand: `ausgewählt` an jedem *Modell* der *ausgewählten* *Einheit* (AUF-5.7). AUF-25
+  gilt nur in der *Aufstellung*: in der *Schlacht* kein `ebene`; V9 bleibt bei der
+  *Aufstellung* und antwortet 404, denn dort ist keine *Einheit* mehr *ausgewählt* (AUF-5.10).
 
 ## Handlungen
 Am Bildschirm | Anfrage (V5) | `Schlacht`

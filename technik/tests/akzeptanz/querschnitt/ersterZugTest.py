@@ -39,9 +39,7 @@ def testQue9_1NachDerAufstellungZeigtJedeArmeelisteErsterZug(
 ):
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlacht)
 
-    knopf = knopfDerArmeeliste(seite, spielername, ersterZugKnopf)
-
-    expect(knopf).to_have_count(1)
+    expect(knopfDerArmeeliste(seite, spielername, ersterZugKnopf)).to_have_count(1)
 
 
 @spielernamen
@@ -52,9 +50,7 @@ def testQue9_1HatEinSpielerDenErstenZugZeigtKeineArmeelisteErsterZug(
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlacht)
     expect(spielerAmZug(seite)).to_have_count(1)
 
-    knopf = knopfDerArmeeliste(seite, spielername, ersterZugKnopf)
-
-    expect(knopf).to_have_count(0)
+    expect(knopfDerArmeeliste(seite, spielername, ersterZugKnopf)).to_have_count(0)
 
 
 @spielernamen
@@ -64,9 +60,7 @@ def testQue9_1VorDemEndeDerAufstellungZeigtKeineArmeelisteErsterZug(
     seite = bildschirm.seiteZu(ausgangsaufstellung)
     expect(armeelisteVon(seite, spielername)).to_have_count(1)
 
-    knopf = knopfDerArmeeliste(seite, spielername, ersterZugKnopf)
-
-    expect(knopf).to_have_count(0)
+    expect(knopfDerArmeeliste(seite, spielername, ersterZugKnopf)).to_have_count(0)
 
 
 def testQue9_1DerSpielstandNenntNachDerAufstellungKeinenErstenZugUndKeinenAmZug(

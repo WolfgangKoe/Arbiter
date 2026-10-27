@@ -6,7 +6,12 @@ from http import HTTPStatus
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import gründeAlsText, kreiseDerKarte, sperrmeldungWarten
+from tests.akzeptanz.bildschirm import (
+    gründeAlsText,
+    kreiseDerKarte,
+    seiteDerSchlachtMitEingabe,
+    sperrmeldungWarten,
+)
 from tests.akzeptanz.dienst import modellLoslassen, spielstandVon, weiterAlsBDesVertrags
 from tests.akzeptanz.handgriffe import millionstel, schrägOhneWurzel, sperrgründe, versetzt
 from tests.akzeptanz.schlacht import (
@@ -14,7 +19,6 @@ from tests.akzeptanz.schlacht import (
     jetzigeStellen,
     ostenUndNorden,
     schrägOhneHindernis,
-    seiteDerSchlachtMitEingabe,
     stellenAlsZahlen,
     stellenVersetzt,
     zurBewegungsphaseDerNächstenSchlachtrunde,

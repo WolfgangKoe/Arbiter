@@ -18,6 +18,7 @@ from tests.akzeptanz.dienst import (
     phaseBeenden,
     schlachtDesVertrags,
     spielstandVon,
+    stelleBeimLoslassenAbfragen,
 )
 from tests.akzeptanz.handgriffe import stellenAllerModelle, versetzt
 from tests.akzeptanz.schlacht import (
@@ -44,6 +45,11 @@ def andererSpieler(spielerMitDemErstenZug, spielerEins, spielerZwei):
 @pytest.fixture
 def nameDesSpielersMitDemErstenZug(spielerMitDemErstenZug, spielerEins) -> str:
     return "Spieler 1" if spielerMitDemErstenZug is spielerEins else "Spieler 2"
+
+
+@pytest.fixture
+def nummerDesAnderenSpielers(nameDesAnderenSpielers) -> int:
+    return int(nameDesAnderenSpielers.removeprefix("Spieler "))
 
 
 @pytest.fixture
@@ -82,11 +88,23 @@ def testQue10_1DieKopfzeileDesSpielersAmZugNenntSchlachtrundeUndPhase(
     bildschirm, beendeteAufstellung, schlachtMitErstemZug, nameDesSpielersMitDemErstenZug
 ):
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtMitErstemZug)
-
     kopfzeile = kopfzeileVon(seite, nameDesSpielersMitDemErstenZug)
 
     expect(kopfzeile).to_have_class(amZugGekennzeichnet)
     expect(kopfzeile.locator(".kopfzeileAmZug")).to_have_text("Schlachtrunde 1 · Kommandophase")
+
+
+def testQue10_1DieKopfzeileNenntNachZweiZügenDieZweiteSchlachtrunde(
+    bildschirm, beendeteAufstellung, schlachtMitErstemZug, nameDesSpielersMitDemErstenZug
+):
+    zügeBeenden(schlachtMitErstemZug, 2)
+    seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtMitErstemZug)
+    kopfzeile = kopfzeileVon(seite, nameDesSpielersMitDemErstenZug)
+
+    expect(kopfzeile).to_have_class(amZugGekennzeichnet)
+    expect(kopfzeile.locator(".kopfzeileAmZug")).to_have_text(
+        f"Schlachtrunde {zweiteSchlachtrunde} · Kommandophase"
+    )
 
 
 def testQue10_1DieKopfzeileDesAnderenSpielersNenntKeinePhase(
@@ -94,7 +112,6 @@ def testQue10_1DieKopfzeileDesAnderenSpielersNenntKeinePhase(
 ):
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtMitErstemZug)
     expect(spielerAmZug(seite)).to_have_count(1)
-
     kopfzeile = kopfzeileVon(seite, nameDesAnderenSpielers)
 
     expect(kopfzeile).not_to_have_class(amZugGekennzeichnet)
@@ -107,7 +124,6 @@ def testQue10_1DieKopfzeileNenntDenNamenDerLaufendenPhase(
 ):
     phaseBeendenBis(schlachtMitErstemZug, phase)
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtMitErstemZug)
-
     kopfzeile = kopfzeileVon(seite, nameDesSpielersMitDemErstenZug)
 
     expect(kopfzeile.locator(".kopfzeileAmZug")).to_have_text(f"Schlachtrunde 1 · {phase.value}")
@@ -118,7 +134,6 @@ def testQue10_1DieKopfzeileNenntNachDemZugDesErstenSpielersDenAnderenInDerNächs
 ):
     moralphaseDesErstenSpielers.phaseBeenden()
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, moralphaseDesErstenSpielers)
-
     kopfzeile = kopfzeileVon(seite, nameDesAnderenSpielers)
 
     expect(kopfzeile).to_have_class(amZugGekennzeichnet)
@@ -130,10 +145,9 @@ def testQue10_1DerSpielstandNenntSchlachtrundeAmZugUndPhaseWieImBeispielDesVertr
 ):
     beispiel = schlachtDesVertrags()
     ersterZugWählen(dienstNachDerAufstellung, 1)
-
     antwort = phaseBeenden(dienstNachDerAufstellung, 1, 1, Phase.kommandophase)
-
     spielstand = antwort.get_json()
+
     assert antwort.status_code == HTTPStatus.OK
     assert spielstand["schlacht"] == beispiel["schlacht"]
     assert spielstand["spieler"] == beispiel["spieler"]
@@ -161,6 +175,19 @@ def testQue10_2DerSpielerBleibtInDerselbenSchlachtrundeAmZug(
     assert schlachtInDerKommandophase.amZug is spielerEins
     assert schlachtInDerKommandophase.schlachtrunde == 1
     assert schlachtInDerKommandophase.phase is danach
+
+
+def testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase(
+    dienstDerSchlacht, schlachtInDerKommandophase
+):
+    phaseBeenden(dienstDerSchlacht, 1, 1, Phase.kommandophase)
+    spielstandDavor = spielstandVon(dienstDerSchlacht)
+
+    antwort = phaseBeenden(dienstDerSchlacht, 1, 1, Phase.kommandophase)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert antwort.get_json() == spielstandDavor
+    assert schlachtInDerKommandophase.phase is Phase.bewegungsphase
 
 
 def testQue10_3NachDerMoralphaseDesErstenSpielersIstDerAndereAmZug(
@@ -264,19 +291,23 @@ def testQue10_4DieSeiteZeigtVorDemEndeDerSchlachtKeineBeendeteSchlacht(
     seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlacht)
     expect(spielerAmZug(seite)).to_have_count(1)
 
-    gezeigt = seite.locator(".kopfzeileSchlachtBeendet")
-
-    expect(gezeigt).to_have_count(0)
+    expect(seite.locator(".kopfzeileSchlachtBeendet")).to_have_count(0)
 
 
-def testQue10_4DerSpielstandNenntNachDemEndeDerSchlachtSieBeendetOhneSpielerAmZug(
-    dienstDerSchlacht, moralphaseDesZweitenSpielersInDerLetztenSchlachtrunde
+def testQue10_4DerDienstNenntNachDemEndeDerSchlachtSieBeendetOhneSpielerAmZug(
+    dienstDerSchlacht,
+    moralphaseDesZweitenSpielersInDerLetztenSchlachtrunde,
+    nummerDesAnderenSpielers,
 ):
     schlacht = moralphaseDesZweitenSpielersInDerLetztenSchlachtrunde
-    schlacht.phaseBeenden()
+    letzteRunde = schlacht.schlachtrunde
 
-    spielstand = spielstandVon(dienstDerSchlacht)
+    antwort = phaseBeenden(
+        dienstDerSchlacht, letzteRunde, nummerDesAnderenSpielers, Phase.moralphase
+    )
 
+    spielstand = antwort.get_json()
+    assert antwort.status_code == HTTPStatus.OK
     assert spielstand["schlacht"]["beendet"] is True
     assert spielstand["schlacht"]["amZug"] is None
 
@@ -295,3 +326,23 @@ def testQue10_5ZiehenAußerhalbDerBewegungsphaseLässtJedesModellStehenOhneGrund
 
     assert stellenAllerModelle(schlachtInDerKommandophase) == davor
     assert ziel != davor[gezogenes]
+
+
+@pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
+def testQue10_5DerDienstNenntAußerhalbDerBewegungsphaseBeimZiehenKeinModellUndKeinenGrund(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerKommandophase, boyz, phase
+):
+    schlachtInDerKommandophase.auswählen(boyz)
+    gezogenes, *_ = boyz.modelle
+    ziel = versetzt(schlachtInDerKommandophase.stelle(gezogenes), (Fraction(0), Fraction(2)))
+    phaseBeendenBis(schlachtInDerKommandophase, phase)
+    spielstandDavor = spielstandVon(dienstDerSchlacht)
+
+    antwort = stelleBeimLoslassenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogenes, ziel
+    )
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert antwort.get_json()["modelle"] == []
+    assert "gründe" not in antwort.get_json()
+    assert spielstandVon(dienstDerSchlacht) == spielstandDavor

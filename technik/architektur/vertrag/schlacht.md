@@ -17,8 +17,8 @@ Die *Schlacht* nach der *Aufstellung* (QUE-9, QUE-10); was alle Phasen teilen:
 - `web/` hält die *Aufstellung* und, sobald sie beendet ist, genau eine `Schlacht` aus ihr;
   `anwendungFür(aufstellung, schlacht=None)`, `serverStarten(aufstellung, port=0, *,
   schlacht=None)`. Fehlt `schlacht` bei beendeter *Aufstellung*, baut `web/` sie beim ersten
-  Bedarf. Danach gehen V5, V9, V10 und V14 an die `Schlacht`, nicht mehr an die
-  *Aufstellung*. Vor dem Ende der *Aufstellung*: V12 und V13 404. Warum in `web/`: Es steckt
+  Bedarf. Danach gehen V5, V10 und V14 an die `Schlacht`, nicht mehr an die
+  *Aufstellung*; V9: [Bewegung](bewegung.md#auswahl). Vor dem Ende der *Aufstellung*: V12 und V13 404. Warum in `web/`: Es steckt
   nur zusammen wie `__main__.py`; mit dem Umbau ([Anwendung](../anwendung.md)) zieht es in
   den Dienst.
 

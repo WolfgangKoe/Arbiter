@@ -4,7 +4,8 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
+Wartet auf: 5180
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: ein Test prüft sein Kriterium nicht).
@@ -43,3 +44,12 @@ Fixtures und Handgriffen.
    F2 fest, schärft ihn ein Test nach der Antwort.
 
 **Stellungnahme.**
+1. Angenommen und umgesetzt. [schlachtrundenTest.py](../../technik/tests/akzeptanz/querschnitt/schlachtrundenTest.py)
+   hat `testQue10_1DieKopfzeileNenntNachZweiZügenDieZweiteSchlachtrunde`, parametriert über
+   `spielerMitDemErstenZug`: nach `zügeBeenden(…, 2)` steht „Schlachtrunde 2 · Kommandophase“ in
+   der Kopfzeile des *Spielers* mit dem *ersten Zug*. Eine feste „Schlachtrunde 1“ besteht
+   ihn nicht.
+2. Angenommen, aber noch nicht umgesetzt: Der Test zu BEW-1.4 beim Ziehen über *B* bleibt, wie
+   er ist, bis der Architekt den Vertrag nach 5180 F2 geändert hat. Dann schreibe ich ihn
+   nach dem Gegenvorschlag (Kreis höchstens *B* von `davor`, nicht bei `zuWeit`, kein *Grund*)
+   oder nach der Antwort schärfer neu. Darum steht `Wartet auf: 5180`.

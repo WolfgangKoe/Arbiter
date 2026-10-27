@@ -10,7 +10,11 @@ from tests.akzeptanz.auswahl import (
     ausgewählteModelle,
     auswählenMit,
 )
-from tests.akzeptanz.bildschirm import aufDieHandlungWarten, seiteMitEingabe
+from tests.akzeptanz.bildschirm import (
+    aufDieHandlungWarten,
+    seiteDerSchlachtMitEingabe,
+    seiteMitEingabe,
+)
 from tests.akzeptanz.dienst import (
     ausgewählteEinheitenIm,
     ausgewählteModelleIm,
@@ -25,7 +29,7 @@ from tests.akzeptanz.dienst import (
     stellenDerEinheitIm,
 )
 from tests.akzeptanz.handgriffe import stelleInDerZoneVon
-from tests.akzeptanz.schlacht import seiteDerSchlachtMitEingabe, stellenDerEinheitAlsZahlen
+from tests.akzeptanz.schlacht import stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import (
     klickenMit,
     liegtEinPixelGenauAn,
