@@ -28,7 +28,8 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   Tabelle Am Bildschirm | Anfrage | Methode der Domäne.
   Ein *Modell* nennt jedes der *Armee*, auch einer *aufgestellten* *Einheit* (AUF-7.2, 22.2).
   Unbekannte Kennung 404, Körper ohne Zahl `x` und `y` 400. `web/` liest
-  Zahlen als `Fraction(str(zahl))`, die Dezimalzahl wie gesendet (S2). Eine Zahl ist eine
+  Zahlen als nächste `Fraction` mit Nenner bis 10⁶ (`limit_denominator`, höchstens
+  1/(2·10⁶)″ daneben): Eine *Stelle* des Spielstands kommt exakt zurück (S2, BEW-1.7). Eine Zahl ist eine
   JSON-Zahl, kein Wahrheitswert, und als double endlich, denn die Seite rechnet in double;
   eine Ganzzahl, die Python nicht liest (über 4.300 Ziffern), ist keine. In der Abfrage (V10)
   gilt nur die Schreibweise einer JSON-Zahl, nicht was `float` sonst nimmt (`1_0`, ` 3 `).
@@ -47,7 +48,8 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   als 4 px (`zugschwelle`, wie `dragStartThresholdPx` in ArbiterMap) vom Startpunkt abweicht.
   Ohne Zug ist es ein Klick; was er bedeutet, nennt die Datei der Phase. Den Punkt in Zoll
   rechnet die Seite mit `getScreenCTM().inverse()` der `.karte`.
-  Gezogen wird nur ein `.karte .modell`: Es folgt dem Zeiger. Ein Zug wählt nie aus.
+  Gezogen wird nur ein `.karte .modell`; Punkt des Zugs: seine vorige *Stelle* plus Weg des
+  Zeigers seit dem Greifen (AUF-8.7), ein Weg nur in x lässt y exakt. Ein Zug wählt nie aus.
   Beim Druck auf ein gezogenes Element verhindert die Seite Markieren und das eigene Ziehen
   des Browsers (`preventDefault` auf `pointerdown` und `dragstart`, `user-select: none` an
   `.armeeKarte`); sonst bricht `pointercancel` den Zug ab.
@@ -55,11 +57,11 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   `modelle[]`, je *Modell*, das das Loslassen am Punkt *setzen* würde (Datei der Phase),
   `spieler`, `einheit`, `nummer` wie V1 und `x`, `y`. *Sperre*: 409 wie V6. Zahlen wie V5,
   fehlt eine: 400. Warum `GET`: Die Abfrage ändert nichts (V4).
-  Statt V8 „folgt dem Zeiger“ fragt die Seite je Zeigerbewegung im *Spielfeld* nach,
+  Mit dem Punkt des Zugs (V8) fragt die Seite je Zeigerbewegung im *Spielfeld* nach,
   höchstens eine Anfrage zugleich, danach nur mit dem jüngsten Punkt. Auf 200 setzt sie
   `cx`, `cy` jedes genannten Kreises, sonst bleibt jeder, wo er ist, auch bei 409 (ohne
   `sperrmeldung`: keine Handlung). Eine Antwort nach dem Loslassen verwirft sie. Beim
-  Loslassen schickt sie V5 mit dem Punkt des Zeigers, nicht dem gezeigten; neben dem
+  Loslassen schickt sie V5 mit dem Punkt des Zugs, nicht dem gezeigten; neben dem
   *Spielfeld* mit dem Punkt der letzten 200 dieses Zugs, ohne sie keine Anfrage: Sie
   zeichnet den letzten Stand. Warum der Punkt: Zu ihm *setzt* die Handlung die gezeigten
   *Stellen*; welche *Modelle* mitgehen, entscheidet die Domäne. Prüft am Bildschirm:

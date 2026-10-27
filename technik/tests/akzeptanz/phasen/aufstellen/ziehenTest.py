@@ -5,6 +5,7 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.spielobjekte import Stelle
+from tests.akzeptanz.auswahl import auswählenMit
 from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     radiusInZoll,
@@ -62,6 +63,7 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
 ):
     [(_, stelleDavor)] = boyzSetzen(1)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
+    auswählenMit[eingabe](seite, "Spieler 1", "Boyz")
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
     start = punktAufDerKarte(seite, stelleDavor)
     ziel = Bildpunkt(
@@ -70,5 +72,5 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
 
     anfragen = ziehenOhneAnfrage(seite, start, ziel, eingabe)
 
-    assert anfragen == []
+    assert [anfrage for anfrage in anfragen if anfrage.url.endswith("/stelle")] == []
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor

@@ -79,8 +79,12 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Fachkritiker → Testautor: Kein Test sperrt den Block, wenn ein nicht gezogenes Modell über eine fremde Base geht (BEW-2.5) (Anliegen 5760); beseitigt: Commit „normalMove: Bewegungsphase ohne Ende je Einheit“
 - [x] Architekt: Kritik an den Tests zu Item normalMove
 - [ ] Implementierer: Tests zu Item normalMove grün
+  Hindernis: Implementierer → Testautor: testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle (ziehenTest.py) fordert, dass eine Bewegung unter der Zugschwelle keine ändernde Anfrage sendet. Sie ist aber ein Klick auf ein gesetztes Modell einer nicht ausgewählten Einheit in der Aufstellung; AUF-20.6 und V14 verlangen dafür PUT …/anklicken (Einheit wird ausgewählt). Beides zugleich ist nicht erfüllbar. Empfehlung: der Test wählt zuvor die Einheit der Boyz aus (dann sendet der Klick nur ebene, auch eine ändernde Anfrage; besser: Test prüft nur, dass die Stellen unverändert bleiben und keine PUT …/stelle gesendet wird) oder nimmt anklicken ausdrücklich aus. (Anliegen 6060)
 - [ ] Architekt: Kritik am Code zu Item normalMove
+  Hindernis: Architekt → Testautor: AUF-8.7 hat keinen Akzeptanztest, bedienung.js setzt es aber schon um (stelleDesZugs: vorige Stelle plus Weg des Zeigers seit dem Greifen; Anliegen 6100 F1 A); Akzeptanztests entstehen vor dem Code. Empfehlung: in ziehenTest.py ein gesetztes Modell abseits seiner Mitte greifen, mit Maus und Finger ziehen und loslassen; die Stelle danach ist die vorige plus der Weg des Zeigers, auf einen Pixel genau (B5), nicht der Punkt unter dem Zeiger. (Anliegen 6101)
 - [ ] Reviewer: Kritik am Code zu Item normalMove
+  Hindernis: Reviewer → Implementierer: Grund des Setzens und Ziehens als Zweig statt Zeile der Tabelle (D4) (Anliegen 6120)
+  Hindernis: Reviewer → Architekt: Rundung jeder Zahl der Anfrage auf Nenner 10^6 steht nicht in S2 (Anliegen 6121)
 - [ ] Fachkritiker: Item normalMove abgenommen
 - [ ] Planer: Item normalMove gelöscht
 - [ ] Reviewer: DoD über das Inkrement
