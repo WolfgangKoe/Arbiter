@@ -18,10 +18,10 @@ Status: angenommen
    nicht *aufgestellte* *Einheiten* (Glossar); so ist es gebaut
    (`technik/arbiter/web/kennungen.py:46`), nach der *Aufstellung* ist sie leer. bew-1 und
    bew-2 zeigen dazu Boyz in der *Armeeliste* *ausgewählt*: einen Weg zur *Auswahl*, den
-   keine Anforderung kennt (siehe [4260](4260-normalMoveTrifftAufAufstellregeln.md), Punkt 3).
+   keine Anforderung kennt (siehe Anliegen 4260, Punkt 3).
 3. Plan 8, Schritt 4 („Nach der fünften *Schlachtrunde* endet die *Schlacht*“, QUE-10.4) hat
    kein Mockup; offen ist dazu deine Frage
-   [4200](4200-komponenteFuerSchlachtrundeUndPhase.md) an den Architekten.
+   Anliegen 4200 an den Architekten.
 
 **Kosten.** Der Implementierer baut nach dem Mockup: ohne „Phase beenden“ in der
 *Bewegungsphase* bleibt die Partie dort stehen; mit gefüllten *Armeelisten* baut er gegen
@@ -45,7 +45,7 @@ ein Mockup mehr.
    bew-2 ist keine *Einheit* *ausgewählt*; zu sehen ist nur das *ausgewählte* *Modell* auf
    der *Karte*. Das ist Variante (a) aus deinem Gegenvorschlag.
 3. Gezeichnet nach der Antwort des Architekten auf
-   [4200](4200-komponenteFuerSchlachtrundeUndPhase.md):
+   Anliegen 4200:
    [que-10-ende](../../domaene/mockups/que-10-ende.html) zeigt „Schlacht beendet“ unter
    „ARBITER“, kein *Spieler* ist *am Zug*, kein Knopf. Dazu heißt es in que-10, bew-1 und
    bew-2 jetzt `amZug` und `kopfzeileAmZug`.

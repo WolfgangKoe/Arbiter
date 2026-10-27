@@ -8,7 +8,7 @@ Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: eine *Sperre* greift zu Unrecht, Schritt 3 des Happy Path).
-Seit der Nachbesserung zu [4260](4260-normalMoveTrifftAufAufstellregeln.md) verweist
+Seit der Nachbesserung zu Anliegen 4260 verweist
 [BEW-1.1](../../domaene/anforderungen/phasen/bewegung/normalMove.md) nicht mehr auf AUF-21.1.
 Damit gilt [AUF-24.2](../../domaene/anforderungen/phasen/aufstellen/blockAlsGanzes.md) im
 *Normal Move* nicht mehr („Wenn AUF-21.1 oder 21.2 die *Modelle* einer *Einheit* *setzt*,

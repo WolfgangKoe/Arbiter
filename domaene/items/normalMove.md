@@ -1,7 +1,7 @@
 # Normal Move
 
 Umfang: BEW-1, BEW-2, AUF-20.6 (Klick wählt die *Einheit*,
-[4281](../../handoff/anliegen/4281-auf20_6InsItemNormalMove.md)).
+Anliegen 4281).
 
 Warum jetzt: Etappe 2, Zyklusziel aus Review 7; der erste Zug einer Partie.
 
