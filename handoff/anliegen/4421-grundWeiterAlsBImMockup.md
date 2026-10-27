@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Ux
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [4280](4280-begriffeUndAnnahmenZuPlan8.md) F1 *B* statt
@@ -16,4 +16,4 @@ Zeile 52, zeigt noch „weiter als M“.
 
 **Gegenvorschlag.** „weiter als B“ in Zeile 52.
 
-**Stellungnahme.**
+**Stellungnahme.** Einverstanden, umgesetzt: Zeile 52 des Mockups zeigt „weiter als B“.

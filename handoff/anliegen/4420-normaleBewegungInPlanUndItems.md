@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in [4280](4280-begriffeUndAnnahmenZuPlan8.md) F1 entschieden:
@@ -25,4 +25,11 @@ der Link auf BEW-1 im Plan führt ins Leere, bis er berichtigt ist.
 **Gegenvorschlag.** Die Wörter ersetzen, den Link auf `normaleBewegung.md` setzen;
 Dateinamen der Items bleiben (Es 2).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. *Normale Bewegung* und *B* stehen in [Plan 8](../plan.md)
+(Schritt 3, Item 3 mit Link auf `normaleBewegung.md`, Reihenfolge), in den Items
+[normalMove](../../domaene/items/normalMove.md) (Titel),
+[gemeinsamUebergehen](../../domaene/items/gemeinsamUebergehen.md),
+[loslassenNebenDerKarte](../../domaene/items/loslassenNebenDerKarte.md) und in
+[Etappe 2](../../domaene/etappen/02-bewegen.md). Dort und im Plan zudem *Nahkampfreichweite*
+statt „Engagement Range“ nach dem Glossar. „Advance“ bleibt, bis du ihm einen Begriff im
+Glossar gibst.

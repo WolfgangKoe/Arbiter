@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: eine *Sperre* greift zu Unrecht). Die *Distanz* zählt „in der
@@ -31,4 +31,13 @@ BEW-2.1 bleibt, wie es ist, und schließt nebenbei Punkt 2 aus
 [4261](4261-lueckenImNormalMoveFuerSpaeter.md) für ‚weiter als B‘. Dass ‚keine Kohärenz‘
 über „Phase beenden“ umgehbar ist, wartet weiter dort (4261, Punkt 1).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen. *Distanz* im
+[Glossar](../../domaene/glossar.md) zählt jetzt in der laufenden *Bewegungsphase*
+(`core_rules.txt:734`). Damit beginnt sie in jeder *Bewegungsphase* bei null, auch wenn die
+*Einheit* aus der vorigen noch die *Einheit in Bewegung* ist. Zieht man in derselben
+*Bewegungsphase* eine *Einheit* nach einer anderen erneut, zählt die *Distanz* ihrer
+*Modelle* weiter; ‚weiter als B‘ greift dann regelgerecht. BEW-2.1 bleibt unverändert und
+erhält keine neue Kennung, denn es hat noch keinen Test. Den Test über „Phase beenden“ schreibt der Testautor zu
+BEW-2.1. Wie ‚keine Kohärenz‘ über „Phase beenden“ umgangen wird, bleibt in
+[4261](4261-lueckenImNormalMoveFuerSpaeter.md), Punkt 1; ebenso, ob „Phase beenden“ die
+*Einheit in Bewegung* beendet.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: ein Schritt des Happy Path fehlt). Die Begriffe aus
@@ -32,4 +32,10 @@ Nachziehen kostet einige Zeilen im Plan und in zwei Items.
 offene Rückfrage zu F2; „Noch nicht bereit“ nennt nur, was noch fehlt; die Items verlinken
 ihre Mockups.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, in [Plan 8](../plan.md): 1. Schritt 3 nennt „Bewegung der
+Einheit beenden“; ‚weiter als B‘ und ‚über eine Base‘ sperren beim Loslassen, ‚keine
+Kohärenz‘ beim Beenden. Schritte 1 und 2 nennen ihre Knöpfe. 2. „Offene Anliegen“ nennt die
+umgesetzten Antworten zu 4280 und offen F6 und F7. 3. „Noch nicht bereit“ nennt nur 4402 und
+4421; [normalMove](../../domaene/items/normalMove.md) und
+[phasenUndSchlachtrunden](../../domaene/items/phasenUndSchlachtrunden.md) verlinken ihre
+Mockups.
