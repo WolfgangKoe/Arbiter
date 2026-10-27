@@ -9,7 +9,7 @@ Wartet auf: Domänenphase 9
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: kein Schritt des Happy Path, keine *Sperre*; Schritt 3 von
-[Plan 8](../plan.md) steht nach [4400](4400-plan8NachAntwortenZu4280.md)). „Noch nicht
+[Plan 8](../plan.md) steht nach Anliegen 4400). „Noch nicht
 bereit“ sagt „Es fehlen: Anliegen 4402, Anliegen 4421“, die Empfehlung „sobald 4402 und
 4421 erledigt sind“. Beide sind erledigt und gelöscht (Commit „Erledigte Anliegen 4402 und
 4421 entfernt“); der Plan hatte sie richtig genannt, als er geschrieben wurde.
@@ -19,6 +19,6 @@ Anliegen, die es nicht mehr gibt. In Plan 9 wiederholt es sich, wenn „Noch nic
 offene Anliegen nennt, die vor der Freigabe erledigt werden.
 
 **Gegenvorschlag.** Rührst du Plan 8 vor der Freigabe noch an (etwa zu
-[4420](4420-normaleBewegungInPlanUndItems.md)): „Noch nicht bereit“ entfällt, die Empfehlung
+Anliegen 4420): „Noch nicht bereit“ entfällt, die Empfehlung
 heißt „Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.“ Ab Plan 9
 nennt „Noch nicht bereit“ nur, was bei der Freigabe noch fehlt.

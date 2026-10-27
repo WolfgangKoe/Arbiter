@@ -43,7 +43,7 @@ Kommentar: Zu F1: B Wir machen es wie A außer statt "Normal Move" nehmen wir "N
 **Klärung.** Deine Antworten kamen nicht an, weil unter den Fragen die Zeile `Antwort:`
 fehlte; mein Fehler, jetzt steht sie überall. Umgesetzt: F1 B im Glossar, in BEW-1 und BEW-2,
 die *Sperre* heißt ‚weiter als B‘; F3 bis F5 standen schon so. Plan, Items und Etappe 2
-berichtigt der Planer ([4420](4420-normaleBewegungInPlanUndItems.md)), das Mockup Ux
+berichtigt der Planer (Anliegen 4420), das Mockup Ux
 (Anliegen 4421).
 
 Wozu ein Kürzel: Jedes Kriterium heißt `<Kürzel>-<n>.<m>`, sein Test trägt die Kennung im
