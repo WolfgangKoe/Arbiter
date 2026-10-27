@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Das Zyklusziel aus [Review 7](../review.md) verlangt Phasen und Normal Move;

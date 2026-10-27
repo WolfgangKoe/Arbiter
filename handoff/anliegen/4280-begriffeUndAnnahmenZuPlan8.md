@@ -21,7 +21,7 @@ Kennungen und Tests.
 
 **F1 · Gibst du die neuen Begriffe frei?** Im [Glossar](../../domaene/glossar.md): *am Zug*,
 *erster Zug*, *Schlacht*, *Schlachtrunde*, *Phase*, *Kommandophase*, *Bewegungsphase*,
-*Moralphase*, *Normal Move*, *M*, *Weg*, *Einheit in Bewegung*, *Bewegung der Einheit beenden*.
+*Moralphase*, *Normal Move*, *M*, *Distanz* (statt *Weg*, [4302](4302-anforderungenPlan8VorDenTests.md)), *Einheit in Bewegung*, *Bewegung der Einheit beenden*.
 A: Ja. B: Mit deinen Änderungen darunter.
 Empfehlung: A. Deutsch wie im Plan; *Normal Move* und *M* bleiben, wie du sie schreibst.
 

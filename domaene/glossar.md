@@ -19,6 +19,7 @@ Bewegung der Einheit beenden | – | bewegungDerEinheitBeenden | Handlung, mit d
 Bewegungsphase | Movement phase | bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Durchmesser | diameter | durchmesser | Durchmesser einer runden *Base*, in Millimetern wie bei Markern (`core_rules.txt:2228`); ein *Zoll* sind 25,4 mm.
+Distanz | distance a model moves | distanz | Summe der geraden Strecken zwischen den *Stellen*, an die ein *Modell* im laufenden *Normal Move* nacheinander *gesetzt* wurde, in *Zoll* (`core_rules.txt:729`, Anliegen 02 F5, git).
 Ebene | – | ebene | Was Ziehen eines *Modells* einer *ausgewählten* *Einheit* bewegt: ist sie die ganze *Einheit*, alle ihre *gesetzten* *Modelle*; ist sie eines ihrer *Modelle*, nur das gezogene. Jede *ausgewählte* *Einheit* hat eine (Anliegen 980, Vorbild `ArbiterMap/…/model_selection.js:110`).
 eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* zeigt; nicht eingefahren zeigt sie auch ihren Inhalt (Anliegen 366 F1 A).
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben Datenblatts, die zusammen bewegen und kämpfen (`core_rules.txt:420`).
@@ -41,12 +42,12 @@ Missionsvorbereitung | – | Missionsvorbereitung | Schritte 1 bis 3 der *Missio
 Moralphase | Morale phase | moralphase | Siebte und letzte *Phase* eines Zugs (`core_rules.txt:665`).
 Modell | model | Modell | Eine Miniatur einer *Armee* (`core_rules.txt:305`).
 Nahkampfreichweite | Engagement Range | nahkampfreichweite | Zwei *Modelle* verschiedener *Spieler* sind in Nahkampfreichweite, wenn ihr *Abstand* höchstens 1″ ist (`core_rules.txt:447`, „within“ `:473`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
-Normal Move | Normal Move | normalMove | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* ein *Weg* bis *M*; am Ende in *Kohärenz* (`core_rules.txt:730`, `:745`).
+Normal Move | Normal Move | normalMove | Bewegung einer *Einheit* in der *Bewegungsphase*, je *Modell* eine *Distanz* bis *M*; am Ende in *Kohärenz* (`core_rules.txt:730`, `:745`).
 Name | unit name | name | Name einer *Einheit*, wie ihn ihr Datenblatt nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte in `domaene/daten/ausgangslage.yaml` unter `Einheit`.
-Phase | phase | Phase | Abschnitt eines Zugs; sieben in dieser Reihenfolge: *Kommandophase*, *Bewegungsphase*, Psi-, Schuss-, Angriffs-, Nahkampf-, *Moralphase* (`core_rules.txt:639`).
+Phase | phase | Phase (kommandophase, bewegungsphase, psiphase, schussphase, angriffsphase, nahkampfphase, moralphase) | Abschnitt eines Zugs; sieben in dieser Reihenfolge: *Kommandophase*, *Bewegungsphase*, Psiphase, Schussphase, Angriffsphase, Nahkampfphase, *Moralphase* (`core_rules.txt:639`).
 Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).
 Roll-off | roll-off | RollOff | Beide *Spieler* würfeln je einen W6, der höhere gewinnt; bei Gleichstand wird wiederholt, kein Würfel darf neu gewürfelt oder verändert werden (`core_rules.txt:506`).
-Schlacht | battle | Schlacht | Folge der *Schlachtrunden* nach der *Aufstellung*; sie endet nach der fünften (`core_rules.txt:2333`, `:2337`).
+Schlacht | battle | Schlacht | Folge der *Schlachtrunden* nach der *Aufstellung*; sie endet nach der letzten *Schlachtrunde* der *Mission* (`core_rules.txt:2333`, `:2337`). Wert in `domaene/daten/onlyWar.yaml`.
 Schlachtrunde | battle round | schlachtrunde | Teil der *Schlacht*, gezählt ab 1, in dem jeder *Spieler* einen Zug hat, zuerst der mit dem *ersten Zug* (`core_rules.txt:639`, `:667`).
 setzen | set up | setzen | Handlung, die ein *Modell* an eine *Stelle* bringt; danach ist es gesetzt (`core_rules.txt:2322`).
 Sperre | – | Sperre | Arbiter verweigert eine regelwidrige Handlung und nennt den *Grund*; *gemeinsam übergehen* nach `domaene/ziel.md`, außer ‚keine Kohärenz‘ (Anliegen 2361 F1 A).
@@ -54,8 +55,6 @@ Spieler | player | Spieler | Einer der zwei Menschen am Gerät; jeder führt ein
 Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht geschlagen wird; die *Mission* nennt die Größe (`core_rules.txt:452`).
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
-Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
-Weg | – | weg | Summe der geraden Strecken zwischen den *Stellen*, an die ein *Modell* im laufenden *Normal Move* nacheinander *gesetzt* wurde, in *Zoll* (`core_rules.txt:729`, Anliegen 02 F5, git).
-Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
+Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Anliegen 09 F12 A, git).
