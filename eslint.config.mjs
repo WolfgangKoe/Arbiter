@@ -1,6 +1,6 @@
 import kommentare from "./prozess/pruefungen/frontendregeln/eslintKommentare.mjs";
 
-const meldung = "Markup aus einer <template> der Seite klonen (Architektur, Web, O1)";
+const meldung = "Markup aus einer <template> der Seite klonen (Architektur, Frontend, O1)";
 const aufJedemObjekt = ["createElement", "createElementNS", "parseFromString", "createContextualFragment", "setHTMLUnsafe"];
 const aufDocument = ["write", "writeln"];
 const verboteneAufrufe = [

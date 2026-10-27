@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Item [architekturUmordnen](../../domaene/items/architekturUmordnen.md) hat die
@@ -29,4 +29,8 @@ Prüfung rot, kein Schritt des Happy Path betroffen.
 
 **Gegenvorschlag.** Die vier Stellen auf die neuen Pfade setzen, sonst nichts.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen, sonst nichts: In
+[Formregeln](../../prozess/regeln/formregeln.md) zeigt V4 auf `vertrag/querschnitt.md`, in
+[Frontendregeln](../../prozess/regeln/frontendregeln.md) O1 auf `frontend.md`, in
+[Kriterienregeln](../../prozess/regeln/kriterienregeln.md) T1 und T2 auf `tests.md` und der
+Grundschnitt auf `domaene.md`; `eslint.config.mjs` nennt „Architektur, Frontend, O1“.
