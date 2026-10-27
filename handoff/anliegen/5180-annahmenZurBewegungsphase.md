@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Vier Fälle ohne Anforderung.
@@ -44,14 +44,14 @@ bis F7 ändern Schritt 3 von Plan 8; bis dahin baut niemand Knopf und *Sperre* �
 in *Kohärenz*: *Sperre* ‚keine Kohärenz‘ (Regeltext). B: schon beim Klick auf eine andere
 eigene *Einheit* (Regeltext). Empfehlung: A. Ein Klick wählt auch zum Ansehen aus
 (AUF-20.6); eine *Sperre* dabei überrascht.
-Antwort: .
+Antwort: Ich verstehe die Empfehlung nicht... Was ist den die Frage? Wir sind in der Bewegungsphase. Der aktive Spieler bewegt nacheinander seine Einheiten oder deren einzelne Modelle so wie er möchte nach den verschiedenen erlaubten möglichkeiten. Dabei kann er eine bereits bewegte Einheit nochmals korrigieren, falls die Bewegung einer anderen Einheit dies erforderlich macht. Wir bilden hier also nicht die harten Regeln ab, sondern Arbiter ermöglicht, zum Ende jeder Phase einen Mapstate herzustellen, der regelkonform entstanden sein könnte. Beende ich die Phase bzw. gehe ich zur nächsten über, dann zählt jede Einheit entsprechend des regeltechnisch festgelegten Zustands. Stationär, bewegt, vorgerückt, Zurückgezogen.
 
 **F6 · Wo bleibt ein Modell, das du über sein B hinaus ziehst?** A: Es hält auf der
 geraden Strecke an, wo sein *B* aufgebraucht ist (auf 1/100″), und bleibt beim Loslassen
 dort, ohne *Grund*; der Block hält, sobald eines sein *B* erreicht (Anliegen 5180, AUF-29).
 B: Es springt beim Loslassen mit ‚weiter als B‘ zurück (BEW-2.3). Empfehlung: A, so
 erwartest du es. Weiter erst mit *gemeinsam übergehen* (Plan 8: noch nicht).
-Antwort: .
+Antwort: A
 
 **F7 · Wann kommt das?** A: F5 und F6 jetzt in Plan 8, die Markierung und F3 in der
 Domänenphase 9 (Anliegen 5180). B: alles in Domänenphase 9 (Plan 8). Empfehlung: A, sonst
@@ -62,7 +62,7 @@ Anforderungsautor und UX fassen BEW-1, BEW-2, Mockups neu, etwa 15 Tests ändern
 Markierung braucht „jede *Einheit* nur einmal“ und Advance, F3 einen neuen Schlüssel im
 Spielstand; bis dahin ziehst du ein *Modell* allein nach einem Klick auf eine andere
 *Einheit* (AUF-20.4).
-Antwort: .
+Antwort: A
 
 **Gegenvorschlag.** F5 bis F7 beantworten; „.“ heißt, die Empfehlung gilt. Danach
 beauftragt der Koordinator Anforderungsautor und UX, ich ziehe den Vertrag nach.
