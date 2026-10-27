@@ -79,6 +79,8 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
   Hindernis: Fachkritiker → Ux: Mockup bew-2 zeigt weiter als M statt B nach 4280 F1 (Anliegen 4401)
   Hindernis: Fachkritiker → Anforderungsautor: Distanz läuft über Phase beenden hinaus, weiter als M sperrt in einer späteren Schlachtrunde zu Unrecht (Anliegen 4402); beseitigt: Commit „Kritik am Plan 8 und Antworten zu 4280 umgesetzt“
 - [ ] Architekt: Kritik am Plan
+  Hindernis: Architekt → Planer: Item architekturUmordnen zählt den Vertrag in die 24.000 Zeichen, gegen 2570 F2 C und die Höchstmaße (Anliegen 4600)
+  Hindernis: Architekt → Anforderungsautor: Distanz zählt die Strecke ab der Stelle zu Beginn der Bewegungsphase nicht, weiter als B sperrt beim ersten Ziehen nach dem Wortlaut nie (Anliegen 4601)
 - [ ] Stakeholder: Freigabe Plan 8
 
 ## Freigabe

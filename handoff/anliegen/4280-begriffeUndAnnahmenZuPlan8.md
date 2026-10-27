@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Für Plan 8 habe ich [QUE-9](../../domaene/anforderungen/querschnitt/ersterZug.md),

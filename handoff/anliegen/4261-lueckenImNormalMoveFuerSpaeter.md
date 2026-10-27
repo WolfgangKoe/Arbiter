@@ -35,3 +35,4 @@ Kriterium dort; 5 im Glossar oder in den AUF-Kriterien ein eigener Begriff; 6 al
 den Stakeholder mit ArbiterMap als Quelle.
 
 **Stellungnahme.**
+Kommentar: Bitte auf die Umbenennung von "Normal Move" achten!
