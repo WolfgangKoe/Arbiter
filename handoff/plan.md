@@ -66,14 +66,14 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Fachkritiker → Testautor: QUE-10.1 prüft die Nummer der Schlachtrunde nur bei 1 (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
 - [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
 - [x] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
-- [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
+- [x] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
   Hindernis: Architekt → Implementierer: Knöpfe nicht als Tabelle (O5), Spielernummer außerhalb kennungen.py (W2) (Anliegen 5680); beseitigt: Commit „phasenUndSchlachtrunden: Knöpfe als Tabelle, Auswahl bleibt bei der Aufstellung“
-- [ ] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
-- [ ] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
+- [x] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
+- [x] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
 - [ ] Planer: Item phasenUndSchlachtrunden gelöscht
 - [x] Architekt: Vertrag zu Item normalMove, bei beiden Hälften
 - [x] Testautor: Tests zu Item normalMove
-- [ ] Fachkritiker: Kritik an den Tests zu Item normalMove
+- [x] Fachkritiker: Kritik an den Tests zu Item normalMove
   Hindernis: Fachkritiker → Testautor: BEW-2.4 ohne Überdeckung, Distanz nur auf Achsen, BEW-2.3 nie zwei Gründe (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
   Hindernis: Fachkritiker → Testautor: BEW-1.4 verlangt beim Halten über B ein Bild, das weder Kriterium noch V10 nennen (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
   Hindernis: Fachkritiker → Testautor: Kein Test sperrt den Block, wenn ein nicht gezogenes Modell über eine fremde Base geht (BEW-2.5) (Anliegen 5760)

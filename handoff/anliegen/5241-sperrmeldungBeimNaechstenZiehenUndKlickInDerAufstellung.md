@@ -28,7 +28,7 @@ bleibt 2, bliebe in der *Aufstellung* eine zweite *Einheit* *ausgewählt*, unbem
 **Gegenvorschlag.**
 1. Im Test nach dem zweiten Drücken mit `halten` den *Grund* noch prüfen, erst nach dem
    Loslassen keinen; vorher eine Frage an den Architekten, V7 um V10 zu ergänzen (wie V14 in
-   [5140](5140-klickAufEinModellUndDieSperrmeldung.md)).
+   Anliegen 5140).
 2. Ein Test in der *Aufstellung*: Warboss *ausgewählt*, Klick auf ein *gesetztes* Boyz; danach
    sind nur die Boyz *ausgewählt*.
 

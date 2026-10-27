@@ -20,7 +20,7 @@ Wartet auf: Technikphase 9
    [Tests](../../technik/architektur/tests.md) regelt das bisher nur für `tests/einheit/`.
 3. Aus Anliegen 5260, von dir für Technikphase 9 angenommen:
    `istHandlung` in [bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py) zählt V9 und
-   V14 als Handlung; nach V7 sind sie Auswählen ([5140](5140-klickAufEinModellUndDieSperrmeldung.md)).
+   V14 als Handlung; nach V7 sind sie Auswählen (Anliegen 5140).
 4. Aus 5260: Die Fixture `schlachtInDerKommandophase` heißt nach der Kommandophase. Die Tests
    zu QUE-10.2 und 10.5 laufen aber in einer anderen *Phase*.
 5. Aus 5260: `ebeneTest.py` lädt `schlacht.py` gleich beim Import (zusammen mit

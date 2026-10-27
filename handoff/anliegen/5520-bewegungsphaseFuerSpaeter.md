@@ -9,7 +9,7 @@ Wartet auf: Domänenphase 9
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path). Schritt 3 nach
-[5180](5180-annahmenZurBewegungsphase.md) F7 A ist ganz abgedeckt: BEW-1.5, 1.6, 1.7,
+Anliegen 5180 F7 A ist ganz abgedeckt: BEW-1.5, 1.6, 1.7,
 BEW-3.1, BEW-2.5 bis 2.7, BEW-4.1; nichts hält auf.
 1. Zwei Antworten aus 5180 stehen in keiner Anforderung und keinem Anliegen; 5180 ist
    `erledigt` und wird gelöscht. F1: eine Markierung, wie sich jede *Einheit* in der
@@ -41,5 +41,5 @@ mit „Anliegen 5180 F5“ statt `:710` für das Korrigieren; 4 „als Annahme�
 **Stellungnahme.** Vorab umgesetzt: 3, der Zweck von
 [BEW-1](../../domaene/anforderungen/phasen/bewegung/normaleBewegung.md) belegt „in beliebiger
 Folge“ mit `core_rules.txt:710` und „korrigiert jede nach Belieben“ mit Anliegen 5180 F5;
-4 im [Glossar](../../domaene/glossar.md) (siehe [5560](5560-distanzEntschieden.md)).
+4 im [Glossar](../../domaene/glossar.md) (siehe Anliegen 5560).
 1, 2 und 5 bearbeite ich in Domänenphase 9; bis dahin wartet das Anliegen.

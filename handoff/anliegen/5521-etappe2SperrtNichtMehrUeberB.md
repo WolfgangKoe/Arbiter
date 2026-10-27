@@ -10,7 +10,7 @@ Wartet auf: Domänenphase 9
 ## Runde 1
 **Befund.** Wartet (Ich 3: abseits des Happy Path von Zyklus 8).
 [Etappe 2](../../domaene/etappen/02-bewegen.md) sagt „Arbiter sperrt über B oder B plus
-Wurf“. Nach [5180](5180-annahmenZurBewegungsphase.md) F6 A hält Arbiter am *B* an, ohne
+Wurf“. Nach Anliegen 5180 F6 A hält Arbiter am *B* an, ohne
 *Sperre* ([BEW-3](../../domaene/anforderungen/phasen/bewegung/anhaltenAmB.md)); ‚weiter als
 B‘ gibt es nicht mehr.
 

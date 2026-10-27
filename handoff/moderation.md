@@ -6,13 +6,13 @@ auf; die vier Annahmen aus 5180 gelten, bis du antwortest.
 
 ## Dran
 - Testautor: die Tests zu Item phasenUndSchlachtrunden und normalMove (Plan 8, Fortschritt);
-  er arbeitet mit den Annahmen aus [5180](anliegen/5180-annahmenZurBewegungsphase.md) weiter.
+  er arbeitet mit den Annahmen aus Anliegen 5180 weiter.
 - Implementierer: Anliegen 4781 (Docstring von
   `web/anwendung.py`); klein, hält nichts auf.
 - Regelumsetzer: Anliegen 4780 (Links auf die
   alte Architektur). [3780](anliegen/3780-restePruefcodeNach3301.md) und
   [3900](anliegen/3900-standNenntFalscheRolleFuerProzessItems.md) warten auf die Prozessphase 8.
-- Stakeholder: [5180](anliegen/5180-annahmenZurBewegungsphase.md) F1 bis F4; hält nichts auf.
+- Stakeholder: Anliegen 5180 F1 bis F4; hält nichts auf.
 - Auf die Prozessphase (8): [3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
   [4120](anliegen/4120-hindernisformatInAblaufUndRegeln.md),
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md),
@@ -47,7 +47,7 @@ auf; die vier Annahmen aus 5180 gelten, bis du antwortest.
 
 ## Fragen an dich
 Mit `Annahme:` (die Arbeit läuft mit der Empfehlung weiter):
-- [5180](anliegen/5180-annahmenZurBewegungsphase.md) F1: Steht „Bewegung der Einheit beenden“
+- Anliegen 5180 F1: Steht „Bewegung der Einheit beenden“
   nur bei einer Einheit in Bewegung? Annahme: ja.
 - 5180 F2: Zeigt die Karte beim Ziehen die letzte Stelle ohne Sperre? Annahme: ja (A).
 - 5180 F3: Wählt in der Schlacht ein Klick auf ein Modell die ganze Einheit, nie ein Modell
