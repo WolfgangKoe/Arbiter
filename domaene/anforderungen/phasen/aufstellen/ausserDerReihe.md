@@ -1,5 +1,6 @@
 ### AUF-22 · Außer der Reihe
 
+Etappe: 7
 Zweck: Setzt jemand ein *Modell* des *Spielers*, der nicht *an der Reihe* ist, sagt der *Grund*, wer *an der Reihe* ist, statt nur ‚nicht wählbar‘ (Anliegen 681, 684). Ersetzt [AUF-7.2](einheitInAufstellung.md), auch in AUF-12.5 und 19.4.
 Am Bildschirm: klicken ([AUF-18](setzenPerKlick.md)) oder ziehen ([AUF-8](ziehen.md)).
 

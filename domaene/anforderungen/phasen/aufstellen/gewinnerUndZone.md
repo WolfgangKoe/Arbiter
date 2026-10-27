@@ -1,5 +1,6 @@
 ### AUF-11 · Gewinner und Zone wählen
 
+Etappe: 8
 Zweck: Die *Spieler* geben am Bildschirm den *Gewinner* des *Roll-offs* ein, dann wählt er seine *Aufstellungszone* ([AUF-1.1](reihenfolge.md)); gewürfelt wird am Tisch (Anliegen 362 F1 A).
 Am Bildschirm: „Roll-off gewonnen“ in einer *Armeeliste* klicken, dann in eine *Aufstellungszone* auf der *Karte*.
 

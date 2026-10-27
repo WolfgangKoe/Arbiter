@@ -1,5 +1,6 @@
 ### QUE-5 · Gemeinsam übergehen
 
+Etappe: 2
 Zweck: Die *Spieler* können eine *Sperre* einvernehmlich übergehen, nie aber ‚keine Kohärenz‘; Arbiter hält jedes Übergehen im *Protokoll* fest (`domaene/ziel.md`, Anliegen 2361 F1 A). Wo es angeboten wird, sagt das Kriterium der *Sperre*.
 Am Bildschirm: „gemeinsam übergehen“ klicken.
 

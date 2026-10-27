@@ -67,7 +67,7 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
   ([3051](anliegen/3051-architekturUmordnenInPlan8.md)).
 
 ## Fortschritt
-- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
+- [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [x] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben

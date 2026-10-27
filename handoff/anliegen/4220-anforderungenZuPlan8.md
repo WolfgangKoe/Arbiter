@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Das Zyklusziel aus [Review 7](../review.md) verlangt Phasen und Normal Move;
@@ -31,4 +31,18 @@ noch offenen Etappe ihre Etappe.
 Nebenbei, wartet auf Etappe 7: [sperrenBeimSetzen](../../domaene/anforderungen/phasen/aufstellen/sperrenBeimSetzen.md)
 liegt mit 1.295 Zeichen über 1.200, mit `(Etappe 7)` an AUF-3.9 noch mehr.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen.
+1. Item phasenUndSchlachtrunden: [QUE-9](../../domaene/anforderungen/querschnitt/ersterZug.md)
+   (erster Zug), [QUE-10](../../domaene/anforderungen/querschnitt/schlachtrunden.md) (Anzeige,
+   Phase beenden, Zugwechsel, Ende nach Schlachtrunde 5, leere Phasen). Item normalMove:
+   [BEW-1](../../domaene/anforderungen/phasen/bewegung/normalMove.md) (ziehen, beenden,
+   ‚keine Kohärenz‘), [BEW-2](../../domaene/anforderungen/phasen/bewegung/sperrenBeimZiehen.md)
+   (‚weiter als M‘, ‚über eine Base‘). *M* je *Einheit* in
+   [ausgangslage.yaml](../../domaene/daten/ausgangslage.yaml), Glossar nachgeführt. Nicht
+   aufgenommen, wartet: ‚schon bewegt‘ (`core_rules.txt:734`), andere *Einheit* während einer
+   *Einheit in Bewegung*, „Phase beenden“ mit *Einheit in Bewegung*. Neue Begriffe, Kürzel BEW,
+   Messung des Wegs und Knöpfe: Annahmen in [4280](4280-begriffeUndAnnahmenZuPlan8.md).
+2. `Etappe: 2` in den vier neuen; nach deiner Liste `Etappe: 2` in QUE-5, 6, 7, AUF-16, 28,
+   `Etappe: 3` in AUF-29, `Etappe: 7` in AUF-22, 27, `Etappe: 8` in AUF-11; am Kriterium
+   `(Etappe 2)` AUF-8.7, 12.8, `(Etappe 3)` AUF-28.2, `(Etappe 7)` AUF-3.9, 8.8, 18.7, 20.6.
+   Die Zeile steht über `Zweck:`.

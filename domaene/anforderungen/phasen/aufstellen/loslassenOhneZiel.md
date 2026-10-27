@@ -1,5 +1,6 @@
 ### AUF-16 · Loslassen ohne Ziel
 
+Etappe: 2
 Zweck: Ein *Modell*, das [AUF-28](loslassenWoDieKarteZeigt.md) beim Loslassen nicht *setzt*, springt ohne Ziel still zurück.
 Am Bildschirm: ziehen und loslassen.
 

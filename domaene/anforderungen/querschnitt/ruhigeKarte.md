@@ -1,5 +1,6 @@
 ### QUE-7 · Ruhige Karte
 
+Etappe: 2
 Zweck: Was neben der *Karte* erscheint oder verschwindet, verschiebt sie nicht; wer nach einer *Sperre* ein *Modell* greift, findet es, wo er es losgelassen hat (Anliegen 670, [QUE-2](karte.md)).
 Am Bildschirm: hinsehen, während ein *Grund* erscheint und verschwindet oder eine *Einheit* *ausgewählt* wird und nicht mehr.
 

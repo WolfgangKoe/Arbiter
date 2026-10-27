@@ -1,5 +1,6 @@
 ### QUE-6 · Leisten
 
+Etappe: 2
 Zweck: Die *Armeelisten* und das *Protokoll* stehen in drei *Leisten* um die *Karte*; die *Spieler* fahren jede per *Griff* ein und aus (Anliegen 366 F1 A, Vorbild ArbiterMap).
 Am Bildschirm: den *Griff* einer *Leiste* klicken oder tippen.
 

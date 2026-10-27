@@ -1,5 +1,6 @@
 ### AUF-29 · Anhalten auf dem Weg
 
+Etappe: 3
 Zweck: Beim Ziehen hält Arbiter vor einer fremden *Base* an und gleitet an ihr entlang; je Weiterrücken zählt nur, wo es endet (Anliegen 1820, 2090, Vorbild `ArbiterMap/…/model_drag.js:887`, `:964`, `ArbiterMap/…/interaction_map.md:427`).
 Am Bildschirm: an fremden *Bases* vorbeiziehen.
 
