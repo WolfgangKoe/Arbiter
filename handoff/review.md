@@ -75,6 +75,9 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
   Hindernis: Fachkritiker → Anforderungsautor: BEW-1.1: Block im Normal Move sperrt sich nach QUE-1.2 an den eigenen Modellen, AUF-24.2 gilt nicht mehr (Anliegen 4263); beseitigt: Commit „Anforderungen zu Plan 8 nach Kritik nachgebessert“
 - [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
+  Hindernis: Fachkritiker → Planer: Plan 8 und Items nennen Normal Move und M statt deiner Antwort zu 4280 F1, Schritt 3 ohne Bewegung der Einheit beenden, Mockups nicht verlinkt (Anliegen 4400)
+  Hindernis: Fachkritiker → Ux: Mockup bew-2 zeigt weiter als M statt B nach 4280 F1 (Anliegen 4401)
+  Hindernis: Fachkritiker → Anforderungsautor: Distanz läuft über Phase beenden hinaus, weiter als M sperrt in einer späteren Schlachtrunde zu Unrecht (Anliegen 4402)
 - [x] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 8
 

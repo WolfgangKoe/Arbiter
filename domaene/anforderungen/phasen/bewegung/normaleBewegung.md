@@ -1,7 +1,7 @@
-### BEW-1 · Normal Move
+### BEW-1 · Normale Bewegung
 
 Etappe: 2
-Zweck: In der *Bewegungsphase* zieht der *Spieler* *am Zug* eine eigene *Einheit* und beendet ihren *Normal Move* in *Kohärenz* (`core_rules.txt:710`, `:745`, Anliegen 02 F5, git).
+Zweck: In der *Bewegungsphase* zieht der *Spieler* *am Zug* eine eigene *Einheit* und beendet ihre *Normale Bewegung* in *Kohärenz* (`core_rules.txt:710`, `:745`, Anliegen 02 F5, git).
 Am Bildschirm: wie [AUF-20](../aufstellen/ebene.md) ziehen, „Bewegung der Einheit beenden“ klicken.
 
 - BEW-1.1 **Gegeben** die *Bewegungsphase*, **wenn** jemand ein *Modell* einer *Einheit* des *Spielers* *am Zug* zieht und loslässt, **dann** ist sie die *Einheit in Bewegung*, Arbiter *setzt* es nach AUF-8.2, bei der ganzen *Einheit* als *Ebene* jedes ihrer *Modelle* um dieselbe Strecke, rückt nicht, und es sperren nur QUE-1 und BEW-2.
