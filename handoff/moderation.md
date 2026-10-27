@@ -10,7 +10,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   Anliegen 3050,
   Anliegen 2201 (alle P1),
   Anliegen 2590 (P2),
-  [2591](anliegen/2591-innenIchDesStakeholdersInDenPraemissen.md) (P3).
+  Anliegen 2591 (P3).
 - Regelumsetzer:
   Anliegen 2040 und
   Anliegen 2592 (P4),
