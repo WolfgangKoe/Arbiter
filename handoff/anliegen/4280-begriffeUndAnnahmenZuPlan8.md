@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Für Plan 8 habe ich [QUE-9](../../domaene/anforderungen/querschnitt/ersterZug.md),
@@ -57,7 +57,7 @@ eigenes; eine Zeile der Domäne ändert sich (neu). B: AUF wie heute; BEW-1 und 
 AUF-30 und AUF-31 (Domäne).
 Empfehlung: A. Du liest an der Kennung die Phase ab (Absicht 3, 5).
 Annahme: Ich schreibe weiter BEW.
-Antwort: .
+Antwort: A
 
 Daten aus Arbiter-old, geprüft: Einfach übernehmen passt nicht. Sie haben englische
 Schlüssel und die Quelle nur im Kopf; die Domäne verlangt Schlüssel aus dem Glossar und eine
@@ -72,4 +72,4 @@ trage ich nur die Werte ein, die eine Etappe braucht, je mit Fundstelle (Domäne
 der Planer zieht die Übernahme vor (neu).
 Empfehlung: A. Für Orks gegen Necrons reicht das; in Etappe 8 prüft der Architekt YAML oder
 Datenbank, ich jeden Wert.
-Antwort: .
+Antwort: Wir entscheiden es für den nächsten Zyklus, damit die Daten sauber aufgesetzt werden. Der Architekt soll prüfen, wie wir das Datenmodell aufbauen können. Vielleicht ist dieses aus Arbiter-old brauchbar und muss vor allem mit Begriffen aus dem Glossar bestückt werden.
