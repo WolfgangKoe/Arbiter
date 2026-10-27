@@ -4,7 +4,7 @@ from collections.abc import Collection, Mapping
 
 from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Grenzen
-from arbiter.domaene.querschnitt import gründeDesSetzens
+from arbiter.domaene.querschnitt import befundeDesSetzens
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
 
@@ -17,7 +17,8 @@ def gründeGegenDieStelle(
     zone: Grenzen,
 ) -> set[Grund]:
     """Die Gründe gegen die Stelle; `eigene` sind die Modelle des Spielers an der Reihe."""
-    gründe = gründeDesSetzens(modell, stelle, stellen, eigene)
-    if not messen.ganzIn(modell.base, stelle, *zone):
-        gründe.add(Grund.nichtGanzInDerZone)
-    return gründe
+    befunde = {
+        **befundeDesSetzens(modell, stelle, stellen, eigene),
+        Grund.nichtGanzInDerZone: not messen.ganzIn(modell.base, stelle, *zone),
+    }
+    return {grund for grund, trifft in befunde.items() if trifft}

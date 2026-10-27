@@ -28,8 +28,7 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   Tabelle Am Bildschirm | Anfrage | Methode der Domäne.
   Ein *Modell* nennt jedes der *Armee*, auch einer *aufgestellten* *Einheit* (AUF-7.2, 22.2).
   Unbekannte Kennung 404, Körper ohne Zahl `x` und `y` 400. `web/` liest
-  Zahlen als nächste `Fraction` mit Nenner bis 10⁶ (`limit_denominator`, höchstens
-  1/(2·10⁶)″ daneben): Eine *Stelle* des Spielstands kommt exakt zurück (S2, BEW-1.7). Eine Zahl ist eine
+  Zahlen nach [S2](../domaene.md#stelle-und-rechnen). Eine Zahl ist eine
   JSON-Zahl, kein Wahrheitswert, und als double endlich, denn die Seite rechnet in double;
   eine Ganzzahl, die Python nicht liest (über 4.300 Ziffern), ist keine. In der Abfrage (V10)
   gilt nur die Schreibweise einer JSON-Zahl, nicht was `float` sonst nimmt (`1_0`, ` 3 `).

@@ -30,15 +30,14 @@ def inNahkampfreichweite(
     )
 
 
-def gründeDesSetzens(
+def befundeDesSetzens(
     modell: Modell,
     stelle: Stelle,
     stellen: Mapping[Modell, Stelle],
     eigene: Collection[Modell],
-) -> set[Grund]:
-    """Die Gründe nach QUE-1 gegen die Stelle; `eigene` sind die Modelle des Spielers am Zug."""
-    gegeben = {
+) -> dict[Grund, bool]:
+    """Je Grund nach QUE-1, ob er gegen die Stelle gilt; `eigene` sind die Modelle am Zug."""
+    return {
         Grund.baseÜberdeckt: baseÜberdeckt(modell, stelle, stellen),
         Grund.nahkampfreichweite: inNahkampfreichweite(modell, stelle, stellen, eigene),
     }
-    return {grund for grund, trifft in gegeben.items() if trifft}

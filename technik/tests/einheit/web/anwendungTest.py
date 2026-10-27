@@ -1,8 +1,10 @@
+from fractions import Fraction
 from http import HTTPStatus
 
 import pytest
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.spielobjekte import Stelle
 from arbiter.web.anwendung import anwendungFür
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, aufstellungVon, spielerMit
 
@@ -107,6 +109,40 @@ def testEineSehrGroßeGanzeZahlIstEineFehlerhafteAnfrageUndLässtDenSpielstandLe
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
     assert dienst.get("/api/spielstand").status_code == HTTPStatus.OK
+
+
+def stellenAbfangen(aufstellung, monkeypatch, aufruf):
+    stellen = []
+    echte = getattr(aufstellung, aufruf)
+
+    def abfangen(modell, stelle):
+        stellen.append(stelle)
+        return echte(modell, stelle)
+
+    monkeypatch.setattr(aufstellung, aufruf, abfangen)
+    return stellen
+
+
+def testEineGleitkommazahlKommtImKörperAlsBruchMitKleinemNennerInDieDomäne(
+    aufstellung, monkeypatch
+):
+    stellen = stellenAbfangen(aufstellung, monkeypatch, "modellLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+
+    dienst.put(pfadDesModells.format(1, 1, 1), json={"x": 160 / 127, "y": 121 / 3})
+
+    assert stellen == [Stelle(x=Fraction(160, 127), y=Fraction(121, 3))]
+
+
+def testEineGleitkommazahlKommtInDerAbfrageAlsBruchMitKleinemNennerInDieDomäne(
+    aufstellung, monkeypatch
+):
+    stellen = stellenAbfangen(aufstellung, monkeypatch, "stellenBeimLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+
+    dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string={"x": 160 / 127, "y": 121 / 3})
+
+    assert stellen == [Stelle(x=Fraction(160, 127), y=Fraction(121, 3))]
 
 
 def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):

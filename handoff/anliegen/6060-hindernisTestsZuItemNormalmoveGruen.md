@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle (ziehenTest.py) fordert, dass eine Bewegung unter der Zugschwelle keine ändernde Anfrage sendet. Sie ist aber ein Klick auf ein gesetztes Modell einer nicht ausgewählten Einheit in der Aufstellung; AUF-20.6 und V14 verlangen dafür PUT …/anklicken (Einheit wird ausgewählt). Beides zugleich ist nicht erfüllbar. Empfehlung: der Test wählt zuvor die Einheit der Boyz aus (dann sendet der Klick nur ebene, auch eine ändernde Anfrage; besser: Test prüft nur, dass die Stellen unverändert bleiben und keine PUT …/stelle gesendet wird) oder nimmt anklicken ausdrücklich aus. Das hält den Schritt „Tests zu Item normalMove grün“ von Implementierer im Fortschritt auf.

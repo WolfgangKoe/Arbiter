@@ -3,7 +3,7 @@
 from collections.abc import Collection, Mapping
 
 from arbiter.domaene import messen
-from arbiter.domaene.querschnitt import gründeDesSetzens
+from arbiter.domaene.querschnitt import befundeDesSetzens
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
 
@@ -26,7 +26,9 @@ def gründeBeimZiehen(
     """Die Gründe gegen die neuen Stellen; `fremde` sind alle Modelle, die nicht gezogen werden."""
     gründe: set[Grund] = set()
     for modell, stelle in neue.items():
-        gründe |= gründeDesSetzens(modell, stelle, fremde, eigene)
-        if _überEineBase(modell, vorige[modell], stelle, fremde):
-            gründe.add(Grund.überEineBase)
+        befunde = {
+            **befundeDesSetzens(modell, stelle, fremde, eigene),
+            Grund.überEineBase: _überEineBase(modell, vorige[modell], stelle, fremde),
+        }
+        gründe |= {grund for grund, trifft in befunde.items() if trifft}
     return gründe

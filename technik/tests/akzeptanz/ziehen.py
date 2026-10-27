@@ -135,10 +135,15 @@ eingaben = {"maus": mitDerMausZiehen, "finger": mitDemFingerZiehen}
 
 def modellZiehen(seite: Page, von: Stelle, nach: Stelle, eingabe: str = "maus") -> Response:
     """Zieht das Modell an der Stelle auf die Karte und wartet auf die Antwort."""
-    anfang = punktAufDerKarte(seite, von)
-    ende = punktAufDerKarte(seite, nach)
+    return modellAmPunktZiehen(
+        seite, punktAufDerKarte(seite, von), punktAufDerKarte(seite, nach), eingabe
+    )
+
+
+def modellAmPunktZiehen(seite: Page, von: Bildpunkt, nach: Bildpunkt, eingabe: str) -> Response:
+    """Zieht vom Bildpunkt zum Bildpunkt, auch abseits der Mitte, und wartet auf die Antwort."""
     with aufDieHandlungWarten(seite) as antwort:
-        eingaben[eingabe](seite, anfang, ende)
+        eingaben[eingabe](seite, von, nach)
     return antwort.value
 
 

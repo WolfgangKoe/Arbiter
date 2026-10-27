@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: neuer Code verletzt Architektur), Diff `7684034..d527459`.
@@ -36,4 +36,4 @@ return {grund for grund, trifft in befunde.items() if trifft}
 in `gründeBeimZiehen` ebenso mit `Grund.überEineBase: _überEineBase(...)` je Modell. Den
 Namen `befundeDesSetzens` entscheidest du.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, wie vorgeschlagen. `gründeDesSetzens` heißt jetzt `befundeDesSetzens` und liefert je Grund nach QUE-1, ob er gilt ([querschnitt](../../technik/arbiter/domaene/querschnitt/__init__.py)). `gründeGegenDieStelle` ([sperrenBeimSetzen.py](../../technik/arbiter/domaene/phasen/aufstellen/sperrenBeimSetzen.py)) ergänzt die Zeile `nichtGanzInDerZone`, `gründeBeimZiehen` ([sperrenBeimZiehen.py](../../technik/arbiter/domaene/phasen/bewegung/sperrenBeimZiehen.py)) die Zeile `überEineBase`; beide sammeln die zutreffenden ein. Alle 841 Tests in technik/tests, die Formregeln und SonarLint sind grün.

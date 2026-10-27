@@ -16,6 +16,7 @@ from tests.akzeptanz.handgriffe import (
 from tests.akzeptanz.ziehen import (
     Bildpunkt,
     liegtEinPixelGenauAn,
+    modellAmPunktZiehen,
     modellZiehen,
     punktAufDerKarte,
     ziehenOhneAnfrage,
@@ -74,3 +75,23 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
 
     assert [anfrage for anfrage in anfragen if anfrage.url.endswith("/stelle")] == []
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
+
+
+@pytest.mark.parametrize("eingabe", ["maus", "finger"])
+def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
+    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
+):
+    [(modell, stelleDavor)] = boyzSetzen(1)
+    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
+    mitte = punktAufDerKarte(seite, stelleDavor)
+    radiusInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite)
+    versatzDesGriffsInPixeln = radiusInPixeln * 0.8
+    griff = Bildpunkt(mitte.links + versatzDesGriffsInPixeln, mitte.oben)
+    wegInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
+    ende = Bildpunkt(griff.links, griff.oben + wegInPixeln)
+    erwartet = Stelle(x=stelleDavor.x, y=stelleDavor.y + Fraction(1, 2))
+    assert versatzDesGriffsInPixeln > zugschwelleInPixeln
+
+    modellAmPunktZiehen(seite, griff, ende, eingabe)
+
+    assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(modell), erwartet)

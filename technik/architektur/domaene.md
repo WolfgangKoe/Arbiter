@@ -21,10 +21,17 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   y entlang der zweiten (60″). Die erste *Aufstellungszone* liegt an der Kante x = 0, die
   zweite an x = 44. Prüft: die Fixture `zone`.
 - **S2** Gerechnet wird exakt mit `fractions.Fraction`, ohne Toleranz und ohne Wurzel:
-  Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; `web/`
-  übersetzt in `Fraction`. Mit `float` überdecken sich zwei berührende Boyz.
-  Prüft: `Stelle` ohne `Fraction` wirft `TypeError` (`spielobjekteTest.py`), die Grenzfälle
-  der Akzeptanztests.
+  Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen. Mit `float`
+  überdecken sich zwei berührende Boyz. `web/` übersetzt jede Zahl einer Anfrage in die
+  nächste `Fraction` mit Nenner höchstens 10⁶ (`limit_denominator`, höchstens 1/(2·10⁶)″
+  daneben). Warum: Der Spielstand zeigt *Stellen* als double, die Seite schickt sie so zurück
+  (V8); ohne Rundung käme etwa x = 160/127 um die letzte Ziffer des double verschoben an, und
+  ein berührendes *Modell* überdeckte (BEW-1.7, BEW-2.6). Eine *Stelle* mit Nenner bis 10⁶
+  kommt exakt zurück: Zwei solche Brüche liegen mindestens 10⁻¹² auseinander, ein double auf
+  dem Spielfeld höchstens 10⁻¹⁴ daneben. Eine *Stelle* aus dem Anhalten (S3) kann einen
+  größeren Nenner haben und kommt dann bis 1/(2·10⁶)″ daneben zurück.
+  Prüft: `Stelle` ohne `Fraction` wirft `TypeError` (`spielobjekteTest.py`), die Rundung
+  `anwendungTest.py`, die Grenzfälle der Akzeptanztests.
 - **S3** Anhalten (AUF-29.1, [V10](vertrag/aufstellen.md)): Die Berührung ist eine
   Wurzel, darum hält Arbiter auf einem Raster des Wegs an: Anteil k/n mit
   n = ⌈100 · (|Δx| + |Δy|)⌉, das größte k vor der ersten Überdeckung, exakt nachgeprüft (S2);
