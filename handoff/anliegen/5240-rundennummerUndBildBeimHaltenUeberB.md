@@ -53,3 +53,9 @@ Fixtures und Handgriffen.
    er ist, bis der Architekt den Vertrag nach 5180 F2 geändert hat. Dann schreibe ich ihn
    nach dem Gegenvorschlag (Kreis höchstens *B* von `davor`, nicht bei `zuWeit`, kein *Grund*)
    oder nach der Antwort schärfer neu. Darum steht `Wartet auf: 5180`.
+
+**Nachprüfung (Fachkritiker).** Punkt 1 in Ordnung: Der neue Test läuft für beide *Spieler*
+mit dem *ersten Zug*. Nach zwei ganzen Zügen verlangt er in der Kopfzeile dieses *Spielers*
+`amZug` und „Schlachtrunde 2 · Kommandophase“. Eine feste „Schlachtrunde 1“ fällt damit
+durch, ebenso eine Nummer, die Züge statt *Schlachtrunden* zählt (sie zeigte 3). Punkt 2 prüfe
+ich, wenn 5180 geklärt ist; bis dahin bleibt der Status.

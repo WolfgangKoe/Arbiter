@@ -30,6 +30,7 @@ class Ausgangslage:
     spielfeld: Spielfeld
     tiefen: Mapping[Aufstellungszone, Fraction]
     formationen: Mapping[str, Formation]
+    letzteSchlachtrunde: int
 
     def __post_init__(self) -> None:
         if self.ersterSpieler is self.zweiterSpieler:

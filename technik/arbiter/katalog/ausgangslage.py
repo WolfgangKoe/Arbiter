@@ -32,13 +32,20 @@ def _durchmesserLesen(zahl: object) -> int:
     return _ganzeZahlÜberNull(zahl, "Der Durchmesser in mm")
 
 
+def _bewegungsweiteLesen(zahl: object) -> Fraction:
+    return Fraction(_ganzeZahlÜberNull(zahl, "Die Bewegungsweite in Zoll"))
+
+
 def _armeeLesen(einheiten: list[dict]) -> Armee:
     return Armee(
         einheiten=tuple(
             Einheit(
                 name=eintrag["Einheit"],
                 modelle=tuple(
-                    Modell(base=Base(durchmesser=_durchmesserLesen(zahl)))
+                    Modell(
+                        base=Base(durchmesser=_durchmesserLesen(zahl)),
+                        bewegungsweite=_bewegungsweiteLesen(eintrag["bewegungsweite"]),
+                    )
                     for zahl in eintrag["durchmesser"]
                 ),
             )
@@ -100,4 +107,7 @@ def ausgangslageAus(ausgangslage: dict, onlyWar: dict, formation: dict) -> Ausga
         spielfeld=Spielfeld(seitenlängen=(Fraction(breite), Fraction(länge))),
         tiefen=MappingProxyType(tiefen),
         formationen=formationen,
+        letzteSchlachtrunde=_ganzeZahlÜberNull(
+            onlyWar["Schlacht"]["schlachtrunde"], "Die letzte Schlachtrunde"
+        ),
     )

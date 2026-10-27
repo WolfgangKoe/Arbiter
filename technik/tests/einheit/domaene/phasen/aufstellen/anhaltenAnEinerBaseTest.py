@@ -1,7 +1,8 @@
 from fractions import Fraction
 
 from arbiter.domaene.phasen.aufstellen.anhaltenAnEinerBase import angehalten
-from arbiter.domaene.spielobjekte import Modell, Stelle
+from arbiter.domaene.spielobjekte import Stelle
+from tests.einheit.modelle import testmodell
 
 
 def stelleAn(inX: int, inY: int) -> Stelle:
@@ -9,7 +10,7 @@ def stelleAn(inX: int, inY: int) -> Stelle:
 
 
 def testEinGezogenesModellHältVorDerFremdenBaseAn(zehnZoll):
-    gezogenes, ruhendes = Modell(base=zehnZoll), Modell(base=zehnZoll)
+    gezogenes, ruhendes = testmodell(zehnZoll), testmodell(zehnZoll)
     stellen = {gezogenes: stelleAn(0, 0), ruhendes: stelleAn(25, 0)}
     neue = {gezogenes: stelleAn(20, 0)}
 
@@ -17,7 +18,7 @@ def testEinGezogenesModellHältVorDerFremdenBaseAn(zehnZoll):
 
 
 def testEinNichtGesetztesGezogenesModellWirdNichtAngehaltenAuchAufEinerFremdenBase(zehnZoll):
-    gezogenes, ruhendes = Modell(base=zehnZoll), Modell(base=zehnZoll)
+    gezogenes, ruhendes = testmodell(zehnZoll), testmodell(zehnZoll)
     stellen = {ruhendes: stelleAn(20, 20)}
     neue = {gezogenes: stelleAn(20, 20)}
 

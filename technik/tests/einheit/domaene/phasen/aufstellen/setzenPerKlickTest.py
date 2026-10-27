@@ -7,7 +7,8 @@ from arbiter.domaene.phasen.aufstellen.setzenPerKlick import (
     formationDerEinheit,
     stellenDerFormation,
 )
-from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Stelle
+from tests.einheit.modelle import testmodell
 
 weitesFeld = (Fraction(-1000), Fraction(1000))
 
@@ -86,7 +87,7 @@ def testEineVersetzteNächsteReiheStehtAufEinHundertstelGenauAmKleinstenAbstand(
 
 def testEineFormationMitAndererModellzahlAlsDieEinheitIstEineVorbedingungsverletzung(zehnZoll):
     formation = Formation(reihen=(3,), abstand=Fraction(0))
-    einheit = Einheit(name="Einheit", modelle=(Modell(base=zehnZoll), Modell(base=zehnZoll)))
+    einheit = Einheit(name="Einheit", modelle=(testmodell(zehnZoll), testmodell(zehnZoll)))
     mitte = Stelle(x=Fraction(20), y=Fraction(20))
 
     with pytest.raises(ValueError):

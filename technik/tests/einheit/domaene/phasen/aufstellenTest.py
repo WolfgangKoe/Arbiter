@@ -9,18 +9,23 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
 )
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund, Sperre
-from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld, Stelle
+from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Spieler, Spielfeld, Stelle
+from tests.einheit.modelle import testmodell
+
+letzteSchlachtrunde = 5
 
 
 def spielerMitEinerEinheit() -> Spieler:
-    modell = Modell(base=Base(durchmesser=32))
+    modell = testmodell(Base(durchmesser=32))
     return Spieler(armee=Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),)))
 
 
 def ausgangslageVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Ausgangslage:
     spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
     tiefen = {zone: Fraction(9) for zone in Aufstellungszone}
-    return Ausgangslage(ersterSpieler, zweiterSpieler, spielfeld, tiefen, formationen={})
+    return Ausgangslage(
+        ersterSpieler, zweiterSpieler, spielfeld, tiefen, {}, letzteSchlachtrunde
+    )
 
 
 def aufstellungVon(ersterSpieler: Spieler, zweiterSpieler: Spieler) -> Aufstellung:
@@ -111,7 +116,7 @@ def testZweiSpielerMitDerselbenLeerenArmeeSindEineVorbedingungsverletzung():
 
 def testEinFremdesModellSetzenIstEineVorbedingungsverletzung():
     aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
-    fremdes = Modell(base=Base(durchmesser=32))
+    fremdes = testmodell(Base(durchmesser=32))
     stelle = Stelle(x=Fraction(1), y=Fraction(1))
 
     with pytest.raises(ValueError):
@@ -167,7 +172,10 @@ def testEinKlickMitEinerFormationAufEinerFremdenBaseSperrtUndSetztKeinModell():
     spielfeld = Spielfeld(seitenlängen=(Fraction(44), Fraction(60)))
     ganzesFeld = {zone: Fraction(44) for zone in Aufstellungszone}
     formationen = {"Einheit": Formation(reihen=(1,), abstand=Fraction(0))}
-    aufstellung = Aufstellung(Ausgangslage(gewinner, gegner, spielfeld, ganzesFeld, formationen))
+    ausgangslage = Ausgangslage(
+        gewinner, gegner, spielfeld, ganzesFeld, formationen, letzteSchlachtrunde
+    )
+    aufstellung = Aufstellung(ausgangslage)
     aufstellung.gewinnerWählen(gewinner)
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     fremde, *_ = gegner.armee.einheiten

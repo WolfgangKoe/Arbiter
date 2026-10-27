@@ -59,9 +59,9 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [x] Planer: Item architekturUmordnen gelöscht
 - [x] Architekt: Vertrag zu Item phasenUndSchlachtrunden, bei beiden Hälften
 - [x] Testautor: Tests zu Item phasenUndSchlachtrunden
-- [ ] Fachkritiker: Kritik an den Tests zu Item phasenUndSchlachtrunden
+- [x] Fachkritiker: Kritik an den Tests zu Item phasenUndSchlachtrunden
   Hindernis: Fachkritiker → Testautor: QUE-10.3 und 10.4 prüfen den ersten Zug nur bei Spieler 1 (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
-  Hindernis: Fachkritiker → Testautor: QUE-10.1 prüft die Nummer der Schlachtrunde nur bei 1 (Anliegen 5240)
+  Hindernis: Fachkritiker → Testautor: QUE-10.1 prüft die Nummer der Schlachtrunde nur bei 1 (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
 - [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
 - [ ] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
 - [ ] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
@@ -72,7 +72,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [x] Testautor: Tests zu Item normalMove
 - [ ] Fachkritiker: Kritik an den Tests zu Item normalMove
   Hindernis: Fachkritiker → Testautor: BEW-2.4 ohne Überdeckung, Distanz nur auf Achsen, BEW-2.3 nie zwei Gründe (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
-  Hindernis: Fachkritiker → Testautor: BEW-1.4 verlangt beim Halten über B ein Bild, das weder Kriterium noch V10 nennen (Anliegen 5240)
+  Hindernis: Fachkritiker → Testautor: BEW-1.4 verlangt beim Halten über B ein Bild, das weder Kriterium noch V10 nennen (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
 - [x] Architekt: Kritik an den Tests zu Item normalMove
 - [ ] Implementierer: Tests zu Item normalMove grün
 - [ ] Architekt: Kritik am Code zu Item normalMove
