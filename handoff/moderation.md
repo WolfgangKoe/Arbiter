@@ -21,10 +21,10 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
 - Stakeholder: Anliegen 3550.
 - Spätere Phase, nichts zu tun: Planer
   [3051](anliegen/3051-architekturUmordnenInPlan8.md); Ux
-  [2920](anliegen/2920-leistenNamenInDenMockups.md),
-  [3040](anliegen/3040-que7MockupZeigtZurueckUndUebergehenBeiKohaerenz.md);
-  Anforderungsautor [3500](anliegen/3500-verweiseAufEtappe1.md); Architekt
-  [2215](anliegen/2215-leistenOhneEigenenNamen.md) (wartet auf 2920).
+  Anliegen 2920,
+  Anliegen 3040;
+  Anforderungsautor Anliegen 3500; Architekt
+  Anliegen 2215 (wartet auf 2920).
 
 ## Vorschläge
 - 2740 hat die Antwort A und wartet auf 3120. Schließen darf der Architekt, sobald P7 gebaut
