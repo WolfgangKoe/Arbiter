@@ -4,7 +4,7 @@ Stand vor „Freigabe Plan 8“ (Zyklus 8, Domänenphase), nach der Kritik am Pl
 blockiert die Items 1 bis 3 in [Plan 8](plan.md).
 
 ## Dran
-- Anforderungsautor: [4280](anliegen/4280-begriffeUndAnnahmenZuPlan8.md). F6 und F7 stehen
+- Anforderungsautor: Anliegen 4280. F6 und F7 stehen
   mit „Antwort: .“ beantwortet (A, A); er setzt sie um (BEW bleibt, Daten mit Etappe 8) und
   schließt das Anliegen, oder fasst nach, wenn eine Rückfrage bleibt.
 - Regelumsetzer, ohne Wartevermerk (Stand führt falsch, Prüfcode):
@@ -41,7 +41,7 @@ blockiert die Items 1 bis 3 in [Plan 8](plan.md).
 
 ## Fragen an dich
 Offen ist keine. Dein „.“ unter F6 und F7 in
-[4280](anliegen/4280-begriffeUndAnnahmenZuPlan8.md) gilt als A; die Annahme dort ist damit
+Anliegen 4280 gilt als A; die Annahme dort ist damit
 bestätigt.
 
 Später, noch nicht gestellt: Soll Arbiter die bisher gezogene Distanz der gewählten

@@ -49,7 +49,7 @@ Gib die drei Items frei, sobald 4402 und 4421 erledigt sind und Schritte 1 bis 4
 Bild entsprechen.
 
 ## Offene Anliegen
-- An dich, vom Anforderungsautor: [4280](anliegen/4280-begriffeUndAnnahmenZuPlan8.md).
+- An dich, vom Anforderungsautor: Anliegen 4280.
   Umgesetzt sind deine Antworten: *Normale Bewegung* und *B* (F1), gerade Strecken (F3),
   Overlord 6″ (F4), Knöpfe (F5). Offen: F6, welches Kürzel, auf deine Rückfrage zu F2, und
   F7, wann wir über die Daten aus Arbiter-old entscheiden. Bis zu deiner Antwort gilt die
