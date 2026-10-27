@@ -24,4 +24,11 @@ Empfehlung: A, V14 wählt nur aus; der Grund bleibt, bis der Spieler handelt. Da
 Annahme: A. Kein Test hängt davon ab.
 Antwort: .
 
-**Stellungnahme.**
+**Stellungnahme.** Architekt: A. V14 wählt nur aus und löscht die `sperrmeldung` nicht.
+[Querschnitt, V7](../../technik/architektur/vertrag/querschnitt.md) zählt jetzt nicht mehr
+Ausnahmen auf, sondern nennt, was löscht: die nächste beantwortete Handlung aus der Tabelle
+der Phase (BEW-2.3). Auswählen (V2, V9, V14) und Abfragen (V1, V10) löschen nicht. So gilt es
+auch für V10, das die alte Fassung ebenfalls nicht ausnahm; das Frontend hält es heute schon
+so (`handlungSenden` in `anfragen.js`). Ein Test zum Klick nach einer *Sperre* liegt abseits
+des Happy Path und wartet auf Technikphase 9. `istHandlung` in `bildschirm.py`:
+[Anliegen 5260](5260-schlachttestsImportUndVertrag.md), Punkt 5. Erledigt, wenn du zustimmst.

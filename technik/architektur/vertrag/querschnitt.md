@@ -37,9 +37,10 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
   aus `Grund`, in dessen Reihenfolge) und dem unveränderten `spielstand`. Beispiele: in der
   Datei der Phase.
 - **V7** Die Seite zeigt (O1):
-  - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409, bis eine
-    Anfrage außer V2 und V9 beantwortet ist (AUF-12.6, 12.7: Auswählen ist keine Handlung);
-    ohne *Grund* keine. Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
+  - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409 einer
+    Handlung (Tabelle der Phase, V5), bis die nächste Handlung beantwortet ist (BEW-2.3);
+    Auswählen (V2, V9, V14) und Abfragen (V1, V10) sind keine (AUF-12.6, 12.7). Ohne *Grund*
+    keine. Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
   - `knopfGruppe`: die Knöpfe, die die Datei der Phase nennt.
 - **V8** Pointer Events am Dokument, ein Weg für Maus und Finger (QUE-3.4,
   `touch-action: none` an `.karte`). Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr
