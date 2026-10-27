@@ -64,7 +64,7 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
   Move, gesperrt über M, über fremde *Bases* und am Ende ohne *Kohärenz*. Noch nicht: Advance,
   Zurücksetzen, über die Kante, Engagement Range, gemeinsam übergehen mit *Protokoll*, neue
   Modelle, Loslassen neben der *Karte*. Vorher: die Architektur umordnen
-  ([3051](anliegen/3051-architekturUmordnenInPlan8.md)).
+  (Anliegen 3051).
 
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel

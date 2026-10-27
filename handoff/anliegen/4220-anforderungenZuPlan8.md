@@ -11,7 +11,7 @@ Status: angenommen
 dazu gibt es noch keine Anforderung. Die Items
 [phasenUndSchlachtrunden](../../domaene/items/phasenUndSchlachtrunden.md) und
 [normalMove](../../domaene/items/normalMove.md) nennen darum kein Kriterium. Nach
-[Anliegen 3661](3661-kriteriumNenntSeineEtappe.md) (A) nennt zudem jede Anforderung einer
+Anliegen 3661 (A) nennt zudem jede Anforderung einer
 noch offenen Etappe ihre Etappe.
 
 **Kosten.** Hält auf: Ohne Kriterien ist Plan 8 nicht zur Freigabe bereit

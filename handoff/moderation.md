@@ -20,7 +20,7 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
   Anliegen 3120 (P7).
 - Stakeholder: Anliegen 3550.
 - Spätere Phase, nichts zu tun: Planer
-  [3051](anliegen/3051-architekturUmordnenInPlan8.md); Ux
+  Anliegen 3051; Ux
   Anliegen 2920,
   Anliegen 3040;
   Anforderungsautor Anliegen 3500; Architekt
@@ -45,5 +45,5 @@ Alle Anliegen warten auf die Prozessphase, außer wo vermerkt.
 - Anliegen 3550: Zählen Stand und Dashboard die
   belegten Kriterien je Etappe (A, Empfehlung) oder weiter über alle (B)? Hält die
   Freigabe nicht auf; Retro 7 legt dafür kein Item an.
-- [3051 · F1](anliegen/3051-architekturUmordnenInPlan8.md): Nimmst du das Umordnen der
+- Anliegen 3051: Nimmst du das Umordnen der
   Architektur als erstes Item in Plan 8? Empfehlung ja; hält die Freigabe nicht auf.
