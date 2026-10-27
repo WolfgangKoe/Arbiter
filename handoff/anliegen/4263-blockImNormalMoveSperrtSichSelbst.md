@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: eine *Sperre* greift zu Unrecht, Schritt 3 des Happy Path).

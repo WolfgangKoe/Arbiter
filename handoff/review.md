@@ -69,8 +69,8 @@ Phasen, Fortschritt im Dashboard, freie Nummern.
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [x] UX: Mockups, bei einer Oberfläche
-- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
-  Hindernis: Fachkritiker → Anforderungsautor: BEW-1.1 lässt Aufstellregeln greifen (AUF-7.2 sperrt jedes Ziehen), Anzeige beim Ziehen und Ebene ungeklärt (Anliegen 4260)
+- [x] Fachkritiker: Kritik an Anforderungen und Mockups
+  Hindernis: Fachkritiker → Anforderungsautor: BEW-1.1 lässt Aufstellregeln greifen (AUF-7.2 sperrt jedes Ziehen), Anzeige beim Ziehen und Ebene ungeklärt (Anliegen 4260); beseitigt: Commit „Anforderungen zu Plan 8 nach Kritik nachgebessert“
   Hindernis: Fachkritiker → Ux: Mockups zu Plan 8: Phase beenden fehlt in der Bewegungsphase, Armeelisten nach der Aufstellung gefüllt, Ende der Schlacht ohne Bild (Anliegen 4262); beseitigt: Commit „Mockups zu Plan 8: erster Zug, Schlachtrunden, Normal Move, Ende der Schlacht“
   Hindernis: Fachkritiker → Anforderungsautor: BEW-1.1: Block im Normal Move sperrt sich nach QUE-1.2 an den eigenen Modellen, AUF-24.2 gilt nicht mehr (Anliegen 4263); beseitigt: Commit „Anforderungen zu Plan 8 nach Kritik nachgebessert“
 - [x] Planer: Plan geschrieben

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Alle drei halten auf (Ich 3): Ohne Änderung wird eine Prüfung rot, oder neuer
