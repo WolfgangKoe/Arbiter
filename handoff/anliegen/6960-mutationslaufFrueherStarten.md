@@ -62,3 +62,7 @@ A: Ja, mit F2 (Anliegen 6960, dein Kommentar). Rückweg: streichen. Nicht an ein
 B: Nein, wie bisher am Ende (`mutation.py`).
 Empfehlung: A, unterbrechen kostet dann nichts.
 Antwort: A
+
+**Nachprüfung (Organisationsentwickler).** F1 steht in der [DoD](../../prozess/ablauf/dod.md)
+(P8, [Retro 8](../retro.md)); F2 und F4 baut der Regelumsetzer als P9. `erledigt` folgt dessen
+Haken.

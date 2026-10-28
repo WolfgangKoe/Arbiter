@@ -43,7 +43,7 @@ zusammengesetzten Namen, tote Links, Formfehler erst beim Commit, Kommentare im 
 lange Läufe, `gleichwertig.json` für den Testautor.
 
 ## Prozess-Items
-P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
+P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550, 6960.
 - P1 Tests für jeden Fall (Organisationsentwickler): Nach deiner Antwort F2 A läuft der
   Testautor auf Opus (`model: opus` in seiner Definition); der Auslöser fällt aus
   [Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md). Danach prüft ein Test eher
@@ -89,14 +89,27 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
   y Kriterien belegt“ neben allen (3550, A). Ein Kriterium zählt zur Etappe aus `(Etappe <n>)`
   am Satzende, sonst aus `Etappe: <n>` seiner Anforderung, ohne beides nur unter allen
   (Annahme bis zur Antwort des Anforderungsautors, [6500](anliegen/6500-etappeEinesKriteriums.md)).
+- P8 Mutationslauf früher (Organisationsentwickler), nach deinen Antworten in
+  [6960](anliegen/6960-mutationslaufFrueherStarten.md): Ab Technikphase 9 startet der
+  Koordinator den vollen Lauf, sobald die DoD über das Inkrement grün ist, nicht erst mit der
+  Prozessphase; ändert sich `technik/` danach, startet er neu ([DoD](../prozess/ablauf/dod.md)).
+- P9 Mutationslauf zeigt und merkt je Modul (Regelumsetzer), nach P8: `mutation.py` schreibt
+  je fertigem Modul sofort eine Zeile ins Protokoll (Modul, Mutanten, Überlebende) und das
+  Ergebnis in `.git/arbiter/mutation.json`; ein unterbrochener Lauf beim gleichen Stand
+  übernimmt die fertigen Module. Scheiter-Tests in `mutationTest.py`: nach dem ersten Modul
+  steht seine Zeile, bevor das zweite fertig ist; ein nach dem ersten Modul abgebrochener Lauf
+  prüft es beim nächsten nicht neu. Dazu die Zeile in den
+  [Mutationsregeln](../prozess/regeln/mutationsregeln.md), `--voll` „nach der DoD über das
+  Inkrement“ statt „für die Retro“.
 
 ## Empfehlung
 Für dich ist nichts zu tun. Der Regelumsetzer arbeitet nach deiner Entscheidung in dieser
-Reihenfolge: die Hook-Zeile aus [6760](anliegen/6760-anliegenLaengeNachRunde.md); 3780
+Reihenfolge: die Hook-Zeile aus Anliegen 6760; 3780
 Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle statt an vier
 ([3780](anliegen/3780-restePruefcodeNach3301.md)); keine Testzeilen im Fortschritt für ein
 Item ohne Kriterium ([4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md)); P4 nach 4301,
-ohne Teilung um `standregeln/`, weil beide dort ändern; zuletzt der Reiter Architektur
+ohne Teilung um `standregeln/`, weil beide dort ändern; P9 nach P4, es wirkt ab der
+Technikphase 9 (6960, F3); zuletzt der Reiter Architektur
 ([4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md)): erst Bestand abbauen, dann
 Neues (306).
 
@@ -114,6 +127,8 @@ Neues (306).
 - [x] Organisationsentwickler: P5
 - [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
+- [ ] Organisationsentwickler: P8
+- [ ] Regelumsetzer: P9
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe

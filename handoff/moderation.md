@@ -13,7 +13,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
 - Nachprüfung fällig: Anliegen 6870, Absender
   Koordinator, nach Regel niemand (siehe Vorschläge); Regelumsetzer, laufen daneben:
-  [6760](anliegen/6760-anliegenLaengeNachRunde.md),
+  Anliegen 6760,
   Anliegen 6820.
 - Wartet auf 6431: Anliegen 6380, Anliegen 6430.
 - Alle übrigen warten auf Domänen- oder Technikphase 9 oder Prozessphase 9

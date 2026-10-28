@@ -11,9 +11,8 @@ in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Standregeln]
    mit dem Fortschritt des Produkts: Etappe, belegte Kriterien, was am Bildschirm neu geht.
    Höchstens zwei Prozess-Items aus Befunden, die das Produkt aufgehalten haben, dazu die
    Aufträge des Stakeholders (Anliegen 630, 730, 1671); jedes in Worten beschrieben: was
-   danach anders geschieht. Mit Beginn der Phase startet der Koordinator den vollen
-   Mutationslauf ([DoD](dod.md)) im Hintergrund; der Reviewer schreibt seine Lücken
-   als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
+   danach anders geschieht. Die Lücken des vollen Mutationslaufs ([DoD](dod.md)) schreibt
+   der Reviewer als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
    (Anliegen 1671, F2). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
    Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine

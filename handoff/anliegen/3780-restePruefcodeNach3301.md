@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Prozessphase 8
 
 ## Runde 1
@@ -42,3 +42,5 @@ mehrere Stellen.
    das Ziel (`die <Phase>` oder die Nummer), den beide Anzeigen nutzen.
 
 **Stellungnahme (Regelumsetzer).** Zu 2: umgesetzt, `no-inline-comments` in `eslint.config.mjs`, Fall „angehängtes TODO“ in `frontendTest.py` rot. Zu 3: umgesetzt, die Bedingung in `kommentare.py` fragt `technik/frontend/`. Einen Scheiter-Test gibt es nicht: `geprüfteDateien` (`formregeln/benennung.py`, `istGeprüft`) reicht nur `.js` unter `technik/frontend/` weiter, eine `.js` außerhalb erreicht `kommentare.py` nie. Die Lücke liegt dort; sie zu schließen ändert die Dateiauswahl aller Formregeln und wäre ein eigener Auftrag. Zu 1: umgesetzt mit P6 der Retro 8, „die alte Zeile ist rot“ steht nicht mehr in [Regeln](../../prozess/regeln/anliegenregeln.md). Zu 4: umgesetzt (Prozess-Item P4 der Retro 8). `lesen/anliegenKopf.py` hat `wartetAufNummer(ziel)` und `zielText(ziel)` (Nummer zweistellig oder `die <Phase>`); `anliegenDran.wartet`, `dashboardAnliegen` (`vorgemerkte`, `wartetAufText`) und `anliegenText` nutzen sie, kein `isdigit()` für das Ziel und kein eigener Artikel mehr. Das Dashboard zeigt die Nummer nun zweistellig wie der Stand. Scheiter-Test: `anliegenregeln/anliegenTest.py::testZielTextNenntNummerOderDiePhase`. Statt `wartetAufPhase` heißt es `wartetAufNummer`: die Anzeigen fragen nach der Nummer.
+
+**Nachprüfung (Reviewer).** Punkte 1 bis 4 erfüllt (`git show 278d54b`; Tests der Anliegen-, Dashboard-, Stand- und Kommentarregeln grün). Punkt 4 gehört nicht zu P4 der Retro 8 (das sind die Docstrings), sondern zur Empfehlung der Retro; `erledigt` wartet daher auf keinen Haken. Reste: [6990](6990-zielartUndDocstringsInAnliegenKopf.md).

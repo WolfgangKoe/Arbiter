@@ -23,9 +23,16 @@ Modulebene, Tests in einem eigenen Prozess: alle); ein Ergebnis gilt, solange `t
 Unter 95 % wird jeder Überlebende angegangen, nicht nur bis zur Schwelle: ein Test, der ihn
 fängt, oder, ist er gleichwertig, eine Begründung in `mutationsregeln/gleichwertig.json`, dann
 zählt er nicht (Anliegen 1740). Code ändert sich dafür nur, wenn er lesbarer wird; ein Test
-sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Der volle Lauf (`--voll`)
-über alle Module, auch `web/`, läuft nur in der Prozessphase ([Schritt 1](prozessphase.md)) und
-hält nichts auf. Mechanismus: `mutationsregeln/mutation.py` (Befehle:
-[Mutationsregeln](../regeln/mutationsregeln.md)); „jeder Überlebende“ und Lesbarkeit: nur Text.
+sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Mechanismus:
+`mutationsregeln/mutation.py` (Befehle: [Mutationsregeln](../regeln/mutationsregeln.md));
+„jeder Überlebende“ und Lesbarkeit: nur Text.
+
+Den vollen Lauf (`--voll`) über alle Module, auch `web/`, startet der Koordinator im
+Hintergrund, sobald die DoD über das Inkrement grün ist ([Technikphase](technikphase.md) 4);
+ändert sich `technik/` danach, startet er ihn neu. Der Lauf hält nichts auf (Anliegen 6960,
+F1); seine Lücken: [Prozessphase](prozessphase.md) 1. Mechanismus: nur Text.
+Je fertigem Modul schreibt er eine Zeile ins Protokoll (Modul, Mutanten, Überlebende) und
+merkt sich die Ergebnisse, ein unterbrochener Lauf setzt dort fort (6960, F2 und F4).
+Mechanismus: nur Text (P9 der [Retro 8](../../handoff/retro.md) baut ihn in `mutation.py`).
 
 Schwellen der Werkzeuge: [Werkzeuge](werkzeuge.md).
