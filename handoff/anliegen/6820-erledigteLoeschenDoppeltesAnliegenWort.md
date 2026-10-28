@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** `anliegenregeln/erledigteLoeschen.py` (`linksErsetzen`, Zeile 34) ersetzt jeden
@@ -26,3 +26,5 @@ eigenes Prozess-Item ist nicht nötig; nächster Lauf des Regelumsetzers.
 vorangehendes „Anliegen “ (auch über einen Zeilenumbruch) mit, das Ergebnis ist „Anliegen <nr>“.
 Scheiter-Test: `erledigteLoeschenTest.py`
 (`testEinLinkMitVorangestelltemAnliegenGibtKeinDoppeltesAnliegen`).
+
+**Nachprüfung.** Das Muster `link` nimmt „Anliegen“ samt Zeilenumbruch mit; `erledigteLoeschenTest.py` (10 Tests) ist grün, der neue Test prüft beide Fälle (gleiche Zeile, Umbruch) und hätte mit dem alten Muster „Anliegen Anliegen 12“ geliefert. Erledigt.
