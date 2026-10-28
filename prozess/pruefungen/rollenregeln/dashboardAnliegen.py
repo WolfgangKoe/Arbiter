@@ -1,5 +1,3 @@
-"""Das Anliegenboard im Dashboard: dran je Rolle, wartend, vorgemerkt je Phase; Karten, Filter."""
-
 import html
 from collections.abc import Callable
 from operator import attrgetter
@@ -49,7 +47,6 @@ def titelLesen(datei: Path) -> str:
 
 
 def zuständige(ordner: Path) -> dict[str, list[int]]:
-    """Je Rolle die Nummern, bei denen sie dran ist, samt ihren Nachprüfungen."""
     spalten = {rolle: list(nummern) for rolle, nummern in dran(ordner).items()}
     for rolle, nummern in nachprüfungen(ordner).items():
         spalten.setdefault(rolle, []).extend(nummern)
@@ -61,7 +58,6 @@ def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
 
 
 def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
-    """Wartende Anliegen je Bereich: auf ein anderes Anliegen, dann je folgende Phase."""
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
     auf: dict[str, list[Anliegen]] = {}
     for nummer, ziel in wartende(ordner).items():
@@ -78,7 +74,6 @@ def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
 def vorgemerktJePhase(
     ordner: Path, auf: dict[str, list[Anliegen]]
 ) -> list[tuple[str, list[Anliegen]]]:
-    """Die Phasen nach der jetzigen in der Reihenfolge der Rotation, soweit etwas auf sie wartet."""
     phasen = list(Phase)
     nächste = phasen.index(lage(ordner).phase) + 1
     versetzt = phasen[nächste:] + phasen[:nächste]

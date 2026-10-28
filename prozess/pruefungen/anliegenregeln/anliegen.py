@@ -1,5 +1,3 @@
-"""Prüft den Kopf einer Anliegen-Datei (Titel, Felder, Form, Runde, Status, Rollen)."""
-
 from pathlib import Path
 
 from lesen.agenten import rollennamen
@@ -7,7 +5,6 @@ from lesen.anliegenKopf import Status, felderLesen, höchstRunde, kopfLesen, sta
 
 
 def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
-    """Was am Kopf der Anliegen-Datei nicht stimmt; leer, wenn er in Ordnung ist."""
     zeilen = datei.read_text(encoding="utf-8").splitlines()
     if not zeilen or not zeilen[0].startswith("# "):
         return ["Zeile 1 ist kein Titel `# <Titel>`"]

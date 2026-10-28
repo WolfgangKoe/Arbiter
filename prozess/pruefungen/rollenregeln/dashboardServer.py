@@ -1,5 +1,3 @@
-"""Mini-Server des Dashboards (WSGI): zeigt die Anliegen, legt Züge des Stakeholders sofort ab."""
-
 import subprocess
 import sys
 import time
@@ -67,7 +65,6 @@ def feldwert(felder: dict[str, list[str]], name: str) -> str:
 
 
 def zügeAusFormular(nummer: int, felder: dict[str, list[str]]) -> list[Zug]:
-    """Die Züge in der Folge Status, Runde, Antworten, Kommentar; leere Felder entfallen."""
     züge = []
     if feldwert(felder, "status"):
         züge.append(Zug(nummer, "status", feldwert(felder, "status")))
@@ -98,7 +95,6 @@ def nummerAus(pfad: str) -> int | None:
 
 
 def fremderUrsprung(kopf: dict[str, str | None]) -> bool:
-    """Ein Formular von einer anderen Seite im Browser darf keine Züge vormerken."""
     herkunft = kopf.get("Origin")
     return herkunft is not None and herkunft != f"{lokalesSchema}://{kopf.get('Host')}"
 
@@ -133,7 +129,6 @@ def schreiben(ordner: Path, pfad: str, körper: bytes) -> Antwort:
 def antworten(
     ordner: Path, methode: str, pfad: str, körper: bytes, kopf: dict[str, str | None]
 ) -> Antwort:
-    """Die Antwort auf eine Anfrage; ohne Netz, damit die Tests sie aufrufen können."""
     if methode == "GET":
         return lesen(ordner, pfad)
     if fremderUrsprung(kopf):
@@ -142,8 +137,6 @@ def antworten(
 
 
 def anwendung(ordner: Path) -> Callable:
-    """Die WSGI-Anwendung, die Anfragen an `antworten` weiterreicht."""
-
     def anwenden(umgebung: dict, antwortStart: Callable) -> list[bytes]:
         länge = int(umgebung.get("CONTENT_LENGTH") or 0)
         körper = umgebung["wsgi.input"].read(länge)
@@ -164,7 +157,6 @@ def serverErzeugen(ordner: Path, port: int) -> WSGIServer:
 
 
 def quellenStand(ordner: Path) -> tuple[tuple[str, int], ...]:
-    """Änderungszeiten aller Prüfskripte; ändern sie sich, läuft der Server mit altem Code."""
     stand = []
     for skript in sorted((ordner / prüfskripteOrdner).rglob("*.py")):
         try:
@@ -175,8 +167,6 @@ def quellenStand(ordner: Path) -> tuple[tuple[str, int], ...]:
 
 
 class Wächter:
-    """Hält den Server als Kindprozess am Laufen und startet ihn bei Codeänderung neu."""
-
     def __init__(self, befehl: list[str], ordner: Path) -> None:
         self.befehl = befehl
         self.ordner = ordner

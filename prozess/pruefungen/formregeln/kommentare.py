@@ -1,5 +1,3 @@
-"""Prüft Kommentare und Docstrings nach `prozess/praemissen/es.md` (Punkt 8)."""
-
 import ast
 import io
 import re
@@ -26,7 +24,6 @@ javaScriptEndungen = (".js", ".mjs")
 
 
 def kommentare(quelltext: str, endung: str) -> Iterator[tuple[int, str]]:
-    """Zeile und Text jedes Kommentars; in JavaScript nur Zeilenkommentare am Zeilenanfang."""
     if endung in javaScriptEndungen:
         for zeile, text in enumerate(quelltext.splitlines(), start=1):
             if treffer := zeilenkommentarJavaScript.match(text):
@@ -50,7 +47,6 @@ def todoZeilen(quelltext: str, endung: str = ".py") -> list[int]:
 
 
 def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
-    """Alle Docstrings, je als Ausdruck und Text."""
     knoten = []
     for teil in ast.walk(baum):
         if not isinstance(teil, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
@@ -72,7 +68,6 @@ def docstringVerstöße(quelltext: str) -> list[str]:
 
 
 def geprüfteQuelltexte(wurzel: Path) -> list[Path]:
-    """Python- und JavaScript-Dateien der Prüfung, dazu die `.mjs` der Werkzeugkonfiguration."""
     dateien = [pfad for pfad in geprüfteDateien(wurzel) if pfad.suffix in (".py", ".js")]
     dateien += sorted(wurzel.glob("*.mjs")) + sorted((wurzel / "prozess").rglob("*.mjs"))
     return dateien

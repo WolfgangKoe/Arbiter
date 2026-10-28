@@ -1,5 +1,3 @@
-"""Stil und Legende der Dashboard-Seite."""
-
 legende = (
     ("var(--c-orchestrator)", "Gold: Koordinator", False),
     ("var(--c-subagent)", "Grau: Rolle", False),

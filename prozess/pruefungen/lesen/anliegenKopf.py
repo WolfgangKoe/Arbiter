@@ -1,5 +1,3 @@
-"""Liest und schreibt den Kopf der Anliegen und vergibt freie Nummern (`ablauf/anliegen.md`)."""
-
 import re
 from dataclasses import dataclass
 from enum import StrEnum
@@ -32,12 +30,10 @@ dateinummer = re.compile(rf"{anliegenOrdner}/(\d+)-")
 
 
 def wartetAufNummer(ziel: str) -> bool:
-    """Das Ziel von `Wartet auf` ist ein Anliegen, sonst eine Phase."""
     return ziel.isdigit()
 
 
 def zielText(ziel: str) -> str:
-    """Das Ziel für die Anzeige: die Nummer oder `die <Phase>`."""
     return f"{int(ziel):02d}" if wartetAufNummer(ziel) else f"die {ziel}"
 
 
@@ -66,7 +62,6 @@ def kopfLesen(datei: Path) -> Anliegen | None:
 
 
 def felderLesen(zeilen: list[str]) -> dict[str, str]:
-    """Die Felder `Name: Wert` ab Zeile 3, solange eine Zeile ein bekanntes Feld ist."""
     felder: dict[str, str] = {}
     for zeile in zeilen[2:]:
         name, trenner, wert = zeile.partition(": ")
@@ -87,7 +82,6 @@ def kopfAusText(text: str, datei: Path) -> Anliegen | None:
 
 
 def ohnePerspektive(rolle: str) -> str:
-    """Die Rolle ohne die Perspektive in Klammern, die der Ablauf nicht verlangt, aber duldet."""
     return rolle.partition(" (")[0]
 
 
@@ -112,7 +106,6 @@ def anliegenAusFeldern(felder: dict[str, str], datei: Path) -> Anliegen | None:
 
 
 def kopfÄndern(text: str, änderungen: dict[str, str]) -> str | None:
-    """Der Text mit den geänderten Feldern im Kopf; `None` ohne Kopf."""
     zeilen = text.splitlines()
     felder = felderLesen(zeilen)
     if not felder:
@@ -125,7 +118,6 @@ def kopfÄndern(text: str, änderungen: dict[str, str]) -> str | None:
 
 
 def belegteNummern(wurzel: Path) -> set[int]:
-    """Nummern im Ordner und in der Geschichte von git; sie sind nie wieder frei."""
     log = ("log", "--all", "--format=", "--name-only", "--", anliegenOrdner)
     geschichte = gitAusgabe(wurzel, *log)
     dateien = (wurzel / anliegenOrdner).glob("*.md")
@@ -136,7 +128,6 @@ def belegteNummern(wurzel: Path) -> set[int]:
 
 
 def freieNummer(wurzel: Path, bereich: range) -> int | None:
-    """Die erste Nummer im Bereich des Auftrags, die nie vergeben war; `None`, wenn er voll ist."""
     belegt = belegteNummern(wurzel)
     return next((nummer for nummer in bereich if nummer not in belegt), None)
 

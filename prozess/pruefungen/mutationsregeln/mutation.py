@@ -1,5 +1,3 @@
-"""Mutationstest: baut Fehler in geänderte Zeilen und nennt, welche kein Test bemerkt."""
-
 import os
 import shutil
 import subprocess
@@ -55,12 +53,10 @@ def schwelleErreicht(ergebnis: Ergebnis) -> bool:
 
 
 def geänderteModule(wurzel: Path) -> list[str]:
-    """Domänenmodule, die seit der jüngsten `Freigabe Plan` geändert oder neu sind."""
     return list(geänderteZeilen(wurzel, domaeneOrdner))
 
 
 def testenAufrufen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> bool:
-    """Wahr, wenn alle Tests der Kopie grün sind; Absturz oder Zeitüberschreitung ist rot."""
     befehl = [sys.executable, "-m", "pytest", "-x", "-q", "-p", "no:cacheprovider", *pfade]
     try:
         lauf = subprocess.run(
@@ -88,7 +84,6 @@ def kopieAnlegen(wurzel: Path, ziel: Path) -> None:
 def überlebt(
     kopie: Path, ausgewählt: tuple[str, ...] | None, pfade: tuple[str, ...], wartezeit: float
 ) -> bool:
-    """Wahr, wenn kein Test den Mutanten fängt; ein Überlebender prüft sich gegen alle nach."""
     if ausgewählt == ():
         return True
     if ausgewählt is None:
@@ -102,7 +97,6 @@ def mutantenWählen(
     zeilen: dict[str, set[int]] | None,
     gleichwertige: frozenset[Gleichwertig],
 ) -> tuple[list[tuple[int, Mutant]], int]:
-    """Die Mutanten in den genannten Zeilen mit ihrer Nummer, und wie viele gleichwertig sind."""
     quellzeilen = original.splitlines()
     gewählt = []
     begründet = 0
@@ -118,8 +112,6 @@ def mutantenWählen(
 
 
 class Vorgaben(NamedTuple):
-    """Zeilen je Modul (ohne: alle), Merkzettel (ohne: nichts merken) und gleichwertige Mutanten."""
-
     zeilen: dict[str, set[int]] | None = None
     ablage: Path | None = None
     gleichwertige: frozenset[Gleichwertig] = frozenset()
@@ -131,7 +123,6 @@ def mutationenPrüfen(
     pfade: tuple[str, ...] = testpfade,
     vorgaben: Vorgaben = Vorgaben(),  # noqa: B008
 ) -> Ergebnis:
-    """Baut je Mutant in eine Kopie und lässt nur die Tests laufen, die seine Zeile ausführen."""
     zeilen, ablage, gleichwertige = vorgaben
     überlebende: list[Überlebender] = []
     gesamt = 0
@@ -173,7 +164,6 @@ def bericht(ergebnis: Ergebnis) -> str:
 
 
 def ziel(wurzel: Path, argument: str) -> tuple[str, set[int]]:
-    """Ein Modul, ganz oder nur `modul:von-bis` (eine Zeile: `modul:zeile`)."""
     modul, _, bereich = argument.partition(":")
     if not bereich:
         anzahl = len((wurzel / modul).read_text(encoding="utf-8").splitlines())
@@ -183,7 +173,6 @@ def ziel(wurzel: Path, argument: str) -> tuple[str, set[int]]:
 
 
 def alleModule(wurzel: Path) -> dict[str, set[int]]:
-    """Jede Zeile jedes Moduls des Produkts, auch `web/`: der volle Lauf der Retro."""
     ergebnis = {}
     for datei in sorted((wurzel / produktOrdner).rglob("*.py")):
         name = datei.relative_to(wurzel).as_posix()
@@ -192,7 +181,6 @@ def alleModule(wurzel: Path) -> dict[str, set[int]]:
 
 
 def zeilenWählen(wurzel: Path, argumente: list[str]) -> dict[str, set[int]]:
-    """Voll: alles; Module genannt: diese Zeilen; sonst die seit der Planfreigabe geänderten."""
     if vollerLauf in argumente:
         return alleModule(wurzel)
     if argumente:

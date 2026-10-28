@@ -1,5 +1,3 @@
-"""Importvertrag A1, A2 (`technik/architektur.md`) und W1, W2, B1 (`technik/architektur/web.md`)."""
-
 import ast
 import sys
 from pathlib import Path
@@ -16,12 +14,10 @@ serverModule = ("flask", "werkzeug")
 
 
 def paketDerDatei(datei: Path, wurzel: Path) -> list[str]:
-    """Das Paket, in dem die Datei liegt, aus ihrem Pfad unter `technik/`."""
     return list(datei.parent.relative_to(wurzel / "technik").parts)
 
 
 def aufgelöst(knoten: ast.ImportFrom, paket: list[str]) -> str | None:
-    """Der absolute Modulname eines `from`-Imports; `None`, wenn er über das Paket hinausführt."""
     if knoten.level == 0:
         return knoten.module
     if knoten.level > len(paket):
@@ -31,7 +27,6 @@ def aufgelöst(knoten: ast.ImportFrom, paket: list[str]) -> str | None:
 
 
 def importierteModule(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
-    """Absolute Modulnamen mit Zeile; ein Import über das Paket hinaus heißt `?`."""
     module = []
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Import):
@@ -46,7 +41,6 @@ def istOderUnter(modul: str, name: str) -> bool:
 
 
 def erlaubt(modul: str) -> bool:
-    """Aus der Domäne erlaubt: die Standardbibliothek und nach der Tabelle nur die Domäne selbst."""
     kasten = kastenDesModuls(modul)
     if kasten is not None:
         return pfeilErlaubt("domaene", kasten, frozenset())
@@ -54,14 +48,12 @@ def erlaubt(modul: str) -> bool:
 
 
 def istVorlagenName(name: str) -> bool:
-    """Ob der volle Name ein Vorlagenmodul, darunter, eine Vorlagenfunktion oder `flask.*` ist."""
     return any(istOderUnter(name, modul) for modul in vorlagenModule) or name in {
         f"flask.{funktion}" for funktion in vorlagenFunktionen
     }
 
 
 def importierteNamen(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
-    """Volle Namen aller Importe mit Zeile; bei `from` das Modul und jedes `modul.name`."""
     namen = []
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Import):
@@ -82,7 +74,6 @@ def gebundeneAusImport(knoten: ast.Import) -> dict[str, str]:
 
 
 def gebundeneModule(baum: ast.AST, paket: list[str]) -> dict[str, str]:
-    """Der Name, den ein Import bindet, und der volle Name dahinter (`import a.b` bindet `a`)."""
     gebunden = {}
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Import):
@@ -96,7 +87,6 @@ def gebundeneModule(baum: ast.AST, paket: list[str]) -> dict[str, str]:
 
 
 def vollerName(zugriff: ast.Attribute, gebunden: dict[str, str]) -> str | None:
-    """Der volle Name einer Attributkette, deren Wurzel an einen Import gebunden ist."""
     teile = [zugriff.attr]
     knoten = zugriff.value
     while isinstance(knoten, ast.Attribute):
@@ -108,7 +98,6 @@ def vollerName(zugriff: ast.Attribute, gebunden: dict[str, str]) -> str | None:
 
 
 def vorlagenImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
-    """Importe und Attributzugriffe auf Vorlagen und HTML-Erzeugung (W1) mit Zeile."""
     gebunden = gebundeneModule(baum, paket)
     zugriffe = [
         (vollerName(knoten, gebunden), knoten.lineno)
@@ -124,7 +113,6 @@ def vorlagenImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
 
 
 def serverImporte(baum: ast.AST, paket: list[str]) -> list[tuple[str, int]]:
-    """Importe von Flask und Werkzeug (W2) mit Zeile."""
     return [
         (modul, zeile)
         for modul, zeile in importierteModule(baum, paket)
@@ -149,7 +137,6 @@ def webVerstöße(wurzel: Path) -> list[str]:
 
 
 def akzeptanzVerstöße(wurzel: Path) -> list[str]:
-    """B1: Tests unter `tests/akzeptanz/` importieren weder Flask noch Werkzeug."""
     gefunden = []
     for datei in sorted((wurzel / akzeptanzOrdner).rglob("*.py")):
         baum = ast.parse(datei.read_text(encoding="utf-8"))

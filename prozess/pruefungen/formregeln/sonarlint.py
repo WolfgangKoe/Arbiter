@@ -1,5 +1,3 @@
-"""SonarLint ohne VS Code: der Analysator der Erweiterung meldet die Funde des Standardprofils."""
-
 import json
 import os
 import subprocess
@@ -40,7 +38,6 @@ def istAusgenommen(ordner: Path, datei: Path, regel: str) -> bool:
 
 
 def version(ordner: Path) -> str:
-    """Feld `version` aus `package.json` der Erweiterung."""
     paket = ordner / "package.json"
     assert paket.is_file(), (
         f"SonarLint-Erweiterung {ordner}: Version nicht erkennbar, kein package.json"
@@ -53,7 +50,6 @@ def versionszahlen(ordner: Path) -> tuple[int, ...]:
 
 
 def erweiterungFinden() -> Path:
-    """Ordner der SonarLint-Erweiterung: `SONARLINT_ERWEITERUNG` oder die neueste in VS Code."""
     vorgabe = os.environ.get(umgebungsvariable)
     gefunden = (
         [Path(vorgabe)]
@@ -110,7 +106,6 @@ def dateiEintrag(datei: Path) -> dict:
 
 
 def antwortAuf(anfrage: dict, dateien: list[Path]):
-    """Antwort des Clients auf eine Anfrage des Servers."""
     art = anfrage["method"]
     if art == konfigurationAnfrage:
         regeln = {regel: {"level": "off"} for regel in abgeschalteteRegeln}
@@ -151,7 +146,6 @@ def initialisierung(ordner: Path) -> dict:
 
 
 def öffnen(datei: Path) -> dict:
-    """Meldet dem Server die Datei als im Editor geöffnet; er antwortet mit `publishDiagnostics`."""
     text = {"uri": datei.as_uri(), "languageId": "python", "version": 1}
     text["text"] = datei.read_text(encoding="utf-8")
     return {"jsonrpc": "2.0", "method": "textDocument/didOpen", "params": {"textDocument": text}}
@@ -176,7 +170,6 @@ def dateienSammeln(ordner: Path, unterordner: tuple[str, ...]) -> list[Path]:
 
 
 def funde(ordner: Path, dateien: list[Path]) -> list[str]:
-    """Funde des Standardprofils zu `dateien`, je Zeile `pfad:zeile: regel meldung`."""
     server = subprocess.Popen(
         serverAufruf(erweiterungFinden()),
         stdin=subprocess.PIPE,
@@ -194,8 +187,6 @@ def funde(ordner: Path, dateien: list[Path]) -> list[str]:
 
 
 class Sitzung:
-    """Gespräch mit dem Server: Dateien nacheinander öffnen, ihre Funde einsammeln."""
-
     def __init__(self, server: subprocess.Popen, ordner: Path, dateien: list[Path]):
         self.server = server
         self.ordner = ordner
@@ -258,7 +249,6 @@ def lauf(ordner: Path, unterordner: tuple[str, ...]) -> list[str]:
 
 
 def einstellung() -> str:
-    """Block für die Benutzereinstellungen von VS Code, gleiche Regeln wie die Sperre."""
     regeln = {regel: {"level": "off"} for regel in abgeschalteteRegeln}
     return json.dumps({"sonarlint.rules": regeln}, indent=2)
 

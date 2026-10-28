@@ -1,5 +1,3 @@
-"""Erkennt Bash-Befehle, die Dateien im Projekt ändern oder committen."""
-
 import os
 import shlex
 import tempfile
@@ -32,8 +30,7 @@ def liegtInTmp(pfad: str) -> bool:
     return ".." not in teile and teile[:2] == (ablage.parts[0], ablage.parts[1])
 
 
-class Umleitung(str):
-    """Ein unquotiertes `>`, `>>` oder `>|` im Befehl."""
+class Umleitung(str): ...
 
 
 def ohneAnführung(wort: str) -> str:
@@ -43,7 +40,6 @@ def ohneAnführung(wort: str) -> str:
 
 
 def zerlegen(befehl: str) -> list[list[str]]:
-    """Die Wörter je Teilbefehl; Zeilenumbrüche, `;`, `&&`, `||` und `|` trennen."""
     lexer = shlex.shlex(befehl.replace("\n", " ; "), posix=False, punctuation_chars=True)
     lexer.whitespace_split = True
     teile: list[list[str]] = [[]]
@@ -69,7 +65,6 @@ def istUmhüllung(wort: str) -> bool:
 
 
 def hinterXargs(wörter: list[str], stelle: int) -> int:
-    """Die Stelle nach `xargs` und seinen Optionen samt Werten."""
     stelle += 1
     while stelle < len(wörter) and wörter[stelle].startswith("-"):
         stelle += 2 if wörter[stelle] in xargsOptionenMitWert else 1
@@ -89,7 +84,6 @@ def ohneUmhüllung(wörter: list[str]) -> list[str]:
 
 
 def findAufrufe(wörter: list[str]) -> list[list[str]]:
-    """Die Befehle hinter `-exec`, `-execdir` und `-ok` eines `find`."""
     wörter = ohneUmhüllung(wörter)
     if not wörter or PurePosixPath(wörter[0]).name != "find":
         return []
@@ -126,7 +120,6 @@ def ändertInPlace(wort: str) -> bool:
 
 
 def entfernenName(wörter: list[str]) -> str:
-    """`rm` oder `mv`, sonst leer."""
     wörter = ohneUmhüllung(wörter)
     name = PurePosixPath(wörter[0]).name if wörter else ""
     return name if name in löschenUndUmbenennen else ""
@@ -171,7 +164,6 @@ def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
 
 
 def verbotenesSchreiben(befehl: str, entfernen: Entfernen | None = None) -> str | None:
-    """Der Teil des Befehls, der im Projekt schreibt oder committet; sonst `None`."""
     try:
         teile = zerlegen(befehl)
     except ValueError:

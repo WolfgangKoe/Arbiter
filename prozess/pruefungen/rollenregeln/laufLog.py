@@ -1,5 +1,3 @@
-"""Hook (SubagentStop): trägt Rolle, Auftrag, Modell, Belegung, Dauer, Zyklus ins Log ein."""
-
 import json
 import re
 from datetime import datetime
@@ -28,7 +26,6 @@ def textDerNachricht(inhalt) -> str:
 
 
 def transkriptEinträge(transkript: Path) -> list[dict]:
-    """Die Einträge mit Nachricht, ohne Meta-Einträge außer Nachrichten des Koordinators."""
     gefunden = []
     for zeile in transkript.read_text(encoding="utf-8").splitlines():
         eintrag = eintragAusZeile(zeile, ())
@@ -43,7 +40,6 @@ def vonKoordinator(nachricht: dict) -> bool:
 
 
 def gekürzt(text: str) -> str:
-    """Kürzt am letzten Leerzeichen vor `zielLänge` und hängt „…“ an."""
     if len(text) <= zielLänge:
         return text
     wortGrenze = text.rfind(" ", 0, zielLänge)
@@ -51,14 +47,12 @@ def gekürzt(text: str) -> str:
 
 
 def auftragsZeile(text: str) -> str:
-    """Erste Zeile des Auftrags ohne Hinweise des Harness, Vorspann und „Ziel:“."""
     zeilen = hinweisBlock.sub("", text).replace(koordinatorVorspann, "").splitlines()
     erste = next((zeile.strip() for zeile in zeilen if zeile.strip()), "")
     return gekürzt(erste.removeprefix("Ziel:").strip())
 
 
 def zielUndModell(einträge: list[dict]) -> tuple[str, str]:
-    """Erste Zeile des jüngsten Auftrags und Modell; leer, wenn das Transkript sie nicht hat."""
     alle = [eintrag["message"] for eintrag in einträge]
     texte = [
         textDerNachricht(nachricht.get("content")).strip()
@@ -83,7 +77,6 @@ def zeitstempel(eintrag: dict) -> datetime | None:
 
 
 def dauerSekunden(alle: list[dict]) -> int | None:
-    """Sekunden vom jüngsten Auftrag bis zur letzten Zeile; `None`, wenn Zeitstempel fehlen."""
     beginne = [
         zeitstempel(eintrag)
         for eintrag in alle
@@ -101,7 +94,6 @@ def koordinatorStand(eingabe: HookEingabe) -> int | None:
 
 
 def laufEintrag(eingabe: HookEingabe, zeit: datetime) -> Lauf | None:
-    """Der Eintrag zu einem Rollenlauf; `None`, wenn Rolle oder Belegung fehlen."""
     rolle = eingabe.rolle
     transkript = eigenesTranskript(eingabe)
     belegung = belegungAusTranskript(transkript) if transkript else None
@@ -131,7 +123,6 @@ def eintragAnhängen(wurzel: Path, lauf: Lauf) -> None:
 
 
 def protokollieren(eingabe: HookEingabe, ordner: Path) -> None:
-    """Trägt den Lauf ein und schreibt das Dashboard neu."""
     gefunden = laufEintrag(eingabe, jetzt())
     if gefunden:
         stand = lage(ordner)

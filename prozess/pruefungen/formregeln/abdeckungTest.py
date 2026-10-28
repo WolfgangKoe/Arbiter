@@ -1,5 +1,3 @@
-"""Scheiter-Test und Messung: Zweigabdeckung (DoD 1) und toter Code (DoD 2)."""
-
 import pytest
 
 from formregeln.abdeckung import (

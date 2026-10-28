@@ -1,5 +1,3 @@
-"""Fortschrittsliste des Dashboards: Haken per Klick, Kommentarfeld je Zeile hinter einem Klick."""
-
 import html
 import re
 from pathlib import Path
@@ -32,7 +30,6 @@ ul.fortschritt .vermerk{flex-basis:100%;margin-left:22px;color:var(--text-muted)
 
 
 def vermerkHtml(zeile: str) -> str:
-    """Der Vermerk unter einer Zeile; die Nummer eines Anliegens ist ein Link auf seine Seite."""
     maskiert = html.escape(zeile.strip())
     verlinkt = anliegenNummer.sub(r'<a href="/anliegen/\1">Anliegen \1</a>', maskiert)
     return f'<div class="vermerk">{verlinkt}</div>'
@@ -58,7 +55,6 @@ def zeileHtml(schlüssel: str, *, abgehakt: bool, zusatz: list[str], vonFakt: bo
 
 
 def fortschrittListe(ordner: Path) -> str:
-    """Der Fortschritt der laufenden Phase als kompakte Liste, eine Zeile je Schritt."""
     ziel = zielUndZeilen(ordner, lage(ordner))
     if ziel is None:
         return keinAbschnitt
@@ -74,7 +70,6 @@ def fortschrittListe(ordner: Path) -> str:
 
 
 def zügeAusFortschrittFormular(körper: bytes) -> list[Zug]:
-    """Haken (nur setzen, nie entfernen) und Kommentar der Zeile; ein leeres Feld entfällt."""
     felder = parse_qs(körper.decode("utf-8"), keep_blank_values=True)
     schlüssel = (felder.get("zeile") or [""])[0]
     if not schlüssel:

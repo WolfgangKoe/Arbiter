@@ -1,5 +1,3 @@
-"""Code → Glossar: Klassen und Enum-Werte der Domäne stehen im Glossar oder als Grund."""
-
 import ast
 import re
 import sys
@@ -14,7 +12,6 @@ spalteCodeBezeichner = 2
 
 
 def glossarBezeichner(glossar: str) -> dict[str, set[str]]:
-    """Klasse → ihre Enum-Werte, wie die Spalte *Code-Bezeichner* sie nennt."""
     bezeichner: dict[str, set[str]] = {}
     for zeile in glossar.splitlines():
         zellen = [zelle.strip() for zelle in zeile.split("|")]
@@ -34,7 +31,6 @@ def gründe(anforderungen: str) -> set[str]:
 
 
 def enumWerte(klasse: ast.ClassDef) -> list[tuple[str, str | None]]:
-    """Name und, falls ein Text, der Wert jedes Enum-Werts der Klasse, auch mit Annotation."""
     werte = []
     for anweisung in klasse.body:
         if isinstance(anweisung, ast.Assign) and isinstance(anweisung.targets[0], ast.Name):

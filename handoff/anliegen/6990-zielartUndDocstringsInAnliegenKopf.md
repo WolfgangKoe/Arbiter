@@ -30,3 +30,7 @@ eine andere Form von Phase und Zyklus müsste man Regex, `wartetAufNummer` und b
    und `wartetAufPhase: str | None` samt Zyklus. Ein eigener kleiner Typ `Ziel` mit `zielText`
    geht ebenso. `wartetAufNummer` und beide `partition`-Stellen entfallen dann. Den Zeitpunkt
    wählst du: in dieser Prozessphase nach P4, sonst trage `Wartet auf: Prozessphase 9` ein.
+
+**Stellungnahme.** Zu 1: Die beiden Docstrings in `lesen/anliegenKopf.py` sind mit P4,
+Schritt 1 entfernt (P4 Zwischenstand). Zu 2: noch nicht umgesetzt, der Status bleibt `offen`,
+bis P4 fertig ist; dann folgt der Umbau in dieser Prozessphase.

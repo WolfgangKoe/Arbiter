@@ -1,5 +1,3 @@
-"""Stellt coverage je Test auf dessen Kennung um, damit jede Zeile ihre Tests nennt."""
-
 import coverage
 
 

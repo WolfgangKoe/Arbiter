@@ -1,5 +1,3 @@
-"""Kriterium ↔ Akzeptanztest: Jedes Kriterium hat einen Test, jeder Test ein Kriterium."""
-
 import re
 import sys
 from pathlib import Path
@@ -22,8 +20,6 @@ from lesen.plan import freigegebenerPlan, offeneItemTexte
 
 
 class Fehlend(NamedTuple):
-    """Ein Kriterium ohne Test oder eine Anforderung ohne Testdatei, mit allen ihren Kriterien."""
-
     kennung: str
     kriterien: set[Kriterium]
 
@@ -35,7 +31,6 @@ class Zuordnung(NamedTuple):
 
 
 def anforderungenDerDatei(anforderungsdatei: Path) -> list[Anforderungsnummer]:
-    """Die Anforderungen der Datei, auch die, von denen nur Kriterien da sind."""
     gefunden = {anforderung for anforderung, _ in anforderungenMitZeile(anforderungsdatei)}
     gefunden |= {kriterium.anforderung for kriterium in kriterien(anforderungsdatei)}
     return sorted(gefunden)
@@ -53,14 +48,12 @@ def einzeldateiZu(wurzel: Path, anforderungsdatei: Path, anforderung: Anforderun
 
 
 def nennt(text: str, kriterium: Kriterium) -> bool:
-    """Der Text nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     kürzel, haupt, unter = kriterium
     muster = rf"\b{kürzel}-{haupt}(?:\.{unter}(?!\d)|(?!\d)(?!\.\d))"
     return re.search(muster, text) is not None
 
 
 def umfasst(itemTexte: list[str], kriterium: Kriterium) -> bool:
-    """Ein Itemtext nennt das Kriterium (`AUF-1.8`) oder seine Anforderung (`AUF-1`)."""
     return any(nennt(text, kriterium) for text in itemTexte)
 
 
@@ -97,7 +90,6 @@ def anforderungUmfasst(itemTexte: list[str], verlangt: set[Kriterium]) -> bool:
 def sammeldateiGilt(
     sammeldatei: Path, spätereVerlangt: list[set[Kriterium]], itemTexte: list[str]
 ) -> bool:
-    """Die Sammeldatei liegt vor, und kein Plan umfasst eine spätere Anforderung."""
     return sammeldatei.is_file() and keineSpätereUmfasst(spätereVerlangt, itemTexte)
 
 
@@ -112,14 +104,12 @@ def testdateiWählen(
     *,
     gilt: bool,
 ) -> Path:
-    """Die Sammeldatei, wenn sie für die erste Anforderung gilt, sonst die Einzeldatei."""
     if gilt:
         return sammeldateiZu(wurzel, anforderungsdatei)
     return einzeldateiZu(wurzel, anforderungsdatei, anforderung)
 
 
 def zuordnungen(wurzel: Path, anforderungsdatei: Path, itemTexte: list[str]) -> list[Zuordnung]:
-    """Je Anforderung der Datei die Testdatei, die für sie gilt, und ihre Kriterien."""
     anforderungen = anforderungenDerDatei(anforderungsdatei)
     if not anforderungen:
         return []
@@ -157,7 +147,6 @@ def doppelteKennungen(anforderungsdatei: Path) -> list[str]:
 def sammeldateiNebenEinzeldatei(
     wurzel: Path, anforderungsdatei: Path, zuordnung: Zuordnung, itemTexte: list[str]
 ) -> list[str]:
-    """Eine vorhandene Einzeldatei wird geprüft, auch wenn die Sammeldatei gilt."""
     einzeldatei = einzeldateiZu(wurzel, anforderungsdatei, zuordnung.anforderung)
     if not einzeldatei.is_file() or einzeldatei == zuordnung.testdatei:
         return []
@@ -206,7 +195,6 @@ def nenntFehlendes(itemTexte: list[str], fehlend: Fehlend) -> bool:
 
 
 def fehlendeTests(wurzel: Path, itemTexte: list[str]) -> list[Fehlend]:
-    """Kriterien ohne Test und Anforderungen ohne Testdatei; die Itemtexte wählen die Testdatei."""
     gefunden = []
     for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
         for zuordnung in zuordnungen(wurzel, anforderungsdatei, itemTexte):
@@ -222,7 +210,6 @@ def fehlendeTests(wurzel: Path, itemTexte: list[str]) -> list[Fehlend]:
 
 
 def wartende(wurzel: Path) -> list[str]:
-    """Fehlendes, das kein offenes Item eines freigegebenen Plans nennt."""
     itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
     return [
         fehlend.kennung

@@ -1,5 +1,3 @@
-"""Scheiter-Test und Stand: SonarLint ohne VS Code."""
-
 import ast
 import io
 import json
@@ -128,7 +126,6 @@ def istRouteMitPost(aufruf: ast.Call) -> bool:
 
 
 def routenMitPost(quelltext: str) -> list[int]:
-    """Zeilen, in denen eine Route eine andere Methode als GET, PUT, DELETE annimmt."""
     return [
         knoten.lineno
         for knoten in ast.walk(ast.parse(quelltext))
@@ -137,7 +134,6 @@ def routenMitPost(quelltext: str) -> list[int]:
 
 
 def ansichtsKlassen(quelltext: str) -> list[int]:
-    """Zeilen von Klassen, die von `View` oder `MethodView` erben; sie können POST tragen."""
     return [
         knoten.lineno
         for knoten in ast.walk(ast.parse(quelltext))
@@ -151,7 +147,6 @@ def ansichtsKlassen(quelltext: str) -> list[int]:
 
 
 def corsFreigaben(quelltext: str) -> list[str]:
-    """Merkmale einer CORS-Freigabe, die im Quelltext vorkommen."""
     return [merkmal for merkmal in corsMerkmale if merkmal in quelltext]
 
 

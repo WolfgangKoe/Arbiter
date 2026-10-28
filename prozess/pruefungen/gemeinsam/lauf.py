@@ -1,5 +1,3 @@
-"""Startet ein Prüfskript über seinen Modulnamen, ohne PYTHONPATH: `lauf.py standregeln.stand`."""
-
 import runpy
 import sys
 from pathlib import Path

@@ -1,5 +1,3 @@
-"""Liest Angaben aus den Agentendefinitionen in `.claude/agents/`."""
-
 from fnmatch import fnmatch
 from pathlib import Path
 
@@ -23,7 +21,6 @@ def kopfzeilen(agentTyp: str, wurzel: Path) -> list[str] | None:
 
 
 def schreibpfade(agentTyp: str, wurzel: Path) -> tuple[str, ...]:
-    """Die Muster unter `schreibpfade:`; ohne Eintrag darf die Rolle nichts schreiben."""
     zeilen = kopfzeilen(agentTyp, wurzel) or []
     muster: list[str] = []
     inListe = False
@@ -38,7 +35,6 @@ def schreibpfade(agentTyp: str, wurzel: Path) -> tuple[str, ...]:
 
 
 def darfSchreiben(relativerPfad: str, muster: tuple[str, ...]) -> bool:
-    """Ein Muster mit `/` am Ende erlaubt den ganzen Ordner, sonst gilt `fnmatch`."""
     return any(
         relativerPfad.startswith(eintrag)
         if eintrag.endswith("/")

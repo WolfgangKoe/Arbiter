@@ -1,5 +1,3 @@
-"""Misst für die Karte: Importe zwischen den Kästen, Zeichen Code gegen Architektur."""
-
 import ast
 from pathlib import Path
 from typing import NamedTuple
@@ -48,7 +46,6 @@ def codeDateien(wurzel: Path, kasten: str) -> list[Path]:
 
 
 def architekturZeichen(wurzel: Path, kasten: str) -> int | None:
-    """Zeichen der Datei `technik/architektur/<kasten>.md`; `None`, wo sie fehlt (Start: keine)."""
     if kasten == "start":
         return None
     datei = wurzel / architekturOrdner / f"{architekturDateien.get(kasten, kasten)}.md"
@@ -63,7 +60,6 @@ def kästenMessen(wurzel: Path) -> list[Kasten]:
 
 
 def kastenDerDatei(datei: Path, wurzel: Path) -> str | None:
-    """Der Kasten einer Python-Datei unter `technik/arbiter/`; `None` für Dateien außerhalb."""
     teile = datei.relative_to(wurzel / produktOrdner).parts
     if datei.name == startDatei and len(teile) == 1:
         return "start"
@@ -71,7 +67,6 @@ def kastenDerDatei(datei: Path, wurzel: Path) -> str | None:
 
 
 def importzeilen(wurzel: Path) -> dict[tuple[str, str], int]:
-    """Importzeilen aus Dateien eines Kastens in Module eines anderen, je (von, nach)."""
     anzahl: dict[tuple[str, str], int] = {}
     for datei in sorted((wurzel / produktOrdner).rglob("*.py")):
         von = kastenDerDatei(datei, wurzel)
@@ -94,6 +89,5 @@ def pfeileMessen(wurzel: Path, kästen: list[Kasten]) -> list[Pfeil]:
 
 
 def übersichtUndVertrag(wurzel: Path) -> tuple[int, int]:
-    """Zeichen der Übersicht `technik/architektur.md` und der Dateien des Vertrags."""
     vertrag = [datei for datei in (wurzel / vertragOrdner).rglob("*") if datei.is_file()]
     return zeichen([wurzel / übersichtDatei]), zeichen(vertrag)

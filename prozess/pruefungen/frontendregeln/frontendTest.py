@@ -1,5 +1,3 @@
-"""Scheiter-Test: eslint und stylelint über technik/frontend/ (Anliegen 242)."""
-
 import json
 import re
 import shutil

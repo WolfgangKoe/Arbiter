@@ -1,5 +1,3 @@
-"""Vorgemerkte Züge des Stakeholders und verworfene Züge, je als Zeilen einer JSON-Datei."""
-
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -63,7 +61,6 @@ def vorgemerkte(ordner: Path) -> list[Zug]:
 
 
 def ersteVorgemerkteEntfernen(ordner: Path, anzahl: int) -> None:
-    """Entfernt die ersten Zeilen und lässt, was inzwischen dazukam, stehen."""
     datei = ordner / eingangDatei
     if not datei.is_file():
         return

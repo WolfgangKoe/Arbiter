@@ -1,5 +1,3 @@
-"""Ein- und Ausgabe der Hooks von Claude Code."""
-
 import json
 import sys
 from dataclasses import dataclass
@@ -20,14 +18,11 @@ feldnamen = {
 
 
 def feldVon(daten: dict, attribut: str):
-    """Der Wert des Feldes der Hook-Eingabe, das zum Attribut von `HookEingabe` gehört."""
     return daten.get(feldnamen[attribut])
 
 
 @dataclass(frozen=True)
 class HookEingabe:
-    """Die Felder der Hook-Eingabe von Claude Code; fehlt eines, ist es `None`."""
-
     rolle: str | None
     werkzeug: str | None
     ereignis: str | None

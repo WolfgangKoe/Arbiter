@@ -9,7 +9,6 @@ konfiguration = wurzel / ".pre-commit-config.yaml"
 
 
 def hooksLesen(text: str) -> dict[str, dict[str, str]]:
-    """Liest je Hook die Schlüssel `entry`, `files` und `always_run` aus der Konfiguration."""
     hooks: dict[str, dict[str, str]] = {}
     aktuell: dict[str, str] = {}
     for zeile in text.splitlines():
@@ -24,7 +23,6 @@ def hooksLesen(text: str) -> dict[str, dict[str, str]]:
 
 
 def ausgelösteHooks(text: str, geänderteDateien: list[str]) -> set[str]:
-    """Die Hooks, die pre-commit für diese Dateien startet (`files` ist eine Suche)."""
     return {
         kennung
         for kennung, hook in hooksLesen(text).items()

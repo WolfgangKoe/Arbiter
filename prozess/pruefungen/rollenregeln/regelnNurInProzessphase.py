@@ -1,5 +1,3 @@
-"""Prozessregeln, Prämissen und Rollen schreibt nur die Prozessphase nach `Freigabe Retro`."""
-
 from fnmatch import fnmatch
 from pathlib import Path
 
@@ -31,7 +29,6 @@ def istGeschützt(relativ: str) -> bool:
 
 
 def prozessphaseFreigegeben(wurzel: Path) -> bool:
-    """Die Prozessphase läuft, und `Freigabe Retro <n>` des laufenden Zyklus ist committet."""
     aktuell = lage(wurzel)
     if aktuell.phase != Phase.prozessphase:
         return False

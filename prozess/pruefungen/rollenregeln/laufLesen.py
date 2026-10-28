@@ -1,5 +1,3 @@
-"""Liest das Lauf-Log (`prozess/dashboard/laeufe.jsonl`) und führt geteilte Läufe zusammen."""
-
 import json
 from pathlib import Path
 from typing import NamedTuple
@@ -45,7 +43,6 @@ def logPfad(wurzel: Path) -> Path:
 
 
 def eintragAusZeile(zeile: str, pflicht: tuple = pflichtfelder) -> dict | None:
-    """Der Eintrag einer Zeile; `None` bei leerer, unlesbarer oder unvollständiger Zeile."""
     try:
         eintrag = json.loads(zeile)
     except json.JSONDecodeError:
@@ -56,7 +53,6 @@ def eintragAusZeile(zeile: str, pflicht: tuple = pflichtfelder) -> dict | None:
 
 
 def dauerSumme(spät: Lauf, früh: Lauf) -> int | None:
-    """Beide Teile des Laufs zusammen; die Rückmeldung des Hooks zählt ab ihrem Beginn."""
     teile = (spät.dauer, früh.dauer)
     return sum(teile) if all(teil is not None for teil in teile) else spät.dauer
 

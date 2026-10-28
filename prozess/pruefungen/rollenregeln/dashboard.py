@@ -1,5 +1,3 @@
-"""Erzeugt den Tokenbericht `dashboard.html` aus dem Lauf-Log, im Aussehen der `ArbiterMap`."""
-
 import html
 import sys
 from pathlib import Path

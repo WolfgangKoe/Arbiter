@@ -1,5 +1,3 @@
-"""Merkt Mutantenergebnisse, solange der Stand gleich ist, und liest die gleichwertigen Mutanten."""
-
 import hashlib
 import json
 from pathlib import Path
@@ -29,7 +27,6 @@ def dateienDes(wurzel: Path, name: str) -> list[Path]:
 
 
 def standKennung(wurzel: Path) -> str:
-    """Prüfsumme über alles, wovon ein Mutantenergebnis abhängt."""
     summe = hashlib.sha256()
     for name in (*standQuellen, mutantenbauer):
         for datei in dateienDes(wurzel, name):
@@ -39,7 +36,6 @@ def standKennung(wurzel: Path) -> str:
 
 
 def gemerkt(ablage: Path | None, stand: str) -> dict[str, bool]:
-    """Die Ergebnisse (Schlüssel `<datei>#<nummer>`, Wert: überlebt) zum gleichen Stand."""
     if ablage is None or not ablage.is_file():
         return {}
     try:
@@ -59,7 +55,6 @@ def merken(ablage: Path | None, stand: str, ergebnisse: dict[str, bool]) -> None
 
 
 def gleichwertigeLesen(datei: Path = gleichwertigDatei) -> set[Gleichwertig]:
-    """Mutanten, die kein Test fangen kann, mit Begründung (`grund`); sie zählen nicht."""
     if not datei.is_file():
         return set()
     return {

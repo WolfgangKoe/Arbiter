@@ -1,5 +1,3 @@
-"""Seitenschalter der Sitzungskarten: Markup, Stil und das Skript, das im Browser blättert."""
-
 sitzungenJeSeite = 6
 
 schalterStil = """
@@ -49,7 +47,6 @@ schalterSkript = """
 
 
 def seitenschalter(anzahlSitzungen: int) -> str:
-    """Leerer Rahmen, den das Skript füllt; bei einer Seite entfällt er samt Skript."""
     if anzahlSitzungen <= sitzungenJeSeite:
         return ""
     return (

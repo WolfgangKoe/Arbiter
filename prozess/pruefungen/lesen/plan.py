@@ -1,5 +1,3 @@
-"""Der Plan in `handoff/plan.md` und seine Items in `domaene/items/`."""
-
 import re
 from pathlib import Path
 
@@ -21,7 +19,6 @@ def zyklus(datei: Path) -> int | None:
 
 
 def itemNamen(wurzel: Path) -> list[str]:
-    """Dateinamen aller Items, auf die `handoff/plan.md` verlinkt, auch gelöschter."""
     plan = wurzel / planDatei
     if not plan.is_file():
         return []
@@ -30,12 +27,10 @@ def itemNamen(wurzel: Path) -> list[str]:
 
 
 def offeneItems(wurzel: Path) -> list[str]:
-    """Items des Plans (Links in `handoff/plan.md`), deren Datei in `domaene/items/` existiert."""
     return [name for name in itemNamen(wurzel) if (wurzel / itemsOrdner / name).is_file()]
 
 
 def freigegebenerPlan(wurzel: Path) -> int | None:
-    """Nummer des Plans, wenn `Freigabe Plan <n>` committet ist, sonst `None`."""
     nummer = zyklus(wurzel / planDatei)
     if nummer is None or freigabeCommit(wurzel, "Plan", nummer) is None:
         return None
@@ -43,7 +38,6 @@ def freigegebenerPlan(wurzel: Path) -> int | None:
 
 
 def offeneItemTexte(wurzel: Path) -> list[str]:
-    """Texte der offenen Items des Plans."""
     return [
         (wurzel / itemsOrdner / name).read_text(encoding="utf-8") for name in offeneItems(wurzel)
     ]

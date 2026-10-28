@@ -1,5 +1,3 @@
-"""Prüft den Spiegel der Anforderungen: Inhalt der Akzeptanztests, Module der Domäne."""
-
 import ast
 import sys
 from pathlib import Path
@@ -31,7 +29,6 @@ def überschriftVon(anforderung: Path) -> str | None:
 
 
 def docstringVerstoß(testdatei: Path, überschrift: str) -> str | None:
-    """T1 (1): Der Docstring der Testdatei ist die Überschrift ihrer Anforderung mit Punkt."""
     erwartet = f"{überschrift.removeprefix(überschriftPräfix)}."
     vorhanden = ast.get_docstring(ast.parse(testdatei.read_text(encoding="utf-8")))
     if vorhanden == erwartet:
@@ -40,7 +37,6 @@ def docstringVerstoß(testdatei: Path, überschrift: str) -> str | None:
 
 
 def kennungVerstöße(testdatei: Path, anforderung: Path) -> list[str]:
-    """T1 (2): Jede Testfunktion trägt Kürzel und Nummer der Anforderung ihrer Datei."""
     eigene = anforderungenMitZeile(anforderung)
     if not eigene:
         return []
@@ -53,7 +49,6 @@ def kennungVerstöße(testdatei: Path, anforderung: Path) -> list[str]:
 
 
 def folgeVerstöße(testdatei: Path, anforderung: Path) -> list[str]:
-    """T1 (3): Die Kennungen der Tests stehen in der Folge der Kriterien, gleiche beisammen."""
     alle = kriterienMitZeile(anforderung)
     folge = {kriterium: platz for platz, (kriterium, _) in enumerate(alle)}
     tests = sorted(
@@ -92,7 +87,6 @@ def hatSpiegel(modul: Path, domäne: Path, anforderungen: Path) -> bool:
 
 
 def modulVerstöße(wurzel: Path) -> list[str]:
-    """Grundschnitt: Jedes Modul der Domäne außer den Werkzeugen hat einen Spiegel."""
     domäne = wurzel / domaeneOrdner
     anforderungen = wurzel / anforderungsOrdner
     return [

@@ -1,5 +1,3 @@
-"""Komplexitätsschwelle im Lauf der Prüfungen: complexipy (Verschachtelung)."""
-
 import pytest
 
 from formregeln.werkzeugaufruf import complexipyAufrufen

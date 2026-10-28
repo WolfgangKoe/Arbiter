@@ -1,5 +1,3 @@
-"""Hinweise oben im Tokenbericht: Befehl zum Öffnen, offene Fragen an den Stakeholder."""
-
 import html
 from pathlib import Path
 
@@ -31,7 +29,6 @@ def befehlHinweis() -> str:
 
 
 def offeneFragen(ordner: Path) -> list[int]:
-    """Nummern der Anliegen, auf die der Stakeholder noch antworten oder entscheiden muss."""
     return dran(ordner).get(stakeholder, [])
 
 

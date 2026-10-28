@@ -1,5 +1,3 @@
-"""Zeichnet die Architekturkarte des Dashboards: Kästen, Pfeile mit Importzeilen, Zeichen."""
-
 from pathlib import Path
 
 from rollenregeln.architekturMessung import (
@@ -65,7 +63,6 @@ def mitte(name: str) -> tuple[float, float]:
 
 
 def randpunkt(name: str, richtungX: float, richtungY: float) -> tuple[float, float]:
-    """Wo die Gerade von der Mitte des Kastens in die Richtung seinen Rand schneidet."""
     mitteX, mitteY = mitte(name)
     faktorX = (kastenBreite / 2) / abs(richtungX) if richtungX else float("inf")
     faktorY = (kastenHöhe / 2) / abs(richtungY) if richtungY else float("inf")
@@ -147,7 +144,6 @@ def kartenBild(kästen: list[Kasten], pfeile: list[Pfeil]) -> str:
 
 
 def architekturKarte(wurzel: Path) -> str:
-    """Der Kasten der Karte mit Fußzeile, aus den Dateien unter `wurzel` gemessen."""
     kästen = kästenMessen(wurzel)
     pfeile = pfeileMessen(wurzel, kästen)
     übersicht, vertrag = übersichtUndVertrag(wurzel)

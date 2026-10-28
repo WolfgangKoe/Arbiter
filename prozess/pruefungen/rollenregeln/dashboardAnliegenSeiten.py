@@ -1,5 +1,3 @@
-"""Seiten des Dashboard-Servers: Anliegen mit Fortschritt, ein Anliegen mit Formular, Reiter."""
-
 import hashlib
 import html
 import re
@@ -74,7 +72,6 @@ def seite(titel: str, aktiv: str, inhalt: str) -> str:
 
 
 def stand(ordner: Path) -> str:
-    """Ein Fingerabdruck von `handoff/` und den Zügen; ändert er sich, lädt die Seite neu."""
     dateien = sorted((ordner / handoffOrdner).rglob("*"))
     dateien += [ordner / eingangDatei, ordner / verworfenDatei]
     summe = hashlib.sha1(usedforsecurity=False)

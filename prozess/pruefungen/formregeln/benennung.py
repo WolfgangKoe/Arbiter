@@ -1,5 +1,3 @@
-"""Prüft die Benennung nach `prozess/praemissen/wir.md`."""
-
 import ast
 import os
 import re
@@ -64,7 +62,6 @@ def nameVerstoß(name: str, *, istKlasse: bool = False) -> str | None:
 
 
 def typaliase(baum: ast.AST) -> dict[int, str]:
-    """Zeile und Name der Typaliase auf Modulebene (`Name = tuple[…]`, `type Name = …`)."""
     gefunden = {}
     for knoten in getattr(baum, "body", []):
         if isinstance(knoten, ast.TypeAlias) and isinstance(knoten.name, ast.Name):
@@ -82,7 +79,6 @@ def typaliase(baum: ast.AST) -> dict[int, str]:
 
 
 def koordinatenfelder(baum: ast.AST) -> set[tuple[int, str]]:
-    """Zeile und Name der Achsen `x`, `y` als Felder von `Stelle` (Architektur S1)."""
     felder = set()
     for klasse in ast.walk(baum):
         if isinstance(klasse, ast.ClassDef) and klasse.name == "Stelle":
@@ -97,7 +93,6 @@ def koordinatenfelder(baum: ast.AST) -> set[tuple[int, str]]:
 
 
 def selbstDefinierteNamen(baum: ast.AST) -> Iterator[tuple[int, str, bool]]:
-    """Zeile, Name und ob es eine Klasse ist, für jeden Namen, den der Code selbst festlegt."""
     aliase = typaliase(baum)
     yield from ((zeile, name, True) for zeile, name in aliase.items())
     achsenfelder = koordinatenfelder(baum)
@@ -183,7 +178,6 @@ def dateinamenVerstoß(pfad: Path, wurzel: Path) -> str | None:
 
 
 def spiegelVerstoß(pfad: Path, wurzel: Path) -> str | None:
-    """Akzeptanztest `<anforderung>Test.py` im Ordner seiner Anforderung."""
     ordner = wurzel / akzeptanzOrdner
     if not pfad.is_relative_to(ordner) or pfad.name in werkzeugdateien:
         return None

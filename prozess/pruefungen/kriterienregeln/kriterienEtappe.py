@@ -1,5 +1,3 @@
-"""Die Etappe jedes Kriteriums: `(Etappe <n>)` am Satzende, sonst `Etappe: <n>` der Anforderung."""
-
 import re
 from pathlib import Path
 
@@ -10,7 +8,6 @@ etappeAmSatzende = re.compile(r"\(Etappe (\d+)\)\s*$")
 
 
 def etappeJeKriterium(anforderungsdatei: Path) -> dict[Kriterium, int | None]:
-    """Jedes Kriterium der Datei mit seiner Etappe; `None`, wo keine genannt ist."""
     ergebnis: dict[Kriterium, int | None] = {}
     vorgabe: int | None = None
     for zeile in zeilen(anforderungsdatei):

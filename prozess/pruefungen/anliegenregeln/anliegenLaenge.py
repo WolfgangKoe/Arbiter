@@ -1,5 +1,3 @@
-"""Misst die Länge eines Anliegens gegen seine Grenze (4.000 Zeichen je Runde)."""
-
 import re
 import sys
 from pathlib import Path
@@ -14,7 +12,6 @@ antwortZeile = re.compile(r"^Antwort:.*$", re.MULTILINE)
 
 
 def länge(text: str) -> int:
-    """Zeichen des Anliegens; jede Zeile `Antwort:` zählt als `Antwort: .`."""
     return len(antwortZeile.sub("Antwort: .", text))
 
 
@@ -23,7 +20,6 @@ def grenze(runde: int) -> int:
 
 
 def längeBefund(datei: Path) -> tuple[str, str] | None:
-    """`("rot", Text)` über der Grenze, `("hinweis", Text)` im Hinweisbereich, sonst `None`."""
     anliegen = kopfLesen(datei)
     if anliegen is None or anliegen.status == Status.erledigt:
         return None
@@ -43,7 +39,6 @@ def längeBefund(datei: Path) -> tuple[str, str] | None:
 
 
 def hinweisZu(eingabe: HookEingabe, wurzel: Path) -> dict | None:
-    """Die Rückmeldung nach Write oder Edit eines Anliegens im Hinweisbereich oder darüber."""
     pfad = eingabe.angaben.get("file_path")
     if not pfad or not Path(pfad).is_relative_to(wurzel / anliegenOrdner):
         return None

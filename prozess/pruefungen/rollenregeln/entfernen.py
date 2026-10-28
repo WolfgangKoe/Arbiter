@@ -1,5 +1,3 @@
-"""Urteilt, ob eine Rolle mit `rm` oder `mv` löschen und umbenennen darf."""
-
 import subprocess
 from pathlib import Path
 
@@ -53,7 +51,6 @@ def grundGegenPfad(relativ: str, rolle: str, wurzel: Path, *, istZielordner: boo
 
 
 def urteil(name: str, wörter: list[str], rolle: str, wurzel: Path) -> str | None:
-    """Der Grund, warum `rm` oder `mv` nicht zulässig ist; `None`, wenn jeder Pfad frei ist."""
     optionen, pfade = optionenUndPfade(wörter)
     falsch = unerlaubteOption(name, optionen)
     if falsch:

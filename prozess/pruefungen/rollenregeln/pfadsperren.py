@@ -1,5 +1,3 @@
-"""Pfade, die keine Rolle schreibt, mit der Meldung dazu."""
-
 from gemeinsam.pfade import istNurLesbar, nurLesbar
 
 pfadsperren = (

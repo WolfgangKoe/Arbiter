@@ -1,5 +1,3 @@
-"""Hook (SubagentStart, PreToolUse): legt die vorgemerkten Züge des Stakeholders in die Anliegen."""
-
 import fcntl
 import re
 from collections.abc import Callable
@@ -42,7 +40,6 @@ keineFrage = "Die Frage steht nicht mehr im Anliegen."
 
 
 def zulässigeStatus(anliegen: Anliegen) -> set[Status]:
-    """Die Status, die der Stakeholder diesem Anliegen jetzt geben darf."""
     erlaubt: set[Status] = set()
     for seiten, von, nach in statusZüge:
         beteiligt = any(getattr(anliegen, seite) == stakeholder for seite in seiten)
@@ -105,7 +102,6 @@ anwender: dict[str, Callable[[str, Zug], str | None]] = {
 
 
 def grundDagegen(anliegen: Anliegen | None, zug: Zug) -> str | None:
-    """Warum der Zug zum Anliegen nicht mehr passt; `None`, wenn er passt."""
     if anliegen is None:
         return "Das Anliegen gibt es nicht mehr."
     if zug.art not in anwender:
@@ -122,14 +118,12 @@ def grundDagegen(anliegen: Anliegen | None, zug: Zug) -> str | None:
 
 
 def fragtStakeholder(anliegen: Anliegen) -> bool:
-    """Ob das Anliegen jetzt auf Antworten des Stakeholders auf seine Fragen wartet."""
     if anliegen.status == Status.offen:
         return anliegen.empfänger == stakeholder
     return anliegen.status == Status.rückfrage and anliegen.absender == stakeholder
 
 
 def bereitsAngekommen(anliegen: Anliegen | None, zug: Zug, text: str) -> bool:
-    """Ob der Zug schon im Anliegen steht, etwa weil er zweimal abgeschickt wurde."""
     if anliegen is None:
         return False
     if zug.art == "status":
@@ -162,7 +156,6 @@ def einzelnenÜbernehmen(ordner: Path, zug: Zug) -> Verworfen | None:
 
 
 def übernehmen(ordner: Path) -> tuple[int, int]:
-    """Legt alle vorgemerkten Züge in die Dateien; gibt (übernommen, verworfen) zurück."""
     sperre = ordner / sperrDatei
     sperre.parent.mkdir(parents=True, exist_ok=True)
     with sperre.open("a", encoding="utf-8") as griff:
@@ -183,7 +176,6 @@ def unterSperreÜbernehmen(ordner: Path) -> tuple[int, int]:
 
 
 def löstAus(eingabe: HookEingabe) -> bool:
-    """Vor jedem Rollenstart und vor dem Commit des Koordinators."""
     if eingabe.ereignis == "SubagentStart":
         return True
     befehl = str(eingabe.angaben.get("command") or "")

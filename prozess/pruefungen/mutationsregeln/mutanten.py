@@ -1,5 +1,3 @@
-"""Baut aus dem Quelltext eines Moduls Mutanten: je einer mit genau einem eingebauten Fehler."""
-
 import ast
 from typing import NamedTuple
 
@@ -36,8 +34,6 @@ def tauschText(alt: object, neu: type) -> str:
 
 
 class Einbauer(ast.NodeTransformer):
-    """Zählt die Stellen, an denen ein Fehler möglich ist, und baut an der `ziel`-ten einen ein."""
-
     def __init__(self, ziel: int) -> None:
         self.ziel = ziel
         self.gezählt = 0
@@ -122,7 +118,6 @@ def eingebaut(quelle: str, ziel: int) -> tuple[Einbauer, str]:
 
 
 def mutantenVon(quelle: str) -> list[Mutant]:
-    """Alle Mutanten des Quelltexts, in der Reihenfolge der Stellen."""
     stellen = eingebaut(quelle, -1)[0].gezählt
     gefunden = []
     for ziel in range(stellen):

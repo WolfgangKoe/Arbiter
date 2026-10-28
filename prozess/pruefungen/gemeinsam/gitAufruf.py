@@ -1,5 +1,3 @@
-"""Alle Aufrufe von git im Projektordner, nur lesend."""
-
 import subprocess
 from pathlib import Path
 from typing import NamedTuple
@@ -19,7 +17,6 @@ def gitAusgabe(wurzel: Path, *argumente: str) -> str:
 
 
 def freigaben(wurzel: Path) -> list[Freigabe]:
-    """Kennung und Betreff aller Commits mit Betreff `Freigabe …`, jüngster zuerst."""
     gefunden = []
     for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
         kennung, _, betreff = zeile.partition(" ")
@@ -29,7 +26,6 @@ def freigaben(wurzel: Path) -> list[Freigabe]:
 
 
 def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
-    """Der Commit mit der Betreffzeile `Freigabe <gegenstand> <nummer>`, sonst `None`."""
     for freigabe in freigaben(wurzel):
         if freigabe.betreff == f"Freigabe {gegenstand} {nummer}":
             return freigabe.kennung
@@ -37,18 +33,15 @@ def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
 
 
 def letzteFreigabe(wurzel: Path) -> str | None:
-    """Der jüngste Commit `Freigabe …`, sonst `None`."""
     alle = freigaben(wurzel)
     return alle[0].kennung if alle else None
 
 
 def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
-    """Der Text der Datei im Commit; leer, wenn es sie dort nicht gab."""
     pfad = relativZurWurzel(datei, wurzel)
     assert pfad is not None, f"{datei} liegt außerhalb von {wurzel}"
     return gitAusgabe(wurzel, "show", f"{kennung}:{pfad}")
 
 
 def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
-    """Die Betreffzeilen der Commits nach `kennung` bis HEAD."""
     return gitAusgabe(wurzel, "log", "--format=%s", f"{kennung}..HEAD").splitlines()

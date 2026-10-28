@@ -1,5 +1,3 @@
-"""Hook (PreToolUse): Eine Rolle schreibt nur in ihren Schreibpfaden; manches ist nur lesbar."""
-
 import shlex
 from pathlib import Path
 
@@ -23,7 +21,6 @@ abhakenModule = ("standregeln.abhaken", "standregeln.hindernis")
 
 
 def abhakenFürAndere(befehl: str, rolle: str | None) -> bool:
-    """Der Befehl zum Abhaken oder für ein Hindernis nennt eine andere als die aufrufende Rolle."""
     try:
         wörter = shlex.split(befehl)
     except ValueError:

@@ -1,5 +1,3 @@
-"""Kriterien und Tests lesen: Anforderungsdateien und Testdateien nach Kennung."""
-
 import ast
 import re
 from collections import Counter
@@ -69,7 +67,6 @@ def kriterien(anforderungsdatei: Path) -> set[Kriterium]:
 
 
 def testsMitZeile(testdatei: Path) -> list[tuple[Kriterium, int, int]]:
-    """Kriterium, erste und letzte Zeile jeder Testfunktion mit Kennung im Namen."""
     gefunden = []
     for knoten in ast.walk(ast.parse(testdatei.read_text(encoding="utf-8"))):
         if isinstance(knoten, ast.FunctionDef | ast.AsyncFunctionDef):

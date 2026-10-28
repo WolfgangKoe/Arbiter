@@ -1,5 +1,3 @@
-"""Zweigabdeckung und toter Code des Produkts messen."""
-
 import json
 import math
 import os
@@ -21,7 +19,6 @@ class Abdeckung(NamedTuple):
 
 
 def prozentText(prozent: float) -> str:
-    """Auf eine Stelle abgerundet, damit die Meldung nie „95.0 %“ unter der Schwelle nennt."""
     return f"{math.floor(prozent * 10) / 10:.1f} %"
 
 
@@ -33,7 +30,6 @@ def abdeckungText(name: str, abdeckung: Abdeckung) -> str:
 
 
 def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
-    """Meldung, wenn Zeilen oder Zweige von `name` unter der Schwelle liegen."""
     if abdeckung.rote:
         return f"{name}: {abdeckung.rote} Tests rot, die Schwelle gilt erst, wenn sie grün sind"
     if min(abdeckung.zeilen, abdeckung.zweige) >= schwelle:
@@ -42,14 +38,12 @@ def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
 
 
 def aussetzung(abdeckung: Abdeckung) -> str | None:
-    """Meldung, wenn die Schwelle nicht gilt: rote Tests, denn Tests entstehen vor dem Code."""
     if abdeckung.rote:
         return f"{abdeckung.rote} Tests rot (Tests vor dem Code), Abdeckung nicht gemessen"
     return None
 
 
 def roteTests(pytestAusgabe: str) -> int:
-    """Summe aus `failed` und `error(s)` der Schlusszeile von pytest."""
     zeilen = pytestAusgabe.strip().splitlines()
     if not zeilen:
         return 0
@@ -72,7 +66,6 @@ def coverageAufrufen(wurzel: Path, umgebung: dict, *argumente: str):
 
 
 def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None = None) -> Abdeckung:
-    """Zeilen und Zweige von `quelle` im Lauf von `tests` samt Kindprozessen (`auswahl`: -m)."""
     with tempfile.TemporaryDirectory() as ablage:
         messdatei = Path(ablage) / "messung"
         umgebung = {**os.environ, "COVERAGE_FILE": str(messdatei)}
@@ -99,7 +92,6 @@ def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None =
 
 
 def unbenutzterCode(wurzel: Path, *pfade: str) -> list[str]:
-    """Meldungen von vulture über `pfade` bei 60 % Konfidenz; Ausnahmen stehen in pyproject.toml."""
     lauf = subprocess.run(
         [sys.executable, "-m", "vulture", *pfade, "--min-confidence", "60"],
         cwd=wurzel,

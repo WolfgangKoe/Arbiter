@@ -1,5 +1,3 @@
-"""Hook (SubagentStop): Löscht erledigte, committete Anliegen; Links darauf werden Text."""
-
 import re
 import sys
 from pathlib import Path
@@ -24,7 +22,6 @@ def markdownDateien(wurzel: Path) -> list[Path]:
 
 
 def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
-    """Ersetzt Links auf gelöschte Anliegen durch „Anliegen <nr>“; nennt die geänderten Dateien."""
     geändert = []
     for datei in markdownDateien(wurzel):
         text = datei.read_text(encoding="utf-8")
@@ -41,7 +38,6 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 
 
 def erledigteLöschen(wurzel: Path) -> list[str]:
-    """Löscht erledigte Anliegen, die unverändert im letzten Commit stehen; nennt die Dateinamen."""
     gelöscht: dict[Path, str] = {}
     bekannt = set(
         gitAusgabe(

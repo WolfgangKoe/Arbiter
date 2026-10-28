@@ -1,5 +1,3 @@
-"""Gruppiert die Läufe des Logs nach Sitzung und Rolle und benennt die Sitzungen."""
-
 from rollenregeln.laufLesen import Lauf
 
 ohneSitzung = "ohne Sitzung"
@@ -13,7 +11,6 @@ def nachSitzung(läufe: list[Lauf]) -> dict[str, list[Lauf]]:
 
 
 def sitzungsTitel(sitzung: str, läufe: list[Lauf]) -> str:
-    """„Zyklus 3 Prozessphase“; wechselt die Sitzung die Phase, „Zyklus 3 Domänenphase bis …“."""
     if sitzung == ohneSitzung:
         return f"Altbestand, {ohneSitzung}"
     benannt = [(lauf.zyklus, lauf.phase) for lauf in läufe if lauf.zyklus]

@@ -1,5 +1,3 @@
-"""Zeichnet die SVG-Diagramme des Dashboards: Säulen je Lauf und Histogramm der Belegung."""
-
 import html
 import statistics
 

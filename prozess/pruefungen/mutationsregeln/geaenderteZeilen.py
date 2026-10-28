@@ -1,5 +1,3 @@
-"""Die Zeilen der Module, die seit der jüngsten `Freigabe Plan` geändert oder neu sind."""
-
 import re
 from pathlib import Path
 
@@ -19,7 +17,6 @@ def planKennung(wurzel: Path) -> str:
 
 
 def zeilenAusDiff(diff: str) -> dict[str, set[int]]:
-    """Je Datei die neuen Zeilen eines Diffs mit `-U0`; eine gelöschte Datei fehlt."""
     zeilen: dict[str, set[int]] = {}
     aktuell: set[int] | None = None
     for zeile in diff.splitlines():
@@ -38,7 +35,6 @@ def zeilenAusDiff(diff: str) -> dict[str, set[int]]:
 
 
 def geänderteZeilen(wurzel: Path, ordner: str) -> dict[str, set[int]]:
-    """Je Python-Datei unter `ordner` die seit der Planfreigabe geänderten oder neuen Zeilen."""
     diff = gitAusgabe(wurzel, *ohneAnführung, "diff", "-U0", planKennung(wurzel), "--", ordner)
     zeilen = zeilenAusDiff(diff)
     neu = gitAusgabe(

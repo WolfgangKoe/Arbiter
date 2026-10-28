@@ -1,5 +1,3 @@
-"""Befehl: Nennt die erste freie Anliegen-Nummer im Bereich, den der Auftrag zuteilt."""
-
 import sys
 
 from gemeinsam.pfade import projektordner

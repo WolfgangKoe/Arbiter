@@ -1,5 +1,3 @@
-"""Hook (SubagentStart): Die Rolle bekommt Stand und die Ordner-CLAUDE.md ihrer Perspektive."""
-
 from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext

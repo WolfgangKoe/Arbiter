@@ -1,5 +1,3 @@
-"""Spur eines Kriteriums: seine Fundstellen in den Anforderungen und in den Akzeptanztests."""
-
 import re
 from pathlib import Path
 
@@ -37,7 +35,6 @@ def teststellen(wurzel: Path) -> dict[Kriterium, list[Fundstelle]]:
 
 
 def kriteriumZuStelle(wurzel: Path, pfad: str, zeile: int) -> Kriterium | None:
-    """Das Kriterium, das in der Zeile der Datei steht oder dessen Testfunktion sie enthält."""
     datei = wurzel / pfad
     if not datei.is_file():
         return None
@@ -62,7 +59,6 @@ def kriteriumZuEingabe(wurzel: Path, eingabe: str) -> Kriterium | None:
 
 
 def spur(wurzel: Path, eingabe: str) -> list[Fundstelle] | None:
-    """Kriterium und seine Tests; `None`, wenn die Eingabe kein bekanntes Kriterium nennt."""
     kriterium = kriteriumZuEingabe(wurzel, eingabe)
     stellen = kriteriumsstellen(wurzel).get(kriterium, []) if kriterium else []
     if not stellen:

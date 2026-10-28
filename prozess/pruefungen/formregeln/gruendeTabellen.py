@@ -1,5 +1,3 @@
-"""Architektur D4: Wächter werfen genau einen Grund, Tabellen halten jeden Grund nur einmal."""
-
 import ast
 import sys
 from pathlib import Path
@@ -10,7 +8,6 @@ domaeneOrdner = "technik/arbiter/domaene"
 
 
 def grundName(knoten: ast.expr) -> str | None:
-    """Der Wert von `Grund.<wert>`, sonst nichts."""
     if (
         isinstance(knoten, ast.Attribute)
         and isinstance(knoten.value, ast.Name)
@@ -21,7 +18,6 @@ def grundName(knoten: ast.expr) -> str | None:
 
 
 def sperreWurf(knoten: ast.AST) -> ast.Call | None:
-    """Der Aufruf von `Sperre(…)`, wenn der Knoten ihn wirft."""
     if not isinstance(knoten, ast.Raise):
         return None
     aufruf = knoten.exc
@@ -31,7 +27,6 @@ def sperreWurf(knoten: ast.AST) -> ast.Call | None:
 
 
 def wächterGründe(baum: ast.AST, dateiname: str, meldungen: list[str]) -> set[str]:
-    """Die Gründe der Wächter; ein anderes `raise Sperre` kommt als Meldung."""
     wächter: set[str] = set()
     for knoten in ast.walk(baum):
         aufruf = sperreWurf(knoten)
@@ -52,7 +47,6 @@ def wächterGründe(baum: ast.AST, dateiname: str, meldungen: list[str]) -> set[
 
 
 def tabellenSchlüssel(baum: ast.AST) -> list[set[str]]:
-    """Je Tabelle (Zuweisung eines Dict) die Gründe, die ihre Schlüssel sind."""
     tabellen = []
     for knoten in ast.walk(baum):
         if isinstance(knoten, ast.Assign | ast.AnnAssign) and isinstance(knoten.value, ast.Dict):
@@ -64,7 +58,6 @@ def tabellenSchlüssel(baum: ast.AST) -> list[set[str]]:
 
 
 def quelltextVerstöße(quelltexte: dict[str, str]) -> list[str]:
-    """Die Verstöße gegen D4 über alle Module zusammen (Name → Quelltext)."""
     meldungen: list[str] = []
     wächter: set[str] = set()
     tabellen: list[tuple[str, set[str]]] = []

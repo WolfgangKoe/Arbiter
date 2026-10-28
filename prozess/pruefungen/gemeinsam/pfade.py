@@ -1,5 +1,3 @@
-"""Ordner des Repos und Pfade, die mehrere Prüfungen kennen."""
-
 import os
 from pathlib import Path
 
@@ -20,12 +18,10 @@ altbestandOrdner = tuple(eintrag.rstrip("/") for eintrag in nurLesbar if eintrag
 
 
 def projektordner() -> Path:
-    """Das Repo: `CLAUDE_PROJECT_DIR`, sonst die Wurzel nach dem Ort der Prüfskripte."""
     return Path(os.environ.get("CLAUDE_PROJECT_DIR") or wurzel).resolve()
 
 
 def relativZurWurzel(pfad: Path, ordner: Path) -> str | None:
-    """Der Pfad mit `/` ab `ordner` (relative Pfade gelten ab dort); `None` außerhalb."""
     absolut = pfad if pfad.is_absolute() else ordner / pfad
     try:
         return absolut.resolve().relative_to(ordner.resolve()).as_posix()
@@ -34,7 +30,6 @@ def relativZurWurzel(pfad: Path, ordner: Path) -> str | None:
 
 
 def istNurLesbar(relativerPfad: str) -> bool:
-    """Für alle Rollen und den Koordinator nur lesbar; löschen tut nur der Stakeholder."""
     return any(
         f"{relativerPfad.rstrip('/')}/".startswith(eintrag)
         if eintrag.endswith("/")

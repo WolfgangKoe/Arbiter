@@ -1,5 +1,3 @@
-"""eslint und stylelint über `technik/frontend/` (`prozess/ablauf/werkzeuge.md`; wir.md 1, 5, 8)."""
-
 import subprocess
 import sys
 from pathlib import Path
@@ -9,7 +7,6 @@ from gemeinsam.pfade import frontendOrdner, projektordner
 
 
 def werkzeugAufrufen(wurzel: Path, werkzeug: str, *argumente: str) -> str:
-    """Ausgabe des Werkzeugs, wenn es Verstöße oder Fehler meldet, sonst leer; fehlt es, rot."""
     programm = wurzel / "node_modules" / ".bin" / werkzeug
     assert programm.exists(), f"{werkzeug} fehlt: `npm install` in der Wurzel (package.json)"
     lauf = subprocess.run(

@@ -1,5 +1,3 @@
-"""Misst mit einem Lauf der Tests, welche Testdateien jede Zeile eines Moduls ausführen."""
-
 import json
 import os
 import shutil
@@ -19,8 +17,6 @@ steckmodul = Path(__file__).with_name("kontext") / "conftest.py"
 
 
 class Karte(NamedTuple):
-    """Zeilen ohne Ausführung und je ausgeführter Zeile ihre Testdateien (`None`: alle)."""
-
     unausgeführt: frozenset[int]
     dateien: dict[int, frozenset[str] | None]
 
@@ -59,7 +55,6 @@ def coverageAufrufen(kopie: Path, umgebung: dict, *argumente: str, wartezeit: fl
 
 
 def messen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> Messung:
-    """Lässt alle Tests in der Kopie unter coverage laufen; `grün`: kein Test war rot."""
     shutil.copy(steckmodul, kopie / "conftest.py")
     regeln = kopie / ".mutationCoveragerc"
     regeln.write_text(konfiguration, encoding="utf-8")
@@ -79,7 +74,6 @@ def messen(kopie: Path, pfade: tuple[str, ...], wartezeit: float) -> Messung:
 
 
 def auswahl(karte: Karte | None, zeile: int) -> tuple[str, ...] | None:
-    """Testdateien, die `zeile` ausführen; leer: keine; `None`: nicht zu sagen, also alle."""
     if karte is None:
         return None
     if zeile in karte.unausgeführt:

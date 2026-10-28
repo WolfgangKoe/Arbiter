@@ -1,5 +1,3 @@
-"""Bestimmt, welche Rolle bei welchem Anliegen dran ist, nach der Statustabelle des Ablaufs."""
-
 from pathlib import Path
 
 from gemeinsam.gitAufruf import dateiBeiCommit, letzteFreigabe
@@ -15,7 +13,6 @@ from standregeln.phasenfolge import lage
 
 
 def nachprüfungen(wurzel: Path) -> dict[str, list[int]]:
-    """Fällige Nachprüfungen je Rolle: `angenommen` prüft der Absender, Wartende nicht."""
     fällig: dict[str, list[int]] = {}
     for anliegen in gelesene(wurzel):
         if anliegen.status == Status.angenommen and not wartet(wurzel, anliegen):
@@ -24,7 +21,6 @@ def nachprüfungen(wurzel: Path) -> dict[str, list[int]]:
 
 
 def beantwortetDurchFreigabe(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> bool:
-    """Ein Anliegen an den Stakeholder, das in der Freigabe schon so offen war (gleiche Runde)."""
     if freigabe is None or anliegen.empfänger != stakeholder or anliegen.status != Status.offen:
         return False
     damals = kopfAusText(dateiBeiCommit(wurzel, freigabe, anliegen.datei), anliegen.datei)
@@ -32,7 +28,6 @@ def beantwortetDurchFreigabe(wurzel: Path, anliegen: Anliegen, freigabe: str | N
 
 
 def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | None:
-    """Die Rolle, die dran ist, nach der Statustabelle in `prozess/ablauf/anliegenStatus.md`."""
     if anliegen.status == Status.offen:
         beantwortet = beantwortetDurchFreigabe(wurzel, anliegen, freigabe)
         return anliegen.absender if beantwortet else anliegen.empfänger
@@ -49,7 +44,6 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
 
 
 def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
-    """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf seine Phase samt Zyklus."""
     if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
         return False
     if not wartetAufNummer(anliegen.wartetAuf):
@@ -60,7 +54,6 @@ def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
 
 
 def wartende(wurzel: Path) -> dict[int, str]:
-    """Wartende Anliegen mit dem, worauf sie warten; sie sind für niemanden dran."""
     return {
         anliegen.nummer: str(anliegen.wartetAuf)
         for anliegen in gelesene(wurzel)
@@ -69,7 +62,6 @@ def wartende(wurzel: Path) -> dict[int, str]:
 
 
 def dran(wurzel: Path) -> dict[str, list[int]]:
-    """Offene Anliegen je Rolle, die dran ist; `angenommen` steht bei `nachprüfungen`."""
     zuständig: dict[str, list[int]] = {}
     freigabe = letzteFreigabe(wurzel)
     for anliegen in gelesene(wurzel):
