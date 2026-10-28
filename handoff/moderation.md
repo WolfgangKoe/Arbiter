@@ -4,8 +4,8 @@ Stand: Retro 8 wartet auf deine Freigabe ([Retro 8](retro.md)). Kein offenes Anl
 Inkrement auf; 6431 hält die Items P1, P3 und P4 der Retro auf.
 
 ## Dran
-Blockiert: nur [6431](anliegen/6431-fragenDerRetro8.md) (P1, P3, P4 brauchen F1 bis F3).
-- Stakeholder: [6431](anliegen/6431-fragenDerRetro8.md) F1 bis F3 und Freigabe Retro 8.
+Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
+- Stakeholder: Anliegen 6431 F1 bis F3 und Freigabe Retro 8.
 - Organisationsentwickler, Prozessphase 8: [4620](anliegen/4620-kuerzelJePhaseInDerDomaene.md),
   [4040](anliegen/4040-ablaufUndRegelnVerschlanken.md).
 - Regelumsetzer, Prozessphase 8: [3900](anliegen/3900-standNenntFalscheRolleFuerProzessItems.md),
@@ -13,8 +13,8 @@ Blockiert: nur [6431](anliegen/6431-fragenDerRetro8.md) (P1, P3, P4 brauchen F1 
   [3780](anliegen/3780-restePruefcodeNach3301.md),
   [4120](anliegen/4120-hindernisformatInAblaufUndRegeln.md),
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
-- Wartet auf 6431: [6380](anliegen/6380-praemissenAmRichtigenFleck.md),
-  [6430](anliegen/6430-kommentareImCode.md).
+- Wartet auf 6431: Anliegen 6380,
+  Anliegen 6430.
 - Alle übrigen warten auf Domänen- oder Technikphase 9 oder Prozessphase 9
   ([3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
   [6432](anliegen/6432-antwortOhneZeileUndRolleUx.md),
@@ -47,7 +47,7 @@ Mit `Annahme:` (die Arbeit läuft weiter):
   Annahme: P7 zählt danach. Antwort an den Anforderungsautor.
 
 Ohne `Annahme:`:
-- [6431](anliegen/6431-fragenDerRetro8.md) F1 (Docstrings), F2 (Testautor auf Opus), F3
+- Anliegen 6431 F1 (Docstrings), F2 (Testautor auf Opus), F3
   (Prämissen verschieben): Du hast um Erklärung zu F2 und F3 gebeten; der Organisationsentwickler
   hat sie unter „Klärung“ ergänzt. Trage je `Antwort:` ein, „.“ heißt Empfehlung.
 - [4882](anliegen/4882-itemKatalogwerteGliedern.md) F1: Katalogwerte gliedern als erstes Item

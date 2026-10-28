@@ -48,7 +48,7 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
   Testautor auf Opus (`model: opus` in seiner Definition); der Auslöser fällt aus
   [Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md). Danach prüft ein Test eher
   gleich, was für beide Spieler oder jede Runde gilt; jeder Lauf des Testautors kostet je
-  Token doppelt so viel. Nach deiner Antwort B in [6640](anliegen/6640-gegenbeispielImSkillDesTestautors.md)
+  Token doppelt so viel. Nach deiner Antwort B in Anliegen 6640
   zeigt seine [Anleitung](../.claude/skills/akzeptanztest-schreiben/SKILL.md) zudem das
   Gegenbeispiel „nur Spieler 1“: ein Test, der nur einen Spieler prüft, mit Grund.
 - P3 Prämissen nach deinen Antworten (Organisationsentwickler): Es 8 nach F1 A (Befund 4):
@@ -103,7 +103,7 @@ abbauen, dann Neues (306).
   Hindernis: Architekt → Organisationsentwickler: F1 widerspricht T1, P2 steht schon, P7 zählt ungeregelt (Anliegen 6470); beseitigt: Commit „Nachkorrektur Retro 8, Rückfrage des Stakeholders zu 6431“
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 8
-- [ ] Organisationsentwickler: P1
+- [x] Organisationsentwickler: P1
 - [ ] Organisationsentwickler: P3
 - [ ] Regelumsetzer: P4
 - [ ] Organisationsentwickler: P5
@@ -114,4 +114,4 @@ abbauen, dann Neues (306).
 ## Freigabe
 Freigabe: ja
 Kommentar: Zu P1, bitte nochmal erläutern, was esmit dem Gegenbeispiel auf sich hatte. Viellicht habe ich etwas missverstanden.
-Stellungnahme: Erläutert in Anliegen [6640](anliegen/6640-gegenbeispielImSkillDesTestautors.md), dort F1 mit Empfehlung; P1 im Abschnitt Prozess-Items verweist darauf.
+Stellungnahme: Erläutert in Anliegen Anliegen 6640, dort F1 mit Empfehlung; P1 im Abschnitt Prozess-Items verweist darauf.
