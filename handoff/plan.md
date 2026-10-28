@@ -89,7 +89,8 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [x] Fachkritiker: Item normalMove abgenommen
 - [x] Planer: Item normalMove gelöscht
 - [ ] Reviewer: DoD über das Inkrement
-- [ ] Reviewer: Review geschrieben
+  Hindernis: Reviewer → Testautor: Mutation der geänderten Domänenzeilen seit Freigabe Plan 8: 94 Mutanten, 84 % gefangen, Schwelle 95 %. 15 überleben: messen.py:133, 134, 135 (streckeÜberdeckt), aufstellen/__init__.py:170 (modellAnklicken: and wird or), anhaltenAnDerBewegungsweite.py:29, 31, 32, beenden.py:16, schlachtrunden.py:99 (is wird is not), 112, 120, 145 (Rückgabe wird None). Empfehlung: je Überlebenden ein Test, der ihn fängt, oder eine Begründung in mutationsregeln/gleichwertig.json; schlachtrunden.py:99 halte ich für gleichwertig, da außerhalb der Bewegungsphase keine Stelle sich ändert. Liste: .venv/bin/python prozess/pruefungen/gemeinsam/lauf.py mutationsregeln.mutation (Anliegen 6291)
+- [x] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
 - [ ] Organisationsentwickler: Kritik am Review
 - [ ] Stakeholder: Freigabe Review 8

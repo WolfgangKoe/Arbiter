@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Bisher legt Arbiter ein gezogenes *Modell* genau unter den Zeiger. Der Browser
