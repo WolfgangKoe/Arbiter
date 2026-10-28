@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Der Stakeholder entscheidet F1 vor der Freigabe ohne die Folgen, P2 und
