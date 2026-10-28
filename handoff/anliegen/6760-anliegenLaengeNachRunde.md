@@ -43,5 +43,9 @@ der Satz „höchstens 4.000 Zeichen je Runde, Hinweis ab 100 darunter“ in
 [Anliegen](../../prozess/ablauf/anliegen.md) (Organisationsentwickler).
 
 **Stellungnahme.** Nachprüfung: Grenze und Hinweis stehen (`anliegenLaenge.py`, Test), der
-Satz steht in [Anliegen](../../prozess/ablauf/anliegen.md). Offen bleibt die Hook-Zeile
-PostToolUse in `.claude/settings.json` (Antwort A, eigener Lauf).
+Satz steht in [Anliegen](../../prozess/ablauf/anliegen.md). Die Hook-Zeile steht jetzt:
+[settings.json](../../.claude/settings.json), PostToolUse, Matcher `Write|Edit`,
+`anliegenregeln.anliegenLaenge`. Erprobt an einer Kopie in /tmp: JSON gültig; Anliegen mit
+3.979 Zeichen gibt den Hinweis „bald kürzen“, mit 4.579 „kürzen“, ein kurzes und eine fremde
+Datei schweigen; Ausgang stets 0 und nur `additionalContext`, nie ein Block, also arbeiten
+und committen alle Rollen weiter. Rückweg: die Zeile aus `.claude/settings.json` streichen.

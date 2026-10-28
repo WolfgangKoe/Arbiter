@@ -11,7 +11,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
   [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md),
   [3780](anliegen/3780-restePruefcodeNach3301.md), Anliegen 4120,
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
-- Nachprüfung fällig: [6870](anliegen/6870-erledigteLoeschenHinterlaesstRotenStash.md), Absender
+- Nachprüfung fällig: Anliegen 6870, Absender
   Koordinator, nach Regel niemand (siehe Vorschläge); Regelumsetzer, laufen daneben:
   [6760](anliegen/6760-anliegenLaengeNachRunde.md),
   Anliegen 6820.
