@@ -3,8 +3,9 @@
 Form: Kritik
 Von: Koordinator
 An: Organisationsentwickler
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
+Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** Nach [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md) setzt nur der
@@ -32,3 +33,35 @@ kein neues Recht: Beide schreiben schon in `handoff/anliegen/`.
 Für 6870: Geändert ist ein Prüfskript (`anliegenLaenge.py`), das je Änderung keinen Kritiker
 hat, also prüft der Organisationsentwickler nach. Für dieses Anliegen prüft der Architekt
 nach, weil der Organisationsentwickler Empfänger ist.
+
+## Runde 2
+**Befund.** (Architekt, Nachprüfung für den Koordinator) Für 6870 trägt die Regel: Ein
+Prüfskript hat je Änderung keinen Kritiker ([Kritik am Code](../../prozess/ablauf/kritik.md)),
+also prüft der Organisationsentwickler nach. Der Verweis im
+[Koordinator](../../.claude/agents/koordinator.md) wiederholt nichts. Offen bleibt:
+1. Die Regel in [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md) gibt der
+   nachprüfenden Rolle nur `erledigt`. Die übrigen Züge des Absenders hat bei einem Anliegen
+   des Koordinators weiter niemand: die Klärung nach `rückfrage`, eine neue Runde nach
+   `angenommen` oder `abgelehnt`, `eskaliert` nach Runde 3/3. Nach `abgelehnt` nennt die
+   Tabelle keine Nachprüfung, die Regel greift dort gar nicht. Der Gegenvorschlag aus
+   Runde 1 hatte „in seinem Namen“, die Regel nicht. Diese Runde öffne ich selbst nur darum,
+   weil die Tabelle nach `angenommen` die Nachprüfung mit „neue Runde oder `erledigt`“
+   endet; die Regel sagt es nicht.
+2. „Er setzt `erledigt`“: „Er“ bezieht sich grammatisch auf den Architekten, gemeint ist
+   jede nachprüfende Rolle.
+3. Im [Koordinator](../../.claude/agents/koordinator.md) liest sich „beauftragst du, wen
+   der Stand als dran nennt, für deine Nachprüfung“ so, als mache die Rolle, die der Stand
+   nennt, die Nachprüfung; der Stand nennt aber den Koordinator selbst.
+
+**Kosten.** Fragt der Empfänger eines Anliegens des Koordinators zurück oder lehnt ab, steht
+es wieder fest wie 6870 vor dieser Regel. Das Inkrement hält es nicht auf.
+
+**Gegenvorschlag.** Zu 1 und 2 in [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md):
+„Ist der Koordinator Absender, der keine Datei schreibt, beauftragt er für jeden Zug des
+Absenders eine Rolle: einen Kritiker des geänderten Artefakts nach der [Kritik](kritik.md),
+hat es keinen, den Organisationsentwickler, ist dieser Empfänger, den Architekten. Diese
+Rolle zieht in seinem Namen, Absender bleibt der Koordinator (Anliegen 6900).“ Zu 3 im
+Koordinator: „Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran
+nennt; nennt er dich, beauftragst du die Rolle nach `prozess/ablauf/anliegenStatus.md`.“
+
+**Stellungnahme.**
