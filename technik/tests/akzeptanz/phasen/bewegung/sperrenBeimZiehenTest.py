@@ -24,6 +24,8 @@ from tests.akzeptanz.ziehen import mitMausUndFinger, modellZiehen
 nichts = Fraction(0)
 dreiZoll = Fraction(3)
 fünfZoll = Fraction(5)
+dreiOstenUndZweiNorden = (Fraction(3), Fraction(2))
+schrägAnDerFremdenBaseVorbei = (Fraction(3), Fraction(4))
 aufDieBoyz = (Fraction(-5, 2), nichts)
 
 
@@ -58,6 +60,24 @@ def testBew2_5LiegtKeineFremdeBaseAufDerStreckeGehtDasModellOhneSperre(
     schlachtInDerBewegungsphase.modellLoslassen(drittes, ziel)
 
     assert schlachtInDerBewegungsphase.stelle(drittes) == ziel
+
+
+def testBew2_5LiegtEineFremdeBaseSchrägMittenAufDerStreckeIstDasModellÜberEineBaseGesperrt(
+    schlachtInDerBewegungsphase, boyz
+):
+    *_, vorletztes, letztes = boyz.modelle
+    davor = schlachtInDerBewegungsphase.stelle(vorletztes)
+    fremdeBase = versetzt(davor, dreiOstenUndZweiNorden)
+    schlachtInDerBewegungsphase.modellLoslassen(letztes, fremdeBase)
+
+    gründe = sperrgründe(
+        schlachtInDerBewegungsphase.modellLoslassen,
+        vorletztes,
+        versetzt(davor, schrägAnDerFremdenBaseVorbei),
+    )
+
+    assert gründe == {Grund.überEineBase}
+    assert schlachtInDerBewegungsphase.stelle(vorletztes) == davor
 
 
 def testBew2_5IstDieEinheitNichtAusgewähltGiltAuchEinAnderesModellDerselbenEinheitAlsFremd(

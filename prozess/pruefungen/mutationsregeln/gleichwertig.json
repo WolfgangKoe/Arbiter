@@ -1,1 +1,32 @@
-[]
+[
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "quelle": "return überdecken(bewegteBase, von, ruhendeBase, ort)",
+  "fehler": "Rückgabe wird None",
+  "grund": "Nur bei Weg 0, dann ist von die jetzige Stelle; keine Stelle überdeckt eine fremde Base (Aufstellung und Bewegung sperren das, Übergehen gibt es noch nicht), also False; der einzige Aufrufer (sperrenBeimZiehen) wertet in any nur die Wahrheit aus (Anliegen 6301)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/anhaltenAnDerBewegungsweite.py",
+  "quelle": "erster = bisect_left(range(schritte + 1), x=True, key=überBeiSchritt)",
+  "fehler": "1 wird 2",
+  "grund": "überBeiSchritt ist steigend: Der Abstand zur Anfangsstelle ist entlang der Strecke konvex, die vorige Stelle liegt innerhalb der Bewegungsweite; bei schritte wahr, also auch bei schritte + 1. Ein angehängtes wahres Element ändert die erste wahre Stelle nicht (Anliegen 6301)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/beenden.py",
+  "quelle": "return set()",
+  "fehler": "Rückgabe wird None",
+  "grund": "Der einzige Aufrufer (Schlacht.phaseBeenden) prüft nur if gründe; leere Menge und None sind beide falsch (Anliegen 6301)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/querschnitt/schlachtrunden.py",
+  "quelle": "if nächste is Phase.bewegungsphase:",
+  "fehler": "Is wird IsNot",
+  "grund": "Stellen ändern sich nur in der Bewegungsphase (stellenBeimLoslassen); der Stand zu Beginn ist im Konstruktor gesetzt und bei jedem anderen Phasenwechsel derselbe, gelesen wird er nur in der Bewegungsphase (Anliegen 6291, 6301)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/querschnitt/schlachtrunden.py",
+  "quelle": "return self._auswahl.modellIstEbene(modell)",
+  "fehler": "Rückgabe wird None",
+  "grund": "Die Schlacht ruft ebeneWählen nie auf, kein Modell ist dort die Ebene, also False; der einzige Aufrufer (darstellung._modell) wertet nur die Wahrheit aus (Anliegen 6301)."
+ }
+]

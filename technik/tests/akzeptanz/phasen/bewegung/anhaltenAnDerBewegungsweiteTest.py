@@ -88,6 +88,34 @@ def testBew3_1ZiehtEinModellWeiterAlsDieBewegungsweiteHältArbiterEsAnDerBewegun
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
+def testBew3_1ZiehtEinModellNurEinenHauchWeiterHältArbiterEsHöchstensEinHundertstelDavorAn(
+    schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    ziel = versetzt(davor, (bewegungsweite("Warboss") + Fraction(1, 200), nichts))
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
+
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
+    assert liegtAufDerGeradenVon(davor, ziel, danach)
+
+
+def testBew3_1StehtEinModellSchonAnDerBewegungsweiteBleibtEsBeimWeiterZiehenStehen(
+    schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    start = schlachtInDerBewegungsphase.stelle(modell)
+    anDerBewegungsweite = versetzt(start, (bewegungsweite("Warboss"), nichts))
+    schlachtInDerBewegungsphase.modellLoslassen(modell, anDerBewegungsweite)
+    ziel = versetzt(anDerBewegungsweite, (dreiZoll, nichts))
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
+
+    assert schlachtInDerBewegungsphase.stelle(modell) == anDerBewegungsweite
+
+
 def testBew3_1DieDistanzZähltVonDerStelleZuBeginnDerBewegungsphase(
     schlachtInDerBewegungsphase, warboss
 ):

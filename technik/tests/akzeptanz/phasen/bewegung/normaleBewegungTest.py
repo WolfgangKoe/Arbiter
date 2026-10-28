@@ -53,6 +53,17 @@ def testBew1_5DasModellStehtDanachAnDerStelleDesLoslassens(schlachtInDerBewegung
     assert schlachtInDerBewegungsphase.stelle(modell) == ziel
 
 
+def testBew1_5LässtJemandDasModellAnSeinerStelleLosBleibtEsOhneSperreDort(
+    schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, davor)
+
+    assert schlachtInDerBewegungsphase.stelle(modell) == davor
+
+
 def testBew1_5IstDieGanzeEinheitEbeneRücktJedesModellUmDieselbeStreckeVor(
     schlachtInDerBewegungsphase, boyz
 ):

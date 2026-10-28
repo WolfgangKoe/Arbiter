@@ -12,6 +12,7 @@ from tests.akzeptanz.handgriffe import (
     spielerMit,
     stelleInDerZoneVon,
 )
+from tests.akzeptanz.schlacht import einModellAusDerKohärenzZiehen
 
 
 def aufstellungMitEinheitVon(modellzahl: int):
@@ -85,6 +86,14 @@ def testQue4_4ZweiGruppenOhneModellImAbstandVonZweiZollMachenDieEinheitInkohäre
     assert not aufstellung.inKohärenz(einheit)
 
 
+def testQue4_4DieSchlachtNenntEineEinheitMitEinemWeitEntferntenModellNichtInKohärenz(
+    schlachtInDerBewegungsphase, boyz
+):
+    einModellAusDerKohärenzZiehen(schlachtInDerBewegungsphase, boyz)
+
+    assert not schlachtInDerBewegungsphase.inKohärenz(boyz)
+
+
 @pytest.mark.parametrize(
     ("modellzahl", "abstände"),
     [
@@ -109,3 +118,7 @@ def testQue4_5EineEinheitOhneEinenDerFälleVierZweiBisVierVierIstInKohärenz(mod
     modelleMitAbständen(aufstellung, beginner, einheit, [Fraction(wert) for wert in abstände])
 
     assert aufstellung.inKohärenz(einheit)
+
+
+def testQue4_5DieSchlachtNenntEineEinheitInReiheInKohärenz(schlachtInDerBewegungsphase, boyz):
+    assert schlachtInDerBewegungsphase.inKohärenz(boyz)
