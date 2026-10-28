@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Das Item [architekturUmordnen](../../domaene/items/architekturUmordnen.md) hat
