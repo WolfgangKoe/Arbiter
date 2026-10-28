@@ -87,7 +87,7 @@ def verstöße(wurzel: Path) -> list[str]:
         quelltext = pfad.read_text(encoding="utf-8")
         gründe = docstringVerstöße(quelltext) if pfad.suffix == ".py" else []
         if mitTechnik or not relativ.startswith("technik/"):
-            if pfad.suffix != ".js":
+            if not relativ.startswith("technik/frontend/"):
                 gründe += kommentarVerstöße(quelltext, pfad.suffix)
             offene = todoZeilen(quelltext, pfad.suffix)
             gesamtzahl += len(offene)

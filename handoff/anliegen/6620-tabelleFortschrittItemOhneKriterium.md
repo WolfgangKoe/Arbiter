@@ -4,8 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** [Fortschritt](../../prozess/ablauf/fortschritt.md) führt die Zeilen zu Vertrag, Tests,
@@ -17,4 +16,7 @@ Anliegen 4301 nur für ein Item, dessen Text ein Kriterium nennt.
 **Gegenvorschlag.** Die Tabelle sagt für diese vier Zeilen „je Item mit Kriterium“; Kritik am
 Code, Abnahme und Löschen gelten je Item.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in der Tabelle von
+[Fortschritt](../../prozess/ablauf/fortschritt.md): Vertrag, Tests mit Kritik daran und
+„Tests grün“ gelten „je Item mit Kriterium“; die Kritik am Code steht als eigene Zeile
+„Technik 3 je Item“, Abnahme und Löschen bleiben „je Item“.

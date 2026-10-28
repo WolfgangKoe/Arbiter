@@ -13,12 +13,14 @@ Höchstmaß. Ihn schreibt nur das Skript, der Autor lässt ihn beim Ändern steh
 liest ihn für ihre Arbeit: Ihre offenen Schritte nennt ihr der Hook beim Start.
 
 Eine Zeile je Schritt nach der Tabelle, `- [ ] <Rolle>: <Schritt>`, abgehakt `- [x]`.
-Darunter eingerückt, was ihn aufhält, `Hindernis: <Text> (Anliegen <nr>)`, angenommen mit
-`; beseitigt: Commit „<Betreff>“`, und ein Kommentar des Stakeholders
+Darunter eingerückt, was ihn aufhält, `Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`
+(den Satz schreibt die Rolle für den Stakeholder, [Wir 5](../praemissen/wir.md)), angenommen
+gefolgt von `; beseitigt: Commit „<Betreff>“`, und ein Kommentar des Stakeholders
 `Kommentar: <Text> (Anliegen <nr>)`.
 - Fakt: Ein Hook hakt nach jedem Rollenlauf ab, was die Tabelle als Fakt nennt.
-- Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs ab, als Kritiker, wenn keiner
-  seiner Befunde mehr aufhält ([Kritik](kritik.md)):
+- Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs ab. Ein Kritiker hakt erst ab,
+  wenn unter seinem Schritt kein `Hindernis:` ohne `beseitigt` mehr steht und keiner seiner
+  Befunde mehr aufhält ([Kritik](kritik.md)):
   `python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken <Rolle> <Schritt>`; ein
   schon gesetzter Haken wird als solcher gemeldet. Hält sie etwas auf, meldet sie es mit
   `… standregeln.hindernis <Rolle> <Schritt> <Rolle, die es beseitigen kann> <Text> <Ziel>`.
@@ -39,9 +41,10 @@ Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
 Domäne 6 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
 Domäne 7 | je Kritiker: Kritik am Plan, offen wieder bei neuer Fassung des Plans | Befehl
 Domäne 8 | Stakeholder: Freigabe Plan | Fakt: Commit
-Technik 1 je Item mit beiden Hälften | Architekt: Vertrag zu Item <k>, bei beiden Hälften | Befehl
-Technik 1, 2 je Item | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
-Technik 3 je Item | Implementierer: Tests zu Item <k> grün · Architekt, Reviewer: je Kritik am Code | Befehl
+Technik 1 je Item mit Kriterium | Architekt: Vertrag zu Item <k>, bei beiden Hälften | Befehl
+Technik 1, 2 je Item mit Kriterium | Testautor: Tests zu Item <k> · je Kritiker: Kritik daran | Fakt: jedes Kriterium des Items hat einen Test · Befehl
+Technik 3 je Item mit Kriterium | Implementierer: Tests zu Item <k> grün | Befehl
+Technik 3 je Item | Architekt, Reviewer: je Kritik am Code | Befehl
 Technik 4 | Reviewer: DoD über das Inkrement | Befehl
 Technik 5 je Item | Fachkritiker: Item <k> abgenommen · Planer: Item <k> gelöscht | Befehl · Fakt: Datei weg
 Technik 6, 7 | Reviewer: Review geschrieben · je Kritiker: Kritik am Review · Stakeholder: Freigabe Review | Fakt: `# Review · Zyklus <n>` · Befehl · Fakt: Commit

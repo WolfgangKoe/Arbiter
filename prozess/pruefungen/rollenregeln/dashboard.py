@@ -13,6 +13,7 @@ from rollenregeln.dashboardSeiten import schalterSkriptFür, schalterStil, seite
 from rollenregeln.dashboardStil import legende, stil
 from rollenregeln.laufLesen import Lauf, läufeLesen
 from standregeln.phasenfolge import lage
+from standregeln.produktstand import belegungAlsText
 
 dashboardDatei = "dashboard.html"
 minute = 60
@@ -106,9 +107,9 @@ def seiteErzeugen(
 
 def dashboardSchreiben(ordner: Path) -> Path:
     ziel = ordner / dashboardDatei
-    seite = seiteErzeugen(
-        läufeLesen(ordner), lage(ordner).alsText(), hinweise(ordner), architekturKarte(ordner)
-    )
+    aktuell = lage(ordner)
+    lageText = f"{aktuell.alsText()} · {belegungAlsText(ordner, aktuell)}"
+    seite = seiteErzeugen(läufeLesen(ordner), lageText, hinweise(ordner), architekturKarte(ordner))
     ziel.write_text(seite, encoding="utf-8")
     return ziel
 

@@ -144,6 +144,11 @@ def testSauberesCssIstGrün(tmp_path):
         pytest.param("arbiter/kommentare", "/* Block */\nexport const eins = 1;\n", id="Block"),
         pytest.param("arbiter/kommentare", "// TODO\nexport const eins = 1;\n", id="TODO leer"),
         pytest.param("arbiter/kommentare", "// Warum: weil\nexport const eins = 1;\n", id="Warum"),
+        pytest.param(
+            "no-inline-comments",
+            "export const eins = 1; // TODO: Rand\n",
+            id="angehängtes TODO",
+        ),
         pytest.param("arbiter/kommentare", "// Regel: V8\nexport const eins = 1;\n", id="Regel"),
     ],
 )

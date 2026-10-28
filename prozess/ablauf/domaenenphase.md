@@ -17,7 +17,7 @@
    begründet er es. Am Ende der Abschnitt `## Freigabe` ([Freigabe und Kommentare](freigabe.md)).
    Weitere Anforderungen kommen in späteren Zyklen. Jedes Item steht als Link
    `[…](../domaene/items/<id>.md)`; daran erkennt die Rückverfolgung die Items des Plans
-   ([DoD 2](dod.md)). Mechanismus: `lesen/plan.py` (`offeneItems`). Jedes Item nennt
+   ([Kriterienregeln](../regeln/kriterienregeln.md)). Mechanismus: `lesen/plan.py` (`offeneItems`). Jedes Item nennt
    Kriterien ohne Test (`AUF-7.3`) oder ihre Anforderung; bis dahin ist der Plan nicht zur
    Freigabe bereit. Mechanismus: nur Text; der Stand nennt die Kriterien ohne Test.
 7. Kritik am Plan samt Items, Anforderungen und Mockups ([Kritik](kritik.md)).

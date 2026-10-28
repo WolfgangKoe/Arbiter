@@ -1,7 +1,16 @@
 # Kritik
 
-Je Artefakt prüft jeder seiner Kritiker einmal und ordnet jeden Befund nach
-[Ich 3](../praemissen/ich.md) ein. Die aufhaltenden Befunde an einen Autor stehen in einem
+Je Artefakt prüft jeder seiner Kritiker einmal und ordnet jeden Befund ein
+([Ich 3](../praemissen/ich.md)):
+- Hält auf: Ein Schritt des Happy Path fehlt, eine *Sperre* greift zu Unrecht oder fehlt,
+  obwohl ein Kriterium sie verlangt, ein Test prüft sein Kriterium nicht, neuer Code
+  verletzt Architektur oder Lesbarkeit ([Es](../praemissen/es.md)), eine Prüfung ist rot.
+- Wartet auf die nächste Phase seiner Perspektive: Randfälle, Lücken abseits des Happy Path
+  (auch eine *Sperre*, die nur der Regeltext verlangt), Namen und Ablage von
+  Hilfsfunktionen, solange keine Prüfung rot ist.
+- Entfällt: Form und Länge eines Anliegens, Geschmack ohne Regel.
+
+Einordnen: nur Text. Die aufhaltenden Befunde an einen Autor stehen in einem
 Anliegen, die wartenden in einem zweiten mit `Wartet auf: <Phase>` der Perspektive des
 Autors; was entfällt, schreibt er nicht, ohne Befund keine Datei. Der Autor bessert nach
 oder widerspricht; eine weitere Runde öffnet der Kritiker nur für, was weiter aufhält, nach

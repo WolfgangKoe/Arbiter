@@ -4,8 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat entschieden: Jede Phase trägt ein eigenes Kürzel, die
@@ -21,4 +20,7 @@ kann BEW-1 und BEW-2 zu Unrecht beanstanden. Die Prüfungen erkennen BEW schon.
 „`phasen/<phase>` je Phase ein Kürzel, `aufstellen` (AUF), `bewegung` (BEW)“. Ein neues
 Kürzel schlägt der Anforderungsautor weiter dem Stakeholder vor (Rolle Anforderungsautor).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in P3 der [Retro 8](../retro.md):
+[Domäne](../../domaene/CLAUDE.md) nennt „`phasen/<phase>` (je Phase ein Kürzel: AUF, BEW)“;
+kürzer als dein Vorschlag, sonst überschritte die Datei 1.500 Zeichen. Die Ordnernamen
+`aufstellen` und `bewegung` stehen im Baum.

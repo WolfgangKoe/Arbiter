@@ -8,6 +8,3 @@ Mechanismus: nur Text.
   ([Technikphase](technikphase.md), Schritt 1; Anliegen 241).
 - Prozesskritiker: Prozesskritik fehlt, oder der Organisationsentwickler verteidigt
   wiederholt eigene Regeln.
-- Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der
-  Belegprüfer nach der ersten falschen Behauptung. Sie startet die Rolle, die das Ergebnis
-  braucht.

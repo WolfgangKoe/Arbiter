@@ -29,6 +29,7 @@ export default [
       complexity: ["error", 15],
       "no-restricted-properties": ["error", ...verboteneAufrufe],
       "no-restricted-syntax": ["error", ...verboteneSyntax],
+      "no-inline-comments": "error",
       "arbiter/kommentare": "error",
     },
   },

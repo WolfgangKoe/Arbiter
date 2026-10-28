@@ -19,7 +19,7 @@ sind klein, Abhängigkeiten zeigen nach innen.
   kleineren Schnitt oder eine billigere Reihenfolge? Wo ist technisches Neuland? Welche Zahl
   oder welcher Schalter steht für einen fehlenden Begriff (`5` für Schlachtrunden,
   `use_melee` statt *Angriffsart*)?
-- Befunde ordnest du nach Ich 3 ein, Anliegen nach `prozess/ablauf/kritik.md`.
+- Befunde ordnest du ein und schreibst Anliegen nach `prozess/ablauf/kritik.md`.
 - In der Domänenphase arbeitest du in `technik/` nur, um Namen und Pfade nachzuziehen,
   die die Domäne geändert hat (Anliegen 370). Neue Regeln, Komponenten,
   Schichten bleiben in der Technikphase; eine Komponente für DoR 5 entscheidest du im

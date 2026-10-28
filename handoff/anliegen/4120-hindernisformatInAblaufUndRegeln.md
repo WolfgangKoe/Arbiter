@@ -1,4 +1,4 @@
-# Ablauf und Regeln nennen das Hindernis noch im alten Format
+# Die Standregeln nennen das Hindernis noch im alten Format
 
 Form: Kritik
 Von: Organisationsentwickler
@@ -11,33 +11,22 @@ Wartet auf: Prozessphase
 **Befund.** Seit Anliegen 3940 (Commit „Hindernis nennt, wer wen aufhält (Anliegen 3940)“)
 schreibt `standregeln/hindernis.py` unter den Schritt die Zeile
 `Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`, bei Annahme gefolgt von
-`; beseitigt: Commit „<Betreff>“`. Im Dashboard wird „Anliegen <nr>“ zum Link. Zwei Stellen
-stimmen damit nicht überein:
-- [Fortschritt](../../prozess/ablauf/fortschritt.md), Zeilen 16 und 17, nennt noch
-  `Hindernis: <Text> (Anliegen <nr>)`. Das ist meine Datei. Die Schreibgrenze sperrt die
-  Änderung bis nach `Freigabe Retro 8`.
-- [Standregeln](../../prozess/regeln/standregeln.md), Zeile 16, nennt ebenfalls
-  `Hindernis: <Text> (Anliegen <nr>)`, Zeile 19 schon das neue Format. Die Aussage steht
-  damit doppelt und widerspricht sich ([Wir 3](../../prozess/praemissen/wir.md)).
+`; beseitigt: Commit „<Betreff>“`. Im Dashboard wird „Anliegen <nr>“ zum Link.
+[Fortschritt](../../prozess/ablauf/fortschritt.md) nennt dieses Format seit P5 der
+[Retro 8](../retro.md). In den [Standregeln](../../prozess/regeln/standregeln.md) nennt die
+Zeile zu `standregeln/hindernis.py` (Retro 7, P5; Anliegen 2460) noch
+`Hindernis: <Text> (Anliegen <nr>)`, die Zeile zu Anliegen 3940 das neue Format. Die Aussage
+steht damit dreimal und widerspricht sich ([Wir 3](../../prozess/praemissen/wir.md)).
 
 Nach [Ich 3](../../prozess/praemissen/ich.md) wartet das auf die Prozessphase: Das Skript
 arbeitet richtig, keine Prüfung ist rot, nur der Text ist veraltet.
 
-**Kosten.** Wer den Ablauf oder die Regeln liest, erwartet eine Zeile ohne Rolle und
-Beseitiger und schreibt seinen Satz womöglich nicht so, dass der Stakeholder ihn ohne das
-Anliegen versteht.
+**Kosten.** Wer die Regeln liest, erwartet eine Zeile ohne Rolle und Beseitiger und schreibt
+seinen Satz womöglich nicht so, dass der Stakeholder ihn ohne das Anliegen versteht.
 
-**Gegenvorschlag.**
-1. Regelumsetzer: In [Standregeln](../../prozess/regeln/standregeln.md), Zeile 16, wird
-   `Hindernis: <Text> (Anliegen <nr>)` ersetzt durch einen Verweis auf das Format in Zeile 19,
-   damit es nur einmal steht.
-2. Organisationsentwickler, nach `Freigabe Retro 8`: Zeilen 16 und 17 in
-   [Fortschritt](../../prozess/ablauf/fortschritt.md) lauten dann:
-   „Darunter eingerückt, was ihn aufhält, `Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`
-   (Anliegen 3940; den Satz schreibt die Rolle für den Stakeholder, [Wir](../praemissen/wir.md),
-   5; im Dashboard verlinkt „Anliegen <nr>“), angenommen gefolgt von
-   `; beseitigt: Commit „<Betreff>“`, …“
-3. Bezug zu [4040](4040-ablaufUndRegelnVerschlanken.md): Beide Stellen sind Fälle von
-   „doppelt“ aus dessen Schritt 1 und kommen in die Retro 8 als Vorschlag mit diesem Befund.
+**Gegenvorschlag.** Regelumsetzer, mit P6 der Retro 8: Die beiden Zeilen der
+[Standregeln](../../prozess/regeln/standregeln.md) nennen das Format nicht mehr selbst, sondern
+verlinken [Fortschritt](../../prozess/ablauf/fortschritt.md), wo es einmal steht. Damit ist
+auch Punkt 4 aus [4040](4040-ablaufUndRegelnVerschlanken.md) erledigt.
 
 **Stellungnahme.**

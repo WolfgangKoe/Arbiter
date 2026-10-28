@@ -26,4 +26,3 @@ Kommentar: .
   verständlich (Anliegen 354). Mechanismus: nur Text.
 - Kommentare und Stellungnahmen bleiben, bis der Autor die Datei im nächsten Zyklus neu
   schreibt; Höchstmaß: [Kennzahlen](../kennzahlen.md).
-- Die Etappe gibt der Stakeholder mit „.“ im Chat frei.

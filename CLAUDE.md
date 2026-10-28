@@ -22,7 +22,7 @@ handeln außen.
 
 ## Technik-Rahmen
 Python und Flask, Frontend und Backend getrennt. Die Domäne kennt weder Flask noch die
-Datenbank. Akzeptanztests entstehen vor dem Code.
+Datenbank; Handwerk am Code: [Es](prozess/praemissen/es.md).
 
 @prozess/praemissen/absicht.md
 

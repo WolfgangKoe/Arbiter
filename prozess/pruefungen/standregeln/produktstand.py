@@ -4,7 +4,8 @@ import re
 from pathlib import Path
 
 from gemeinsam.pfade import anforderungsOrdner, etappenOrdner
-from kriterienregeln.kriterium import Kriterium, kriterien
+from kriterienregeln.kriterienEtappe import etappeJeKriterium
+from kriterienregeln.kriterium import Kriterium
 from kriterienregeln.rueckverfolgung import fehlendeTests, itemTexteDesFreigegebenenPlans, umfasst
 from standregeln.phasenfolge import Lage
 
@@ -21,23 +22,34 @@ def etappenzahl(wurzel: Path) -> int:
     return max(nummern, default=0)
 
 
-def kriterienZählen(wurzel: Path) -> tuple[int, int]:
-    """Belegte und alle Kriterien: belegt hat einen Test und steht in keinem offenen Item."""
+def kriterienZählen(wurzel: Path, etappe: int | None = None) -> tuple[int, int]:
+    """Belegte und alle Kriterien, auf Wunsch nur die der Etappe; belegt: Test, in keinem Item."""
     itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
-    alle: set[Kriterium] = set()
+    alle: dict[Kriterium, int | None] = {}
     for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        alle |= kriterien(datei)
+        alle |= etappeJeKriterium(datei)
+    gezählt = {kriterium for kriterium, nummer in alle.items() if etappe in (None, nummer)}
     fehlende = fehlendeTests(wurzel, itemTexte)
     ohneTest = {kriterium for fehlend in fehlende for kriterium in fehlend.kriterien}
-    inItems = {kriterium for kriterium in alle if umfasst(itemTexte, kriterium)}
-    return len(alle - ohneTest - inItems), len(alle)
+    inItems = {kriterium for kriterium in gezählt if umfasst(itemTexte, kriterium)}
+    return len(gezählt - ohneTest - inItems), len(gezählt)
+
+
+def belegungAlsText(wurzel: Path, aktuell: Lage) -> str:
+    """„74 von 94 Kriterien belegt, davon Etappe 2: 30 von 40“."""
+    belegt, alle = kriterienZählen(wurzel)
+    text = f"{belegt} von {alle} Kriterien belegt"
+    treffer = etappenüberschrift.match(aktuell.etappe)
+    if not treffer:
+        return text
+    belegtInEtappe, alleInEtappe = kriterienZählen(wurzel, int(treffer[1]))
+    return f"{text}, davon Etappe {treffer[1]}: {belegtInEtappe} von {alleInEtappe}"
 
 
 def produktstandAlsText(wurzel: Path, aktuell: Lage) -> str:
-    """„Etappe 1 von 7 (Aufstellen), Zyklus 5; 74 von 94 Kriterien belegt“."""
-    belegt, alle = kriterienZählen(wurzel)
+    """„Etappe 1 von 7 (Aufstellen), Zyklus 5; 74 von 94 Kriterien belegt, davon Etappe 1: …“."""
     treffer = etappenüberschrift.match(aktuell.etappe)
     etappe = aktuell.etappe
     if treffer:
         etappe = f"Etappe {treffer[1]} von {etappenzahl(wurzel)} ({treffer[2]})"
-    return f"{etappe}, Zyklus {aktuell.zyklus}; {belegt} von {alle} Kriterien belegt"
+    return f"{etappe}, Zyklus {aktuell.zyklus}; {belegungAlsText(wurzel, aktuell)}"

@@ -14,8 +14,9 @@ deutsch mit Umlauten, Dateinamen ASCII.
    Modul `<modul>Test.py`. Namen, die ein Werkzeug vorgibt (`conftest.py`, `__init__`,
    `CLAUDE.md`, Skill-Ordner), bleiben; Etappen, Items und Anliegen werden nicht umbenannt.
    Mechanismus: `formregeln/benennung.py`.
-3. Je Anforderung eine Akzeptanztest-Datei nach [Architektur, T1](../../technik/architektur.md).
-   Mechanismus: `kriterienregeln/rueckverfolgung.py` (`<anforderungsdatei>Test.py`), sonst nur Text.
+3. Akzeptanztests entstehen vor dem Code, je Anforderung eine Datei nach
+   [T1](../../technik/architektur/tests.md). Mechanismus:
+   `kriterienregeln/rueckverfolgung.py` (`<anforderungsdatei>Test.py`), sonst nur Text.
 4. Testfunktionen `test<Kürzel><n>_<m><Satz>`: `testAuf7_3EinModellEinerAnderenEinheitIstEinheitBegonnen`
    (Skill `akzeptanztest-schreiben`). Mechanismus: `formregeln/benennung.py`,
    `kriterienregeln/rueckverfolgung.py`.
@@ -24,22 +25,22 @@ deutsch mit Umlauten, Dateinamen ASCII.
 6. Keine Indizes auf Fachobjekte (`einheiten[0]`): benennen oder entpacken. Mechanismus: nur Text.
 7. Kein lambda als Hülle um einen Aufruf, keine Bindung per Standardargument. Mechanismus:
    nur Text.
-8. Der Code erklärt sich selbst. Kommentare nur aus einer festen Liste: Werkzeugkommentare mit
-   Regelcode (`# noqa: <Code>`, `// eslint-disable-next-line <Regel>`) und `TODO: <was>`,
-   höchstens drei; ein TODO von vor der laufenden Technikphase macht die DoD über das
-   Inkrement rot. Docstrings einzeilig (Anliegen 1660, 1860). Mechanismus:
-   `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`.
+8. Der Code erklärt sich selbst. Ein Docstring steht nur als Kopf einer Akzeptanztestdatei
+   nach [T1](../../technik/architektur/tests.md), sonst keiner (6430). Kommentare
+   nur als Werkzeugkommentar mit Regelcode (`# noqa: <Code>`,
+   `// eslint-disable-next-line <Regel>`) und `TODO: <was>`, höchstens drei; ein TODO von
+   vor der laufenden Technikphase macht die DoD über das Inkrement rot. Mechanismus:
+   `formregeln/kommentare.py`, `frontendregeln/eslintKommentare.mjs`; Docstring: nur Text.
 9. Die Form folgt der Verständlichkeit: wenige Fälle als `if` mit frühem `return`; viele, die
    sich nur in Daten unterscheiden, als Tabelle; viele mit eigenem Verhalten als eigene Typen.
    Urteil des Reviewers, Schwellen: [Ablauf, DoD](../ablauf/dod.md).
 
 ## SOLID
-- S: Ein Modul hat eine Aufgabe; sein Docstring nennt sie. Urteil des Reviewers. Mechanismus:
-  nur Text.
+- S: Ein Modul hat eine Aufgabe; sein Name nennt sie. Mechanismus: Urteil des Reviewers.
 - O: Ein neuer Fall kommt als Zeile, Katalogdatum oder Typ hinzu, nicht als Zweig in
   bestehendem Code (9). Mechanismus: nur Text.
-- L: Ein Untertyp hält den Vertrag seines Obertyps. Noch ohne Anlass: keine Klassenhierarchie.
-- I: Eine Schnittstelle verlangt nur, was ihr Nutzer aufruft. Noch ohne Anlass.
+- L, I: Ein Untertyp hält den Vertrag seines Obertyps; eine Schnittstelle verlangt nur, was
+  ihr Nutzer aufruft. Mechanismus: nur Text.
 - D: Abhängigkeiten zeigen nach innen, ohne Kreis: im Produkt nach
   [Architektur, A1 und A2](../../technik/architektur.md). Mechanismus:
   `formregeln/importvertrag.py`.

@@ -62,7 +62,7 @@ nur Text.
   Text.
 - Der Koordinator beauftragt die Rolle, die dran ist: Lief sie in diesem Chat und liegt ihre
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
-  neu. Ein Anliegen, das aufhält ([Ich 3](../praemissen/ich.md)), bearbeitet der Empfänger in
+  neu. Ein Anliegen, das aufhält ([Kritik](kritik.md)), bearbeitet der Empfänger in
   jeder Phase; die übrigen tragen `Wartet auf: <Phase>` seiner Perspektive.
   Mechanismus: Wartende sind nicht dran, `anliegenregeln/anliegenDran.py`; ob ein Anliegen
   aufhält: nur Text.

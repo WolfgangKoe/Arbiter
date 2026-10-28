@@ -26,7 +26,7 @@ Mechanismus, der ohne Tokenkosten wirkt.
 ## Was du tust
 - Umsetzen, was dein Auftrag verlangt: Hook, Prüfskript, Berechtigung oder Linter-Regel.
   „Mechanismus: nur Text“ allein ist kein Auftrag: Ein Mechanismus entsteht erst bei
-  beobachtetem Bedarf (`prozess/ablauf/prozessphase.md`).
+  beobachtetem Bedarf (`prozess/backlog.md`).
 - Skripte liegen in `prozess/pruefungen/`, nur Standardbibliothek. Benennung und
   Lesbarkeit nach `prozess/praemissen/es.md`, wie für jeden Code.
 - Prüfkonfiguration der Technik (`pyproject.toml`, ruff, Architekturverträge, eslint,

@@ -1,6 +1,6 @@
 ---
 name: akzeptanztest-schreiben
-description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau, Sperren. Beispiel und Gegenbeispiel aus AUF-7.
+description: Akzeptanztests zu einer Anforderung schreiben: Datei, Namen, Aufbau, Sperren, jeder Spieler. Beispiel aus AUF-7, Gegenbeispiele aus AUF-7 und QUE-9.
 ---
 # Akzeptanztest schreiben
 
@@ -49,7 +49,7 @@ def testAuf7_3EinModellEinerAnderenEinheitIstEinheitBegonnen(
 Gut: Der Name sagt Kriterium und Aussage, die Handlung steht allein, geprüft werden die
 Gründe und der unveränderte Zustand, jedes Fachobjekt hat einen Namen aus dem Glossar.
 
-## Gegenbeispiel
+## Gegenbeispiel: Form
 AUF-7.2, wie es nicht stehen soll:
 
 ```python
@@ -62,3 +62,18 @@ def test_auf_7_2_nach_der_aufstellung_ist_kein_modell_wählbar(aufstellung, a, b
 Schlecht: snake_case, Fixtures `a` und `b`, `einheiten[0]` statt eines Namens, lambda mit
 Bindung per Standardargument, die Handlung steckt im Assert, die Schleife verschweigt,
 welches Modell scheitert.
+
+## Gegenbeispiel: nur Spieler 1
+QUE-9.2 gilt für jeden *Spieler*, der „Erster Zug“ klickt; dieser Test prüft nur einen:
+
+```python
+def testQue9_2DerDienstSetztDenSpielerMitDemErstenZugAmZug(dienstNachDerAufstellung):
+    antwort = ersterZugWählen(dienstNachDerAufstellung, 1)
+
+    assert antwort.get_json()["schlacht"]["amZug"] == 1
+```
+
+Schlecht: Ein Fehler, der nur Spieler 2 trifft, bleibt grün. Nennt das Kriterium jeden
+*Spieler* oder jede *Schlachtrunde*, prüft der Test jeden als `parametrize`, so in
+`ersterZugTest.py`:
+`@pytest.mark.parametrize("spielernummer", [1, 2], ids=["spielerEins", "spielerZwei"])`.

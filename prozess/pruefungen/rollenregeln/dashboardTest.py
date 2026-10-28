@@ -222,6 +222,16 @@ def testKaputteZeileWirdÜbersprungen(tmp_path):
     assert dashboardSchreiben(tmp_path).is_file()
 
 
+def testDasDashboardNenntDieBelegtenKriterienDerEtappeNebenAllen(tmp_path):
+    (tmp_path / "domaene/etappen").mkdir(parents=True)
+    (tmp_path / "domaene/etappen/02-bewegen.md").write_text("# Etappe 2 · Bewegen\n", "utf-8")
+    (tmp_path / "domaene/anforderungen").mkdir(parents=True)
+    anforderung = "### AU-1 · A\n\nEtappe: 2\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei. (Etappe 3)\n"
+    (tmp_path / "domaene/anforderungen/aufstellung.md").write_text(anforderung, "utf-8")
+    seite = dashboardSchreiben(tmp_path).read_text(encoding="utf-8")
+    assert "0 von 2 Kriterien belegt, davon Etappe 2: 0 von 1" in seite
+
+
 def testJetztHatDieOrtszone():
     assert jetzt().tzinfo == datetime.now().astimezone().tzinfo
 

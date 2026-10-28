@@ -14,9 +14,7 @@ in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Standregeln]
    danach anders geschieht. Mit Beginn der Phase startet der Koordinator den vollen
    Mutationslauf ([DoD](dod.md)) im Hintergrund; der Reviewer schreibt seine Lücken
    als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
-   (Anliegen 1671, F2). Ein Mechanismus entsteht wie eine Rolle erst bei
-   beobachtetem Bedarf; Vorrang hat das Produkt: Anforderung, Akzeptanztest, grüner
-   Produktcode (Retro 3). Dazu: Neuerungen von Claude Code, die einen eigenen
+   (Anliegen 1671, F2). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
    Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist

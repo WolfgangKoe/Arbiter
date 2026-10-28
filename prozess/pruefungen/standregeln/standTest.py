@@ -93,8 +93,20 @@ def testStandBeginntMitEtappeUndBelegtenKriterien(repo):
     repo.datei("domaene/anforderungen/aufstellung.md", text)
     repo.datei("technik/tests/akzeptanz/aufstellungTest.py", "def testAu1_1Eins(): ...\n")
     assert stand(repo.wurzel).startswith(
-        "Stand: Etappe 1 von 2 (Aufstellen), Zyklus 1; 1 von 2 Kriterien belegt · "
+        "Stand: Etappe 1 von 2 (Aufstellen), Zyklus 1; 1 von 2 Kriterien belegt, "
+        "davon Etappe 1: 0 von 0 · "
     )
+
+
+def testStandNenntDieBelegtenKriterienDerEtappeNebenAllen(repo):
+    repo.datei("domaene/etappen/02-bewegen.md", "# Etappe 2 · Bewegen\n")
+    text = (
+        "### AU-1 · A\n\nEtappe: 2\n\n- AU-1.1 Eins.\n- AU-1.2 Zwei.\n- AU-1.3 Drei. (Etappe 3)\n\n"
+        "### AU-2 · B\n\n- AU-2.1 Vier.\n"
+    )
+    repo.datei("domaene/anforderungen/aufstellung.md", text)
+    repo.datei("technik/tests/akzeptanz/aufstellungTest.py", "def testAu1_1Eins(): ...\n")
+    assert "; 1 von 4 Kriterien belegt, davon Etappe 2: 1 von 2 · " in stand(repo.wurzel)
 
 
 @pytest.mark.stand

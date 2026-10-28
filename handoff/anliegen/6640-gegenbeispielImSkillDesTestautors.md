@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Kommentar zu P1 in der [Retro 8](../retro.md). In Technikphase 8 ließen
@@ -17,7 +17,7 @@ Was ein Gegenbeispiel ist: Die Anleitung des Testautors (Skill
 einen guten Test und einen schlechten, „wie es nicht stehen soll“, mit dem Grund. Der
 schlechte heißt Gegenbeispiel; heute zeigt er nur Formfehler (Namen, Indizes, lambda).
 
-In [6431](6431-fragenDerRetro8.md), F2, standen zwei Wege: A Opus, B Sonnet mit dem
+In Anliegen 6431, F2, standen zwei Wege: A Opus, B Sonnet mit dem
 Gegenbeispiel. Meine Empfehlung war „A und das Gegenbeispiel“, beides zusammen. Du hast
 „A“ geantwortet; ich las das als Opus ohne Gegenbeispiel. Das kann ein Missverständnis sein.
 

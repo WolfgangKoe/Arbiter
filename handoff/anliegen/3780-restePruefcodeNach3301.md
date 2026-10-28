@@ -40,3 +40,5 @@ mehrere Stellen.
 3. Die Bedingung auf `relativ.startswith("technik/frontend/")` statt auf die Endung stellen.
 4. Eine Funktion in `lesen/anliegenKopf.py` (etwa `wartetAufPhase(anliegen)`) und ein Text für
    das Ziel (`die <Phase>` oder die Nummer), den beide Anzeigen nutzen.
+
+**Stellungnahme (Regelumsetzer).** Zu 2: umgesetzt, `no-inline-comments` in `eslint.config.mjs`, Fall „angehängtes TODO“ in `frontendTest.py` rot. Zu 3: umgesetzt, die Bedingung in `kommentare.py` fragt `technik/frontend/`. Einen Scheiter-Test gibt es nicht: `geprüfteDateien` (`formregeln/benennung.py`, `istGeprüft`) reicht nur `.js` unter `technik/frontend/` weiter, eine `.js` außerhalb erreicht `kommentare.py` nie. Die Lücke liegt dort; sie zu schließen ändert die Dateiauswahl aller Formregeln und wäre ein eigener Auftrag. Punkte 1 und 4 folgen (P6, nach P7).

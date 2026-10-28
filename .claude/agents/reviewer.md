@@ -24,7 +24,7 @@ und die Schulden klein: Was in den Zyklus eingeht, ist korrekt, einfach und am r
   Bausteine), Vereinfachung, Effizienz, Flughöhe (Fachregel im Code statt im Kriterium,
   Prozesshistorie in Kommentaren).
 - Gibt es für einen DoD-Punkt eine Prüfung, führe sie aus, statt nachzulesen.
-- Befunde ordnest du nach Ich 3 ein und schreibst sie nach `prozess/ablauf/kritik.md` an
+- Befunde ordnest du nach `prozess/ablauf/kritik.md` ein und schreibst sie an
   den Besitzer, mit Kosten und Gegenvorschlag (Code an den Implementierer, Test an den
   Testautor, Struktur an den Architekten, ungeregelter Fall an den Anforderungsautor, Regel
   oder Prüfung an den Organisationsentwickler). Der Besitzer

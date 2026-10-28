@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -35,4 +35,12 @@ verschoben, fehlt einer Rolle eine Haltung, die heute trägt.
    nur der Stakeholder, verschoben wird erst nach `Freigabe Retro 8`.
 3. Danach sind alle Prüfungen grün, jede verschobene Regel nennt weiter ihren Mechanismus.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in P3 der [Retro 8](../retro.md), nach deiner Antwort F3 A:
+alle sechs Stellen verschoben. [Ich](../../prozess/praemissen/ich.md) ist jetzt 1.887 statt
+2.768 Zeichen lang: Ich 1 ohne die Moderation, dafür „Fragen an ihn stehen nur in einem
+Anliegen“ statt der Datei in `handoff/` aus Ich 5; Ich 2 verlinkt die
+[Rollenregeln](../../prozess/regeln/rollenregeln.md); die Einordnung aus Ich 3 steht in der
+[Kritik](../../prozess/ablauf/kritik.md). „Akzeptanztests entstehen vor dem Code“ steht in
+[Es 3](../../prozess/praemissen/es.md), die [Root-CLAUDE.md](../../CLAUDE.md) verlinkt Es;
+Es L und I ohne „Noch ohne Anlass“. Verweise auf Ich 3 in Ablauf und bei Reviewer,
+Fachkritiker und Architekt zeigen auf die Kritik. Alle Prüfungen mit Marke `stand` grün.

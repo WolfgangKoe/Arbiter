@@ -6,19 +6,11 @@
    Ist in `technik/tests` ein Test rot, gilt die Schwelle nicht: Die Prüfung misst nicht und
    nennt die Zahl der roten Tests (Tests vor dem Code brechen auch geteilte Fixtures).
    Mechanismus: `formregeln/abdeckung.py` (`aussetzung`, `verstoß`).
-2. Prüfmechanismen grün. Mechanismus: Benennung und Spiegel (`formregeln/benennung.py`), Kriterium ↔
-   Test (`kriterienregeln/rueckverfolgung.py`: Kennung höchstens einmal je Datei; ein Kriterium ohne Test ist
-   rot, sobald ein offenes Item eines freigegebenen Plans es nennt, vorher nennt es der
-   Stand), Komplexität (`formregeln/werkzeugaufruf.py`, `complexipyAufrufen`), Code →
-   Glossar (`formregeln/glossar.py`), Kommentare und Docstrings nach `prozess/praemissen/es.md` 8
-   (`formregeln/kommentare.py`), toter Code (vulture über `technik/arbiter` und
-   `technik/tests/akzeptanz`, ohne Einheitstests: `unbenutzterCode` in `formregeln/abdeckung.py`), alle
-   im Lauf von `python3 -m pytest prozess/pruefungen`, ruff dort über `formregeln/werkzeugaufruf.py` (`ruffAufrufen`);
-   SonarLint (Standardprofil ohne Namensregeln, Ordner nach [Formregeln](../regeln/formregeln.md)) mit
-   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`, beim Commit als Hook
-   `sonarlint` ([Formregeln](../regeln/formregeln.md), Anliegen 216); Höchstmaße nur Text ([Kennzahlen](../kennzahlen.md)). Urteil: Zeilen,
-   die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung, fehlendes
-   Kriterium oder tot); Glossar → Code.
+2. Prüfmechanismen grün: `python3 -m pytest prozess/pruefungen` und SonarLint mit
+   `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint`. Was sie prüfen:
+   [Formregeln](../regeln/formregeln.md), [Kriterienregeln](../regeln/kriterienregeln.md).
+   Urteil: Zeilen, die nur Einheitstests erreichen, beurteilt der Reviewer (Vorbedingung,
+   fehlendes Kriterium oder tot); Glossar → Code.
 3. Item gelöscht, die Anforderung beschreibt das gebaute Verhalten. Mechanismus: nur Text.
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: nur Text.

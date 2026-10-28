@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -21,4 +21,8 @@ wie die Kommentare `# Regel:` aus Anliegen 1660.
 **Gegenvorschlag.** Die [Retro 8](../retro.md) behandelt es; nach deiner Wahl F1 A (6431)
 setzen P3 (Es 8) und P4 (Prüfung, Prüfcode) es um.
 
-**Stellungnahme.**
+**Stellungnahme.** Die Regel steht, P3 der [Retro 8](../retro.md):
+[Es 8](../../prozess/praemissen/es.md) lässt einen Docstring nur als Kopf einer
+Akzeptanztestdatei nach T1 zu, sonst keinen; Es S: „sein Name nennt sie“. Gelöscht werden
+die Docstrings in P4: der Regelumsetzer im Prüfcode samt Prüfung, Testautor und
+Implementierer im Produkt in der Technikphase 9. Nachprüfen kannst du nach dem Haken bei P4.

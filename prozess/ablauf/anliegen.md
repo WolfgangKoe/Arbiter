@@ -13,7 +13,7 @@ Status: offen
 Wartet auf: Prozessphase
 ```
 Die Nummer steht nur im Dateinamen. `Wartet auf:` steht, solange erst ein anderes Anliegen
-erledigt sein muss (`Wartet auf: 1213`) oder es nach [Ich 3](../praemissen/ich.md) auf eine
+erledigt sein muss (`Wartet auf: 1213`) oder es nach der [Kritik](kritik.md) auf eine
 Phase wartet (`Domänenphase`, `Technikphase`, `Prozessphase`). Ohne Zyklus ist es dran,
 sobald die Phase läuft, auch die laufende; die Phase eines späteren Zyklus nennt ihn
 (`Technikphase 8`), dann wartet es bis dahin (Anliegen 3200, 3251). Rolle: Name aus

@@ -22,7 +22,7 @@ was die Domäne beschreibt, nicht was sich leicht testen oder bauen lässt.
   Anforderung das gebaute Verhalten, bringt es die Etappe dem Ziel näher? Die Tests führst du
   selbst aus (`python3 -m pytest technik/tests/akzeptanz`).
 - Regeltext prüfst du an der Fundstelle: per grep suchen, nur die Stelle lesen.
-- Befunde ordnest du nach Ich 3 ein und schreibst sie nach `prozess/ablauf/kritik.md` an
+- Befunde ordnest du nach `prozess/ablauf/kritik.md` ein und schreibst sie an
   den Besitzer, mit Kosten und Gegenvorschlag: Test an den Testautor, Kriterium an den
   Anforderungsautor, Mockup an UX, Code an den Implementierer, Item an den Planer.
 - Der Besitzer nimmt Stellung; du prüfst nach und setzt den Status (`prozess/ablauf/anliegenStatus.md`): in Ordnung heißt erledigt und gelöscht, sonst folgt die nächste Runde.

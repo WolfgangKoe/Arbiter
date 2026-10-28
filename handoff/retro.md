@@ -20,8 +20,8 @@ vor deiner Freigabe, was der Klickpfad ausließ (6335, 6360).
    „Testautor auf Opus“ ein ([Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md)).
 2. Zwei Verhalten kamen ohne Test: Das Greifen am Rand (AUF-8.7) fand die Kritik am Code
    (6101). ‚Nahkampfreichweite‘ sperrt in der *Bewegungsphase*, wie BEW-1.5 und QUE-1.3
-   verlangen, der Test fehlt (6241, Technikphase 9). „Kein Verhalten ohne Test“ steht in der
-   [Root-CLAUDE.md](../CLAUDE.md) und beim [Implementierer](../.claude/agents/implementierer.md),
+   verlangen, der Test fehlt (6241, Technikphase 9). „Kein Verhalten ohne Test“ steht in
+   [Es 3](../prozess/praemissen/es.md) und beim [Implementierer](../.claude/agents/implementierer.md),
    darum kein Item. Im Frontend fängt es nur die Kritik am Code (6471, Prozessphase 9).
 3. 572 neue Zeilen Prüfcode gegen 530 Produktcode: über der Schwelle. Prozesslast 13 von 93
    Anliegen: darunter. Darum beauftragt diese Retro keinen neuen Mechanismus außer auf deinen
@@ -48,8 +48,9 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
   Testautor auf Opus (`model: opus` in seiner Definition); der Auslöser fällt aus
   [Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md). Danach prüft ein Test eher
   gleich, was für beide Spieler oder jede Runde gilt; jeder Lauf des Testautors kostet je
-  Token doppelt so viel. Ob die Anleitung des Testautors dazu das Gegenbeispiel „nur
-  Spieler 1“ bekommt, entscheidest du in [6640](anliegen/6640-gegenbeispielImSkillDesTestautors.md).
+  Token doppelt so viel. Nach deiner Antwort B in [6640](anliegen/6640-gegenbeispielImSkillDesTestautors.md)
+  zeigt seine [Anleitung](../.claude/skills/akzeptanztest-schreiben/SKILL.md) zudem das
+  Gegenbeispiel „nur Spieler 1“: ein Test, der nur einen Spieler prüft, mit Grund.
 - P3 Prämissen nach deinen Antworten (Organisationsentwickler): Es 8 nach F1 A (Befund 4):
   Docstring nur als Kopf der Testdatei nach T1, sonst keiner; unter `technik/` rot ab der
   Technikphase 9 (Mechanismus P4). Es S: „sein Name nennt sie“. Die sechs Verschiebungen
