@@ -56,7 +56,9 @@ AUF-7.2, wie es nicht stehen soll:
 def test_auf_7_2_nach_der_aufstellung_ist_kein_modell_wählbar(aufstellung, a, b):
     ...
     for modell in a.armee.einheiten[0].modelle + b.armee.einheiten[0].modelle:
-        assert sperrgründe(lambda m=modell: aufstellung.modell_setzen(m, stelle)) == {Grund.NICHT_WÄHLBAR}
+        assert sperrgründe(lambda m=modell: aufstellung.modell_setzen(m, stelle)) == {
+            Grund.NICHT_WÄHLBAR
+        }
 ```
 
 Schlecht: snake_case, Fixtures `a` und `b`, `einheiten[0]` statt eines Namens, lambda mit

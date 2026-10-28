@@ -8,7 +8,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
 - Stakeholder: Anliegen 6431 F1 bis F3 und Freigabe Retro 8.
 - Organisationsentwickler, Prozessphase 8: Anliegen 4620, Anliegen 4040.
 - Regelumsetzer, Prozessphase 8: Anliegen 3900,
-  [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md),
+  Anliegen 4301,
   Anliegen 3780, Anliegen 4120,
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
 - Nachprüfung fällig: Anliegen 6870, Absender
