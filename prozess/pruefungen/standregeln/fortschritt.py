@@ -56,11 +56,16 @@ def kriterienZuordnungen(wurzel: Path, text: str) -> list[Zuordnung]:
     ]
 
 
-def hatKriterium(wurzel: Path, itemName: str) -> bool:
-    """Der Text des Items nennt ein Kriterium; ein gelöschtes Item gilt als mit Kriterium."""
+def vertragszeile(itemName: str) -> Zeile:
+    name = itemName.removesuffix(".md")
+    return Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften")
+
+
+def hatKriterium(wurzel: Path, itemName: str, bisher: Bisher) -> bool:
+    """Der Text des Items nennt ein Kriterium; ein gelöschtes Item behält seine Zeilen."""
     datei = wurzel / itemsOrdner / itemName
     if not datei.is_file():
-        return True
+        return vertragszeile(itemName).schlüssel in bisher
     return bool(kriterienZuordnungen(wurzel, datei.read_text(encoding="utf-8")))
 
 
@@ -89,15 +94,16 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     ]
 
 
-def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
+def itemzeilen(wurzel: Path, itemName: str, bisher: Bisher) -> list[Zeile]:
     name = itemName.removesuffix(".md")
     gelöscht = not (wurzel / itemsOrdner / itemName).is_file()
     folge = gelöscht or None
-    vertrag = Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften", folge)
+    vertrag = vertragszeile(itemName)._replace(fakt=folge)
     tests = Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName))
     kritikTests = [Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker]
     testsGrün = Zeile("Implementierer", f"Tests zu Item {name} grün", folge)
-    mitTests = [vertrag, tests, *kritikTests, testsGrün] if hatKriterium(wurzel, itemName) else []
+    alleTests = [vertrag, tests, *kritikTests, testsGrün]
+    mitTests = alleTests if hatKriterium(wurzel, itemName, bisher) else []
     return [
         *mitTests,
         *(Zeile(rolle, f"Kritik am Code zu Item {name}", folge) for rolle in codekritiker),
@@ -109,7 +115,9 @@ def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
 def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     review = zyklus(wurzel / handoffOrdner / reviewName) == aktuell.zyklus
     freigegeben = freigabeCommit(wurzel, "Review", aktuell.zyklus) is not None
-    zeilen = [zeile for name in itemNamen(wurzel) for zeile in itemzeilen(wurzel, name)]
+    plan = wurzel / handoffOrdner / planName
+    bisher = bisherigeZeilen(plan.read_text(encoding="utf-8"))
+    zeilen = [zeile for name in itemNamen(wurzel) for zeile in itemzeilen(wurzel, name, bisher)]
     return [
         *zeilen,
         Zeile("Reviewer", "DoD über das Inkrement"),

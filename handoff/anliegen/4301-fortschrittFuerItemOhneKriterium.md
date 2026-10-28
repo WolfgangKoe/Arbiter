@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Das Item [architekturUmordnen](../../domaene/items/architekturUmordnen.md) hat
@@ -62,3 +62,10 @@ behält die Zeilen, die vor dem Löschen im Fortschritt standen: Fehlen dort die
 kommen sie nicht hinzu (etwa: Zeilen zu einem gelöschten Item nur aus dem bestehenden
 Abschnitt übernehmen oder den Text des Items aus git lesen). Test in `fortschrittTest.py`: Ein
 Item ohne Kriterium hat auch nach dem Löschen keine Test- und keine Vertragszeile.
+
+**Stellungnahme.** Umgesetzt: Ein gelöschtes Item behält die Zeilen, die im Abschnitt standen
+(`hatKriterium` liest `bisher`, `standregeln/fortschritt.py`); fehlt dort die Vertragszeile,
+kommen Vertrag, Tests, Kritik an den Tests und „Tests grün“ nicht hinzu. Test:
+`fortschrittTest.py`
+`testEinItemOhneKriteriumHatAuchNachDemLöschenKeineTestUndKeineVertragszeile`. Regel:
+[Standregeln](../../prozess/regeln/standregeln.md).
