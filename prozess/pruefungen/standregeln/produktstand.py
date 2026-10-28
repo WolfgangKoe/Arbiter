@@ -1,5 +1,3 @@
-"""Etappe und belegte Kriterien in Worten: die erste Angabe des Stands."""
-
 import re
 from pathlib import Path
 
@@ -13,7 +11,6 @@ etappenüberschrift = re.compile(r"Etappe\s+(\d+)\s*·\s*(.*)")
 
 
 def etappenzahl(wurzel: Path) -> int:
-    """Die größte Nummer in `domaene/etappen/`."""
     nummern = [
         int(datei.name.partition("-")[0])
         for datei in (wurzel / etappenOrdner).glob("*.md")
@@ -23,7 +20,6 @@ def etappenzahl(wurzel: Path) -> int:
 
 
 def kriterienZählen(wurzel: Path, etappe: int | None = None) -> tuple[int, int]:
-    """Belegte und alle Kriterien, auf Wunsch nur die der Etappe; belegt: Test, in keinem Item."""
     itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
     alle: dict[Kriterium, int | None] = {}
     for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
@@ -36,7 +32,6 @@ def kriterienZählen(wurzel: Path, etappe: int | None = None) -> tuple[int, int]
 
 
 def belegungAlsText(wurzel: Path, aktuell: Lage) -> str:
-    """„74 von 94 Kriterien belegt, davon Etappe 2: 30 von 40“."""
     belegt, alle = kriterienZählen(wurzel)
     text = f"{belegt} von {alle} Kriterien belegt"
     treffer = etappenüberschrift.match(aktuell.etappe)
@@ -47,7 +42,6 @@ def belegungAlsText(wurzel: Path, aktuell: Lage) -> str:
 
 
 def produktstandAlsText(wurzel: Path, aktuell: Lage) -> str:
-    """„Etappe 1 von 7 (Aufstellen), Zyklus 5; 74 von 94 Kriterien belegt, davon Etappe 1: …“."""
     treffer = etappenüberschrift.match(aktuell.etappe)
     etappe = aktuell.etappe
     if treffer:

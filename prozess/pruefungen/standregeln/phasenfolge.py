@@ -1,5 +1,3 @@
-"""Etappe, Zyklus, Phase und nächster Schritt aus den Dateien in `handoff/` und den Freigaben."""
-
 import re
 from enum import StrEnum
 from pathlib import Path
@@ -32,7 +30,6 @@ class Lage(NamedTuple):
 
 
 def aktuelleEtappe(wurzel: Path) -> str:
-    """Die Überschrift der ersten Etappendatei, sonst „keine Etappe“."""
     for datei in sorted((wurzel / etappenOrdner).glob("*.md")):
         for zeile in datei.read_text(encoding="utf-8").splitlines():
             treffer = re.match(r"# (Etappe\s+\d+.*)", zeile)
@@ -42,14 +39,12 @@ def aktuelleEtappe(wurzel: Path) -> str:
 
 
 def prozessItems(wurzel: Path) -> list[str]:
-    """Die Kennungen `P<k>` der Zeilen `- P<k> ` im Abschnitt „Prozess-Items“ der Retro."""
     text = (wurzel / handoffOrdner / "retro.md").read_text(encoding="utf-8")
     abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
     return re.findall(r"^- (P\d+) ", abschnitt, re.MULTILINE)
 
 
 def itemRollen(wurzel: Path) -> dict[str, str]:
-    """Die Rolle je `P<k>` aus der Klammer `- P<k> <Titel> (<Rolle>): …`; sonst Regelumsetzer."""
     text = (wurzel / handoffOrdner / "retro.md").read_text(encoding="utf-8")
     abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
     bekannt = {name.casefold(): name.capitalize() for name in rollennamen(wurzel)}
@@ -60,13 +55,11 @@ def itemRollen(wurzel: Path) -> dict[str, str]:
 
 
 def hatItemCommit(betreffe: list[str], retro: int, kennung: str) -> bool:
-    """Ein Betreff beginnt mit `P<k>:`, `P<j>, P<k> und 1920:` (Sammel) oder `Retro <n> P<k>:`."""
     muster = rf"(Retro {retro} )?(P\d+(, | und ))*{kennung}((, | und )(P)?\d+)*:"
     return any(re.match(muster, betreff) for betreff in betreffe)
 
 
 def offenesProzessItem(wurzel: Path, retro: int, freigabe: str) -> str | None:
-    """Das erste Item `- P<k> ` der Retro ohne Commit `P<k>: …` seit ihrer Freigabe."""
     betreffe = betreffeSeit(wurzel, freigabe)
     for kennung in prozessItems(wurzel):
         if not hatItemCommit(betreffe, retro, kennung):
@@ -96,7 +89,6 @@ def technikschritt(wurzel: Path, plan: int, review: int | None) -> tuple[Phase, 
 
 
 def lage(wurzel: Path) -> Lage:
-    """Wo der Zyklus steht, nach `prozess/ablauf/`."""
     handoff = wurzel / handoffOrdner
     plan, review, retro = (zyklus(handoff / f"{name}.md") for name in ("plan", "review", "retro"))
     etappe = aktuelleEtappe(wurzel)

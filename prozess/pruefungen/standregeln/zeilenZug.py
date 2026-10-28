@@ -1,5 +1,3 @@
-"""Züge des Stakeholders auf eine Zeile im Fortschritt: Haken setzen, Kommentar als Anliegen."""
-
 from pathlib import Path
 
 from gemeinsam.pfade import anliegenOrdner
@@ -65,7 +63,6 @@ def anliegenAnlegen(wurzel: Path, zeile: Zeile, rolle: str, text: str) -> int:
 
 
 def zeilenzugÜbernehmen(wurzel: Path, schlüssel: str, art: str, wert: str) -> str | None:
-    """Setzt Haken oder Kommentar der Zeile; nennt den Grund, wenn der Zug nicht passt."""
     gefunden = zeileFinden(wurzel, schlüssel)
     if gefunden is None:
         return keineZeile

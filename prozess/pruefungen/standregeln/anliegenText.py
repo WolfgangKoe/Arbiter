@@ -1,5 +1,3 @@
-"""Formt, wer bei den Anliegen dran ist, als Text für den Stand."""
-
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
@@ -18,7 +16,6 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
 
 
 def wartendeAnliegenAlsText(wurzel: Path) -> str:
-    """Anliegen, die auf ein anderes oder die Prozessphase warten; für niemanden dran."""
     warten = wartende(wurzel)
     if not warten:
         return ""
@@ -27,7 +24,6 @@ def wartendeAnliegenAlsText(wurzel: Path) -> str:
 
 
 def dranAlsText(wurzel: Path) -> str:
-    """Wer bei den Anliegen dran ist."""
     zuständig = dran(wurzel)
     if not zuständig:
         return ""

@@ -2,6 +2,7 @@ import pytest
 
 from formregeln.kommentare import (
     docstringVerstöße,
+    docstringVerstößeUnterTechnik,
     höchstzahlOffenerPunkte,
     kommentarVerstöße,
     todoZeilen,
@@ -56,20 +57,45 @@ def testTodoZeilenNennenNurTodoKommentare():
     assert todoZeilen("x = 1\n# TODO: eins\n# noqa: A1\ny = 2  # TODO: zwei\n") == [2, 4]
 
 
+prüfcode = "prozess/pruefungen/modul.py"
+akzeptanztest = "technik/tests/akzeptanz/aufTest.py"
+
+
 @pytest.mark.parametrize(
     "quelltext",
     [
-        pytest.param('"""Erste.\n\nZweite."""\n', id="Modul mehrzeilig"),
-        pytest.param('def tun():\n    """Erste.\n\n    Zweite.\n    """\n', id="Funktion"),
-        pytest.param('class Ort:\n    """TODO: später."""\n', id="TODO im Docstring"),
+        pytest.param('"""Probe."""\n', id="Modul"),
+        pytest.param('def tun():\n    """Tut etwas."""\n', id="Funktion einzeilig"),
+        pytest.param('class Ort:\n    """Ein Ort."""\n', id="Klasse"),
     ],
 )
-def testUnerlaubteDocstringsSindRot(quelltext):
-    assert docstringVerstöße(quelltext)
+def testEinDocstringImPrüfcodeIstRot(quelltext):
+    assert docstringVerstöße(quelltext, prüfcode)
 
 
-def testEinzeiligerDocstringIstGrün():
-    assert docstringVerstöße('def tun():\n    """Tut etwas."""\n') == []
+def testDerKopfEinerAkzeptanztestdateiIstGrün():
+    assert (
+        docstringVerstöße('"""Stellen."""\n\n\ndef testAuf1_1Eins():\n    pass\n', akzeptanztest)
+        == []
+    )
+
+
+def testEineFunktionInEinerAkzeptanztestdateiMitDocstringIstRot():
+    quelltext = '"""Stellen."""\n\n\ndef testAuf1_1Eins():\n    """Eins."""\n'
+    assert len(docstringVerstöße(quelltext, akzeptanztest)) == 1
+
+
+def testEinDocstringUnterTechnikIstErstAbPlanNeunRot(tmp_path, gitRepo):
+    (tmp_path / "technik").mkdir()
+    (tmp_path / "technik" / "modul.py").write_text('"""Probe."""\n', encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 8")
+    assert docstringVerstößeUnterTechnik(tmp_path) == []
+    gitRepo.festhalten("Freigabe Plan 9")
+    assert len(docstringVerstößeUnterTechnik(tmp_path)) == 1
+
+
+def testDasRepoHältDieDocstringregelUnterTechnik():
+    assert docstringVerstößeUnterTechnik(wurzel) == []
 
 
 def testDieVerstößeEinesVerzeichnissesNennenDateiUndGrund(tmp_path):

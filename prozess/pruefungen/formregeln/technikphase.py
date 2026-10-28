@@ -5,6 +5,7 @@ from gemeinsam.gitAufruf import freigaben, gitAusgabe
 
 planFreigabe = "Freigabe Plan "
 ersteGeprüfteTechnikphase = 7
+ersteTechnikphaseOhneDocstrings = 9
 blameKopf = re.compile(r"^([0-9a-f]{40}) \d+ (\d+)")
 
 
@@ -19,6 +20,11 @@ def jüngsterPlan(wurzel: Path) -> tuple[str, int] | None:
 def technikGeprüft(wurzel: Path) -> bool:
     plan = jüngsterPlan(wurzel)
     return plan is not None and plan[1] >= ersteGeprüfteTechnikphase
+
+
+def technikOhneDocstrings(wurzel: Path) -> bool:
+    plan = jüngsterPlan(wurzel)
+    return plan is not None and plan[1] >= ersteTechnikphaseOhneDocstrings
 
 
 def commitsJeZeile(wurzel: Path, relativ: str) -> dict[int, str]:

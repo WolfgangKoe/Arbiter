@@ -107,7 +107,7 @@ Für dich ist nichts zu tun. Der Regelumsetzer arbeitet nach deiner Entscheidung
 Reihenfolge: die Hook-Zeile aus Anliegen 6760; 3780
 Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle statt an vier
 (Anliegen 3780); keine Testzeilen im Fortschritt für ein
-Item ohne Kriterium ([4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md)); P4 nach 4301,
+Item ohne Kriterium (Anliegen 4301); P4 nach 4301,
 ohne Teilung um `standregeln/`, weil beide dort ändern; P9 nach P4, es wirkt ab der
 Technikphase 9 (6960, F3); zuletzt der Reiter Architektur
 ([4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md)): erst Bestand abbauen, dann

@@ -1,5 +1,3 @@
-"""Merkt sich die Fassung des Plans, damit ein neu gefasster Plan seine Kritik wieder öffnet."""
-
 import hashlib
 import re
 from pathlib import Path
@@ -14,7 +12,6 @@ abschnittNachDemPlan = re.compile(r"^## (?:Fortschritt|Freigabe)", re.MULTILINE)
 
 
 def fassungVon(wurzel: Path, zyklusNummer: int) -> str | None:
-    """Fassung des Plans ohne Fortschritt und Freigabe, Anliegenlinks als „Anliegen <nr>“."""
     plan = wurzel / handoffOrdner / "plan.md"
     if not plan.is_file() or zyklus(plan) != zyklusNummer:
         return None
@@ -26,7 +23,6 @@ def fassungVon(wurzel: Path, zyklusNummer: int) -> str | None:
 
 
 def neuGefasst(wurzel: Path, zyklusNummer: int) -> bool:
-    """Der Plan dieses Zyklus unterscheidet sich von der Fassung, die zuletzt gemerkt wurde."""
     fassung = fassungVon(wurzel, zyklusNummer)
     zettel = wurzel / merkzettelOrdner / merkzettelName
     if fassung is None or not (wurzel / ".git").is_dir():

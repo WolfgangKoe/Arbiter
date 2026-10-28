@@ -7,11 +7,16 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from formregeln.benennung import geprüfteDateien
-from formregeln.technikphase import technikGeprüft, zeilenVorDerTechnikphase
+from formregeln.technikphase import (
+    technikGeprüft,
+    technikOhneDocstrings,
+    zeilenVorDerTechnikphase,
+)
 from gemeinsam.pfade import projektordner
 
 höchstzahlOffenerPunkte = 3
-offenerPunkt = re.compile(r"\b(TODO|FIXME)\b")
+technikordner = "technik/"
+akzeptanzordner = technikordner + "tests/akzeptanz/"
 todoKommentar = re.compile(r"^(#|//) TODO: \S")
 werkzeugkommentar = re.compile(
     r"^(#!"
@@ -46,25 +51,29 @@ def todoZeilen(quelltext: str, endung: str = ".py") -> list[int]:
     return [zeile for zeile, text in kommentare(quelltext, endung) if todoKommentar.match(text)]
 
 
-def docstringKnoten(baum: ast.AST) -> list[tuple[ast.Expr, str]]:
+def docstringKnoten(baum: ast.Module) -> list[ast.Expr]:
     knoten = []
     for teil in ast.walk(baum):
         if not isinstance(teil, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
             continue
         anweisung = teil.body[0] if teil.body else None
-        if isinstance(anweisung, ast.Expr) and (text := ast.get_docstring(teil, clean=False)):
-            knoten.append((anweisung, text))
+        if isinstance(anweisung, ast.Expr) and ast.get_docstring(teil, clean=False):
+            knoten.append(anweisung)
     return knoten
 
 
-def docstringVerstöße(quelltext: str) -> list[str]:
-    verstöße = []
-    for docstring, text in docstringKnoten(ast.parse(quelltext)):
-        if docstring.end_lineno != docstring.lineno:
-            verstöße.append(f"Zeile {docstring.lineno}: Docstring länger als eine Zeile")
-        if offenerPunkt.search(text):
-            verstöße.append(f"Zeile {docstring.lineno}: TODO oder FIXME")
-    return verstöße
+def istAkzeptanztest(relativ: str) -> bool:
+    return relativ.startswith(akzeptanzordner) and relativ.endswith("Test.py")
+
+
+def docstringVerstöße(quelltext: str, relativ: str) -> list[str]:
+    baum = ast.parse(quelltext)
+    kopf = baum.body[0] if istAkzeptanztest(relativ) and baum.body else None
+    return [
+        f"Zeile {docstring.lineno}: Docstring nur als Spiegel der Anforderung (Es 8)"
+        for docstring in docstringKnoten(baum)
+        if docstring is not kopf
+    ]
 
 
 def geprüfteQuelltexte(wurzel: Path) -> list[Path]:
@@ -73,16 +82,30 @@ def geprüfteQuelltexte(wurzel: Path) -> list[Path]:
     return dateien
 
 
-def verstöße(wurzel: Path) -> list[str]:
+def docstringMeldungen(wurzel: Path, *, unterTechnik: bool) -> list[str]:
     meldungen = []
+    for pfad in geprüfteQuelltexte(wurzel):
+        relativ = pfad.relative_to(wurzel).as_posix()
+        if pfad.suffix == ".py" and relativ.startswith(technikordner) == unterTechnik:
+            quelltext = pfad.read_text(encoding="utf-8")
+            meldungen += [f"{relativ}: {grund}" for grund in docstringVerstöße(quelltext, relativ)]
+    return meldungen
+
+
+def docstringVerstößeUnterTechnik(wurzel: Path) -> list[str]:
+    return docstringMeldungen(wurzel, unterTechnik=True) if technikOhneDocstrings(wurzel) else []
+
+
+def verstöße(wurzel: Path) -> list[str]:
+    meldungen = docstringMeldungen(wurzel, unterTechnik=False)
     gesamtzahl = 0
     mitTechnik = technikGeprüft(wurzel)
     for pfad in geprüfteQuelltexte(wurzel):
         relativ = pfad.relative_to(wurzel).as_posix()
         quelltext = pfad.read_text(encoding="utf-8")
-        gründe = docstringVerstöße(quelltext) if pfad.suffix == ".py" else []
-        if mitTechnik or not relativ.startswith("technik/"):
-            if not relativ.startswith("technik/frontend/"):
+        gründe = []
+        if mitTechnik or not relativ.startswith(technikordner):
+            if not relativ.startswith(technikordner + "frontend/"):
                 gründe += kommentarVerstöße(quelltext, pfad.suffix)
             offene = todoZeilen(quelltext, pfad.suffix)
             gesamtzahl += len(offene)

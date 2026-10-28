@@ -1,5 +1,3 @@
-"""Hook: Schreibt den Abschnitt `## Fortschritt` der laufenden Phase und hakt Fakten selbst ab."""
-
 import re
 import sys
 from pathlib import Path
@@ -26,8 +24,6 @@ Bisher = dict[str, tuple[bool, list[str]]]
 
 
 class Zeile(NamedTuple):
-    """Ein Schritt; `fakt` ist `None`, wo nur ein Befehl oder der Stakeholder abhakt."""
-
     rolle: str
     schritt: str
     fakt: bool | None = None
@@ -47,7 +43,6 @@ def ungetestete(text: str, verlangt: set[Kriterium], testdatei: Path) -> list[Kr
 
 
 def kriterienZuordnungen(wurzel: Path, text: str) -> list[Zuordnung]:
-    """Die Zuordnungen der Anforderungsdateien, deren Kriterien der Text des Items nennt."""
     return [
         zuordnung
         for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md"))
@@ -62,7 +57,6 @@ def vertragszeile(itemName: str) -> Zeile:
 
 
 def hatKriterium(wurzel: Path, itemName: str, bisher: Bisher) -> bool:
-    """Der Text des Items nennt ein Kriterium; ein gelöschtes Item behält seine Zeilen."""
     datei = wurzel / itemsOrdner / itemName
     if not datei.is_file():
         return vertragszeile(itemName).schlüssel in bisher
@@ -70,7 +64,6 @@ def hatKriterium(wurzel: Path, itemName: str, bisher: Bisher) -> bool:
 
 
 def itemKriterienGetestet(wurzel: Path, itemName: str) -> bool:
-    """Jedes Kriterium im Text des Items hat einen Test; ein gelöschtes Item gilt als getestet."""
     datei = wurzel / itemsOrdner / itemName
     if not datei.is_file():
         return True
@@ -145,7 +138,6 @@ def prozesszeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
 
 
 def zielUndZeilen(wurzel: Path, aktuell: Lage) -> tuple[Path, list[Zeile]] | None:
-    """Die Datei der laufenden Phase und ihre Zeilen; `None`, wo es den Abschnitt nicht gibt."""
     handoff = wurzel / handoffOrdner
     if aktuell.phase == Phase.domänenphase:
         if zyklus(handoff / reviewName) != aktuell.zyklus - 1:
@@ -161,7 +153,6 @@ def zielUndZeilen(wurzel: Path, aktuell: Lage) -> tuple[Path, list[Zeile]] | Non
 
 
 def bisherigeZeilen(text: str) -> Bisher:
-    """Haken und eingerückte Zeilen (Hindernis, Kommentar) je Zeile des vorhandenen Abschnitts."""
     treffer = abschnittsmuster.search(text)
     bisher: Bisher = {}
     schlüssel = ""
@@ -185,7 +176,6 @@ def abschnittBauen(zeilen: list[Zeile], bisher: Bisher) -> str:
 
 
 def abschnittEinsetzen(text: str, abschnitt: str) -> str:
-    """Ersetzt den Abschnitt oder setzt ihn vor `## Freigabe`; der übrige Text bleibt."""
     vorhanden = abschnittsmuster.search(text)
     if vorhanden:
         return text[: vorhanden.start()] + abschnitt + text[vorhanden.end() :]
@@ -196,7 +186,6 @@ def abschnittEinsetzen(text: str, abschnitt: str) -> str:
 
 
 def vorherigeLage(aktuell: Lage) -> Lage:
-    """Die Phase davor: nach der Domänenphase die Prozessphase des Vorzyklus."""
     if aktuell.phase == Phase.technikphase:
         return aktuell._replace(phase=Phase.domänenphase)
     if aktuell.phase == Phase.prozessphase:
@@ -205,27 +194,23 @@ def vorherigeLage(aktuell: Lage) -> Lage:
 
 
 def nächsteLage(aktuell: Lage) -> Lage:
-    """Die Phase danach: nach der Domänenphase die Technikphase, sonst die Domänenphase danach."""
     if aktuell.phase == Phase.domänenphase:
         return aktuell._replace(phase=Phase.technikphase)
     return aktuell._replace(zyklus=aktuell.zyklus + 1, phase=Phase.domänenphase)
 
 
 def alleOffen(ziel: tuple[Path, list[Zeile]]) -> tuple[Path, list[Zeile]]:
-    """Vor Beginn der Phase hakt kein Fakt ab."""
     datei, zeilen = ziel
     return datei, [Zeile(zeile.rolle, zeile.schritt) for zeile in zeilen]
 
 
 def fürDiesenZyklusGeschrieben(ziel: tuple[Path, list[Zeile]]) -> bool:
-    """Der Abschnitt trägt schon die Freigabezeile dieses Zyklus; sonst ist er der eines älteren."""
     datei, zeilen = ziel
     freigaben = [zeile.schlüssel for zeile in zeilen if zeile.rolle == stakeholderRolle]
     return any(name in bisherigeZeilen(datei.read_text(encoding="utf-8")) for name in freigaben)
 
 
 def kritikAmPlanÖffnen(bisher: Bisher) -> Bisher:
-    """Die Haken der Kritik am Plan fallen; Hindernis und Kommentar darunter bleiben."""
     return {
         schlüssel: (abgehakt and not schlüssel.endswith(f": {kritikAmPlan}"), zusatz)
         for schlüssel, (abgehakt, zusatz) in bisher.items()
@@ -256,7 +241,6 @@ def abschnittSchreiben(
 
 
 def fortschrittSchreiben(wurzel: Path) -> str | None:
-    """Schreibt den Abschnitt für die Phase davor, die laufende und die nächste; nennt geänderte."""
     aktuell = lage(wurzel)
     neu = aktuell.phase == Phase.domänenphase and neuGefasst(wurzel, aktuell.zyklus)
     ziele = [zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell))]

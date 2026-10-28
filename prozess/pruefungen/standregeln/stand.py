@@ -1,5 +1,3 @@
-"""Hook (SessionStart, PostToolUse): der Stand in einer Zeile, nach jedem Agent-Aufruf neu."""
-
 from pathlib import Path
 
 from gemeinsam.gitAufruf import gitAusgabe

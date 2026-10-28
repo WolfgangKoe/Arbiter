@@ -1,5 +1,3 @@
-"""Hook (PreToolUse, PostToolUse): Belegung des Kontextfensters je Lauf, für alle Agenten."""
-
 import json
 from pathlib import Path
 
@@ -33,7 +31,6 @@ def belegungAusZeile(zeile: str) -> int | None:
 
 
 def belegungAusTranskript(transkript: Path) -> int | None:
-    """Belegung der jüngsten brauchbaren Anfrage; `None`, wenn das Transkript sie nicht hat."""
     if not transkript.is_file():
         return None
     for zeile in reversed(transkript.read_text(encoding="utf-8").splitlines()):
@@ -44,7 +41,6 @@ def belegungAusTranskript(transkript: Path) -> int | None:
 
 
 def eigenesTranskript(eingabe: HookEingabe) -> Path | None:
-    """Rollen haben ein eigenes Transkript; das der Eingabe ist dann das des Koordinators."""
     if not eingabe.agentId:
         return eingabe.transkript
     if eingabe.rollenTranskript:

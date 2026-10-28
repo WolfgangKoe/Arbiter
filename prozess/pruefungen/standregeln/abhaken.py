@@ -1,5 +1,3 @@
-"""Befehl: Eine Rolle hakt ihren Schritt im Fortschritt ab: `abhaken.py <Rolle> <Schritt>`."""
-
 import sys
 from pathlib import Path
 
@@ -22,7 +20,6 @@ def gleicheRolle(zeile: Zeile, rolle: str) -> bool:
 
 
 def eigeneZeilen(wurzel: Path, rolle: str) -> tuple[Path, list[Zeile]] | None:
-    """Die Datei der Phase und die Zeilen der Rolle, bei denen kein Fakt abhakt."""
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:
         return None
@@ -31,7 +28,6 @@ def eigeneZeilen(wurzel: Path, rolle: str) -> tuple[Path, list[Zeile]] | None:
 
 
 def offeneZeilen(wurzel: Path, rolle: str) -> list[str]:
-    """Die Schritte der Rolle, die ein Befehl abhaken muss und die noch offen sind."""
     eigene = eigeneZeilen(wurzel, rolle)
     if eigene is None:
         return []
@@ -41,7 +37,6 @@ def offeneZeilen(wurzel: Path, rolle: str) -> list[str]:
 
 
 def passt(zeile: Zeile, rolle: str, schritt: str) -> bool:
-    """Die Zeile gehört der Rolle, kein Fakt hakt sie ab, und der Schritt enthält den Text."""
     return (
         gleicheRolle(zeile, rolle)
         and zeile.fakt is None
@@ -50,7 +45,6 @@ def passt(zeile: Zeile, rolle: str, schritt: str) -> bool:
 
 
 def bereitsAbgehakt(wurzel: Path, rolle: str, schritt: str) -> list[str]:
-    """Die Schritte der Rolle zum Text, deren Haken schon steht."""
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:
         return []
@@ -64,7 +58,6 @@ def bereitsAbgehakt(wurzel: Path, rolle: str, schritt: str) -> list[str]:
 
 
 def abhaken(wurzel: Path, rolle: str, schritt: str) -> list[str]:
-    """Hakt die offenen Zeilen der Rolle ab, deren Schritt den Text enthält; nennt sie."""
     fortschrittSchreiben(wurzel)
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:

@@ -1,5 +1,3 @@
-"""Befehl: Eine Rolle meldet ein Hindernis; es wird ein Anliegen und eine Zeile im Fortschritt."""
-
 import re
 import sys
 from pathlib import Path
@@ -59,14 +57,12 @@ def einzeiler(text: str) -> str:
 
 
 def dateiname(nummer: int, schritt: str, vorsilbe: str = "hindernis") -> str:
-    """`<nr>-<vorsilbe><Schritt>.md` in ASCII und camelCase, wie die Benennung es verlangt."""
     wörter = re.findall(r"[a-z0-9]+", schritt.casefold().translate(umlaute))
     name = vorsilbe + "".join(wort.capitalize() for wort in wörter)
     return f"{nummer:02d}-{name[:längeDesNamens]}.md"
 
 
 def nächsteNummer(wurzel: Path) -> int:
-    """Die nächste freie Nummer: größer als jede im Ordner und in der Geschichte."""
     return max(belegteNummern(wurzel), default=0) + 1
 
 
@@ -97,7 +93,6 @@ def anliegenSchreiben(wurzel: Path, zeile: Zeile, beseitiger: str, text: str, nu
 
 
 def eigeneZeile(wurzel: Path, rolle: str, schritt: str) -> tuple[Path, list[Zeile], Zeile] | None:
-    """Die Datei, ihre Zeilen und die eine Zeile der Rolle, deren Schritt den Text enthält."""
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:
         return None
@@ -111,7 +106,6 @@ def eigeneZeile(wurzel: Path, rolle: str, schritt: str) -> tuple[Path, list[Zeil
 
 
 def hindernisZeile(zeile: Zeile, beseitiger: str, text: str, nummer: int) -> str:
-    """`Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`, lesbar ohne das Anliegen."""
     return f"  Hindernis: {zeile.rolle} → {beseitiger}: {einzeiler(text)} (Anliegen {nummer})"
 
 
@@ -122,7 +116,6 @@ def anliegenVorhanden(wurzel: Path, nummer: int) -> bool:
 def hindernisMelden(  # noqa: PLR0913
     wurzel: Path, rolle: str, schritt: str, beseitiger: str, text: str, ziel: range | int
 ) -> int | None:
-    """Schreibt `Hindernis:` unter die Zeile; neues Anliegen aus dem Bereich oder vorhandenes."""
     fortschrittSchreiben(wurzel)
     gefunden = eigeneZeile(wurzel, rolle, schritt)
     name = beseitigerName(wurzel, beseitiger)
@@ -147,7 +140,6 @@ def hindernisMelden(  # noqa: PLR0913
 
 
 def zielLesen(text: str) -> range | int | None:
-    """`3940-3959` ist ein Bereich für ein neues Anliegen, `3941` ein vorhandenes."""
     bereich = bereichsmuster.fullmatch(text)
     if bereich:
         return range(int(bereich[1]), int(bereich[2]) + 1)
