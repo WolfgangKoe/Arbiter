@@ -1,85 +1,80 @@
-# Retro · Zyklus 7
+# Retro · Zyklus 8
 
 Dashboard: im Projektordner
 `python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten,
 `http://127.0.0.1:8765/` öffnen, Strg+C beendet.
 
-Etappe 1 von 10 (Aufstellen) ist erreicht ([Review 7](review.md)); 78 von 108 Kriterien
-belegt (Zyklus 6: 78 von 103). Neu am Bildschirm: „Einheit zurücklegen“, feste Adresse.
+Etappe 2 von 10 (Phasen und Bewegungsphase) läuft ([Review 8](review.md)); 95 von 123
+Kriterien belegt (Zyklus 7: 78 von 108). Neu am Bildschirm: „Erster Zug“, *Schlachtrunden*
+mit „Phase beenden“, in der *Bewegungsphase* ein Zug bis zur *Bewegungsweite*, Sperre über
+eine fremde *Base*, ‚keine Kohärenz‘ beim Phasenende, Schlachtende nach Runde 5.
 
 ## Was geklappt hat
-Beide Items abgenommen, DoD ohne Rest, alle 30 Mutanten gefangen. Die Kritik am Review fand
-vor deiner Freigabe vier Dateien, die der Rundgang ausließ (3250).
+Alle drei Items abgenommen, DoD erfüllt, 17 Kriterien mehr belegt. Die Kritik am Review fand
+vor deiner Freigabe, was der Klickpfad ausließ (6335, 6360).
 
 ## Was nicht geklappt hat
-1. Kein Zuwachs: 8 Kriterien bekamen ihren Test, 8 belegte fasste der neue Schnitt der
-   Etappen neu (das zählt als neu) oder strich sie; 11 neue warten auf ihren Test. Ursache:
-   Anforderungen waren erfunden, daher der Schnitt (2591).
-2. 990 Zeilen Prüfcode gegen 715 Produktcode: über der Schwelle; Prozesslast 15 von 90
-   Anliegen: darunter.
-3. Rollen schrieben rund 15-mal per Python oder `sed` über Bash (2040, 2592): Ich 2
-   wiederholt verletzt, ungesperrt.
-4. Der Commit setzte Arbeit laufender Rollen zurück, Hindernisse nehmen fremde Nummern
-   (2460), die Rückverfolgung nannte einen falschen Testpfad (2720).
-5. `Wartet auf: Technikphase`, in der Technikphase geschrieben, war sofort dran (3200, 3251).
-6. Du musstest raten, was bei dir lag (Plan 7: „Warum liegt das bei mir?“). Eine
-   Einstellung, dir ohne Probe empfohlen, legte alle Rollen still (2201).
+1. 6 der 12 Hindernisse gingen an den Testautor: Tests prüften nur einen Fall (nur Spieler 1,
+   nur Runde 1, nur auf den Achsen); die Mutation fing zuerst 84 %. Damit trat der Auslöser
+   „Testautor auf Opus“ ein ([Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md)).
+2. Code vor dem Test: Das Greifen am Rand (AUF-8.7) kam ohne Test (6101), ‚Nahkampfreichweite‘
+   sperrt ohne Test, obwohl Plan 8 sie unter „Noch nicht“ nennt (6241). Die Regel steht nur als
+   Text in der [Root-CLAUDE.md](../CLAUDE.md).
+3. 572 neue Zeilen Prüfcode gegen 530 Produktcode: über der Schwelle. Prozesslast 13 von 93
+   Anliegen: darunter. Darum beauftragt diese Retro keinen neuen Mechanismus außer auf deinen
+   Wunsch, und 3960 (weitere Bash-Sperren) wartet auf Prozessphase 9.
+4. Deine Frage nach den Kommentaren (6430): Im Produkt steht kein `#`, aber 71 Docstrings,
+   38 mit Kennungen wie „(QUE-10.5)“; dazu Tests, Prüfcode und `pyproject.toml`. Deine Wahl:
+   [Anliegen 6431](anliegen/6431-fragenDerRetro8.md), F1.
+5. Das Dashboard verwirft deine Antwort, wenn unter der Frage keine Zeile `Antwort:` steht;
+   die Prüfung der Anliegen verlangt „Ux“ statt „UX“ (6432 an den Regelumsetzer).
 
-Nicht bestätigt: 3250 und 3251 lagen im Auftrag.
-Ausgelöst im [Backlog](../prozess/backlog.md): „Belegte Kriterien je Etappe“, Frage dazu:
-Anliegen 3550.
+Nicht bestätigt: `.venv/bin/python -c` war in meinem Lauf gesperrt; der Befehl zum Abhaken
+nimmt mit Absicht nur eigene Schritte. Ins [Backlog](../prozess/backlog.md): Abkürzungen in
+zusammengesetzten Namen, tote Links, Formfehler erst beim Commit, Kommentare im Chat,
+lange Läufe, `gleichwertig.json` für den Testautor.
 
 ## Prozess-Items
-P3 gilt der Ursache (1), P4 der verletzten Prämisse (3), P5 deinem Auftrag 2460 und dem
-Testpfad der neuen (2720), P6 löscht Prüfcode vor Neuem (2); sonst deine Aufträge.
-- P1 Regeln nach deinen Entscheidungen (Organisationsentwickler): Fachkritiker und
-  Organisationsentwickler kritisieren ein Review (Kritik, Fortschritt); Es 8 nennt seinen
-  Mechanismus (2360); Höchstmaß der Architektur nach 2570 (3050); `Wartet auf: Technikphase
-  8` nennt den Zyklus; eine Empfehlung an dich ist an einer Kopie erprobt, samt Arbeiten und
-  Commit danach (2201); ohne Zuwachs bleiben deine Aufträge und eine verletzte Prämisse
-  als Item erlaubt (3451). Dazu `doku/`.
-- P2 Ablauf und Regeln in Ordnern (Organisationsentwickler): je Abschnitt eine Datei in
-  `prozess/ablauf/` und `prozess/regeln/`, eine Rolle liest nur, was sie braucht (2590).
-- P3 Dein Innen-Ich (Organisationsentwickler): Ich suche, wo du Frust zeigtest, und lege dir
-  vor, was dich bewegt, als Prämisse erst mit deiner Freigabe (2591, 2201). Was statt des
-  Erfundenen gilt, steht in der [Domäne](../domaene/CLAUDE.md) (Quellen); ich zeige, wo
-  Zyklus 7 davon abwich.
-- P4 Schreiben über Bash sperren (Regelumsetzer): Claude Code sperrt `sed -i` und
-  Python-Schnipsel auch in Schleifen und `/tmp`; ein Skript in `/tmp` mit Pfaden als Argument
-  bleibt erlaubt. Umwege über `xargs` und `find` sperrt die Schreibgrenze, `bash -c` bleibt
-  Lücke (2040, 2592, 3450). An einer Kopie erprobt, samt Commit.
-- P5 Läufe und Anliegenkopf (Regelumsetzer): Der Commit setzt keine fremde Arbeit zurück,
-  Hindernisse nehmen Nummern aus dem Bereich, ein neu gefasster Plan öffnet seine Kritik,
-  `Wartet auf` mit Zyklus wartet bis dahin, die Rückverfolgung nennt T1 (2460, 2720).
-- P6 Reste im Prüfcode (Regelumsetzer): Alte Kopfzeile der Anliegen und ihr Umschreiben
-  entfallen, Kommentare im Frontend prüft nur eslint (3301).
-- P7 Architekturkarte (Regelumsetzer): Das Dashboard zeigt Schichten und Importe,
-  verbotene in Rot (3120).
-- P8 Prüfungen nach P2 (Regelumsetzer): Seine Regeln trägt er auch in den neuen Dateien in
-  jeder Phase ein; Commit mit P2 und den Links des Architekten (3450).
-- P9 Deine Absicht (Organisationsentwickler): vierte Prämisse, zuerst geladen;
-  Optionen an dich nennen ihre Quelle. Deine Wahl: vor Plan 8 (3820).
+P1 gilt Befund 1, P2 Befund 2; sonst deine Aufträge 6430, 6380, 4040, 3550.
+- P1 Tests für jeden Fall (Organisationsentwickler): Nach F2 läuft der Testautor auf Opus,
+  der Skill `akzeptanztest-schreiben` bekommt das Gegenbeispiel „nur Spieler 1“. Danach
+  prüft ein Test, was für beide Spieler oder jede Runde gilt, mit mehr als einem Wert.
+- P2 Kein Verhalten ohne Test (Organisationsentwickler): Verlangt kein Test ein Verhalten,
+  baut der Implementierer es nicht, sondern schreibt ein Anliegen an den Testautor; der
+  Architekt prüft es in der Kritik am Code. Danach sperrt Arbiter nichts, was der Plan unter
+  „Noch nicht“ nennt.
+- P3 Prämissen nach deinen Antworten (Organisationsentwickler): Es 8 nach F1, die sechs
+  Verschiebungen nach F3 (6380), das Kürzel je Phase in der Domäne (4620).
+- P4 Docstrings im Prüfcode (Regelumsetzer): `formregeln/kommentare.py` nach Es 8 neu, der
+  Prüfcode danach ohne verbotene Docstrings. Produkt und Tests räumen Implementierer und
+  Testautor in Technikphase 9; rot erst in deren DoD.
+- P5 Ablauf schlanker (Organisationsentwickler): Streichungen 1 bis 6 aus
+  [Anliegen 4040](anliegen/4040-ablaufUndRegelnVerschlanken.md); an einer Kopie in `/tmp`
+  arbeiten und committen alle Rollen wie vorher.
+- P6 Regeln schlanker (Regelumsetzer): Punkt 7 aus 4040, das Format `Hindernis:` einmal
+  (4120), dazu 3780, Punkt 1.
+- P7 Belegte Kriterien je Etappe (Regelumsetzer): Stand und Dashboard zeigen „Etappe 2: x von
+  y Kriterien belegt“ neben allen (3550, A); jede Anforderung nennt jetzt `Etappe:`.
 
 ## Empfehlung
-Am Bildschirm ändert sich nichts.
+Beantworte 6431 und gib die Retro frei. Der Reiter Architektur (4140) kommt nach P6: erst
+Bestand abbauen, dann Neues (306).
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
-- [x] Fachkritiker: Kritik an der Retro
-- [x] Architekt: Kritik an der Retro
-- [x] Organisationsentwickler: Nachkorrektur
-- [x] Stakeholder: Freigabe Retro 7
-- [x] Organisationsentwickler: P1
-- [x] Organisationsentwickler: P2
-- [x] Organisationsentwickler: P3
-- [x] Regelumsetzer: P4
-- [x] Regelumsetzer: P5
-- [x] Regelumsetzer: P6
-- [x] Regelumsetzer: P7
-- [x] Regelumsetzer: P8
-- [x] Organisationsentwickler: P9
+- [ ] Fachkritiker: Kritik an der Retro
+- [ ] Architekt: Kritik an der Retro
+- [ ] Organisationsentwickler: Nachkorrektur
+- [ ] Stakeholder: Freigabe Retro 8
+- [ ] Organisationsentwickler: P1
+- [ ] Organisationsentwickler: P2
+- [ ] Organisationsentwickler: P3
+- [ ] Regelumsetzer: P4
+- [ ] Organisationsentwickler: P5
+- [ ] Regelumsetzer: P6
+- [ ] Regelumsetzer: P7
 - [x] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: ja
+Freigabe: offen
 Kommentar: .

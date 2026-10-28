@@ -5,7 +5,7 @@ Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
 Status: offen
-Wartet auf: Prozessphase
+Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** Nachprüfung von P4 (Retro 7): Die Formen aus
