@@ -11,7 +11,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
 - Regelumsetzer, Prozessphase 8: Anliegen 3900,
   [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md),
   [3780](anliegen/3780-restePruefcodeNach3301.md),
-  [4120](anliegen/4120-hindernisformatInAblaufUndRegeln.md),
+  Anliegen 4120,
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
 - Wartet auf 6431: Anliegen 6380,
   Anliegen 6430.
