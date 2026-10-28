@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Der Mutationstest muss früher starten. Mir scheint es so, dass er
@@ -61,4 +61,4 @@ empfehle ich nicht: Ein Mutant hängt auch an Tests und anderen Modulen.
 A: Ja, mit F2 (Anliegen 6960, dein Kommentar). Rückweg: streichen. Nicht an einer Kopie erprobt.
 B: Nein, wie bisher am Ende (`mutation.py`).
 Empfehlung: A, unterbrechen kostet dann nichts.
-Antwort: .
+Antwort: A
