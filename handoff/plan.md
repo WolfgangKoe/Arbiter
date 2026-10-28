@@ -95,7 +95,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Fachkritiker → Reviewer: Klickpfad zeigt Korrigieren (BEW-1.6) und leere Phasen (QUE-10.5) nicht, Bild zu Spieler am Zug und Schlachtende fehlt; Nahkampfreichweite und Loslassen neben der Karte fehlen in Etappen- und Zyklusziel (Anliegen 6335); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
 - [x] Organisationsentwickler: Kritik am Review
   Hindernis: Organisationsentwickler → Reviewer: Rundgang Prüfcode ohne erlaubteImporte.py, planFassung.py, abhaken.py, bashSchreiben.py und die Verbote in settings.json; Punkt 3 fragt ohne Empfehlung (Anliegen 6360); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
-- [ ] Stakeholder: Freigabe Review 8
+- [x] Stakeholder: Freigabe Review 8
 
 ## Freigabe
 Freigabe: ja
