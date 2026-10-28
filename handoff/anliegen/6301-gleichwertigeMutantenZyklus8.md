@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Anliegen 6291: Die Mutation liegt bei 84 %. Ich habe die Überlebenden mit Tests gefangen, die ein Kriterium verlangt. Fünf sind gleichwertig; `mutationsregeln/gleichwertig.json` darf ich nicht schreiben (Schreibgrenze). Einträge (`datei`, `quelle`, `fehler`; `grund` je Zeile):

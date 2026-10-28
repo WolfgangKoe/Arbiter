@@ -11,8 +11,8 @@ from tests.akzeptanz.handgriffe import (
     radiusInZoll,
     spielerMit,
     stelleInDerZoneVon,
+    versetzt,
 )
-from tests.akzeptanz.schlacht import einModellAusDerKohärenzZiehen
 
 
 def aufstellungMitEinheitVon(modellzahl: int):
@@ -86,10 +86,13 @@ def testQue4_4ZweiGruppenOhneModellImAbstandVonZweiZollMachenDieEinheitInkohäre
     assert not aufstellung.inKohärenz(einheit)
 
 
-def testQue4_4DieSchlachtNenntEineEinheitMitEinemWeitEntferntenModellNichtInKohärenz(
+def testQue4_4DieSchlachtNenntEineEinheitInZweiGruppenNichtInKohärenz(
     schlachtInDerBewegungsphase, boyz
 ):
-    einModellAusDerKohärenzZiehen(schlachtInDerBewegungsphase, boyz)
+    zweiteGruppe = list(boyz.modelle)[5:]
+    for modell in reversed(zweiteGruppe):
+        ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), (Fraction(5), Fraction(0)))
+        schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
     assert not schlachtInDerBewegungsphase.inKohärenz(boyz)
 
