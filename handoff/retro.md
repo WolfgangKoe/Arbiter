@@ -104,11 +104,11 @@ abbauen, dann Neues (306).
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 8
 - [x] Organisationsentwickler: P1
-- [ ] Organisationsentwickler: P3
+- [x] Organisationsentwickler: P3
 - [ ] Regelumsetzer: P4
-- [ ] Organisationsentwickler: P5
+- [x] Organisationsentwickler: P5
 - [ ] Regelumsetzer: P6
-- [ ] Regelumsetzer: P7
+- [x] Regelumsetzer: P7
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
