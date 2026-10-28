@@ -1,59 +1,66 @@
 # Moderation
 
-Stand: Technikphase 8 (Zyklus 8). Die Items 1 bis 3 in [Plan 8](plan.md) laufen: Tests zu
-Item phasenUndSchlachtrunden sind der nächste offene Schritt. Kein offenes Anliegen hält sie
-auf; die vier Annahmen aus 5180 gelten, bis du antwortest.
+Stand: Review 8 wartet auf deine Freigabe ([Plan 8](plan.md), [Review 8](review.md)). Kein
+offenes Anliegen hält sie auf; die 30 offenen warten alle auf spätere Phasen.
 
 ## Dran
-- Testautor: die Tests zu Item phasenUndSchlachtrunden und normalMove (Plan 8, Fortschritt);
-  er arbeitet mit den Annahmen aus Anliegen 5180 weiter.
-- Implementierer: Anliegen 4781 (Docstring von
-  `web/anwendung.py`); klein, hält nichts auf.
-- Regelumsetzer: Anliegen 4780 (Links auf die
-  alte Architektur). [3780](anliegen/3780-restePruefcodeNach3301.md) und
-  [3900](anliegen/3900-standNenntFalscheRolleFuerProzessItems.md) warten auf die Prozessphase 8.
-- Stakeholder: Anliegen 5180 F1 bis F4; hält nichts auf.
-- Auf die Prozessphase (8): [3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
+Blockiert das Inkrement: nichts.
+- Stakeholder: Freigabe Review 8; Fragen unten.
+- Anforderungsautor, Domänenphase 9: [4261](anliegen/4261-lueckenImNormalMoveFuerSpaeter.md),
+  [5520](anliegen/5520-bewegungsphaseFuerSpaeter.md),
+  [6240](anliegen/6240-abwaehlenInDerSchlacht.md),
+  [6300](anliegen/6300-anklickenUndFremdesModellLoslassen.md),
+  [4881](anliegen/4881-datenblaetterImGlossarUndInDenDaten.md).
+- Planer, Domänenphase 9: [5521](anliegen/5521-etappe2SperrtNichtMehrUeberB.md),
+  [4882](anliegen/4882-itemKatalogwerteGliedern.md).
+- Ux, Domänenphase 9: [5542](anliegen/5542-mockupBewegungGanzeEinheitAusgewaehlt.md).
+- Testautor, Technikphase 9: [4901](anliegen/4901-ebeneImTestnamenUndKlickAufDenAnderenSpieler.md),
+  [4921](anliegen/4921-klickUndHandgriffeDerSchlachtFuerSpaeter.md),
+  [5241](anliegen/5241-sperrmeldungBeimNaechstenZiehenUndKlickInDerAufstellung.md),
+  [5781](anliegen/5781-bewegungstestsAblageFuerSpaeter.md),
+  [6241](anliegen/6241-bewegungOhneTestZuQue1_3UndAuf8_7.md),
+  [6340](anliegen/6340-namenDerTestsZu6291.md).
+- Implementierer, Technikphase 9: [5380](anliegen/5380-testmodellUndKopierteWerteImKatalogtest.md),
+  [5701](anliegen/5701-gegnerUndTestnameDerSchlacht.md),
+  [6102](anliegen/6102-ablageDerBewegungFuerSpaeter.md),
+  [6122](anliegen/6122-normalMoveDoppeltesUndUnklares.md),
+  [6290](anliegen/6290-reviewNachbauUndDistanz.md).
+- Architekt, Technikphase 9: [5000](anliegen/5000-vertragAufstellenGekuerztUndVoll.md).
+- Reviewer, Technikphase 9: [6361](anliegen/6361-review8LinksBelegeKlickpfad.md).
+- Regelumsetzer, Prozessphase 8: [3780](anliegen/3780-restePruefcodeNach3301.md),
+  [3900](anliegen/3900-standNenntFalscheRolleFuerProzessItems.md),
+  [3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
   [4120](anliegen/4120-hindernisformatInAblaufUndRegeln.md),
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md),
-  [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md),
-  [4620](anliegen/4620-kuerzelJePhaseInDerDomaene.md),
+  [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md).
+- Organisationsentwickler, Prozessphase 8: [4620](anliegen/4620-kuerzelJePhaseInDerDomaene.md),
   [4040](anliegen/4040-ablaufUndRegelnVerschlanken.md).
-- Auf die Domänenphase 9: [4261](anliegen/4261-lueckenImNormalMoveFuerSpaeter.md),
-  [4881](anliegen/4881-datenblaetterImGlossarUndInDenDaten.md),
-  [4882](anliegen/4882-itemKatalogwerteGliedern.md),
-  [5181](anliegen/5181-klickAufEineAufgestellteEinheit.md) (Anforderungsautor, falls A).
-- Auf die Technikphase 9: [4901](anliegen/4901-ebeneImTestnamenUndKlickAufDenAnderenSpieler.md),
-  [4921](anliegen/4921-klickUndHandgriffeDerSchlachtFuerSpaeter.md),
-  [5000](anliegen/5000-vertragAufstellenGekuerztUndVoll.md).
 
 ## Vorschläge
-- 4901 Punkt 1 ist als F3 in 5180 aufgegangen; der Architekt darf ihn in 4901 als erledigt
-  vermerken und 4901 auf den Rest kürzen.
-- 5180 F3 und 4921 (Klick der Schlacht) haben dasselbe Thema; der Architekt darf 4921 nach
-  deiner Antwort auf F3 gegen 5180 abgleichen. 5181 bleibt eigenes Anliegen (Aufstellung).
-- 4120 Schritt 1 und 2 sind Fälle von „doppelt“ aus 4040; der Organisationsentwickler darf
-  sie dort einordnen und 4120 danach schließen.
-- 4301 und 3900 ändern beide `standregeln/fortschritt.py` und `phasenfolge.py` samt Tests;
-  der Regelumsetzer macht sie in einem Lauf. 4301 hängt zudem an der Tabelle in
-  [Fortschritt](../prozess/ablauf/fortschritt.md) (Organisationsentwickler).
-- 3960 und 3780 sind Hook-Code und laufen nacheinander, nicht neben 3900 und 4301.
-- 4140 trägt Anliegen 4100 mit; der Architekt schließt 4100, wenn 4140 gebaut ist. 4140
-  ändert kein Hook-Modul und darf neben den Hook-Strängen laufen.
-- 4620 und 4040 ändern beide Dateien des Organisationsentwicklers; ein Strang, 4620 zuerst.
-- Stränge Prozessphase 8: Regelumsetzer A: 3900 + 4301 (+ 4120 Schritt 1), dann 3780, dann
-  3960; B daneben: 4140. Organisationsentwickler: 4620, dann 4040 mit 4120 Schritt 2 und der
-  Tabelle aus 4301. Nichts davon läuft neben den Items der Technikphase.
+- 6240, 5520 (F3 Ebene in der Schlacht) und 6300 haben dasselbe Thema: Auswahl, Abwählen und
+  Klick in der Schlacht. Der Anforderungsautor darf sie in einem Lauf bearbeiten und die
+  Fragen an dich in einem Anliegen bündeln. 4921 (Architekt/Testautor) gehört dazu.
+- 4261, 5520 Punkt 1 und 5521 betreffen Advance, Zurücksetzen und die Wahl der Bewegung;
+  der Anforderungsautor darf sie zusammenlegen, der Planer zieht 5521 danach nach.
+- 4261 trägt dein `Kommentar:`: Die Umbenennung von „Normal Move“ (Item heißt
+  normalMove, Anforderungen „Normale Bewegung“) ist zu beachten; der Anforderungsautor darf
+  das beim Bearbeiten einbeziehen, es geht meinen Vorschlägen vor.
+- 4901 Punkt 1, 5241 und 6340 sind Testnamen und Testlücken desselben Testautors; ein Lauf.
+- 6102, 6122, 6290 und 5701 ändern dieselben Domänenmodule (Bewegung, messen); der
+  Implementierer macht sie in einer Kette, 6290 zuerst.
+- 4120 Schritt 1 und 2 sind Fälle von „doppelt“ aus 4040; der Organisationsentwickler darf sie
+  dort einordnen, der Regelumsetzer führt Schritt 1 aus; dann kann 4120 schließen.
+- 4301 und 3900 ändern beide `standregeln/fortschritt.py`; ein Lauf des Regelumsetzers.
+- Stränge Prozessphase 8: Regelumsetzer A: 3900 + 4301, dann 3780, dann 3960; B daneben:
+  4140 (kein Hook-Modul). Organisationsentwickler: 4620, dann 4040. Domänenphase 9:
+  Anforderungsautor, Planer und Ux laufen getrennt nebeneinander (getrennte Dateien).
 
 ## Fragen an dich
 Mit `Annahme:` (die Arbeit läuft mit der Empfehlung weiter):
-- Anliegen 5180 F1: Steht „Bewegung der Einheit beenden“
-  nur bei einer Einheit in Bewegung? Annahme: ja.
-- 5180 F2: Zeigt die Karte beim Ziehen die letzte Stelle ohne Sperre? Annahme: ja (A).
-- 5180 F3: Wählt in der Schlacht ein Klick auf ein Modell die ganze Einheit, nie ein Modell
-  allein als Ebene? Annahme: A.
-- 5180 F4: Wirkt ein doppelt ankommender Klick nur einmal? Annahme: A.
 - [5181](anliegen/5181-klickAufEineAufgestellteEinheit.md) F1: Wählt in der Aufstellung der
   Klick auf eine aufgestellte Einheit nichts aus? Annahme: A, der Klick ändert nichts.
 
-Ohne `Annahme:`: keine.
+Ohne `Annahme:`:
+- [4882](anliegen/4882-itemKatalogwerteGliedern.md) F1: Kommt das Item Katalogwerte gliedern
+  als erstes Item von Plan 9 (A) oder erst in Etappe 8 (B)? Empfehlung: A. Eine Antwortzeile
+  fehlt dort; trage sie im Anliegen ein.
