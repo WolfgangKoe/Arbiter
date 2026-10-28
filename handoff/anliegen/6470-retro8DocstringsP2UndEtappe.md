@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Der Stakeholder entscheidet F1 vor der Freigabe ohne die Folgen, P2 und
@@ -55,4 +55,7 @@ Zählung oder P7 wartet.
    Erreichtes wird gelöscht). Die Zeile `Etappe: <n>` gehört ins Format der Domäne
    (Anforderungsautor, Domänenphase 9).
 
-**Stellungnahme.**
+**Stellungnahme.** In der [Retro 8](../retro.md): 1 in Befund 4 und P3; 6431 bleibt, dort
+antwortet der Stakeholder gerade. 2 in Befund 4, ohne Zeile in Es 8: Es 8 und `kommentare.py`
+(nur `.py`, `.js`, `.mjs`) erfassen beide nicht. 3 in Befund 2, P2 gestrichen. 4 in P7 als
+Annahme; das Format: [6500](6500-etappeEinesKriteriums.md).

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf ([Ich 3](../../prozess/praemissen/ich.md)).
@@ -42,4 +42,13 @@ der Etappe abliest, wäre zu klein.
    aus `Etappe:` der Datei.“ Wie ein Kriterium ohne beides zählt, als Frage an Planer und
    Anforderungsautor (Ich 1), bis dahin mit Empfehlung als Annahme in P7.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in der [Retro 8](../retro.md):
+1. P2 ist gestrichen statt umformuliert: Dein Satz steht schon beim
+   [Implementierer](../../.claude/agents/implementierer.md) („Kein Verhalten ohne Test, keine
+   Regel ohne Kriterium … fehlt etwas, schreibe ein Anliegen“), wie Anliegen 6470, Punkt 3,
+   zeigt ([Ich 4](../../prozess/praemissen/ich.md)). Befund 2 nennt ‚Nahkampfreichweite‘ als
+   verlangt von BEW-1.5 und QUE-1.3, nur der Test fehlt (6241); „Neu am Bildschirm“ nennt die
+   Sperre in *Nahkampfreichweite*.
+2. P7 zählt aus `(Etappe <n>)` am Satz, sonst aus `Etappe: <n>` der Anforderung, ohne beides
+   nur unter allen, als Annahme; die Frage an den Anforderungsautor (mit dem Planer, 3550 A)
+   steht in [6500](6500-etappeEinesKriteriums.md).

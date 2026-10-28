@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Zu deinen Aufträgen 6430 und 6380 und zum Auslöser „Testautor auf Opus“
@@ -53,3 +53,4 @@ Antwort: .
 Empfehlung gilt. Umgesetzt in P1, P3 und P4 der [Retro 8](../retro.md).
 
 **Stellungnahme.**
+Kommentar: F2 und F3 verstehe ich nicht. Bitte ausführen. Bei F1 habe ich zumindest eine Art Meinung, die ggf. durch den aktuellen Stand gedeckt ist. Wir verwenden Docstrings vor allem und einen Spiegel zwischen Akzeptanztests und den Akzeptanzkriterien herzustellen, korrekt? ALso QUE-1.1 würde einen entsprechenden Test in der Technik haben, wo genau diese Abkürzung in der Datei steht, zusätzlich noch ein Satz, was das für ein TEst ist. Bei allen anderen Codezeilen sollte das an sich nicht nötig sein. Der Code selbst sollte lesbar sein und der Docstring daher unnötig. Ist hingegen der Inhalt des Docstrings nicht im Code zu lesen, dann wird auch ein zusätzlicher Docstring nicht zu einem besseren Verständnis beitragen. Wie machen wir es nun?
