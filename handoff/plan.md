@@ -87,7 +87,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Reviewer → Implementierer: Grund des Setzens und Ziehens als Zweig statt Zeile der Tabelle (D4) (Anliegen 6120); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
   Hindernis: Reviewer → Architekt: Rundung jeder Zahl der Anfrage auf Nenner 10^6 steht nicht in S2 (Anliegen 6121); beseitigt: Commit „normalMove: Kritik des Architekten am Code abgeschlossen“
 - [x] Fachkritiker: Item normalMove abgenommen
-- [ ] Planer: Item normalMove gelöscht
+- [x] Planer: Item normalMove gelöscht
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
