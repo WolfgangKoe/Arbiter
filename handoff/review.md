@@ -19,17 +19,22 @@ Phasen jeder *Schlachtrunde* und zieht in der *Bewegungsphase* eure *Einheiten*.
 7. Einen Boy anklicken: Alle Boyz sind *ausgewählt*. Einen ziehen: Alle rücken um denselben
    Weg.
 8. Danach den Warboss noch einmal 2″ zurückziehen: Das geht, er steht, wo du ihn loslässt.
-9. Einen Boy allein ziehen geht nur über einen Umweg: erst den Warboss anklicken, dann ist
-   kein *Modell* der Boyz mehr *ausgewählt*. Ein Klick auf die leere *Karte* hebt die Auswahl
-   nicht auf ([Anliegen 6240](anliegen/6240-abwaehlenInDerSchlacht.md)).
-10. Einen Boy über einen anderen hinweg ziehen: Er springt zurück, Arbiter nennt ‚über eine Base‘.
-11. Einen Boy weit weg aus der *Kohärenz* ziehen, „Phase beenden“: ‚keine Kohärenz‘, nichts
-    zum Übergehen.
+9. Einen einzelnen Boy *auswählen* geht in der *Schlacht* noch nicht: Ein Klick auf einen Boy
+   wählt immer alle Boyz (Plan 8, Item 3). Ein *Modell* als *Ebene* auch in der *Schlacht*
+   hast du für Domänenphase 9 gewählt
+   ([Anliegen 5520](anliegen/5520-bewegungsphaseFuerSpaeter.md), F3 B). Einen Boy allein
+   ziehen geht nur über einen Umweg: erst den Warboss anklicken, dann ist kein *Modell* der
+   Boyz mehr *ausgewählt*; dann einen Boy greifen und ziehen, ohne ihn vorher anzuklicken.
+   Ein Klick auf die leere *Karte* hebt die Auswahl nicht auf
+   ([Anliegen 6240](anliegen/6240-abwaehlenInDerSchlacht.md)).
+10. Wie in 9 einen Boy über einen anderen hinweg ziehen: Er springt zurück, Arbiter nennt
+    ‚über eine Base‘.
+11. Wie in 9 einen Boy weit weg aus der *Kohärenz* ziehen: Nur er rückt. „Phase beenden“:
+    ‚keine Kohärenz‘, nichts zum Übergehen.
 12. Phasen beenden bis zur Moralphase: Spieler 2 ist *am Zug*. Nach der fünften
     *Schlachtrunde* steht in der Kopfzeile „Schlacht beendet“, „Phase beenden“ ist fort.
 
-Am laufenden Arbiter gesehen: 1 bis 10 und 12. 11 zeigt nur
-[beendenTest](../technik/tests/akzeptanz/phasen/bewegung/beendenTest.py).
+Am laufenden Arbiter gesehen: 1 bis 12, 6 bis 11 in Folge mit der Maus.
 Greifst du ein *Modell* am Rand, springt es nicht mehr mit der Mitte unter den Zeiger
 (AUF-8.7, [ziehenTest](../technik/tests/akzeptanz/phasen/aufstellen/ziehenTest.py)).
 Lässt du ein *Modell* in *Nahkampfreichweite* eines gegnerischen los, sperrt Arbiter schon
@@ -119,3 +124,9 @@ wesentliches Problem nenne, sehe ich keines.
 ## Freigabe
 Freigabe: offen
 Kommentar: .
+Stellungnahme: Zu deiner Frage im Chat zu Schritt 11: Ja, das ist so in Zyklus 8. Ein
+einzelnes *Modell* *auswählen* geht in der *Schlacht* noch nicht (Anliegen 5520, F3 B, für
+Domänenphase 9); allein ziehen geht nur, solange seine *Einheit* nicht *ausgewählt* ist. Der
+Klickpfad sagte nicht, wie; Schritte 9 bis 11 unter „Am Bildschirm prüfen“ sagen es jetzt.
+Schritte 6 bis 11 habe ich am laufenden Arbiter nachgestellt: Nur der Boy rückt, „Phase
+beenden“ nennt ‚keine Kohärenz‘. Im Produkt fehlt kein Schritt, kein neues Anliegen.
