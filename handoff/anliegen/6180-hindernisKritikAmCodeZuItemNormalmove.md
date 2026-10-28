@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [S2](../../technik/architektur/domaene.md#stelle-und-rechnen) nennt jetzt die Rundung jeder Zahl einer Anfrage (Anliegen 6121), Prüft: [anwendungTest.py](../../technik/tests/einheit/web/anwendungTest.py); dort fehlt der Einheitstest. Empfehlung: ein Test, der x = 160/127 und y = 121/3 als JSON-double schickt, einmal als Körper von PUT …/stelle (V5), einmal als Abfrage …/stelleBeimLoslassen (V10), und in der Domäne genau diese Fraction findet; ohne limit_denominator ist er rot. Das hält den Schritt „Kritik am Code zu Item normalMove“ von Architekt im Fortschritt auf.

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: 6180
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Ich 3: neuer Code verletzt Architektur), Diff `7684034..d527459`.
@@ -41,6 +40,7 @@ ihren Grund und ihre Grenze, [V5](../../technik/architektur/vertrag/querschnitt.
 nur noch auf S2. Meine Zeile in V5 sagte zu viel: Exakt zurück kommt nur eine *Stelle* mit
 Nenner bis 10⁶. Eine aus dem Anhalten (S3) hat oft einen größeren (in `/tmp` 68 315 388 515)
 und kommt bis 1/(2·10⁶)″ daneben zurück, ohne Rundung ebenso wenig exakt; das steht jetzt in
-S2 und wartet als Randfall. Den Einheitstest schreibt der Implementierer:
-[6180](6180-hindernisKritikAmCodeZuItemNormalmove.md). Bis es erledigt ist, bleibt dieses
-Anliegen offen (Wartet auf: 6180).
+S2 und wartet als Randfall. Den Einheitstest hat der Implementierer geschrieben
+([6180](6180-hindernisKritikAmCodeZuItemNormalmove.md), erledigt): zwei Tests in
+[anwendungTest.py](../../technik/tests/einheit/web/anwendungTest.py), Körper und Abfrage;
+in `/tmp` ohne `limit_denominator` beide rot.
