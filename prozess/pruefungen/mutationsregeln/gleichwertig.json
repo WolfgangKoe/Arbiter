@@ -28,5 +28,71 @@
   "quelle": "return self._auswahl.modellIstEbene(modell)",
   "fehler": "Rückgabe wird None",
   "grund": "Die Schlacht ruft ebeneWählen nie auf, kein Modell ist dort die Ebene, also False; der einzige Aufrufer (darstellung._modell) wertet nur die Wahrheit aus (Anliegen 6301)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py",
+  "quelle": "zweite = 2",
+  "fehler": "2 wird 3",
+  "grund": "Den Wert von Aufstellungszone liest kein Code, nur die Identität (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/aufstellen/setzenPerKlick.py",
+  "quelle": "for versatz, anzahl in zip(versätze, formation.reihen, strict=True)",
+  "fehler": "True wird False",
+  "grund": "versätze hat stets so viele Einträge wie formation.reihen: accumulate mit initial über die Paare der Reihen (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/aufstellen/setzenPerKlick.py",
+  "quelle": "abs(vorn - hinten)",
+  "fehler": "Sub wird Add",
+  "grund": "Die Lagen einer Reihe liegen symmetrisch um null; mit hinten ist auch -hinten eine Lage, das Minimum bleibt gleich (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/web/darstellung.py",
+  "quelle": "\"länge\": float(endeY - anfangY),",
+  "fehler": "Sub wird Add",
+  "grund": "grenzenDerZone gibt in y stets (0, länge), anfangY ist 0 (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/web/server.py",
+  "quelle": "self._thread = Thread(target=self._server.serve_forever, daemon=True)",
+  "fehler": "True wird False",
+  "grund": "Der Befehl beendet den Server stets mit beenden (Strg+C), die Tests über ihre Fixture; daemon wirkt nur, wenn ein Aufrufer das auslässt (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/spielobjekte.py",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Base, Stelle, Spielfeld: Kein Code weist einem Feld neu zu (mypy prüft das), keiner hasht sie (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/spielobjekte.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "True wird False",
+  "grund": "Modell, Einheit, Armee, Spieler: Kein Code weist einem Feld neu zu (mypy prüft das); mit eq=False bleibt der Hash der Identität (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/spielobjekte.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "False wird True",
+  "grund": "Einheit, Armee, Spieler: Gleich wären nur Einheiten mit denselben Modellen oder Spieler mit derselben Armee, das verbietet Ausgangslage.__post_init__; Armee vergleicht kein Code. Der gefangene Mutant an Modell hat dieselbe Quelle und zählt mit nicht (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Formation: Kein Code weist einem Feld neu zu (mypy prüft das), keiner hasht sie (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "True wird False",
+  "grund": "Ausgangslage: Kein Code weist einem Feld neu zu (mypy prüft das); mit eq=False bleibt der Hash der Identität (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "False wird True",
+  "grund": "Ausgangslage vergleicht und hasht kein Code (Anliegen 6994)."
  }
 ]

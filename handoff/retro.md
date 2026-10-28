@@ -106,7 +106,7 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550, 6960.
 Für dich ist nichts zu tun. Der Regelumsetzer arbeitet nach deiner Entscheidung in dieser
 Reihenfolge: die Hook-Zeile aus Anliegen 6760; 3780
 Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle statt an vier
-([3780](anliegen/3780-restePruefcodeNach3301.md)); keine Testzeilen im Fortschritt für ein
+(Anliegen 3780); keine Testzeilen im Fortschritt für ein
 Item ohne Kriterium ([4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md)); P4 nach 4301,
 ohne Teilung um `standregeln/`, weil beide dort ändern; P9 nach P4, es wirkt ab der
 Technikphase 9 (6960, F3); zuletzt der Reiter Architektur
@@ -127,7 +127,7 @@ Neues (306).
 - [x] Organisationsentwickler: P5
 - [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
-- [ ] Organisationsentwickler: P8
+- [x] Organisationsentwickler: P8
 - [ ] Regelumsetzer: P9
 - [ ] Koordinator: nach dev gepusht
 

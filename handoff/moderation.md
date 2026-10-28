@@ -9,7 +9,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
 - Organisationsentwickler, Prozessphase 8: Anliegen 4620, Anliegen 4040.
 - Regelumsetzer, Prozessphase 8: Anliegen 3900,
   [4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md),
-  [3780](anliegen/3780-restePruefcodeNach3301.md), Anliegen 4120,
+  Anliegen 3780, Anliegen 4120,
   [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
 - Nachprüfung fällig: Anliegen 6870, Absender
   Koordinator, nach Regel niemand (siehe Vorschläge); Regelumsetzer, laufen daneben:
