@@ -309,6 +309,18 @@ def testJedesItemHatVorDenTestsDieVertragszeileDesArchitekten(tmp_path, gitRepo)
     assert vertrag + "- [ ] Testautor: Tests zu Item stellen\n" in text
 
 
+def testEinItemOhneKriteriumHatKeineTestUndKeineVertragszeile(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nKein Kriterium.\n")
+    fortschrittSchreiben(tmp_path)
+    text = plan.read_text(encoding="utf-8")
+    for fehlt in ("Vertrag zu Item", "Tests zu Item", "Kritik an den Tests"):
+        assert fehlt not in text
+    assert "- [ ] Architekt: Kritik am Code zu Item stellen\n" in text
+    assert "- [ ] Fachkritiker: Item stellen abgenommen\n" in text
+    assert "- [ ] Planer: Item stellen gelöscht\n" in text
+
+
 def testHooksStartenDasSkriptNachJedemRollenlaufUndNachBashBefehlen():
     einstellungen = json.loads(
         (Path(__file__).parents[3] / ".claude" / "settings.json").read_text(encoding="utf-8")

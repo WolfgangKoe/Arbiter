@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase 8
 
 ## Runde 1
@@ -28,4 +28,8 @@ und Commit müssen beide stimmen, der Stand nennt es dann „Commit fehlt“. Wa
 Prozessphase, weil der Stand falsch führt; Umsetzung nach Freigabe in einem späteren
 Prozess-Item.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `prozessschritt` nennt die Rolle aus der Klammer; `itemRollen`
+liegt dafür in `standregeln/phasenfolge.py`. Test:
+`phasenfolgeTest.py` `testDerNächsteSchrittNenntDieRolleAusDerKlammerDesItems`. Regel:
+[Standregeln](../../prozess/regeln/standregeln.md). Nicht umgesetzt: „Haken und Commit müssen
+beide stimmen“; das verlangt zuerst die DoD der Prozessphase (Organisationsentwickler).

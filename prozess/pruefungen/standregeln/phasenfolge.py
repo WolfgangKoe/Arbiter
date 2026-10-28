@@ -7,7 +7,11 @@ from typing import NamedTuple
 
 from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit
 from gemeinsam.pfade import etappenOrdner, handoffOrdner
+from lesen.agenten import rollennamen
 from lesen.plan import offeneItems, zyklus
+
+itemzeile = re.compile(r"^- (P\d+) [^\n(]*\(([^),:]+)", re.MULTILINE)
+umsetzer = "Regelumsetzer"
 
 
 class Phase(StrEnum):
@@ -44,6 +48,17 @@ def prozessItems(wurzel: Path) -> list[str]:
     return re.findall(r"^- (P\d+) ", abschnitt, re.MULTILINE)
 
 
+def itemRollen(wurzel: Path) -> dict[str, str]:
+    """Die Rolle je `P<k>` aus der Klammer `- P<k> <Titel> (<Rolle>): …`; sonst Regelumsetzer."""
+    text = (wurzel / handoffOrdner / "retro.md").read_text(encoding="utf-8")
+    abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
+    bekannt = {name.casefold(): name.capitalize() for name in rollennamen(wurzel)}
+    genannt = {kennung: rolle.strip().casefold() for kennung, rolle in itemzeile.findall(abschnitt)}
+    return {
+        kennung: bekannt.get(genannt.get(kennung, ""), umsetzer) for kennung in prozessItems(wurzel)
+    }
+
+
 def hatItemCommit(betreffe: list[str], retro: int, kennung: str) -> bool:
     """Ein Betreff beginnt mit `P<k>:`, `P<j>, P<k> und 1920:` (Sammel) oder `Retro <n> P<k>:`."""
     muster = rf"(Retro {retro} )?(P\d+(, | und ))*{kennung}((, | und )(P)?\d+)*:"
@@ -67,7 +82,8 @@ def prozessschritt(wurzel: Path, plan: int, retro: int | None) -> tuple[int, Pha
         return plan, Phase.prozessphase, f"Retro {plan} wartet auf Kritik und Freigabe"
     offen = offenesProzessItem(wurzel, plan, freigabe)
     if offen is not None:
-        return plan, Phase.prozessphase, f"Regelumsetzer: Prozess-Item {offen} aus Retro {plan}"
+        rolle = itemRollen(wurzel)[offen]
+        return plan, Phase.prozessphase, f"{rolle}: Prozess-Item {offen} aus Retro {plan}"
     return plan + 1, Phase.domänenphase, f"Anforderungsautor, dann Planer: Plan {plan + 1}"
 
 

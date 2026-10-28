@@ -4,8 +4,8 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
+Wartet auf: 6620
 
 ## Runde 1
 **Befund.** Das Item [architekturUmordnen](../../domaene/items/architekturUmordnen.md) hat
@@ -41,4 +41,8 @@ bleiben. Die Tabelle sagt dazu „je Item mit Kriterium“; diesen Teil reichst 
 Organisationsentwickler weiter. Test in `standregeln/fortschrittTest.py`: Ein Item ohne
 Kriterium hat keine Test- und keine Vertragszeile.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `itemzeilen` lässt Vertrag, Tests, Kritik an den Tests und
+„Tests grün“ für ein Item ohne Kriterium weg (`hatKriterium`). Test: `fortschrittTest.py`
+`testEinItemOhneKriteriumHatKeineTestUndKeineVertragszeile`. Regel:
+[Standregeln](../../prozess/regeln/standregeln.md). Die Tabelle geht als Anliegen 6620 an den
+Organisationsentwickler.

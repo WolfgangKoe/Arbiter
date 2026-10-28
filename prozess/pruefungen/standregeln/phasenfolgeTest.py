@@ -74,6 +74,19 @@ def testProzessItemOhneCommitIstDerNächsteSchritt(repo):
     assert schritt(repo) == "Regelumsetzer: Prozess-Item P2 aus Retro 3"
 
 
+def testDerNächsteSchrittNenntDieRolleAusDerKlammerDesItems(repo):
+    repo.datei(".claude/agents/organisationsentwickler.md", "---\nname: x\n---\n")
+    repo.datei("handoff/plan.md", planKopf)
+    repo.datei("handoff/review.md", "# Review · Zyklus 3\n")
+    items = "- P1 Ablauf (Organisationsentwickler): neu\n- P2 Werkzeug (Regelumsetzer): neu\n"
+    repo.datei("handoff/retro.md", f"# Retro · Zyklus 3\n\n## Prozess-Items\n{items}")
+    for betreff in ("Freigabe Plan 3", "Freigabe Review 3", "Freigabe Retro 3"):
+        repo.festhalten(betreff)
+    assert schritt(repo) == "Organisationsentwickler: Prozess-Item P1 aus Retro 3"
+    repo.festhalten("P1: Ablauf")
+    assert schritt(repo) == "Regelumsetzer: Prozess-Item P2 aus Retro 3"
+
+
 def testEinCommitFürMehrereItemsErledigtJedesDieserItems(repo):
     repo.datei("handoff/plan.md", planKopf)
     repo.datei("handoff/review.md", "# Review · Zyklus 3\n")

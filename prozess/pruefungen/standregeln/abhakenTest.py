@@ -21,7 +21,9 @@ def schreiben(wurzel: Path, pfad: str, text: str) -> Path:
 @pytest.fixture
 def plan(tmp_path, gitRepo):
     datei = schreiben(tmp_path, "handoff/plan.md", planText)
-    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n")
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nAUF-1.1\n")
+    anforderung = "### AUF-1 Stellen\n\n- AUF-1.1 Ein Modell.\n"
+    schreiben(tmp_path, "domaene/anforderungen/auf.md", anforderung)
     gitRepo.festhalten("Freigabe Plan 1")
     return datei
 

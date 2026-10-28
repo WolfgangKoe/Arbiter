@@ -8,21 +8,18 @@ from typing import NamedTuple
 from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
 from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, projektordner
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
-from kriterienregeln.rueckverfolgung import anforderungUmfasst, umfasst, zuordnungen
-from lesen.agenten import rollennamen
+from kriterienregeln.rueckverfolgung import Zuordnung, anforderungUmfasst, umfasst, zuordnungen
 from lesen.plan import itemNamen, zyklus
 from standregeln.beseitigt import beseitigtErgänzen
-from standregeln.phasenfolge import Lage, Phase, hatItemCommit, lage, prozessItems
+from standregeln.phasenfolge import Lage, Phase, hatItemCommit, itemRollen, lage
 from standregeln.planFassung import neuGefasst
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
 kritiker = ("Fachkritiker", "Architekt")
 codekritiker = ("Architekt", "Reviewer")
 reviewkritiker = ("Fachkritiker", "Organisationsentwickler")
-umsetzer = "Regelumsetzer"
 kritikAmPlan = "Kritik am Plan"
 stakeholderRolle = "Stakeholder"
-itemzeile = re.compile(r"^- (P\d+) [^\n(]*\(([^),:]+)", re.MULTILINE)
 zeilenmuster = re.compile(r"^- \[([ x])\] (.+)$")
 abschnittsmuster = re.compile(r"^## Fortschritt\n(?:(?!## )[^\n]*\n)*", re.MULTILINE)
 Bisher = dict[str, tuple[bool, list[str]]]
@@ -49,21 +46,34 @@ def ungetestete(text: str, verlangt: set[Kriterium], testdatei: Path) -> list[Kr
     ]
 
 
+def kriterienZuordnungen(wurzel: Path, text: str) -> list[Zuordnung]:
+    """Die Zuordnungen der Anforderungsdateien, deren Kriterien der Text des Items nennt."""
+    return [
+        zuordnung
+        for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md"))
+        for zuordnung in zuordnungen(wurzel, anforderungsdatei, [text])
+        if anforderungUmfasst([text], zuordnung.verlangt)
+    ]
+
+
+def hatKriterium(wurzel: Path, itemName: str) -> bool:
+    """Der Text des Items nennt ein Kriterium; ein gelöschtes Item gilt als mit Kriterium."""
+    datei = wurzel / itemsOrdner / itemName
+    if not datei.is_file():
+        return True
+    return bool(kriterienZuordnungen(wurzel, datei.read_text(encoding="utf-8")))
+
+
 def itemKriterienGetestet(wurzel: Path, itemName: str) -> bool:
     """Jedes Kriterium im Text des Items hat einen Test; ein gelöschtes Item gilt als getestet."""
     datei = wurzel / itemsOrdner / itemName
     if not datei.is_file():
         return True
     text = datei.read_text(encoding="utf-8")
-    gefunden = False
-    for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        for zuordnung in zuordnungen(wurzel, anforderungsdatei, [text]):
-            if not anforderungUmfasst([text], zuordnung.verlangt):
-                continue
-            gefunden = True
-            if ungetestete(text, zuordnung.verlangt, zuordnung.testdatei):
-                return False
-    return gefunden
+    gefunden = kriterienZuordnungen(wurzel, text)
+    return bool(gefunden) and not any(
+        ungetestete(text, zuordnung.verlangt, zuordnung.testdatei) for zuordnung in gefunden
+    )
 
 
 def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
@@ -83,11 +93,13 @@ def itemzeilen(wurzel: Path, itemName: str) -> list[Zeile]:
     name = itemName.removesuffix(".md")
     gelöscht = not (wurzel / itemsOrdner / itemName).is_file()
     folge = gelöscht or None
+    vertrag = Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften", folge)
+    tests = Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName))
+    kritikTests = [Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker]
+    testsGrün = Zeile("Implementierer", f"Tests zu Item {name} grün", folge)
+    mitTests = [vertrag, tests, *kritikTests, testsGrün] if hatKriterium(wurzel, itemName) else []
     return [
-        Zeile("Architekt", f"Vertrag zu Item {name}, bei beiden Hälften", folge),
-        Zeile("Testautor", f"Tests zu Item {name}", itemKriterienGetestet(wurzel, itemName)),
-        *(Zeile(rolle, f"Kritik an den Tests zu Item {name}", folge) for rolle in kritiker),
-        Zeile("Implementierer", f"Tests zu Item {name} grün", folge),
+        *mitTests,
         *(Zeile(rolle, f"Kritik am Code zu Item {name}", folge) for rolle in codekritiker),
         Zeile("Fachkritiker", f"Item {name} abgenommen", folge),
         Zeile("Planer", f"Item {name} gelöscht", gelöscht),
@@ -105,17 +117,6 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
         *(Zeile(rolle, "Kritik am Review") for rolle in reviewkritiker),
         Zeile("Stakeholder", f"Freigabe Review {aktuell.zyklus}", freigegeben),
     ]
-
-
-def itemRollen(wurzel: Path) -> dict[str, str]:
-    """Die Rolle je `P<k>` aus der Klammer `- P<k> <Titel> (<Rolle>): …`; sonst Regelumsetzer."""
-    text = (wurzel / handoffOrdner / retroName).read_text(encoding="utf-8")
-    abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]
-    bekannt = {name.casefold(): name.capitalize() for name in rollennamen(wurzel)}
-    genannt = {kennung: rolle.strip().casefold() for kennung, rolle in itemzeile.findall(abschnitt)}
-    return {
-        kennung: bekannt.get(genannt.get(kennung, ""), umsetzer) for kennung in prozessItems(wurzel)
-    }
 
 
 def prozesszeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:

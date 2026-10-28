@@ -29,7 +29,9 @@ def schreiben(wurzel: Path, pfad: str, text: str) -> Path:
 @pytest.fixture
 def plan(tmp_path, gitRepo):
     datei = schreiben(tmp_path, "handoff/plan.md", planText)
-    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n")
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nAUF-1.1\n")
+    anforderung = "### AUF-1 Stellen\n\n- AUF-1.1 Ein Modell.\n"
+    schreiben(tmp_path, "domaene/anforderungen/auf.md", anforderung)
     for rolle in ("implementierer", "planer", "regelumsetzer"):
         schreiben(tmp_path, f".claude/agents/{rolle}.md", f"---\nname: {rolle}\n---\n")
     gitRepo.festhalten("Freigabe Plan 1")
