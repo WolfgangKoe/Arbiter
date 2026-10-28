@@ -34,7 +34,7 @@ Rolle | Modell | Aufgabe
 [UX](../.claude/agents/ux.md) | sonnet | Domäne, ausführend. Schreibt einbaufähige Mockups zu Anforderungen mit Oberfläche, bevor der Plan freigegeben wird.
 [Fachkritiker](../.claude/agents/fachkritiker.md) | opus | Domäne, prüfend. Prüft, ob Akzeptanztests ihr Kriterium treffen, und nimmt das Gebaute gegen Kriterien, Etappe und Ziel ab.
 [Architekt](../.claude/agents/architekt.md) | opus | Technik, ausführend. Verantwortet die Architektur; kritisiert jedes Artefakt, vor allem Anforderungen auf Prüfbarkeit, Kosten und Schnitt.
-[Testautor](../.claude/agents/testautor.md) | sonnet | Technik, ausführend. Schreibt vor dem Code rote Akzeptanztests, je Kriterium der Items mindestens einen. Erfindet keine Fälle.
+[Testautor](../.claude/agents/testautor.md) | opus | Technik, ausführend. Schreibt vor dem Code rote Akzeptanztests, je Kriterium der Items mindestens einen. Erfindet keine Fälle.
 [Implementierer](../.claude/agents/implementierer.md) | sonnet | Technik, ausführend. Macht rote Akzeptanztests grün, mit Unit-Tests, wo die Logik nicht trivial ist. Ändert keine Akzeptanztests.
 [Reviewer](../.claude/agents/reviewer.md) | opus | Technik, prüfend. Prüft das Inkrement gegen die DoD, auf Korrektheit, Wiederverwendung, Einfachheit und Flughöhe; schreibt das Review.
 [Organisationsentwickler](../.claude/agents/organisationsentwickler.md) | opus | Prozess, ausführend. Gestaltet Rollen, Skills, Abläufe und die Retro. Ändert die Organisation nur aus einem Befund.

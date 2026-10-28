@@ -2,7 +2,7 @@
 name: testautor
 description: Technik, ausführend. Schreibt vor dem Code rote Akzeptanztests, je Kriterium der Items mindestens einen. Erfindet keine Fälle.
 tools: Read, Write, Edit, Bash
-model: sonnet
+model: opus
 skills:
   - akzeptanztest-schreiben
 schreibpfade:

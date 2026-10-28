@@ -11,4 +11,3 @@ Mechanismus: nur Text.
 - Haiku-Zuarbeiter (Regel-Nachschlager, Belegprüfer): bei beobachtetem Bedarf, der
   Belegprüfer nach der ersten falschen Behauptung. Sie startet die Rolle, die das Ergebnis
   braucht.
-- Testautor auf Opus: Fachkritik oder Mutationstests zeigen wiederholt fehlende Fälle.
