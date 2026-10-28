@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Bisher legt Arbiter ein gezogenes *Modell* genau unter den Zeiger. Der Browser
@@ -43,7 +43,7 @@ Empfehlung: A. Die Bedienung, die du in Anliegen 1610 verlangt hast, behebt die 
 Gemessen wird weiter exakt.
 Annahme: Wir arbeiten mit A weiter. Das Item behält `stelleDesZugs`, der Testautor schreibt
 den Test zu AUF-8.7 (Anliegen 6101).
-Antwort: .
+Antwort: A
 
 Was bleibt: Ziehst du von Hand, weicht deine Hand um Pixel ab. Ein Boy, der an einem
 fremden anliegt und leicht auf ihn zu gezogen wird, ist nach BEW-2.5 weiter gesperrt. So
