@@ -42,10 +42,11 @@ nur Text.
   (Anliegen 1570). Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist. Der Empfänger setzt nie `erledigt`, das
   setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Ist der Koordinator
-  Absender, der keine Datei schreibt, beauftragt er die Nachprüfung: Sie macht ein Kritiker
-  des geänderten Artefakts nach der [Kritik](kritik.md), hat es keinen, der
-  Organisationsentwickler, ist dieser Empfänger, der Architekt. Er setzt `erledigt`,
-  Absender bleibt der Koordinator (Anliegen 6900). Mechanismus: nur Text.
+  Absender, der keine Datei schreibt, beauftragt er für jeden Zug des Absenders eine Rolle:
+  einen Kritiker des betroffenen Artefakts nach der [Kritik](kritik.md), hat es keinen, den
+  Organisationsentwickler, ist dieser Empfänger, den Architekten. Diese Rolle zieht in seinem
+  Namen, Absender bleibt der Koordinator (Anliegen 6900). Mechanismus: nur Text; der Stand
+  nennt den Koordinator als dran.
 - Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine
   Stellungnahme mit Text: was umgesetzt ist und wo, die Begründung oder die Frage; dem
   Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt

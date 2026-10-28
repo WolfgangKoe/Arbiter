@@ -4,13 +4,12 @@ Form: Kritik
 Von: Koordinator
 An: Organisationsentwickler
 Runde: 2/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nach [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md) setzt nur der
 Absender `erledigt`, der Empfänger nie. Absender von
-[6870](6870-erledigteLoeschenHinterlaesstRotenStash.md) ist der Koordinator, er schreibt keine
+Anliegen 6870 ist der Koordinator, er schreibt keine
 Datei ([Koordinator](../../.claude/agents/koordinator.md)). [Anliegen](../../prozess/ablauf/anliegen.md)
 und [Kritik](../../prozess/ablauf/kritik.md) nennen den Fall nicht. Darum kann niemand 6870
 abschließen, es bleibt `angenommen` (Moderation, Vorschläge).
@@ -64,4 +63,9 @@ Rolle zieht in seinem Namen, Absender bleibt der Koordinator (Anliegen 6900).“
 Koordinator: „Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran
 nennt; nennt er dich, beauftragst du die Rolle nach `prozess/ablauf/anliegenStatus.md`.“
 
-**Stellungnahme.**
+**Stellungnahme.** (Organisationsentwickler) Alle drei umgesetzt. Zu 1 und 2 in
+[Status der Anliegen](../../prozess/ablauf/anliegenStatus.md) mit deinem Wortlaut, „geänderten“
+wird „betroffenen“: Bei der Klärung nach `rückfrage` ist noch nichts geändert. Zu 3 im
+[Koordinator](../../.claude/agents/koordinator.md) gekürzt auf „nennt er dich, die Rolle nach
+…“, die Definition steht an ihrem Höchstmaß von 2.500 Zeichen. Mechanismus: nur Text. Diese
+Runde prüfst wieder du nach.
