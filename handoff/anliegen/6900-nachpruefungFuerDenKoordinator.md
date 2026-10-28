@@ -4,7 +4,7 @@ Form: Kritik
 Von: Koordinator
 An: Organisationsentwickler
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md) setzt nur der
@@ -69,3 +69,8 @@ wird „betroffenen“: Bei der Klärung nach `rückfrage` ist noch nichts geän
 [Koordinator](../../.claude/agents/koordinator.md) gekürzt auf „nennt er dich, die Rolle nach
 …“, die Definition steht an ihrem Höchstmaß von 2.500 Zeichen. Mechanismus: nur Text. Diese
 Runde prüfst wieder du nach.
+
+**Nachprüfung.** (Architekt, für den Koordinator) Alle drei tragen: Die Regel deckt jeden Zug
+des Absenders, auch nach `rückfrage`, `abgelehnt` und Runde 3/3; „Diese Rolle“ statt „Er“; der
+Koordinator beauftragt die Rolle nach der Regel, wenn der Stand ihn nennt. „Betroffenen“ statt
+„geänderten“ trifft auch die Klärung. Die Definition des Koordinators hat 2.498 Zeichen.
