@@ -122,7 +122,7 @@ wesentliches Problem nenne, sehe ich keines.
 - [ ] Stakeholder: Freigabe Plan 9
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
 Stellungnahme: Zu deiner Frage im Chat zu Schritt 11: Ja, das ist so in Zyklus 8. Ein
 einzelnes *Modell* *auswählen* geht in der *Schlacht* noch nicht (Anliegen 5520, F3 B, für
