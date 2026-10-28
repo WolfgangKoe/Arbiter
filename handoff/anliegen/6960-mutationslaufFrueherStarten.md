@@ -8,56 +8,57 @@ Status: offen
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Der Mutationstest muss früher starten. Mir scheint es so, dass er
-mal unterbrochen wurde.“ Unterbrochen wurde er nicht: Nach `Freigabe Review 8` (19:24) startete
-der Koordinator den vollen Lauf um 19:32; um 22:18 lief er laut `ps` seit 2:46 h ohne Pause, je
-Mutant ein Testlauf samt Bildschirmtests. Es sieht nach einem Abbruch aus, weil das Werkzeug
-erst am Ende schreibt: `/tmp/mutationVoll8.log` bleibt bis dahin leer. Die normale Dauer ist
-unbelegt; frühere volle Läufe haben kein Protokoll hinterlassen. Die letzte Änderung am Produkt
-in Zyklus 8 war der Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“ um 17:58.
-Bestehende Regel: [Prozessphase](../../prozess/ablauf/prozessphase.md) Punkt 1 („Mit Beginn der
-Phase startet der Koordinator den vollen Mutationslauf“) und [DoD](../../prozess/ablauf/dod.md)
-(„läuft nur in der Prozessphase und hält nichts auf“), beide nur Text.
+mal unterbrochen wurde.“ Er lief laut `ps` seit 19:32 ohne Pause, schreibt aber erst am Ende:
+`/tmp/mutationVoll8.log` bleibt bis dahin leer. Letzte Änderung am Produkt: 17:58. Regel, nur
+Text: [Prozessphase](../../prozess/ablauf/prozessphase.md) 1, [DoD](../../prozess/ablauf/dod.md).
 
-**Kosten.** Am Bildschirm: nichts. Deine Arbeit: Das Ergebnis kommt früher, du wartest kürzer.
-Unsere Arbeit: Der Lauf rechnet, während Reviewer und Fachkritiker ihre Tests laufen lassen;
-die werden langsamer. Ändert sich `technik/` danach, gilt das Ergebnis nicht mehr und der Lauf
-startet neu. Er liest die Module unterwegs aus dem Projektordner, ein Ergebnis über eine
-Änderung hinweg wäre gemischt. Token: keine, der Lauf rechnet ohne Agent.
+**Kosten.** Am Bildschirm: nichts. Du wartest kürzer. Wir: parallele Tests langsamer; ändert
+sich `technik/` danach, startet der Lauf neu. Token: keine.
 
-**Gegenvorschlag.** Der Koordinator startet den vollen Lauf, sobald der Reviewer die DoD über
-das Inkrement erfüllt meldet ([Technikphase](../../prozess/ablauf/technikphase.md) Schritt 4);
-der Satz zieht aus Prozessphase und DoD dorthin. Der Reviewer schreibt die Lücken weiter in der
-Prozessphase als Anliegen. Dazu schreibt der Lauf je Modul eine Zeile, sobald es fertig ist.
+**Gegenvorschlag.** Start nach der DoD über das Inkrement
+([Technikphase](../../prozess/ablauf/technikphase.md) Schritt 4), je fertigem Modul eine Zeile.
 
 **Stellungnahme.**
 
 **F1 · Wann startet der volle Lauf?**
-A: Nach der DoD über das Inkrement (Technikphase Schritt 4); ändert sich `technik/` danach,
-startet der Koordinator ihn neu (neu, Grund: [Absicht 2](../../prozess/praemissen/absicht.md),
-„Arbeitet parallel, wo nichts voneinander abhängt“). In Zyklus 8 wäre das 17:58 gewesen statt
-19:32. Nachteil: parallele Tests langsamer, Neustart bei späten Änderungen am Produkt.
-B: Mit dem Commit `Freigabe Review <n>`, ohne auf die Retro zu warten (Prozessphase 1). Gewinn
-in Zyklus 8: 8 Minuten. Nichts läuft parallel, kein Neustart.
-Empfehlung: A. Nach der DoD ändert sich das Produkt selten, der Lauf hat dann Stunden Vorsprung.
-Antwort: .
+A: Nach der DoD über das Inkrement; ändert sich `technik/` danach, startet der Koordinator ihn
+neu (neu, Grund: [Absicht 2](../../prozess/praemissen/absicht.md), parallel arbeiten). Zyklus
+8: 17:58 statt 19:32. Nachteil: parallele Tests langsamer, Neustart bei späten Änderungen.
+B: Mit `Freigabe Review <n>` (Prozessphase 1): 8 Minuten früher, nichts parallel.
+Empfehlung: A, Stunden Vorsprung.
+Antwort: A
 
 **F2 · Soll der Lauf unterwegs zeigen, wie weit er ist?**
-A: Ja, je fertigem Modul eine Zeile ins Protokoll: Modul, Zahl der Mutanten, Überlebende (neu,
-Grund: [Absicht 5](../../prozess/praemissen/absicht.md), verstehen ohne nachzufragen). Arbeit:
-Regelumsetzer, einige Zeilen in `mutationsregeln/mutation.py` mit Scheiter-Test. Nachteil: mehr
-Prüfcode, der in [Retro 8](../retro.md) Befund 3 schon über der Schwelle liegt; darum nur auf
-deinen Wunsch. Rückweg: die Zeile wieder streichen. Nicht an einer Kopie erprobt; das tut der
-Regelumsetzer mit seinem Scheiter-Test.
-B: Nein, wie bisher: Das Protokoll füllt sich erst am Ende (`mutation.py`); fragst du nach,
-nennt der Koordinator die Laufzeit aus `ps`.
-Empfehlung: A. Ein leeres Protokoll sieht wie ein Abbruch aus, das hat dich hier getäuscht.
-Antwort: .
+A: Ja, je fertigem Modul eine Zeile: Modul, Mutanten, Überlebende (neu, Grund:
+[Absicht 5](../../prozess/praemissen/absicht.md), verstehen). Arbeit: Regelumsetzer, einige
+Zeilen in `mutationsregeln/mutation.py` mit Scheiter-Test. Nachteil: mehr Prüfcode. Rückweg:
+Zeile streichen. Nicht an einer Kopie erprobt.
+B: Nein, das Protokoll füllt sich erst am Ende (`mutation.py`).
+Empfehlung: A. Ein leeres Protokoll hat dich getäuscht.
+Antwort: A
 
 **F3 · Ab wann gilt die Änderung?**
-A: Jetzt: `Freigabe Retro 8` ist erteilt, also darf ich Prozessregeln in dieser Prozessphase
-ändern (Prozessphase, Auslöser). Ich trage sie in der Nachkorrektur als Auftrag in Retro 8 ein;
-sie wirkt ab Technikphase 9.
-B: Erst in Prozessphase 9 über den [Backlog](../../prozess/backlog.md) (Prozessphase 1); sie
-wirkt dann ab Technikphase 10.
-Empfehlung: A. Sonst wartest du auch im nächsten Zyklus drei Stunden.
+A: Jetzt, nach `Freigabe Retro 8` (Prozessphase, Auslöser): Auftrag in Retro 8, wirkt ab
+Technikphase 9.
+B: Über den [Backlog](../../prozess/backlog.md) (Prozessphase 1), wirkt ab Technikphase 10.
+Empfehlung: A.
+Antwort: A
+Kommentar: Du sagst, dass Parallelisieren langsamer macht. Aber wie stark wird das System belastet? Wir hatten auch mal gesagt, dass wir die Mutationstest gezielt einsetzen. Und zwar primär dort, wo wir Code ändern. Eine Art Fortschritt und Zwischenspeicherung der Erkenntnisse wäre gut. Dann kann man vielleicht auch mal unterbrechen oder die Prüfung geschickt aufteilen. Dann weiß man, Wo es gut aussieht und findet Probleme ggf. schneller. Was meinst du?
+
+**Klärung.** Belastung, um 22:31 am laufenden Lauf gemessen: ein Testlauf zur Zeit, mit
+Browser etwa 0,6 von 8 Kernen, 0,5 von 31 GB; andere Tests verlieren wenig.
+Gezielt gibt es: Ohne `--voll` prüft `mutation.py` nur die seit `Freigabe Plan` geänderten
+Zeilen der Domänenmodule (Schwelle der DoD). Der volle Lauf prüft dazu `web/` und Zeilen, deren
+Tests sich geändert haben können.
+Zwischenspeichern: Der Merkzettel `.git/arbiter/mutation.json` gilt je Stand von `technik/`,
+wird aber erst am Ende geschrieben; ein Abbruch verliert alles. Aufteilen geht
+(`mutation.py <modul>:<von>-<bis>`), der volle Lauf übernimmt das beim gleichen Stand.
+Regelumsetzer: nach jedem Modul merken, neben der Zeile aus F2; etwa drei Zeilen und ein
+Scheiter-Test im selben Lauf. Dann setzt ein unterbrochener Lauf fort. Einen Stand je Modul
+empfehle ich nicht: Ein Mutant hängt auch an Tests und anderen Modulen.
+
+**F4 · Merkt sich der Lauf seine Ergebnisse je fertigem Modul?**
+A: Ja, mit F2 (Anliegen 6960, dein Kommentar). Rückweg: streichen. Nicht an einer Kopie erprobt.
+B: Nein, wie bisher am Ende (`mutation.py`).
+Empfehlung: A, unterbrechen kostet dann nichts.
 Antwort: .

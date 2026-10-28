@@ -3,7 +3,14 @@
 from pathlib import Path
 
 from gemeinsam.gitAufruf import dateiBeiCommit, letzteFreigabe
-from lesen.anliegenKopf import Anliegen, Status, gelesene, kopfAusText, stakeholder
+from lesen.anliegenKopf import (
+    Anliegen,
+    Status,
+    gelesene,
+    kopfAusText,
+    stakeholder,
+    wartetAufNummer,
+)
 from standregeln.phasenfolge import lage
 
 
@@ -45,7 +52,7 @@ def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
     """Das Anliegen wartet noch: auf ein anderes im Ordner oder auf seine Phase samt Zyklus."""
     if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
         return False
-    if not anliegen.wartetAuf.isdigit():
+    if not wartetAufNummer(anliegen.wartetAuf):
         phase, _, zyklus = anliegen.wartetAuf.partition(" ")
         jetzt = lage(wurzel)
         return phase != str(jetzt.phase) or (zyklus != "" and jetzt.zyklus < int(zyklus))

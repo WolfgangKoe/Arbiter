@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Ein oberes Limit ist gut. Lass es 4000 sein. Aber es wäre mir

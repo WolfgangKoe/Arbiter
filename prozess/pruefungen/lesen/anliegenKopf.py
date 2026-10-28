@@ -31,6 +31,16 @@ rundeFeld = re.compile(rf"^(\d+)/{höchstRunde}$")
 dateinummer = re.compile(rf"{anliegenOrdner}/(\d+)-")
 
 
+def wartetAufNummer(ziel: str) -> bool:
+    """Das Ziel von `Wartet auf` ist ein Anliegen, sonst eine Phase."""
+    return ziel.isdigit()
+
+
+def zielText(ziel: str) -> str:
+    """Das Ziel für die Anzeige: die Nummer oder `die <Phase>`."""
+    return f"{int(ziel):02d}" if wartetAufNummer(ziel) else f"die {ziel}"
+
+
 @dataclass(frozen=True)
 class Anliegen:
     datei: Path

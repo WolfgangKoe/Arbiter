@@ -9,7 +9,7 @@ from anliegenregeln.anliegen import kopfVerstöße
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
 from anliegenregeln.freieNummer import hauptprogramm
 from gemeinsam.pfade import wurzel
-from lesen.anliegenKopf import Status, anliegenDateien, freieNummer, kopfLesen, kopfÄndern
+from lesen.anliegenKopf import Status, anliegenDateien, freieNummer, kopfLesen, kopfÄndern, zielText
 
 guterKopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen"
 
@@ -275,6 +275,13 @@ def testKopfÄndernSchreibtDieFelderUndLässtDenRestStehen(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
     neu = kopfÄndern(datei.read_text(encoding="utf-8"), {"Status": "angenommen"})
     assert neu == datei.read_text(encoding="utf-8").replace("Status: offen", "Status: angenommen")
+
+
+@pytest.mark.parametrize(
+    ("ziel", "text"), [("7", "07"), ("6760", "6760"), ("Prozessphase 9", "die Prozessphase 9")]
+)
+def testZielTextNenntNummerOderDiePhase(ziel, text):
+    assert zielText(ziel) == text
 
 
 def testKopfÄndernOhneKopfGibtNichtsZurück():

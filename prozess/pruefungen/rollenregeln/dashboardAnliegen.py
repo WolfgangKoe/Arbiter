@@ -6,7 +6,7 @@ from operator import attrgetter
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende, wartetAuf
-from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
+from lesen.anliegenKopf import Anliegen, gelesene, stakeholder, wartetAufNummer, zielText
 from standregeln.phasenfolge import Phase, lage
 
 Verweis = Callable[[Anliegen, Path], str]
@@ -66,9 +66,11 @@ def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
     auf: dict[str, list[Anliegen]] = {}
     for nummer, ziel in wartende(ordner).items():
         auf.setdefault(ziel.partition(" ")[0], []).append(nachNummer[nummer])
-    aufAnliegen = [anliegen for ziel, liste in auf.items() if ziel.isdigit() for anliegen in liste]
+    aufAnliegen = [
+        anliegen for ziel, liste in auf.items() if wartetAufNummer(ziel) for anliegen in liste
+    ]
     bereiche = [("Wartet auf ein anderes Anliegen", aufAnliegen)] if aufAnliegen else []
-    if any(not ziel.isdigit() for ziel in auf):
+    if any(not wartetAufNummer(ziel) for ziel in auf):
         bereiche += vorgemerktJePhase(ordner, auf)
     return bereiche
 
@@ -87,8 +89,7 @@ def vorgemerktJePhase(
 def wartetAufText(anliegen: Anliegen) -> str:
     if anliegen.wartetAuf is None:
         return ""
-    artikel = "" if anliegen.wartetAuf.isdigit() else "die "
-    return f" · wartet auf {artikel}{anliegen.wartetAuf}"
+    return f" · wartet auf {zielText(anliegen.wartetAuf)}"
 
 
 def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:

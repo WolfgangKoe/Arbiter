@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
+from lesen.anliegenKopf import zielText
 
 
 def nachprüfungenAlsText(wurzel: Path) -> str:
@@ -16,16 +17,12 @@ def nachprüfungenAlsText(wurzel: Path) -> str:
     return "Nachprüfung fällig: " + ", ".join(teile)
 
 
-def worauf(ziel: str) -> str:
-    return f"{int(ziel):02d}" if ziel.isdigit() else f"die {ziel}"
-
-
 def wartendeAnliegenAlsText(wurzel: Path) -> str:
     """Anliegen, die auf ein anderes oder die Prozessphase warten; für niemanden dran."""
     warten = wartende(wurzel)
     if not warten:
         return ""
-    teile = [f"{nummer:02d} (auf {worauf(ziel)})" for nummer, ziel in sorted(warten.items())]
+    teile = [f"{nummer:02d} (auf {zielText(ziel)})" for nummer, ziel in sorted(warten.items())]
     return "Wartet: " + ", ".join(teile)
 
 
