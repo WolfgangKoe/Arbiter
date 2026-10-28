@@ -41,7 +41,11 @@ nur Text.
   Stellungnahme nennt das Item: `erledigt` folgt dessen Haken im Fortschritt der Retro
   (Anliegen 1570). Mechanismus: nur Text.
 - Den Status setzt, wem die Tabelle ihn zuweist. Der Empfänger setzt nie `erledigt`, das
-  setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Mechanismus: nur Text.
+  setzt der Absender nach seiner Nachprüfung (Anliegen 1581, 1591). Ist der Koordinator
+  Absender, der keine Datei schreibt, beauftragt er die Nachprüfung: Sie macht ein Kritiker
+  des geänderten Artefakts nach der [Kritik](kritik.md), hat es keinen, der
+  Organisationsentwickler, ist dieser Empfänger, der Architekt. Er setzt `erledigt`,
+  Absender bleibt der Koordinator (Anliegen 6900). Mechanismus: nur Text.
 - Wer `angenommen`, `abgelehnt` oder `rückfrage` setzt, schreibt in der letzten Runde eine
   Stellungnahme mit Text: was umgesetzt ist und wo, die Begründung oder die Frage; dem
   Stakeholder genügen seine Antworten. Eine Stellungnahme in einer früheren Runde zählt

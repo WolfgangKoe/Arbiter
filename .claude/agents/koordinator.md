@@ -18,7 +18,8 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
   neuen Chat mit einem Startprompt zum Kopieren, der den nächsten Schritt nennt.
 - Nach jeder Änderung von Produktcode beauftragst du die Kritiker (Ablauf, Kritik am
   Code).
-- Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt.
+- Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt,
+  für deine Nachprüfung nach `prozess/ablauf/anliegenStatus.md`.
 - Ein Auftrag nennt Ziel, Eingang als Pfade, erwartetes Ergebnis, wer daneben läuft und
   den Nummernbereich für neue Anliegen; kein Briefing.
 - Was gleichzeitig laufen darf (Ablauf, Gleichzeitige Läufe), startest du gleichzeitig.
