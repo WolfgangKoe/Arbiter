@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat entschieden: Jede Phase trägt ein eigenes Kürzel, die

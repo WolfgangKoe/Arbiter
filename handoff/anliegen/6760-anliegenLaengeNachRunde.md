@@ -42,4 +42,6 @@ Schreibpfade und brauchen den, der sie darf: die Hook-Zeile in `.claude/settings
 der Satz „höchstens 4.000 Zeichen je Runde, Hinweis ab 100 darunter“ in
 [Anliegen](../../prozess/ablauf/anliegen.md) (Organisationsentwickler).
 
-**Stellungnahme.**
+**Stellungnahme.** Nachprüfung: Grenze und Hinweis stehen (`anliegenLaenge.py`, Test), der
+Satz steht in [Anliegen](../../prozess/ablauf/anliegen.md). Offen bleibt die Hook-Zeile
+PostToolUse in `.claude/settings.json` (Antwort A, eigener Lauf).

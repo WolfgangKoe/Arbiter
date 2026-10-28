@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Fortschritt](../../prozess/ablauf/fortschritt.md) führt die Zeilen zu Vertrag, Tests,

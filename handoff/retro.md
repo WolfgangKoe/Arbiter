@@ -114,4 +114,4 @@ abbauen, dann Neues (306).
 ## Freigabe
 Freigabe: ja
 Kommentar: Zu P1, bitte nochmal erläutern, was esmit dem Gegenbeispiel auf sich hatte. Viellicht habe ich etwas missverstanden.
-Stellungnahme: Erläutert in Anliegen Anliegen 6640, dort F1 mit Empfehlung; P1 im Abschnitt Prozess-Items verweist darauf.
+Stellungnahme: Erläutert in Anliegen 6640, dort F1 mit Empfehlung; P1 im Abschnitt Prozess-Items verweist darauf.

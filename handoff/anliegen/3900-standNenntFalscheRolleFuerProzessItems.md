@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Prozessphase 8
 
 ## Runde 1

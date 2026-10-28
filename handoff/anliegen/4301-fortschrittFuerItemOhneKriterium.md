@@ -3,9 +3,8 @@
 Form: Kritik
 Von: Architekt
 An: Regelumsetzer
-Runde: 1/3
-Status: angenommen
-Wartet auf: 6620
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Das Item [architekturUmordnen](../../domaene/items/architekturUmordnen.md) hat
@@ -46,3 +45,20 @@ Kriterium hat keine Test- und keine Vertragszeile.
 `testEinItemOhneKriteriumHatKeineTestUndKeineVertragszeile`. Regel:
 [Standregeln](../../prozess/regeln/standregeln.md). Die Tabelle geht als Anliegen 6620 an den
 Organisationsentwickler.
+
+## Runde 2
+**Befund.** Nachgeprüft: Solange das Item besteht, stimmt es; Test grün, Tabelle (6620) und
+[Standregeln](../../prozess/regeln/standregeln.md) passen. Nach dem Löschen nicht mehr:
+`hatKriterium` gibt für ein gelöschtes Item `True` zurück, `itemzeilen` schreibt dann Vertrag,
+Tests, Kritik an den Tests und „Tests grün“ wieder, abgehakt (`folge = gelöscht`). Der
+Endstand von [Plan 8](../plan.md) zeigt so für architekturUmordnen „Implementierer: Tests zu
+Item architekturUmordnen grün“ als erledigt (aus Code und Plan gelesen, ohne Probe).
+
+**Kosten.** Der Endstand sagt dem Stakeholder, es habe Tests gegeben, die es nie gab; der
+Befund aus Runde 1 bleibt für jedes Item ohne Kriterium bestehen. Hält nicht auf.
+
+**Gegenvorschlag.** Bestehende Regel: dieselbe Zeile in den Standregeln. Ein gelöschtes Item
+behält die Zeilen, die vor dem Löschen im Fortschritt standen: Fehlen dort die Testzeilen,
+kommen sie nicht hinzu (etwa: Zeilen zu einem gelöschten Item nur aus dem bestehenden
+Abschnitt übernehmen oder den Text des Items aus git lesen). Test in `fortschrittTest.py`: Ein
+Item ohne Kriterium hat auch nach dem Löschen keine Test- und keine Vertragszeile.
