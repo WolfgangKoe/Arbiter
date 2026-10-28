@@ -63,7 +63,9 @@ Bestand abbauen, dann Neues (306).
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
 - [ ] Fachkritiker: Kritik an der Retro
+  Hindernis: Fachkritiker → Organisationsentwickler: P2 nähme die von BEW-1.5 und QUE-1.3 verlangte Sperre ‚Nahkampfreichweite‘ weg; P7 nennt einen falschen Stand zu Etappe: (Anliegen 6450)
 - [ ] Architekt: Kritik an der Retro
+  Hindernis: Architekt → Organisationsentwickler: F1 widerspricht T1, P2 steht schon, P7 zählt ungeregelt (Anliegen 6470)
 - [ ] Organisationsentwickler: Nachkorrektur
 - [ ] Stakeholder: Freigabe Retro 8
 - [ ] Organisationsentwickler: P1

@@ -5,6 +5,7 @@ Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
 Status: offen
+Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** Aus dem Code gelesen, ohne Probe, beobachtet vom Koordinator in Zyklus 8:
@@ -27,3 +28,15 @@ Zeile „Anliegen“.
    „An: UX“ grün, „An: Ux“ rot.
 
 **Stellungnahme.**
+Beide Befunde stimmen, geprüft im Code. (1) `antwortSetzen` gibt ohne Zeile `Antwort:` bis
+zur nächsten Frage `None` zurück; die Antwort geht verloren, wenn die Moderation die Zeile
+auslässt. (2) `rolle != rolle.capitalize()` weist „UX“ ab, obwohl `ux.md` so heißt.
+Beide Gegenvorschläge nehme ich an: Fehlt die Zeile, hängt das Skript `Antwort: <Text>` ans
+Ende des Blocks der Frage; die Schreibweise gilt, wenn sie ein Name aus der Rollenliste (UX)
+ist oder sonst groß am Anfang beginnt. Je ein Scheiter-Test in `zuegeUebernehmenTest.py` und
+`anliegenTest.py`; die Zeilen in [Rollenregeln](../../prozess/regeln/rollenregeln.md) und
+[Anliegenregeln](../../prozess/regeln/anliegenregeln.md) trage ich dann nach.
+Umgesetzt ist noch nichts: Vor der Freigabe der Retro 8 ändern sich Mechanismen nicht
+([Prozessphase](../../prozess/ablauf/prozessphase.md)). Der Kopf wartet darum auf die
+Prozessphase 9; `angenommen` setze ich, sobald die Regel steht. Bis dahin schreibt die
+Moderation die Zeile `Antwort:` immer.
