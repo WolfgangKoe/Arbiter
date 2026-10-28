@@ -69,7 +69,7 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
   1. Zuerst entfernt er die 282 Docstrings in `prozess/pruefungen/`, je Lauf unter 120.000
      Token ein `P4 Zwischenstand`; ist der Docstring die einzige Anweisung (`Umleitung` in
      `rollenregeln/bashSchreiben.py`), tritt `...` an seine Stelle. `standregeln/` erst nach
-     3900, 4301 und P7, sie ändern dieselben Dateien.
+     4301, es ändert dieselben Dateien.
   2. Dann die Prüfung: außerhalb von `technik/` im Test mit Marke `stand`; unter `technik/` in
      einem eigenen Test ohne `stand`, erst ab `Freigabe Plan 9` (Schwelle wie
      `ersteGeprüfteTechnikphase` in `formregeln/technikphase.py`). So ist er in der DoD rot
@@ -91,9 +91,14 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
   (Annahme bis zur Antwort des Anforderungsautors, [6500](anliegen/6500-etappeEinesKriteriums.md)).
 
 ## Empfehlung
-Für dich ist nichts zu tun, bis P3 und P4 committet sind; dann prüfst du 6380 und 6430 nach
-und setzt im Dashboard `erledigt`. Der Reiter Architektur (4140) kommt nach P6: erst Bestand
-abbauen, dann Neues (306).
+Für dich ist nichts zu tun. Der Regelumsetzer arbeitet nach deiner Entscheidung in dieser
+Reihenfolge: die Hook-Zeile aus [6760](anliegen/6760-anliegenLaengeNachRunde.md); 3780
+Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle statt an vier
+([3780](anliegen/3780-restePruefcodeNach3301.md)); keine Testzeilen im Fortschritt für ein
+Item ohne Kriterium ([4301](anliegen/4301-fortschrittFuerItemOhneKriterium.md)); P4 nach 4301,
+ohne Teilung um `standregeln/`, weil beide dort ändern; zuletzt der Reiter Architektur
+([4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md)): erst Bestand abbauen, dann
+Neues (306).
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
