@@ -83,9 +83,9 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
 - [x] Architekt: Kritik am Code zu Item normalMove
   Hindernis: Architekt → Testautor: AUF-8.7 hat keinen Akzeptanztest, bedienung.js setzt es aber schon um (stelleDesZugs: vorige Stelle plus Weg des Zeigers seit dem Greifen; Anliegen 6100 F1 A); Akzeptanztests entstehen vor dem Code. Empfehlung: in ziehenTest.py ein gesetztes Modell abseits seiner Mitte greifen, mit Maus und Finger ziehen und loslassen; die Stelle danach ist die vorige plus der Weg des Zeigers, auf einen Pixel genau (B5), nicht der Punkt unter dem Zeiger. (Anliegen 6101); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
   Hindernis: Architekt → Implementierer: S2 nennt jetzt die Rundung jeder Zahl einer Anfrage (technik/architektur/domaene.md, Anliegen 6121), Prüft: anwendungTest.py; dort fehlt der Einheitstest. Empfehlung: ein Test, der x = 160/127 und y = 121/3 als JSON-double schickt, einmal als Körper von PUT …/stelle (V5), einmal als Abfrage …/stelleBeimLoslassen (V10), und in der Domäne genau diese Fraction findet; ohne limit_denominator ist er rot. (Anliegen 6180); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
-- [ ] Reviewer: Kritik am Code zu Item normalMove
+- [x] Reviewer: Kritik am Code zu Item normalMove
   Hindernis: Reviewer → Implementierer: Grund des Setzens und Ziehens als Zweig statt Zeile der Tabelle (D4) (Anliegen 6120); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
-  Hindernis: Reviewer → Architekt: Rundung jeder Zahl der Anfrage auf Nenner 10^6 steht nicht in S2 (Anliegen 6121)
+  Hindernis: Reviewer → Architekt: Rundung jeder Zahl der Anfrage auf Nenner 10^6 steht nicht in S2 (Anliegen 6121); beseitigt: Commit „normalMove: Kritik des Architekten am Code abgeschlossen“
 - [ ] Fachkritiker: Item normalMove abgenommen
 - [ ] Planer: Item normalMove gelöscht
 - [ ] Reviewer: DoD über das Inkrement
