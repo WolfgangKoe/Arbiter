@@ -5,7 +5,6 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: 6431
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -19,7 +18,7 @@ Zeile 14. [Es 8](../../prozess/praemissen/es.md) erlaubt einzeilige Docstrings (
 **Kosten.** Was ein Docstring sagt, muss der Name schon sagen; sonst veraltet es unbemerkt,
 wie die Kommentare `# Regel:` aus Anliegen 1660.
 
-**Gegenvorschlag.** Die [Retro 8](../retro.md) behandelt es; deine Wahl steht in
-[Anliegen 6431](6431-fragenDerRetro8.md).
+**Gegenvorschlag.** Die [Retro 8](../retro.md) behandelt es; nach deiner Wahl F1 A (6431)
+setzen P3 (Es 8) und P4 (Prüfung, Prüfcode) es um.
 
 **Stellungnahme.**

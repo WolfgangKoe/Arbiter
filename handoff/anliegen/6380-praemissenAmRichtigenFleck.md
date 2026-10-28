@@ -5,7 +5,6 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: 6431
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
