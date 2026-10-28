@@ -81,7 +81,7 @@ P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550.
      `technik/tests/akzeptanz/` außer den 31 Köpfen, sechs Fixtures bestehen nur aus ihm) und
      an den Implementierer (71 in `technik/arbiter/`, einer in `technik/tests/einheit/`).
 - P5 Ablauf schlanker (Organisationsentwickler): Streichungen 1 bis 6 aus
-  [Anliegen 4040](anliegen/4040-ablaufUndRegelnVerschlanken.md); an einer Kopie in `/tmp`
+  Anliegen 4040; an einer Kopie in `/tmp`
   arbeiten und committen alle Rollen wie vorher.
 - P6 Regeln schlanker (Regelumsetzer): Punkt 7 aus 4040, das Format `Hindernis:` einmal
   (4120), dazu 3780, Punkt 1.

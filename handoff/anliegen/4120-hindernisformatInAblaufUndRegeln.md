@@ -27,6 +27,6 @@ seinen Satz womöglich nicht so, dass der Stakeholder ihn ohne das Anliegen vers
 **Gegenvorschlag.** Regelumsetzer, mit P6 der Retro 8: Die beiden Zeilen der
 [Standregeln](../../prozess/regeln/standregeln.md) nennen das Format nicht mehr selbst, sondern
 verlinken [Fortschritt](../../prozess/ablauf/fortschritt.md), wo es einmal steht. Damit ist
-auch Punkt 4 aus [4040](4040-ablaufUndRegelnVerschlanken.md) erledigt.
+auch Punkt 4 aus Anliegen 4040 erledigt.
 
 **Stellungnahme.**
