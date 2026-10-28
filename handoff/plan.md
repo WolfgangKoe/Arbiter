@@ -92,9 +92,9 @@ Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
   Hindernis: Reviewer → Testautor: Mutation der geänderten Domänenzeilen seit Freigabe Plan 8: 94 Mutanten, 84 % gefangen, Schwelle 95 %. 15 überleben: messen.py:133, 134, 135 (streckeÜberdeckt), aufstellen/__init__.py:170 (modellAnklicken: and wird or), anhaltenAnDerBewegungsweite.py:29, 31, 32, beenden.py:16, schlachtrunden.py:99 (is wird is not), 112, 120, 145 (Rückgabe wird None). Empfehlung: je Überlebenden ein Test, der ihn fängt, oder eine Begründung in mutationsregeln/gleichwertig.json; schlachtrunden.py:99 halte ich für gleichwertig, da außerhalb der Bewegungsphase keine Stelle sich ändert. Liste: .venv/bin/python prozess/pruefungen/gemeinsam/lauf.py mutationsregeln.mutation (Anliegen 6291); beseitigt: Commit „Anliegen 6291 und 6301: Tests gegen überlebende Mutanten, gleichwertige eingetragen“
 - [x] Reviewer: Review geschrieben
 - [x] Fachkritiker: Kritik am Review
-  Hindernis: Fachkritiker → Reviewer: Klickpfad zeigt Korrigieren (BEW-1.6) und leere Phasen (QUE-10.5) nicht, Bild zu Spieler am Zug und Schlachtende fehlt; Nahkampfreichweite und Loslassen neben der Karte fehlen in Etappen- und Zyklusziel (Anliegen 6335)
-- [ ] Organisationsentwickler: Kritik am Review
-  Hindernis: Organisationsentwickler → Reviewer: Rundgang Prüfcode ohne erlaubteImporte.py, planFassung.py, abhaken.py, bashSchreiben.py und die Verbote in settings.json; Punkt 3 fragt ohne Empfehlung (Anliegen 6360)
+  Hindernis: Fachkritiker → Reviewer: Klickpfad zeigt Korrigieren (BEW-1.6) und leere Phasen (QUE-10.5) nicht, Bild zu Spieler am Zug und Schlachtende fehlt; Nahkampfreichweite und Loslassen neben der Karte fehlen in Etappen- und Zyklusziel (Anliegen 6335); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
+- [x] Organisationsentwickler: Kritik am Review
+  Hindernis: Organisationsentwickler → Reviewer: Rundgang Prüfcode ohne erlaubteImporte.py, planFassung.py, abhaken.py, bashSchreiben.py und die Verbote in settings.json; Punkt 3 fragt ohne Empfehlung (Anliegen 6360); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
 - [ ] Stakeholder: Freigabe Review 8
 
 ## Freigabe

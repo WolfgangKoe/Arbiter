@@ -21,6 +21,9 @@ Wartet auf: Technikphase 9
    ohne Grund. Schritt 10 (rund 70 Klicks) und AUF-8.7 nennen ebenfalls keinen.
 4. Unter `## Code`: „Zwei Nachbauten in der Messung und *Distanz* ohne Namen im Code“ versteht
    der Stakeholder ohne Anliegen 6290 nicht ([Wir 5](../../prozess/praemissen/wir.md)).
+5. Rundgang, Punkt 5: „Willst du die Lücke schließen, schreib …“ sagt, wie er antwortet, aber
+   nicht ausdrücklich, was du empfiehlst ([Absicht 4](../../prozess/praemissen/absicht.md),
+   Anliegen 418).
 
 **Kosten.** Ohne Link sucht der Stakeholder die Datei selbst; ohne Beleg kann er Etappe und
 Schätzung nicht prüfen; ohne Grund weiß er nicht, ob ein Schritt am Bildschirm hakt. Punkte 1
