@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 Wartet auf: Domänenphase 9
 
 ## Runde 1
@@ -30,3 +30,4 @@ Antwort: .
 **Gegenvorschlag.** Beantworte F1 in der Domänenphase 9; „.“ heißt, die Empfehlung gilt.
 
 **Stellungnahme.**
+Kommentar: An sich stimme ich dir zu. Es sollte im Zweifelsfall möglich sein, eine bereits aufgestellte Einheit zu verschieben, damit die neu aufzustellende Einheit ggf. Platz hat. Dazu muss es möglich sein, die betreffende bereits aufgestellte Einheit auszuwählen und zu verschieben. Ein Zurücklegen dieser bereits aufgestellten Einheit sollte dagegen nicht möglich sein. Ist das abbildbar?
