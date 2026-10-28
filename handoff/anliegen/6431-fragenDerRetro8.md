@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zu deinen Aufträgen 6430 und 6380 und zu
@@ -27,7 +27,7 @@ C: Wie heute (Es 8).
 Bei A löschen die Rollen die übrigen einmal, die Prüfung lässt nur den Spiegel zu; Es S:
 „sein Name nennt sie“.
 Empfehlung: A; so arbeitet T1 schon. Mein früheres A „ohne Kennungen“ widersprach T1.
-Antwort: .
+Antwort: A
 
 **F2 · Testautor auf Opus?** Der Testautor schreibt aus deinen Kriterien die Tests, bevor der
 Code entsteht; er läuft auf Sonnet, dem günstigeren Modell. In Technikphase 8 prüften seine
@@ -39,7 +39,7 @@ kostet je Token doppelt so viel; billiger erst, wenn kaum noch Rückläufe nöti
 B: Sonnet bleibt; seine Anleitung (Skill `akzeptanztest-schreiben`) bekommt das
 Gegenbeispiel „nur Spieler 1“ (neu). Ob das reicht, zeigt erst Zyklus 9.
 Empfehlung: A und das Gegenbeispiel; sinken die Rückläufe bis Retro 9 nicht, zurück auf Sonnet.
-Antwort: .
+Antwort: A
 
 **F3 · Verschiebe ich diese Stellen der Prämissen?** Prämissen: deine Texte Absicht, Ich, Wir,
 Es; die ersten drei liest jede Rolle in jedem Lauf. Sechs Stellen sind Ablauf, der anderswo
@@ -58,7 +58,7 @@ A: Alle sechs (Anliegen 6380, Wir 3). B: Nur 1, 2, 3, 6, die keine Regel ändern
 6380). C: Keine (Anliegen 2590).
 Code: nichts. Arbeit: Ich wird 1.000 Zeichen kürzer.
 Empfehlung: A.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
 Kommentar: F2 und F3 verstehe ich nicht. Bitte ausführen. Bei F1 habe ich zumindest eine Art Meinung, die ggf. durch den aktuellen Stand gedeckt ist. Wir verwenden Docstrings vor allem und einen Spiegel zwischen Akzeptanztests und den Akzeptanzkriterien herzustellen, korrekt? ALso QUE-1.1 würde einen entsprechenden Test in der Technik haben, wo genau diese Abkürzung in der Datei steht, zusätzlich noch ein Satz, was das für ein TEst ist. Bei allen anderen Codezeilen sollte das an sich nicht nötig sein. Der Code selbst sollte lesbar sein und der Docstring daher unnötig. Ist hingegen der Inhalt des Docstrings nicht im Code zu lesen, dann wird auch ein zusätzlicher Docstring nicht zu einem besseren Verständnis beitragen. Wie machen wir es nun?

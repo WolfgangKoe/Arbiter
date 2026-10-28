@@ -82,5 +82,5 @@ Bestand abbauen, dann Neues (306).
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
