@@ -8,7 +8,7 @@ from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, projektordner
 from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
 
-link = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
+link = re.compile(r"(?:Anliegen\s+)?\[[^\]]*\]\(([^)\s#]+)(?:#[^)\s]*)?\)")
 suchOrdner = ("domaene", "technik", "prozess", handoffOrdner, ".claude", "doku")
 
 

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** `anliegenregeln/erledigteLoeschen.py` (`linksErsetzen`, Zeile 34) ersetzt jeden
@@ -22,4 +22,7 @@ und es mitersetzen, oder bei vorangehendem „Anliegen “ nur „<nr>“ einset
 `erledigteLoeschenTest.py`: ein Link mit vorangestelltem „Anliegen “ ergibt „Anliegen <nr>“. Ein
 eigenes Prozess-Item ist nicht nötig; nächster Lauf des Regelumsetzers.
 
-**Stellungnahme.**
+**Stellungnahme.** Behoben: Das Muster `link` in `erledigteLoeschen.py` nimmt ein
+vorangehendes „Anliegen “ (auch über einen Zeilenumbruch) mit, das Ergebnis ist „Anliegen <nr>“.
+Scheiter-Test: `erledigteLoeschenTest.py`
+(`testEinLinkMitVorangestelltemAnliegenGibtKeinDoppeltesAnliegen`).

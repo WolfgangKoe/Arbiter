@@ -107,7 +107,7 @@ abbauen, dann Neues (306).
 - [x] Organisationsentwickler: P3
 - [ ] Regelumsetzer: P4
 - [x] Organisationsentwickler: P5
-- [ ] Regelumsetzer: P6
+- [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
 - [ ] Koordinator: nach dev gepusht
 

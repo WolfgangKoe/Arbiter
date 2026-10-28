@@ -31,6 +31,13 @@ def testDieGrenzeWächstMitDerRunde(tmp_path, runde):
     assert längeBefund(datei)[0] == "rot"
 
 
+def testEinErledigtesAnliegenÜberDerGrenzeIstNichtRot(tmp_path):
+    datei = anliegenMitLänge(tmp_path, 1, grenze(1) + 1)
+    neu = datei.read_text(encoding="utf-8").replace("offen", "erledigt")
+    datei.write_text(neu, encoding="utf-8")
+    assert längeBefund(datei) is None
+
+
 @pytest.mark.parametrize("runde", [1, 2, 3])
 def testBeiDerGrenzeIstEsNurEinHinweis(tmp_path, runde):
     datei = anliegenMitLänge(tmp_path, runde, grenze(runde))

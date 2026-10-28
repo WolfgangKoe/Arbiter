@@ -6,7 +6,7 @@ from pathlib import Path
 
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, zusatzkontext
 from gemeinsam.pfade import anliegenOrdner, projektordner
-from lesen.anliegenKopf import kopfLesen
+from lesen.anliegenKopf import Status, kopfLesen
 
 zeichenJeRunde = 4000
 hinweisAbstand = 100
@@ -25,7 +25,7 @@ def grenze(runde: int) -> int:
 def längeBefund(datei: Path) -> tuple[str, str] | None:
     """`("rot", Text)` über der Grenze, `("hinweis", Text)` im Hinweisbereich, sonst `None`."""
     anliegen = kopfLesen(datei)
-    if anliegen is None:
+    if anliegen is None or anliegen.status == Status.erledigt:
         return None
     zeichen = länge(datei.read_text(encoding="utf-8"))
     obergrenze = grenze(anliegen.runde)

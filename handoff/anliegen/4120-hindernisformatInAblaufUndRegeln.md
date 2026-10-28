@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Seit Anliegen 3940 (Commit „Hindernis nennt, wer wen aufhält (Anliegen 3940)“)

@@ -73,6 +73,17 @@ def testLinksAufAndereDateienBleiben(tmp_path, gitRepo):
     assert plan.read_text() == "[Ablauf](../prozess/ablauf.md) [Web](https://x.de/12-probe.md)\n"
 
 
+def testEinLinkMitVorangestelltemAnliegenGibtKeinDoppeltesAnliegen(tmp_path, gitRepo):
+    anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
+    retro = tmp_path / "handoff" / "retro.md"
+    retro.write_text(
+        "Siehe Anliegen [12](anliegen/12-probe.md) und Anliegen\n[12](anliegen/12-probe.md).\n"
+    )
+    gitRepo.festhalten("Probe")
+    erledigteLöschen(tmp_path)
+    assert retro.read_text() == "Siehe Anliegen 12 und Anliegen 12.\n"
+
+
 def testNurVorgemerktesErledigtesBleibtLiegen(tmp_path, gitRepo):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
     gitRepo.git("add", "-A")
