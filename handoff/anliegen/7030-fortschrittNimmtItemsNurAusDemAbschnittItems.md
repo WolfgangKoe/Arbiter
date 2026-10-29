@@ -11,7 +11,7 @@ Wartet auf: Prozessphase 9
 **Befund.** `lesen/plan.py` (`itemNamen`) nimmt jeden Link auf `../domaene/items/` im ganzen
 Plan als freigegebenes Item. In Plan 9 stand unter „Danach“ ein Link auf das Item für Plan 10
 (QUE-11); der Fortschritt bekam dafür neun Schritte der Technikphase
-([7021](7021-planNenntFuenftesItemUndErledigteBedingung.md)). Der
+(Anliegen 7021). Der
 [Planer](../../.claude/agents/planer.md) nennt die gewählten Items im Plan je mit Link; andere
 Abschnitte (Danach, Abweichungen) dürfen ein Item nennen, das nicht freigegeben wird.
 Bestehende Regel, die es abdeckt: [Fortschritt](../../prozess/ablauf/fortschritt.md), Technik
