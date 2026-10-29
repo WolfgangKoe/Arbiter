@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Ux
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (DoR 5 für Item [Grenzkreise und Vorrücken](../../domaene/items/grenzkreise.md):
