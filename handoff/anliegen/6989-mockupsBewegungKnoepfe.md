@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Drei Mockups widersprechen den neuen Kriterien.

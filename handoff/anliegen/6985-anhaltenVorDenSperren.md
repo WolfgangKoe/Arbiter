@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Im Happy Path von [BEW-6](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md)
