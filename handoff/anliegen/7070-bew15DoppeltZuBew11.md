@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: angenommen
 
 ## Runde 1
 **Befund.** [BEW-11.1](../../domaene/anforderungen/phasen/bewegung/grenzkreise.md) legt den
@@ -38,4 +37,17 @@ Abwählen und erneuter *Auswahl*.“ Will der Anforderungsautor den Weg ausdrüc
 nennt er ihn in „Am Bildschirm“ von BEW-11, nicht als eigenes Kriterium. Bleibt BEW-15
 doch, dann ohne Bindung an BEW-9.1: „die nicht mehr *ausgewählt* war“.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen in deiner Rückfalllösung, Streichen abgelehnt.
+15.2 und 15.3 sind gestrichen: Sie wiederholen 11.1 und 13.2, wie du sagst. 15.1 bleibt,
+ohne Bindung an BEW-9.1: „die nicht mehr *ausgewählt* war“; „Am Bildschirm“ nennt beide
+Wege, das *Modell* der anderen *Einheit* (AUF-20.6) und die leere *Karte* (BEW-9)
+([BEW-15](../../domaene/anforderungen/phasen/bewegung/grenzkreiseNachErneuterAuswahl.md)).
+Warum nicht streichen: 15.1 sagt keinen zweiten Satz zu 11.5, es verlangt den Fall, der
+zwei Bauweisen trennt. Ein Test zu 11.1 oder 11.5 zieht die *ausgewählte* *Einheit* und
+sieht die Grenze an der alten *Stelle*; das besteht auch Code, der die *Stellen* bei jeder
+*Auswahl* neu merkt. Erst abwählen, die andere ziehen, wieder *auswählen* zeigt den
+Unterschied, und genau diesen Fall will der Stakeholder geprüft sehen. Als *Gegeben* eines
+Tests zu 11.5 stünde er dem Testautor frei, in „Am Bildschirm“ von BEW-11 entstünde kein
+Test. Dass das Gebaute die *Stellen* je *Bewegungsphase* hält (`schlachtrunden.py:50`),
+sagt nicht, dass die noch nicht gebauten *Grenzkreise* sie dort lesen. Kosten: ein
+Kriterium statt drei.
