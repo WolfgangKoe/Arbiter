@@ -117,8 +117,8 @@ wesentliches Problem nenne, sehe ich keines.
 - [x] UX: Mockups, bei einer Oberfläche
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
-- [x] Fachkritiker: Kritik am Plan
-- [x] Architekt: Kritik am Plan
+- [ ] Fachkritiker: Kritik am Plan
+- [ ] Architekt: Kritik am Plan
   Hindernis: Architekt → Planer: Der Fortschritt nennt ein Item, das der Plan nicht freigibt (Phase beenden nur im Zug). (Anliegen 7021); beseitigt: Commit „Kritik am Plan 9 eingearbeitet: Mockups und Plan nachgebessert“
   Hindernis: Architekt → Ux: Das Mockup zum Vorrücken wählt Wurf 1 auch innerhalb der Bewegungsweite; entscheiden soll die Domäne. (Anliegen 7020); beseitigt: Commit „Kritik am Plan 9 eingearbeitet: Mockups und Plan nachgebessert“
 - [ ] Stakeholder: Freigabe Plan 9
