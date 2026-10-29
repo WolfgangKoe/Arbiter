@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Diese Reste blieben aus der Nachprüfung von Anliegen 3780 (Commit 278d54b). Keiner
