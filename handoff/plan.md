@@ -19,7 +19,8 @@ Zyklusziel aus [Review 8](review.md), Abweichungen unten.
    ihrer *Grenzkreise*), um jede gegnerische ihre *Nahkampfreichweite*. Nach „Vorrücken“
    erscheinen sechs Kreise +1″ bis +6″; ihr klickt in den Ring eures Wurfs, nur er bleibt, die
    *Modelle* ziehen bis *Bewegungsweite* plus Wurf. Verklickt: „Vorrücken zurücknehmen“, die
-   *Modelle* stehen wieder, wo die Phase begann. (Item 4)
+   *Modelle* stehen wieder, wo die Phase begann. Wählt ihr gezogene Boyz wieder aus, gelten
+   die *Grenzkreise* ab ihren *Stellen* zu Beginn der Phase. (Item 4)
 
 ## Items
 1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): Schritt 1; MIV-1.5.
@@ -28,7 +29,7 @@ Zyklusziel aus [Review 8](review.md), Abweichungen unten.
 3. [Anhalten und Auswahl](../domaene/items/anhaltenUndAuswahl.md): Schritte 3 und 4; BEW-6,
    BEW-2.8, BEW-7, BEW-9, BEW-10, AUF-30.
 4. [Grenzkreise und Vorrücken](../domaene/items/grenzkreise.md): Schritt 5; BEW-11, BEW-13,
-   BEW-14, BEW-5, BEW-12.
+   BEW-14, BEW-5, BEW-12, BEW-15.
 
 Reihenfolge 1 bis 4: Arbiter startet seit der neuen *Ausgangslage* nicht; Item 1 behebt das.
 Item 2 vor 3: BEW-2.8 *setzt* nach BEW-8.2. Item 3 vor 4: Ein Boy als *Ebene* (BEW-7) zeigt
@@ -44,6 +45,7 @@ zuletzt: Hängt es, bekommst du Schritte 1 bis 4, Item 4 rückt in Plan 10.
 - Kante und *Nahkampfreichweite* halten an statt zu sperren (6400); der Test aus 6241 prüft
   dann BEW-6.2.
 - „Jede *Einheit* nur einmal“ ohne neues Kriterium: Korrigieren bleibt (7000 F4 A).
+- BEW-15 auf deine Frage: Sonst zeigten die *Grenzkreise* nach erneuter *Auswahl* zu weit.
 
 Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
 

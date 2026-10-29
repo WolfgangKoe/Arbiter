@@ -1,6 +1,6 @@
 # Grenzkreise und Vorrücken
 
-Umfang: BEW-11, BEW-13, BEW-14, BEW-5, BEW-12.
+Umfang: BEW-11, BEW-13, BEW-14, BEW-5, BEW-12, BEW-15.
 
 Warum jetzt: Zyklusziel aus Review 8; den *Vorrückwurf* wählt ein Klick zwischen zwei
 *Grenzkreise* (6998 F1, 7040).
