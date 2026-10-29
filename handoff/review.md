@@ -115,7 +115,7 @@ wesentliches Problem nenne, sehe ich keines.
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [x] UX: Mockups, bei einer Oberfläche
-- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
+- [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [ ] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan
