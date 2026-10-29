@@ -10,7 +10,7 @@ Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
 - Regelumsetzer, Prozessphase 8: Anliegen 3900,
   Anliegen 4301,
   Anliegen 3780, Anliegen 4120,
-  [4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md).
+  Anliegen 4140.
 - Nachprüfung fällig: Anliegen 6870, Absender
   Koordinator, nach Regel niemand (siehe Vorschläge); Regelumsetzer, laufen daneben:
   Anliegen 6760,

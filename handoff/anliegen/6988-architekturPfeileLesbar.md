@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase
 
 ## Runde 1
-**Befund.** Nachprüfung von [4140](4140-architekturAlsReiterBisZuDenDateien.md) an den
+**Befund.** Nachprüfung von Anliegen 4140 an den
 Screenshots des Regelumsetzers (`/tmp/arch/start.png`, `/tmp/arch/offen.png`): Die Punkte 1 bis 7
 sind umgesetzt, die 22 Tests grün, 4140 ist erledigt. Offen bleibt die Lesbarkeit aus seinem
 Erledigt-Kriterium:

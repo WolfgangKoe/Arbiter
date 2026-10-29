@@ -9,7 +9,7 @@ from anliegenregeln.anliegen import kopfVerstöße
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
 from anliegenregeln.freieNummer import hauptprogramm
 from gemeinsam.pfade import wurzel
-from lesen.anliegenKopf import Status, anliegenDateien, freieNummer, kopfLesen, kopfÄndern, zielText
+from lesen.anliegenKopf import Status, Ziel, anliegenDateien, freieNummer, kopfLesen, kopfÄndern
 
 guterKopf = "Form: Kritik\nVon: Architekt\nAn: Planer\nRunde: 1/3\nStatus: offen"
 
@@ -185,7 +185,7 @@ def testStatusIstEinWertDerAufzählungUnbekannterBleibtText(tmp_path):
 def testWartetAufImKopfIstGrün(tmp_path, zusatz):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf(zusatz))
     assert kopfVerstöße(datei, tmp_path) == []
-    assert kopfLesen(datei).wartetAuf == zusatz
+    assert str(kopfLesen(datei).wartetAuf) == zusatz
 
 
 def testWartetAufEinenUnbekanntenTextIstRot(tmp_path):
@@ -202,7 +202,7 @@ def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
     wartend = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf("13"))
     ziel = anliegenAnlegen(tmp_path, "13-probe.md", guterKopf)
     assert dran(tmp_path) == {"Planer": [13]}
-    assert wartende(tmp_path) == {12: "13"}
+    assert wartende(tmp_path) == {12: Ziel(nummer=13)}
     ziel.unlink()
     assert dran(tmp_path) == {"Planer": [12]}
     assert wartend.is_file()
@@ -212,7 +212,7 @@ def testEinAnliegenAufEinVorhandenesWartetBisEsGelöschtIst(tmp_path):
 def testEinAnliegenAufDieTechnikphaseIstInDerDomänenphaseNichtDran(gitRepo):
     anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Technikphase"))
     assert dran(gitRepo.ordner) == {}
-    assert wartende(gitRepo.ordner) == {12: "Technikphase"}
+    assert wartende(gitRepo.ordner) == {12: Ziel(phase="Technikphase")}
     (gitRepo.ordner / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
     assert dran(gitRepo.ordner) == {"Planer": [12]}
@@ -229,7 +229,7 @@ def testEinAnliegenAufDieDomänenphaseIstInDerTechnikphaseNichtDran(gitRepo):
 def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
     anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Prozessphase"))
     assert dran(gitRepo.ordner) == {}
-    assert wartende(gitRepo.ordner) == {12: "Prozessphase"}
+    assert wartende(gitRepo.ordner) == {12: Ziel(phase="Prozessphase")}
     plan = "# Plan · Zyklus 3\n"
     (gitRepo.ordner / "handoff" / "plan.md").write_text(plan, encoding="utf-8")
     (gitRepo.ordner / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
@@ -242,12 +242,12 @@ def testEinAnliegenAufDieProzessphaseIstDortDranSonstNicht(gitRepo):
 def testEinAnliegenAufDiePhaseEinesSpäterenZyklusWartetBisDahin(gitRepo):
     datei = anliegenAnlegen(gitRepo.ordner, "12-probe.md", wartetAuf("Technikphase 4"))
     assert kopfVerstöße(datei, gitRepo.ordner) == []
-    assert kopfLesen(datei).wartetAuf == "Technikphase 4"
+    assert kopfLesen(datei).wartetAuf == Ziel(phase="Technikphase", zyklus=4)
     plan = gitRepo.ordner / "handoff" / "plan.md"
     plan.write_text("# Plan · Zyklus 3\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 3")
     assert dran(gitRepo.ordner) == {}
-    assert wartende(gitRepo.ordner) == {12: "Technikphase 4"}
+    assert wartende(gitRepo.ordner) == {12: Ziel(phase="Technikphase", zyklus=4)}
     plan.write_text("# Plan · Zyklus 4\n", encoding="utf-8")
     gitRepo.festhalten("Freigabe Plan 4")
     assert dran(gitRepo.ordner) == {"Planer": [12]}
@@ -278,10 +278,28 @@ def testKopfÄndernSchreibtDieFelderUndLässtDenRestStehen(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("ziel", "text"), [("7", "07"), ("6760", "6760"), ("Prozessphase 9", "die Prozessphase 9")]
+    ("ziel", "text"),
+    [
+        (Ziel(nummer=7), "07"),
+        (Ziel(nummer=6760), "6760"),
+        (Ziel(phase="Prozessphase", zyklus=9), "die Prozessphase 9"),
+    ],
 )
-def testZielTextNenntNummerOderDiePhase(ziel, text):
-    assert zielText(ziel) == text
+def testZielBeschreibtNummerOderDiePhase(ziel, text):
+    assert ziel.beschreibung == text
+
+
+@pytest.mark.parametrize(
+    ("text", "erwartet"),
+    [
+        ("13", Ziel(nummer=13)),
+        ("Technikphase", Ziel(phase="Technikphase")),
+        ("Prozessphase 9", Ziel(phase="Prozessphase", zyklus=9)),
+    ],
+)
+def testWartetAufLegtDasZielGetrenntAb(tmp_path, text, erwartet):
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", wartetAuf(text))
+    assert kopfLesen(datei).wartetAuf == erwartet
 
 
 def testKopfÄndernOhneKopfGibtNichtsZurück():

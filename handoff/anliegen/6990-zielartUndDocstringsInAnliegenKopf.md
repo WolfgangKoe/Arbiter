@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase 8
+Status: angenommen
 
 ## Runde 1
 **Befund.** Diese Reste blieben aus der Nachprüfung von Anliegen 3780 (Commit 278d54b). Keiner
@@ -32,5 +31,8 @@ eine andere Form von Phase und Zyklus müsste man Regex, `wartetAufNummer` und b
    wählst du: in dieser Prozessphase nach P4, sonst trage `Wartet auf: Prozessphase 9` ein.
 
 **Stellungnahme.** Zu 1: Die beiden Docstrings in `lesen/anliegenKopf.py` sind mit P4,
-Schritt 1 entfernt (P4 Zwischenstand). Zu 2: noch nicht umgesetzt, der Status bleibt `offen`,
-bis P4 fertig ist; dann folgt der Umbau in dieser Prozessphase.
+Schritt 1 entfernt (P4 Zwischenstand). Zu 2: umgesetzt auf Weisung des Stakeholders. `lesen/anliegenKopf.py`
+legt das Ziel als `Ziel(nummer, phase, zyklus)` ab; `wartetAufNummer`, `zielText` und beide
+`partition`-Stellen (`anliegenDran.wartet`, `dashboardAnliegen.vorgemerkte`) entfallen.
+Scheiter-Test: `testWartetAufLegtDasZielGetrenntAb`, `testZielBeschreibtNummerOderDiePhase`
+in `anliegenregeln/anliegenTest.py`; Eintrag in `anliegenregeln.md`.

@@ -4,10 +4,10 @@ from gemeinsam.gitAufruf import dateiBeiCommit, letzteFreigabe
 from lesen.anliegenKopf import (
     Anliegen,
     Status,
+    Ziel,
     gelesene,
     kopfAusText,
     stakeholder,
-    wartetAufNummer,
 )
 from standregeln.phasenfolge import lage
 
@@ -44,20 +44,21 @@ def wartetAuf(wurzel: Path, anliegen: Anliegen, freigabe: str | None) -> str | N
 
 
 def wartet(wurzel: Path, anliegen: Anliegen) -> bool:
-    if anliegen.wartetAuf is None or anliegen.status == Status.erledigt:
+    ziel = anliegen.wartetAuf
+    if ziel is None or anliegen.status == Status.erledigt:
         return False
-    if not wartetAufNummer(anliegen.wartetAuf):
-        phase, _, zyklus = anliegen.wartetAuf.partition(" ")
-        jetzt = lage(wurzel)
-        return phase != str(jetzt.phase) or (zyklus != "" and jetzt.zyklus < int(zyklus))
-    return int(anliegen.wartetAuf) in {andere.nummer for andere in gelesene(wurzel)}
+    if ziel.nummer is not None:
+        return ziel.nummer in {andere.nummer for andere in gelesene(wurzel)}
+    jetzt = lage(wurzel)
+    späterer = ziel.zyklus is not None and jetzt.zyklus < ziel.zyklus
+    return ziel.phase != str(jetzt.phase) or späterer
 
 
-def wartende(wurzel: Path) -> dict[int, str]:
+def wartende(wurzel: Path) -> dict[int, Ziel]:
     return {
-        anliegen.nummer: str(anliegen.wartetAuf)
+        anliegen.nummer: anliegen.wartetAuf
         for anliegen in gelesene(wurzel)
-        if wartet(wurzel, anliegen)
+        if anliegen.wartetAuf is not None and wartet(wurzel, anliegen)
     }
 
 

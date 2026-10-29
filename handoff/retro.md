@@ -110,7 +110,7 @@ Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle stat
 Item ohne Kriterium (Anliegen 4301); P4 nach 4301,
 ohne Teilung um `standregeln/`, weil beide dort ändern; P9 nach P4, es wirkt ab der
 Technikphase 9 (6960, F3); zuletzt der Reiter Architektur
-([4140](anliegen/4140-architekturAlsReiterBisZuDenDateien.md)): erst Bestand abbauen, dann
+(Anliegen 4140): erst Bestand abbauen, dann
 Neues (306).
 
 ## Fortschritt

@@ -23,18 +23,35 @@ stakeholder = "Stakeholder"
 wartetAufName = "Wartet auf"
 feldNamen = ("Form", "Von", "An", "Runde", "Status", wartetAufName)
 wartetAufFeld = re.compile(
-    r"^(?P<nummer>\d+)$|^(?P<phase>(?:Domänen|Technik|Prozess)phase(?: \d+)?)$"
+    r"^(?P<nummer>\d+)$|^(?P<phase>(?:Domänen|Technik|Prozess)phase)(?: (?P<zyklus>\d+))?$"
 )
 rundeFeld = re.compile(rf"^(\d+)/{höchstRunde}$")
 dateinummer = re.compile(rf"{anliegenOrdner}/(\d+)-")
 
 
-def wartetAufNummer(ziel: str) -> bool:
-    return ziel.isdigit()
+@dataclass(frozen=True)
+class Ziel:
+    nummer: int | None = None
+    phase: str | None = None
+    zyklus: int | None = None
+
+    def __str__(self) -> str:
+        if self.nummer is not None:
+            return str(self.nummer)
+        return f"{self.phase} {self.zyklus}" if self.zyklus is not None else str(self.phase)
+
+    @property
+    def beschreibung(self) -> str:
+        return f"{self.nummer:02d}" if self.nummer is not None else f"die {self}"
 
 
-def zielText(ziel: str) -> str:
-    return f"{int(ziel):02d}" if wartetAufNummer(ziel) else f"die {ziel}"
+def zielAusTreffer(treffer: re.Match[str]) -> Ziel:
+    nummer, phase, zyklus = treffer["nummer"], treffer["phase"], treffer["zyklus"]
+    return Ziel(
+        nummer=int(nummer) if nummer else None,
+        phase=phase,
+        zyklus=int(zyklus) if zyklus else None,
+    )
 
 
 @dataclass(frozen=True)
@@ -46,7 +63,7 @@ class Anliegen:
     empfänger: str
     runde: int
     status: Status | str
-    wartetAuf: str | None = None
+    wartetAuf: Ziel | None = None
 
 
 def statusAusText(text: str) -> Status | str:
@@ -101,7 +118,7 @@ def anliegenAusFeldern(felder: dict[str, str], datei: Path) -> Anliegen | None:
         empfänger=ohnePerspektive(felder["An"]),
         runde=int(runde[1]),
         status=statusAusText(felder["Status"]),
-        wartetAuf=(wartet["nummer"] or wartet["phase"]) if wartet else None,
+        wartetAuf=zielAusTreffer(wartet) if wartet else None,
     )
 
 

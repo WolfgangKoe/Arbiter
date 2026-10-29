@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende
-from lesen.anliegenKopf import zielText
 
 
 def nachprüfungenAlsText(wurzel: Path) -> str:
@@ -19,7 +18,7 @@ def wartendeAnliegenAlsText(wurzel: Path) -> str:
     warten = wartende(wurzel)
     if not warten:
         return ""
-    teile = [f"{nummer:02d} (auf {zielText(ziel)})" for nummer, ziel in sorted(warten.items())]
+    teile = [f"{nummer:02d} (auf {ziel.beschreibung})" for nummer, ziel in sorted(warten.items())]
     return "Wartet: " + ", ".join(teile)
 
 

@@ -4,7 +4,7 @@ from operator import attrgetter
 from pathlib import Path
 
 from anliegenregeln.anliegenDran import dran, nachprüfungen, wartende, wartetAuf
-from lesen.anliegenKopf import Anliegen, gelesene, stakeholder, wartetAufNummer, zielText
+from lesen.anliegenKopf import Anliegen, gelesene, stakeholder
 from standregeln.phasenfolge import Phase, lage
 
 Verweis = Callable[[Anliegen, Path], str]
@@ -59,15 +59,16 @@ def dateiVerweis(anliegen: Anliegen, ordner: Path) -> str:
 
 def vorgemerkte(ordner: Path) -> list[tuple[str, list[Anliegen]]]:
     nachNummer = {anliegen.nummer: anliegen for anliegen in gelesene(ordner)}
-    auf: dict[str, list[Anliegen]] = {}
+    aufAnliegen: list[Anliegen] = []
+    aufPhase: dict[str, list[Anliegen]] = {}
     for nummer, ziel in wartende(ordner).items():
-        auf.setdefault(ziel.partition(" ")[0], []).append(nachNummer[nummer])
-    aufAnliegen = [
-        anliegen for ziel, liste in auf.items() if wartetAufNummer(ziel) for anliegen in liste
-    ]
+        if ziel.phase is None:
+            aufAnliegen.append(nachNummer[nummer])
+        else:
+            aufPhase.setdefault(ziel.phase, []).append(nachNummer[nummer])
     bereiche = [("Wartet auf ein anderes Anliegen", aufAnliegen)] if aufAnliegen else []
-    if any(not wartetAufNummer(ziel) for ziel in auf):
-        bereiche += vorgemerktJePhase(ordner, auf)
+    if aufPhase:
+        bereiche += vorgemerktJePhase(ordner, aufPhase)
     return bereiche
 
 
@@ -84,7 +85,7 @@ def vorgemerktJePhase(
 def wartetAufText(anliegen: Anliegen) -> str:
     if anliegen.wartetAuf is None:
         return ""
-    return f" · wartet auf {zielText(anliegen.wartetAuf)}"
+    return f" · wartet auf {anliegen.wartetAuf.beschreibung}"
 
 
 def anliegenKarte(anliegen: Anliegen, rolle: str, ordner: Path, verweis: Verweis) -> str:
