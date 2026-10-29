@@ -3,8 +3,8 @@
 Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
-Runde: 1/3
-Status: rückfrage
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Zum Zyklusziel aus [Review 8](../review.md) stehen neu
@@ -47,3 +47,28 @@ Antwort: .
 
 **Stellungnahme.**
 Kommentar: Ich habe im Mockup mehrere Buttons mit "vorrücken" gesehen. Ich verstehe die Absicht dahinter nicht. Nach meinem Dafür halten braucht es da nur einen Button, nachdem eine Einheit gewählt wurde. Einzelne Modelle in einer Einheit können nicht vorrücken, ohne dass auch alle anderen Modelle vorrücken, falls das die IDee war. Das Vorrücken muss rückgängig gemacht werden können. Beachte auch die Auswahl des jeweiligen Kreises, wie ich es in einem anderen Anliegen beschrieben habe
+
+## Runde 2
+**Befund.** Zu deinem Kommentar: Die sechs Knöpfe waren je ein *Vorrückwurf*, nicht je ein
+*Modell*. Jetzt gibt es einen Knopf „Vorrücken“ für die ganze *Einheit*, den Wurf wählt der Klick
+auf einen Kreis, „Vorrücken zurücknehmen“ macht es rückgängig; beschrieben in
+[Anliegen 6998, Runde 2](6998-grenzkreiseVorrueckenUndBegriff.md). F2 und F3 gelten mit A.
+Zu F1: Deinen Ablauf beschreiben BEW-5 und BEW-12. Zurückziehen (Fall Back, `core_rules.txt:737`)
+kommt mit Etappe 3 (Anliegen 2363). Wie Arbiter die Zustände der *Einheiten* zeigt, etwa wie
+Arbiter-old (`Arbiter-old/docs/spec/unit_states.md:20`), ist F3 B: nach Plan 9, mit einem Mockup.
+Offen bleibt, was ich mit F1 meinte; hier enger gefragt.
+
+**Kosten.** Ohne Antwort gilt die Annahme; B kostet ein Kriterium und das Zurücksetzen vorher.
+
+**Gegenvorschlag.** „.“ heißt, die Empfehlung gilt.
+
+**F4 · Ihr zieht die Boyz, dann den Warboss. Dürft ihr die Boyz danach noch einmal ziehen?**
+A: Ja, wie heute; die *Distanz* zählt vom Beginn der *Bewegungsphase* (BEW-1.6, Anliegen 5180
+F5). B: Nein, Arbiter sperrt ‚schon bewegt‘; korrigieren nur über das Zurücksetzen, das später
+kommt (Regeltext „No unit can be selected to move more than once“, `core_rules.txt:734`).
+Empfehlung: A; so lässt sich jede *Einheit* korrigieren, bis das Zurücksetzen da ist, und die
+*Bewegungsweite* hält Arbiter trotzdem ein.
+Annahme: A, kein Kriterium ‚schon bewegt‘.
+Antwort: .
+
+**Stellungnahme.**

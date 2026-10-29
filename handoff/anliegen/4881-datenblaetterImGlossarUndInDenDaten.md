@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 4800 F2 B gewählt: je

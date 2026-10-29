@@ -38,3 +38,4 @@ Frage an den Stakeholder.
 (Vorbild ArbiterMap). Ob ein Anhalten zu übergehen ist: [Anliegen 7000](7000-begriffeUndFragenZurBewegung.md) F2.
 Damit sperrt QUE-1.3 in der *Bewegungsphase* nicht mehr; der Test aus 6241 Punkt 1 prüft dann BEW-6.2.
 Kommentar: Okay, ich setze das Anliegen auf erledigt, sobald es umgesetzt ist?
+Stellungnahme: Ja. BEW-6 ist in Item 3 von Plan 9; prüfe es am Bildschirm nach Review 9: Ein Boy, den du auf einen Necron ziehst, bleibt 1″ vor dessen *Base* stehen. Bis dahin musst du nichts tun.

@@ -26,6 +26,7 @@ eingefahren | – | eingefahren | Zustand einer *Leiste*, die nur ihren *Griff* 
 Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben *Datenblatts*, die zusammen bewegen und kämpfen (`core_rules.txt:420`, `:552`).
 erster Zug | first turn | ersterZug | Der Zug, mit dem jede *Schlachtrunde* beginnt; ihn hat in allen derselbe *Spieler* (`core_rules.txt:639`, `:2329`).
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
+Einhüllende | – | Einhüllende | Rand der Fläche, die mehrere *Grenzkreise* zusammen bedecken, etwa je einer um jedes *Modell* einer *Einheit*; die *Karte* zeigt sie statt dieser *Grenzkreise*. Nur Anzeige wie ein *Grenzkreis* (Anliegen 6410 Punkt 2, Vorbild `ArbiterMap/docs/spec/interaction_map.md:538`).
 Fraktion | faction | fraktion | Zugehörigkeit einer *Einheit*, die ihr *Datenblatt* unter den Faction keywords nennt (`core_rules.txt:2483`, `:2484`). Arbiter führt je Fraktion ihre *Datenblätter*, bisher Orks und Necrons (Anliegen 4800 F2 B, 7005).
 Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, wie es `domaene/daten/formation.yaml` vorgibt (Anliegen 374 F2 A, 377 F1 A).
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
@@ -59,8 +60,8 @@ Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht 
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
-Vorrücken | Advance | vorrücken | Bewegung einer *Einheit* in der *Bewegungsphase* statt der *Normalen Bewegung*, je *Modell* eine *Distanz* bis zu seiner *Bewegungsweite* plus *Vorrückwurf*; die *Einheit* ist danach bis zum Ende der *Bewegungsphase* vorgerückt (`core_rules.txt:754`, `:764`).
-Vorrückwurf | Advance roll | vorrückwurf | Ein W6, den die *Spieler* für eine *Einheit* am Tisch würfeln, wenn sie *vorrückt*; Arbiter nimmt das Ergebnis entgegen, je *Einheit* einen (`core_rules.txt:754`, `domaene/ziel.md`).
+Vorrücken | Advance | vorrücken | Bewegung einer *Einheit* in der *Bewegungsphase* statt der *Normalen Bewegung*, je *Modell* eine *Distanz* bis zu seiner *Bewegungsweite* plus *Vorrückwurf*; die *Einheit* ist danach bis zum Ende der *Bewegungsphase* vorgerückt, außer die *Spieler* nehmen es zurück (`core_rules.txt:754`, `:764`, Anliegen 6998 F1).
+Vorrückwurf | Advance roll | vorrückwurf | Ein W6, den die *Spieler* für eine *Einheit* am Tisch würfeln, wenn sie *vorrückt*; Arbiter nimmt das Ergebnis per Klick auf einen *Grenzkreis* entgegen, je *Einheit* einen (`core_rules.txt:754`, `domaene/ziel.md`, Anliegen 6998 F1).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Anliegen 09 F12 A, git).

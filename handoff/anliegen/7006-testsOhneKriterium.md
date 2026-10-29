@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach [Anliegen 4881](4881-datenblaetterImGlossarUndInDenDaten.md) ersetzt
