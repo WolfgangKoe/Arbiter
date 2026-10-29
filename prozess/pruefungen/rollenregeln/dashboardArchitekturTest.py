@@ -72,7 +72,7 @@ def testEinOrdnerÖffnetSichBisZurDateiUndLeereInitDateienFehlen(tmp_path):
         assert f'data-pfad="{pfad}"' in text
     assert "__init__.py" not in text
     assert 'class="ak ordner"' in text
-    assert "ak-kinder" in text and "classList.toggle(\"offen\")" in text
+    assert "ak-kinder" in text and 'classList.toggle("offen")' in text
 
 
 def testPfeileZählenImportzeilenAusPythonJavaScriptUndHtml(tmp_path):
@@ -117,9 +117,12 @@ def testEinVerbotenerPfeilStehtAlsUrteilUndErlaubteNicht(tmp_path):
     assert "Kein verbotener Pfeil." in seite(tmp_path)
     datei(tmp_path, f"{produkt}/domaene/phase.py", "from arbiter.katalog import ausgangslage\n")
     assert "Verbotene Pfeile: Domäne → Katalog" in seite(tmp_path)
-    assert kanten(tmp_path)[
-        (f"{produkt}/domaene/phase.py", f"{produkt}/katalog/ausgangslage.py")
-    ].erlaubt is False
+    assert (
+        kanten(tmp_path)[
+            (f"{produkt}/domaene/phase.py", f"{produkt}/katalog/ausgangslage.py")
+        ].erlaubt
+        is False
+    )
 
 
 @pytest.mark.parametrize(
