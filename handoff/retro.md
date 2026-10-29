@@ -129,7 +129,7 @@ Neues (306).
 - [x] Regelumsetzer: P7
 - [x] Organisationsentwickler: P8
 - [x] Regelumsetzer: P9
-- [ ] Koordinator: nach dev gepusht
+- [x] Koordinator: nach dev gepusht
 
 ## Freigabe
 Freigabe: ja
