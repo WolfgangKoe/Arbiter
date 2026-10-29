@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Kritik, Schritt 5 des Happy Path und Freigabe).
@@ -26,4 +26,7 @@ bew-11; ohne 2 hält der Plan die Freigabe für etwas auf, das schon erledigt is
 Plan streichen, oder er lautet „Bereit zur Freigabe.“; im Item „Anliegen 7003, 7004“
 streichen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beides umgesetzt. 1: Das
+[Item grenzkreise](../../domaene/items/grenzkreise.md) verlinkt bew-5 vor bew-11, bew-13 und
+bew-12. 2: Im [Plan](../plan.md) ist der Satz zu 7003 und 7004 gestrichen, im Item „Anliegen
+7003, 7004“ unter „Abhängigkeit“.

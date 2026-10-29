@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Kritik, eine Handlung fehlt, die ein Kriterium verlangt).
@@ -24,4 +24,4 @@ Kriterium.
 
 **Gegenvorschlag.** In bew-11 „Vorrücken“ wie in bew-5 in die `knopfGruppe` aufnehmen.
 
-**Stellungnahme.**
+**Stellungnahme.** Übernommen: [bew-11](../../domaene/mockups/bew-11.html) bietet „Vorrücken“ vor „Phase beenden“ in der `knopfGruppe` an, wie bew-5; BEW-5.1 gilt damit auch mit einem Boy als *Ebene*.

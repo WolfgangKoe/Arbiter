@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Ux
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (DoR 5 für Item [Grenzkreise und Vorrücken](../../domaene/items/grenzkreise.md):
@@ -36,4 +36,4 @@ Anzeige wie jede `grenze`. In `vorschlag.css` wird `.grenze.wählbar` zu
 und `.grenze.wählbar:hover` entfällt (ohne Trefferfläche kein Hover; kein Kriterium verlangt
 ihn). Markup von bew-13 bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Übernommen wie vorgeschlagen: In [vorschlag.css](../../domaene/mockups/vorschlag.css) ist `.grenze.wählbar` nur noch `stroke-opacity: 0.7`, `:hover` entfällt (auch `fill`, `pointer-events`, `cursor`); das Markup von [bew-13](../../domaene/mockups/bew-13.html) bleibt. Der Klick geht mit seiner *Stelle* an die Domäne (BEW-14.1, BEW-9.1).

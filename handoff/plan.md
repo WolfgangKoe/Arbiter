@@ -36,8 +36,6 @@ seinen *Grenzkreis* (BEW-11.1), der Klick auf einen Kreis hebt die *Auswahl* nic
 (BEW-5.3, BEW-9.1). Item 4 kostet am meisten Code (*Einhüllende*, Anliegen 7004), darum
 zuletzt: Hängt es, bekommst du Schritte 1 bis 4, Item 4 rückt in Plan 10.
 
-Bereit zur Freigabe nach Anliegen 7003; 7004 vor dem Vertrag zu Item 4.
-
 ## Abweichungen vom Zyklusziel
 - Dazu Item 1 (4882 F1 A), BEW-7 (6420), BEW-10 und AUF-30 (6300, 6996), die *Grenzkreise*:
   Mit ihnen wählt ihr den *Vorrückwurf* (6998 F1), ohne sie kein *Vorrücken* (6999). Kosten:
@@ -52,8 +50,7 @@ Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
 ## Danach
 Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3), Anhalten übergehen
 (7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*, ruhige *Karte*, die
-Lücken aus 6986, [„Phase beenden“ nur im Zug](../domaene/items/phaseBeendenNurImZug.md)
-(QUE-11). Ich schätze zwei Zyklen bis Etappe 2.
+Lücken aus 6986, „Phase beenden“ nur im Zug (QUE-11). Ich schätze zwei Zyklen bis Etappe 2.
 
 ## Empfehlung
 Gib die vier Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen; damit gelten die
@@ -106,15 +103,6 @@ Begriffe aus 6998, 7000, 7005.
 - [ ] Reviewer: Kritik am Code zu Item grenzkreise
 - [ ] Fachkritiker: Item grenzkreise abgenommen
 - [ ] Planer: Item grenzkreise gelöscht
-- [ ] Architekt: Vertrag zu Item phaseBeendenNurImZug, bei beiden Hälften
-- [ ] Testautor: Tests zu Item phaseBeendenNurImZug
-- [ ] Fachkritiker: Kritik an den Tests zu Item phaseBeendenNurImZug
-- [ ] Architekt: Kritik an den Tests zu Item phaseBeendenNurImZug
-- [ ] Implementierer: Tests zu Item phaseBeendenNurImZug grün
-- [ ] Architekt: Kritik am Code zu Item phaseBeendenNurImZug
-- [ ] Reviewer: Kritik am Code zu Item phaseBeendenNurImZug
-- [ ] Fachkritiker: Item phaseBeendenNurImZug abgenommen
-- [ ] Planer: Item phaseBeendenNurImZug gelöscht
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review

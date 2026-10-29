@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Die Technikphase arbeitet den Fortschritt des [Plans](../plan.md) ab.
@@ -21,4 +21,9 @@ das niemand freigegeben hat. Je eine Zeile.
 **Gegenvorschlag.** Unter „Danach“ QUE-11 ohne Link nennen, dann schreibt das Skript den
 Fortschritt ohne das Item neu; den Satz zu 7003 und 7004 streichen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beides umgesetzt im [Plan](../plan.md). 1: Unter „Danach“
+steht QUE-11 ohne Link; der Hook hat den Fortschritt neu geschrieben, er nennt nur noch die
+vier Items. Die Ursache in `lesen/plan.py` liegt beim Regelumsetzer:
+[7030](7030-fortschrittNimmtItemsNurAusDemAbschnittItems.md). 2: Der Satz zu 7003 und 7004
+ist gestrichen, ebenso „Anliegen 7003, 7004“ im
+[Item grenzkreise](../../domaene/items/grenzkreise.md).
