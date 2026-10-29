@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Ux
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Drei Mockups widersprechen den neuen Kriterien.
@@ -27,4 +27,4 @@ betrifft drei Dateien mit je bis zu sieben Knöpfen aus vorhandenen Komponenten.
 ergänzen. Ist bew-2 nach dem Einbau von BEW-2 fällig zum Löschen, genügt stattdessen das Löschen
 (UX: nach dem Einbau das Mockup löschen).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: [bew-1](../../domaene/mockups/bew-1.html), [bew-2](../../domaene/mockups/bew-2.html) und [bew-8](../../domaene/mockups/bew-8.html) zeigen „Vorrücken mit 1“ bis „Vorrücken mit 6“ wie [bew-5](../../domaene/mockups/bew-5.html); bew-2 zeigt zusätzlich „gemeinsam übergehen“ wie bew-8.

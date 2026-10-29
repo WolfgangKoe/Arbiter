@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Ux
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder wünscht Grenzkreise für *Bewegungsweite* und *Nahkampfreichweite* ([Anliegen 6410](6410-grenzkreiseNahkampfUndBewegung.md)). Kein Kriterium nennt sie; Ux zeigt im Mockup nur, was ein Kriterium verlangt (Ich 1).

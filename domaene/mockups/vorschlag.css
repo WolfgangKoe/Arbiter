@@ -187,6 +187,17 @@ body {
   vector-effect: non-scaling-stroke;
 }
 
+.grenzkreis {
+  fill: none;
+  stroke: var(--spielerFarbe);
+  stroke-opacity: 0.45;
+  stroke-width: 0.08;
+  pointer-events: none;
+}
+
+.grenzkreis.nahkampfreichweite {
+  stroke-dasharray: 0.3 0.2;
+}
 
 .sperrmeldung {
   width: 100%;

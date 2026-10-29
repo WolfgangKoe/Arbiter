@@ -5,7 +5,6 @@ Von: Stakeholder
 An: Ux
 Runde: 1/3
 Status: angenommen
-Wartet auf: 6983
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Eine Anregung noch für die nächste Domänenphase. Es wäre gut, wenn Grenzen für Nahkampfreichweite und Bewegung jeweils durch einen Kreis leicht angezeigt würden. UX soll in der nächsten Domänenphase ein Mockup vorstellen. Eine Idee dazu gibt es auch schon in ArbiterMap und auch wie das Verhalten sein soll.“
@@ -16,4 +15,4 @@ Fundstellen in ArbiterMap: [Reichweiten und Ringe, Spezifikation](../../ArbiterM
 
 **Gegenvorschlag.** Keiner.
 
-**Stellungnahme.** Gelesen, aber noch kein Mockup: Die Komponentenseite hat keinen Kreis für Grenzen (Anliegen [6983](6983-komponenteGrenzkreis.md), Architekt), und kein Kriterium verlangt ihn (Anliegen [6984](6984-kriteriumGrenzkreise.md), Anforderungsautor, mit offener Frage zu den Vorrückringen). Sobald beide stehen, zeichne ich das Mockup, auf [bew-5](../../domaene/mockups/bew-5.html) aufbauend.
+**Stellungnahme.** Umgesetzt in [bew-11](../../domaene/mockups/bew-11.html): Die *Boyz* sind *ausgewählt*; je *Modell* ein durchgezogener *Grenzkreis* (BEW-11.1), um die *Modelle* des anderen *Spielers* ein gestrichelter bei 1″ (BEW-11.3). Die Regeln für `grenzkreis` stehen in [vorschlag.css](../../domaene/mockups/vorschlag.css), da [komponenten.css](../../technik/frontend/komponenten.css) sie erst in der Technikphase erhält. Vorrückringe nach 6998 F1 A angenommen: nach der Wahl nur ein Kreis, weiteres Mockup dafür nicht nötig (BEW-11.2 ändert nur den Radius). Antwortet der Stakeholder in 6998 mit B, folgt ein neues Kriterium und ein neues Mockup.

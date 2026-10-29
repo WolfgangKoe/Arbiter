@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Ux
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder will Grenzen von *Nahkampfreichweite* und *Bewegung* als leichten Kreis auf der *Karte* sehen ([Anliegen 6410](6410-grenzkreiseNahkampfUndBewegung.md)). [komponenten.css](../../technik/frontend/komponenten.css) hat keine Komponente dafür; ein Mockup darf nur vorhandene nutzen.
