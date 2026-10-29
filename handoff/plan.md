@@ -112,5 +112,5 @@ Begriffe aus 6998, 7000, 7005.
 - [ ] Stakeholder: Freigabe Review 9
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .

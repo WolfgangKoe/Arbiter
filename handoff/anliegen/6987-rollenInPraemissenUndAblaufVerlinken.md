@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase 9
 
 ## Runde 1
@@ -48,7 +48,7 @@ die Rollen nennen (neu). Absicht schreibst nur du; jede neue oder umbenannte Rol
 Änderung der Prämissen nach sich. Token: 20 bis 60 je Lauf, beide werden immer geladen.
 C: Wie bisher, kein Verweis (Wir 3). Der Weg zu den Rollen führt über `doku/`.
 Empfehlung: A, ein Ort, passend zum Quadranten, kaum Kosten.
-Antwort: .
+Antwort: A
 
 **F2 · Wie weit verlinkt der Ablauf die Rollen?**
 A: In Domänen-, Technik- und Prozessphase jede Rolle bei ihrer ersten Nennung je Datei, dort,
@@ -61,4 +61,4 @@ zusammen etwa 850 Token. Fortschritt und Status der Anliegen rücken an die Gren
 Zeichen und müssten bald geteilt werden.
 C: Wie bisher, 4 Links, uneinheitlich.
 Empfehlung: A. Dort ist eine Rolle „dran“, und die Kosten bleiben klein.
-Antwort: .
+Antwort: A, und ich würde hier eine Sache ergänzen. Gerade beim Ablauf und auch bei den CLAUDE.md Dateien in den einzelnen Ordnern würde ich erwarten, dass die Vier Quadranten für die jeweilige Perspektive konkretisiert werden. In der Domänen-CLAUDE.md hätte also der Implementierer nichts zu suchen. Es reicht aber auch nur der konkrete Link in claude/agents/
