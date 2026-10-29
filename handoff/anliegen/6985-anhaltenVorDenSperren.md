@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Im Happy Path von [BEW-6](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md)
@@ -35,4 +35,12 @@ Strecke bis dorthin, und BEW-8.2 *setzt* dorthin (`core_rules.txt:745`, Vorbild
 `interaction_map.md:402`).“ Eine *Base* der eigenen Armee auf der Strecke bis zur
 angehaltenen *Stelle* sperrt dann weiter ‚über eine Base‘.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in [BEW-2.8](../../domaene/anforderungen/phasen/bewegung/sperrenBeimZiehen.md)
+statt BEW-6.5, weil BEW-6 sonst über 1.200 Zeichen käme: Hält BEW-6 an, prüfen QUE-1 und
+BEW-2.5 die angehaltene *Stelle* und die Strecke bis dorthin, BEW-8.2 *setzt* dorthin.
+Dazu [BEW-6.2](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md): Es hält an,
+sobald ein *Modell* auf der Strecke nach BEW-3.1 in *Nahkampfreichweite* käme, nicht erst an
+der Zielstelle. Sonst sperrte ‚über eine Base‘ weiter, wenn jemand hinter einem Gegner
+loslässt, und ein *Modell* zöge durch die *Nahkampfreichweite* (`core_rules.txt:745`, Vorbild
+`interaction_map.md:402`). BEW-6.1 verweist für das Anhalten auf BEW-3.1, inhaltlich gleich;
+BEW-6 hat noch keinen Test.
