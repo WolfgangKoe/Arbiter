@@ -22,7 +22,7 @@ Phasen jeder *Schlachtrunde* und zieht in der *Bewegungsphase* eure *Einheiten*.
 9. Einen einzelnen Boy *auswählen* geht in der *Schlacht* noch nicht: Ein Klick auf einen Boy
    wählt immer alle Boyz (Plan 8, Item 3). Ein *Modell* als *Ebene* auch in der *Schlacht*
    hast du für Domänenphase 9 gewählt
-   ([Anliegen 5520](anliegen/5520-bewegungsphaseFuerSpaeter.md), F3 B). Einen Boy allein
+   (Anliegen 5520, F3 B). Einen Boy allein
    ziehen geht nur über einen Umweg: erst den Warboss anklicken, dann ist kein *Modell* der
    Boyz mehr *ausgewählt*; dann einen Boy greifen und ziehen, ohne ihn vorher anzuklicken.
    Ein Klick auf die leere *Karte* hebt die Auswahl nicht auf
