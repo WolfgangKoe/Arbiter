@@ -113,7 +113,7 @@ wesentliches Problem nenne, sehe ich keines.
   (Ablage der Bewegung), 6241 (Tests zu QUE-1.3 und AUF-8.7 in der Bewegung) und 6290.
 
 ## Fortschritt
-- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
+- [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [ ] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
 - [ ] Planer: Plan geschrieben
