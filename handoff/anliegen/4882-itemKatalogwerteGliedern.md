@@ -4,8 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Aus Anliegen 4800 (F1 A, F2 B, F3 A mit der Auflage einer
@@ -27,4 +26,8 @@ Empfehlung: A. Heute ist der Umbau klein: vier *Einheiten*, zwei Werte. B baut b
 jede neue *Einheit* im alten Format und danach um; das widerspricht der Auflage des
 Stakeholders.
 
-**Stellungnahme.**
+**Stellungnahme.** F1 A, angenommen: [Item katalogwerteGliedern](../../domaene/items/katalogwerteGliedern.md)
+ist Item 1 von [Plan 9](../plan.md), vor jeder neuen *Einheit*. Umfang: MIV-1 mit der
+Neufassung von MIV-1.3; Kriterium, Daten und Glossar schreibt der Anforderungsautor nach
+[Anliegen 4881](4881-datenblaetterImGlossarUndInDenDaten.md) Punkt 2 bis 4. Bis dahin ist das
+Item nicht bereit (DoR 4), der Plan nicht zur Freigabe.

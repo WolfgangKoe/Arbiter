@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: abseits des Happy Path von Zyklus 8).
@@ -21,4 +20,11 @@ angehalten wird.
 **Gegenvorschlag.** „Arbiter hält am B an und sperrt über fremde Bases, …“; was bei B plus
 Wurf geschieht, fragt der Anforderungsautor den Stakeholder, wenn Advance kommt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in [Etappe 2](../../domaene/etappen/02-bewegen.md):
+„Arbiter hält an der Bewegungsweite (Vorrücken: plus Wurf), an der Kante und vor der
+Nahkampfreichweite an (5180 F6, 6400) und sperrt über fremde Bases und am Ende ohne
+Kohärenz.“ Das Anhalten bei *Bewegungsweite* plus *Vorrückwurf* regelt schon
+[BEW-5.2](../../domaene/anforderungen/phasen/bewegung/vorruecken.md), an Kante und
+*Nahkampfreichweite* [BEW-6](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md);
+eine Frage an den Stakeholder ist nicht mehr nötig. „Advance“ heißt nach dem Vorschlag aus
+Anliegen 7000 *Vorrücken*.

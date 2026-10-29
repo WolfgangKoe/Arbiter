@@ -1,102 +1,102 @@
-# Plan · Zyklus 8
+# Plan · Zyklus 9
 
 Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
-Zyklusziel aus [Review 7](review.md), ohne Abweichung.
+Zyklusziel aus [Review 8](review.md), Abweichungen unten.
 
-## Dein Happy Path nach Zyklus 8
-1. Ihr stellt beide Armeen auf wie bisher. Wer am Tisch den Roll-off gewinnt, klickt in
-   seiner *Armeeliste* „Erster Zug“. (Item 2)
-2. Arbiter zeigt Schlachtrunde 1, den Spieler am Zug und die Phase. Jede Phase außer der
-   Bewegungsphase ist leer, ihr beendet sie mit „Phase beenden“. (Item 2)
-3. In der Bewegungsphase zieht ihr eine *Einheit* in einer *Normalen Bewegung* und
-   korrigiert sie nach Belieben. Weiter als ihre *Bewegungsweite* hält Arbiter sie an, über eine fremde *Base*
-   sperrt er beim Loslassen, „Phase beenden“ ohne *Kohärenz*. (Item 3)
-4. Nach der fünften Schlachtrunde endet die Schlacht. (Item 2)
-
-Noch nicht: jede *Einheit* nur einmal ziehen, Advance, Zurücksetzen, über die Kante,
-*Nahkampfreichweite*, *gemeinsam übergehen* mit *Protokoll*, Ork-Psioniker und
-Canoptek-Spinne, Loslassen neben der *Karte*. Sie bleiben für die nächsten zwei bis drei
-Zyklen von Etappe 2.
+## Dein Happy Path nach Zyklus 9
+1. Ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie bisher.
+2. Ihr wählt eine *Einheit* aus. Unter der *Karte* stehen „Vorrücken mit 1“ bis „Vorrücken mit
+   6“; nach eurem Wurf am Tisch klickt ihr ihn, und die *Modelle* ziehen bis *Bewegungsweite*
+   plus Wurf. Ohne Klick bleibt es die *Normale Bewegung*. (Item 3)
+3. Ein Klick auf einen Boy der *ausgewählten* Boyz: Nur er zieht. Noch ein Klick: wieder die
+   ganze *Einheit*. Ein Klick auf die leere *Karte* hebt die *Auswahl* auf. (Item 3)
+4. Zieht ihr an die *Spielfeldkante* oder auf einen Gegner zu, hält Arbiter an der Kante oder
+   1″ vor seiner *Base* an, statt zurückzusetzen. *Modelle* des anderen *Spielers* lassen sich
+   nicht ziehen. (Item 3)
+5. Sperrt Arbiter beim Loslassen, etwa ‚über eine Base‘, klickt ihr „gemeinsam übergehen“: Die
+   *Modelle* stehen, wo ihr losgelassen habt, das *Protokoll* in der unteren *Leiste* nennt
+   *Einheit*, *Spieler* und *Grund*. Jede *Leiste* fährt per *Griff* ein und aus. ‚keine
+   Kohärenz‘ bleibt ohne Übergehen. (Item 2)
 
 ## Items
-1. [Architektur umordnen](../domaene/items/architekturUmordnen.md): am Bildschirm nichts.
-   Deine Entscheidung aus Anliegen 2570 (F3).
-2. [Phasen und Schlachtrunden](../domaene/items/phasenUndSchlachtrunden.md): Schritte 1, 2, 4;
-   [QUE-9](../domaene/anforderungen/querschnitt/ersterZug.md),
-   [QUE-10](../domaene/anforderungen/querschnitt/schlachtrunden.md).
-3. [Normale Bewegung](../domaene/items/normalMove.md): Schritt 3;
-   [BEW-1](../domaene/anforderungen/phasen/bewegung/normaleBewegung.md),
-   [BEW-2](../domaene/anforderungen/phasen/bewegung/sperrenBeimZiehen.md),
-   [BEW-3](../domaene/anforderungen/phasen/bewegung/anhaltenAnDerBewegungsweite.md),
-   [BEW-4](../domaene/anforderungen/phasen/bewegung/beenden.md),
-   [AUF-20.6](../domaene/anforderungen/phasen/aufstellen/ebene.md): ein Klick auf ein
-   *Modell* wählt die ganze *Einheit*, ein Zug verschiebt sie als Block.
+1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): am Bildschirm nichts;
+   MIV-1 neu nach Anliegen 4881. Deine Auflage aus 4800 F3 ([4882](anliegen/4882-itemKatalogwerteGliedern.md)).
+2. [Gemeinsam übergehen mit Protokoll](../domaene/items/gemeinsamUebergehen.md): Schritt 5;
+   BEW-8, QUE-5, QUE-6.
+3. [Vorrücken, Anhalten und Auswahl](../domaene/items/vorrueckenUndAuswahl.md): Schritte 2
+   bis 4; BEW-5, BEW-6, BEW-2.8, BEW-7, BEW-9, BEW-10.
 
-Reihenfolge 1, 2, 3: Item 1 ordnet die Regeln, nach denen 2 und 3 gebaut werden; die
-*Normale Bewegung* braucht die Bewegungsphase aus Item 2. Am meisten Code kostet Item 2: Die
-*Stellen* gehören danach der *Schlacht*, nicht mehr der *Aufstellung*. Neu ist in Item 3 nur
-das exakte Messen der *Distanz*.
+Reihenfolge 1, 2, 3: Item 1 vor jeder neuen *Einheit*, damit keine im alten Format entsteht.
+Item 2 vor 3: Es arbeitet auf der schon gebauten *Sperre* ‚über eine Base‘, und BEW-2.8 aus
+Item 3 *setzt* nach BEW-8.2. Am meisten Code kostet Item 3: Anhalten auf der Strecke vor der
+*Nahkampfreichweite*.
 
-Anforderungen, Mockups und ihre Prüfung stehen; die Items verlinken ihre Mockups. Jede
-Anforderung nennt ihre Etappe; so zählt der Stand ab Retro 8 „Etappe 2: x von y Kriterien
-belegt“, wie du in Anliegen 3550 gewählt hast (Anliegen 3661).
+Item 1 ist erst bereit, wenn der Anforderungsautor Anliegen 4881 umgesetzt hat; bis dahin ist
+der Plan nicht zur Freigabe bereit.
+
+## Abweichungen vom Zyklusziel
+- Dazu Item 1 (4882 F1 A), BEW-7 (dein Auftrag 6420) und BEW-10 (6300).
+- Kante und *Nahkampfreichweite* halten an statt zu sperren (dein Wunsch aus 6400); der Test
+  aus 6241 prüft dann BEW-6.2.
+- „Jede *Einheit* nur einmal“ ohne neues Kriterium: Korrigieren bleibt (7000 F1 A).
+- Grenzkreise ([BEW-11](../domaene/anforderungen/phasen/bewegung/grenzkreise.md), Mockup
+  [bew-11](../domaene/mockups/bew-11.html)) erst in Plan 10: höchstens drei Items, Regeln vor
+  Komfort. Willst du sie jetzt, schreib im Kommentar „Grenzkreise in Plan 9“; dann kommt
+  BEW-11 in Item 3, das um vier Kriterien wächst.
+
+Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
+
+## Danach
+Grenzkreise, Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3),
+Anhalten übergehen (7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*,
+ruhige *Karte*, die Lücken aus Anliegen 6986. Ich schätze zwei Zyklen bis Etappe 2.
 
 ## Empfehlung
-Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen.
+Gib die drei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
 
 ## Offene Anliegen
-- An dich: keine. Deine Antworten aus Anliegen 4280 stehen in den Items; das Datenmodell
-  aus F7 prüft der Architekt in Anliegen 4621.
-- Sonst: [Moderation](moderation.md).
+- An dich, Vorschläge des Anforderungsautors: [6998](anliegen/6998-grenzkreiseVorrueckenUndBegriff.md)
+  (Ring beim Vorrücken, Begriff *Grenzkreis*), [7000](anliegen/7000-begriffeUndFragenZurBewegung.md)
+  (Begriffe *Vorrücken*, *Vorrückwurf*, Datenblatt, Profil, Modellart; drei Fragen). Bis zu
+  deiner Antwort gilt je die Empfehlung A.
+- An dich, sonst: [5181](anliegen/5181-klickAufEineAufgestellteEinheit.md),
+  [6995](anliegen/6995-frontendUndBackendImOrdner.md).
+- Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
-- [x] Architekt: Vertrag zu Item architekturUmordnen, bei beiden Hälften
-- [x] Testautor: Tests zu Item architekturUmordnen
-- [x] Fachkritiker: Kritik an den Tests zu Item architekturUmordnen
-- [x] Architekt: Kritik an den Tests zu Item architekturUmordnen
-- [x] Implementierer: Tests zu Item architekturUmordnen grün
-- [x] Architekt: Kritik am Code zu Item architekturUmordnen
-- [x] Reviewer: Kritik am Code zu Item architekturUmordnen
-- [x] Fachkritiker: Item architekturUmordnen abgenommen
-- [x] Planer: Item architekturUmordnen gelöscht
-- [x] Architekt: Vertrag zu Item phasenUndSchlachtrunden, bei beiden Hälften
-- [x] Testautor: Tests zu Item phasenUndSchlachtrunden
-- [x] Fachkritiker: Kritik an den Tests zu Item phasenUndSchlachtrunden
-  Hindernis: Fachkritiker → Testautor: QUE-10.3 und 10.4 prüfen den ersten Zug nur bei Spieler 1 (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
-  Hindernis: Fachkritiker → Testautor: QUE-10.1 prüft die Nummer der Schlachtrunde nur bei 1 (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
-- [x] Architekt: Kritik an den Tests zu Item phasenUndSchlachtrunden
-- [x] Implementierer: Tests zu Item phasenUndSchlachtrunden grün
-- [x] Architekt: Kritik am Code zu Item phasenUndSchlachtrunden
-  Hindernis: Architekt → Implementierer: Knöpfe nicht als Tabelle (O5), Spielernummer außerhalb kennungen.py (W2) (Anliegen 5680); beseitigt: Commit „phasenUndSchlachtrunden: Knöpfe als Tabelle, Auswahl bleibt bei der Aufstellung“
-- [x] Reviewer: Kritik am Code zu Item phasenUndSchlachtrunden
-- [x] Fachkritiker: Item phasenUndSchlachtrunden abgenommen
-- [x] Planer: Item phasenUndSchlachtrunden gelöscht
-- [x] Architekt: Vertrag zu Item normalMove, bei beiden Hälften
-- [x] Testautor: Tests zu Item normalMove
-- [x] Fachkritiker: Kritik an den Tests zu Item normalMove
-  Hindernis: Fachkritiker → Testautor: BEW-2.4 ohne Überdeckung, Distanz nur auf Achsen, BEW-2.3 nie zwei Gründe (Anliegen 4900); beseitigt: Commit „Technikphase 8: Architektur umgeordnet, Verträge und rote Tests“
-  Hindernis: Fachkritiker → Testautor: BEW-1.4 verlangt beim Halten über die Bewegungsweite ein Bild, das weder Kriterium noch V10 nennen (Anliegen 5240); beseitigt: Commit „Tests nachgebessert, 5180 in Runde 2“
-  Hindernis: Fachkritiker → Testautor: Kein Test sperrt den Block, wenn ein nicht gezogenes Modell über eine fremde Base geht (BEW-2.5) (Anliegen 5760); beseitigt: Commit „normalMove: Bewegungsphase ohne Ende je Einheit“
-- [x] Architekt: Kritik an den Tests zu Item normalMove
-- [x] Implementierer: Tests zu Item normalMove grün
-  Hindernis: Implementierer → Testautor: testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle (ziehenTest.py) fordert, dass eine Bewegung unter der Zugschwelle keine ändernde Anfrage sendet. Sie ist aber ein Klick auf ein gesetztes Modell einer nicht ausgewählten Einheit in der Aufstellung; AUF-20.6 und V14 verlangen dafür PUT …/anklicken (Einheit wird ausgewählt). Beides zugleich ist nicht erfüllbar. Empfehlung: der Test wählt zuvor die Einheit der Boyz aus (dann sendet der Klick nur ebene, auch eine ändernde Anfrage; besser: Test prüft nur, dass die Stellen unverändert bleiben und keine PUT …/stelle gesendet wird) oder nimmt anklicken ausdrücklich aus. (Anliegen 6060); beseitigt: Commit „normalMove: Zug folgt dem Zeiger, Kritik am Code“
-- [x] Architekt: Kritik am Code zu Item normalMove
-  Hindernis: Architekt → Testautor: AUF-8.7 hat keinen Akzeptanztest, bedienung.js setzt es aber schon um (stelleDesZugs: vorige Stelle plus Weg des Zeigers seit dem Greifen; Anliegen 6100 F1 A); Akzeptanztests entstehen vor dem Code. Empfehlung: in ziehenTest.py ein gesetztes Modell abseits seiner Mitte greifen, mit Maus und Finger ziehen und loslassen; die Stelle danach ist die vorige plus der Weg des Zeigers, auf einen Pixel genau (B5), nicht der Punkt unter dem Zeiger. (Anliegen 6101); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
-  Hindernis: Architekt → Implementierer: S2 nennt jetzt die Rundung jeder Zahl einer Anfrage (technik/architektur/domaene.md, Anliegen 6121), Prüft: anwendungTest.py; dort fehlt der Einheitstest. Empfehlung: ein Test, der x = 160/127 und y = 121/3 als JSON-double schickt, einmal als Körper von PUT …/stelle (V5), einmal als Abfrage …/stelleBeimLoslassen (V10), und in der Domäne genau diese Fraction findet; ohne limit_denominator ist er rot. (Anliegen 6180); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
-- [x] Reviewer: Kritik am Code zu Item normalMove
-  Hindernis: Reviewer → Implementierer: Grund des Setzens und Ziehens als Zweig statt Zeile der Tabelle (D4) (Anliegen 6120); beseitigt: Commit „normalMove: Gründe als Tabelle, Test zu AUF-8.7, Rundung in S2“
-  Hindernis: Reviewer → Architekt: Rundung jeder Zahl der Anfrage auf Nenner 10^6 steht nicht in S2 (Anliegen 6121); beseitigt: Commit „normalMove: Kritik des Architekten am Code abgeschlossen“
-- [x] Fachkritiker: Item normalMove abgenommen
-- [x] Planer: Item normalMove gelöscht
-- [x] Reviewer: DoD über das Inkrement
-  Hindernis: Reviewer → Testautor: Mutation der geänderten Domänenzeilen seit Freigabe Plan 8: 94 Mutanten, 84 % gefangen, Schwelle 95 %. 15 überleben: messen.py:133, 134, 135 (streckeÜberdeckt), aufstellen/__init__.py:170 (modellAnklicken: and wird or), anhaltenAnDerBewegungsweite.py:29, 31, 32, beenden.py:16, schlachtrunden.py:99 (is wird is not), 112, 120, 145 (Rückgabe wird None). Empfehlung: je Überlebenden ein Test, der ihn fängt, oder eine Begründung in mutationsregeln/gleichwertig.json; schlachtrunden.py:99 halte ich für gleichwertig, da außerhalb der Bewegungsphase keine Stelle sich ändert. Liste: .venv/bin/python prozess/pruefungen/gemeinsam/lauf.py mutationsregeln.mutation (Anliegen 6291); beseitigt: Commit „Anliegen 6291 und 6301: Tests gegen überlebende Mutanten, gleichwertige eingetragen“
-- [x] Reviewer: Review geschrieben
-- [x] Fachkritiker: Kritik am Review
-  Hindernis: Fachkritiker → Reviewer: Klickpfad zeigt Korrigieren (BEW-1.6) und leere Phasen (QUE-10.5) nicht, Bild zu Spieler am Zug und Schlachtende fehlt; Nahkampfreichweite und Loslassen neben der Karte fehlen in Etappen- und Zyklusziel (Anliegen 6335); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
-- [x] Organisationsentwickler: Kritik am Review
-  Hindernis: Organisationsentwickler → Reviewer: Rundgang Prüfcode ohne erlaubteImporte.py, planFassung.py, abhaken.py, bashSchreiben.py und die Verbote in settings.json; Punkt 3 fragt ohne Empfehlung (Anliegen 6360); beseitigt: Commit „DoD über das Inkrement erfüllt, Review 8 nachgebessert“
-- [x] Stakeholder: Freigabe Review 8
+- [ ] Architekt: Vertrag zu Item katalogwerteGliedern, bei beiden Hälften
+- [ ] Testautor: Tests zu Item katalogwerteGliedern
+- [ ] Fachkritiker: Kritik an den Tests zu Item katalogwerteGliedern
+- [ ] Architekt: Kritik an den Tests zu Item katalogwerteGliedern
+- [ ] Implementierer: Tests zu Item katalogwerteGliedern grün
+- [ ] Architekt: Kritik am Code zu Item katalogwerteGliedern
+- [ ] Reviewer: Kritik am Code zu Item katalogwerteGliedern
+- [ ] Fachkritiker: Item katalogwerteGliedern abgenommen
+- [ ] Planer: Item katalogwerteGliedern gelöscht
+- [ ] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
+- [ ] Testautor: Tests zu Item gemeinsamUebergehen
+- [ ] Fachkritiker: Kritik an den Tests zu Item gemeinsamUebergehen
+- [ ] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
+- [ ] Implementierer: Tests zu Item gemeinsamUebergehen grün
+- [ ] Architekt: Kritik am Code zu Item gemeinsamUebergehen
+- [ ] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
+- [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen
+- [ ] Planer: Item gemeinsamUebergehen gelöscht
+- [ ] Architekt: Vertrag zu Item vorrueckenUndAuswahl, bei beiden Hälften
+- [ ] Testautor: Tests zu Item vorrueckenUndAuswahl
+- [ ] Fachkritiker: Kritik an den Tests zu Item vorrueckenUndAuswahl
+- [ ] Architekt: Kritik an den Tests zu Item vorrueckenUndAuswahl
+- [ ] Implementierer: Tests zu Item vorrueckenUndAuswahl grün
+- [ ] Architekt: Kritik am Code zu Item vorrueckenUndAuswahl
+- [ ] Reviewer: Kritik am Code zu Item vorrueckenUndAuswahl
+- [ ] Fachkritiker: Item vorrueckenUndAuswahl abgenommen
+- [ ] Planer: Item vorrueckenUndAuswahl gelöscht
+- [ ] Reviewer: DoD über das Inkrement
+- [ ] Reviewer: Review geschrieben
+- [ ] Fachkritiker: Kritik am Review
+- [ ] Organisationsentwickler: Kritik am Review
+- [ ] Stakeholder: Freigabe Review 9
 
 ## Freigabe
-Freigabe: ja
+Freigabe: offen
 Kommentar: .
