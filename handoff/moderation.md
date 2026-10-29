@@ -1,61 +1,51 @@
 # Moderation
 
-Stand: Retro 8 wartet auf deine Freigabe ([Retro 8](retro.md)). Kein offenes Anliegen hält das
-Inkrement auf; 6431 hält die Items P1, P3 und P4 der Retro auf.
+Stand: Plan 9 wartet auf deine Freigabe ([Plan 9](plan.md)). 31 offene Anliegen; keines hält die
+Freigabe auf. Vor den Items laufen laut Plan 6102, 6241, 6290 (Technikphase).
 
 ## Dran
-Blockiert: nur Anliegen 6431 (P1, P3, P4 brauchen F1 bis F3).
-- Stakeholder: Anliegen 6431 F1 bis F3 und Freigabe Retro 8.
-- Organisationsentwickler, Prozessphase 8: Anliegen 4620, Anliegen 4040.
-- Regelumsetzer, Prozessphase 8: Anliegen 3900,
-  Anliegen 4301,
-  Anliegen 3780, Anliegen 4120,
-  Anliegen 4140.
-- Nachprüfung fällig: Anliegen 6870, Absender
-  Koordinator, nach Regel niemand (siehe Vorschläge); Regelumsetzer, laufen daneben:
-  Anliegen 6760,
-  Anliegen 6820.
-- Wartet auf 6431: Anliegen 6380, Anliegen 6430.
-- Alle übrigen warten auf Domänen- oder Technikphase 9 oder Prozessphase 9
-  ([3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
-  [6432](anliegen/6432-antwortOhneZeileUndRolleUx.md),
-  [6471](anliegen/6471-frontendOhneAbdeckung.md)); sie halten nichts auf.
+Blockiert das Inkrement: nichts außer der Freigabe.
+- Stakeholder: Freigabe Plan 9; Nachprüfung
+  [6400](anliegen/6400-anhaltenVorDerNahkampfreichweite.md),
+  [6410](anliegen/6410-grenzkreiseNahkampfUndBewegung.md),
+  [6420](anliegen/6420-einzelnesModellNachAuswahlDerEinheitZiehen.md) (erst nach Items 3 und 4);
+  Fragen unten.
+- Technikphase 9, Testautor: 4901, 4921, 5241, 5781, 6241, 6340, 6981, 6993.
+- Technikphase 9, Implementierer: 5380, 5701, 6102, 6122, 6290, 6982, 6991, 6992.
+- Technikphase 9, Architekt: 5000. Reviewer: 6361.
+- Prozessphase 9, Regelumsetzer: 3960, 6432, 6988, 7030. Organisationsentwickler: 6471, 6500, 6960
+  (Nachprüfung), 6987 (wartet auf F1, F2).
+- Domänenphase 10, Anforderungsautor: [6986](anliegen/6986-bewegungLueckenFuerSpaeter.md).
+- Architekt: [6995](anliegen/6995-frontendUndBackendImOrdner.md), Stellungnahme steht; schließt
+  nach Technikphase 9.
 
 ## Vorschläge
-- 6870, wer setzt `erledigt`: [Status der Anliegen](../prozess/ablauf/anliegenStatus.md) weist
-  es dem Absender zu, der Empfänger setzt es nie. Absender ist der Koordinator, der keine Datei
-  schreibt ([Koordinator](../.claude/agents/koordinator.md)). Für diesen Fall fehlt eine Regel
-  ([Anliegen](../prozess/ablauf/anliegen.md), [Kritik](../prozess/ablauf/kritik.md) nennen ihn
-  nicht). Empfehlung an den Organisationsentwickler (Autor des Ablaufs): Hat der Koordinator ein
-  Anliegen gestellt, prüft auf seinen Auftrag eine Rolle, die nicht Empfänger ist, in seinem
-  Namen nach und setzt `erledigt`; Absender bleibt er. Ich schreibe kein Anliegen: der
-  Koordinator lässt es als Kritik 6900 anlegen. Bis dahin bleibt 6870 `angenommen`; du kannst
-  `erledigt` selbst eintragen.
-- 6430 und 6380 sind erledigt, wenn P3 und P4 stehen; du schließt sie nach Nachprüfung (Absender
-  Stakeholder). 6431 schließt der Organisationsentwickler nach deinen Antworten.
-- 4120 Schritt 1 und 2 sind Fälle von „doppelt“ aus 4040; P5 und P6 führen sie aus, dann
-  kann der Organisationsentwickler 4120 schließen.
-- 3900 und 4301 ändern beide `standregeln/fortschritt.py`: ein Lauf; P7 (Stand, Dashboard)
-  berührt dieselben Module und folgt danach.
-- 5181 und 4261 tragen deinen `Kommentar:`; 5181: ob Verschieben ohne Zurücklegen abbildbar
-  ist, beantwortet die Domänenphase 9; 4261: Umbenennung von „Normal Move“ beachten.
+- 6500 ist beantwortet und nachgeprüft: der Organisationsentwickler trägt das Format in die
+  Domäne ein, streicht die Annahme und setzt `erledigt`. 6960 ebenso (F1 bis F4 beantwortet).
+- 6981 und 6982 tragen dasselbe Thema (Es 8, Docstrings); getrennte Dateien, Testautor und
+  Implementierer laufen gleichzeitig.
+- 6991, 6992, 6993 sind Mutationslücken (Zyklus 8); getrennte Module, gleichzeitig möglich,
+  zusammen unter einer Abnahme durch den Reviewer.
+- 4901, 5241, 5781, 6340, 6241, 4921 betreffen dieselben Bewegungstests: ein Lauf des
+  Testautors als Kette, 6241 zuerst (Plan). 6102, 6290 zuerst, dann 6122, 5701, 5380 als Kette
+  des Implementierers; 6982 und 6991/6992 danach, wenn Dateien gleich sind.
+- 6400, 6410, 6420 legen nur Entscheidungen ab; Items 3 und 4 setzen sie um, dann schließt du.
+- 6995 F3 (`komponenten/`) und 6410 gehören zu Item 4; keine eigene Arbeit.
+- 3960, 6432, 7030: Regelumsetzer; höchstens einer ändert Hook-Code, sonst eine Kette
+  (7030 berührt `lesen/plan.py`, 6432 `zuegeUebernehmen.py`, getrennt). 6471 beim
+  Organisationsentwickler gleichzeitig, 6988 nach den Regeländerungen.
+- 6987 bleibt bis zu deinen Antworten offen.
 
-Stränge der Prozess-Items nach der Freigabe:
-- Organisationsentwickler, Kette: P1, P3, P5 (gemeinsame Dateien `rollenMitAusloeser.md`,
-  `kritik.md`). P1 und P3 erst nach deinen Antworten; 4620 gehört in P3.
-- Regelumsetzer, zwei Stränge gleichzeitig, wenn P4 keinen Hook-Code ändert (sonst P4 nach A):
-  A: 3900 + 4301, dann P7. B: P4 (`formregeln/kommentare.py`, nach F1), dann P6 (3780, 4120).
-- Organisationsentwickler und Regelumsetzer laufen nebeneinander. 4140 nach P6.
+Stränge Technikphase 9: Testautor und Implementierer laufen nebeneinander, solange die Tests
+des Items zuerst stehen (Plan: Tests vor Code); Architekt und Reviewer prüfen danach.
 
 ## Fragen an dich
 Mit `Annahme:` (die Arbeit läuft weiter):
-- Anliegen 5181 F1: Wählt in der Aufstellung der
-  Klick eine aufgestellte Einheit aus? Annahme: A, der Klick ändert nichts.
-- [6500](anliegen/6500-etappeEinesKriteriums.md): Format `Etappe: <n>` und `(Etappe <n>)`;
-  Annahme: P7 zählt danach. Antwort an den Anforderungsautor.
+- [6995](anliegen/6995-frontendUndBackendImOrdner.md) F2 (Annahme A) und F3 (Annahme A): Dein
+  Kommentar folgt den Empfehlungen; es fehlt die Zeile `Antwort:`.
 
 Ohne `Annahme:`:
-- Anliegen 6431 F1 (Docstrings), F2 (Testautor auf Opus), F3 (Prämissen verschieben): Der
-  Organisationsentwickler hat F2 und F3 unter „Klärung“ erklärt. Trage je `Antwort:` ein.
-- Anliegen 4882 F1: Katalogwerte gliedern als erstes Item
-  von Plan 9 (A) oder in Etappe 8 (B)? Empfehlung: A. Eine Zeile `Antwort:` fehlt dort.
+- [6995](anliegen/6995-frontendUndBackendImOrdner.md) F1: Der Architekt liest F1 B; trage
+  `Antwort: B`.
+- [6987](anliegen/6987-rollenInPraemissenUndAblaufVerlinken.md) F1 (Empfehlung A) und F2
+  (Empfehlung A): Rollen in den Prämissen und im Ablauf verlinken.
