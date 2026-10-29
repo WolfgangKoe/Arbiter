@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücke abseits des Happy Path; Schritt 3 aus Plan 8 läuft am
