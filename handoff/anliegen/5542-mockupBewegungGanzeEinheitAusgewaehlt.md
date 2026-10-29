@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Ux
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücke abseits des Happy Path; die Kennzeichnung ist gebaut).
@@ -22,4 +21,4 @@ der Stakeholder im Review mehr gekennzeichnete *Modelle* als im Mockup.
 **Gegenvorschlag.** Alle zehn Kreise der Boyz (`spieler1`, `r="0.630"`) mit `ausgewählt`, in
 bew-1 und bew-2. Gern schon früher, es ist billig.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: In [bew-1](../../domaene/mockups/bew-1.html) und [bew-2](../../domaene/mockups/bew-2.html) tragen alle zehn Boyz `ausgewählt`; [bew-5](../../domaene/mockups/bew-5.html) und [bew-8](../../domaene/mockups/bew-8.html) ebenso.
