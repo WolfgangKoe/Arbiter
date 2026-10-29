@@ -60,9 +60,9 @@ Begriffe aus 6998, 7000, 7005.
 
 ## Offene Anliegen
 - Von dir beantwortet, der Anforderungsautor prüft nach:
-  [6998](anliegen/6998-grenzkreiseVorrueckenUndBegriff.md),
-  [7000](anliegen/7000-begriffeUndFragenZurBewegung.md),
-  [7005](anliegen/7005-fraktionUndModellartenDerBoyz.md).
+  Anliegen 6998,
+  Anliegen 7000,
+  Anliegen 7005.
 - Deine Nachprüfung: [6400](anliegen/6400-anhaltenVorDerNahkampfreichweite.md),
   [6410](anliegen/6410-grenzkreiseNahkampfUndBewegung.md),
   [6420](anliegen/6420-einzelnesModellNachAuswahlDerEinheitZiehen.md).

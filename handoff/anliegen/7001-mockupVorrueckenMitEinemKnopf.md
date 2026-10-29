@@ -9,8 +9,8 @@ Status: angenommen
 ## Runde 1
 **Befund.** [bew-5](../../domaene/mockups/bew-5.html) zeigt sechs Knöpfe „Vorrücken mit 1“ bis
 „mit 6“; der Stakeholder will einen Knopf (Kommentar in
-[Anliegen 7000](7000-begriffeUndFragenZurBewegung.md)) und den Wurf per Klick auf einen Kreis
-([6998](6998-grenzkreiseVorrueckenUndBegriff.md) F1). Neu gefasst:
+Anliegen 7000) und den Wurf per Klick auf einen Kreis
+(Anliegen 6998 F1). Neu gefasst:
 [BEW-5](../../domaene/anforderungen/phasen/bewegung/vorruecken.md),
 [BEW-12](../../domaene/anforderungen/phasen/bewegung/vorrueckenZuruecknehmen.md) („Vorrücken
 zurücknehmen“), [BEW-13](../../domaene/anforderungen/phasen/bewegung/grenzkreiseBeimVorruecken.md)
@@ -27,7 +27,8 @@ Mockup zu 6410.
 [bew-12](../../domaene/mockups/bew-12.html) („Vorrücken zurücknehmen“ nach dem Wurf),
 [bew-11](../../domaene/mockups/bew-11.html) (ein *Modell* *ausgewählt*, ein Kreis; die
 *Einheit* als Ganze siehe bew-5). Die Grenzen nutzen die Komponente `grenze` nach
-[7004](7004-komponenteGrenzbereich.md); `wählbar` und `grenzeZahl` liegen in
+Anliegen 7004; `wählbar` und `grenzeZahl` liegen in
 [vorschlag.css](../../domaene/mockups/vorschlag.css). bew-13 zeigt ein *Modell*, weil die
 sechs Kreise der ganzen *Einheit* das Höchstmaß der Datei sprengten. Offen für den Stakeholder: Der
 Wurf steht als Ziffer am Kreis; ob das so gewünscht ist, sagt er beim Ansehen.
+Kommentar: Ich habe mir die Mockups angesehen. Sie gefallen mir recht gut. Die Ziffern lassen wir weg. Die Auswahl der Kreise sollte etwas "flächiger" sein. Wenn ich die Linie erwischen muss, ist das aus Nutzersicht eher schwer. Die "Klick"- oder "Tipp"-Linie muss deutlich breiter sein. Ein Finger erwischt sie vielleicht, weil er selbst breit ist. Aber ein Mauszeiger braucht eine Fläche.

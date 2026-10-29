@@ -20,7 +20,7 @@ Ein Mockup ohne Kriterium darf ich nicht zeichnen. Es fehlt:
    *Aufstellungszone* des Gegners“); nur, wenn eine Regel sie braucht.
 4. Andere *Base*-Formen: die Form wird ausgedehnt; zu gegebener Zeit.
 Farbe, Linienart und -dicke sind Parameter der Darstellung, keine Fachlichkeit; die Komponente
-klärt der Architekt in [Anliegen 7004](7004-komponenteGrenzbereich.md).
+klärt der Architekt in Anliegen 7004.
 
 **Kosten.** Ohne neue Fassung bleibt bew-11 beim Kreis je *Modell*; die Einhüllende zeichne ich
 erst mit Kriterium.

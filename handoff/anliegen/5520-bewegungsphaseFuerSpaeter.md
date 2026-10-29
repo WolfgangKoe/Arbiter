@@ -45,5 +45,5 @@ Folge“ mit `core_rules.txt:710` und „korrigiert jede nach Belieben“ mit An
 1, 2 und 5 bearbeite ich in Domänenphase 9; bis dahin wartet das Anliegen.
 Domänenphase 9: 1, F3 B in [BEW-7](../../domaene/anforderungen/phasen/bewegung/auswahlInDerSchlacht.md).
 1, F1 (Markierung) und 2 (welche *Einheit* ohne *Kohärenz*) frage ich in
-[Anliegen 7000](7000-begriffeUndFragenZurBewegung.md) F3. 5: ja, BEW-4.1 sperrt auch nach dem
+Anliegen 7000 F3. 5: ja, BEW-4.1 sperrt auch nach dem
 Wechsel zur nächsten *Einheit*; ‚schon bewegt‘ entfällt nach 7000 F1 A.

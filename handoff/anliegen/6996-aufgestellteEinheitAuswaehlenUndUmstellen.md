@@ -46,4 +46,4 @@ Danach sind veraltet oder offen:
 Aufstellung* und *Modelle* bleiben gleich, wie AUF-5.8. Zugleich Antwort auf 6300 Punkt 1.
 2 angenommen: Die Kriterien zum Ziehen und Übergehen einer *aufgestellten* *Einheit* schreibe
 ich mit den Randfällen des Aufstellens; dass das Item sie mitnimmt, habe ich dem Planer in
-[Anliegen 7011](7011-umstellenAufgestellterEinheitInEtappe7.md) geschrieben.
+Anliegen 7011 geschrieben.
