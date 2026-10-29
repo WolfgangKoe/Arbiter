@@ -56,9 +56,9 @@ def testDieStartseiteZeigtJedeZeileMitHakenUndDasKommentarfeldNurInDetails(tmp_p
 
 
 @pytest.mark.usefixtures("plan")
-def testDieReiterSindAnliegenUndTokenbericht(tmp_path):
+def testDieReiterSindAnliegenTokenberichtUndArchitektur(tmp_path):
     reiter = re.search(r'<nav class="reiter">(.*?)</nav>', startseite(tmp_path)).group(1)
-    assert re.findall(r">([^<]+)</a>", reiter) == ["Anliegen", "Tokenbericht"]
+    assert re.findall(r">([^<]+)</a>", reiter) == ["Anliegen", "Tokenbericht", "Architektur"]
     assert antworten(tmp_path, "GET", "/fortschritt", b"", kopf).status == HTTPStatus.NOT_FOUND
 
 

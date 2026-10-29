@@ -16,9 +16,11 @@ from rollenregeln.dashboardAnliegenSeiten import (
     einzelSeite,
     navigation,
     neuladenSkript,
+    seite,
     seitenStil,
     stand,
 )
+from rollenregeln.dashboardArchitektur import architekturSeite
 from rollenregeln.dashboardFortschritt import (
     fortschrittPfad,
     zügeAusFortschrittFormular,
@@ -104,11 +106,13 @@ def lesen(ordner: Path, pfad: str) -> Antwort:
         return text(anliegenSeite(ordner))
     if pfad == "/tokens":
         return tokenbericht(ordner)
+    if pfad == "/architektur":
+        return text(seite("Architektur", "Architektur", architekturSeite(ordner)))
     if pfad == "/stand":
         return text(stand(ordner), typ="text/plain; charset=utf-8")
     nummer = nummerAus(pfad)
-    seite = einzelSeite(ordner, nummer) if nummer is not None else None
-    return text(seite) if seite else text("Nicht gefunden.", HTTPStatus.NOT_FOUND)
+    einzel = einzelSeite(ordner, nummer) if nummer is not None else None
+    return text(einzel) if einzel else text("Nicht gefunden.", HTTPStatus.NOT_FOUND)
 
 
 def schreiben(ordner: Path, pfad: str, körper: bytes) -> Antwort:

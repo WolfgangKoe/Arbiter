@@ -1,30 +1,22 @@
+import html
+import json
 from pathlib import Path
 
+from rollenregeln.architekturKanten import Kante, kantenMessen, kastenPfeile
 from rollenregeln.architekturMessung import (
     Kasten,
-    Pfeil,
+    Knoten,
     kästenMessen,
-    pfeileMessen,
+    produktOrdner,
+    seiteOrdner,
     übersichtUndVertrag,
 )
+from rollenregeln.dashboardArchitekturSkript import architekturSkript, architekturStil
 
-kastenBreite = 120
-kastenHöhe = 62
-spaltenabstand = 135
-zeilenabstand = 105
-rand = 14
 keineDatei = "keine Datei"
-httpPfeil = ("seite", "web")
-
-kastenLage = {
-    "start": (4, 0),
-    "seite": (0, 1),
-    "web": (1, 1),
-    "anwendung": (2, 1),
-    "speicher": (3, 1),
-    "katalog": (5, 1),
-    "domaene": (4, 2),
-}
+nichtInArchitektur = "nicht in der Architektur"
+httpKante = {"von": seiteOrdner, "nach": f"{produktOrdner}/web", "anzahl": 0, "erlaubt": True}
+zeilen = (("start",), ("seite", "web", "anwendung", "speicher", "katalog"), ("domaene",))
 titel = {
     "start": "Start",
     "seite": "Seite",
@@ -34,129 +26,93 @@ titel = {
     "katalog": "Katalog",
     "domaene": "Domäne",
 }
-breite = rand * 2 + 5 * spaltenabstand + kastenBreite
-höhe = rand * 2 + 2 * zeilenabstand + kastenHöhe
-
-kartenStil = """
-.karte-kasten{fill:var(--panel);stroke:var(--c-subagent);stroke-width:1.5}
-.karte-kasten.leer{stroke-dasharray:5 4;fill:none}
-.karte-name{fill:var(--accent-text);font-size:12px;font-weight:600}
-.karte-zahl{fill:var(--text-muted);font-size:9.5px}
-.pfeil{stroke:var(--text-muted);stroke-width:1.5;fill:none}
-.pfeil.verboten{stroke:var(--c-warnung);stroke-width:2.5}
-.pfeil-spitze{fill:var(--text-muted)}.pfeil-spitze.verboten{fill:var(--c-warnung)}
-.pfeil-text{fill:var(--text);font-size:10px;font-weight:600}
-.pfeil-text.verboten{fill:var(--c-warnung)}
-"""
 
 
 def tausender(zahl: int) -> str:
     return f"{zahl:,}".replace(",", ".")
 
 
-def mitte(name: str) -> tuple[float, float]:
-    spalte, zeile = kastenLage[name]
+def kastenTitel(kasten: Kasten) -> str:
+    if kasten.bekannt:
+        return titel[kasten.name]
+    return f"{kasten.name} · {nichtInArchitektur}"
+
+
+def knotenZeichnen(knoten: Knoten) -> str:
+    art = "ordner" if knoten.istOrdner else "datei"
+    pfad = html.escape(knoten.pfad)
+    pfadZeile = "" if knoten.istOrdner else f'<span class="ak-zahl">{pfad}</span>'
+    kinder = "".join(knotenZeichnen(kind) for kind in knoten.kinder)
     return (
-        rand + spalte * spaltenabstand + kastenBreite / 2,
-        rand + zeile * zeilenabstand + kastenHöhe / 2,
-    )
-
-
-def randpunkt(name: str, richtungX: float, richtungY: float) -> tuple[float, float]:
-    mitteX, mitteY = mitte(name)
-    faktorX = (kastenBreite / 2) / abs(richtungX) if richtungX else float("inf")
-    faktorY = (kastenHöhe / 2) / abs(richtungY) if richtungY else float("inf")
-    faktor = min(faktorX, faktorY)
-    return mitteX + richtungX * faktor, mitteY + richtungY * faktor
-
-
-def pfeilZeichnen(von: str, nach: str, text: str, *, verboten: bool) -> str:
-    vonX, vonY = mitte(von)
-    nachX, nachY = mitte(nach)
-    anfangX, anfangY = randpunkt(von, nachX - vonX, nachY - vonY)
-    endeX, endeY = randpunkt(nach, vonX - nachX, vonY - nachY)
-    klasse = "pfeil verboten" if verboten else "pfeil"
-    spitze = "spitzeVerboten" if verboten else "spitze"
-    textKlasse = "pfeil-text verboten" if verboten else "pfeil-text"
-    labelX = anfangX + (endeX - anfangX) * 0.35
-    labelY = anfangY + (endeY - anfangY) * 0.35 - 4
-    return (
-        f'<line class="{klasse}" x1="{anfangX:.1f}" y1="{anfangY:.1f}" '
-        f'x2="{endeX:.1f}" y2="{endeY:.1f}" marker-end="url(#{spitze})"/>'
-        f'<text class="{textKlasse}" text-anchor="middle" x="{labelX:.1f}" '
-        f'y="{labelY:.1f}">{text}</text>'
+        f'<div class="ak {art}" data-pfad="{pfad}"><div class="ak-kopf">'
+        f'<span class="ak-name">{html.escape(knoten.name)}</span>{pfadZeile}'
+        f'<span class="ak-zahl">{tausender(knoten.zeichen)} Zeichen</span></div>'
+        f'<div class="ak-kinder">{kinder}</div></div>'
     )
 
 
 def kastenZeichnen(kasten: Kasten) -> str:
-    spalte, zeile = kastenLage[kasten.name]
-    links = rand + spalte * spaltenabstand
-    oben = rand + zeile * zeilenabstand
-    mitteX = links + kastenBreite / 2
+    wurzel = kasten.wurzel
     architektur = (
         f"Architektur {tausender(kasten.architekturZeichen)}"
         if kasten.architekturZeichen is not None
         else keineDatei
     )
-    zahlen = [f"Code {tausender(kasten.codeZeichen)}"]
-    if kasten.name != "start":
-        zahlen.append(architektur)
-    klasse = "karte-kasten" if kasten.codeZeichen else "karte-kasten leer"
-    zeilen = "".join(
-        f'<text class="karte-zahl" text-anchor="middle" x="{mitteX}" '
-        f'y="{oben + 38 + nummer * 12}">{text}</text>'
-        for nummer, text in enumerate(zahlen)
-    )
+    zahlen = f'<span class="ak-zahl">Code {tausender(kasten.codeZeichen)}</span>'
+    if kasten.name != "start" and kasten.bekannt:
+        zahlen += f'<span class="ak-zahl">{architektur}</span>'
+    klassen = ["ak", "ordner" if wurzel and wurzel.istOrdner else "datei"]
+    if not kasten.codeZeichen:
+        klassen.append("leer")
+    if not kasten.bekannt:
+        klassen.append("unbekannt")
+    pfad = html.escape(wurzel.pfad) if wurzel else f"{produktOrdner}/{kasten.name}"
+    kinder = "".join(knotenZeichnen(kind) for kind in wurzel.kinder) if wurzel else ""
     return (
-        f'<g data-kasten="{kasten.name}"><rect class="{klasse}" x="{links}" y="{oben}" '
-        f'width="{kastenBreite}" height="{kastenHöhe}" rx="6"/>'
-        f'<text class="karte-name" text-anchor="middle" x="{mitteX}" y="{oben + 20}">'
-        f"{titel[kasten.name]}</text>{zeilen}</g>"
+        f'<div class="{" ".join(klassen)}" data-kasten="{kasten.name}" data-pfad="{pfad}">'
+        f'<div class="ak-kopf"><span class="ak-name">{html.escape(kastenTitel(kasten))}</span>'
+        f'{zahlen}</div><div class="ak-kinder">{kinder}</div></div>'
     )
 
 
-def spitzen() -> str:
-    def spitze(kennung: str, klasse: str) -> str:
-        return (
-            f'<marker id="{kennung}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" '
-            f'markerHeight="7" orient="auto"><path class="{klasse}" d="M0 0L10 5L0 10z"/></marker>'
-        )
-
-    return (
-        "<defs>"
-        + spitze("spitze", "pfeil-spitze")
-        + spitze("spitzeVerboten", "pfeil-spitze verboten")
-        + "</defs>"
+def zeilenZeichnen(kästen: list[Kasten]) -> str:
+    nachName = {kasten.name: kasten for kasten in kästen}
+    fremde = [kasten for kasten in kästen if not kasten.bekannt]
+    gruppen = [[nachName[name] for name in zeile] for zeile in zeilen] + [fremde]
+    return "".join(
+        '<div class="ak-zeile">' + "".join(kastenZeichnen(kasten) for kasten in gruppe) + "</div>"
+        for gruppe in gruppen
+        if gruppe
     )
 
 
-def kartenBild(kästen: list[Kasten], pfeile: list[Pfeil]) -> str:
-    gemessen = "".join(
-        pfeilZeichnen(pfeil.von, pfeil.nach, str(pfeil.anzahl), verboten=not pfeil.erlaubt)
-        for pfeil in pfeile
-    )
-    fest = pfeilZeichnen(*httpPfeil, "HTTP", verboten=False)
-    inhalt = "".join(kastenZeichnen(kasten) for kasten in kästen)
-    return (
-        f'<svg class="architekturkarte" viewBox="0 0 {breite} {höhe}" width="{breite}" '
-        f'height="{höhe}">{spitzen()}{gemessen}{fest}{inhalt}</svg>'
-    )
+def kantenAlsJson(kanten: list[Kante]) -> str:
+    daten = [kante._asdict() | {"text": None} for kante in kanten] + [httpKante | {"text": "HTTP"}]
+    return json.dumps(daten).replace("</", "<\\/")
 
 
-def architekturKarte(wurzel: Path) -> str:
+def urteil(kästen: list[Kasten], kanten: list[Kante]) -> str:
+    namen = {kasten.name: kastenTitel(kasten) for kasten in kästen}
+    verboten = [pfeil for pfeil in kastenPfeile(kanten) if not pfeil.erlaubt]
+    if not verboten:
+        return "Kein verbotener Pfeil."
+    pfeile = ", ".join(
+        f"{namen.get(pfeil.von, pfeil.von)} → {namen.get(pfeil.nach, pfeil.nach)}"
+        for pfeil in verboten
+    )
+    return f"Verbotene Pfeile: {html.escape(pfeile)}"
+
+
+def architekturSeite(wurzel: Path) -> str:
     kästen = kästenMessen(wurzel)
-    pfeile = pfeileMessen(wurzel, kästen)
+    kanten = kantenMessen(wurzel, kästen)
     übersicht, vertrag = übersichtUndVertrag(wurzel)
-    verboten = [pfeil for pfeil in pfeile if not pfeil.erlaubt]
-    urteil = (
-        "Verbotene Pfeile: "
-        + ", ".join(f"{titel[pfeil.von]} → {titel[pfeil.nach]}" for pfeil in verboten)
-        if verboten
-        else "Kein verbotener Pfeil."
-    )
     return (
-        '<section class="kasten"><h3>Architektur</h3>'
-        f'<div class="karten-diagramm">{kartenBild(kästen, pfeile)}</div>'
-        f'<p class="muted">{urteil} Zahlen an Pfeilen: Importzeilen. Zeichen: Übersicht '
-        f"{tausender(übersicht)} und Vertrag {tausender(vertrag)}.</p></section>"
+        f"<style>{architekturStil}</style>"
+        f'<p class="muted">{urteil(kästen, kanten)} Ein Klick öffnet oder schließt einen Kasten. '
+        "Zahlen an Pfeilen: Importzeilen. Zeichen: Übersicht "
+        f"{tausender(übersicht)} und Vertrag {tausender(vertrag)}.</p>"
+        f'<div class="architektur" id="architektur">{zeilenZeichnen(kästen)}</div>'
+        f'<script type="application/json" id="architektur-kanten">{kantenAlsJson(kanten)}</script>'
+        f"<script>{architekturSkript}</script>"
     )

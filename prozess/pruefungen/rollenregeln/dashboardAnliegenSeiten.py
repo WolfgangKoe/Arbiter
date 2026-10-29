@@ -49,7 +49,7 @@ neuladenSkript = """
 })();
 """.replace("__INTERVALL__", str(neuladenIntervall))
 
-reiter = (("Anliegen", "/"), ("Tokenbericht", "/tokens"))
+reiter = (("Anliegen", "/"), ("Tokenbericht", "/tokens"), ("Architektur", "/architektur"))
 
 
 def navigation(aktiv: str) -> str:

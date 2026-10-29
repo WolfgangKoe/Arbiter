@@ -1,9 +1,7 @@
-import ast
+from dataclasses import dataclass
 from pathlib import Path
-from typing import NamedTuple
 
-from formregeln.erlaubteImporte import kastenDesModuls, kastenNamen, pfeilErlaubt
-from formregeln.importvertrag import importierteModule, paketDerDatei
+from formregeln.erlaubteImporte import kastenNamen
 
 produktOrdner = "technik/arbiter"
 seiteOrdner = "technik/frontend"
@@ -12,37 +10,57 @@ architekturOrdner = "technik/architektur"
 übersichtDatei = "technik/architektur.md"
 vertragOrdner = "technik/architektur/vertrag"
 startDatei = "__main__.py"
+paketDatei = "__init__.py"
 architekturDateien = {"seite": "frontend"}
+nichtGemessen = ("__pycache__",)
 
 
-class Kasten(NamedTuple):
+@dataclass(frozen=True)
+class Knoten:
+    pfad: str
     name: str
-    codeZeichen: int
+    zeichen: int
+    istOrdner: bool
+    kinder: tuple["Knoten", ...] = ()
+
+
+@dataclass(frozen=True)
+class Kasten:
+    name: str
+    bekannt: bool
+    wurzel: Knoten | None
     architekturZeichen: int | None
 
-
-class Pfeil(NamedTuple):
-    von: str
-    nach: str
-    anzahl: int
-    erlaubt: bool
+    @property
+    def codeZeichen(self) -> int:
+        return self.wurzel.zeichen if self.wurzel else 0
 
 
 def zeichen(dateien: list[Path]) -> int:
     return sum(len(datei.read_text(encoding="utf-8")) for datei in dateien if datei.is_file())
 
 
-def codeDateien(wurzel: Path, kasten: str) -> list[Path]:
-    if kasten == "seite":
-        ordner = wurzel / seiteOrdner
-        return [datei for datei in ordner.rglob("*") if datei.suffix in seiteEndungen]
-    if kasten == "start":
-        return [datei for datei in [wurzel / produktOrdner / startDatei] if datei.is_file()]
-    return [
-        datei
-        for datei in (wurzel / produktOrdner / kasten).rglob("*.py")
-        if "__pycache__" not in datei.parts
-    ]
+def leerePaketDatei(datei: Path) -> bool:
+    return datei.name == paketDatei and not datei.read_text(encoding="utf-8").strip()
+
+
+def dateiKnoten(datei: Path, wurzel: Path) -> Knoten:
+    text = datei.read_text(encoding="utf-8")
+    return Knoten(datei.relative_to(wurzel).as_posix(), datei.name, len(text), istOrdner=False)
+
+
+def ordnerKnoten(ordner: Path, wurzel: Path, endungen: tuple[str, ...]) -> Knoten:
+    kinder = []
+    for eintrag in sorted(ordner.iterdir()):
+        if eintrag.name in nichtGemessen:
+            continue
+        if eintrag.is_dir():
+            kinder.append(ordnerKnoten(eintrag, wurzel, endungen))
+        elif eintrag.suffix in endungen and not leerePaketDatei(eintrag):
+            kinder.append(dateiKnoten(eintrag, wurzel))
+    summe = sum(kind.zeichen for kind in kinder)
+    pfad = ordner.relative_to(wurzel).as_posix()
+    return Knoten(pfad, ordner.name, summe, istOrdner=True, kinder=tuple(kinder))
 
 
 def architekturZeichen(wurzel: Path, kasten: str) -> int | None:
@@ -52,40 +70,50 @@ def architekturZeichen(wurzel: Path, kasten: str) -> int | None:
     return zeichen([datei]) if datei.is_file() else None
 
 
+def wurzelKnoten(wurzel: Path, name: str) -> Knoten | None:
+    produkt = wurzel / produktOrdner
+    if name == "seite":
+        ordner = wurzel / seiteOrdner
+        return ordnerKnoten(ordner, wurzel, seiteEndungen) if ordner.is_dir() else None
+    if name == "start":
+        datei = produkt / startDatei
+        return dateiKnoten(datei, wurzel) if datei.is_file() else None
+    ordner = produkt / name
+    if ordner.is_dir():
+        return ordnerKnoten(ordner, wurzel, (".py",))
+    datei = produkt / f"{name}.py"
+    return dateiKnoten(datei, wurzel) if datei.is_file() else None
+
+
+def unbekannteNamen(wurzel: Path) -> list[str]:
+    produkt = wurzel / produktOrdner
+    if not produkt.is_dir():
+        return []
+    namen = []
+    for eintrag in sorted(produkt.iterdir()):
+        name = eintrag.stem if eintrag.is_file() else eintrag.name
+        gemeint = eintrag.suffix == ".py" or eintrag.is_dir()
+        if gemeint and eintrag.name not in (*nichtGemessen, paketDatei, startDatei):
+            if name not in kastenNamen:
+                namen.append(name)
+    return namen
+
+
 def kästenMessen(wurzel: Path) -> list[Kasten]:
-    return [
-        Kasten(name, zeichen(codeDateien(wurzel, name)), architekturZeichen(wurzel, name))
+    bekannte = [
+        Kasten(
+            name,
+            bekannt=True,
+            wurzel=wurzelKnoten(wurzel, name),
+            architekturZeichen=architekturZeichen(wurzel, name),
+        )
         for name in kastenNamen
     ]
-
-
-def kastenDerDatei(datei: Path, wurzel: Path) -> str | None:
-    teile = datei.relative_to(wurzel / produktOrdner).parts
-    if datei.name == startDatei and len(teile) == 1:
-        return "start"
-    return teile[0] if len(teile) > 1 else None
-
-
-def importzeilen(wurzel: Path) -> dict[tuple[str, str], int]:
-    anzahl: dict[tuple[str, str], int] = {}
-    for datei in sorted((wurzel / produktOrdner).rglob("*.py")):
-        von = kastenDerDatei(datei, wurzel)
-        if von is None or "__pycache__" in datei.parts:
-            continue
-        baum = ast.parse(datei.read_text(encoding="utf-8"))
-        for modul, _ in importierteModule(baum, paketDerDatei(datei, wurzel)):
-            nach = kastenDesModuls(modul)
-            if nach is not None and nach != von:
-                anzahl[(von, nach)] = anzahl.get((von, nach), 0) + 1
-    return anzahl
-
-
-def pfeileMessen(wurzel: Path, kästen: list[Kasten]) -> list[Pfeil]:
-    mitCode = frozenset(kasten.name for kasten in kästen if kasten.codeZeichen)
-    return [
-        Pfeil(von, nach, anzahl, pfeilErlaubt(von, nach, mitCode))
-        for (von, nach), anzahl in sorted(importzeilen(wurzel).items())
+    fremde = [
+        Kasten(name, bekannt=False, wurzel=wurzelKnoten(wurzel, name), architekturZeichen=None)
+        for name in unbekannteNamen(wurzel)
     ]
+    return bekannte + fremde
 
 
 def übersichtUndVertrag(wurzel: Path) -> tuple[int, int]:

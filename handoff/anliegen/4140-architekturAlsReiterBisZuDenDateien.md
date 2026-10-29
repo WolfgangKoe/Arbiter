@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Feedback des Stakeholders zur Karte aus Anliegen 3120, im Wortlaut aus
@@ -52,4 +51,5 @@ unter `/tmp`. Bestehende Regel: [Regeln](../../prozess/regeln/rollenregeln.md), 
 grün sind und Screenshots unter `/tmp` die Startansicht und die ganz geöffnete Domäne mit
 allen Namen, Pfaden und Zahlen lesbar zeigen.
 
-**Stellungnahme.**
+**Stellungnahme.** 1 bis 7 umgesetzt; Test `dashboardArchitekturTest.py`,
+Regel `rollenregeln.md`.
