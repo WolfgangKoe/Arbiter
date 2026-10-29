@@ -50,7 +50,7 @@ Lässt du ein *Modell* in *Nahkampfreichweite* eines gegnerischen los, sperrt Ar
 Oberfläche: **Erfüllt.** Bildschirmtests grün.
 Mutation: **Erfüllt.** 89 Mutanten der geänderten Domänenzeilen, 97 % gefangen, Schwelle
 95 %; 5 sind gleichwertig begründet und zählen nicht. Zwei überleben, weil ihr Fall
-ungeregelt ist ([Anliegen 6300](anliegen/6300-anklickenUndFremdesModellLoslassen.md)); die
+ungeregelt ist (Anliegen 6300); die
 Mutanten zur *Kohärenz* nach dem neuen Test aus Anliegen 6330: alle gefangen.
 
 ## Code

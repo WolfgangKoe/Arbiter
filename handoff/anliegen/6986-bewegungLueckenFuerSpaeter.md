@@ -17,7 +17,7 @@ Regeltext verlangt):
    hält an der ersten Nahkampfzone auf der Strecke an (`ArbiterMap/docs/spec/interaction_map.md:402`).
 2. [BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md) lässt das *Modell*
    des anderen *Spielers* ohne *Grund* zurückspringen. Kein Stakeholder hat das entschieden:
-   Die Quelle ist das Verhalten des Codes ([Anliegen 6300](6300-anklickenUndFremdesModellLoslassen.md)).
+   Die Quelle ist das Verhalten des Codes (Anliegen 6300).
    Das Ziel sagt dagegen: „Was nicht erlaubt ist, wird gesperrt“. Ähnliche Fälle sind
    verschieden geregelt: In der *Aufstellung* sperrt AUF-22.1 ‚nicht an der Reihe‘ und lässt
    *gemeinsam übergehen* zu, in den übrigen *Phasen* springt das *Modell* nach QUE-10.5 ohne
