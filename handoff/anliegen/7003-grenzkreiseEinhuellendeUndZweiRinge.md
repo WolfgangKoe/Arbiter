@@ -4,7 +4,7 @@ Form: Kritik
 Von: Ux
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder kommentiert [Anliegen 6410](6410-grenzkreiseNahkampfUndBewegung.md) und

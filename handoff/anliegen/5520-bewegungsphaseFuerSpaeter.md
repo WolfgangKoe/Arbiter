@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 7000
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path). Schritt 3 nach
@@ -47,3 +46,8 @@ Domänenphase 9: 1, F3 B in [BEW-7](../../domaene/anforderungen/phasen/bewegung/
 1, F1 (Markierung) und 2 (welche *Einheit* ohne *Kohärenz*) frage ich in
 Anliegen 7000 F3. 5: ja, BEW-4.1 sperrt auch nach dem
 Wechsel zur nächsten *Einheit*; ‚schon bewegt‘ entfällt nach 7000 F1 A.
+Stellungnahme: 7000 ist beantwortet. 1, F1 (wie sich jede *Einheit* bewegt hat) und 2 (welche
+*Modelle* ohne *Kohärenz*): Der Stakeholder hat 7000 F3 mit A beantwortet, beides kommt mit dem
+Zurücksetzen und einem Mockup ([Plan 9](../plan.md), „Danach“); er nennt dafür Arbiter-old als
+Vorbild (7000 F1). 5: ‚schon bewegt‘ entfällt endgültig (7000 F4 A), BEW-4.1 sperrt „Phase
+beenden“ bei jeder *Einheit* ohne *Kohärenz*.

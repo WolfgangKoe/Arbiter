@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 7000
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path, *Sperren*, die nur der Regeltext
@@ -41,3 +40,11 @@ Stellungnahme: Beachtet: Die neuen Kriterien sagen *Normale Bewegung*, für Adva
 1 löst BEW-4.1 (siehe 5520 Punkt 5). 2 entfällt nach 7000 F1 A. 3:
 [BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md). 6: 7000 F3.
 4 und 5 kommen mit dem Zurücksetzen; bis 7000 beantwortet ist, wartet das Anliegen.
+Stellungnahme: 7000 ist beantwortet. 2 entfällt endgültig: Korrigieren bleibt, kein ‚schon
+bewegt‘ (7000 F4 A); die *Bewegungsweite* hält Arbiter, weil die *Distanz* vom Beginn der
+*Bewegungsphase* zählt (BEW-1.6). 4 jetzt doch gleich als
+[QUE-11.1](../../domaene/anforderungen/querschnitt/phaseBeenden.md): „Phase beenden“ nur, wenn
+ein *Spieler* *am Zug* ist; einplanen tut es der Planer. 5 entfällt: *Weg* ist kein Begriff des
+Glossars mehr, „Weg“ in AUF-8.7, 21.1, 26.1, 29.1 ist gewöhnliches Wort. 6: Der Stakeholder hat
+7000 F3 mit A beantwortet, die Anzeige an einer gezogenen *Einheit* kommt mit dem Zurücksetzen
+und einem Mockup ([Plan 9](../plan.md), „Danach“).

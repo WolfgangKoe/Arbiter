@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Fälle, die der Code regelt, die aber kein Kriterium nennt; bis zur Antwort kein Test dazu (Mutation, Anliegen 6291).
