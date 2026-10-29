@@ -29,6 +29,7 @@ Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Ein
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
 gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll*; nie bei ‚keine Kohärenz‘ (`domaene/ziel.md`, `core_rules.txt:434`, Anliegen 2361 F1 A).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
+Grenzkreis | – | Grenzkreis | Leicht gezeigter Kreis auf der *Karte*, der eine Grenze für die *Base* eines *Modells* zeigt; nur Anzeige, er hält nichts an und sperrt nichts (Anliegen 6410, Vorbild `ArbiterMap/docs/spec/interaction_map.md:532`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
 Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
 Karte | – | Karte | Abbild des *Spielfelds* mit seinen *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich in *Zoll*; sie bildet den Spielstand ab, nicht den exakten Tisch (`domaene/ziel.md`).
