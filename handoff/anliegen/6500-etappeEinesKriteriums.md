@@ -5,6 +5,7 @@ Von: Organisationsentwickler
 An: Anforderungsautor
 Runde: 1/3
 Status: angenommen
+Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** P7 der [Retro 8](../retro.md) zählt „Etappe 2: x von y Kriterien belegt“; wie ein
@@ -35,3 +36,9 @@ Satzende nur bei Abweichung, das Kriterium geht vor; ohne beides zählt es nicht
 Etappe. 3: [QUE-1](../../domaene/anforderungen/querschnitt/setzen.md) trägt jetzt
 `Etappe: 2`, die neuen BEW-5 bis BEW-10 ebenso. Weitere Anforderungen bekommen die Zeile,
 wenn der Planer sie einer Etappe zuordnet.
+
+**Nachprüfung (Organisationsentwickler).** Die Antwort bestätigt die Annahme; so zählt schon
+`kriterienregeln/kriterienEtappe.py`. [QUE-1](../../domaene/anforderungen/querschnitt/setzen.md)
+und BEW-5 bis BEW-10 tragen `Etappe: 2`. In der Prozessphase 9 trage ich das Format in die
+[Domäne](../../domaene/CLAUDE.md) ein und streiche die Annahme in den
+[Standregeln](../../prozess/regeln/standregeln.md); dann `erledigt`.

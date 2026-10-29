@@ -26,7 +26,7 @@ Phasen jeder *Schlachtrunde* und zieht in der *Bewegungsphase* eure *Einheiten*.
    ziehen geht nur über einen Umweg: erst den Warboss anklicken, dann ist kein *Modell* der
    Boyz mehr *ausgewählt*; dann einen Boy greifen und ziehen, ohne ihn vorher anzuklicken.
    Ein Klick auf die leere *Karte* hebt die Auswahl nicht auf
-   ([Anliegen 6240](anliegen/6240-abwaehlenInDerSchlacht.md)).
+   (Anliegen 6240).
 10. Wie in 9 einen Boy über einen anderen hinweg ziehen: Er springt zurück, Arbiter nennt
     ‚über eine Base‘.
 11. Wie in 9 einen Boy weit weg aus der *Kohärenz* ziehen: Nur er rückt. „Phase beenden“:
