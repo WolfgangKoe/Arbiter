@@ -4,7 +4,7 @@ Form: Kritik
 Von: Ux
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder will die Kreise beim *Vorrücken* nicht an der Linie wählen, sondern
@@ -21,4 +21,11 @@ Wurf 2, und so fort bis 6″.
 (oder *Einhüllenden*) für n−1 und n wählt Wurf n, bei 1 ab dem Rand der *Bewegungsweite*; ein Klick
 darin oder außerhalb des sechsten wählt nichts.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als eigenes Kriterium
+[BEW-14.1](../../domaene/anforderungen/phasen/bewegung/wurfPerFlaeche.md) (BEW-5 und BEW-13
+haben keinen Platz mehr): Ein Klick, wo kein *Modell* ist, zwischen dem *Grenzkreis* oder der
+*Einhüllenden* für n−1 (für 1: der *Bewegungsweite*) und dem für n gilt als Klick auf den für
+Wurf n nach BEW-5.3. Eine Abweichung: Ein Klick an jeder anderen Stelle ohne *Modell* wählt
+keinen Wurf und hebt nach dem bestehenden BEW-9.1 die *Auswahl* auf, statt nichts zu tun. Ein
+Klick auf ein *Modell* bleibt Auswahl nach BEW-7 und AUF-20.6, auch in der Fläche. Einplanen
+in Item [Grenzkreise und Vorrücken](../../domaene/items/grenzkreise.md) tut der Planer.

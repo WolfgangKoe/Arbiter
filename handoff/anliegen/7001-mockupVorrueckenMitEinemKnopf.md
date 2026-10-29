@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Ux
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [bew-5](../../domaene/mockups/bew-5.html) zeigt sechs Knöpfe „Vorrücken mit 1“ bis

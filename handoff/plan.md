@@ -17,7 +17,7 @@ Zyklusziel aus [Review 8](review.md), Abweichungen unten.
    Aufstellen wählt ein Klick auch eine *aufgestellte* *Einheit* aus. (Item 3)
 5. Um die *ausgewählte* *Einheit* zeigt die *Karte* leicht, bis wohin sie zieht (*Einhüllende*
    ihrer *Grenzkreise*), um jede gegnerische ihre *Nahkampfreichweite*. Nach „Vorrücken“
-   erscheinen sechs Kreise +1″ bis +6″; ihr klickt den eures Wurfs, nur er bleibt, die
+   erscheinen sechs Kreise +1″ bis +6″; ihr klickt in den Ring eures Wurfs, nur er bleibt, die
    *Modelle* ziehen bis *Bewegungsweite* plus Wurf. Verklickt: „Vorrücken zurücknehmen“, die
    *Modelle* stehen wieder, wo die Phase begann. (Item 4)
 
@@ -28,7 +28,7 @@ Zyklusziel aus [Review 8](review.md), Abweichungen unten.
 3. [Anhalten und Auswahl](../domaene/items/anhaltenUndAuswahl.md): Schritte 3 und 4; BEW-6,
    BEW-2.8, BEW-7, BEW-9, BEW-10, AUF-30.
 4. [Grenzkreise und Vorrücken](../domaene/items/grenzkreise.md): Schritt 5; BEW-11, BEW-13,
-   BEW-5, BEW-12.
+   BEW-14, BEW-5, BEW-12.
 
 Reihenfolge 1 bis 4: Arbiter startet seit der neuen *Ausgangslage* nicht; Item 1 behebt das.
 Item 2 vor 3: BEW-2.8 *setzt* nach BEW-8.2. Item 3 vor 4: Ein Boy als *Ebene* (BEW-7) zeigt
@@ -36,7 +36,7 @@ seinen *Grenzkreis* (BEW-11.1), der Klick auf einen Kreis hebt die *Auswahl* nic
 (BEW-5.3, BEW-9.1). Item 4 kostet am meisten Code (*Einhüllende*, Anliegen 7004), darum
 zuletzt: Hängt es, bekommst du Schritte 1 bis 4, Item 4 rückt in Plan 10.
 
-Bereit zur Freigabe nach Anliegen 7001 (Mockup) und 7003; 7004 vor dem Vertrag zu Item 4.
+Bereit zur Freigabe nach Anliegen 7003; 7004 vor dem Vertrag zu Item 4.
 
 ## Abweichungen vom Zyklusziel
 - Dazu Item 1 (4882 F1 A), BEW-7 (6420), BEW-10 und AUF-30 (6300, 6996), die *Grenzkreise*:
@@ -52,7 +52,8 @@ Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
 ## Danach
 Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3), Anhalten übergehen
 (7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*, ruhige *Karte*, die
-Lücken aus 6986. Ich schätze zwei Zyklen bis Etappe 2.
+Lücken aus 6986, [„Phase beenden“ nur im Zug](../domaene/items/phaseBeendenNurImZug.md)
+(QUE-11). Ich schätze zwei Zyklen bis Etappe 2.
 
 ## Empfehlung
 Gib die vier Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen; damit gelten die
@@ -105,6 +106,15 @@ Begriffe aus 6998, 7000, 7005.
 - [ ] Reviewer: Kritik am Code zu Item grenzkreise
 - [ ] Fachkritiker: Item grenzkreise abgenommen
 - [ ] Planer: Item grenzkreise gelöscht
+- [ ] Architekt: Vertrag zu Item phaseBeendenNurImZug, bei beiden Hälften
+- [ ] Testautor: Tests zu Item phaseBeendenNurImZug
+- [ ] Fachkritiker: Kritik an den Tests zu Item phaseBeendenNurImZug
+- [ ] Architekt: Kritik an den Tests zu Item phaseBeendenNurImZug
+- [ ] Implementierer: Tests zu Item phaseBeendenNurImZug grün
+- [ ] Architekt: Kritik am Code zu Item phaseBeendenNurImZug
+- [ ] Reviewer: Kritik am Code zu Item phaseBeendenNurImZug
+- [ ] Fachkritiker: Item phaseBeendenNurImZug abgenommen
+- [ ] Planer: Item phaseBeendenNurImZug gelöscht
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
