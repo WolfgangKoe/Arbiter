@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** `ruff format --check .` endet mit „1 file would be reformatted“: Der Python-Block in
