@@ -4,7 +4,7 @@ from fractions import Fraction
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.handgriffe import durchmesserJeEinheit, sperrgründe
+from tests.akzeptanz.handgriffe import sperrgründe
 
 
 def modelleDerArmeen(ausgangslage):
@@ -17,15 +17,6 @@ def einheitenDerArmeen(ausgangslage):
         for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
         for einheit in spieler.armee.einheiten
     ]
-
-
-def durchmesserDerArmeen(ausgangslage) -> list[tuple[tuple[int, ...], ...]]:
-    return sorted(
-        [
-            durchmesserJeEinheit(ausgangslage.ersterSpieler),
-            durchmesserJeEinheit(ausgangslage.zweiterSpieler),
-        ]
-    )
 
 
 def testMiv1_1EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
@@ -89,33 +80,6 @@ def testMiv1_2InDerAusgangslageIstKeineEinheitAufgestellt(ausgangslage):
     aufgestellteEinheiten = [einheit for einheit in einheiten if aufstellung.aufgestellt(einheit)]
 
     assert aufgestellteEinheiten == []
-
-
-def testMiv1_3DieAusgangslageHatDieZweiArmeenMitJeZweiEinheiten(ausgangslage):
-    einheitenJeArmee = [
-        len(ausgangslage.ersterSpieler.armee.einheiten),
-        len(ausgangslage.zweiterSpieler.armee.einheiten),
-    ]
-
-    assert einheitenJeArmee == [2, 2]
-
-
-def testMiv1_3JederEintragUnterDurchmesserIstEinModellDerEinheit(ausgangslage):
-    zahlenDerModelle = sorted(
-        tuple(len(einheit.modelle) for einheit in spieler.armee.einheiten)
-        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
-    )
-
-    assert zahlenDerModelle == [(10, 1), (10, 1)]
-
-
-def testMiv1_3DieBaseJedesModellsHatDenDurchmesserDesEintrags(ausgangslage):
-    orks = ((32,) * 10, (40,))
-    necrons = ((32,) * 10, (32,))
-
-    durchmesser = durchmesserDerArmeen(ausgangslage)
-
-    assert durchmesser == sorted([orks, necrons])
 
 
 def testMiv1_4DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):

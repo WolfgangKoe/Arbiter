@@ -1,0 +1,20 @@
+# Datenblätter der Orks (Glossar: Datenblatt, Modellart, Profil), Gliederung nach
+# technik/architektur/katalog.md K1 bis K6; nur die Werte, die Kriterien lesen (Anliegen 4800 F3 A).
+# Modellarten: Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (model_groups, name_en);
+# ohne model_groups eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group).
+# bewegungsweite: Zoll; Quelle Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (move).
+# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm).
+
+Boyz:                       # units.yaml:493
+  modellarten:
+    Ork Boy:                # units.yaml:515
+      bewegungsweite: 5     # units.yaml:501
+      durchmesser: 32       # orks_boyz.yaml:21
+    Boss Nob:               # units.yaml:543
+      bewegungsweite: 5     # units.yaml:501; :545 ändert sie nicht
+      durchmesser: 32       # orks_boyz.yaml:21
+Warboss:                    # units.yaml:10
+  modellarten:
+    Warboss:                # orks_warboss.yaml:15
+      bewegungsweite: 5     # units.yaml:18
+      durchmesser: 40       # orks_warboss.yaml:17

@@ -1,21 +1,26 @@
 # Ausgangslage (domaene/anforderungen/missionsvorbereitung/ausgangslage.md): die zwei Armeen,
 # Stakeholder in handoff/anliegen/09-fragen-freigabe-etappen.md, F1 A (git).
 # Spielfeld und Aufstellungszonen: onlyWar.yaml.
-# Je Einheit ein Eintrag je Modell: Durchmesser seiner runden Base in mm.
-# Quelle der Durchmesser: ArbiterMap/data/poc/units/<datei>:<zeile> (count, base_mm).
-# bewegungsweite: Bewegungsweite jedes Modells der Einheit in Zoll (Glossar, BEW-3.1); Quelle:
-# Arbiter-old/data/wh40k_9e/<fraktion>/units.yaml:<zeile> (move).
+# Je Einheit Fraktion und Datenblatt aus katalog/<fraktion>/datenblaetter.yaml, je Modellart
+# die Zahl ihrer Modelle (technik/architektur/katalog.md K1).
+# Quelle der Zahlen: ArbiterMap/data/poc/units/<datei>:<zeile> (count); Aufteilung auf die
+# Modellarten: Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (count).
 
 Armee:
-  - - Einheit: Boyz
-      durchmesser: [32, 32, 32, 32, 32, 32, 32, 32, 32, 32]  # orks_boyz.yaml:20, :21
-      bewegungsweite: 5                                      # orks/units.yaml:501
-    - Einheit: Warboss
-      durchmesser: [40]                                      # orks_warboss.yaml:16, :17
-      bewegungsweite: 5                                      # orks/units.yaml:18
-  - - Einheit: Necron Warriors
-      durchmesser: [32, 32, 32, 32, 32, 32, 32, 32, 32, 32]  # necrons_necron_warriors.yaml:14, :15
-      bewegungsweite: 5                                      # necrons/units.yaml:160
-    - Einheit: Overlord
-      durchmesser: [32]                                      # necrons_overlord.yaml:15, :17, Stakeholder :16
-      bewegungsweite: 6                                      # necrons/units.yaml:28, Anliegen 4280 F4 A
+  - - fraktion: orks
+      datenblatt: Boyz
+      modelle:
+        Ork Boy: 9          # orks_boyz.yaml:20 abzüglich Boss Nob; units.yaml:516
+        Boss Nob: 1         # units.yaml:544
+    - fraktion: orks
+      datenblatt: Warboss
+      modelle:
+        Warboss: 1          # orks_warboss.yaml:16
+  - - fraktion: necrons
+      datenblatt: Necron Warriors
+      modelle:
+        Necron Warriors: 10 # necrons_necron_warriors.yaml:14
+    - fraktion: necrons
+      datenblatt: Overlord
+      modelle:
+        Overlord: 1         # necrons_overlord.yaml:15

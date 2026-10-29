@@ -1,0 +1,17 @@
+# Datenblätter der Necrons (Glossar: Datenblatt, Modellart, Profil), Gliederung nach
+# technik/architektur/katalog.md K1 bis K6; nur die Werte, die Kriterien lesen (Anliegen 4800 F3 A).
+# Modellarten: Arbiter-old/data/wh40k_9e/necrons/units.yaml hat für beide keine model_groups,
+# also je eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group).
+# bewegungsweite: Zoll; Quelle Arbiter-old/data/wh40k_9e/necrons/units.yaml:<zeile> (move).
+# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm).
+
+Necron Warriors:            # units.yaml:148
+  modellarten:
+    Necron Warriors:        # necrons_necron_warriors.yaml:13
+      bewegungsweite: 5     # units.yaml:160
+      durchmesser: 32       # necrons_necron_warriors.yaml:15
+Overlord:                   # units.yaml:15
+  modellarten:
+    Overlord:               # necrons_overlord.yaml:14
+      bewegungsweite: 6     # units.yaml:28, Anliegen 4280 F4 A
+      durchmesser: 32       # necrons_overlord.yaml:17, Stakeholder :16

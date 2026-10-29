@@ -57,5 +57,5 @@ Mit `Annahme:` (die Arbeit läuft weiter):
 Ohne `Annahme:`:
 - Anliegen 6431 F1 (Docstrings), F2 (Testautor auf Opus), F3 (Prämissen verschieben): Der
   Organisationsentwickler hat F2 und F3 unter „Klärung“ erklärt. Trage je `Antwort:` ein.
-- [4882](anliegen/4882-itemKatalogwerteGliedern.md) F1: Katalogwerte gliedern als erstes Item
+- Anliegen 4882 F1: Katalogwerte gliedern als erstes Item
   von Plan 9 (A) oder in Etappe 8 (B)? Empfehlung: A. Eine Zeile `Antwort:` fehlt dort.

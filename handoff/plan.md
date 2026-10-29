@@ -20,7 +20,7 @@ Zyklusziel aus [Review 8](review.md), Abweichungen unten.
 
 ## Items
 1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): am Bildschirm nichts;
-   MIV-1 neu nach Anliegen 4881. Deine Auflage aus 4800 F3 ([4882](anliegen/4882-itemKatalogwerteGliedern.md)).
+   MIV-1 neu nach Anliegen 4881. Deine Auflage aus 4800 F3 (Anliegen 4882).
 2. [Gemeinsam übergehen mit Protokoll](../domaene/items/gemeinsamUebergehen.md): Schritt 5;
    BEW-8, QUE-5, QUE-6.
 3. [Vorrücken, Anhalten und Auswahl](../domaene/items/vorrueckenUndAuswahl.md): Schritte 2

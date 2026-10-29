@@ -13,7 +13,7 @@ Architektur hält er ein: Die Domäne bekommt `Modell.bewegungsweite` und
 `Ausgangslage.letzteSchlachtrunde` als Werte, `katalog/` liest sie aus `domaene/daten/`
 (A2, A3, K4); dass die Architektur `letzteSchlachtrunde` nicht nennt, ist richtig so, sie
 zählt die Felder der Ausgangslage nicht auf. Die Gliederung nach K2 und K3 (B je Modellart,
-Tabelle der Schlüssel) kommt mit [Anliegen 4882](4882-itemKatalogwerteGliedern.md). Zwei
+Tabelle der Schlüssel) kommt mit Anliegen 4882. Zwei
 Befunde betreffen Ablage und Namen von Hilfen in den Tests; sie warten
 ([Ich 3](../../prozess/praemissen/ich.md)).
 

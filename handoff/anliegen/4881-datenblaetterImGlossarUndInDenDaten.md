@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 4800 F2 B gewählt: je
@@ -35,9 +35,20 @@ Etappe 2) ins alte Format, wird jede einzeln umgebaut, samt `katalog/` und seine
    Modellarten die vier *Einheiten* haben, entscheidet der Regeltext oder der Stakeholder.
 4. MIV-1.3 und die Glossarzeilen B, Einheit, Name ziehst du nach.
 
-Wann: Domänenphase 9, als Teil des Items aus [4882](4882-itemKatalogwerteGliedern.md).
+Wann: Domänenphase 9, als Teil des Items aus Anliegen 4882.
 
 **Stellungnahme.** 1: Die Begriffe stehen zur Freigabe in
 [Anliegen 7000](7000-begriffeUndFragenZurBewegung.md). 2 bis 4 schreibe ich, sobald der
 Planer in 4882 das Item einplant; die Modellarten der Boyz (Ork Boy, Boss Nob,
 `Arbiter-old/data/wh40k_9e/orks/units.yaml:542`) belege ich dann je Wert.
+Umgesetzt, 2 bis 4: [orks](../../domaene/daten/katalog/orks/datenblaetter.yaml) und
+[necrons](../../domaene/daten/katalog/necrons/datenblaetter.yaml) nach K1 bis K6, die
+[Ausgangslage](../../domaene/daten/ausgangslage.yaml) mit `fraktion`, `datenblatt` und
+`modelle` je Modellart. MIV-1.3 hat Tests, die Neufassung ist darum
+[MIV-1.5](../../domaene/anforderungen/missionsvorbereitung/ausgangslage.md), jetzt auch mit
+der *Bewegungsweite*; die alten Tests soll der Testautor löschen
+([7006](7006-testsOhneKriterium.md)). Glossar: Datenblatt, Modellart (ohne eigenen
+Regelbegriff, Spalte „No.“ `core_rules.txt:564`), Profil, dazu *Fraktion* für den Schlüssel
+aus K1; Bewegungsweite, Durchmesser, Einheit, Name nachgezogen. Boyz als 9 Ork Boy und 1 Boss
+Nob, Warboss, Necron Warriors und Overlord mit je einer Modellart; Fraktion und Boyz stehen
+dem Stakeholder in [7005](7005-fraktionUndModellartenDerBoyz.md) zur Entscheidung.
