@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Aus Anliegen 4800 (F1 A, F2 B, F3 A mit der Auflage einer

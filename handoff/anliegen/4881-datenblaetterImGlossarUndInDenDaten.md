@@ -5,7 +5,6 @@ Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: 4882
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 4800 F2 B gewählt: je
