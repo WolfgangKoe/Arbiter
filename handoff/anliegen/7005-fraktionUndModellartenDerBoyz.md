@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Für Item 1 von [Plan 9](../plan.md) stehen die *Datenblätter* jetzt je
@@ -30,6 +30,7 @@ ein *Profil* je *Modellart* (`core_rules.txt:561`), der Boss Nob ein eigenes (A 
 Heute haben beide dieselbe *Bewegungsweite* und denselben *Durchmesser*. Warboss, Necron
 Warriors und Overlord haben in beiden Quellen nur eine Modellart.
 Annahme: A.
-Antwort: .
+Antwort: Noch keine Antwort
 
 **Stellungnahme.**
+Kommentar: Diese Fragen sollten über eine Regelrecherche beantwortet werden können. Es ist etwas komplizierter, als du es hier darstellst. Die vollständigen Regeln der 9. Edition sollten in Arbiter-old enthalten sein.

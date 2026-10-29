@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Deinen Wunsch aus [Anliegen 6410](6410-grenzkreiseNahkampfUndBewegung.md) beschreibt
@@ -33,6 +33,6 @@ man vor dem Würfeln sieht, was jeder Wurf bringt. Sieben Kreise je *Modell*, be
 *Einheiten* unübersichtlich; ein weiteres Kriterium.
 Empfehlung: A; der gewählte Wurf legt die Grenze fest, die sechs Ringe zeigen dann nichts mehr.
 Annahme: A.
-Antwort:
+Antwort: Ich würde es so machen, dass alle 6 Kreise angezeigt werden. Dann klickt oder tippt man auf einen der Kreise, womit dann implizit der Wert des Wurfs "eingegeben" ist. Diese Eingabe muss zur Korrektur zurückgenommen werden können (ähnlich wie beim Aufstellen von Einheiten), falls man sich verklickt hat. Ist das verständlich?
 
 **Stellungnahme.**

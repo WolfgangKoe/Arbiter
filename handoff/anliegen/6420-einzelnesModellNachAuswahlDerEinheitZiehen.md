@@ -24,3 +24,4 @@ Bezug: [Review](../review.md), Klickpfad Schritt 9 (Umweg über ein nicht *ausge
 Nach der Auswahl der *Einheit* macht ein Klick auf eines ihrer *Modelle* es zur *Ebene*
 (7.1), dann zieht nur dieses (7.3); ein zweiter Klick wählt wieder die ganze *Einheit* (7.2).
 Der Umweg über eine nicht *ausgewählte* *Einheit* bleibt (AUF-20.4).
+Kommentar: Ich setze das Anliegen auf erledigt, wenn es in der Technikphase umgesetzt ist.

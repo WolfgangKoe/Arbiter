@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Randfall abseits des Happy Path). In der *Aufstellung* klickt
@@ -24,7 +24,7 @@ Eine *aufgestellte* *Einheit* kann man in der *Aufstellung* nicht mehr bewegen, 
 Kennzeichnung brächte nichts. Bei A ergänzt der Anforderungsautor AUF-20.6 um „nicht
 *aufgestellt*“.
 Annahme: A, der Klick ändert nichts.
-Antwort: .
+Antwort: Die Antwort hierauf ist obsulet.
 
 **Gegenvorschlag.** Beantworte F1 in der Domänenphase 9; „.“ heißt, die Empfehlung gilt.
 
@@ -67,6 +67,6 @@ Empfehlung: B. Regelkonform von sich aus, dein Fall geht trotzdem, und jeder sie
 *Protokoll*, dass umgestellt wurde. Ein einzeln gezogenes *Modell*, nach dem die *Einheit* nicht
 in *Kohärenz* ist, springt zurück; ‚keine Kohärenz‘ ist nie zu übergehen (QUE-5.5).
 Annahme: B; bis Etappe 7 wählt der Klick sie aus, Ziehen bleibt gesperrt ohne Übergehen.
-Antwort: .
+Antwort: B
 
 **Stellungnahme.**

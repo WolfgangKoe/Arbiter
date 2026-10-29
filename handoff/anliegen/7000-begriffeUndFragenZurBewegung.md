@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Zum Zyklusziel aus [Review 8](../review.md) stehen neu
@@ -27,7 +27,7 @@ Ziehen einer anderen *Einheit* sperrt die erste mit ‚schon bewegt‘ (Regeltex
 Empfehlung: A. So hast du es in 5180 F5 beschrieben; B bricht BEW-1.6 und ließe eine
 *Einheit* ohne *Kohärenz* stecken, bis das Zurücksetzen kommt.
 Annahme: A, kein Kriterium ‚schon bewegt‘.
-Antwort: .
+Antwort: Ich bin mir nicht sicher, ob ich die Frage richtig verstehe. Ich wähle eine Einheit aus, entscheide dann, ob sie sich normal bewegt oder vorrückt (darum ein Button unten), befindet sie sich in Nahkampfreichweiter feindlicher Modelle, wird ein zurückziehen-Button angeboten. Es braucht dann eben noch eine UX-Darstellung, wie die Zustände der Einheiten angezeigt werden (z.B. wie in Arbiter-old)
 
 **F2 · Ein Anhalten (Bewegungsweite, Kante, Nahkampfreichweite) gemeinsam übergehen?**
 A: In Plan 9 nicht; *gemeinsam übergehen* nur bei einer *Sperre* (BEW-8) (Anliegen 5180 F6 A).
@@ -46,3 +46,4 @@ Annahme: A.
 Antwort: .
 
 **Stellungnahme.**
+Kommentar: Ich habe im Mockup mehrere Buttons mit "vorrücken" gesehen. Ich verstehe die Absicht dahinter nicht. Nach meinem Dafür halten braucht es da nur einen Button, nachdem eine Einheit gewählt wurde. Einzelne Modelle in einer Einheit können nicht vorrücken, ohne dass auch alle anderen Modelle vorrücken, falls das die IDee war. Das Vorrücken muss rückgängig gemacht werden können. Beachte auch die Auswahl des jeweiligen Kreises, wie ich es in einem anderen Anliegen beschrieben habe
