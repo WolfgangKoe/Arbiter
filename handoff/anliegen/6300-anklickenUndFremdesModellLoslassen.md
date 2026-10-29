@@ -19,5 +19,5 @@ Wartet auf: 5181
 **Stellungnahme.** 2 umgesetzt als eigenes Kriterium
 [BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md) (BEW-1.5 ist
 getestet, eine Ergänzung wäre eine Neufassung). 1 hängt am Klick auf eine *aufgestellte*
-*Einheit*, den Anliegen [5181](5181-klickAufEineAufgestellteEinheit.md) F1 gerade klärt;
+*Einheit*, den Anliegen 5181 F1 gerade klärt;
 danach schreibe ich das Kriterium zu AUF-20.

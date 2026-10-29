@@ -59,7 +59,7 @@ Gib die drei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
   (Ring beim Vorrücken, Begriff *Grenzkreis*), [7000](anliegen/7000-begriffeUndFragenZurBewegung.md)
   (Begriffe *Vorrücken*, *Vorrückwurf*, Datenblatt, Profil, Modellart; drei Fragen). Bis zu
   deiner Antwort gilt je die Empfehlung A.
-- An dich, sonst: [5181](anliegen/5181-klickAufEineAufgestellteEinheit.md),
+- An dich, sonst: Anliegen 5181,
   [6995](anliegen/6995-frontendUndBackendImOrdner.md).
 - Übrige: [Moderation](moderation.md).
 

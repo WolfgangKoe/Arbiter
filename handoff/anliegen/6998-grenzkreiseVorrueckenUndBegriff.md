@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Deinen Wunsch aus [Anliegen 6410](6410-grenzkreiseNahkampfUndBewegung.md) beschreibt
@@ -73,3 +73,4 @@ Annahme: A (BEW-11.3).
 Antwort: .
 
 **Stellungnahme.**
+Kommentar: Verfahre wie du empfiehlst.

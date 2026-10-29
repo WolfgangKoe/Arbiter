@@ -49,7 +49,7 @@ Stränge der Prozess-Items nach der Freigabe:
 
 ## Fragen an dich
 Mit `Annahme:` (die Arbeit läuft weiter):
-- [5181](anliegen/5181-klickAufEineAufgestellteEinheit.md) F1: Wählt in der Aufstellung der
+- Anliegen 5181 F1: Wählt in der Aufstellung der
   Klick eine aufgestellte Einheit aus? Annahme: A, der Klick ändert nichts.
 - [6500](anliegen/6500-etappeEinesKriteriums.md): Format `Etappe: <n>` und `(Etappe <n>)`;
   Annahme: P7 zählt danach. Antwort an den Anforderungsautor.

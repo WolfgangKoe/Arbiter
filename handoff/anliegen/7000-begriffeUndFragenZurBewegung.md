@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zum Zyklusziel aus [Review 8](../review.md) stehen neu
@@ -69,6 +69,6 @@ kommt (Regeltext „No unit can be selected to move more than once“, `core_rul
 Empfehlung: A; so lässt sich jede *Einheit* korrigieren, bis das Zurücksetzen da ist, und die
 *Bewegungsweite* hält Arbiter trotzdem ein.
 Annahme: A, kein Kriterium ‚schon bewegt‘.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
