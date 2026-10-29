@@ -4,8 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 5181
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Fälle, die der Code regelt, die aber kein Kriterium nennt; bis zur Antwort kein Test dazu (Mutation, Anliegen 6291).
@@ -18,6 +17,11 @@ Wartet auf: 5181
 
 **Stellungnahme.** 2 umgesetzt als eigenes Kriterium
 [BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md) (BEW-1.5 ist
-getestet, eine Ergänzung wäre eine Neufassung). 1 hängt am Klick auf eine *aufgestellte*
-*Einheit*, den Anliegen 5181 F1 gerade klärt;
-danach schreibe ich das Kriterium zu AUF-20.
+getestet, eine Ergänzung wäre eine Neufassung). 1 anders als vorgeschlagen: Der Stakeholder
+hat in Anliegen 5181 F2 B entschieden, dass der Klick auch eine *aufgestellte* *Einheit* wählt;
+das steht jetzt als
+[AUF-30.1](../../domaene/anforderungen/phasen/aufstellen/aufgestellteEinheitAuswaehlen.md),
+mit dem, was dabei gleich bleibt (zusammen mit Anliegen 6996). Ein nicht *gesetztes* *Modell*
+zeigt die *Karte* nicht (Glossar *Karte*), am Bildschirm kann es niemand anklicken; dafür
+schreibe ich kein Kriterium. Ob die Prüfung `gesetzt` im Code bleibt oder der Mutant
+gleichwertig ist, entscheidet die Technik.

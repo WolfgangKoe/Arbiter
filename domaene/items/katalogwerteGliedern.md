@@ -1,8 +1,9 @@
 # Katalogwerte gliedern
 
-Umfang: MIV-1, Neufassung von MIV-1.3 nach Anliegen 4881 (Datenblatt, Modellart, Profil).
+Umfang: MIV-1.5 (Datenblatt, Modellart, Fraktion; Anliegen 4881, 7005).
 
-Warum jetzt: Anliegen 4882 F1 A, Auflage des Stakeholders aus 4800 F3: vor jeder neuen
-*Einheit*, solange es vier *Einheiten* mit zwei Werten sind. Am Bildschirm nichts.
+Warum jetzt: Arbiter startet mit der neuen Ausgangslage nicht mehr, die Tests zur
+Missionsvorbereitung sind rot. Auflage aus 4800 F3 (4882 F1 A): vor jeder neuen *Einheit*.
+Am Bildschirm nichts Neues.
 
-Abhängigkeit: Anliegen 4881 (Kriterium, Daten, Glossar).
+Abhängigkeit: keine.

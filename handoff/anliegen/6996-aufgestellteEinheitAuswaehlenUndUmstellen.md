@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 5181 F2 B gewählt: In der *Aufstellung* wählt ein
@@ -39,4 +39,11 @@ Danach sind veraltet oder offen:
    *Einheit* nicht in *Kohärenz* ist, springt zurück, ‚keine Kohärenz‘ ist nie zu übergehen
    (QUE-5.5).
 
-**Stellungnahme.**
+**Stellungnahme.** 1 umgesetzt als
+[AUF-30.1](../../domaene/anforderungen/phasen/aufstellen/aufgestellteEinheitAuswaehlen.md)
+(eigene Datei, `ebene.md` hat keinen Platz mehr): In der *Aufstellung* wählt der Klick eine
+*aufgestellte* *Einheit* mit der ganzen *Einheit* als *Ebene*, *an der Reihe*, *Einheit in
+Aufstellung* und *Modelle* bleiben gleich, wie AUF-5.8. Zugleich Antwort auf 6300 Punkt 1.
+2 angenommen: Die Kriterien zum Ziehen und Übergehen einer *aufgestellten* *Einheit* schreibe
+ich mit den Randfällen des Aufstellens; dass das Item sie mitnimmt, habe ich dem Planer in
+[Anliegen 7011](7011-umstellenAufgestellterEinheitInEtappe7.md) geschrieben.

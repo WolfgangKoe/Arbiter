@@ -4,63 +4,68 @@ Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grun
 Zyklusziel aus [Review 8](review.md), Abweichungen unten.
 
 ## Dein Happy Path nach Zyklus 9
-1. Ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie bisher.
-2. Ihr wählt eine *Einheit* aus. Unter der *Karte* stehen „Vorrücken mit 1“ bis „Vorrücken mit
-   6“; nach eurem Wurf am Tisch klickt ihr ihn, und die *Modelle* ziehen bis *Bewegungsweite*
-   plus Wurf. Ohne Klick bleibt es die *Normale Bewegung*. (Item 3)
-3. Ein Klick auf einen Boy der *ausgewählten* Boyz: Nur er zieht. Noch ein Klick: wieder die
-   ganze *Einheit*. Ein Klick auf die leere *Karte* hebt die *Auswahl* auf. (Item 3)
-4. Zieht ihr an die *Spielfeldkante* oder auf einen Gegner zu, hält Arbiter an der Kante oder
-   1″ vor seiner *Base* an, statt zurückzusetzen. *Modelle* des anderen *Spielers* lassen sich
-   nicht ziehen. (Item 3)
-5. Sperrt Arbiter beim Loslassen, etwa ‚über eine Base‘, klickt ihr „gemeinsam übergehen“: Die
+1. Arbiter startet, ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie
+   bisher. (Item 1)
+2. Sperrt Arbiter beim Loslassen ‚über eine Base‘, klickt ihr „gemeinsam übergehen“: Die
    *Modelle* stehen, wo ihr losgelassen habt, das *Protokoll* in der unteren *Leiste* nennt
    *Einheit*, *Spieler* und *Grund*. Jede *Leiste* fährt per *Griff* ein und aus. ‚keine
    Kohärenz‘ bleibt ohne Übergehen. (Item 2)
+3. Zieht ihr an die *Spielfeldkante* oder auf einen Gegner zu, hält Arbiter an der Kante oder
+   1″ vor seiner *Base* an. *Modelle* des Gegners lassen sich nicht ziehen. (Item 3)
+4. Ein Klick auf einen Boy der *ausgewählten* Boyz: Nur er zieht. Noch ein Klick: wieder die
+   ganze *Einheit*. Ein Klick auf die leere *Karte* hebt die *Auswahl* auf. Schon beim
+   Aufstellen wählt ein Klick auch eine *aufgestellte* *Einheit* aus. (Item 3)
+5. Um die *ausgewählte* *Einheit* zeigt die *Karte* leicht, bis wohin sie zieht (*Einhüllende*
+   ihrer *Grenzkreise*), um jede gegnerische ihre *Nahkampfreichweite*. Nach „Vorrücken“
+   erscheinen sechs Kreise +1″ bis +6″; ihr klickt den eures Wurfs, nur er bleibt, die
+   *Modelle* ziehen bis *Bewegungsweite* plus Wurf. Verklickt: „Vorrücken zurücknehmen“, die
+   *Modelle* stehen wieder, wo die Phase begann. (Item 4)
 
 ## Items
-1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): am Bildschirm nichts;
-   MIV-1 neu nach Anliegen 4881. Deine Auflage aus 4800 F3 (Anliegen 4882).
-2. [Gemeinsam übergehen mit Protokoll](../domaene/items/gemeinsamUebergehen.md): Schritt 5;
+1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): Schritt 1; MIV-1.5.
+2. [Gemeinsam übergehen mit Protokoll](../domaene/items/gemeinsamUebergehen.md): Schritt 2;
    BEW-8, QUE-5, QUE-6.
-3. [Vorrücken, Anhalten und Auswahl](../domaene/items/vorrueckenUndAuswahl.md): Schritte 2
-   bis 4; BEW-5, BEW-6, BEW-2.8, BEW-7, BEW-9, BEW-10.
+3. [Anhalten und Auswahl](../domaene/items/anhaltenUndAuswahl.md): Schritte 3 und 4; BEW-6,
+   BEW-2.8, BEW-7, BEW-9, BEW-10, AUF-30.
+4. [Grenzkreise und Vorrücken](../domaene/items/grenzkreise.md): Schritt 5; BEW-11, BEW-13,
+   BEW-5, BEW-12.
 
-Reihenfolge 1, 2, 3: Item 1 vor jeder neuen *Einheit*, damit keine im alten Format entsteht.
-Item 2 vor 3: Es arbeitet auf der schon gebauten *Sperre* ‚über eine Base‘, und BEW-2.8 aus
-Item 3 *setzt* nach BEW-8.2. Am meisten Code kostet Item 3: Anhalten auf der Strecke vor der
-*Nahkampfreichweite*.
+Reihenfolge 1 bis 4: Arbiter startet seit der neuen *Ausgangslage* nicht; Item 1 behebt das.
+Item 2 vor 3: BEW-2.8 *setzt* nach BEW-8.2. Item 3 vor 4: Ein Boy als *Ebene* (BEW-7) zeigt
+seinen *Grenzkreis* (BEW-11.1), der Klick auf einen Kreis hebt die *Auswahl* nicht auf
+(BEW-5.3, BEW-9.1). Item 4 kostet am meisten Code (*Einhüllende*, Anliegen 7004), darum
+zuletzt: Hängt es, bekommst du Schritte 1 bis 4, Item 4 rückt in Plan 10.
 
-Item 1 ist erst bereit, wenn der Anforderungsautor Anliegen 4881 umgesetzt hat; bis dahin ist
-der Plan nicht zur Freigabe bereit.
+Bereit zur Freigabe nach Anliegen 7001 (Mockup) und 7003; 7004 vor dem Vertrag zu Item 4.
 
 ## Abweichungen vom Zyklusziel
-- Dazu Item 1 (4882 F1 A), BEW-7 (dein Auftrag 6420) und BEW-10 (6300).
-- Kante und *Nahkampfreichweite* halten an statt zu sperren (dein Wunsch aus 6400); der Test
-  aus 6241 prüft dann BEW-6.2.
-- „Jede *Einheit* nur einmal“ ohne neues Kriterium: Korrigieren bleibt (7000 F1 A).
-- Grenzkreise ([BEW-11](../domaene/anforderungen/phasen/bewegung/grenzkreise.md), Mockup
-  [bew-11](../domaene/mockups/bew-11.html)) erst in Plan 10: höchstens drei Items, Regeln vor
-  Komfort. Willst du sie jetzt, schreib im Kommentar „Grenzkreise in Plan 9“; dann kommt
-  BEW-11 in Item 3, das um vier Kriterien wächst.
+- Dazu Item 1 (4882 F1 A), BEW-7 (6420), BEW-10 und AUF-30 (6300, 6996), die *Grenzkreise*:
+  Mit ihnen wählt ihr den *Vorrückwurf* (6998 F1), ohne sie kein *Vorrücken* (6999). Kosten:
+  vier statt drei Items, die Technikphase dauert länger; ohne Item 4 käme *Vorrücken* erst
+  mit Plan 10.
+- Kante und *Nahkampfreichweite* halten an statt zu sperren (6400); der Test aus 6241 prüft
+  dann BEW-6.2.
+- „Jede *Einheit* nur einmal“ ohne neues Kriterium: Korrigieren bleibt (7000 F4 A).
 
 Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
 
 ## Danach
-Grenzkreise, Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3),
-Anhalten übergehen (7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*,
-ruhige *Karte*, die Lücken aus Anliegen 6986. Ich schätze zwei Zyklen bis Etappe 2.
+Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3), Anhalten übergehen
+(7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*, ruhige *Karte*, die
+Lücken aus 6986. Ich schätze zwei Zyklen bis Etappe 2.
 
 ## Empfehlung
-Gib die drei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
+Gib die vier Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen; damit gelten die
+Begriffe aus 6998, 7000, 7005.
 
 ## Offene Anliegen
-- An dich, Vorschläge des Anforderungsautors: [6998](anliegen/6998-grenzkreiseVorrueckenUndBegriff.md)
-  (Ring beim Vorrücken, Begriff *Grenzkreis*), [7000](anliegen/7000-begriffeUndFragenZurBewegung.md)
-  (Begriffe *Vorrücken*, *Vorrückwurf*, Datenblatt, Profil, Modellart; drei Fragen). Bis zu
-  deiner Antwort gilt je die Empfehlung A.
-- An dich, sonst: Anliegen 5181,
-  [6995](anliegen/6995-frontendUndBackendImOrdner.md).
+- Von dir beantwortet, der Anforderungsautor prüft nach:
+  [6998](anliegen/6998-grenzkreiseVorrueckenUndBegriff.md),
+  [7000](anliegen/7000-begriffeUndFragenZurBewegung.md),
+  [7005](anliegen/7005-fraktionUndModellartenDerBoyz.md).
+- Deine Nachprüfung: [6400](anliegen/6400-anhaltenVorDerNahkampfreichweite.md),
+  [6410](anliegen/6410-grenzkreiseNahkampfUndBewegung.md),
+  [6420](anliegen/6420-einzelnesModellNachAuswahlDerEinheitZiehen.md).
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
@@ -82,15 +87,24 @@ Gib die drei Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen.
 - [ ] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
 - [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen
 - [ ] Planer: Item gemeinsamUebergehen gelöscht
-- [ ] Architekt: Vertrag zu Item vorrueckenUndAuswahl, bei beiden Hälften
-- [ ] Testautor: Tests zu Item vorrueckenUndAuswahl
-- [ ] Fachkritiker: Kritik an den Tests zu Item vorrueckenUndAuswahl
-- [ ] Architekt: Kritik an den Tests zu Item vorrueckenUndAuswahl
-- [ ] Implementierer: Tests zu Item vorrueckenUndAuswahl grün
-- [ ] Architekt: Kritik am Code zu Item vorrueckenUndAuswahl
-- [ ] Reviewer: Kritik am Code zu Item vorrueckenUndAuswahl
-- [ ] Fachkritiker: Item vorrueckenUndAuswahl abgenommen
-- [ ] Planer: Item vorrueckenUndAuswahl gelöscht
+- [ ] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
+- [ ] Testautor: Tests zu Item anhaltenUndAuswahl
+- [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUndAuswahl
+- [ ] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
+- [ ] Implementierer: Tests zu Item anhaltenUndAuswahl grün
+- [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
+- [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
+- [ ] Fachkritiker: Item anhaltenUndAuswahl abgenommen
+- [ ] Planer: Item anhaltenUndAuswahl gelöscht
+- [ ] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften
+- [ ] Testautor: Tests zu Item grenzkreise
+- [ ] Fachkritiker: Kritik an den Tests zu Item grenzkreise
+- [ ] Architekt: Kritik an den Tests zu Item grenzkreise
+- [ ] Implementierer: Tests zu Item grenzkreise grün
+- [ ] Architekt: Kritik am Code zu Item grenzkreise
+- [ ] Reviewer: Kritik am Code zu Item grenzkreise
+- [ ] Fachkritiker: Item grenzkreise abgenommen
+- [ ] Planer: Item grenzkreise gelöscht
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review

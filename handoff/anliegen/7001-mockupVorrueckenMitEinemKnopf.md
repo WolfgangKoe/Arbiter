@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Ux
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** [bew-5](../../domaene/mockups/bew-5.html) zeigt sechs Knöpfe „Vorrücken mit 1“ bis
@@ -22,4 +22,12 @@ mit *Einhüllender* nach deinem Auftrag 6410; 11.2 entfällt, neu 11.5.
 **Gegenvorschlag.** bew-5 nach BEW-5 und BEW-12 neu; die Kreise aus BEW-11 und BEW-13 mit deinem
 Mockup zu 6410.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: [bew-5](../../domaene/mockups/bew-5.html) (ein Knopf „Vorrücken“),
+[bew-13](../../domaene/mockups/bew-13.html) (sechs Kreise zum Anklicken),
+[bew-12](../../domaene/mockups/bew-12.html) („Vorrücken zurücknehmen“ nach dem Wurf),
+[bew-11](../../domaene/mockups/bew-11.html) (ein *Modell* *ausgewählt*, ein Kreis; die
+*Einheit* als Ganze siehe bew-5). Die Grenzen nutzen die Komponente `grenze` nach
+[7004](7004-komponenteGrenzbereich.md); `wählbar` und `grenzeZahl` liegen in
+[vorschlag.css](../../domaene/mockups/vorschlag.css). bew-13 zeigt ein *Modell*, weil die
+sechs Kreise der ganzen *Einheit* das Höchstmaß der Datei sprengten. Offen für den Stakeholder: Der
+Wurf steht als Ziffer am Kreis; ob das so gewünscht ist, sagt er beim Ansehen.

@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zum Zyklusziel aus [Review 8](../review.md) stehen neu

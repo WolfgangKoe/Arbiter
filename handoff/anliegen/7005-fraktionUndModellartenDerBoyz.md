@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Für Item 1 von [Plan 9](../plan.md) stehen die *Datenblätter* jetzt je
