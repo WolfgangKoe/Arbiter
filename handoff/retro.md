@@ -123,7 +123,7 @@ Neues (306).
 - [x] Stakeholder: Freigabe Retro 8
 - [x] Organisationsentwickler: P1
 - [x] Organisationsentwickler: P3
-- [ ] Regelumsetzer: P4
+- [x] Regelumsetzer: P4
 - [x] Organisationsentwickler: P5
 - [x] Regelumsetzer: P6
 - [x] Regelumsetzer: P7
