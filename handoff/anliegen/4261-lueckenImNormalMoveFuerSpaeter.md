@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 9
+Wartet auf: 7000
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path, *Sperren*, die nur der Regeltext
@@ -36,3 +36,8 @@ den Stakeholder mit ArbiterMap als Quelle.
 
 **Stellungnahme.**
 Kommentar: Bitte auf die Umbenennung von "Normal Move" achten!
+Stellungnahme: Beachtet: Die neuen Kriterien sagen *Normale Bewegung*, für Advance schlage ich
+*Vorrücken* vor ([Anliegen 7000](7000-begriffeUndFragenZurBewegung.md)). Zu den Punkten:
+1 löst BEW-4.1 (siehe 5520 Punkt 5). 2 entfällt nach 7000 F1 A. 3:
+[BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md). 6: 7000 F3.
+4 und 5 kommen mit dem Zurücksetzen; bis 7000 beantwortet ist, wartet das Anliegen.

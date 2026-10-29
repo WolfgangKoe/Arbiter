@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -21,4 +20,7 @@ Bezug: [Review](../review.md), Klickpfad Schritt 9 (Umweg über ein nicht *ausge
 
 **Gegenvorschlag.** Keiner.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [BEW-7](../../domaene/anforderungen/phasen/bewegung/auswahlInDerSchlacht.md):
+Nach der Auswahl der *Einheit* macht ein Klick auf eines ihrer *Modelle* es zur *Ebene*
+(7.1), dann zieht nur dieses (7.3); ein zweiter Klick wählt wieder die ganze *Einheit* (7.2).
+Der Umweg über eine nicht *ausgewählte* *Einheit* bleibt (AUF-20.4).

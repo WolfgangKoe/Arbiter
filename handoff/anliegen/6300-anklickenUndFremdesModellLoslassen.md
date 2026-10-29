@@ -5,7 +5,7 @@ Von: Testautor
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 9
+Wartet auf: 5181
 
 ## Runde 1
 **Befund.** Zwei Fälle, die der Code regelt, die aber kein Kriterium nennt; bis zur Antwort kein Test dazu (Mutation, Anliegen 6291).
@@ -16,4 +16,8 @@ Wartet auf: Domänenphase 9
 
 **Gegenvorschlag.** 1: AUF-20.6 ergänzen: Ein Klick auf ein nicht *gesetztes* *Modell* oder auf ein *Modell* einer *aufgestellten* *Einheit* ändert die *Auswahl* nicht. 2: BEW-1.5 ergänzen: Ein *Modell* des anderen *Spielers* loszulassen ändert nichts und nennt keinen *Grund*.
 
-**Stellungnahme.**
+**Stellungnahme.** 2 umgesetzt als eigenes Kriterium
+[BEW-10.1](../../domaene/anforderungen/phasen/bewegung/fremdeModelle.md) (BEW-1.5 ist
+getestet, eine Ergänzung wäre eine Neufassung). 1 hängt am Klick auf eine *aufgestellte*
+*Einheit*, den Anliegen [5181](5181-klickAufEineAufgestellteEinheit.md) F1 gerade klärt;
+danach schreibe ich das Kriterium zu AUF-20.

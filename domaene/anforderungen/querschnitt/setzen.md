@@ -1,5 +1,6 @@
 ### QUE-1 · Setzen
 
+Etappe: 2
 Zweck: Wo immer ein *Modell* aufs *Spielfeld* kommt, *setzen* die *Spieler* es an eine *Stelle*; keine *Base* steht in einer anderen, keine in *Nahkampfreichweite* eines Gegners (Anliegen 09 F12 A, 105 F1 A, git). Was eine Phase sonst sperrt, steht bei ihr, für die *Aufstellung* in [AUF-3](../phasen/aufstellen/sperrenBeimSetzen.md) und [AUF-7](../phasen/aufstellen/einheitInAufstellung.md).
 Am Bildschirm: in der *Aufstellung* ziehen ([AUF-8](../phasen/aufstellen/ziehen.md)).
 

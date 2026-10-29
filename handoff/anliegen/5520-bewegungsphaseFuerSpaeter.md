@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 9
+Wartet auf: 7000
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path). Schritt 3 nach
@@ -43,3 +43,7 @@ mit „Anliegen 5180 F5“ statt `:710` für das Korrigieren; 4 „als Annahme�
 Folge“ mit `core_rules.txt:710` und „korrigiert jede nach Belieben“ mit Anliegen 5180 F5;
 4 im [Glossar](../../domaene/glossar.md) (siehe Anliegen 5560).
 1, 2 und 5 bearbeite ich in Domänenphase 9; bis dahin wartet das Anliegen.
+Domänenphase 9: 1, F3 B in [BEW-7](../../domaene/anforderungen/phasen/bewegung/auswahlInDerSchlacht.md).
+1, F1 (Markierung) und 2 (welche *Einheit* ohne *Kohärenz*) frage ich in
+[Anliegen 7000](7000-begriffeUndFragenZurBewegung.md) F3. 5: ja, BEW-4.1 sperrt auch nach dem
+Wechsel zur nächsten *Einheit*; ‚schon bewegt‘ entfällt nach 7000 F1 A.

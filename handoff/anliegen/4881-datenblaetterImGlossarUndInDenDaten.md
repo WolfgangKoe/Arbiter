@@ -5,7 +5,7 @@ Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 9
+Wartet auf: 4882
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 4800 F2 B gewählt: je
@@ -38,4 +38,7 @@ Etappe 2) ins alte Format, wird jede einzeln umgebaut, samt `katalog/` und seine
 
 Wann: Domänenphase 9, als Teil des Items aus [4882](4882-itemKatalogwerteGliedern.md).
 
-**Stellungnahme.**
+**Stellungnahme.** 1: Die Begriffe stehen zur Freigabe in
+[Anliegen 7000](7000-begriffeUndFragenZurBewegung.md). 2 bis 4 schreibe ich, sobald der
+Planer in 4882 das Item einplant; die Modellarten der Boyz (Ork Boy, Boss Nob,
+`Arbiter-old/data/wh40k_9e/orks/units.yaml:542`) belege ich dann je Wert.

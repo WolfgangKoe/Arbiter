@@ -54,6 +54,8 @@ Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht 
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).
 Stelle | – | Stelle | Ort, an den ein *Modell* *gesetzt* werden soll oder an dem es *gesetzt* ist: der Mittelpunkt seiner runden *Base*. Auch außerhalb des *Spielfelds*; ob dort *gesetzt* werden darf, sagen die Kriterien.
 Tiefe | depth | Tiefe | Entfernung der Grenze einer *Aufstellungszone* von ihrer *Spielfeldkante*, in *Zoll* (`matched_play.txt:564`).
+Vorrücken | Advance | vorrücken | Bewegung einer *Einheit* in der *Bewegungsphase* statt der *Normalen Bewegung*, je *Modell* eine *Distanz* bis zu seiner *Bewegungsweite* plus *Vorrückwurf*; die *Einheit* ist danach bis zum Ende der *Bewegungsphase* vorgerückt (`core_rules.txt:754`, `:764`).
+Vorrückwurf | Advance roll | vorrückwurf | Ein W6, den die *Spieler* für eine *Einheit* am Tisch würfeln, wenn sie *vorrückt*; Arbiter nimmt das Ergebnis entgegen, je *Einheit* einen (`core_rules.txt:754`, `domaene/ziel.md`).
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Anliegen 09 F12 A, git).

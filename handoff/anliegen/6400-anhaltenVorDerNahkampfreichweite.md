@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -34,4 +33,7 @@ Arbiter die gezogenen *Modelle* (*Modell* oder ganze *Einheit* als *Ebene*) dort
 gerade noch außerhalb sind, statt zu sperren; was Regeltext und Vorbilder offenlassen, als
 Frage an den Stakeholder.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [BEW-6](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md):
+6.2 hält vor der *Nahkampfreichweite* an statt QUE-1.3, 6.1 ebenso an der *Spielfeldkante*
+(Vorbild ArbiterMap). Ob ein Anhalten zu übergehen ist: [Anliegen 7000](7000-begriffeUndFragenZurBewegung.md) F2.
+Damit sperrt QUE-1.3 in der *Bewegungsphase* nicht mehr; der Test aus 6241 Punkt 1 prüft dann BEW-6.2.

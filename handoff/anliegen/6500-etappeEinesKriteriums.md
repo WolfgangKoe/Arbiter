@@ -4,8 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** P7 der [Retro 8](../retro.md) zählt „Etappe 2: x von y Kriterien belegt“; wie ein
@@ -31,4 +30,8 @@ nicht mit; die Zahl, an der der Stakeholder den Fortschritt der Etappe abliest, 
 
 Annahme: P7 zählt nach 1 und 2, bis du antwortest.
 
-**Stellungnahme.**
+**Stellungnahme.** 1 und 2 ja: `Etappe: <n>` unter der Überschrift, `(Etappe <n>)` am
+Satzende nur bei Abweichung, das Kriterium geht vor; ohne beides zählt es nicht zur laufenden
+Etappe. 3: [QUE-1](../../domaene/anforderungen/querschnitt/setzen.md) trägt jetzt
+`Etappe: 2`, die neuen BEW-5 bis BEW-10 ebenso. Weitere Anforderungen bekommen die Zeile,
+wenn der Planer sie einer Etappe zuordnet.

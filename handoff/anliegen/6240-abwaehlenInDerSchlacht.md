@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücke abseits des Happy Path; Schritt 3 aus Plan 8 läuft am
@@ -27,4 +26,6 @@ auf (`ArbiterMap/frontend/static/js/model_selection.js:363`).
 Kriterium zum Abwählen in der *Schlacht*, als Frage an den Stakeholder mit ArbiterMap als
 Quelle (Klick auf eine Leerfläche der *Karte*).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [BEW-9](../../domaene/anforderungen/phasen/bewegung/abwaehlen.md),
+ohne Frage: Der Stakeholder hat es mit dem Zyklusziel aus Review 8 freigegeben. *Ebene* in
+der *Schlacht*: [BEW-7](../../domaene/anforderungen/phasen/bewegung/auswahlInDerSchlacht.md).
