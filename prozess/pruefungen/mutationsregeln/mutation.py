@@ -117,6 +117,10 @@ class Vorgaben(NamedTuple):
     gleichwertige: frozenset[Gleichwertig] = frozenset()
 
 
+def modulZeile(modul: str, mutanten: int, überlebende: int) -> str:
+    return f"{modul}: {mutanten} Mutanten, {überlebende} Überlebende"
+
+
 def mutationenPrüfen(
     wurzel: Path,
     module: list[str],
@@ -137,6 +141,7 @@ def mutationenPrüfen(
         assert messung.grün, "Die Tests sind ohne Mutant rot; so zeigt keiner eine Lücke"
         wartezeit = max(sekundenMindestens, wartefaktor * (time.monotonic() - beginn))
         for modul in module:
+            gesamtVorher, überlebendeVorher = gesamt, len(überlebende)
             original = (wurzel / modul).read_text(encoding="utf-8")
             mutanten, begründet = mutantenWählen(modul, original, zeilen, gleichwertige)
             ohneWirkung += begründet
@@ -150,6 +155,11 @@ def mutationenPrüfen(
                     (kopie / modul).write_text(original, encoding="utf-8")
                 if ergebnisse[schlüssel]:
                     überlebende.append(Überlebender(modul, mutant.zeile, mutant.beschreibung))
+            merken(ablage, stand, ergebnisse)
+            print(
+                modulZeile(modul, gesamt - gesamtVorher, len(überlebende) - überlebendeVorher),
+                flush=True,
+            )
     merken(ablage, stand, ergebnisse)
     return Ergebnis(gesamt, überlebende, ohneWirkung)
 

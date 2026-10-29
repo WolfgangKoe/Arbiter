@@ -1,6 +1,7 @@
 import pytest
 
-from mutationsregeln.ergebnisse import Gleichwertig
+from mutationsregeln import mutation
+from mutationsregeln.ergebnisse import Gleichwertig, gemerkt, standKennung
 from mutationsregeln.mutation import (
     Ergebnis,
     Vorgaben,
@@ -181,6 +182,48 @@ def testEinModulMitBereichBekommtNurDessenZeilen(tmp_path):
     assert ziel(tmp_path, "technik/probe.py") == ("technik/probe.py", {1, 2, 3})
     assert ziel(tmp_path, "technik/probe.py:2-3") == ("technik/probe.py", {2, 3})
     assert ziel(tmp_path, "technik/probe.py:2") == ("technik/probe.py", {2})
+
+
+andereModul = "technik/arbiter/domaene/andere.py"
+
+
+def abbruchBeiAnderem(monkeypatch):
+    echt = mutation.mutantenWählen
+
+    def abbrechenBeiAnderem(name, *rest):
+        if name == andereModul:
+            raise KeyboardInterrupt
+        return echt(name, *rest)
+
+    monkeypatch.setattr(mutation, "mutantenWählen", abbrechenBeiAnderem)
+
+
+def testNachDemErstenModulStehtSeineZeileUndSeinMerkzettel(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("MUTATIONSLOG", str(tmp_path / "protokoll.txt"))
+    projekt = projektMitZweiModulen(tmp_path / "projekt")
+    ablage = tmp_path / "merkzettel.json"
+    vorgaben = Vorgaben(ablage=ablage)
+    abbruchBeiAnderem(monkeypatch)
+    with pytest.raises(KeyboardInterrupt):
+        mutationenPrüfen(projekt, [modul, andereModul], testpfade, vorgaben)
+    assert capsys.readouterr().out.splitlines() == [f"{modul}: 2 Mutanten, 0 Überlebende"]
+    merkzettel = gemerkt(ablage, standKennung(projekt))
+    assert merkzettel
+    assert all(schlüssel.startswith(modul) for schlüssel in merkzettel)
+
+
+def testEinNachDemErstenModulAbgebrochenerLaufPrüftEsBeimNächstenNichtNeu(tmp_path, monkeypatch):
+    protokoll = tmp_path / "protokoll.txt"
+    monkeypatch.setenv("MUTATIONSLOG", str(protokoll))
+    projekt = projektMitZweiModulen(tmp_path / "projekt")
+    vorgaben = Vorgaben(ablage=tmp_path / "merkzettel.json")
+    with monkeypatch.context() as abbruch:
+        abbruchBeiAnderem(abbruch)
+        with pytest.raises(KeyboardInterrupt):
+            mutationenPrüfen(projekt, [modul, andereModul], testpfade, vorgaben)
+    nachAbbruch = zähle(protokoll, "probe")
+    mutationenPrüfen(projekt, [modul, andereModul], testpfade, vorgaben)
+    assert zähle(protokoll, "probe") == nachAbbruch + 1
 
 
 def testDerVolleLaufUmfasstAuchDasWeb(tmp_path):
