@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Ux
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (die [DoD](../../prozess/ablauf/dod.md) verlangt bei einer Oberfläche

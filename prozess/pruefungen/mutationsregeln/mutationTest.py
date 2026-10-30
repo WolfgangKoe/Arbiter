@@ -226,6 +226,31 @@ def testEinNachDemErstenModulAbgebrochenerLaufPrüftEsBeimNächstenNichtNeu(tmp_
     assert zähle(protokoll, "probe") == nachAbbruch + 1
 
 
+langsamerTest = (
+    "import os\nimport time\n\nfrom arbiter.domaene.probe import kleiner\n\n\n"
+    "def testKleinerAlsDrei():\n"
+    "    with open(os.environ['MUTATIONSLOG'], 'a') as datei:\n"
+    "        datei.write(os.getcwd() + '\\n')\n"
+    "    time.sleep(0.5)\n"
+    "    assert kleiner(1, 3)\n    assert not kleiner(2, 2)\n"
+)
+
+
+def benutzteKopien(tmp_path, monkeypatch, kerne):
+    protokoll = tmp_path / "protokoll.txt"
+    monkeypatch.setenv("MUTATIONSLOG", str(protokoll))
+    projekt = projektMit(tmp_path / "projekt", langsamerTest)
+    mutationenPrüfen(projekt, [modul], testpfade, Vorgaben(kerne=kerne))
+    return set(protokoll.read_text(encoding="utf-8").splitlines())
+
+
+def testMutantenLaufenParallelJeKernInEigenerKopie(tmp_path, monkeypatch):
+    zweiKerne = 2
+    einKern = 1
+    assert len(benutzteKopien(tmp_path / "zwei", monkeypatch, kerne=zweiKerne)) == zweiKerne
+    assert len(benutzteKopien(tmp_path / "einer", monkeypatch, kerne=einKern)) == einKern
+
+
 def testDerVolleLaufUmfasstAuchDasWeb(tmp_path):
     web = tmp_path / "technik/arbiter/web"
     web.mkdir(parents=True)

@@ -1,15 +1,17 @@
 import os
+import queue
 import shutil
 import subprocess
 import sys
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import NamedTuple
 
 from formregeln.glossar import domaeneOrdner
 from gemeinsam.pfade import projektordner
-from mutationsregeln.abdeckungKontext import auswahl, messen
+from mutationsregeln.abdeckungKontext import Messung, auswahl, messen
 from mutationsregeln.ergebnisse import (
     Gleichwertig,
     gemerkt,
@@ -26,6 +28,7 @@ schwelle = 95
 sekundenMindestens = 10
 wartefaktor = 3
 volleProzent = 100
+kerneImRechner = os.cpu_count() or 1
 vollerLauf = "--voll"
 ohneBytecode = {"PYTHONDONTWRITEBYTECODE": "1"}
 
@@ -115,10 +118,29 @@ class Vorgaben(NamedTuple):
     zeilen: dict[str, set[int]] | None = None
     ablage: Path | None = None
     gleichwertige: frozenset[Gleichwertig] = frozenset()
+    kerne: int = kerneImRechner
 
 
 def modulZeile(modul: str, mutanten: int, überlebende: int) -> str:
     return f"{modul}: {mutanten} Mutanten, {überlebende} Überlebende"
+
+
+class Prüfstand(NamedTuple):
+    freieKopien: "queue.Queue[Path]"
+    messung: Messung
+    pfade: tuple[str, ...]
+    wartezeit: float
+
+
+def mutantPrüfen(stand: Prüfstand, modul: str, original: str, mutant: Mutant) -> bool:
+    kopie = stand.freieKopien.get()
+    try:
+        (kopie / modul).write_text(mutant.quelle, encoding="utf-8")
+        ausgewählt = auswahl(stand.messung.karten.get(modul), mutant.zeile)
+        return überlebt(kopie, ausgewählt, stand.pfade, stand.wartezeit)
+    finally:
+        (kopie / modul).write_text(original, encoding="utf-8")
+        stand.freieKopien.put(kopie)
 
 
 def mutationenPrüfen(
@@ -127,39 +149,47 @@ def mutationenPrüfen(
     pfade: tuple[str, ...] = testpfade,
     vorgaben: Vorgaben = Vorgaben(),  # noqa: B008
 ) -> Ergebnis:
-    zeilen, ablage, gleichwertige = vorgaben
+    zeilen, ablage, gleichwertige, kerne = vorgaben
     überlebende: list[Überlebender] = []
     gesamt = 0
     ohneWirkung = 0
     stand = standKennung(wurzel)
     ergebnisse = dict(gemerkt(ablage, stand))
     with tempfile.TemporaryDirectory() as ordner:
-        kopie = Path(ordner)
-        kopieAnlegen(wurzel, kopie)
+        kopien = [Path(ordner) / f"kern{nummer}" for nummer in range(kerne)]
+        for kopie in kopien:
+            kopieAnlegen(wurzel, kopie)
         beginn = time.monotonic()
-        messung = messen(kopie, pfade, 3600)
+        messung = messen(kopien[0], pfade, 3600)
         assert messung.grün, "Die Tests sind ohne Mutant rot; so zeigt keiner eine Lücke"
         wartezeit = max(sekundenMindestens, wartefaktor * (time.monotonic() - beginn))
-        for modul in module:
-            gesamtVorher, überlebendeVorher = gesamt, len(überlebende)
-            original = (wurzel / modul).read_text(encoding="utf-8")
-            mutanten, begründet = mutantenWählen(modul, original, zeilen, gleichwertige)
-            ohneWirkung += begründet
-            for nummer, mutant in mutanten:
-                gesamt += 1
-                schlüssel = f"{modul}#{nummer}"
-                if schlüssel not in ergebnisse:
-                    (kopie / modul).write_text(mutant.quelle, encoding="utf-8")
-                    ausgewählt = auswahl(messung.karten.get(modul), mutant.zeile)
-                    ergebnisse[schlüssel] = überlebt(kopie, ausgewählt, pfade, wartezeit)
-                    (kopie / modul).write_text(original, encoding="utf-8")
-                if ergebnisse[schlüssel]:
-                    überlebende.append(Überlebender(modul, mutant.zeile, mutant.beschreibung))
-            merken(ablage, stand, ergebnisse)
-            print(
-                modulZeile(modul, gesamt - gesamtVorher, len(überlebende) - überlebendeVorher),
-                flush=True,
-            )
+        freieKopien: queue.Queue[Path] = queue.Queue()
+        for kopie in kopien:
+            freieKopien.put(kopie)
+        prüfstand = Prüfstand(freieKopien, messung, pfade, wartezeit)
+        with ThreadPoolExecutor(max_workers=kerne) as kernpool:
+            for modul in module:
+                gesamtVorher, überlebendeVorher = gesamt, len(überlebende)
+                original = (wurzel / modul).read_text(encoding="utf-8")
+                mutanten, begründet = mutantenWählen(modul, original, zeilen, gleichwertige)
+                ohneWirkung += begründet
+                offene = {
+                    nummer: kernpool.submit(mutantPrüfen, prüfstand, modul, original, mutant)
+                    for nummer, mutant in mutanten
+                    if f"{modul}#{nummer}" not in ergebnisse
+                }
+                for nummer, mutant in mutanten:
+                    gesamt += 1
+                    schlüssel = f"{modul}#{nummer}"
+                    if nummer in offene:
+                        ergebnisse[schlüssel] = offene[nummer].result()
+                    if ergebnisse[schlüssel]:
+                        überlebende.append(Überlebender(modul, mutant.zeile, mutant.beschreibung))
+                merken(ablage, stand, ergebnisse)
+                print(
+                    modulZeile(modul, gesamt - gesamtVorher, len(überlebende) - überlebendeVorher),
+                    flush=True,
+                )
     merken(ablage, stand, ergebnisse)
     return Ergebnis(gesamt, überlebende, ohneWirkung)
 

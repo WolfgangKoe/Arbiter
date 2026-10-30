@@ -42,8 +42,8 @@ Ziehst du den Warboss nach links zur Kante, springt er zurück: Die Boyz stehen 
 3. **Erfüllt.** Alle vier Items gelöscht; die Kriterien beschreiben das Gebaute.
 4. **Erfüllt.** Der Fachkritiker hat alle vier Items abgenommen.
 
-Oberfläche: **Nicht erfüllt.** Bildschirmtests grün, aber acht Mockups des Gebauten liegen
-noch da (Anliegen 8760, an UX, acht Dateien löschen).
+Oberfläche: **Erfüllt.** Bildschirmtests grün; die acht Mockups des Gebauten sind gelöscht,
+unter `domaene/mockups/` liegen nur noch die der offenen Items (Anliegen 8760 erledigt).
 Mutation: offen. Mein Lauf brach nach 50 Minuten am Zeitlimit ab, ohne Ergebnis; die fertigen
 Module stehen im Merkzettel, ein neuer Lauf setzt dort fort. Das Ergebnis trägt der
 Koordinator nach.
@@ -61,9 +61,49 @@ hält: Der Klickpfad zeigt, was Plan 9 versprochen hat, Schritte 1 bis 5 des Hap
 Die übrigen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
 
 ## Rundgang Prüfcode
-Seit „Freigabe Review 8“ 95 Dateien in [prozess/pruefungen](../prozess/pruefungen),
-`.claude/settings.json` und `pyproject.toml` geändert, rund 1.240 Zeilen neu, 690 fort. Den
-Rundgang durch sie trage ich in einem eigenen Lauf nach; bis dahin ist dieser Abschnitt offen.
+Seit „Freigabe Review 8“ 95 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
+[.claude/settings.json](../.claude/settings.json), 1.243 Zeilen neu, 694 fort. Gut 60 Dateien
+haben nur ihre Docstrings verloren (P4, Anliegen 6430); daran ist nichts zu prüfen. Neu oder
+geändert:
+- Länge der Anliegen ([anliegenLaenge.py](../prozess/pruefungen/anliegenregeln/anliegenLaenge.py)):
+  rot über 4.000 Zeichen je Runde, ein Hinweis direkt nach dem Schreiben (neuer Hook nach
+  Write und Edit in `settings.json`).
+- Docstrings nur als Kopf einer Akzeptanztestdatei ([kommentare.py](../prozess/pruefungen/formregeln/kommentare.py)).
+- Reiter „Architektur“ im Dashboard, aufklappbar bis zu den Dateien
+  ([dashboardArchitektur.py](../prozess/pruefungen/rollenregeln/dashboardArchitektur.py),
+  [architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py),
+  [architekturMessung.py](../prozess/pruefungen/rollenregeln/architekturMessung.py)).
+- Stand nennt die belegten Kriterien der Etappe ([produktstand.py](../prozess/pruefungen/standregeln/produktstand.py),
+  [kriterienEtappe.py](../prozess/pruefungen/kriterienregeln/kriterienEtappe.py)) und die Rolle
+  des Prozess-Items ([phasenfolge.py](../prozess/pruefungen/standregeln/phasenfolge.py)).
+- Fortschritt ohne Testzeilen für ein Item ohne Kriterium ([fortschritt.py](../prozess/pruefungen/standregeln/fortschritt.py)).
+- „Wartet auf“ getrennt nach Nummer, Phase, Zyklus ([anliegenKopf.py](../prozess/pruefungen/lesen/anliegenKopf.py)).
+- Mutationslauf schreibt und merkt sich jedes fertige Modul ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py)).
+- Schreibgrenze erkennt das Ziel von `cp -t` ([bashSchreiben.py](../prozess/pruefungen/rollenregeln/bashSchreiben.py)).
+
+Probleme, keins hält auf:
+1. Der Hook „Stand“ vor jeder Rolle braucht jetzt 5,3 von 10 Sekunden: `belegungAlsText`
+   ([produktstand.py](../prozess/pruefungen/standregeln/produktstand.py), Zeile 34) zählt die
+   Kriterien zweimal, für alle und für die Etappe, und sucht dabei jedes Mal alle Tests; das
+   Dashboard tut es nach jedem Lauf noch einmal. Wächst das Repo, fällt der Stand aus.
+   Empfehlung: einmal zählen und je Kriterium die Etappe mitnehmen.
+2. Die Liste der Kästen steht dreimal: in [erlaubteImporte.py](../prozess/pruefungen/formregeln/erlaubteImporte.py)
+   und als `zeilen` und `titel` in [dashboardArchitektur.py](../prozess/pruefungen/rollenregeln/dashboardArchitektur.py)
+   (Zeilen 19 und 20). Ein neuer Kasten fehlt auf dem Reiter ohne Meldung. Dazu baut
+   `kastenDesPfads` ([architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py),
+   Zeile 36) `kastenDesModuls` nach. Empfehlung: Reihen und Titel aus einer Tabelle neben
+   `kastenNamen`.
+3. Doppelte Arbeit im Fortschritt: `hatKriterium` und `itemKriterienGetestet`
+   ([fortschritt.py](../prozess/pruefungen/standregeln/fortschritt.py), Zeilen 59 und 66) suchen
+   je Item zweimal dieselben Kriterien; `itemRollen` liest die Retro ein zweites Mal
+   ([phasenfolge.py](../prozess/pruefungen/standregeln/phasenfolge.py), Zeile 47).
+4. Klein: `längeBefund` gibt „rot“ oder „hinweis“ als Wort zurück, das der Hook nicht nutzt
+   ([anliegenLaenge.py](../prozess/pruefungen/anliegenregeln/anliegenLaenge.py), Zeile 22);
+   eine Bindung per Standardargument, gegen Es 7, steht weiter in
+   [erledigteLoeschen.py](../prozess/pruefungen/anliegenregeln/erledigteLoeschen.py), Zeile 29.
+
+Empfehlung: 1 als Anliegen an den Regelumsetzer, ein Zug von wenigen Zeilen; 2 bis 4 beim
+nächsten Eingriff in die Dateien, sonst bleiben sie liegen, ohne zu stören.
 
 ## Nächstes Vorgehen
 - **Produktziel:** Etappe 1 von 10 ist erreicht, Etappe 2 läuft. Am meisten fehlt die Partie
