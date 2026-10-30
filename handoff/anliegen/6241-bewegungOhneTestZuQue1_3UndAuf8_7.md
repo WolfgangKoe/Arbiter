@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path; alle Akzeptanztests grün).
@@ -27,4 +26,21 @@ an ein *Modell* des anderen *Spielers* zieht: *Sperre* ‚Nahkampfreichweite‘,
 2: `testAuf8_7…` zusätzlich mit `schlachtInDerBewegungsphase` (Griff abseits der Mitte, Maus
 und Finger).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, Punkt 1 nach Plan 9 statt nach dem Gegenvorschlag.
+1. Plan 9 („Abweichungen“, Anliegen 6400): In der *Bewegungsphase* hält Arbiter vor der
+   *Nahkampfreichweite* an, statt nach QUE-1.3 zu sperren (BEW-6.2 „statt QUE-1.3“). Ein Test
+   auf die *Sperre* ‚Nahkampfreichweite‘ widerspräche dem; darum
+   `testBew6_2ZiehtEinModellInDieNahkampfreichweiteDesAnderenSpielersHältArbiterEsDavorAn` in
+   [anhaltenVorDerGrenzeTest.py](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py):
+   Der Warboss zieht auf einen *Abstand* von ½″ zum Overlord; er steht danach auf der geraden
+   Strecke, über 1″ und höchstens 1/100″ mehr vor dessen *Base*, ohne *Sperre*. Vorgeschichte:
+   Weil die *Distanz* ab Beginn der *Bewegungsphase* zählt, ziehen beide *Spieler* Zug um Zug
+   aufeinander zu (`aufeinanderZuZiehen` in
+   [schlacht.py](../../technik/tests/akzeptanz/schlacht.py)), bis 3″ *Abstand* bleiben. Rot,
+   weil Arbiter heute ‚Nahkampfreichweite‘ sperrt (an einer Kopie mit der *Ausgangslage* vor
+   dfe9a79 erprobt); im Arbeitsstand bricht er schon beim Laden der *Ausgangslage* ab (Item
+   katalogwerteGliedern). BEW-6.1, 6.3, 6.4 folgen mit Item anhaltenUndAuswahl.
+2. `testAuf8_7InDerBewegungsphaseFolgtEinModellDemWegDesZeigersUndNichtDemPunktUnterDemZeiger`
+   in [ziehenTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ziehenTest.py), mit
+   `schlachtInDerBewegungsphase`, Griff abseits der Mitte, Maus und Finger; an derselben Kopie
+   grün, das Verhalten besteht schon.

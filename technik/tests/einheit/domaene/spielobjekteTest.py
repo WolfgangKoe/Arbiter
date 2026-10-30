@@ -3,11 +3,11 @@ from fractions import Fraction
 import pytest
 
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Stelle
-from tests.einheit.modelle import testmodell
+from tests.einheit.modelle import modellMit
 
 
 def testDieArmeeNenntDieEinheitEinesModells():
-    modell = testmodell(Base(durchmesser=32))
+    modell = modellMit(Base(durchmesser=32))
     einheit = Einheit(name="Einheit", modelle=(modell,))
     armee = Armee(einheiten=(Einheit(name="Andere", modelle=()), einheit))
 
@@ -17,7 +17,7 @@ def testDieArmeeNenntDieEinheitEinesModells():
 def testDieArmeeKenntEinFremdesModellNicht():
     armee = Armee(einheiten=(Einheit(name="Einheit", modelle=()),))
 
-    assert armee.einheitVon(testmodell(Base(durchmesser=32))) is None
+    assert armee.einheitVon(modellMit(Base(durchmesser=32))) is None
 
 
 @pytest.mark.parametrize("zahl", [20, 20.0])

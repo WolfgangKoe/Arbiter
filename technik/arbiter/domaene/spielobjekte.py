@@ -28,6 +28,7 @@ class Spielfeld:
 
 @dataclass(frozen=True, eq=False)
 class Modell:
+    modellart: str
     base: Base
     bewegungsweite: Fraction
 

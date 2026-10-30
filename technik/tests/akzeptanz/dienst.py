@@ -6,6 +6,7 @@ from fractions import Fraction
 from pathlib import Path
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from arbiter.web.anwendung import anwendungFür
 
@@ -56,6 +57,36 @@ def stelleBeimLoslassenDesVertrags() -> dict:
 def schlachtDesVertrags() -> dict:
     """Das Beispiel der Schlacht aus `schlacht.json`, nicht kopiert."""
     return _beispielDesVertrags("schlacht.json")
+
+
+def übergehbarDesVertrags() -> dict:
+    return _beispielDesVertrags("uebergehbar.json")
+
+
+def protokollDesVertrags() -> dict:
+    return _beispielDesVertrags("protokoll.json")
+
+
+def gründeAlsListe(gründe) -> list[str]:
+    return [grund.value for grund in Grund if grund in gründe]
+
+
+def einheitDesModells(aufstellung: Aufstellung, modell: Modell) -> Einheit:
+    ausgangslage = aufstellung.ausgangslage
+    return next(
+        einheit
+        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+        for einheit in spieler.armee.einheiten
+        if modell in einheit.modelle
+    )
+
+
+def modellLoslassenUndÜbergehen(
+    dienst, aufstellung: Aufstellung, modell: Modell, stelle: Stelle, gründe
+):
+    pfad = pfadDesModells(aufstellung, einheitDesModells(aufstellung, modell), modell)
+    körper = {**körperDerStelle(stelle), "übergehen": gründeAlsListe(gründe)}
+    return dienst.put(f"{pfad}/stelle", json=körper)
 
 
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
@@ -121,6 +152,14 @@ def stellenDerAbfrage(
 
 def karteAnklicken(dienst, stelle: Stelle):
     return dienst.put("/api/karteAnklicken", json=körperDerStelle(stelle))
+
+
+def vorrücken(dienst):
+    return dienst.put("/api/vorrücken")
+
+
+def vorrückenZurücknehmen(dienst):
+    return dienst.put("/api/vorrückenZurücknehmen")
 
 
 def aufstellenDerEinheitBeenden(dienst):

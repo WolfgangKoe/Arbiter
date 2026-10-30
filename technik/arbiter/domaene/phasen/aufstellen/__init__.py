@@ -7,22 +7,16 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
     Ausgangslage,
     Grenzen,
 )
+from arbiter.domaene.phasen import ebeneDesZugs, einheitVon, verschobeneStellen
 from arbiter.domaene.phasen.aufstellen.anhaltenAnEinerBase import angehalten
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
-from arbiter.domaene.phasen.aufstellen.beenden import gesetzteModelle, gründeGegenDasBeenden
+from arbiter.domaene.phasen.aufstellen.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.aufstellen.einheitInAufstellung import prüfenDassWählbar
-from arbiter.domaene.phasen.aufstellen.einheitVerschieben import (
-    hineingerückt,
-    verschobeneStellen,
-)
-from arbiter.domaene.phasen.aufstellen.reihenfolge import (
-    einheitVon,
-    nächsterAnDerReihe,
-    zonenVerteilen,
-)
+from arbiter.domaene.phasen.aufstellen.einheitVerschieben import hineingerückt
+from arbiter.domaene.phasen.aufstellen.reihenfolge import nächsterAnDerReihe, zonenVerteilen
 from arbiter.domaene.phasen.aufstellen.setzenPerKlick import formationDerEinheit
 from arbiter.domaene.phasen.aufstellen.sperrenBeimSetzen import gründeGegenDieStelle
-from arbiter.domaene.querschnitt.kohaerenz import inKohärenz
+from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
@@ -68,7 +62,7 @@ class Aufstellung:
         return self._stellen.get(modell)
 
     def inKohärenz(self, einheit: Einheit) -> bool:
-        return inKohärenz(gesetzteModelle(einheit, self._stellen))
+        return einheitInKohärenz(einheit, self._stellen)
 
     def aufgestellt(self, einheit: Einheit) -> bool:
         return einheit in self._aufgestellt
@@ -185,9 +179,10 @@ class Aufstellung:
     def _verschobeneStellen(
         self, einheit: Einheit, modell: Modell, stelle: Stelle
     ) -> dict[Modell, Stelle]:
-        if not self.ganzeEinheitIstEbene(einheit):
-            return {modell: stelle}
-        return verschobeneStellen(gesetzteModelle(einheit, self._stellen), modell, stelle)
+        ebene = ebeneDesZugs(
+            einheit, modell, self._stellen, ganzeEinheitIstEbene=self.ganzeEinheitIstEbene(einheit)
+        )
+        return verschobeneStellen(ebene, modell, stelle)
 
     def _loslassen(self, einheit: Einheit, neue: Mapping[Modell, Stelle]) -> None:
         anderswo = {modell: ort for modell, ort in self._stellen.items() if modell not in neue}

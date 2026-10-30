@@ -2,20 +2,15 @@
 
 from collections.abc import Callable, Mapping
 
-from arbiter.domaene.querschnitt.kohaerenz import inKohärenz
+from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
 Prüfung = Callable[[Einheit, Mapping[Modell, Stelle]], bool]
 
 
-def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
-    """Die Stellen der gesetzten Modelle der Einheit."""
-    return {modell: stellen[modell] for modell in einheit.modelle if modell in stellen}
-
-
 def _ohneKohärenz(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> bool:
-    return not inKohärenz(gesetzteModelle(einheit, stellen))
+    return not einheitInKohärenz(einheit, stellen)
 
 
 _prüfungen: dict[Grund, Prüfung] = {

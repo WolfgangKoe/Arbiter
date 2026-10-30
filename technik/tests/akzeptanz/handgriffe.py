@@ -25,6 +25,7 @@ abstandDerReihen = Fraction(5, 2)
 tiefeDerErstenReihe = Fraction(3, 2)
 durchmesserDerTestmodelle = 32
 bewegungsweiteDerTestmodelle = Fraction(5)
+modellartDerTestmodelle = "Testmodell"
 anzahlGesetzterModelle = 3
 
 gerade = (1, 0)
@@ -38,6 +39,7 @@ def spielerMit(*modellzahlen: int) -> Spieler:
             name=f"Einheit {nummer}",
             modelle=tuple(
                 Modell(
+                    modellart=modellartDerTestmodelle,
                     base=Base(durchmesser=durchmesserDerTestmodelle),
                     bewegungsweite=bewegungsweiteDerTestmodelle,
                 )
@@ -98,10 +100,14 @@ def nachDerWahlDerAufstellungszone(aufstellung: Aufstellung, gewinner: Spieler) 
     aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
 
 
-def sperrgründe(handlung, *argumente) -> frozenset[Grund]:
+def sperreBei(handlung, *argumente, **benannte) -> Sperre:
     with pytest.raises(Sperre) as sperre:
-        handlung(*argumente)
-    return sperre.value.gründe
+        handlung(*argumente, **benannte)
+    return sperre.value
+
+
+def sperrgründe(handlung, *argumente, **benannte) -> frozenset[Grund]:
+    return sperreBei(handlung, *argumente, **benannte).gründe
 
 
 def durchmesserJeEinheit(spieler: Spieler) -> tuple[tuple[int, ...], ...]:
@@ -117,6 +123,7 @@ class Platz:
     def __init__(self, zone: Aufstellungszone) -> None:
         self._zone = zone
         testmodell = Modell(
+            modellart=modellartDerTestmodelle,
             base=Base(durchmesser=durchmesserDerTestmodelle),
             bewegungsweite=bewegungsweiteDerTestmodelle,
         )
@@ -244,8 +251,34 @@ def stellenAllerModelle(spielstand) -> dict[Modell, Stelle | None]:
     }
 
 
+def yamlAusDenDaten(*teileDesPfads: str):
+    pfad = Path(__file__).parents[3] / "domaene" / "daten" / Path(*teileDesPfads)
+    with pfad.open(encoding="utf-8") as datei:
+        return yaml.safe_load(datei)
+
+
+def modellartenImKatalog(eintrag: dict) -> dict:
+    """Die Modellarten des Datenblatts eines Eintrags der Ausgangslage, aus dem Katalog."""
+    datenblätter = yamlAusDenDaten("katalog", eintrag["fraktion"], "datenblaetter.yaml")
+    return datenblätter[eintrag["datenblatt"]]["modellarten"]
+
+
+def profileDerModelle(eintrag: dict) -> list[tuple[str, dict]]:
+    """Je Modell des Eintrags seine Modellart und ihr Profil aus dem Katalog."""
+    modellarten = modellartenImKatalog(eintrag)
+    return [
+        (modellart, modellarten[modellart])
+        for modellart, anzahl in eintrag["modelle"].items()
+        for _ in range(anzahl)
+    ]
+
+
+def eintragDerAusgangslage(datenblatt: str) -> dict:
+    armeen = yamlAusDenDaten("ausgangslage.yaml")["Armee"]
+    einträge = (eintrag for armee in armeen for eintrag in armee)
+    return next(eintrag for eintrag in einträge if eintrag["datenblatt"] == datenblatt)
+
+
 def reihenDerFormation(einheitenname: str) -> list[int]:
     """Die Modelle je Reihe aus `formation.yaml`, nicht kopiert."""
-    pfad = Path(__file__).parents[3] / "domaene" / "daten" / "formation.yaml"
-    with pfad.open(encoding="utf-8") as datei:
-        return yaml.safe_load(datei)["formation"][einheitenname]
+    return yamlAusDenDaten("formation.yaml")["formation"][einheitenname]

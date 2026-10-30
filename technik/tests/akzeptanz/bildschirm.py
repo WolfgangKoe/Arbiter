@@ -153,6 +153,37 @@ def knopfDerArmeeliste(seite: Page, spielername: str, text: str) -> Locator:
     return knöpfe.filter(has_text=gleicherText)
 
 
+übergehenKnopf = "gemeinsam übergehen"
+
+
+def leisteVon(seite: Page, inhalt: str) -> Locator:
+    return seite.get_by_role("complementary", name=inhalt, exact=True)
+
+
+def griffVon(seite: Page, inhalt: str) -> Locator:
+    return seite.get_by_role("button", name=f"{inhalt} ein- und ausfahren", exact=True)
+
+
+def protokollEinträge(seite: Page) -> Locator:
+    return leisteVon(seite, "Protokoll").locator(".protokollEintrag")
+
+
+def eintragDerEinheit(seite: Page, einheitenname: str) -> Locator:
+    einheit = seite.locator(".protokollEinheit", has_text=einheitenname)
+    return protokollEinträge(seite).filter(has=einheit)
+
+
+def textDesEintrags(eintrag: Locator) -> tuple[str, str, frozenset[str]]:
+    einheit = eintrag.locator(".protokollEinheit").text_content().strip()
+    spieler = eintrag.locator(".protokollSpieler").text_content().strip()
+    gründe = eintrag.locator(".protokollGrund").all_text_contents()
+    return einheit, spieler, frozenset(grund.strip() for grund in gründe)
+
+
+def protokollDerSeite(seite: Page) -> frozenset[tuple[str, str, frozenset[str]]]:
+    return frozenset(textDesEintrags(eintrag) for eintrag in protokollEinträge(seite).all())
+
+
 def kopfzeileVon(seite: Page, spielername: str) -> Locator:
     return seite.locator(".kopfzeileSpieler", has_text=spielername)
 

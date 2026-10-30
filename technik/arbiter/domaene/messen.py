@@ -1,7 +1,7 @@
 """Die Messungen der Phasen (technik/architektur.md, M1); gerechnet wird exakt."""
 
 from bisect import bisect_left
-from collections.abc import Collection
+from collections.abc import Callable, Collection
 from fractions import Fraction
 from math import ceil, floor
 
@@ -98,25 +98,30 @@ def _überdecktAm(bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, anteil: 
     return überdecken(base, stelle, ruhendeBase, ort)
 
 
+def _anteilDesNächstenPunkts(von: Stelle, weg: Weg, ort: Stelle) -> Fraction:
+    wegInX, wegInY = weg
+    return ((ort.x - von.x) * wegInX + (ort.y - von.y) * wegInY) / (wegInX**2 + wegInY**2)
+
+
+def ersterSchrittMit(trifftMonotonAb: Callable[[int], bool], bis: int) -> int:
+    return bisect_left(range(bis), x=True, key=trifftMonotonAb)
+
+
 def _ersterÜberdeckenderSchritt(
     bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, schritte: int
 ) -> int | None:
     """Erster Schritt mit Überdeckung; der Abstand fällt bis zum nächsten Punkt, dann steigt er."""
     _, start = bewegt
     _, ort = ruhend
-    wegInX, wegInY = weg
 
     def überdecktBeiSchritt(schritt: int) -> bool:
         return _überdecktAm(bewegt, ruhend, weg, Fraction(schritt, schritte))
 
-    anteilDesNächsten = -((start.x - ort.x) * wegInX + (start.y - ort.y) * wegInY) / (
-        wegInX**2 + wegInY**2
-    )
-    davor = min(max(floor(anteilDesNächsten * schritte), 0), schritte)
+    davor = min(max(floor(_anteilDesNächstenPunkts(start, weg, ort) * schritte), 0), schritte)
     danach = min(davor + 1, schritte)
     if not überdecktBeiSchritt(davor):
         return danach if überdecktBeiSchritt(danach) else None
-    return bisect_left(range(davor), x=True, key=überdecktBeiSchritt)
+    return ersterSchrittMit(überdecktBeiSchritt, davor)
 
 
 def schritteDesWegs(weg: Weg) -> int:
@@ -129,13 +134,11 @@ def streckeÜberdeckt(
     bewegteBase: Base, von: Stelle, nach: Stelle, ruhendeBase: Base, ort: Stelle
 ) -> bool:
     """Ob die bewegte Base auf der geraden Strecke von `von` bis `nach` die ruhende überdeckt."""
-    wegInX, wegInY = wegZwischen(von, nach)
-    länge = wegInX**2 + wegInY**2
-    if länge == 0:
+    weg = wegZwischen(von, nach)
+    if weg == (0, 0):
         return überdecken(bewegteBase, von, ruhendeBase, ort)
-    nächster = ((ort.x - von.x) * wegInX + (ort.y - von.y) * wegInY) / länge
-    anteil = min(max(nächster, Fraction(0)), Fraction(1))
-    stelle = verschoben(von, teilDesWegs((wegInX, wegInY), anteil))
+    anteil = min(max(_anteilDesNächstenPunkts(von, weg, ort), Fraction(0)), Fraction(1))
+    stelle = verschoben(von, teilDesWegs(weg, anteil))
     return überdecken(bewegteBase, stelle, ruhendeBase, ort)
 
 

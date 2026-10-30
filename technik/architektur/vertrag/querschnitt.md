@@ -3,8 +3,8 @@
 Pfade und JSON zwischen `web/` und `frontend/`
 ([Ablauf, Technikphase](../../../prozess/ablauf/technikphase.md), Schritt 1); Aufbau beider:
 [Web](../web.md), [Frontend](../frontend.md). Hier steht, was alle Phasen teilen; Handlungen,
-Knöpfe und Beispiele je Phase in ihrer Datei: [Aufstellen](aufstellen.md),
-[Schlacht](schlacht.md), [Bewegung](bewegung.md). Eine neue Route ist ein Anliegen an den
+Knöpfe und Beispiele je Phase in ihrem Ordner ([Übersicht](../../architektur.md#schichten)).
+Eine neue Route ist ein Anliegen an den
 Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:

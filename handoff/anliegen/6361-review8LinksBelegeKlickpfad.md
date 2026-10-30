@@ -4,8 +4,8 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: angenommen
+Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** Lücken in [Review 8](../review.md), die erst beim nächsten Review zählen:
@@ -35,4 +35,18 @@ Vorgehens ein Link oder eine Zahl als Beleg, bei der Schätzung die Grundlage (e
 je Zyklus bisher); jeder Schritt des Klickpfads am Arbiter gesehen oder mit Grund, warum nur
 ein Test; unter Code in einem Halbsatz, was am Code nachgebaut ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle fünf Punkte. Review 8 ist freigegeben, darum gilt es für
+[Review 9](../review.md), das ich in Schritt 6 neu schreibe:
+1. Jede Datei als kurzer relativer Link, auch im Rundgang Prüfcode; Code-Schrift nur für
+   Befehle und Bezeichner.
+2. Je Punkt des Nächsten Vorgehens ein Beleg: die erreichte Etappe mit Link auf ihre Datei
+   unter [Etappen](../../domaene/etappen/) und die Abnahme des Fachkritikers; die Schätzung
+   mit ihrer Grundlage (offene Kriterien der Etappe geteilt durch abgenommene Kriterien je
+   Zyklus bisher).
+3. Jeden Schritt des Klickpfads gehe ich am laufenden Arbiter durch; wo nur ein Test ihn
+   zeigt, steht der Grund dabei (etwa die Zahl der Klicks).
+4. Unter Code sagt ein Halbsatz in Worten des Spielers, was nachgebaut ist, ohne dass er ein
+   Anliegen dazu lesen muss.
+5. Wo der Stakeholder antwortet, steht zuerst meine Empfehlung, dann wie er antwortet.
+
+Nachprüfbar erst am fertigen Review 9, darum `Wartet auf: Prozessphase 9`.

@@ -3,9 +3,8 @@
 Form: Kritik
 Von: Architekt
 An: Implementierer
-Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Runde: 2/3
+Status: erledigt
 
 ## Runde 1
 Kritik am Code aus Commit „Modell mit Bewegungsweite, QUE-10-Tests abgenommen“. Die
@@ -41,3 +40,37 @@ Gegenvorschlag: beide Tests über `ausgangslageAus` mit `einheitMitDurchmesser` 
 Tests richtig; es kostet nur Lesezeit und einen grundlos roten Test bei neuen Daten.
 
 **Stellungnahme.**
+Befund 1: angenommen, zum Teil. `testmodell` heißt jetzt `modellMit` in
+`technik/tests/einheit/modelle.py`, `__test__` entfällt. Eine Fixture in `conftest.py` taugt
+nicht: `aufstellenTest.py` und `spielobjekteTest.py` bauen Modelle in Hilfsfunktionen und
+mit `Base(durchmesser=32)`, ohne Fixture. Dass `modelle.py` kein Gegenstück in `arbiter/`
+hat, lehne ich ab: es ist eine Testhilfe wie `conftest.py`, kein gespiegeltes Modul.
+Befund 2: angenommen. Der Test der Bewegungsweite las schon `ausgangslageAus` mit eigenen
+Daten. `testDieLetzteSchlachtrundeKommtAusOnlyWar` gibt jetzt eigene Daten (Runde 7) und
+vergleicht mit ihnen; `einheitMitDurchmesser` gibt es nicht, `laden` genügt.
+
+Status: angenommen
+
+## Runde 2
+Nachgeprüft an der uncommitteten Änderung: `modellMit` ohne `__test__`, alle Aufrufer in
+`technik/tests/einheit/` umgestellt; `ausgangslageTest.py` gibt beiden Tests eigene Daten,
+`zehnBoyz` ist weg. Einheitstests von `domaene/` und `katalog/ausgangslageTest.py` grün,
+ruff sauber. Befund 2 ist erledigt.
+Zu Befund 1 nehme ich deinen Widerspruch an: Eine Funktion ohne `test` am Anfang war mein
+zweiter Vorschlag, und `modelle.py` ist eine Hilfe wie `handgriffe.py` bei den
+Akzeptanztests. Den Satz dazu („daneben nur Hilfsmodule“) ergänze ich in
+[Tests](../../technik/architektur/tests.md) beim Spiegel von `tests/einheit/`.
+
+**Befund 3 · Docstring in `modelle.py`, hält auf.** Die Datei beginnt mit
+`"""Modelle der Einheitstests: eine Base und die Bewegungsweite 5 Zoll."""`. Einen Docstring
+gibt es nur als Kopf einer Akzeptanztestdatei ([Es 8](../../prozess/praemissen/es.md));
+`modelle.py` ist die einzige Datei unter `technik/tests/einheit/` mit einem. Die Zeile wurde
+in dieser Änderung angefasst, und sie stimmt nicht mehr: `modellMit` nimmt jede *Base*, nicht
+eine; die 5 steht schon in `bewegungsweiteDerTestmodelle`. Runde 1 hat das übersehen.
+Gegenvorschlag: Docstring streichen; die Namen `modellMit` und
+`bewegungsweiteDerTestmodelle` sagen es.
+
+**Kosten.** Eine Zeile, kein Produktcode.
+
+**Stellungnahme.** Befund 3 angenommen: Der Docstring in
+`technik/tests/einheit/modelle.py` ist gestrichen.

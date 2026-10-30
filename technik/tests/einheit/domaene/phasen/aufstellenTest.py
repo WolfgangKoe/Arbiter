@@ -10,13 +10,13 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Spieler, Spielfeld, Stelle
-from tests.einheit.modelle import testmodell
+from tests.einheit.modelle import modellMit
 
 letzteSchlachtrunde = 5
 
 
 def spielerMitEinerEinheit() -> Spieler:
-    modell = testmodell(Base(durchmesser=32))
+    modell = modellMit(Base(durchmesser=32))
     return Spieler(armee=Armee(einheiten=(Einheit(name="Einheit", modelle=(modell,)),)))
 
 
@@ -114,7 +114,7 @@ def testZweiSpielerMitDerselbenLeerenArmeeSindEineVorbedingungsverletzung():
 
 def testEinFremdesModellSetzenIstEineVorbedingungsverletzung():
     aufstellung = aufstellungVon(spielerMitEinerEinheit(), spielerMitEinerEinheit())
-    fremdes = testmodell(Base(durchmesser=32))
+    fremdes = modellMit(Base(durchmesser=32))
     stelle = Stelle(x=Fraction(1), y=Fraction(1))
 
     with pytest.raises(ValueError):

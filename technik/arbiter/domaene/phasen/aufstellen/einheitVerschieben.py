@@ -7,18 +7,6 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import Grenzen
 from arbiter.domaene.spielobjekte import Modell, Stelle
 
 
-def verschobeneStellen(
-    gruppe: Mapping[Modell, Stelle], gezogenes: Modell, ziel: Stelle
-) -> dict[Modell, Stelle]:
-    """Jedes Modell der Gruppe um den Weg des gezogenen; das gezogene steht am Ziel."""
-    davor = gruppe.get(gezogenes)
-    if davor is None:
-        return {gezogenes: ziel}
-    weg = messen.wegZwischen(davor, ziel)
-    verschobene = {modell: messen.verschoben(stelle, weg) for modell, stelle in gruppe.items()}
-    return {**verschobene, gezogenes: ziel}
-
-
 def hineingerückt(stellen: Mapping[Modell, Stelle], zone: Grenzen) -> dict[Modell, Stelle]:
     """Alle gemeinsam auf kürzestem Weg in die Zone, bis jede Base ganz darin liegt."""
     grenzenInX, grenzenInY = zone

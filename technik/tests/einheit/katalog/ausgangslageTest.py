@@ -4,10 +4,24 @@ import pytest
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.katalog.ausgangslage import ausgangslageAus, ausgangslageLaden
+from arbiter.katalog.datenblaetter import Modellart
 
-einheitMitDurchmesser = {"Einheit": "Boyz", "durchmesser": [32], "bewegungsweite": 5}
-armeen = [[einheitMitDurchmesser], [einheitMitDurchmesser]]
-formation = {"abstand": 1.5, "formation": {"Boyz": [1]}}
+modellart = Modellart(bewegungsweite=Fraction(5), durchmesser=32)
+datenblätter = {
+    "orks": {
+        "Boyz": {"Ork Boy": modellart, "Boss Nob": modellart},
+        "Warboss": {"Warboss": modellart},
+    }
+}
+einheit = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1}}
+armeenMitBoyz = [[einheit], [einheit]]
+formationDerBoyz = {"abstand": 1.5, "formation": {"Boyz": [1]}}
+
+
+def datenblätterVon(fraktion: str) -> dict:
+    if fraktion not in datenblätter:
+        raise ValueError(f"Die Fraktion {fraktion} hat keinen Ordner")
+    return datenblätter[fraktion]
 
 
 def onlyWarMitKante(kante: int) -> dict:
@@ -19,56 +33,85 @@ def onlyWarMitKante(kante: int) -> dict:
     }
 
 
-def testDieBewegungsweiteJedesModellsKommtAusDerAusgangslage():
-    boyz, warboss = ausgangslageLaden().ersterSpieler.armee.einheiten
-    zehnBoyz = {modell.bewegungsweite for modell in boyz.modelle}
+def laden(armeen: list, formation: dict | None = None, onlyWar: dict | None = None):
+    return ausgangslageAus(
+        {"Armee": armeen},
+        onlyWar or onlyWarMitKante(60),
+        formation or formationDerBoyz,
+        datenblätterVon,
+    )
 
-    assert zehnBoyz == {Fraction(5)}
-    assert {modell.bewegungsweite for modell in warboss.modelle} == {Fraction(5)}
+
+def testDieModelleEinerEinheitFolgenDenModellartenUndZahlenDerAusgangslage():
+    zwei = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 2, "Boss Nob": 1}}
+
+    ausgangslage = laden([[zwei], [zwei]], {"abstand": 1.5, "formation": {"Boyz": [3]}})
+
+    boyz, *_ = ausgangslage.ersterSpieler.armee.einheiten
+    assert boyz.name == "Boyz"
+    assert [modell.modellart for modell in boyz.modelle] == ["Ork Boy", "Ork Boy", "Boss Nob"]
+
+
+def testDieWerteJedesModellsKommenAusSeinerModellart():
+    boyz, *_ = laden(armeenMitBoyz).ersterSpieler.armee.einheiten
+    modell, *_ = boyz.modelle
+
+    assert (modell.bewegungsweite, modell.base.durchmesser) == (Fraction(5), 32)
+
+
+def testDieAusgangslageLadenNenntDieEinheitenWieIhreDatenblätter():
+    boyz, warboss = ausgangslageLaden().ersterSpieler.armee.einheiten
+
+    assert (boyz.name, warboss.name) == ("Boyz", "Warboss")
+    assert {modell.modellart for modell in boyz.modelle} == {"Ork Boy", "Boss Nob"}
 
 
 def testDieLetzteSchlachtrundeKommtAusOnlyWar():
-    letzteSchlachtrunde = 5
+    schlachtrunde = 7
+    onlyWar = onlyWarMitKante(60) | {"Schlacht": {"schlachtrunde": schlachtrunde}}
 
-    assert ausgangslageLaden().letzteSchlachtrunde == letzteSchlachtrunde
+    assert laden(armeenMitBoyz, onlyWar=onlyWar).letzteSchlachtrunde == schlachtrunde
 
 
-def testEineBewegungsweiteKeineZahlÜberNullIstEinFehlerBeimLaden():
-    kaputt = [[{**einheitMitDurchmesser, "bewegungsweite": "5 Zoll"}], [einheitMitDurchmesser]]
-    onlyWar = onlyWarMitKante(60)
-
+@pytest.mark.parametrize(
+    "kaputt",
+    [
+        {"fraktion": "elfen", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1}},
+        {"fraktion": "orks", "datenblatt": "Grots", "modelle": {"Ork Boy": 1}},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Grot": 1}},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 0}},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1.5}},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": True}},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {}},
+        {"fraktion": "orks", "datenblatt": "Boyz"},
+        {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1}, "oc": 2},
+    ],
+    ids=[
+        "fraktionOhneOrdner",
+        "datenblattUnbekannt",
+        "modellartUnbekannt",
+        "zahlNull",
+        "zahlMitKomma",
+        "zahlWahrheitswert",
+        "keineModellart",
+        "schlüsselFehlt",
+        "schlüsselUnbekannt",
+    ],
+)
+def testEinFehlerhafterEintragEinerEinheitIstEinFehlerBeimLaden(kaputt):
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWar, formation)
+        laden([[kaputt], [einheit]])
 
 
 def testEineSpielfeldkanteAußerhalbDerZweitenSeitenlängeIstEinFehlerBeimLaden():
     onlyWar = onlyWarMitKante(44)
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
-
-
-def testEinDurchmesserMitKommaIstEinFehlerBeimLaden():
-    kaputt = [[{"Einheit": "Boyz", "durchmesser": [28.5]}], [einheitMitDurchmesser]]
-
-    onlyWar = onlyWarMitKante(60)
-
-    with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWar, formation)
+        laden(armeenMitBoyz, onlyWar=onlyWar)
 
 
 def testDieDatenVonOnlyWarLaden():
     assert ausgangslageLaden().spielfeld.seitenlängen == (44, 60)
-
-
-@pytest.mark.parametrize("durchmesser", [True, 0, -5], ids=["wahrheitswert", "null", "negativ"])
-def testEinDurchmesserKeinePositiveGanzeZahlIstEinFehlerBeimLaden(durchmesser):
-    kaputt = [[{"Einheit": "Boyz", "durchmesser": [durchmesser]}], [einheitMitDurchmesser]]
-
-    onlyWar = onlyWarMitKante(60)
-
-    with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": kaputt}, onlyWar, formation)
 
 
 def testEineFehlendeAufstellungszoneIstEinFehlerBeimLaden():
@@ -76,7 +119,7 @@ def testEineFehlendeAufstellungszoneIstEinFehlerBeimLaden():
     onlyWar = {"Spielfeld": [44, 60], "Aufstellungszone": {"erste": zone}}
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
+        laden(armeenMitBoyz, onlyWar=onlyWar)
 
 
 def testEineUnbekannteAufstellungszoneIstEinFehlerBeimLaden():
@@ -84,50 +127,35 @@ def testEineUnbekannteAufstellungszoneIstEinFehlerBeimLaden():
     onlyWar = {"Spielfeld": [44, 60], "Aufstellungszone": {"erste": zone, "dritte": zone}}
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar, formation)
+        laden(armeenMitBoyz, onlyWar=onlyWar)
 
 
 def testEineEinheitOhneFormationIstEinFehlerBeimLaden():
-    ohne = {"abstand": 1.5, "formation": {"Warboss": [1]}}
-    onlyWar = onlyWarMitKante(60)
-
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar, ohne)
+        laden(armeenMitBoyz, {"abstand": 1.5, "formation": {"Warboss": [1]}})
 
 
 def testReihenMitAndererModellzahlAlsDieEinheitIstEinFehlerBeimLaden():
-    falsch = {"abstand": 1.5, "formation": {"Boyz": [2]}}
-    onlyWar = onlyWarMitKante(60)
-
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": armeen}, onlyWar, falsch)
+        laden(armeenMitBoyz, {"abstand": 1.5, "formation": {"Boyz": [2]}})
 
 
 def testEineEinheitMitVerschiedenenDurchmessernIstEinFehlerBeimLaden():
-    gemischt = {"Einheit": "Boyz", "durchmesser": [32, 40], "bewegungsweite": 5}
-    zwei = {"abstand": 1.5, "formation": {"Boyz": [2]}}
+    breit = Modellart(bewegungsweite=Fraction(5), durchmesser=40)
+    gemischt = {"orks": {"Boyz": {"Ork Boy": modellart, "Boss Nob": breit}}}
+    zwei = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1, "Boss Nob": 1}}
+
     onlyWar = onlyWarMitKante(60)
+    reihen = {"abstand": 1.5, "formation": {"Boyz": [2]}}
 
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": [[gemischt], [gemischt]]}, onlyWar, zwei)
+        ausgangslageAus({"Armee": [[zwei], [zwei]]}, onlyWar, reihen, gemischt.__getitem__)
 
 
-def testEineReiheOhneModellIstEinFehlerBeimLaden():
-    zweiModelle = {"Einheit": "Boyz", "durchmesser": [32, 32], "bewegungsweite": 5}
-    leer = {"abstand": 1.5, "formation": {"Boyz": [2, 0]}}
-    onlyWar = onlyWarMitKante(60)
-
+@pytest.mark.parametrize("reihen", [[1, 0], [2, -1]], ids=["leereReihe", "negativeReihe"])
+def testEineReiheKeineZahlÜberNullIstEinFehlerBeimLaden(reihen):
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": [[zweiModelle], [zweiModelle]]}, onlyWar, leer)
-
-
-def testEineNegativeReiheIstEinFehlerBeimLaden():
-    dreiModelle = {"Einheit": "Boyz", "durchmesser": [32, 32, 32], "bewegungsweite": 5}
-    negativ = {"abstand": 1.5, "formation": {"Boyz": [4, -1]}}
-    onlyWar = onlyWarMitKante(60)
-
-    with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": [[dreiModelle], [dreiModelle]]}, onlyWar, negativ)
+        laden(armeenMitBoyz, {"abstand": 1.5, "formation": {"Boyz": reihen}})
 
 
 def testDieTiefenDerAusgangslageLassenSichNichtÄndern():

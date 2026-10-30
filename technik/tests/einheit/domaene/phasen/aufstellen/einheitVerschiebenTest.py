@@ -1,8 +1,9 @@
 from fractions import Fraction
 
-from arbiter.domaene.phasen.aufstellen.einheitVerschieben import hineingerückt, verschobeneStellen
+from arbiter.domaene.phasen import verschobeneStellen
+from arbiter.domaene.phasen.aufstellen.einheitVerschieben import hineingerückt
 from arbiter.domaene.spielobjekte import Stelle
-from tests.einheit.modelle import testmodell
+from tests.einheit.modelle import modellMit
 
 zone = (Fraction(0), Fraction(44))
 
@@ -12,7 +13,7 @@ def stelleAn(inX: int, inY: int) -> Stelle:
 
 
 def testDieGruppeFolgtDemWegDesGezogenenUndDasGezogeneStehtAmZiel(zehnZoll):
-    gezogenes, zweites = testmodell(zehnZoll), testmodell(zehnZoll)
+    gezogenes, zweites = modellMit(zehnZoll), modellMit(zehnZoll)
     gruppe = {gezogenes: stelleAn(10, 10), zweites: stelleAn(10, 20)}
 
     verschoben = verschobeneStellen(gruppe, gezogenes, stelleAn(13, 6))
@@ -21,20 +22,20 @@ def testDieGruppeFolgtDemWegDesGezogenenUndDasGezogeneStehtAmZiel(zehnZoll):
 
 
 def testEinNochNichtGesetztesModellBewegtDieGruppeNicht(zehnZoll):
-    gesetztes, neues = testmodell(zehnZoll), testmodell(zehnZoll)
+    gesetztes, neues = modellMit(zehnZoll), modellMit(zehnZoll)
     gruppe = {gesetztes: stelleAn(10, 10)}
 
     assert verschobeneStellen(gruppe, neues, stelleAn(13, 6)) == {neues: stelleAn(13, 6)}
 
 
 def testEineGruppeInDerZoneBleibtStehen(zehnZoll):
-    modell = testmodell(zehnZoll)
+    modell = modellMit(zehnZoll)
 
     assert hineingerückt({modell: stelleAn(20, 20)}, (zone, zone)) == {modell: stelleAn(20, 20)}
 
 
 def testEineGruppeVorDerZoneRücktGemeinsamHinein(zehnZoll):
-    erstes, zweites = testmodell(zehnZoll), testmodell(zehnZoll)
+    erstes, zweites = modellMit(zehnZoll), modellMit(zehnZoll)
     stellen = {erstes: stelleAn(2, 20), zweites: stelleAn(2, 30)}
 
     assert hineingerückt(stellen, (zone, zone)) == {
@@ -44,7 +45,7 @@ def testEineGruppeVorDerZoneRücktGemeinsamHinein(zehnZoll):
 
 
 def testEineGruppeHinterDerZoneRücktGemeinsamHinein(zehnZoll):
-    erstes, zweites = testmodell(zehnZoll), testmodell(zehnZoll)
+    erstes, zweites = modellMit(zehnZoll), modellMit(zehnZoll)
     stellen = {erstes: stelleAn(42, 20), zweites: stelleAn(42, 30)}
 
     assert hineingerückt(stellen, (zone, zone)) == {

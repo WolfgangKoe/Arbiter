@@ -1,0 +1,13 @@
+{
+  "schlacht": {
+    "ersterZug": 1,
+    "amZug": 1,
+    "schlachtrunde": 1,
+    "phase": "Bewegungsphase",
+    "beendet": false,
+    "protokoll": [
+      {"spieler": 1, "einheit": 2, "name": "Warboss", "gründe": ["über eine Base"]},
+      {"spieler": 1, "einheit": 1, "name": "Boyz", "gründe": ["über eine Base"]}
+    ]
+  }
+}

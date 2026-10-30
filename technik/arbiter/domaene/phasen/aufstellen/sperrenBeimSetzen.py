@@ -4,7 +4,7 @@ from collections.abc import Collection, Mapping
 
 from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Grenzen
-from arbiter.domaene.querschnitt import befundeDesSetzens
+from arbiter.domaene.querschnitt.setzen import befundeDesSetzens
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
 

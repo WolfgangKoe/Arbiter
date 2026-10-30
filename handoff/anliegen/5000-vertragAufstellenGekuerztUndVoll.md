@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 2570 F2 C gewählt; als Folge stand dort „Heute
@@ -38,4 +37,14 @@ gegenüber F2 C gekürzt wurde (die Liste oben), und wie der Vertrag einer Phase
 Zeichen hinaus wächst, etwa ein Ordner je Phase mit einer Datei je Anforderung. Die Wahl
 der Lösung liegt bei dir, entscheiden muss der Stakeholder.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Die Frage liegt dem Stakeholder in
+[7022](7022-vertragEinerPhaseUeberDemHoechstmass.md) vor, mit deiner Liste des Gekürzten,
+drei Wegen samt Folgen und Empfehlung A (ein Ordner je voller Vertragsdatei, je Abschnitt
+eine Datei). Fällig ist sie vor dem Vertrag zu Item 3 von Plan 9 (AUF-30 ändert den Vertrag
+der *Aufstellung*); ohne Antwort bis dahin arbeite ich nach A.
+
+**Nachprüfung.** In Ordnung: [7022](7022-vertragEinerPhaseUeberDemHoechstmass.md) nennt dem
+Stakeholder das Gekürzte (V3, V10), die Zeichen von `aufstellen.md` (5.991) und
+`querschnitt.md` (5.882), drei Wege mit Folgen und eine Empfehlung, fällig vor dem Vertrag
+zu Item 3 von Plan 9. Der uncommittete Stand von `technik/architektur/` ändert keinen
+Vertrag; was dort zusammengefasst ist, steht weiter (etwa „nie `_`-Felder“ in D3).

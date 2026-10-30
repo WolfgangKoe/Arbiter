@@ -1,21 +1,20 @@
-"""Die Schlacht: wer am Zug ist, in welcher Schlachtrunde und Phase (QUE-9, QUE-10)."""
+"""Die Schlacht: Zug, Schlachtrunde und Phase, in der Bewegungsphase das Ziehen (QUE-9, QUE-10)."""
 
 from collections.abc import Mapping
 from enum import Enum
 from itertools import pairwise
 
+from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
+from arbiter.domaene.phasen import ebeneDesZugs, einheitVon, verschobeneStellen
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
-from arbiter.domaene.phasen.aufstellen.beenden import gesetzteModelle
-from arbiter.domaene.phasen.aufstellen.einheitVerschieben import verschobeneStellen
-from arbiter.domaene.phasen.aufstellen.reihenfolge import einheitVon
 from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
     anDerBewegungsweiteAngehalten,
 )
 from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.bewegung.sperrenBeimZiehen import gründeBeimZiehen
-from arbiter.domaene.querschnitt.kohaerenz import inKohärenz
+from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
@@ -109,7 +108,7 @@ class Schlacht:
         return self._stellen.get(modell)
 
     def inKohärenz(self, einheit: Einheit) -> bool:
-        return inKohärenz(gesetzteModelle(einheit, self._stellen))
+        return einheitInKohärenz(einheit, self._stellen)
 
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
         """Die Stellen, an die `modellLoslassen` die Modelle setzen würde (QUE-10.5)."""
@@ -119,9 +118,12 @@ class Schlacht:
         if modell not in spieler.armee.modelle:
             return {}
         einheit = einheitVon(self._beideSpieler, modell)
-        ebene = self._ebeneVon(einheit, modell)
+        ebene = ebeneDesZugs(
+            einheit, modell, self._stellen, ganzeEinheitIstEbene=self.ganzeEinheitIstEbene(einheit)
+        )
         verschoben = verschobeneStellen(ebene, modell, stelle)
-        neue = anDerBewegungsweiteAngehalten(ebene, verschoben, self._stellenZuBeginn)
+        weg = messen.wegZwischen(ebene[modell], verschoben[modell])
+        neue = anDerBewegungsweiteAngehalten(ebene, weg, self._stellenZuBeginn)
         fremde = {anderes: ort for anderes, ort in self._stellen.items() if anderes not in neue}
         gründe = gründeBeimZiehen(ebene, neue, fremde, spieler.armee.modelle)
         if gründe:
@@ -149,12 +151,6 @@ class Schlacht:
 
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
-
-    def _ebeneVon(self, einheit: Einheit, modell: Modell) -> dict[Modell, Stelle]:
-        """Die Stellen der Modelle, die Ziehen bewegt: die ganze Einheit oder das eine Modell."""
-        if self.ganzeEinheitIstEbene(einheit):
-            return gesetzteModelle(einheit, self._stellen)
-        return {modell: self._stellen[modell]}
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:

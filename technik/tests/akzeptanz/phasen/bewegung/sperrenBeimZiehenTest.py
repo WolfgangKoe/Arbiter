@@ -13,7 +13,11 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import modellLoslassen, spielstandVon
 from tests.akzeptanz.handgriffe import sperrgründe, versetzt
 from tests.akzeptanz.schlacht import (
+    aufeinanderZuZiehen,
+    hältAnDerSpielfeldkante,
+    hältVorDerNahkampfreichweite,
     jetzigeStellen,
+    liegtAufDerGeradenVon,
     ostenUndNorden,
     schrägOhneHindernis,
     stellenAlsZahlen,
@@ -273,3 +277,49 @@ def testBew2_7IstDieGanzeEinheitEbeneSperrtDieÜberdeckungKeinModellWegenDerselb
     assert jetzigeStellen(schlachtInDerBewegungsphase, boyz) == stellenVersetzt(
         davor, schrägOhneHindernis
     )
+
+
+def testBew2_8HältArbiterVorDerNahkampfreichweiteAnPrüftQue1NurDieStelleDesAnhaltens(
+    schlachtInDerBewegungsphase, warboss, overlord
+):
+    (modell,) = warboss.modelle
+    (modellDesAnderenSpielers,) = overlord.modelle
+    aufeinanderZuZiehen(schlachtInDerBewegungsphase, modell, modellDesAnderenSpielers, dreiZoll)
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    aufDieBaseDesAnderen = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, aufDieBaseDesAnderen)
+
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältVorDerNahkampfreichweite(
+        danach, modell, aufDieBaseDesAnderen, modellDesAnderenSpielers
+    )
+    assert liegtAufDerGeradenVon(davor, aufDieBaseDesAnderen, danach)
+
+
+def testBew2_8HältArbiterAnDerKanteAnPrüfenQue1UndÜberEineBaseDieStelleUndDieStreckeBisDorthin(
+    schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    überDieBoyzZurKante = versetzt(davor, nachOsten(-fünfZoll))
+
+    gründe = sperrgründe(schlachtInDerBewegungsphase.modellLoslassen, modell, überDieBoyzZurKante)
+
+    assert gründe == {Grund.baseÜberdeckt, Grund.überEineBase}
+    assert schlachtInDerBewegungsphase.stelle(modell) == davor
+
+
+def testBew2_8GemeinsamÜbergehenSetztDasModellDorthinWoArbiterEsAnhält(
+    schlachtInDerBewegungsphase, warboss
+):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    überDieBoyzZurKante = versetzt(davor, nachOsten(-fünfZoll))
+    gründe = sperrgründe(schlachtInDerBewegungsphase.modellLoslassen, modell, überDieBoyzZurKante)
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, überDieBoyzZurKante, übergehen=gründe)
+
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert hältAnDerSpielfeldkante(danach, modell)
+    assert liegtAufDerGeradenVon(davor, überDieBoyzZurKante, danach)

@@ -6,16 +6,19 @@ import pytest
 
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.auswahl import auswählenMit
+from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
 from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     radiusInZoll,
     stelleDesErstenModells,
     stelleInDerZoneVon,
     stellenAllerModelle,
+    versetzt,
 )
 from tests.akzeptanz.ziehen import (
     Bildpunkt,
     liegtEinPixelGenauAn,
+    mitMausUndFinger,
     modellAmPunktZiehen,
     modellZiehen,
     punktAufDerKarte,
@@ -25,6 +28,7 @@ from tests.akzeptanz.ziehen import (
 
 zugschwelleInPixeln = 4
 abweichungUnterDerSchwelle = zugschwelleInPixeln - 1
+dreiZollNachOsten = (Fraction(3), Fraction(0))
 
 
 def testAuf8_2EinGesetztesModellIstNachDemLoslassenAnDerStelleDesLoslassensGesetzt(
@@ -95,3 +99,28 @@ def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
     modellAmPunktZiehen(seite, griff, ende, eingabe)
 
     assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(modell), erwartet)
+
+
+@mitMausUndFinger
+def testAuf8_7InDerBewegungsphaseFolgtEinModellDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
+):
+    (modell,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    erwartet = versetzt(davor, dreiZollNachOsten)
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
+    )
+    mitte = punktAufDerKarte(seite, davor)
+    punktDesErwarteten = punktAufDerKarte(seite, erwartet)
+    versatzDesGriffsInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite) * 0.8
+    griff = Bildpunkt(mitte.links + versatzDesGriffsInPixeln, mitte.oben)
+    ende = Bildpunkt(
+        griff.links + punktDesErwarteten.links - mitte.links,
+        griff.oben + punktDesErwarteten.oben - mitte.oben,
+    )
+    assert versatzDesGriffsInPixeln > zugschwelleInPixeln
+
+    modellAmPunktZiehen(seite, griff, ende, eingabe)
+
+    assert liegtEinPixelGenauAn(seite, schlachtInDerBewegungsphase.stelle(modell), erwartet)

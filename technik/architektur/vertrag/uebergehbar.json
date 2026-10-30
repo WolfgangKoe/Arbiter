@@ -1,0 +1,14 @@
+{
+  "gründe": ["über eine Base"],
+  "übergehbar": true,
+  "spielstand": {
+    "schlacht": {
+      "ersterZug": 1,
+      "amZug": 1,
+      "schlachtrunde": 1,
+      "phase": "Bewegungsphase",
+      "beendet": false,
+      "protokoll": []
+    }
+  }
+}

@@ -4,7 +4,7 @@ from fractions import Fraction
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.handgriffe import sperrgründe
+from tests.akzeptanz.handgriffe import profileDerModelle, sperrgründe, yamlAusDenDaten
 
 
 def modelleDerArmeen(ausgangslage):
@@ -17,6 +17,50 @@ def einheitenDerArmeen(ausgangslage):
         for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
         for einheit in spieler.armee.einheiten
     ]
+
+
+def armeenAusDenDaten() -> list[list[dict]]:
+    return yamlAusDenDaten("ausgangslage.yaml")["Armee"]
+
+
+def einheitenAusDenDaten(*schlüssel: str) -> list:
+    return sorted(
+        sorted(
+            (
+                eintrag["datenblatt"],
+                sorted(
+                    (modellart, *(profil[name] for name in schlüssel))
+                    for modellart, profil in profileDerModelle(eintrag)
+                ),
+            )
+            for eintrag in armee
+        )
+        for armee in armeenAusDenDaten()
+    )
+
+
+def einheitenDerAusgangslage(ausgangslage, *merkmale) -> list:
+    return sorted(
+        sorted(
+            (
+                einheit.name,
+                sorted(
+                    (modell.modellart, *(merkmal(modell) for merkmal in merkmale))
+                    for modell in einheit.modelle
+                ),
+            )
+            for einheit in spieler.armee.einheiten
+        )
+        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    )
+
+
+def bewegungsweiteDes(modell):
+    return modell.bewegungsweite
+
+
+def durchmesserDes(modell):
+    return modell.base.durchmesser
 
 
 def testMiv1_1EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
@@ -86,3 +130,36 @@ def testMiv1_4DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
     seitenlängen = ausgangslage.spielfeld.seitenlängen
 
     assert seitenlängen == (Fraction(44), Fraction(60))
+
+
+def testMiv1_5DieAusgangslageHatDieZweiArmeenMitIhrenEinheiten(ausgangslage):
+    datenblätterJeArmee = sorted(
+        sorted(eintrag["datenblatt"] for eintrag in armee) for armee in armeenAusDenDaten()
+    )
+    namenJeArmee = sorted(
+        sorted(einheit.name for einheit in spieler.armee.einheiten)
+        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+    )
+
+    assert namenJeArmee == datenblätterJeArmee
+
+
+def testMiv1_5JedeEinheitHatJeModellartSoVieleModelleWieDortSteht(ausgangslage):
+    erwartet = einheitenAusDenDaten()
+    modellartenJeEinheit = einheitenDerAusgangslage(ausgangslage)
+
+    assert modellartenJeEinheit == erwartet
+
+
+def testMiv1_5JedesModellHatDieBewegungsweiteSeinerModellartImDatenblatt(ausgangslage):
+    erwartet = einheitenAusDenDaten("bewegungsweite")
+    bewegungsweitenJeEinheit = einheitenDerAusgangslage(ausgangslage, bewegungsweiteDes)
+
+    assert bewegungsweitenJeEinheit == erwartet
+
+
+def testMiv1_5JedesModellHatEineBaseMitDemDurchmesserSeinerModellart(ausgangslage):
+    erwartet = einheitenAusDenDaten("durchmesser")
+    durchmesserJeEinheit = einheitenDerAusgangslage(ausgangslage, durchmesserDes)
+
+    assert durchmesserJeEinheit == erwartet

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zu Item normalMove (`git diff 7684034`). Diese Befunde warten
@@ -31,4 +30,14 @@ sich.
 `phasen/__init__.py` oder `querschnitt/`, wo beide Phasen sie finden. 2: `querschnitt/setzen.py`.
 3: erst mit der zweiten *Phase* mit eigenem Verhalten.
 
-**Stellungnahme.**
+**Stellungnahme.** Punkt 1 und 2 angenommen und umgesetzt, Punkt 3 angenommen und bis zur
+zweiten *Phase* mit eigenem Verhalten bewusst nicht umgesetzt (wie vorgeschlagen).
+1. `gesetzteModelle`, `einheitVon` und `verschobeneStellen` liegen in
+   [phasen/__init__.py](../../technik/arbiter/domaene/phasen/__init__.py); *Aufstellung*,
+   *Bewegungsphase* und `Schlacht` importieren von dort.
+2. Die Regeln von QUE-1 liegen in
+   [querschnitt/setzen.py](../../technik/arbiter/domaene/querschnitt/setzen.py); der Unit-Test zog
+   nach `tests/einheit/domaene/querschnitt/setzenTest.py` um.
+Die Unit-Tests der Domäne und Ruff sind grün. Die Akzeptanztests sind rot wegen
+`KeyError: 'Einheit'` in `katalog/ausgangslage.py` (Item 1, nicht aus diesem Umzug); keiner
+scheitert an einem Import.

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Namen und Ablage von Hilfsfunktionen, keine Prüfung rot), Diff
@@ -42,4 +41,25 @@ Wartet auf: Technikphase 9
 5. Docstring um das Ziehen ergänzen oder das Ziehen nach `phasen/bewegung/` (Architekt).
 6. Untergrenze `bewegungsweiteDerTestmodelle - Fraction(1, 100)`.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle sechs angenommen und umgesetzt.
+1. [bedienung.js](../../technik/frontend/bedienung.js): `stelleDesZugs` nutzt `stelleAufDerKarte`; die
+   vorige *Stelle* kommt aus `ziehenStart.kreise`, `vorigeStelle` entfällt.
+2. `einheitInKohärenz(einheit, stellen)` und `gesetzteModelle` stehen in
+   [kohaerenz.py](../../technik/arbiter/domaene/querschnitt/kohaerenz.py); *Aufstellung*, *Schlacht*,
+   beide `beenden.py` rufen sie. Die Ablage entscheidet der Architekt.
+3. `ebeneDesZugs(einheit, gezogenes, stellen, *, ganzeEinheitIstEbene)` in
+   [phasen/__init__.py](../../technik/arbiter/domaene/phasen/__init__.py) für *Aufstellung* und *Schlacht*;
+   `Schlacht._ebeneVon` entfällt.
+4. `anDerBewegungsweiteAngehalten(vorige, weg, anfang)`: der Weg kommt vom Aufrufer, `erster - 1`.
+5. Docstring von [schlachtrunden.py](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py)
+   nennt das Ziehen; ob es nach `phasen/bewegung/` gehört, ist Sache des Architekten.
+6. Untergrenze `bewegungsweiteDerTestmodelle - Fraction(1, 100)` in beiden Tests.
+
+Stand: ruff und eslint grün; rot sind nur Tests unumgesetzter Items. Der Ausfall von
+`.karte .spielfeld` kam von einem Tippfehler in `bedienung.js` (behoben).
+
+**Nachprüfung.** Alle sechs umgesetzt (`git diff e1fb48b`); Unit-Tests 191 grün, ruff,
+eslint, `importvertrag`, `benennung`, `kommentare` grün. Nacharbeit aus 4: 7680, Ablage des
+Tests: 7681.
+
+Status: erledigt

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Voller Mutationslauf von Zyklus 8, rot bei 93 % ([DoD](../../prozess/ablauf/dod.md)).
@@ -32,4 +31,14 @@ Fünf Überlebende fehlt ein Unit-Test:
 Einheit wirft `ValueError`. 4: `socket.create_server` per `monkeypatch` wirft
 `OSError(errno.EACCES)`; `serverStarten` gibt ihn weiter.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle vier Tests ergänzt: 1: Port 65535 in
+[befehlTest.py](../../technik/tests/einheit/befehlTest.py). 2: `0.0000009` wird zu `1/10⁶` in
+[anwendungTest.py](../../technik/tests/einheit/web/anwendungTest.py). 3: neue Datei
+[kennungenTest.py](../../technik/tests/einheit/web/kennungenTest.py). 4: `EACCES` beim Binden in
+[serverTest.py](../../technik/tests/einheit/web/serverTest.py). Der Mutationslauf selbst ist nicht
+wiederholt.
+
+**Nachprüfung.** In Ordnung. Alle fünf Mutanten von Hand in einer Kopie in `/tmp` eingesetzt
+(`LtE wird Lt`, `11**6`, `10**7`, beide `raise entfällt`): Jeder macht seinen neuen Test rot.
+Ohne Mutant sind die Tests grün, eine Kontrolle (geänderter Meldungstext) überlebt wie erwartet.
+Lesbarkeit der Tests: kein Befund.

@@ -145,6 +145,17 @@ def testEineGleitkommazahlKommtInDerAbfrageAlsBruchMitKleinemNennerInDieDomäne(
     assert stellen == [Stelle(x=Fraction(160, 127), y=Fraction(121, 3))]
 
 
+def testEineKoordinateMitMehrNachkommastellenAlsDerNennerErlaubtWirdAufEinMillionstelGerundet(
+    aufstellung, monkeypatch
+):
+    stellen = stellenAbfangen(aufstellung, monkeypatch, "modellLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+
+    dienst.put(pfadDesModells.format(1, 1, 1), json={"x": 0.0000009, "y": 1})
+
+    assert stellen == [Stelle(x=Fraction(1, 1_000_000), y=Fraction(1))]
+
+
 def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 

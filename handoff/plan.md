@@ -69,37 +69,47 @@ Begriffe aus 6998, 7000, 7005.
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
-- [ ] Architekt: Vertrag zu Item katalogwerteGliedern, bei beiden Hälften
-- [ ] Testautor: Tests zu Item katalogwerteGliedern
-- [ ] Fachkritiker: Kritik an den Tests zu Item katalogwerteGliedern
-- [ ] Architekt: Kritik an den Tests zu Item katalogwerteGliedern
-- [ ] Implementierer: Tests zu Item katalogwerteGliedern grün
+- [x] Architekt: Vertrag zu Item katalogwerteGliedern, bei beiden Hälften
+- [x] Testautor: Tests zu Item katalogwerteGliedern
+- [x] Fachkritiker: Kritik an den Tests zu Item katalogwerteGliedern
+- [x] Architekt: Kritik an den Tests zu Item katalogwerteGliedern
+  Hindernis: Architekt → Testautor: Eine Testhilfe sucht die Bewegungsweite noch in der alten Ausgangslage; die Tests der Bewegungsphase laufen darum nicht. (Anliegen 7150)
+- [x] Implementierer: Tests zu Item katalogwerteGliedern grün
 - [ ] Architekt: Kritik am Code zu Item katalogwerteGliedern
-- [ ] Reviewer: Kritik am Code zu Item katalogwerteGliedern
+  Hindernis: Architekt → Implementierer: Zwei neue Dateien des Katalogs bringen Erklärtexte mit, die die Regel zum Code verbietet; eine Prüfung ist darum rot. (Anliegen 7190)
+- [x] Reviewer: Kritik am Code zu Item katalogwerteGliedern
+  Hindernis: Reviewer → Implementierer: Im Katalog heißt der Eintrag einer Modellart Profil, obwohl er auch den Durchmesser hält, und ein Einheitstest bindet eine Konstante per Standardargument; der Implementierer benennt um. (Anliegen 7200)
 - [ ] Fachkritiker: Item katalogwerteGliedern abgenommen
 - [ ] Planer: Item katalogwerteGliedern gelöscht
-- [ ] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
-- [ ] Testautor: Tests zu Item gemeinsamUebergehen
-- [ ] Fachkritiker: Kritik an den Tests zu Item gemeinsamUebergehen
-- [ ] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
+- [x] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
+- [x] Testautor: Tests zu Item gemeinsamUebergehen
+  Hindernis: Testautor → Planer: Die Tests zu BEW-8, QUE-5 und QUE-6 stehen vollständig, Formprüfungen grün. Das Häkchen setzt sich nicht, weil die Zeile Abhängigkeit in domaene/items/gemeinsamUebergehen.md BEW-2 nennt; die Prüfung zählt damit BEW-2 zum Item, und BEW-2.8 gehört zu Item 3 (anhaltenUndAuswahl) und hat dort noch keinen Test. Empfehlung: in der Abhängigkeit die Kennung streichen (die Sperren beim Ziehen stehen) statt BEW-2 zu nennen; Alternative für den Regelumsetzer: itemKriterienGetestet liest nur die Zeile Umfang. (Anliegen 7210)
+- [x] Fachkritiker: Kritik an den Tests zu Item gemeinsamUebergehen
+  Hindernis: Fachkritiker → Testautor: Ein Test zu „gemeinsam übergehen“ ist schon grün, obwohl es den Knopf noch nicht gibt; er prüft nicht, dass der Knopf erst da war und dann verschwindet. (Anliegen 7300)
+- [x] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
+  Hindernis: Architekt → Testautor: Ein Test übergab die übergangenen Gründe ohne Namen, anders als der Vertrag, und ein Test zu „gemeinsam übergehen nicht mehr angeboten“ war ohne Knopf schon grün; beides ist berichtigt, der Haken gilt seit der Nachprüfung. (Anliegen 7320)
 - [ ] Implementierer: Tests zu Item gemeinsamUebergehen grün
 - [ ] Architekt: Kritik am Code zu Item gemeinsamUebergehen
 - [ ] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
 - [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen
 - [ ] Planer: Item gemeinsamUebergehen gelöscht
-- [ ] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
-- [ ] Testautor: Tests zu Item anhaltenUndAuswahl
-- [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUndAuswahl
-- [ ] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
+- [x] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
+- [x] Testautor: Tests zu Item anhaltenUndAuswahl
+- [x] Fachkritiker: Kritik an den Tests zu Item anhaltenUndAuswahl
+  Hindernis: Fachkritiker → Testautor: Drei Tests zum Klick auf das Modell der Ebene sind schon grün, obwohl ein Klick heute nie ein Modell zur Ebene macht; sie prüfen nicht, dass vorher ein Modell die Ebene war. (Anliegen 7400)
+- [x] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
+  Hindernis: Architekt → Testautor: Ein Test zur Auswahl einer aufgestellten Einheit heißt „ohne Ebene“, obwohl die ganze Einheit ihre Ebene ist; der Testautor benennt ihn um. (Anliegen 7420)
 - [ ] Implementierer: Tests zu Item anhaltenUndAuswahl grün
 - [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
 - [ ] Fachkritiker: Item anhaltenUndAuswahl abgenommen
 - [ ] Planer: Item anhaltenUndAuswahl gelöscht
-- [ ] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften
-- [ ] Testautor: Tests zu Item grenzkreise
+- [x] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften
+- [x] Testautor: Tests zu Item grenzkreise
 - [ ] Fachkritiker: Kritik an den Tests zu Item grenzkreise
+  Hindernis: Fachkritiker → Testautor: 13 Testfälle zu Grenzkreisen und Vorrücken ziehen die ganze Einheit gegen die Nachbareinheit und werden so nie grün; ein Test der Seite prüft nicht, dass der Kreis des Wurfs verschwindet (Anliegen 7640)
 - [ ] Architekt: Kritik an den Tests zu Item grenzkreise
+  Hindernis: Architekt → Testautor: Die neuen Grenzen im Spielstand machen vier ältere Tests rot, die den ganzen Spielstand der Schlacht mit einem Beispiel vergleichen; drei Tests zur Seite sind ohne Code schon grün, einer prüft nach dem Zurücknehmen die Grenze nicht. Der Testautor vergleicht nur die Schlüssel des Beispiels und baut die drei Tests um. (Anliegen 7660)
 - [ ] Implementierer: Tests zu Item grenzkreise grün
 - [ ] Architekt: Kritik am Code zu Item grenzkreise
 - [ ] Reviewer: Kritik am Code zu Item grenzkreise

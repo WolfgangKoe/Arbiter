@@ -33,8 +33,6 @@ class Ausgangslage:
     letzteSchlachtrunde: int
 
     def __post_init__(self) -> None:
-        if self.ersterSpieler is self.zweiterSpieler:
-            raise ValueError("Die Aufstellung braucht zwei verschiedene Spieler")
         if _teilenSichArmeeOderModell(self.ersterSpieler, self.zweiterSpieler):
             raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
 

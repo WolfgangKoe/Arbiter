@@ -40,8 +40,8 @@ nachNorden = (nichts, Fraction(3))
 überDieHälfteDerBewegungsweite = Fraction(3, 5)
 
 
-def zuWeitNachOsten(einheitenname: str) -> tuple[Fraction, Fraction]:
-    return bewegungsweite(einheitenname) + 1, nichts
+def zuWeitNachOsten(datenblatt: str, modellart: str) -> tuple[Fraction, Fraction]:
+    return bewegungsweite(datenblatt, modellart) + 1, nichts
 
 
 def testBew1_5DasModellStehtDanachAnDerStelleDesLoslassens(schlachtInDerBewegungsphase, warboss):
@@ -113,7 +113,8 @@ def testBew1_6EineSchonGezogeneEinheitLässtSichNachEinerAnderenAuchLängerAlsDi
     (modellDesWarboss,) = warboss.modelle
     *_, letztesModellDerBoyz = boyz.modelle
     start = schlachtInDerBewegungsphase.stelle(modellDesWarboss)
-    mehrAlsDieHälfte = (bewegungsweite("Warboss") * überDieHälfteDerBewegungsweite, nichts)
+    weite = bewegungsweite("Warboss", "Warboss")
+    mehrAlsDieHälfte = (weite * überDieHälfteDerBewegungsweite, nichts)
     schlachtInDerBewegungsphase.modellLoslassen(modellDesWarboss, versetzt(start, mehrAlsDieHälfte))
     stelleDerBoyz = schlachtInDerBewegungsphase.stelle(letztesModellDerBoyz)
     schlachtInDerBewegungsphase.modellLoslassen(
@@ -165,12 +166,12 @@ def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegu
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    ziel = versetzt(davor, zuWeitNachOsten("Warboss"))
+    ziel = versetzt(davor, zuWeitNachOsten("Warboss", "Warboss"))
 
     stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel)
 
     (stelle,) = stellen.values()
-    assert hältAnDerBewegungsweite(davor, stelle, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, stelle, bewegungsweite("Warboss", "Warboss"))
 
 
 def testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
@@ -212,7 +213,8 @@ def testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDa
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), zuWeitNachOsten("Warboss"))
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    ziel = versetzt(davor, zuWeitNachOsten("Warboss", "Warboss"))
     abfrage = stelleBeimLoslassenAbfragen(
         dienstDerSchlacht, beendeteAufstellung, warboss, modell, ziel
     )
@@ -295,7 +297,7 @@ def testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweit
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    zuWeit = versetzt(davor, zuWeitNachOsten("Warboss"))
+    zuWeit = versetzt(davor, zuWeitNachOsten("Warboss", "Warboss"))
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
@@ -305,6 +307,6 @@ def testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweit
 
     (gezeigt,) = kreiseDerKarte(seite) - kreiseDavor
     assert hältAnDerBewegungsweiteAufEinenPixelGenau(
-        seite, davor, gezeigt, bewegungsweite("Warboss")
+        seite, davor, gezeigt, bewegungsweite("Warboss", "Warboss")
     )
     assert sperrmeldungenDerSeite(seite) == []

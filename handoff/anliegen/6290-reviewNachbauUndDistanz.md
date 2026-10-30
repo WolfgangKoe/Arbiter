@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Namen und Ablage von Hilfsfunktionen, keine Prüfung rot; DoD über
@@ -31,4 +30,14 @@ anhaltenAnDerBewegungsweite.py eine Funktion `distanz…` (Name nach Glossar), d
 trägt; in `stelleDesZugs` den Punkt einmal berechnen. Erledigt: Akzeptanztests grün,
 `grep -rni distanz technik/arbiter` findet die Funktion, `bisect_left` steht nur in messen.py.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle drei Punkte angenommen und umgesetzt.
+1. [messen.py](../../technik/arbiter/domaene/messen.py): `_anteilDesNächstenPunkts` rechnet den
+   Anteil einmal für `streckeÜberdeckt` und `_ersterÜberdeckenderSchritt`; `ersterSchrittMit`
+   trägt die Suche auf dem Raster, auch für `anDerBewegungsweiteAngehalten`. `bisect_left` steht
+   nur noch in messen.py.
+2. [anhaltenAnDerBewegungsweite.py](../../technik/arbiter/domaene/phasen/bewegung/anhaltenAnDerBewegungsweite.py):
+   `_distanzÜberDerBewegungsweite` trägt den Vergleich von BEW-3.1.
+3. [bedienung.js](../../technik/frontend/bedienung.js): `stelleDesZugs` berechnet den Punkt einmal;
+   `imSpielfeld` ist die gemeinsame Prüfung mit `stelleAufDerKarte`.
+Unit-Tests der Domäne und Ruff grün. Die Akzeptanztests der Bewegung kann ich erst
+nachprüfen, wenn Item 1 den `KeyError: 'Einheit'` behebt; der Bildschirm ist ungeprüft.

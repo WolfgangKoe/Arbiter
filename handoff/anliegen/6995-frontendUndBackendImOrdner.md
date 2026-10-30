@@ -4,8 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Deine Frage: Baut Python die Oberfläche, liegen Dateien des Frontends im Backend,

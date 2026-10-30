@@ -16,6 +16,7 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
 from tests.akzeptanz.bildschirm import Bildschirm
 from tests.akzeptanz.dienst import dienstFür, dienstFürSchlacht, stellenDesVertrags
+from tests.akzeptanz.grenzen import EinheitAmZug
 from tests.akzeptanz.handgriffe import (
     Platz,
     alleEinheitenAufstellen,
@@ -24,7 +25,9 @@ from tests.akzeptanz.handgriffe import (
     modelleAnStellenSetzen,
     modelleSetzen,
     spielerMit,
+    versetzt,
 )
+from tests.akzeptanz.schlacht import ZugÜberEineBase, fünfZollNachOsten, fünfZollNachWesten
 
 _technik = Path(__file__).parents[2]
 _sekundenBisZurAdresse = 15
@@ -316,9 +319,38 @@ def spielerMitDemErstenZug(request, spielerEins: Spieler, spielerZwei: Spieler) 
     return {"ersterSpieler": spielerEins, "zweiterSpieler": spielerZwei}[request.param]
 
 
+@pytest.fixture(params=["spielerEins", "spielerZwei"])
+def zugÜberEineBase(request, schlacht) -> ZugÜberEineBase:
+    einheitDesSpielers, weg = {
+        "spielerEins": ("boyz", fünfZollNachOsten),
+        "spielerZwei": ("necronWarriors", fünfZollNachWesten),
+    }[request.param]
+    spieler = request.getfixturevalue(request.param)
+    einheit = request.getfixturevalue(einheitDesSpielers)
+    schlacht.ersterZugWählen(spieler)
+    schlacht.phaseBeenden()
+    erstes, *_ = einheit.modelle
+    ziel = versetzt(schlacht.stelle(erstes), weg)
+    return ZugÜberEineBase(schlacht, spieler, einheit, erstes, ziel)
+
+
 @pytest.fixture(params=["einheitDesSpielersAmZug", "einheitDesAnderenSpielers"])
 def einheitJederSeite(request, boyz: Einheit, necronWarriors: Einheit) -> Einheit:
     """Spieler 1 ist am Zug; die Einheit gehört ihm oder dem anderen Spieler."""
     return {"einheitDesSpielersAmZug": boyz, "einheitDesAnderenSpielers": necronWarriors}[
         request.param
     ]
+
+
+@pytest.fixture(params=["spielerEins", "spielerZwei"])
+def einheitAmZug(request, schlacht) -> EinheitAmZug:
+    spieler, einheit, andereEinheit, andererSpieler = (
+        request.getfixturevalue(name)
+        for name in {
+            "spielerEins": ("spielerEins", "boyz", "warboss", "spielerZwei"),
+            "spielerZwei": ("spielerZwei", "necronWarriors", "overlord", "spielerEins"),
+        }[request.param]
+    )
+    schlacht.ersterZugWählen(spieler)
+    schlacht.phaseBeenden()
+    return EinheitAmZug(schlacht, einheit, andereEinheit, andererSpieler)

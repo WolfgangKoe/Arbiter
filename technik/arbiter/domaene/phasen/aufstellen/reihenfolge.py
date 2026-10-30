@@ -3,19 +3,11 @@
 from collections.abc import Collection
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
+from arbiter.domaene.spielobjekte import Einheit, Spieler
 
 
 def gegnerVon(beideSpieler: tuple[Spieler, Spieler], spieler: Spieler) -> Spieler:
     return next(andere for andere in beideSpieler if andere is not spieler)
-
-
-def einheitVon(beideSpieler: tuple[Spieler, Spieler], modell: Modell) -> Einheit:
-    for spieler in beideSpieler:
-        einheit = spieler.armee.einheitVon(modell)
-        if einheit is not None:
-            return einheit
-    raise ValueError("Das Modell gehört nicht zur Aufstellung")
 
 
 def zonenVerteilen(

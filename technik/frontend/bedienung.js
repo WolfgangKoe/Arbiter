@@ -19,18 +19,21 @@ function punktAufDerKarte(ereignis) {
   return new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(zeichnung.getScreenCTM().inverse())
 }
 
-function stelleAufDerKarte(ereignis) {
-  const zeichnung = document.querySelector(".karte")
-  const punkt = punktAufDerKarte(ereignis)
-  const { width, height } = zeichnung.querySelector(".spielfeld").getBBox()
-  const imSpielfeld = punkt.x >= 0 && punkt.x <= width && punkt.y >= 0 && punkt.y <= height
-  return imSpielfeld ? { x: punkt.x, y: punkt.y } : null
+function imSpielfeld(punkt) {
+  const { width, height } = document.querySelector(".karte .spielfeld").getBBox()
+  return punkt.x >= 0 && punkt.x <= width && punkt.y >= 0 && punkt.y <= height
 }
 
-function stelleDesZugs(ereignis, start) {
-  if (!stelleAufDerKarte(ereignis)) return null
+function stelleAufDerKarte(ereignis) {
   const punkt = punktAufDerKarte(ereignis)
-  const { greifpunkt, vorigeStelle } = start
+  return imSpielfeld(punkt) ? { x: punkt.x, y: punkt.y } : null
+}
+
+function stelleDesZugs(ereignis, start, gezogenerKreis) {
+  const punkt = stelleAufDerKarte(ereignis)
+  if (!punkt) return null
+  const vorigeStelle = start.kreise.find(({ kreis }) => kreis === gezogenerKreis)
+  const { greifpunkt } = start
   return { x: vorigeStelle.x + punkt.x - greifpunkt.x, y: vorigeStelle.y + punkt.y - greifpunkt.y }
 }
 
@@ -88,7 +91,6 @@ export function ziehenBeginnen(ereignis) {
   const mitgezogene = gezogen.classList.contains("ausgewählt") ? document.querySelectorAll(".karte .modell.ausgewählt") : [gezogen]
   ziehenStart.kreise = [...mitgezogene].map(kreis => ({ kreis, x: Number(kreis.getAttribute("cx")), y: Number(kreis.getAttribute("cy")) }))
   ziehenStart.greifpunkt = punktAufDerKarte(ereignis)
-  ziehenStart.vorigeStelle = { x: Number(gezogen.getAttribute("cx")), y: Number(gezogen.getAttribute("cy")) }
   gezogen.setPointerCapture(ereignis.pointerId)
   ereignis.preventDefault()
 }
@@ -102,7 +104,7 @@ export function ziehenFolgen(ereignis) {
   const weite = Math.max(Math.abs(ereignis.clientX - ziehenStart.x), Math.abs(ereignis.clientY - ziehenStart.y))
   ziehenStart.begonnen ||= weite > zugschwelle
   if (!ziehenStart.begonnen || !gezogen) return
-  const stelle = stelleDesZugs(ereignis, ziehenStart)
+  const stelle = stelleDesZugs(ereignis, ziehenStart, gezogen)
   if (!stelle) return
   if (abfrageLäuft) {
     wartenderPunkt = { zug: ziehenStart, punkt: stelle }
@@ -126,7 +128,7 @@ export function ziehenBeenden(ereignis) {
   gezogen = null
   if (!start.begonnen) return klicken(ereignis, start.ziel)
   if (!kreis) return
-  const stelle = stelleDesZugs(ereignis, start)
+  const stelle = stelleDesZugs(ereignis, start, kreis)
   if (stelle) return modellLoslassen(kreis.dataset, stelle)
   letztenSpielstandZeichnen()
 }

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der volle Mutationslauf von Zyklus 8 endet rot: 502 Mutanten, 93 % gefangen,
@@ -35,4 +34,19 @@ Formel als eine Funktion für beide Stellen ([Es](../../prozess/praemissen/es.md
 Doppelung). 2: Zeilen 36 und 37 streichen; Code ändert sich dafür, weil er kürzer und lesbarer
 wird (DoD), der Test bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. 1: Zwei Tests in
+[messenTest.py](../../technik/tests/einheit/domaene/messenTest.py) mit schrägem Weg und Start
+außerhalb des Ursprungs, einer für `anteilBisZurBerührung`, einer für `streckeÜberdeckt`
+(Zeile 133, dort liegt die Berührung vor dem Streckenende, damit ein falscher Anteil auffällt).
+Die Formel steht schon als eine Funktion, `_anteilDesNächstenPunkts`, für beide Aufrufer.
+2: Die Prüfung „derselbe Spieler“ in
+[ausgangslage.py](../../technik/arbiter/domaene/missionsvorbereitung/ausgangslage.py)
+gestrichen; der Test bleibt grün. Der Mutationslauf selbst ist nicht wiederholt.
+
+**Nachprüfung.** In Ordnung, je Mutant von Hand in einer Kopie in `/tmp` eingesetzt. 2: Die
+Prüfung ist gestrichen; fällt auch der verbleibende `raise` weg, wird
+`testDerselbeSpielerAlsBeideSpielerIstEineVorbedingungsverletzung` rot. 1: Mit den ersten
+Zahlen überlebten drei Mutanten im Zähler; den Rest führt
+[7600](7600-schraegeTestsFangenDenZaehlerNicht.md). Mit den Zahlen von dort, die jetzt in
+[messenTest.py](../../technik/tests/einheit/domaene/messenTest.py) stehen, sind alle sieben
+geprobten Mutanten der Formel gefangen. Lesbarkeit der Tests: kein Befund.

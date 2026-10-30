@@ -21,8 +21,9 @@ from tests.akzeptanz.ziehen import mitMausUndFinger, modellZiehen
 
 nichts = Fraction(0)
 dreiZoll = Fraction(3)
-weiterAlsDieBewegungsweiteDesWarboss = bewegungsweite("Warboss") + 1
-weiterAlsDieBewegungsweiteDerBoyz = bewegungsweite("Boyz") + 1
+bewegungsweiteDesWarboss = bewegungsweite("Warboss", "Warboss")
+weiterAlsDieBewegungsweiteDesWarboss = bewegungsweiteDesWarboss + 1
+weiterAlsDieBewegungsweiteDerBoyz = bewegungsweite("Boyz", "Ork Boy") + 1
 
 wegeÜberDieBewegungsweite = pytest.mark.parametrize(
     "weg",
@@ -38,7 +39,7 @@ def testBew3_1ZiehtEinModellGenauSoWeitWieSeineBewegungsweiteHältArbiterEsNicht
     schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), (bewegungsweite("Warboss"), nichts))
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), (bewegungsweiteDesWarboss, nichts))
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
@@ -51,7 +52,7 @@ def testBew3_1ZiehtEinModellSchrägGenauSoWeitWieSeineBewegungsweiteHältArbiter
     (modell,) = warboss.modelle
     ziel = versetzt(
         schlachtInDerBewegungsphase.stelle(modell),
-        gestreckt(schrägOhneWurzel, bewegungsweite("Warboss")),
+        gestreckt(schrägOhneWurzel, bewegungsweiteDesWarboss),
     )
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
@@ -65,7 +66,7 @@ def testBew3_1JedesModellHatSeineEigeneBewegungsweite(
     (modell,) = overlord.modelle
     ziel = versetzt(
         schlachtInDerBewegungsphaseDesZweitenSpielers.stelle(modell),
-        (-bewegungsweite("Overlord"), nichts),
+        (-bewegungsweite("Overlord", "Overlord"), nichts),
     )
 
     schlachtInDerBewegungsphaseDesZweitenSpielers.modellLoslassen(modell, ziel)
@@ -84,7 +85,7 @@ def testBew3_1ZiehtEinModellWeiterAlsDieBewegungsweiteHältArbiterEsAnDerBewegun
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweiteDesWarboss)
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
@@ -93,12 +94,12 @@ def testBew3_1ZiehtEinModellNurEinenHauchWeiterHältArbiterEsHöchstensEinHunder
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    ziel = versetzt(davor, (bewegungsweite("Warboss") + Fraction(1, 200), nichts))
+    ziel = versetzt(davor, (bewegungsweiteDesWarboss + Fraction(1, 200), nichts))
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweiteDesWarboss)
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
@@ -107,7 +108,7 @@ def testBew3_1StehtEinModellSchonAnDerBewegungsweiteBleibtEsBeimWeiterZiehenSteh
 ):
     (modell,) = warboss.modelle
     start = schlachtInDerBewegungsphase.stelle(modell)
-    anDerBewegungsweite = versetzt(start, (bewegungsweite("Warboss"), nichts))
+    anDerBewegungsweite = versetzt(start, (bewegungsweiteDesWarboss, nichts))
     schlachtInDerBewegungsphase.modellLoslassen(modell, anDerBewegungsweite)
     ziel = versetzt(anDerBewegungsweite, (dreiZoll, nichts))
 
@@ -123,17 +124,17 @@ def testBew3_1DieDistanzZähltVonDerStelleZuBeginnDerBewegungsphase(
     start = schlachtInDerBewegungsphase.stelle(modell)
     nachDemErstenZug = versetzt(start, (dreiZoll, nichts))
     schlachtInDerBewegungsphase.modellLoslassen(modell, nachDemErstenZug)
-    ziel = versetzt(nachDemErstenZug, (bewegungsweite("Warboss"), nichts))
+    ziel = versetzt(nachDemErstenZug, (bewegungsweiteDesWarboss, nichts))
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAnDerBewegungsweite(start, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(start, danach, bewegungsweiteDesWarboss)
 
 
 def testBew3_1DieDistanzBeginntMitJederBewegungsphaseNeu(schlachtInDerBewegungsphase, warboss):
     (modell,) = warboss.modelle
-    zugweite = (bewegungsweite("Warboss"), nichts)
+    zugweite = (bewegungsweiteDesWarboss, nichts)
     erstesZiel = versetzt(schlachtInDerBewegungsphase.stelle(modell), zugweite)
     schlachtInDerBewegungsphase.modellLoslassen(modell, erstesZiel)
     zurBewegungsphaseDerNächstenSchlachtrunde(schlachtInDerBewegungsphase)
@@ -150,14 +151,16 @@ def testBew3_1IstDieGanzeEinheitEbeneHältDerBlockAnDerBewegungsweiteAn(
     schlachtInDerBewegungsphase.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
-    weg = gestreckt(schrägOhneHindernis, bewegungsweite("Boyz"))
+    weg = gestreckt(schrägOhneHindernis, bewegungsweite("Boyz", gezogenes.modellart))
     ziel = versetzt(davor[gezogenes], weg)
 
     schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
 
     danach = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     gesetzterWeg = wegVon(davor[gezogenes], danach[gezogenes])
-    assert hältAnDerBewegungsweite(davor[gezogenes], danach[gezogenes], bewegungsweite("Boyz"))
+    assert hältAnDerBewegungsweite(
+        davor[gezogenes], danach[gezogenes], bewegungsweite("Boyz", gezogenes.modellart)
+    )
     assert liegtAufDerGeradenVon(davor[gezogenes], ziel, danach[gezogenes])
     assert danach == stellenVersetzt(davor, gesetzterWeg)
 
@@ -173,14 +176,14 @@ def testBew3_1DasModellMitDerWeitestenDistanzBestimmtDenHaltepunktDesBlocks(
     schlachtInDerBewegungsphase.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
-    weg = gestreckt(schrägOhneHindernis, bewegungsweite("Boyz"))
+    weg = gestreckt(schrägOhneHindernis, bewegungsweite("Boyz", gezogenes.modellart))
 
     schlachtInDerBewegungsphase.modellLoslassen(gezogenes, versetzt(davor[gezogenes], weg))
 
     danach = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     gesetzterWeg = wegVon(davor[gezogenes], danach[gezogenes])
     assert hältAnDerBewegungsweite(
-        startDesWeitenModells, danach[weitesModell], bewegungsweite("Boyz")
+        startDesWeitenModells, danach[weitesModell], bewegungsweite("Boyz", weitesModell.modellart)
     )
     assert danach == stellenVersetzt(davor, gesetzterWeg)
 
@@ -192,7 +195,7 @@ def testBew3_1HältArbiterAnDerBewegungsweiteAnPrüftEsÜberEineBaseNurAnDerAnge
     gezogenes, *_ = boyz.modelle
     stelleDesWarboss = schlachtInDerBewegungsphase.stelle(modellDesWarboss)
     schlachtInDerBewegungsphase.modellLoslassen(
-        modellDesWarboss, versetzt(stelleDesWarboss, (bewegungsweite("Warboss"), nichts))
+        modellDesWarboss, versetzt(stelleDesWarboss, (bewegungsweiteDesWarboss, nichts))
     )
     davor = schlachtInDerBewegungsphase.stelle(gezogenes)
     ziel = versetzt(davor, (weiterAlsDieBewegungsweiteDerBoyz, nichts))
@@ -200,7 +203,7 @@ def testBew3_1HältArbiterAnDerBewegungsweiteAnPrüftEsÜberEineBaseNurAnDerAnge
     schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
 
     danach = schlachtInDerBewegungsphase.stelle(gezogenes)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Boyz"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Boyz", gezogenes.modellart))
 
 
 def testBew3_1DerDienstHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnUndAntwortetOhneGrund(
@@ -215,7 +218,7 @@ def testBew3_1DerDienstHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnUndAn
     assert antwort.status_code == HTTPStatus.OK
     assert "gründe" not in antwort.get_json()
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweiteDesWarboss)
 
 
 @mitMausUndFinger
@@ -233,4 +236,4 @@ def testBew3_1DieSeiteHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnOhneSp
 
     assert sperrmeldungenDerSeite(seite) == []
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss"))
+    assert hältAnDerBewegungsweite(davor, danach, bewegungsweiteDesWarboss)
