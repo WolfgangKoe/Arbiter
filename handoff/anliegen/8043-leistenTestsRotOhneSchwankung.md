@@ -4,7 +4,7 @@ Form: Fragen
 Von: Reviewer
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Hinweis: Die roten Tests der *Leisten* schwanken. Ich habe
