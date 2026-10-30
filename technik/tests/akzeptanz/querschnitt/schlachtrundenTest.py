@@ -11,6 +11,7 @@ from tests.akzeptanz.bildschirm import (
     amZugGekennzeichnet,
     knopfDerSeite,
     kopfzeileVon,
+    phaseBeendenKnopf,
     spielerAmZug,
 )
 from tests.akzeptanz.dienst import (
@@ -35,7 +36,6 @@ from tests.akzeptanz.schlacht import (
 
 zweiteSchlachtrunde = 2
 schlachtendeText = "Schlacht beendet"
-phaseBeendenKnopf = "Phase beenden"
 
 
 @pytest.fixture
@@ -156,30 +156,30 @@ def testQue10_1DerSpielstandNenntSchlachtrundeAmZugUndPhaseWieImBeispielDesVertr
 
 @pytest.mark.parametrize(("davor", "danach"), phasenwechsel, ids=phasenwechselIds)
 def testQue10_2PhaseBeendenWechseltInDieNächsteStufeDerReihenfolge(
-    schlachtInDerKommandophase, davor, danach
+    schlachtNachDerWahlDesErstenZugs, davor, danach
 ):
-    phaseBeendenBis(schlachtInDerKommandophase, davor)
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, davor)
 
-    schlachtInDerKommandophase.phaseBeenden()
+    schlachtNachDerWahlDesErstenZugs.phaseBeenden()
 
-    assert schlachtInDerKommandophase.phase is danach
+    assert schlachtNachDerWahlDesErstenZugs.phase is danach
 
 
 @pytest.mark.parametrize(("davor", "danach"), phasenwechsel, ids=phasenwechselIds)
 def testQue10_2DerSpielerBleibtInDerselbenSchlachtrundeAmZug(
-    schlachtInDerKommandophase, spielerEins, davor, danach
+    schlachtNachDerWahlDesErstenZugs, spielerEins, davor, danach
 ):
-    phaseBeendenBis(schlachtInDerKommandophase, davor)
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, davor)
 
-    schlachtInDerKommandophase.phaseBeenden()
+    schlachtNachDerWahlDesErstenZugs.phaseBeenden()
 
-    assert schlachtInDerKommandophase.amZug is spielerEins
-    assert schlachtInDerKommandophase.schlachtrunde == 1
-    assert schlachtInDerKommandophase.phase is danach
+    assert schlachtNachDerWahlDesErstenZugs.amZug is spielerEins
+    assert schlachtNachDerWahlDesErstenZugs.schlachtrunde == 1
+    assert schlachtNachDerWahlDesErstenZugs.phase is danach
 
 
 def testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase(
-    dienstDerSchlacht, schlachtInDerKommandophase
+    dienstDerSchlacht, schlachtNachDerWahlDesErstenZugs
 ):
     phaseBeenden(dienstDerSchlacht, 1, 1, Phase.kommandophase)
     spielstandDavor = spielstandVon(dienstDerSchlacht)
@@ -188,7 +188,7 @@ def testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase(
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == spielstandDavor
-    assert schlachtInDerKommandophase.phase is Phase.bewegungsphase
+    assert schlachtNachDerWahlDesErstenZugs.phase is Phase.bewegungsphase
 
 
 def testQue10_3NachDerMoralphaseDesErstenSpielersIstDerAndereAmZug(
@@ -315,28 +315,28 @@ def testQue10_4DerDienstNenntNachDemEndeDerSchlachtSieBeendetOhneSpielerAmZug(
 
 @pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
 def testQue10_5ZiehenAußerhalbDerBewegungsphaseLässtJedesModellStehenOhneGrund(
-    schlachtInDerKommandophase, boyz, phase
+    schlachtNachDerWahlDesErstenZugs, boyz, phase
 ):
-    schlachtInDerKommandophase.auswählen(boyz)
+    schlachtNachDerWahlDesErstenZugs.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
-    ziel = versetzt(schlachtInDerKommandophase.stelle(gezogenes), (Fraction(0), Fraction(2)))
-    phaseBeendenBis(schlachtInDerKommandophase, phase)
-    davor = stellenAllerModelle(schlachtInDerKommandophase)
+    ziel = versetzt(schlachtNachDerWahlDesErstenZugs.stelle(gezogenes), (Fraction(0), Fraction(2)))
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, phase)
+    davor = stellenAllerModelle(schlachtNachDerWahlDesErstenZugs)
 
-    schlachtInDerKommandophase.modellLoslassen(gezogenes, ziel)
+    schlachtNachDerWahlDesErstenZugs.modellLoslassen(gezogenes, ziel)
 
-    assert stellenAllerModelle(schlachtInDerKommandophase) == davor
+    assert stellenAllerModelle(schlachtNachDerWahlDesErstenZugs) == davor
     assert ziel != davor[gezogenes]
 
 
 @pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
 def testQue10_5DerDienstNenntAußerhalbDerBewegungsphaseBeimZiehenKeinModellUndKeinenGrund(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerKommandophase, boyz, phase
+    dienstDerSchlacht, beendeteAufstellung, schlachtNachDerWahlDesErstenZugs, boyz, phase
 ):
-    schlachtInDerKommandophase.auswählen(boyz)
+    schlachtNachDerWahlDesErstenZugs.auswählen(boyz)
     gezogenes, *_ = boyz.modelle
-    ziel = versetzt(schlachtInDerKommandophase.stelle(gezogenes), (Fraction(0), Fraction(2)))
-    phaseBeendenBis(schlachtInDerKommandophase, phase)
+    ziel = versetzt(schlachtNachDerWahlDesErstenZugs.stelle(gezogenes), (Fraction(0), Fraction(2)))
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, phase)
     spielstandDavor = spielstandVon(dienstDerSchlacht)
 
     antwort = stelleBeimLoslassenAbfragen(

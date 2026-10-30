@@ -21,6 +21,6 @@ Abschnitt der *Schlacht* nach der *Aufstellung* (QUE-9, QUE-10), die anderen:
   `anwendungFür(aufstellung, schlacht=None)`, `serverStarten(aufstellung, port=0, *,
   schlacht=None)`. Fehlt `schlacht` bei beendeter *Aufstellung*, baut `web/` sie beim ersten
   Bedarf. Danach gehen V5, V10, V14 und `karteAnklicken` an die `Schlacht`, nicht mehr an die
-  *Aufstellung*; V9: [Bewegung](../bewegung/auswahl.md). Vor dem Ende der *Aufstellung*: V12
+  *Aufstellung*. Vor dem Ende der *Aufstellung*: V12
   und V13 404. Warum in `web/`: Es steckt nur zusammen wie `__main__.py`; mit dem Umbau
   ([Anwendung](../../anwendung.md)) zieht es in den Dienst.

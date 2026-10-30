@@ -39,16 +39,16 @@ def testBew7_1EinKlickAufEinModellDerAusgewähltenEinheitMachtEsZuIhrerEbene(
 
 
 def testBew7_1IstEinAnderesModellDieEbeneWirdDasAngeklickteZurEbene(
-    schlachtInDerKommandophase, boyz
+    schlachtNachDerWahlDesErstenZugs, boyz
 ):
     erstes, zweites, *_ = boyz.modelle
-    modellZurEbeneMachen(schlachtInDerKommandophase, boyz, erstes)
+    modellZurEbeneMachen(schlachtNachDerWahlDesErstenZugs, boyz, erstes)
 
-    schlachtInDerKommandophase.modellAnklicken(zweites)
+    schlachtNachDerWahlDesErstenZugs.modellAnklicken(zweites)
 
-    assert schlachtInDerKommandophase.modellIstEbene(zweites)
-    assert not schlachtInDerKommandophase.modellIstEbene(erstes)
-    assert schlachtInDerKommandophase.ausgewählt(boyz)
+    assert schlachtNachDerWahlDesErstenZugs.modellIstEbene(zweites)
+    assert not schlachtNachDerWahlDesErstenZugs.modellIstEbene(erstes)
+    assert schlachtNachDerWahlDesErstenZugs.ausgewählt(boyz)
 
 
 def testBew7_1DerDienstNenntNachDemZweitenKlickDasModellAlsEbene(

@@ -10,6 +10,7 @@ from tests.akzeptanz.dienst import modellLoslassen
 from tests.akzeptanz.handgriffe import gestreckt, schrägOhneWurzel, versetzt, wegVon
 from tests.akzeptanz.schlacht import (
     bewegungsweite,
+    hundertstelZoll,
     hältAnDerBewegungsweite,
     jetzigeStellen,
     liegtAufDerGeradenVon,
@@ -21,6 +22,7 @@ from tests.akzeptanz.ziehen import mitMausUndFinger, modellZiehen
 
 nichts = Fraction(0)
 dreiZoll = Fraction(3)
+einHauch = hundertstelZoll / 2
 bewegungsweiteDesWarboss = bewegungsweite("Warboss", "Warboss")
 weiterAlsDieBewegungsweiteDesWarboss = bewegungsweiteDesWarboss + 1
 weiterAlsDieBewegungsweiteDerBoyz = bewegungsweite("Boyz", "Ork Boy") + 1
@@ -94,7 +96,7 @@ def testBew3_1ZiehtEinModellNurEinenHauchWeiterHältArbiterEsHöchstensEinHunder
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    ziel = versetzt(davor, (bewegungsweiteDesWarboss + Fraction(1, 200), nichts))
+    ziel = versetzt(davor, (bewegungsweiteDesWarboss + einHauch, nichts))
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 

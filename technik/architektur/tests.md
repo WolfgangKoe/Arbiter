@@ -13,8 +13,12 @@
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
   `testAuf7_3…`). Spur: [Regeln](../../prozess/regeln/kriterienregeln.md).
-- `tests/einheit/` spiegelt `arbiter/`, daneben nur Hilfsmodule (`modelle.py`). Jeder
-  Ordner dort hat `__init__.py`, sonst kollidieren Dateinamen mit Akzeptanztests. Prüft: `pytest technik/tests` bricht ab.
+- `tests/einheit/` spiegelt `arbiter/`, daneben nur Hilfsmodule (`modelle.py`).
+- Jeder Ordner unter `tests/einheit/` und `tests/akzeptanz/` hat ein `__init__.py`, sonst
+  kollidieren gleiche Dateinamen in zwei Ordnern (`phasen/bewegung/beendenTest.py`,
+  `phasen/aufstellen/beendenTest.py`). `tests/akzeptanz/` selbst hat keins: Dort liegen nur
+  `conftest.py` und Hilfsmodule. Prüft: nur Text; eine Kollision bricht `pytest technik/tests`
+  ab.
 - `arbiter` liegt über `pythonpath` (`pyproject.toml`) im Pfad, ohne `sys.path`. Prüft: nur Text.
 
 ## Bildschirmtests
@@ -36,7 +40,8 @@
   auf 1e-4. Gleichen Maßstab (QUE-2.5) prüft er an `getScreenCTM()`: `a == d`, `b == c == 0`. Farben vergleicht er als `getComputedStyle`
   zweier Elemente (QUE-2.6, AUF-4.6, AUF-4.7), nicht als Wert aus dem CSS.
 - **B4** QUE-2.1 startet `sys.executable -m arbiter --port 0` als eigenen Prozess und öffnet die
-  Adresse aus der ersten Zeile, mit `PYTHONUNBUFFERED=1`, sonst käme sie in der Pipe zu spät;
+  Adresse aus der ersten Zeile, ohne `PYTHONUNBUFFERED`: Rechtzeitig kommt sie nur, weil
+  `__main__.py` sie mit `flush=True` schreibt, und genau das prüft der Test;
   coverage misst im Kindprozess (`[tool.coverage.run]`, `formregeln/abdeckung.py`). Kein Test
   belegt 8040, dort läuft vielleicht eine Partie (1650): QUE-8.1 prüft
   `adresseMitPort(portDesBefehls([]))`, QUE-8.2 startet einen zweiten Befehl mit dem Port des

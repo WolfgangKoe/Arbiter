@@ -22,16 +22,16 @@ def testBew9_1EinKlickAufDieLeereKarteHebtDieAuswahlAuf(
 
 
 def testBew9_1EinKlickAufDieLeereKarteHebtAuchEineAuswahlMitEinemModellAlsEbeneAuf(
-    schlachtInDerKommandophase, boyz
+    schlachtNachDerWahlDesErstenZugs, boyz
 ):
     angeklickt, *_ = boyz.modelle
-    modellZurEbeneMachen(schlachtInDerKommandophase, boyz, angeklickt)
-    assert schlachtInDerKommandophase.modellIstEbene(angeklickt)
+    modellZurEbeneMachen(schlachtNachDerWahlDesErstenZugs, boyz, angeklickt)
+    assert schlachtNachDerWahlDesErstenZugs.modellIstEbene(angeklickt)
 
-    schlachtInDerKommandophase.karteAnklicken(mitteDesSpielfelds)
+    schlachtNachDerWahlDesErstenZugs.karteAnklicken(mitteDesSpielfelds)
 
-    assert not schlachtInDerKommandophase.ausgewählt(boyz)
-    assert not schlachtInDerKommandophase.modellAusgewählt(angeklickt)
+    assert not schlachtNachDerWahlDesErstenZugs.ausgewählt(boyz)
+    assert not schlachtNachDerWahlDesErstenZugs.modellAusgewählt(angeklickt)
 
 
 def testBew9_1DerDienstNenntNachDemKlickAufDieLeereKarteKeineAuswahl(

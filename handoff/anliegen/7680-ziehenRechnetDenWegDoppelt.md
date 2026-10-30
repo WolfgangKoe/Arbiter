@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code gegen [Wir 3](../../prozess/praemissen/wir.md), Nacharbeit
@@ -28,4 +28,4 @@ Verschieben, steht es an zwei Stellen. Fünf Zeilen Arbeit.
 
 **Stellungnahme.** Angenommen und umgesetzt, wie vorgeschlagen.
 
-Status: angenommen
+Status: erledigt

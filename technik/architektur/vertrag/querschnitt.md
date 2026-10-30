@@ -5,7 +5,7 @@ Pfade und JSON zwischen `web/` und `frontend/`
 [Web](../web.md), [Frontend](../frontend.md). Hier steht, was alle Phasen teilen; Handlungen,
 Knöpfe und Beispiele je Phase in ihrem Ordner ([Übersicht](../../architektur.md#schichten)).
 Eine neue Route ist ein Anliegen an den
-Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
+Architekten. Routen gibt es nur nach V1, V2, V5, V10 und V12 bis V14.
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:
   [spielstand.json](spielstand.json): Spieler 2 ist *an der Reihe*, seine erste
@@ -39,7 +39,7 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V9, V10 und V12 bis V14.
 - **V7** Die Seite zeigt (O1):
   - `sperrmeldung`, je *Grund* ein `sperrmeldungGrund`: die `gründe` der letzten 409 einer
     Handlung (Tabelle der Phase, V5), bis die nächste Handlung beantwortet ist (BEW-2.6);
-    Auswählen (V2, V9, V14) und Abfragen (V1, V10) sind keine (AUF-12.6, 12.7). Ohne *Grund*
+    Auswählen (V2, V14) und Abfragen (V1, V10) sind keine (AUF-12.6, 12.7). Ohne *Grund*
     keine. Warum in der Seite: Die *Sperre* ändert den Stand nicht (D2).
   - `knopfGruppe`: die Knöpfe, die die Datei der Phase nennt.
 - **V8** Pointer Events am Dokument, ein Weg für Maus und Finger (QUE-3.4,

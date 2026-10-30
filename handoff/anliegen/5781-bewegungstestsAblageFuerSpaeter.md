@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Namen und Ablage von Hilfsfunktionen, keine Prüfung rot).
@@ -36,3 +35,25 @@ leeres `__init__.py`; die Regel in Tests erweitere ich. Punkte 3 bis 5 wie in 52
 3. `istHandlung` ohne `/ebene` und `/anklicken`.
 4. Nach dem Zustand benennen, den sie liefert.
 5. Mit 4921.
+
+**Stellungnahme.** Angenommen, alle fünf. Kein Test prüft danach etwas anderes: Im Vergleich
+vor und nach der Änderung endet jeder Akzeptanztest gleich.
+1. `phaseBeendenKnopf` steht einmal, in [bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py)
+   neben `beendenKnopf`; [schlachtrundenTest.py](../../technik/tests/akzeptanz/querschnitt/schlachtrundenTest.py)
+   und [beendenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/beendenTest.py) importieren ihn.
+2. Ein leeres `__init__.py` steht jetzt auch in `phasen/`, `phasen/aufstellen/`, `querschnitt/`,
+   `spielobjekte/` und `missionsvorbereitung/`. In `tests/akzeptanz/` selbst steht keins; dort
+   liegen nur `conftest.py` und die Hilfsmodule, sie heißen anders als die Tests. `pytest`
+   sammelt danach dieselben 2189 Tests. Für dich: die Regel in
+   [Tests](../../technik/architektur/tests.md) auf beide Bäume fassen.
+3. `istHandlung` lässt die Pfade aus `pfadeDesAuswählens` aus: `/ausgewählt`, `/ebene`,
+   `/anklicken` (V2, V9, V14 nach V7). Kein Test wartet mit `aufDieHandlungWarten` auf einen
+   Klick auf ein *Modell*; den wartet `aufDasAnklickenWarten` in
+   [ziehen.py](../../technik/tests/akzeptanz/ziehen.py) ab.
+4. Die Fixture heißt `schlachtNachDerWahlDesErstenZugs` (*erster Zug*, Glossar), in
+   [conftest.py](../../technik/tests/akzeptanz/conftest.py) und den Tests, die sie nutzen. Das
+   stimmt auch, wenn der Test danach mit `phaseBeendenBis` in eine andere *Phase* geht.
+5. Mit 4921 erledigt: `Schlacht` lädt [conftest.py](../../technik/tests/akzeptanz/conftest.py)
+   jetzt oben, also schon für jeden Akzeptanztest. Dass `ebeneTest.py`
+   [schlacht.py](../../technik/tests/akzeptanz/schlacht.py) beim Import lädt, hängt darum an
+   keinem Modul mehr, das andere Tests nicht ohnehin brauchen.

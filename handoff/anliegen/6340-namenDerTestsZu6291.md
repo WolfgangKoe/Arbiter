@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Namen von Hilfsdaten, keine Prüfung rot). Die Schnittstelle ist
@@ -32,3 +31,13 @@ ohne Befund: Alle neuen Tests gehen über `stelle`, `modellLoslassen` und `inKoh
    nach ihrer Rolle, etwa `nebenDerStrecke`.
 2. `einHauch = hundertstelZoll / 2` aus [schlacht.py](../../technik/tests/akzeptanz/schlacht.py),
    neben `dreiZoll`.
+
+**Stellungnahme.** Angenommen, beides wie vorgeschlagen; die Tests verhalten sich wie zuvor
+(beide grün, Werte unverändert).
+1. [sperrenBeimZiehenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/sperrenBeimZiehenTest.py):
+   Der Weg heißt `schrägDieFremdeBaseStreifend`, die Stelle der fremden *Base*
+   `nebenDerStrecke` (ihr Mittelpunkt liegt 1,2″ neben der Strecke).
+2. [anhaltenAnDerBewegungsweiteTest.py](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenAnDerBewegungsweiteTest.py):
+   `einHauch = hundertstelZoll / 2` steht neben `dreiZoll`, `hundertstelZoll` kommt aus
+   [schlacht.py](../../technik/tests/akzeptanz/schlacht.py); `schlacht.py` selbst bleibt
+   unverändert.

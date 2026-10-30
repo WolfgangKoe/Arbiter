@@ -39,7 +39,7 @@
   - `seite.js`: Einstieg aus `index.html`; meldet die Ereignisse von `bedienung.js` am
     Dokument an und zeichnet den ersten Spielstand.
   - `bedienung.js`: was Zeiger und Klick bedeuten (V8, V10), mit dem Zustand des Zugs.
-  - `anfragen.js`: Pfade, `fetch`, Antworten (V1, V2, V5, V9, V10); hält den letzten
+  - `anfragen.js`: Pfade, `fetch`, Antworten (V1, V2, V5, V10, V14); hält den letzten
     Spielstand und die `gründe` der letzten 409 (V7). Die Knöpfe der `knopfGruppe` als
     Tabelle Text → Handlung und wann angeboten (V7); ein neuer Knopf ist eine Zeile.
   - `zeichnen.js`: setzt aus Spielstand, `gründe` und Knöpfen die Komponenten zur Seite

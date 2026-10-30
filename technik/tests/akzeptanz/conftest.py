@@ -58,7 +58,8 @@ class Befehl:
         return Ende(ausgabe, fehlerausgabe, prozess.returncode)
 
     def _prozessStarten(self, port: int, fehlerausgabe: int) -> subprocess.Popen:
-        umgebung = {**os.environ, "PYTHONPATH": str(_technik), "PYTHONUNBUFFERED": "1"}
+        umgebung = {name: wert for name, wert in os.environ.items() if name != "PYTHONUNBUFFERED"}
+        umgebung["PYTHONPATH"] = str(_technik)
         prozess = subprocess.Popen(
             [sys.executable, "-m", "arbiter", "--port", str(port)],
             stdout=subprocess.PIPE,
@@ -272,15 +273,15 @@ def dienstDerSchlacht(beendeteAufstellung: Aufstellung, schlacht):
 
 
 @pytest.fixture
-def schlachtInDerKommandophase(schlacht, spielerEins: Spieler):
+def schlachtNachDerWahlDesErstenZugs(schlacht, spielerEins: Spieler):
     schlacht.ersterZugWählen(spielerEins)
     return schlacht
 
 
 @pytest.fixture
-def schlachtInDerBewegungsphase(schlachtInDerKommandophase):
-    schlachtInDerKommandophase.phaseBeenden()
-    return schlachtInDerKommandophase
+def schlachtInDerBewegungsphase(schlachtNachDerWahlDesErstenZugs):
+    schlachtNachDerWahlDesErstenZugs.phaseBeenden()
+    return schlachtNachDerWahlDesErstenZugs
 
 
 @pytest.fixture

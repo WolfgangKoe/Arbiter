@@ -103,9 +103,15 @@ def armeelisteVon(seite: Page, spielername: str) -> Locator:
     return seite.locator(".armeeKarte").filter(has=name)
 
 
+pfadeDesAuswählens = ("/ausgewählt", "/anklicken")
+
+
 def istHandlung(antwort: Response) -> bool:
     anfrage = antwort.request
-    return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in unquote(anfrage.url)
+    pfad = unquote(anfrage.url)
+    return anfrage.method in ("PUT", "DELETE") and not any(
+        teil in pfad for teil in pfadeDesAuswählens
+    )
 
 
 def aufDieHandlungWarten(seite: Page):
@@ -128,6 +134,7 @@ def sperrmeldungenDerSeite(seite: Page) -> list[str]:
 
 
 beendenKnopf = "Aufstellen der Einheit beenden"
+phaseBeendenKnopf = "Phase beenden"
 zurücklegenKnopf = "Einheit zurücklegen"
 
 

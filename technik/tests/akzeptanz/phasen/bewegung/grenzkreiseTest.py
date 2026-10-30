@@ -145,12 +145,12 @@ def testBew11_4UmEineAusgewählteEinheitDesAnderenSpielersZeigtDieKarteKeinenGre
 
 @pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
 def testBew11_4AußerhalbDerBewegungsphaseZeigtDieKarteKeinenGrenzkreis(
-    schlachtInDerKommandophase, boyz, phase: Phase
+    schlachtNachDerWahlDesErstenZugs, boyz, phase: Phase
 ):
-    phaseBeendenBis(schlachtInDerKommandophase, phase)
-    schlachtInDerKommandophase.auswählen(boyz)
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, phase)
+    schlachtNachDerWahlDesErstenZugs.auswählen(boyz)
 
-    assert tuple(schlachtInDerKommandophase.grenzen) == ()
+    assert tuple(schlachtNachDerWahlDesErstenZugs.grenzen) == ()
 
 
 def testBew11_4NachDemAbwählenZeigtDieKarteKeinenGrenzkreis(schlachtInDerBewegungsphase, boyz):

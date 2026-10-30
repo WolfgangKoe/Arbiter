@@ -62,12 +62,12 @@ def testBew5_1ZurEinheitDesAnderenSpielersBietetArbiterVorrückenNichtAn(
 
 @pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
 def testBew5_1AußerhalbDerBewegungsphaseBietetArbiterVorrückenNichtAn(
-    schlachtInDerKommandophase, boyz, phase: Phase
+    schlachtNachDerWahlDesErstenZugs, boyz, phase: Phase
 ):
-    phaseBeendenBis(schlachtInDerKommandophase, phase)
-    schlachtInDerKommandophase.auswählen(boyz)
+    phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, phase)
+    schlachtNachDerWahlDesErstenZugs.auswählen(boyz)
 
-    assert not schlachtInDerKommandophase.vorrückenAngeboten
+    assert not schlachtNachDerWahlDesErstenZugs.vorrückenAngeboten
 
 
 def testBew5_1WartetDieEinheitAufIhrenVorrückwurfBietetArbiterVorrückenNichtAn(einheitAmZug):

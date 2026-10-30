@@ -20,7 +20,7 @@ Wächter und jeder *Grund* gegen die *Stelle* (D4), der nach dem Anhalten
 ([V10](ziehen.md)) bleibt (QUE-1.3 nur bei Zonen unter 1″ Abstand), werfen `Sperre`
 (AUF-12.5, 19.4). `modellSetzen`: [B1](../../tests.md#bildschirmtests).
 
-Beispiele (V6): [zurueckgelegt.json](../zurueckgelegt.json): Stand von V1 oder von V9 nach
+Beispiele (V6): [zurueckgelegt.json](../zurueckgelegt.json): Stand von V1 oder von [ebene.json](../ebene.json) nach
 `PUT /api/zurücklegen` (AUF-23.1, 23.3). [sperre.json](../sperre.json): Stand des Beispiels von
 V1, danach `DELETE /api/spieler/2/einheiten/1/ausgewählt` (AUF-5.4),
 `PUT /api/spieler/2/einheiten/1/modelle/3/stelle` mit `{"x": 42, "y": 28}` (nur dieses

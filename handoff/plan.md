@@ -102,6 +102,7 @@ Begriffe aus 6998, 7000, 7005.
 - [ ] Implementierer: Tests zu Item anhaltenUndAuswahl grün
 - [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
+  Hindernis: Reviewer → Implementierer: Der neue Einheitstest der Bewegungsphase liegt nicht, wo man ihn nach dem Modul sucht, und einer seiner Tests wäre auch grün, wenn das Modell gar nicht zieht; der Implementierer verschiebt die Datei und prüft die genaue Stelle. (Anliegen 8040); beseitigt: Commit „Schlacht nutzt gegnerVon, Route der Ebene entfällt (5701, 8030, 8040)“
 - [ ] Fachkritiker: Item anhaltenUndAuswahl abgenommen
 - [ ] Planer: Item anhaltenUndAuswahl gelöscht
 - [x] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften

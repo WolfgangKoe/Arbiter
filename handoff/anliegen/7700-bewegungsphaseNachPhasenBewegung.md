@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zur Umsetzung von Anliegen 6122 (Architektur), `git diff e1fb48b`;

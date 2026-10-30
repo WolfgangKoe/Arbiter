@@ -16,7 +16,7 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
   Umschalten: Zwei Seiten (QUE-3.2) oder ein doppelter Klick schalteten sonst zurück.
 - **V3** Die *Auswahl* hält die Domäne in `Auswahl` ([Grundschnitt](../../domaene.md)), die
   Tür ist `Aufstellung`: `auswählen(einheit)` (AUF-5.11, 20.2), `abwählen(einheit)`,
-  `ebeneWählen(modell)` (AUF-25.1), `ebeneAbwählen(modell)` (25.2), Abfragen
+  `modellAnklicken(modell)` ([V14](../bewegung/auswahl.md), AUF-25.1, 25.2), Abfragen
   `ausgewählt(einheit)`, `modellAusgewählt(modell)`, `ganzeEinheitIstEbene(einheit)`
   (AUF-21.1) und `modellIstEbene(modell)` (AUF-25.1). Nur in `Auswahl`, ohne Tür:
   `ganzeEinheitAlsEbene(einheit)` (AUF-23.3; ist sie nicht *ausgewählt*, nichts), die nur
@@ -24,9 +24,6 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
   *Ebene*; ob eine *Einheit* zur Partie gehört und nicht *aufgestellt* ist, prüft
   `Aufstellung` in `auswählen` (Anliegen 1651, AUF-5.10), nicht `web/`. Auswählen ist keine
   Handlung (Glossar, *ausgewählt*): ohne Sperre, darum ohne D2.
-- **V9** `PUT …/modelle/<m>/ebene` (`…` wie V5) macht das *Modell* zur *Ebene* seiner
-  *Einheit* (AUF-25.1), `DELETE` macht wieder die *Einheit* dazu, wenn es die *Ebene* war
-  (25.2); beide 200 mit dem Spielstand. Die Seite schickt `DELETE`, wenn das *Modell* `ebene`
-  trägt, sonst `PUT`; idempotent wie V2. Beispiel [ebene.json](../ebene.json): Stand
-  von V1 nach `PUT /api/spieler/2/einheiten/1/modelle/3/ebene`. Kein *gesetztes* *Modell*
-  der *ausgewählten* *Einheit*: 404.
+- Klick auf ein *Modell*: [V14](../bewegung/auswahl.md) (AUF-20.6, 25.1, 25.2). Beispiel
+  [ebene.json](../ebene.json): Stand von V1 nach
+  `PUT /api/spieler/2/einheiten/1/modelle/3/anklicken`.

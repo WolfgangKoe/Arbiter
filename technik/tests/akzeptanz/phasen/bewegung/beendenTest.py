@@ -4,12 +4,15 @@ from http import HTTPStatus
 
 from arbiter.domaene.querschnitt.schlachtrunden import Phase
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.bildschirm import gründeAlsText, knopfDerSeite, sperrmeldungWarten
+from tests.akzeptanz.bildschirm import (
+    gründeAlsText,
+    knopfDerSeite,
+    phaseBeendenKnopf,
+    sperrmeldungWarten,
+)
 from tests.akzeptanz.dienst import phaseBeenden, spielstandVon
 from tests.akzeptanz.handgriffe import sperrgründe
 from tests.akzeptanz.schlacht import einModellAusDerKohärenzZiehen, jetzigeStellen
-
-phaseBeendenKnopf = "Phase beenden"
 
 
 def testBew4_1OhneKohärenzSperrtPhaseBeendenMitDemGrundKeineKohärenz(
