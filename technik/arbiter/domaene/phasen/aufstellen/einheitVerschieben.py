@@ -1,5 +1,3 @@
-"""Das Verschieben einer Einheit als Block und das Hineinrücken in die Zone (AUF-21, AUF-26.1)."""
-
 from collections.abc import Mapping
 
 from arbiter.domaene import messen
@@ -8,7 +6,6 @@ from arbiter.domaene.spielobjekte import Modell, Stelle
 
 
 def hineingerückt(stellen: Mapping[Modell, Stelle], zone: Grenzen) -> dict[Modell, Stelle]:
-    """Alle gemeinsam auf kürzestem Weg in die Zone, bis jede Base ganz darin liegt."""
     grenzenInX, grenzenInY = zone
     rückung = messen.rückungInDieFläche(
         ((modell.base, stelle) for modell, stelle in stellen.items()), grenzenInX, grenzenInY

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zur Umsetzung von Anliegen 6122 (Architektur), `git diff e1fb48b`.
@@ -33,4 +32,4 @@ Anliegen 7700, wenn der Implementierer ohnehin dort ändert.
 2. `gesetzteModelle` nach `querschnitt/setzen.py`; `kohaerenz.py` und `auswahl.py` importieren
    es von dort. Kein Kreis: `setzen.py` kennt nur `messen`, `sperre` und `spielobjekte`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt, wie vorgeschlagen.

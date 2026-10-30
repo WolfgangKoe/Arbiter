@@ -1,5 +1,3 @@
-"""Wann ein Modell dran ist: nur die Einheit in Aufstellung des Spielers an der Reihe (AUF-7)."""
-
 from collections.abc import Collection
 
 from arbiter.domaene.sperre import Grund, Sperre
@@ -12,7 +10,6 @@ def prüfenDassWählbar(
     anDerReihe: Spieler | None,
     einheitInAufstellung: Einheit | None,
 ) -> None:
-    """Wirft die Sperre ohne Stelle, wenn die Einheit jetzt nicht dran ist."""
     if einheit in aufgestellt or anDerReihe is None or einheit not in anDerReihe.armee.einheiten:
         raise Sperre(Grund.nichtWählbar)
     if einheitInAufstellung not in (None, einheit):

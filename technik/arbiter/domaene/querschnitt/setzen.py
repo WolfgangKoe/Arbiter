@@ -1,13 +1,15 @@
-"""Das Setzen eines Modells (QUE-1), was mehrere Regeln über Stellen brauchen."""
-
 from collections.abc import Collection, Mapping
 from fractions import Fraction
 
 from arbiter.domaene import messen
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Modell, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
 _nahkampfreichweite = Fraction(1)
+
+
+def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
+    return {modell: stellen[modell] for modell in einheit.modelle if modell in stellen}
 
 
 def baseÜberdeckt(modell: Modell, stelle: Stelle, stellen: Mapping[Modell, Stelle]) -> bool:
@@ -36,7 +38,6 @@ def befundeDesSetzens(
     stellen: Mapping[Modell, Stelle],
     eigene: Collection[Modell],
 ) -> dict[Grund, bool]:
-    """Je Grund nach QUE-1, ob er gegen die Stelle gilt; `eigene` sind die Modelle am Zug."""
     return {
         Grund.baseÜberdeckt: baseÜberdeckt(modell, stelle, stellen),
         Grund.nahkampfreichweite: inNahkampfreichweite(modell, stelle, stellen, eigene),

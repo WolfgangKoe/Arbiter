@@ -15,7 +15,7 @@ Aufstellungszone | deployment zone | Aufstellungszone (erste, zweite) | Fläche 
 Ausgangslage | – | Ausgangslage | Stand vor der *Aufstellung*: zwei *Armeen*, *Spielfeld* und *Aufstellungszonen* (MIV-1); Werte in `domaene/daten/ausgangslage.yaml` und `onlyWar.yaml`.
 ausgewählt | – | ausgewählt | Zustand einer *Einheit*, die ein *Spieler* angeklickt hat, gleich wer *an der Reihe* ist; ist ihre *Ebene* eines ihrer *Modelle*, ist von ihren *Modellen* nur dieses ausgewählt (Anliegen 980). Erlaubt keine Handlung, zeigt nur, was gemeint ist.
 Auswahl | – | Auswahl | Die *ausgewählte* *Einheit* mit ihrer *Ebene*, höchstens eine für beide *Spieler* zusammen (Anliegen 309, 960 F3 A, 980).
-Bewegungsphase | Movement phase | bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
+Bewegungsphase | Movement phase | Bewegungsphase | Zweite *Phase* eines Zugs; darin bewegt der *Spieler* *am Zug* seine *Einheiten* (`core_rules.txt:644`, `:710`).
 Bewegungsweite | Move (M) | bewegungsweite | Wie weit ein *Modell* in der *Normalen Bewegung* höchstens zieht, in *Zoll*; jedes *Modell* hat die aus dem *Profil* seiner *Modellart* (`core_rules.txt:565`, `:745`, Anliegen 4280 F1 B). Die Anzeige kürzt sie mit B ab.
 Base | base | Base | Fläche, auf der ein *Modell* steht und von der aus gemessen wird (`core_rules.txt:464`); jedes *Modell* hat eine. Bis Etappe 4 rund, mit einem *Durchmesser*.
 Datenblatt | datasheet | datenblatt | Werte, Ausrüstung und Fähigkeiten der *Modelle* einer *Einheit*; jede *Einheit* hat eines, es nennt ihren *Name* und ihre *Modellarten* (`core_rules.txt:552`, `:553`, `:564`). Werte in `domaene/daten/katalog/<fraktion>/datenblaetter.yaml`.

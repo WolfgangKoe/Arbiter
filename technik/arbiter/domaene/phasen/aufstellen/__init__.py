@@ -1,5 +1,3 @@
-"""Die Phase Aufstellen: Wahlen, Setzen und Auswählen (AUF)."""
-
 from collections.abc import Mapping
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import (
@@ -7,7 +5,7 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
     Ausgangslage,
     Grenzen,
 )
-from arbiter.domaene.phasen import ebeneDesZugs, einheitVon, verschobeneStellen
+from arbiter.domaene.phasen import einheitVon, verschobeneStellen
 from arbiter.domaene.phasen.aufstellen.anhaltenAnEinerBase import angehalten
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.beenden import gründeGegenDasBeenden
@@ -22,8 +20,6 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 
 class Aufstellung:
-    """Der Schiedsrichter: ändert den Stand erst nach der Prüfung."""
-
     def __init__(self, ausgangslage: Ausgangslage) -> None:
         self._ausgangslage = ausgangslage
         self._beideSpieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
@@ -85,7 +81,6 @@ class Aufstellung:
         return self._zonen.get(spieler)
 
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> dict[Modell, Stelle]:
-        """Die Stellen, an die `modellLoslassen` die Modelle setzen würde (V10)."""
         einheit = self._wählbareEinheitVon(modell)
         verschoben = self._verschobeneStellen(einheit, modell, stelle)
         hinein = hineingerückt(verschoben, self._zoneAnDerReihe())
@@ -179,9 +174,7 @@ class Aufstellung:
     def _verschobeneStellen(
         self, einheit: Einheit, modell: Modell, stelle: Stelle
     ) -> dict[Modell, Stelle]:
-        ebene = ebeneDesZugs(
-            einheit, modell, self._stellen, ganzeEinheitIstEbene=self.ganzeEinheitIstEbene(einheit)
-        )
+        ebene = self._auswahl.ebene(einheit, modell, self._stellen)
         return verschobeneStellen(ebene, modell, stelle)
 
     def _loslassen(self, einheit: Einheit, neue: Mapping[Modell, Stelle]) -> None:

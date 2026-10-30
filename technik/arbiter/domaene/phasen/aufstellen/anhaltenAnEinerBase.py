@@ -1,5 +1,3 @@
-"""Das Anhalten beim Ziehen an der ersten Base, an die ein Modell oder der Block stößt (AUF-26)."""
-
 from collections.abc import Mapping
 
 from arbiter.domaene import messen
@@ -9,7 +7,6 @@ from arbiter.domaene.spielobjekte import Modell, Stelle
 def angehalten(
     stellen: Mapping[Modell, Stelle], neue: Mapping[Modell, Stelle], gezogenes: Modell
 ) -> dict[Modell, Stelle]:
-    """Die neuen Stellen, der gemeinsame Weg gekürzt bis keine Base eine andere überdeckt."""
     davor = stellen.get(gezogenes)
     if davor is None:
         return dict(neue)

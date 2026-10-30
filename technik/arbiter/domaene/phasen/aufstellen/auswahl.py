@@ -1,6 +1,7 @@
-"""Die Auswahl: die eine ausgewählte Einheit mit ihrer Ebene (AUF-5, AUF-20, AUF-25)."""
+from collections.abc import Mapping
 
-from arbiter.domaene.spielobjekte import Einheit, Modell
+from arbiter.domaene.querschnitt.setzen import gesetzteModelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
 
 class Auswahl:
@@ -27,11 +28,16 @@ class Auswahl:
         return einheit is self._einheit
 
     def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
-        """Ob Ziehen die ganze ausgewählte Einheit bewegt (AUF-21.1)."""
         return self.ausgewählt(einheit) and self._modellAlsEbene is None
 
+    def ebene(
+        self, einheit: Einheit, gezogenes: Modell, stellen: Mapping[Modell, Stelle]
+    ) -> dict[Modell, Stelle]:
+        if self.ganzeEinheitIstEbene(einheit):
+            return gesetzteModelle(einheit, stellen)
+        return {gezogenes: stellen[gezogenes]} if gezogenes in stellen else {}
+
     def modellIstEbene(self, modell: Modell) -> bool:
-        """Ob das Modell die Ebene seiner ausgewählten Einheit ist (AUF-25.1)."""
         return self._modellAlsEbene is modell
 
     def ebeneWählen(self, modell: Modell) -> None:
@@ -44,12 +50,10 @@ class Auswahl:
             self._modellAlsEbene = None
 
     def ganzeEinheitAlsEbene(self, einheit: Einheit) -> None:
-        """Macht die ganze Einheit zur Ebene, wenn sie ausgewählt ist (AUF-23.3)."""
         if self.ausgewählt(einheit):
             self._modellAlsEbene = None
 
     def modellAusgewählt(self, modell: Modell) -> bool:
-        """Alle Modelle der ausgewählten Einheit; ist ein Modell die Ebene, nur dieses."""
         gehörtDazu = self._einheit is not None and modell in self._einheit.modelle
         return gehörtDazu and self._modellAlsEbene in (None, modell)
 

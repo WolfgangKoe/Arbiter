@@ -1,5 +1,3 @@
-"""Die Ausgangslage der Mission: Armeen, Spielfeld und Aufstellungszonen (MIV-1)."""
-
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
@@ -17,7 +15,6 @@ class Aufstellungszone(Enum):
 
 @dataclass(frozen=True)
 class Formation:
-    """Modelle je Reihe und der Abstand benachbarter Bases in Zoll (AUF-8.5)."""
 
     reihen: tuple[int, ...]
     abstand: Fraction
@@ -37,7 +34,6 @@ class Ausgangslage:
             raise ValueError("Die Spieler brauchen verschiedene Armeen ohne gemeinsames Modell")
 
     def grenzenDerZone(self, zone: Aufstellungszone) -> Grenzen:
-        """Die Fläche der Zone als Grenzen in x und in y, die Form von `messen.ganzIn`."""
         breite, länge = self.spielfeld.seitenlängen
         return _grenzenInXDerZone(zone, breite, self.tiefen[zone]), (Fraction(0), länge)
 

@@ -1,5 +1,3 @@
-"""Die Messungen der Phasen (technik/architektur.md, M1); gerechnet wird exakt."""
-
 from bisect import bisect_left
 from collections.abc import Callable, Collection
 from fractions import Fraction
@@ -70,7 +68,6 @@ def rückungInDieFläche(
     grenzenInX: tuple[Fraction, Fraction],
     grenzenInY: tuple[Fraction, Fraction],
 ) -> Weg:
-    """Der kürzeste gemeinsame Weg in die Fläche, soweit die Bases zusammen hineinpassen."""
     mitRadius = [(radiusInZoll(base), stelle) for base, stelle in bases]
     rückungInX = _rückung(
         min(stelle.x - radius for radius, stelle in mitRadius),
@@ -86,7 +83,6 @@ def rückungInDieFläche(
 
 
 def _rückung(vorn: Fraction, hinten: Fraction, grenzen: tuple[Fraction, Fraction]) -> Fraction:
-    """Zu weit vorn rückt hinein, zu weit hinten zurück; passt beides nicht, gilt vorn."""
     von, bis = grenzen
     return max(von - vorn, Fraction(0)) or min(bis - hinten, Fraction(0))
 
@@ -110,7 +106,6 @@ def ersterSchrittMit(trifftMonotonAb: Callable[[int], bool], bis: int) -> int:
 def _ersterÜberdeckenderSchritt(
     bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, schritte: int
 ) -> int | None:
-    """Erster Schritt mit Überdeckung; der Abstand fällt bis zum nächsten Punkt, dann steigt er."""
     _, start = bewegt
     _, ort = ruhend
 
@@ -125,7 +120,6 @@ def _ersterÜberdeckenderSchritt(
 
 
 def schritteDesWegs(weg: Weg) -> int:
-    """Die Anzahl n der Schritte auf dem Raster von S3."""
     wegInX, wegInY = weg
     return ceil(_rasterJeZoll * (abs(wegInX) + abs(wegInY)))
 
@@ -133,7 +127,6 @@ def schritteDesWegs(weg: Weg) -> int:
 def streckeÜberdeckt(
     bewegteBase: Base, von: Stelle, nach: Stelle, ruhendeBase: Base, ort: Stelle
 ) -> bool:
-    """Ob die bewegte Base auf der geraden Strecke von `von` bis `nach` die ruhende überdeckt."""
     weg = wegZwischen(von, nach)
     if weg == (0, 0):
         return überdecken(bewegteBase, von, ruhendeBase, ort)
@@ -145,7 +138,6 @@ def streckeÜberdeckt(
 def anteilBisZurBerührung(
     bewegte: BasenAnStellen, hindernisse: BasenAnStellen, weg: Weg
 ) -> Fraction:
-    """Der Anteil bis vor die erste Überdeckung auf dem Raster von S3; 1, wenn das Ende frei ist."""
     schritte = schritteDesWegs(weg)
     if schritte == 0:
         return Fraction(1)

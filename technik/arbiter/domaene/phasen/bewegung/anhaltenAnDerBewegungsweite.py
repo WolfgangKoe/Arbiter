@@ -1,5 +1,3 @@
-"""Das Anhalten der gezogenen Modelle an ihrer Bewegungsweite (BEW-3, V16)."""
-
 from collections.abc import Mapping
 from fractions import Fraction
 
@@ -14,7 +12,6 @@ def _distanzÜberDerBewegungsweite(gezogenes: Modell, anfang: Stelle, stelle: St
 def anDerBewegungsweiteAngehalten(
     vorige: Mapping[Modell, Stelle], weg: messen.Weg, anfang: Mapping[Modell, Stelle]
 ) -> dict[Modell, Stelle]:
-    """Die Stellen nach dem Weg, gekürzt, bis keines weiter als seine Bewegungsweite steht."""
     schritte = messen.schritteDesWegs(weg)
 
     def stellenBeiSchritt(schritt: int) -> dict[Modell, Stelle]:
@@ -27,7 +24,9 @@ def anDerBewegungsweiteAngehalten(
             for gezogenes, stelle in stellenBeiSchritt(schritt).items()
         )
 
-    if schritte == 0 or not überBeiSchritt(schritte):
-        return {gezogenes: messen.verschoben(stelle, weg) for gezogenes, stelle in vorige.items()}
+    if schritte == 0:
+        return dict(vorige)
+    if not überBeiSchritt(schritte):
+        return stellenBeiSchritt(schritte)
     erster = messen.ersterSchrittMit(überBeiSchritt, schritte + 1)
     return stellenBeiSchritt(erster - 1)

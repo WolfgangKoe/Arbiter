@@ -1,5 +1,3 @@
-"""Die Gründe gegen das Beenden des Aufstellens einer Einheit (AUF-10.3, D4)."""
-
 from collections.abc import Callable, Mapping
 
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz

@@ -1,19 +1,12 @@
-"""Die Schlacht: Zug, Schlachtrunde und Phase, in der Bewegungsphase das Ziehen (QUE-9, QUE-10)."""
-
 from collections.abc import Mapping
 from enum import Enum
 from itertools import pairwise
 
-from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
-from arbiter.domaene.phasen import ebeneDesZugs, einheitVon, verschobeneStellen
+from arbiter.domaene.phasen import einheitVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
-from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
-    anDerBewegungsweiteAngehalten,
-)
-from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
-from arbiter.domaene.phasen.bewegung.sperrenBeimZiehen import gründeBeimZiehen
+from arbiter.domaene.phasen.bewegung import Bewegungsphase
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -34,8 +27,6 @@ _ersteSchlachtrunde = 1
 
 
 class Schlacht:
-    """Übernimmt die Stellen der beendeten Aufstellung und führt durch Züge und Phasen."""
-
     def __init__(self, aufstellung: Aufstellung) -> None:
         ausgangslage = aufstellung.ausgangslage
         self._ausgangslage = ausgangslage
@@ -46,7 +37,7 @@ class Schlacht:
             for modell in spieler.armee.modelle
             if (stelle := aufstellung.stelle(modell))
         }
-        self._stellenZuBeginn = dict(self._stellen)
+        self._bewegungsphase = Bewegungsphase(self._stellen)
         self._auswahl = Auswahl()
         self._ersterZug: Spieler | None = None
         self._amZug: Spieler | None = None
@@ -89,14 +80,16 @@ class Schlacht:
         if spieler is None:
             return
         if self._phase is Phase.bewegungsphase:
-            gründe = gründeGegenDasBeenden(spieler.armee.einheiten, self._stellen)
+            gründe = self._bewegungsphase.gründeGegenDasBeenden(
+                spieler.armee.einheiten, self._stellen
+            )
             if gründe:
                 raise Sperre(*gründe)
         nächste = _nächstePhase.get(self._phase)
         if nächste is not None:
             self._phase = nächste
             if nächste is Phase.bewegungsphase:
-                self._stellenZuBeginn = dict(self._stellen)
+                self._bewegungsphase = Bewegungsphase(self._stellen)
             return
         self._phase = Phase.kommandophase
         self._zugBeenden()
@@ -111,24 +104,16 @@ class Schlacht:
         return einheitInKohärenz(einheit, self._stellen)
 
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
-        """Die Stellen, an die `modellLoslassen` die Modelle setzen würde (QUE-10.5)."""
         spieler = self._amZug
         if self._phase is not Phase.bewegungsphase or spieler is None:
             return {}
         if modell not in spieler.armee.modelle:
             return {}
         einheit = einheitVon(self._beideSpieler, modell)
-        ebene = ebeneDesZugs(
-            einheit, modell, self._stellen, ganzeEinheitIstEbene=self.ganzeEinheitIstEbene(einheit)
+        ebene = self._auswahl.ebene(einheit, modell, self._stellen)
+        return self._bewegungsphase.stellenNachDemZiehen(
+            ebene, modell, stelle, self._stellen, spieler.armee.modelle
         )
-        verschoben = verschobeneStellen(ebene, modell, stelle)
-        weg = messen.wegZwischen(ebene[modell], verschoben[modell])
-        neue = anDerBewegungsweiteAngehalten(ebene, weg, self._stellenZuBeginn)
-        fremde = {anderes: ort for anderes, ort in self._stellen.items() if anderes not in neue}
-        gründe = gründeBeimZiehen(ebene, neue, fremde, spieler.armee.modelle)
-        if gründe:
-            raise Sperre(*gründe)
-        return neue
 
     def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
         self._stellen.update(self.stellenBeimLoslassen(modell, stelle))

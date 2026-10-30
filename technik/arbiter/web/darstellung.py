@@ -1,5 +1,3 @@
-"""Der Spielstand der Aufstellung als JSON-fähige Werte (technik/architektur/web.md, W2, W4)."""
-
 from collections.abc import Collection, Mapping
 
 from arbiter.domaene.messen import radiusInZoll
@@ -18,7 +16,6 @@ from arbiter.web.kennungen import (
 
 
 def spielstand(aufstellung: Aufstellung, schlacht: Schlacht | None = None) -> dict:
-    """Der Spielstand; mit `schlacht` kommen Stellen und Auswahl von ihr (Schlacht, V11)."""
     ausgangslage = aufstellung.ausgangslage
     spielerNummern = spielerNachNummer(aufstellung)
     breite, länge = ausgangslage.spielfeld.seitenlängen
@@ -48,7 +45,6 @@ def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
 
 
 def stellenBeimLoslassen(aufstellung: Aufstellung, abfrage: Mapping[Modell, Stelle]) -> dict:
-    """Die Antwort der Abfrage: jedes genannte Modell mit seiner Stelle (V10)."""
     return {
         "modelle": [
             {
@@ -119,7 +115,6 @@ def _modelle(aufstellung: Aufstellung, quelle: Aufstellung | Schlacht) -> list[d
 
 
 def texteDerGründe(gründe: Collection[Grund]) -> list[str]:
-    """Die Texte der Gründe in der Reihenfolge von `Grund` (V1, V6)."""
     return [grund.value for grund in Grund if grund in gründe]
 
 

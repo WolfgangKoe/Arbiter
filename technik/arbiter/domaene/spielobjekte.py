@@ -4,14 +4,12 @@ from fractions import Fraction
 
 @dataclass(frozen=True)
 class Base:
-    """Rund; der Durchmesser in mm."""
 
     durchmesser: int
 
 
 @dataclass(frozen=True)
 class Stelle:
-    """Mittelpunkt einer Base in Zoll (technik/architektur.md, S1)."""
 
     x: Fraction
     y: Fraction
@@ -48,7 +46,6 @@ class Armee:
         return frozenset(modell for einheit in self.einheiten for modell in einheit.modelle)
 
     def einheitVon(self, modell: Modell) -> Einheit | None:
-        """Die Einheit der Armee, zu der das Modell gehört, sonst None."""
         return next((einheit for einheit in self.einheiten if modell in einheit.modelle), None)
 
 

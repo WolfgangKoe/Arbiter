@@ -1,5 +1,3 @@
-"""Die Sperre und ihre Gründe (AUF-12)."""
-
 from enum import Enum
 
 

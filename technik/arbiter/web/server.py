@@ -1,5 +1,3 @@
-"""Startet den Werkzeug-Server in einem eigenen Thread (web.md, W2)."""
-
 import errno
 import socket
 from threading import Thread
@@ -60,7 +58,6 @@ def serverStarten(
 
 
 def _verbindungBinden(port: int) -> socket.socket:
-    """Bindet den Socket selbst, damit eine belegte Adresse als `AdresseBelegt` ankommt."""
     try:
         return socket.create_server((_gerät, port))
     except OSError as fehler:

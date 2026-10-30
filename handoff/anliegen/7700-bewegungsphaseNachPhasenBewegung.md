@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zur Umsetzung von Anliegen 6122 (Architektur), `git diff e1fb48b`;
@@ -54,4 +54,4 @@ man rund zehn Methoden samt Zustand um. Token: eine Umsetzung, gering.
 
 Prüfen: `importvertrag.py` und `spiegel.py` grün, die Tests der *Schlacht* unverändert grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt, wie vorgeschlagen.

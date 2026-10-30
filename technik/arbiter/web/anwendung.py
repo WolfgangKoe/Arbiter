@@ -1,5 +1,3 @@
-"""Flask: liefert Frontend und Spielstand, nimmt Auswahl und Handlungen an (web.md; vertrag/)."""
-
 import json
 import re
 from fractions import Fraction
@@ -77,7 +75,6 @@ def _phaseDerAnfrage(körper: dict) -> Phase:
 
 
 class _SchlachtDerAnwendung:
-    """Hält die Schlacht und baut sie beim ersten Bedarf nach der Aufstellung (Schlacht, V11)."""
 
     def __init__(self, aufstellung: Aufstellung, schlacht: Schlacht | None) -> None:
         self._aufstellung = aufstellung
@@ -96,7 +93,6 @@ class _SchlachtDerAnwendung:
 
 
 def _phaseBeenden(schlacht: Schlacht, aufstellung: Aufstellung) -> None:
-    """Beendet die Phase nur, wenn der Körper die laufende nennt (V13)."""
     körper = request.get_json(silent=True)
     if not isinstance(körper, dict):
         abort(HTTPStatus.BAD_REQUEST)

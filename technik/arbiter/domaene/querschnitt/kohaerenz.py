@@ -1,17 +1,12 @@
-"""Die Kohärenz einer Einheit (QUE-4)."""
-
 from collections.abc import Mapping
 from fractions import Fraction
 
 from arbiter.domaene import messen
+from arbiter.domaene.querschnitt.setzen import gesetzteModelle
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
 _kohärenzabstand = Fraction(2)
 _größteEinheitMitEinemPartner = 5
-
-
-def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
-    return {modell: stellen[modell] for modell in einheit.modelle if modell in stellen}
 
 
 def einheitInKohärenz(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> bool:

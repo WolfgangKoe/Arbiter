@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code gegen [Wir 3](../../prozess/praemissen/wir.md), Nacharbeit
@@ -26,4 +26,6 @@ Verschieben, steht es an zwei Stellen. Fünf Zeilen Arbeit.
 2. `if schritte == 0: return dict(vorige)`, dann
    `if not überBeiSchritt(schritte): return stellenBeiSchritt(schritte)`.
 
-Status: offen
+**Stellungnahme.** Angenommen und umgesetzt, wie vorgeschlagen.
+
+Status: angenommen

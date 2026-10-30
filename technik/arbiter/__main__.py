@@ -1,5 +1,3 @@
-"""Der Befehl `arbiter` (technik/architektur/web.md, W5)."""
-
 import argparse
 import sys
 from collections.abc import Sequence
@@ -21,7 +19,6 @@ def _portAngabe(text: str) -> int:
 
 
 def portDesBefehls(angaben: Sequence[str]) -> int:
-    """Der Port nach `--port`, ohne Angabe der feste (QUE-8.1)."""
     parser = argparse.ArgumentParser(prog="arbiter")
     parser.add_argument("--port", type=_portAngabe, default=festerPort)
     return parser.parse_args(angaben).port

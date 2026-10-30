@@ -1,5 +1,3 @@
-"""Die Ausgangslage aus den YAML-Dateien in `domaene/daten/` (MIV-1)."""
-
 from collections.abc import Callable, Mapping
 from fractions import Fraction
 from types import MappingProxyType
