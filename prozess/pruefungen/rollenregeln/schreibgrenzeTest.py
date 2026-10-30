@@ -231,6 +231,12 @@ def bash(befehl, rolle="probe"):
         pytest.param("find technik -execdir sed -i x {} \\;", id="find -execdir mit Semikolon"),
         pytest.param("find technik -exec rm {} \\;", id="rm über find"),
         pytest.param("for f in a; do echo x > $f; done", id="Umleitung in for"),
+        pytest.param("cp /tmp/a technik/x.py", id="cp ins Projekt"),
+        pytest.param("cp /tmp/a technik/x.py 2>/dev/null", id="cp mit Fehlerkanal nach null"),
+        pytest.param("cp technik/a technik/b >/dev/null", id="cp mit Ausgabe nach null"),
+        pytest.param("cp -t technik/x /tmp/a", id="cp -t ins Projekt"),
+        pytest.param("cp --target-directory=technik/x /tmp/a", id="cp Zielverzeichnis mit ="),
+        pytest.param("cp --target-directory technik/x /tmp/a", id="cp Zielverzeichnis"),
     ],
 )
 def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
@@ -258,6 +264,8 @@ def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
         pytest.param("python3 -c 'print(1)'", id="python3 -c"),
         pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
         pytest.param("cp prozess/ablauf/dod.md /tmp/dod.md", id="cp nach /tmp"),
+        pytest.param("cp prozess/a.md /tmp/a.md 2>/dev/null", id="cp nach /tmp mit Fehlerkanal"),
+        pytest.param("cp --target-directory=/tmp prozess/a.md", id="cp Zielverzeichnis /tmp"),
         pytest.param("git -C /tmp/repo commit -m x", id="git -C /tmp"),
         pytest.param("cd /tmp/repo && git add x", id="cd /tmp"),
         pytest.param("for f in a b; do echo $f; done", id="for lesend"),

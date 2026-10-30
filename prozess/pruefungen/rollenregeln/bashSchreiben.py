@@ -100,6 +100,32 @@ def argumente(wörter: list[str]) -> list[str]:
     return [wort for wort in wörter[1:] if not wort.startswith("-")]
 
 
+def zielverzeichnisOption(wort: str) -> bool:
+    kurz = wort.startswith("-") and not wort.startswith("--") and wort.endswith("t")
+    return wort == "--target-directory" or kurz
+
+
+def kopierZiele(wörter: list[str]) -> list[str]:
+    ziele: list[str] = []
+    übrige: list[str] = []
+    rest = wörter[1:]
+    stelle = 0
+    while stelle < len(rest):
+        wort = rest[stelle]
+        folgt = rest[stelle + 1] if stelle + 1 < len(rest) else ""
+        stelle += 1
+        if isinstance(wort, Umleitung):
+            stelle += 1
+        elif wort.startswith("--target-directory="):
+            ziele.append(wort.split("=", 1)[1])
+        elif zielverzeichnisOption(wort):
+            ziele.append(folgt)
+            stelle += 1
+        elif not wort.startswith("-") and not (wort.isdigit() and isinstance(folgt, Umleitung)):
+            übrige.append(wort)
+    return ziele or übrige[-1:]
+
+
 def gitÄndertImProjekt(wörter: list[str]) -> str | None:
     stelle = 1
     verzeichnis = ""
@@ -156,7 +182,7 @@ def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
     if name == "sed" and any(ändertInPlace(wort) for wort in wörter[1:]):
         return "sed -i"
     ziele = argumente(wörter)
-    if name in nurZielFrei and ziele and not liegtInTmp(ziele[-1]):
+    if name in nurZielFrei and not all(liegtInTmp(ziel) for ziel in kopierZiele(wörter)):
         return name
     if name in alleZieleFrei and not all(liegtInTmp(ziel) for ziel in ziele):
         return name

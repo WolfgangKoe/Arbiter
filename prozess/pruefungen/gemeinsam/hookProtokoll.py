@@ -53,7 +53,8 @@ class HookEingabe:
 
 
 def eingabeLesen() -> dict:
-    return json.load(sys.stdin)
+    text = sys.stdin.read()
+    return json.loads(text) if text.strip() else {}
 
 
 def verweigerung(grund: str) -> dict:
