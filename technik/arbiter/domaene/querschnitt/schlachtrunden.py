@@ -159,6 +159,9 @@ class Schlacht:
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
 
+    def karteAnklicken(self, _stelle: Stelle) -> None:
+        self._auswahl.alleAbwählen()
+
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:
             self._amZug = gegnerVon(self._beideSpieler, self._ersterZug)

@@ -24,6 +24,10 @@ class Auswahl:
             self._einheit = None
             self._modellAlsEbene = None
 
+    def alleAbwählen(self) -> None:
+        self._einheit = None
+        self._modellAlsEbene = None
+
     def ausgewählt(self, einheit: Einheit) -> bool:
         return einheit is self._einheit
 

@@ -194,7 +194,7 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
     def karteAnklicken():
-        aufstellung.karteAnklicken(_stelleDerAnfrage())
+        spiel().karteAnklicken(_stelleDerAnfrage())
         return spielstandLiefern()
 
     def aufstellenDerEinheitBeenden():
