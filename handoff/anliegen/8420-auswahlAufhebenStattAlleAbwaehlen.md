@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code verletzt Lesbarkeit, Es und Wir 2), Diff `85fe22c..b473b0b`,

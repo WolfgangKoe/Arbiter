@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Lesbarkeit der Änderung seit 85fe22c (Stand b473b0b, Teillauf 1 und 2 von

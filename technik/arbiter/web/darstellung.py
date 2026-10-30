@@ -3,6 +3,7 @@ from collections.abc import Collection, Mapping
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.phasen.bewegung.grenzkreise import Einhüllende
 from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
 from arbiter.domaene.querschnitt.uebergehen import Eintrag
 from arbiter.domaene.sperre import Grund
@@ -45,7 +46,31 @@ def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
         "protokoll": [
             _eintrag(aufstellung, eintrag) for eintrag in reversed(list(schlacht.protokoll))
         ],
+        "grenzen": [_grenze(aufstellung, grenze) for grenze in schlacht.grenzen],
+        "vorrücken": {
+            "angeboten": schlacht.vorrückenAngeboten,
+            "zurücknehmen": schlacht.vorrückenZurücknehmenAngeboten,
+        },
     }
+
+
+def _grenze(aufstellung: Aufstellung, grenze: Einhüllende) -> dict:
+    spielernummer, einheitennummer = kennungenDerEinheit(aufstellung, grenze.einheit)
+    beschreibung = {
+        "spieler": spielernummer,
+        "einheit": einheitennummer,
+        "kreise": [
+            {"x": float(kreis.stelle.x), "y": float(kreis.stelle.y), "radius": float(kreis.radius)}
+            for kreis in grenze.kreise
+        ],
+    }
+    if grenze.wurf is not None:
+        beschreibung["wurf"] = grenze.wurf
+    if grenze.wählbar:
+        beschreibung["wählbar"] = True
+    if grenze.nahkampfreichweite:
+        beschreibung["nahkampfreichweite"] = True
+    return beschreibung
 
 
 def _eintrag(aufstellung: Aufstellung, eintrag: Eintrag) -> dict:

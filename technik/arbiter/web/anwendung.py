@@ -197,6 +197,14 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         spiel().karteAnklicken(_stelleDerAnfrage())
         return spielstandLiefern()
 
+    def vorrücken():
+        schlachtOder404().vorrücken()
+        return spielstandLiefern()
+
+    def vorrückenZurücknehmen():
+        schlachtOder404().vorrückenZurücknehmen()
+        return spielstandLiefern()
+
     def aufstellenDerEinheitBeenden():
         aufstellung.aufstellenDerEinheitBeenden()
         return spielstandLiefern()
@@ -235,6 +243,10 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     pfadDesAnklickens = f"{pfadDerEinheit}/modelle/<int:modellnummer>/anklicken"
     anwendung.add_url_rule(pfadDesAnklickens, view_func=modellAnklicken, methods=["PUT"])
     anwendung.add_url_rule("/api/karteAnklicken", view_func=karteAnklicken, methods=["PUT"])
+    anwendung.add_url_rule("/api/vorrücken", view_func=vorrücken, methods=["PUT"])
+    anwendung.add_url_rule(
+        "/api/vorrückenZurücknehmen", view_func=vorrückenZurücknehmen, methods=["PUT"]
+    )
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]
     )

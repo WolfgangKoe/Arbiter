@@ -40,6 +40,13 @@ class Auswahl:
             return gesetzteModelle(einheit, stellen)
         return {gezogenes: stellen[gezogenes]} if gezogenes in stellen else {}
 
+    def ebeneDerAuswahl(self, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
+        if self._einheit is None:
+            return {}
+        if self._modellAlsEbene is None:
+            return gesetzteModelle(self._einheit, stellen)
+        return self.ebene(self._einheit, self._modellAlsEbene, stellen)
+
     def modellIstEbene(self, modell: Modell) -> bool:
         return self._modellAlsEbene is modell
 

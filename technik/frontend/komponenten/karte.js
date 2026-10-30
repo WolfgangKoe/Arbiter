@@ -1,3 +1,4 @@
+import { grenze } from "./grenze.js"
 import { knopfGruppe } from "./knopfGruppe.js"
 import { sperrmeldung } from "./sperrmeldung.js"
 import { ausSvgVorlage, ausVorlage, mitSpieler } from "./vorlage.js"
@@ -31,6 +32,8 @@ export function karte(spielstand, gründe, knöpfe) {
     flächeSetzen(fläche, zone)
     zeichnung.append(fläche)
   }
+  const grenzen = spielstand.schlacht?.grenzen ?? []
+  zeichnung.append(...grenzen.flatMap(eintrag => grenze(eintrag, spielstand.spielfeld)))
   zeichnung.append(...spielstand.modelle.map(modellKreis))
   if (gründe.length > 0) mitte.append(sperrmeldung(gründe))
   if (knöpfe.length > 0) mitte.append(knopfGruppe(knöpfe))

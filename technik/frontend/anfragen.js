@@ -8,6 +8,8 @@ const knöpfe = [
   { text: "Einheit zurücklegen", ort: "mitte", handlung: zurücklegen, angeboten: stand => !stand.schlacht && stand.einheitInAufstellung },
   { text: "Aufstellen der Einheit beenden", ort: "mitte", handlung: aufstellenDerEinheitBeenden, angeboten: stand => !stand.schlacht },
   { text: "gemeinsam übergehen", ort: "mitte", handlung: gemeinsamÜbergehen, angeboten: () => übergehbareAnfrage !== null },
+  { text: "Vorrücken", ort: "mitte", handlung: vorrücken, angeboten: stand => stand.schlacht?.vorrücken.angeboten },
+  { text: "Vorrücken zurücknehmen", ort: "mitte", handlung: vorrückenZurücknehmen, angeboten: stand => stand.schlacht?.vorrücken.zurücknehmen },
   { text: "Phase beenden", ort: "mitte", handlung: phaseBeenden, angeboten: stand => stand.schlacht && stand.schlacht.amZug !== null },
   { text: "Erster Zug", ort: "armee", handlung: ersterZugWählen, angeboten: stand => stand.schlacht?.ersterZug === null },
 ]
@@ -101,6 +103,14 @@ function aufstellenDerEinheitBeenden() {
 
 function zurücklegen() {
   return handlungSenden("/api/zurücklegen", "PUT")
+}
+
+function vorrücken() {
+  return handlungSenden("/api/vorrücken", "PUT")
+}
+
+function vorrückenZurücknehmen() {
+  return handlungSenden("/api/vorrückenZurücknehmen", "PUT")
 }
 
 function ersterZugWählen(spielernummer) {

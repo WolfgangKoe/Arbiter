@@ -9,6 +9,8 @@
   --spieler1: #3b82f6;
   --spieler2: #f43f5e;
   --ohneSpieler: #a3a3a3;
+  --maskeSichtbar: #fff;
+  --maskeVerborgen: #000;
 }
 
 .spieler1 {
@@ -175,6 +177,30 @@ body {
   stroke: var(--text);
   stroke-width: 2px;
   vector-effect: non-scaling-stroke;
+}
+
+.grenze {
+  fill: none;
+  stroke: var(--spielerFarbe);
+  stroke-opacity: 0.45;
+  stroke-width: 0.16;
+  pointer-events: none;
+}
+
+.grenze.nahkampfreichweite {
+  stroke-dasharray: 0.3 0.2;
+}
+
+.grenzeMaske rect {
+  fill: var(--maskeSichtbar);
+}
+
+.grenzeMaske circle {
+  fill: var(--maskeVerborgen);
+}
+
+.grenze.wählbar {
+  stroke-opacity: 0.7;
 }
 
 .sperrmeldung {

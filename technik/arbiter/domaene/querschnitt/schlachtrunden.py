@@ -8,6 +8,10 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.reihenfolge import gegnerVon
 from arbiter.domaene.phasen.bewegung import Bewegungsphase, StellenMitGründen
+from arbiter.domaene.phasen.bewegung.grenzkreise import (
+    Einhüllende,
+    grenzenDerNahkampfreichweite,
+)
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.querschnitt.uebergehen import Protokoll
 from arbiter.domaene.sperre import Grund, Sperre
@@ -137,7 +141,7 @@ class Schlacht:
         einheit = einheitVon(self._beideSpieler, modell)
         ebene = self._auswahl.ebene(einheit, modell, self._stellen)
         return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            ebene, modell, stelle, self._stellen, spieler.armee.modelle
+            einheit, ebene, modell, stelle, self._stellen, spieler.armee.modelle
         )
 
     def modellAnklicken(self, modell: Modell) -> None:
@@ -159,8 +163,64 @@ class Schlacht:
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
 
-    def karteAnklicken(self, _stelle: Stelle) -> None:
+    def karteAnklicken(self, stelle: Stelle) -> None:
+        einheit = self._einheitMitGrenzen()
+        if einheit is not None:
+            ebene = self._auswahl.ebeneDerAuswahl(self._stellen)
+            if self._bewegungsphase.vorrückwurfNehmen(einheit, ebene, stelle):
+                return
         self._auswahl.auswahlAufheben()
+
+    @property
+    def grenzen(self) -> tuple[Einhüllende, ...]:
+        einheit = self._einheitMitGrenzen()
+        if einheit is None:
+            return ()
+        ebene = self._auswahl.ebeneDerAuswahl(self._stellen)
+        gegner = gegnerVon(self._beideSpieler, self._amZug)
+        return (
+            *self._bewegungsphase.grenzenDerEbene(einheit, ebene),
+            *grenzenDerNahkampfreichweite(gegner.armee.einheiten, self._stellen),
+        )
+
+    @property
+    def vorrückenAngeboten(self) -> bool:
+        einheit = self._einheitMitGrenzen()
+        return einheit is not None and self._bewegungsphase.vorrückenAngeboten(einheit)
+
+    @property
+    def vorrückenZurücknehmenAngeboten(self) -> bool:
+        einheit = self._einheitMitGrenzen()
+        return einheit is not None and self._bewegungsphase.vorrückenZurücknehmenAngeboten(
+            einheit
+        )
+
+    def wartetAufVorrückwurf(self, einheit: Einheit) -> bool:
+        return self._bewegungsphase.wartetAufVorrückwurf(einheit)
+
+    def vorgerückt(self, einheit: Einheit) -> bool:
+        return self._bewegungsphase.vorgerückt(einheit)
+
+    def vorrückwurf(self, einheit: Einheit) -> int | None:
+        return self._bewegungsphase.vorrückwurf(einheit)
+
+    def vorrücken(self) -> None:
+        if self.vorrückenAngeboten:
+            self._bewegungsphase.vorrückenBeginnen(self._auswahl.einheit)
+
+    def vorrückenZurücknehmen(self) -> None:
+        if not self.vorrückenZurücknehmenAngeboten:
+            return
+        einheit = self._auswahl.einheit
+        self._bewegungsphase.vorrückenZurücknehmen(einheit)
+        self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(einheit))
+
+    def _einheitMitGrenzen(self) -> Einheit | None:
+        spieler = self._amZug
+        einheit = self._auswahl.einheit
+        if self._phase is not Phase.bewegungsphase or spieler is None or einheit is None:
+            return None
+        return einheit if einheit in spieler.armee.einheiten else None
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:
