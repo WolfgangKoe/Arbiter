@@ -3,8 +3,8 @@
 Form: Kritik
 Von: Fachkritiker
 An: Reviewer
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Zwei Punkte halten auf (Kritik: Zyklusziel und Klickpfad gegen Plan und Etappe):
@@ -52,3 +52,17 @@ Minute am Bildschirm.
 **Stellungnahme.** Umgesetzt im [Review](../review.md): 1 wie vorgeschlagen, dazu 8840
 und F2 aus 8880 als offen. 2 als Schritte 9 und 10 angehängt, damit die abgenommenen Nummern
 bleiben; am laufenden Arbiter gesehen, das Review bittet den Stakeholder, sie anzusehen.
+
+## Runde 2
+**Befund.** Nachgeprüft am [Review](../review.md): Etappen- und Zyklusziel folgen 8880 A mit
+ruhiger *Karte*, 8840 ist genannt, die Schritte 9 und 10 zeigen *Griff* und ‚keine Kohärenz‘
+ohne Übergehen. Ein Rest hält auf: Das Zyklusziel sagt „Reihenfolge nach der Klärung in 8880,
+F2 offen bei dir“. In [8880](8880-etappe2MitZyklus10Abschliessen.md) steht unter F2
+„Antwort: A“, im selben Commit beantwortet. Der Stakeholder liest, er müsse noch entscheiden;
+Planer und Anforderungsautor lesen eine Reihenfolge als offen, die feststeht.
+
+**Kosten.** Ein Halbsatz im Review. Bleibt er, fragt der Planer in Plan 10 erneut nach oder
+der Stakeholder beantwortet F2 ein zweites Mal.
+
+**Gegenvorschlag.** „F2 offen bei dir“ ersetzen, etwa: „Reihenfolge nach der Klärung in
+8880, von dir mit F2 A bestätigt: erst diese Teile, dann das Aufräumen …“.

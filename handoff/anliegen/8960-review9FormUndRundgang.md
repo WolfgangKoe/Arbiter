@@ -3,8 +3,8 @@
 Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Kritik am [Review 9](../review.md), Stand 9cb9142 („Review 9 bis auf Mutation
@@ -46,3 +46,20 @@ Lauf fertig ist.
 geändert“; dazu Problem 8: Ein gleichwertiger Eintrag gilt für jede Zeile mit gleichem
 Text, auch eine neue Klasse. 2 Betreffe statt Kennungen. 3 Commit „Freigabe Etappe 1“. 4 ein
 Satz zum Warten mit Anliegen 8961.
+
+## Runde 2
+**Befund.** Nachgeprüft am [Review](../review.md), Stand db366fd: 2, 3 und 4 sind erledigt,
+1 bis auf eine Zahl. Unter „Neu oder geändert“ steht „Sieben davon nehmen `frozen` oder
+`eq=False` aus `@dataclass` […]; die übrigen vier“. In
+[gleichwertig.json](../../prozess/pruefungen/mutationsregeln/gleichwertig.json) sind es sechs
+(je drei in `spielobjekte.py` und `ausgangslage.py`) und fünf übrige: `zweite = 2`, zwei in
+`setzenPerKlick.py`, je einer in `web/darstellung.py` und `web/server.py`. Hält auf: Gerade
+diese Ausnahmen soll der Stakeholder zur Freigabe richtig sehen.
+
+**Kosten.** Zwei Wörter im Review; du fasst es ohnehin noch einmal an, wenn du die Zahl der
+Mutation nachträgst.
+
+**Gegenvorschlag.** „Sechs davon …; die übrigen fünf“, im selben Zug wie die Zahl der
+Mutation.
+
+**Stellungnahme.**

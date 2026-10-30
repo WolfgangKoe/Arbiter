@@ -5,6 +5,7 @@ Von: Planer
 An: Stakeholder
 Runde: 1/3
 Status: angenommen
+Wartet auf: Domänenphase 10
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Wir sollten mit diesem Zyklus Etappe 2 an sich fast abgeschlossen haben. Das bitte nochmal prüfen. Für Zyklus 10 haben wir inzwischen sehr viele Anliegen angesammelt. Vielleicht lohnt es sich Zyklus 10 als Abschluss für Etappe 2 zu planen. Das bitte mal kritisch prüfen.“
@@ -30,7 +31,7 @@ Kommentar: Und ein weiterer Kommentar. Sobald Etappe 2 inhaltlich abgenommen ist
 Stellungnahme: Geht: Wer nur Anliegen schreibt, läuft neben der Technikphase ([Gleichzeitige Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md)). Ab der Abnahme des letzten Items fragt dich der Anforderungsautor in Anliegen zu [Etappe 3](../../domaene/etappen/03-angriffUndFallBack.md) samt den zwei Punkten aus A; ausformuliert wird sie nach Review 10 (Domänenphase 1). Token: in Zyklus 10 statt 11.
 
 **Klärung.** Ja. Plan 10 ordnet: erst die Teile aus A bis zur Abnahme des Fachkritikers, die ruhige *Karte* zuletzt; dann die 22 Anliegen zum Aufräumen und 7800; dann DoD und Review 10. Die ruhige *Karte* bleibt in Etappe 2; hängt sie, endet die Etappe mit Zyklus 11. Ab der Abnahme des letzten Items prüfst du am Bildschirm, freigeben kannst du erst Review 10.
-Folgen: eine Ausnahme von „erst Bestand abbauen“ (Absicht 2, Anliegen 306) für Zyklus 10. Die neuen Teile bauen auf Code, den 8620, 8121, 8261 und 8641 noch umbauen; das Aufräumen fasst dann auch neuen Code an, etwas mehr Arbeit. Braucht ein Teil ein Anliegen vorher, ziehe ich es vor. Die Teile fasse ich zu höchstens drei Items (Domänenphase 6).
+Folgen: eine Ausnahme von „erst Bestand abbauen“ (Absicht 2, Anliegen 306) für Zyklus 10. Die neuen Teile bauen auf Code, den 8620, 8121, 8261 und 8641 noch umbauen; das Aufräumen fasst dann auch neuen Code an, mehr Arbeit. Braucht ein Teil ein Anliegen vorher, ziehe ich es vor. Die Teile fasse ich zu höchstens drei Items (Domänenphase 6).
 **F2 · Gilt diese Reihenfolge für Plan 10?**
 - A Ja, wie in der Klärung (Anliegen 8880). **Empfehlung**: Du nimmst früher ab.
 - B Nein, erst aufräumen (Absicht 2, Anliegen 306).
