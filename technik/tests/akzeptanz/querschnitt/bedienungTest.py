@@ -3,6 +3,7 @@
 import pytest
 from playwright.sync_api import expect
 
+from arbiter.domaene.phasen.aufstellen import Aufstellung
 from tests.akzeptanz.auswahl import (
     ausgewählteEinheiten,
     ausgewählteModelle,
@@ -21,6 +22,7 @@ from tests.akzeptanz.handgriffe import (
     anzahlGesetzterModelle,
     einheitenAufstellen,
     modelleSetzen,
+    nachDerWahlDerAufstellungszone,
     stelleInDerZoneVon,
 )
 from tests.akzeptanz.ziehen import (
@@ -38,11 +40,18 @@ def kreisAufDerKarte(seite):
     return seite.locator(".karte .modell").first
 
 
+@pytest.fixture
+def aufstellungZumTippen(ausgangslage, spielerZwei) -> Aufstellung:
+    aufstellung = Aufstellung(ausgangslage)
+    nachDerWahlDerAufstellungszone(aufstellung, gewinner=spielerZwei)
+    return aufstellung
+
+
 def testQue3_1EinTippenAufEineKarteInDerArmeelisteMachtDieEinheitAusgewähltWieEinKlick(
-    bildschirm, aufstellungNachDerZonenwahl
+    bildschirm, aufstellungNachDerZonenwahl, aufstellungZumTippen
 ):
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
+    mitFinger = bildschirm.seiteZu(aufstellungZumTippen, berührbar=True)
 
     klickenUndWarten(mitMaus, "Spieler 2", "Necron Warriors")
     tippenUndWarten(mitFinger, "Spieler 2", "Necron Warriors")
@@ -51,10 +60,10 @@ def testQue3_1EinTippenAufEineKarteInDerArmeelisteMachtDieEinheitAusgewähltWieE
 
 
 def testQue3_1EinTippenAufEineAusgewählteEinheitMachtSieNichtAusgewähltWieEinKlick(
-    bildschirm, aufstellungNachDerZonenwahl
+    bildschirm, aufstellungNachDerZonenwahl, aufstellungZumTippen
 ):
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
+    mitFinger = bildschirm.seiteZu(aufstellungZumTippen, berührbar=True)
     klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
     tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 
@@ -65,11 +74,12 @@ def testQue3_1EinTippenAufEineAusgewählteEinheitMachtSieNichtAusgewähltWieEinK
 
 
 def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
-    bildschirm, aufstellungNachDerZonenwahl, boyz
+    bildschirm, aufstellungNachDerZonenwahl, aufstellungZumTippen, boyz
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
+    modelleSetzen(aufstellungZumTippen, boyz, anzahlGesetzterModelle)
     mitMaus = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    mitFinger = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=True)
+    mitFinger = bildschirm.seiteZu(aufstellungZumTippen, berührbar=True)
     klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
     tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 

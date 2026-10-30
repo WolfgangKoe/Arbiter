@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code, `git diff 90801c5 819896b`. Hält auf nach
@@ -29,4 +29,14 @@ dieselbe Handlung auf zwei gleichen Ständen dasselbe zeigt. Prüfe dabei auch d
 der Datei, die `seiteZu` zweimal mit derselben *Aufstellung* rufen (sie sind heute nur grün,
 weil die *Einheitenkarte* ihren Zustand aus der eigenen Seite liest).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in
+[bedienungTest.py](../../technik/tests/akzeptanz/querschnitt/bedienungTest.py): Die Seite zum
+Tippen bekommt ihre eigene *Aufstellung* aus der neuen Fixture `aufstellungZumTippen`, die
+dieselbe *Ausgangslage* mit `nachDerWahlDerAufstellungszone` auf denselben Stand bringt; im
+Test zur *Karte* setzt `modelleSetzen` die Boyz auf beiden *Aufstellungen*. Das gilt für alle
+drei Tests zu QUE-3.1, die `seiteZu` zweimal riefen; QUE-3.2 öffnet bewusst dieselbe Adresse
+und bleibt. Abweichend vom Gegenvorschlag kein `copy.deepcopy`: Es scheitert an der
+*Ausgangslage* (`MappingProxyType` lässt sich nicht kopieren) und gäbe neue *Modelle*, die
+sich nur über ihre Identität gleichen (`eq=False`), sodass `boyz` die Kopie nicht mehr träfe.
+`python3 -m pytest technik/tests/akzeptanz/querschnitt/bedienungTest.py`: 11 grün;
+Benennung, Kommentare, Glossar, Importvertrag, Rückverfolgung und ruff ohne Befund.
