@@ -101,7 +101,7 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Fachkritiker → Testautor: Drei Tests zum Klick auf das Modell der Ebene sind schon grün, obwohl ein Klick heute nie ein Modell zur Ebene macht; sie prüfen nicht, dass vorher ein Modell die Ebene war. (Anliegen 7400); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
 - [x] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
   Hindernis: Architekt → Testautor: Ein Test zur Auswahl einer aufgestellten Einheit heißt „ohne Ebene“, obwohl die ganze Einheit ihre Ebene ist; der Testautor benennt ihn um. (Anliegen 7420); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
-- [ ] Implementierer: Tests zu Item anhaltenUndAuswahl grün
+- [x] Implementierer: Tests zu Item anhaltenUndAuswahl grün
   Hindernis: Implementierer → Testautor: Test BEW-2.8 Nahkampfreichweite in sperrenBeimZiehenTest.py zieht aus dem Spielfeld (Anliegen 8280); beseitigt: Commit „Lauf 2: Architektur zu 8241, Test BEW-2.8 berichtigt (8280), 6400 und 6420 erledigt“
 - [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
