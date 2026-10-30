@@ -53,9 +53,14 @@ class Bewegungsphase:
     def vorrückwurf(self, einheit: Einheit) -> int | None:
         return self._vorrückwürfe.get(einheit)
 
-    def stellenMitGründenNachDemZiehen(  # noqa: PLR0913
+    def _vorrückwurfDes(self, gezogenes: Modell) -> int:
+        return next(
+            (wurf for einheit, wurf in self._vorrückwürfe.items() if gezogenes in einheit.modelle),
+            0,
+        )
+
+    def stellenMitGründenNachDemZiehen(
         self,
-        einheit: Einheit,
         ebene: Mapping[Modell, Stelle],
         gezogenes: Modell,
         ziel: Stelle,
@@ -66,7 +71,7 @@ class Bewegungsphase:
         gegner = {anderes: ort for anderes, ort in stellen.items() if anderes not in eigene}
         anteil = min(
             anteilBisZurBewegungsweite(
-                ebene, weg, self._stellenZuBeginn, self._vorrückwürfe.get(einheit, 0)
+                ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
             ),
             anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld),
             anteilBisZurNahkampfreichweite(ebene, weg, gegner),

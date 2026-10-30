@@ -141,7 +141,7 @@ class Schlacht:
         einheit = einheitVon(self._beideSpieler, modell)
         ebene = self._auswahl.ebene(einheit, modell, self._stellen)
         return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            einheit, ebene, modell, stelle, self._stellen, spieler.armee.modelle
+            ebene, modell, stelle, self._stellen, spieler.armee.modelle
         )
 
     def modellAnklicken(self, modell: Modell) -> None:

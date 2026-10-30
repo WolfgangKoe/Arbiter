@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code verletzt Lesbarkeit, [Es](../../prozess/praemissen/es.md)),
@@ -39,4 +39,8 @@ etwa 10 Zeilen in zwei Modulen; der Aufruf in
    `gegner` zu übergeben, trägt nicht allein: `gründeBeimZiehen` braucht weiter `fremde`
    (auch die eigenen *Modelle* außerhalb der *Ebene*) und `eigene`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. 1: Parameter heißt `vorrückwurf`,
+ohne Standardwert; die drei Aufrufe in `anhaltenAnDerBewegungsweiteTest.py` übergeben `0`.
+2: `einheit` ist aus `stellenMitGründenNachDemZiehen` entfernt, `Bewegungsphase._vorrückwurfDes(gezogenes)`
+findet den Wurf über das *Modell*; das `noqa` entfällt. Alle Tests in `technik/tests` grün
+(1274), ruff grün.

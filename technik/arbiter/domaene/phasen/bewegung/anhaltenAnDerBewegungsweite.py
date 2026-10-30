@@ -6,22 +6,22 @@ from arbiter.domaene.spielobjekte import Modell, Stelle
 
 
 def _distanzÜberDerBewegungsweite(
-    gezogenes: Modell, anfang: Stelle, stelle: Stelle, zuschlag: int
+    gezogenes: Modell, anfang: Stelle, stelle: Stelle, vorrückwurf: int
 ) -> bool:
-    return messen.abstandImQuadrat(anfang, stelle) > (gezogenes.bewegungsweite + zuschlag) ** 2
+    return messen.abstandImQuadrat(anfang, stelle) > (gezogenes.bewegungsweite + vorrückwurf) ** 2
 
 
 def anteilBisZurBewegungsweite(
     vorige: Mapping[Modell, Stelle],
     weg: messen.Weg,
     anfang: Mapping[Modell, Stelle],
-    zuschlag: int = 0,
+    vorrückwurf: int,
 ) -> Fraction:
     def überBeiAnteil(anteil: Fraction) -> bool:
         kurz = messen.teilDesWegs(weg, anteil)
         return any(
             _distanzÜberDerBewegungsweite(
-                gezogenes, anfang[gezogenes], messen.verschoben(stelle, kurz), zuschlag
+                gezogenes, anfang[gezogenes], messen.verschoben(stelle, kurz), vorrückwurf
             )
             for gezogenes, stelle in vorige.items()
         )

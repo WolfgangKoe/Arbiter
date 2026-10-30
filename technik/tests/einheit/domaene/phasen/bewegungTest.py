@@ -19,7 +19,6 @@ def testDasZiehenGibtDieNeuenStellenDerEbeneZurück(zehnZoll):
     stellen = {modell: stelleAn(0, 0)}
 
     neue, gründe = Bewegungsphase(stellen, spielfeld).stellenMitGründenNachDemZiehen(
-        Einheit("Testeinheit", (modell,)),
         stellen, modell, stelleAn(4, 0), stellen, {modell}
     )
 
@@ -33,7 +32,6 @@ def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
     jetzt = {modell: stelleAn(3, 0)}
 
     neue, _ = Bewegungsphase(beginn, spielfeld).stellenMitGründenNachDemZiehen(
-        Einheit("Testeinheit", (modell,)),
         jetzt, modell, stelleAn(9, 0), jetzt, {modell}
     )
 

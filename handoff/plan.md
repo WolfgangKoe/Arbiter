@@ -64,7 +64,7 @@ Begriffe aus 6998, 7000, 7005.
   Anliegen 7000,
   Anliegen 7005.
 - Deine Nachprüfung: Anliegen 6400,
-  [6410](anliegen/6410-grenzkreiseNahkampfUndBewegung.md),
+  Anliegen 6410,
   Anliegen 6420.
 - Übrige: [Moderation](moderation.md).
 
@@ -114,11 +114,11 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Fachkritiker → Testautor: 13 Testfälle zu Grenzkreisen und Vorrücken ziehen die ganze Einheit gegen die Nachbareinheit und werden so nie grün; ein Test der Seite prüft nicht, dass der Kreis des Wurfs verschwindet (Anliegen 7640); beseitigt: Commit „grenzkreise: Tests und Kritik an den Tests (7640, 7660)“
 - [x] Architekt: Kritik an den Tests zu Item grenzkreise
   Hindernis: Architekt → Testautor: Die neuen Grenzen im Spielstand machen vier ältere Tests rot, die den ganzen Spielstand der Schlacht mit einem Beispiel vergleichen; drei Tests zur Seite sind ohne Code schon grün, einer prüft nach dem Zurücknehmen die Grenze nicht. Der Testautor vergleicht nur die Schlüssel des Beispiels und baut die drei Tests um. (Anliegen 7660); beseitigt: Commit „grenzkreise: Tests und Kritik an den Tests (7640, 7660)“
-- [ ] Implementierer: Tests zu Item grenzkreise grün
+- [x] Implementierer: Tests zu Item grenzkreise grün
 - [x] Architekt: Kritik am Code zu Item grenzkreise
 - [ ] Reviewer: Kritik am Code zu Item grenzkreise
   Hindernis: Reviewer → Implementierer: Lesbarkeit: zuschlag statt vorrückwurf, noqa PLR0913 (Anliegen 8640)
-- [ ] Fachkritiker: Item grenzkreise abgenommen
+- [x] Fachkritiker: Item grenzkreise abgenommen
 - [ ] Planer: Item grenzkreise gelöscht
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
