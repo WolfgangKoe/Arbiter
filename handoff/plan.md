@@ -93,8 +93,8 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Architekt → Implementierer: Beim Loslassen fragt Arbiter nicht, ob die Sperre übergangen werden darf, und verlässt sich allein auf den Knopf; so stünde ‚keine Kohärenz‘ nicht sicher fest, sobald eine Sperre beim Ziehen sie meldet. Die Abfrage beim Ziehen bietet das Übergehen zu Unrecht an. Je eine bis drei Zeilen. (Anliegen 8240); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
 - [x] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
   Hindernis: Reviewer → Implementierer: Im Code, der die Leisten ein- und ausfährt, heißt ein Wert eingefahren, obwohl er wahr ist, wenn die Leiste ausgefahren ist; am Bildschirm stimmt alles, nur der Name sagt laut Glossar das Gegenteil. Empfehlung: umbenennen in ausgefahren, eine Zeile. (Anliegen 8260); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
-- [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen
-- [ ] Planer: Item gemeinsamUebergehen gelöscht
+- [x] Fachkritiker: Item gemeinsamUebergehen abgenommen
+- [x] Planer: Item gemeinsamUebergehen gelöscht
 - [x] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
 - [x] Testautor: Tests zu Item anhaltenUndAuswahl
 - [x] Fachkritiker: Kritik an den Tests zu Item anhaltenUndAuswahl
