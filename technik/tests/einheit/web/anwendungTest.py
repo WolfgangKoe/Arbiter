@@ -172,24 +172,6 @@ def testEinFremderHostBekommtBadRequest(aufstellung):
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
-pfadDerEbene = "/api/spieler/{}/einheiten/{}/modelle/{}/ebene"
-
-
-@pytest.mark.parametrize("methode", ["put", "delete"])
-def testEineEbeneOhneGesetztesModellDerAusgewähltenEinheitIstNichtGefunden(aufstellung, methode):
-    aufstellung.gewinnerWählen(aufstellung.ausgangslage.ersterSpieler)
-    aufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
-    dienst = anwendungFür(aufstellung).test_client()
-    pfad = pfadDerEbene.format(1, 1, 1)
-
-    ohneAuswahl = getattr(dienst, methode)(pfad)
-    dienst.put(pfadDerAuswahl.format(1, 1))
-    ohneGesetztesModell = getattr(dienst, methode)(pfad)
-
-    assert ohneAuswahl.status_code == HTTPStatus.NOT_FOUND
-    assert ohneGesetztesModell.status_code == HTTPStatus.NOT_FOUND
-
-
 pfadDesErstenZugs = "/api/spieler/{}/ersterZug"
 pfadPhaseBeenden = "/api/phaseBeenden"
 kommandophaseVonSpielerEins = {"schlachtrunde": 1, "spieler": 1, "phase": "Kommandophase"}
@@ -243,7 +225,7 @@ def testDerErsteZugÄndertSichNichtBeimZweitenKlick(dienstNachDerAufstellung):
         {"schlachtrunde": 1, "spieler": 1, "phase": ["Kommandophase"]},
     ],
 )
-def testPhaseBeendenMitUnvollständigemKörperIstEineFalscheAnfrage(dienstNachDerAufstellung, körper):
+def testPhaseBeendenMitFalschemKörperIstEineFalscheAnfrage(dienstNachDerAufstellung, körper):
     dienstNachDerAufstellung.put(pfadDesErstenZugs.format(1))
 
     antwort = dienstNachDerAufstellung.put(pfadPhaseBeenden, json=körper)

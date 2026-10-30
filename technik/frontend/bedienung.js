@@ -1,6 +1,5 @@
 import {
   auswahlSenden,
-  ebeneSenden,
   karteAnklicken,
   letztenSpielstandZeichnen,
   modellAnklickenSenden,
@@ -37,10 +36,6 @@ function stelleDesZugs(ereignis, start, gezogenerKreis) {
   return { x: vorigeStelle.x + punkt.x - greifpunkt.x, y: vorigeStelle.y + punkt.y - greifpunkt.y }
 }
 
-function einheitAusgewählt(modell) {
-  return document.querySelector(`.einheitenKarte.ausgewählt[data-spieler="${modell.spieler}"][data-einheit="${modell.einheit}"]`) !== null
-}
-
 function ziehenZurücknehmen(start) {
   for (const { kreis, x, y } of start.kreise) {
     kreis.setAttribute("cx", x)
@@ -74,10 +69,7 @@ function klicken(ereignis, ziel) {
   const einheitenKarte = ziel.closest(".einheitenKarte")
   if (einheitenKarte) return auswahlSenden(einheitenKarte.dataset, einheitenKarte.classList.contains("ausgewählt"))
   const modell = ziel.closest(".karte .modell")
-  if (modell) {
-    if (!einheitAusgewählt(modell.dataset)) return modellAnklickenSenden(modell.dataset)
-    return ebeneSenden(modell.dataset, Boolean(modell.dataset.ebene))
-  }
+  if (modell) return modellAnklickenSenden(modell.dataset)
   if (!ziel.closest(".karte")) return
   const stelle = stelleAufDerKarte(ereignis)
   if (stelle) return karteAnklicken(stelle)

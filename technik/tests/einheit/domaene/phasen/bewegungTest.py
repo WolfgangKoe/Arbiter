@@ -29,4 +29,4 @@ def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
         jetzt, modell, stelleAn(9, 0), jetzt, {modell}
     )
 
-    assert neue[modell].x <= bewegungsweiteDerTestmodelle
+    assert neue == {modell: Stelle(x=bewegungsweiteDerTestmodelle, y=Fraction(0))}

@@ -40,6 +40,14 @@ class Auswahl:
     def modellIstEbene(self, modell: Modell) -> bool:
         return self._modellAlsEbene is modell
 
+    def modellAnklicken(self, einheit: Einheit, modell: Modell) -> None:
+        if not self.ausgewählt(einheit):
+            self.auswählen(einheit)
+        elif self.modellIstEbene(modell):
+            self.ebeneAbwählen(modell)
+        else:
+            self.ebeneWählen(modell)
+
     def ebeneWählen(self, modell: Modell) -> None:
         self._prüfenDassZurAusgewähltenEinheit(modell)
         self._modellAlsEbene = modell

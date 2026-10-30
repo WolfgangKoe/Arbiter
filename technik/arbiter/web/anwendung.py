@@ -155,27 +155,6 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     def modellDerArmee(spielernummer: int, einheitennummer: int, modellnummer: int) -> Modell:
         return modellDerEinheit(einheitDerArmee(spielernummer, einheitennummer), modellnummer)
 
-    def gesetztesModellDerAusgewählten(
-        spielernummer: int, einheitennummer: int, modellnummer: int
-    ) -> Modell:
-        einheit = einheitDerArmee(spielernummer, einheitennummer)
-        modell = modellDerEinheit(einheit, modellnummer)
-        if not (aufstellung.ausgewählt(einheit) and aufstellung.gesetzt(modell)):
-            abort(HTTPStatus.NOT_FOUND)
-        return modell
-
-    def modellAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        aufstellung.ebeneWählen(
-            gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
-        )
-        return spielstandLiefern()
-
-    def einheitAlsEbene(spielernummer: int, einheitennummer: int, modellnummer: int):
-        aufstellung.ebeneAbwählen(
-            gesetztesModellDerAusgewählten(spielernummer, einheitennummer, modellnummer)
-        )
-        return spielstandLiefern()
-
     def einheitAuswählen(spielernummer: int, einheitennummer: int):
         aufstellung.auswählen(einheitInDerArmeeliste(spielernummer, einheitennummer))
         return spielstandLiefern()
@@ -238,9 +217,6 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     anwendung.add_url_rule(pfadDerAbfrage, view_func=stelleBeimLoslassen)
     pfadDesAnklickens = f"{pfadDerEinheit}/modelle/<int:modellnummer>/anklicken"
     anwendung.add_url_rule(pfadDesAnklickens, view_func=modellAnklicken, methods=["PUT"])
-    pfadDerEbene = f"{pfadDerEinheit}/modelle/<int:modellnummer>/ebene"
-    anwendung.add_url_rule(pfadDerEbene, view_func=modellAlsEbene, methods=["PUT"])
-    anwendung.add_url_rule(pfadDerEbene, view_func=einheitAlsEbene, methods=["DELETE"])
     anwendung.add_url_rule("/api/karteAnklicken", view_func=karteAnklicken, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/aufstellenDerEinheitBeenden", view_func=aufstellenDerEinheitBeenden, methods=["PUT"]

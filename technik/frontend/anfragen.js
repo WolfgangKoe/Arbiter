@@ -76,10 +76,6 @@ export async function auswahlSenden(einheit, ausgewählt) {
   await zeichneAntwort(await senden(`${einheitenPfad(einheit)}/ausgewählt`, ausgewählt ? "DELETE" : "PUT"))
 }
 
-export async function ebeneSenden(modell, istEbene) {
-  await zeichneAntwort(await senden(`${modellPfad(modell)}/ebene`, istEbene ? "DELETE" : "PUT"))
-}
-
 export async function modellAnklickenSenden(modell) {
   await zeichneAntwort(await senden(`${modellPfad(modell)}/anklicken`, "PUT"))
 }

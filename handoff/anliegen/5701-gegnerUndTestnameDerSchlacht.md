@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase 9
 
 ## Runde 1
@@ -29,3 +29,5 @@ Stellen; bleibt 2, sucht ein Leser den Fall „falscher Wert“ vergeblich.
 2. Umbenennen in `testPhaseBeendenMitFalschemKörperIstEineFalscheAnfrage`.
 
 **Stellungnahme.**
+1. Angenommen. `_zugBeenden` nutzt `gegnerVon`; ob `gegnerVon` bei den Spielobjekten liegen soll, entscheidet der Architekt.
+2. Angenommen. Umbenannt in `testPhaseBeendenMitFalschemKörperIstEineFalscheAnfrage`.

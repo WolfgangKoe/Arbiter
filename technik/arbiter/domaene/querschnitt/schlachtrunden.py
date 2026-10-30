@@ -6,6 +6,7 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
 from arbiter.domaene.phasen import einheitVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
+from arbiter.domaene.phasen.aufstellen.reihenfolge import gegnerVon
 from arbiter.domaene.phasen.bewegung import Bewegungsphase
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.sperre import Sperre
@@ -120,7 +121,7 @@ class Schlacht:
 
     def modellAnklicken(self, modell: Modell) -> None:
         if self.gesetzt(modell):
-            self._auswahl.auswählen(einheitVon(self._beideSpieler, modell))
+            self._auswahl.modellAnklicken(einheitVon(self._beideSpieler, modell), modell)
 
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)
@@ -139,8 +140,7 @@ class Schlacht:
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:
-            ersterSpieler, zweiterSpieler = self._beideSpieler
-            self._amZug = zweiterSpieler if self._ersterZug is ersterSpieler else ersterSpieler
+            self._amZug = gegnerVon(self._beideSpieler, self._ersterZug)
             return
         if self._schlachtrunde == self._ausgangslage.letzteSchlachtrunde:
             self._amZug = None
