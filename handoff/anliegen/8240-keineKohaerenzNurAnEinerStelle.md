@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Kritik: neuer Code verletzt Architektur, hier den Vertrag
@@ -36,4 +36,6 @@ bis drei Zeilen.
    `sperreTest.py` prüft die Regel schon.
 2. In `stellenBeimLoslassen` `raise Sperre(*gründe)` ohne `übergehbar`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. `modellLoslassen` bildet die
+*Sperre* einmal und wirft sie, wenn nicht `sperre.übergehbar and gründe <= übergehen`;
+`stellenBeimLoslassen` wirft `Sperre(*gründe)` ohne `übergehbar`.

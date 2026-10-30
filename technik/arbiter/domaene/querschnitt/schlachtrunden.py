@@ -113,15 +113,16 @@ class Schlacht:
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
         neue, gründe = self._stellenMitGründen(modell, stelle)
         if gründe:
-            raise Sperre(*gründe, übergehbar=True)
+            raise Sperre(*gründe)
         return neue
 
     def modellLoslassen(
         self, modell: Modell, stelle: Stelle, übergehen: frozenset[Grund] = frozenset()
     ) -> None:
         neue, gründe = self._stellenMitGründen(modell, stelle)
-        if not gründe <= übergehen:
-            raise Sperre(*gründe, übergehbar=True)
+        sperre = Sperre(*gründe, übergehbar=True) if gründe else None
+        if sperre and not (sperre.übergehbar and gründe <= übergehen):
+            raise sperre
         self._stellen.update(neue)
         if gründe and self._amZug is not None:
             einheit = einheitVon(self._beideSpieler, modell)

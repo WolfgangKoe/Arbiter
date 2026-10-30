@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (Kritik: neuer Code verletzt Lesbarkeit, [Es](../../prozess/praemissen/es.md)
@@ -27,4 +27,5 @@ beim Ändern (etwa *Leiste* beim Start eingefahren) die Logik falsch herum um. E
 **Gegenvorschlag.** `const ausgefahren = …` (oder `eingefahren = … === "false"` und
 `String(eingefahren)`).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: in [leisten.js](../../technik/frontend/leisten.js) heißt
+die Konstante jetzt `ausgefahren`.
