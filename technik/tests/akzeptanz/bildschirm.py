@@ -1,5 +1,3 @@
-"""Bildschirm der Akzeptanztests: Browser, Server und das Lesen der Seite."""
-
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass
@@ -16,8 +14,6 @@ from arbiter.web.server import serverStarten
 
 @dataclass(frozen=True)
 class Element:
-    """Ein Element der Seite, wie der Browser es zeigt."""
-
     art: str
     attribute: dict[str, str]
     fill: str
@@ -53,7 +49,6 @@ def elementeDerSeite(seite: Page, auswahl: str) -> tuple[Element, ...]:
 
 
 def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> frozenset[str]:
-    """Die Füllfarben der Kreise an den Stellen der gesetzten Modelle des Spielers."""
     farbeJeStelle = {
         (kreis.zahl("cx"), kreis.zahl("cy")): kreis.fill
         for kreis in elementeDerSeite(seite, ".karte .modell")
@@ -66,13 +61,11 @@ def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> fro
 
 
 def kreiseDerKarte(seite: Page) -> frozenset[tuple[float, float]]:
-    """Die Mittelpunkte der Kreise der Karte, wie die Seite sie zeichnet."""
     kreise = elementeDerSeite(seite, ".karte .modell")
     return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
 
 
 def inhaltDerSeite(seite: Page) -> str:
-    """Kopfzeile, Armeelisten und Karte, wie der Browser sie zeigt."""
     return seite.evaluate(
         "() => ['.kopfzeile', '.spielbereich'].map(a => document.querySelector(a).innerHTML).join()"
     )
@@ -85,7 +78,6 @@ _strichLesen = """element => {
 
 
 def strichVon(element: Locator) -> str:
-    """Farbe und Breite des Rands eines Kreises, wie der Browser ihn zeichnet."""
     return element.evaluate(_strichLesen)
 
 
@@ -94,7 +86,6 @@ def einheitenKarteVon(seite: Page, spielername: str, einheitenname: str) -> Loca
 
 
 def spielerAnDerReihe(seite: Page) -> Locator:
-    """Die Kopfzeile des Spielers, die „an der Reihe“ zeigt."""
     return seite.locator(".kopfzeileSpieler").filter(has=seite.locator(".kopfzeileAnDerReihe"))
 
 
@@ -113,7 +104,6 @@ def armeelisteVon(seite: Page, spielername: str) -> Locator:
 
 
 def istHandlung(antwort: Response) -> bool:
-    """Eine Antwort auf eine Handlung: ändernde Anfrage, die kein Auswählen ist."""
     anfrage = antwort.request
     return anfrage.method in ("PUT", "DELETE") and "/ausgewählt" not in unquote(anfrage.url)
 
@@ -127,7 +117,6 @@ def gründeAlsText(gründe) -> frozenset[str]:
 
 
 def sperrmeldungWarten(seite: Page, gründe: frozenset[Grund]) -> frozenset[str]:
-    """Wartet, bis die Seite so viele Gründe nennt, wie erwartet, und gibt ihren Text zurück."""
     meldungen = seite.locator(".sperrmeldung .sperrmeldungGrund")
     expect(meldungen).to_have_count(len(gründe))
     return frozenset(text.strip() for text in meldungen.all_text_contents())
@@ -189,7 +178,6 @@ def kopfzeileVon(seite: Page, spielername: str) -> Locator:
 
 
 def spielerAmZug(seite: Page) -> Locator:
-    """Die Kopfzeile des Spielers, die ‚am Zug‘ trägt."""
     return seite.locator(".kopfzeileSpieler.amZug")
 
 
@@ -214,15 +202,12 @@ wartezeitInMillisekunden = 5000
 
 
 class Bildschirm:
-    """Browser und Server der Bildschirmtests; schließt, was er geöffnet hat."""
-
     def __init__(self, browser: Browser) -> None:
         self._browser = browser
         self._seiten: list[Page] = []
         self._server: list = []
 
     def seiteBei(self, adresse: str, *, berührbar: bool = False) -> Page:
-        """Öffnet die Adresse und wartet auf das Spielfeld, erst dann gilt, was die Seite zeigt."""
         seite = self._neueSeite(berührbar=berührbar)
         seite.goto(adresse)
         _aufDasSpielfeldWarten(seite)
@@ -231,7 +216,6 @@ class Bildschirm:
     def seiteMitSpielstand(
         self, aufstellung: Aufstellung, spielstand: dict, weitere: Mapping[str, dict] | None = None
     ) -> Page:
-        """Öffnet die Seite des Servers; Spielstand und `weitere` (Muster, Antwort) kommen so."""
         seite = self._neueSeite(berührbar=False)
 
         for muster, antwort in {"**/api/spielstand": spielstand, **(weitere or {})}.items():
@@ -249,7 +233,6 @@ class Bildschirm:
         return seite
 
     def seiteZu(self, aufstellung: Aufstellung, *, berührbar: bool = False) -> Page:
-        """Startet den Server mit dem Spielstand im selben Prozess und öffnet seine Seite."""
         server = serverStarten(aufstellung)
         self._server.append(server)
         return self.seiteBei(server.adresse, berührbar=berührbar)
@@ -257,7 +240,6 @@ class Bildschirm:
     def seiteZuSchlacht(
         self, aufstellung: Aufstellung, schlacht, *, berührbar: bool = False
     ) -> Page:
-        """Startet den Server mit der Aufstellung und dieser Schlacht und öffnet seine Seite."""
         server = serverStarten(aufstellung, schlacht=schlacht)
         self._server.append(server)
         return self.seiteBei(server.adresse, berührbar=berührbar)

@@ -44,8 +44,7 @@ def zustandOhneEbene(aufstellung, einheit):
     )
 
 
-def ganzeEinheitDavor(aufstellung, anderes):
-    """Davor ist die Ebene die ganze Einheit."""
+def ganzeEinheitDavor(aufstellung, anderes): ...
 
 
 def anderesModellDavor(aufstellung, anderes):
@@ -56,7 +55,6 @@ def anderesModellDavor(aufstellung, anderes):
     params=[ganzeEinheitDavor, anderesModellDavor], ids=["ganzeEinheit", "anderesModell"]
 )
 def zweitesBoyzModellOhneEbene(request, aufstellungNachDerZonenwahl, boyzSetzen, boyz):
-    """Die Boyz sind ausgewählt; das zweite Modell wird angeklickt."""
     [(erstes, _), (zweites, stelleZweites), _] = boyzSetzen(3)
     aufstellungNachDerZonenwahl.auswählen(boyz)
     request.param(aufstellungNachDerZonenwahl, erstes)

@@ -1,5 +1,3 @@
-"""Anhalten der Akzeptanztests: Züge zum Anhalten aufbauen und prüfen."""
-
 from dataclasses import dataclass
 from fractions import Fraction
 
@@ -13,7 +11,6 @@ from tests.akzeptanz.handgriffe import (
 
 
 def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]:
-    """Die Stellen aller gesetzten Modelle beider Spieler, wie JSON und Seite sie nennen."""
     return frozenset(
         stelleImSpielstand(stelle)
         for stelle in stellenAllerModelle(aufstellung).values()
@@ -23,8 +20,6 @@ def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]
 
 @dataclass(frozen=True)
 class Zug:
-    """Orte als Tiefe und Länge je in (Zoll, Radien): Start, Loslassen, Base im Weg, Ende."""
-
     start: tuple
     loslassen: tuple
     hindernis: tuple

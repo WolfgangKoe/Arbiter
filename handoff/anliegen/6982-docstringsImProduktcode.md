@@ -4,8 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nach [Es 8](../../prozess/praemissen/es.md) steht ein Docstring nur als Kopf
@@ -23,3 +22,6 @@ benenne um ([Es, Lesbarkeit](../../prozess/praemissen/es.md)).
 Prüfe mit `python3 -m pytest prozess/pruefungen/formregeln/kommentareTest.py`.
 
 **Stellungnahme.**
+Alle Docstrings in `technik/arbiter/` und `technik/tests/einheit/` sind entfernt (0015ae7);
+die Suche nach Docstrings dort findet keinen. Die Prüfung `docstringVerstößeUnterTechnik`
+meldet unter Technik nur noch `technik/tests/akzeptanz/`, das ist Anliegen 6981 des Testautors.

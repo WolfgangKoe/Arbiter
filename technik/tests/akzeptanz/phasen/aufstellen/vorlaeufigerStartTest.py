@@ -13,7 +13,6 @@ def mitteDerArmeeliste(seite, spielername: str) -> float:
 
 
 def zoneNebenDerArmeeliste(seite, spielername: str) -> Element:
-    """Die Zone der Karte, deren Mitte der Armeeliste des Spielers am nächsten liegt."""
     mitteDerArmeelisteDesSpielers = mitteDerArmeeliste(seite, spielername)
     abstandUndZone = [
         (abs(zone.mitteInPixeln - mitteDerArmeelisteDesSpielers), index, zone)

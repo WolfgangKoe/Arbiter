@@ -36,8 +36,6 @@ from tests.akzeptanz.ziehen import modellZiehen
 
 @dataclass(frozen=True)
 class Loslassen:
-    """Ein Modell, losgelassen auf der Karte an der `stelle`."""
-
     einheit: Einheit
     modell: Modell
     stelle: Stelle
@@ -78,8 +76,7 @@ def sperrendesLoslassen(request, aufstellungNachDerZonenwahl) -> Loslassen:
     return einModellAnEinerFreienStelle(aufstellungNachDerZonenwahl, einheit)
 
 
-def ohneEinheitInAufstellung(aufstellung):
-    """Nichts gesetzt: AUF-7.4."""
+def ohneEinheitInAufstellung(aufstellung): ...
 
 
 def ohneKohärenz(aufstellung):

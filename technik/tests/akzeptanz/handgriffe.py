@@ -1,5 +1,3 @@
-"""Handgriffe der Akzeptanztests: Armeen bauen, Stellen berechnen, aufstellen."""
-
 from dataclasses import replace
 from fractions import Fraction
 from pathlib import Path
@@ -33,7 +31,6 @@ schrägOhneWurzel = (Fraction(3, 5), Fraction(4, 5))
 
 
 def spielerMit(*modellzahlen: int) -> Spieler:
-    """Ein Spieler, dessen Armee je Zahl eine Einheit mit so vielen Modellen hat."""
     einheiten = tuple(
         Einheit(
             name=f"Einheit {nummer}",
@@ -61,7 +58,6 @@ def radiusInZoll(modell: Modell) -> Fraction:
 
 
 def stelleInZone(zone: Aufstellungszone, tiefe: Fraction | int, länge: Fraction | int) -> Stelle:
-    """Tiefe von der Spielfeldkante der Zone nach innen, Länge entlang dieser Kante."""
     ersteHälfte = zone is Aufstellungszone.erste
     breite = Fraction(tiefe) if ersteHälfte else breiteDesSpielfelds - Fraction(tiefe)
     return Stelle(x=breite, y=Fraction(länge))
@@ -70,7 +66,6 @@ def stelleInZone(zone: Aufstellungszone, tiefe: Fraction | int, länge: Fraction
 def stellenDerEinheit(
     aufstellung: Aufstellung, spieler: Spieler, einheit: Einheit
 ) -> list[tuple[Modell, Stelle]]:
-    """Die Modelle in einer Reihe, Base an Base, je Einheit eine eigene Reihe in der Zone."""
     zone = aufstellung.aufstellungszone(spieler)
     reihe = spieler.armee.einheiten.index(einheit)
     tiefe = tiefeDerErstenReihe + abstandDerReihen * reihe
@@ -118,8 +113,6 @@ def durchmesserJeEinheit(spieler: Spieler) -> tuple[tuple[int, ...], ...]:
 
 
 class Platz:
-    """Stellen in der Zone des ersten Spielers und die Maße der Testmodelle."""
-
     def __init__(self, zone: Aufstellungszone) -> None:
         self._zone = zone
         testmodell = Modell(
@@ -138,7 +131,6 @@ class Platz:
         return stelleInZone(self._zone, tiefe, länge)
 
     def stelleBeimAnderenSpieler(self, abstandDerMittelpunkte, richtung) -> Stelle:
-        """Eine Stelle, deren Mittelpunkt so weit vom letzten Modell der ersten Einheit liegt."""
         anteilX, anteilY = richtung
         tiefe = (
             self.breiteDesSpielfelds - self.tiefeDerErstenReihe - abstandDerMittelpunkte * anteilX
@@ -149,7 +141,6 @@ class Platz:
 def modelleSetzen(
     aufstellung: Aufstellung, einheit: Einheit, anzahl: int
 ) -> list[tuple[Modell, Stelle]]:
-    """Setzt die ersten Modelle der Reihe der Einheit, ohne das Aufstellen zu beenden."""
     spieler = aufstellung.anDerReihe
     gesetzt = stellenDerEinheit(aufstellung, spieler, einheit)[:anzahl]
     for modell, stelle in gesetzt:
@@ -158,7 +149,6 @@ def modelleSetzen(
 
 
 def einheitenAufstellen(aufstellung: Aufstellung, anzahl: int) -> None:
-    """Der jeweils an der Reihe ist, stellt seine nächste Einheit auf, so oft wie verlangt."""
     for _ in range(anzahl):
         spieler = aufstellung.anDerReihe
         nächste = next(
@@ -168,7 +158,6 @@ def einheitenAufstellen(aufstellung: Aufstellung, anzahl: int) -> None:
 
 
 def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
-    """Beide Spieler stellen alle Einheiten ihrer Armee auf."""
     ausgangslage = aufstellung.ausgangslage
     einheitenAufstellen(
         aufstellung,
@@ -180,7 +169,6 @@ def alleEinheitenAufstellen(aufstellung: Aufstellung) -> None:
 def modelleAnStellenSetzen(
     aufstellung: Aufstellung, einheit: Einheit, stellen: list[Stelle]
 ) -> list[tuple[Modell, Stelle]]:
-    """Setzt die ersten Modelle der Einheit an die Stellen, ein Modell je Stelle."""
     gesetzte = list(zip(einheit.modelle, stellen, strict=False))
     for modell, stelle in gesetzte:
         aufstellung.modellSetzen(modell, stelle)
@@ -188,7 +176,6 @@ def modelleAnStellenSetzen(
 
 
 def inZoll(maß: tuple[Fraction | int, int], radius: Fraction) -> Fraction:
-    """Ganze Zoll plus ein Vielfaches des Radius."""
     zoll, radien = maß
     return zoll + radien * radius
 
@@ -215,7 +202,6 @@ def gestreckt(weg: tuple[Fraction, Fraction], faktor: Fraction) -> tuple[Fractio
 def gezogenesUndRest(
     gesetzte: list[tuple[Modell, Stelle]], *, zweitesGezogen: bool
 ) -> tuple[tuple[Modell, Stelle], tuple[Modell, Stelle]]:
-    """Von zwei gesetzten Modellen das gezogene zuerst, das mitgezogene danach."""
     erstes, zweites = gesetzte
     return (zweites, erstes) if zweitesGezogen else (erstes, zweites)
 
@@ -223,7 +209,6 @@ def gezogenesUndRest(
 def erwarteteStelle(
     aufstellung: Aufstellung, radius: Fraction, erwartet: tuple[tuple, tuple]
 ) -> Stelle:
-    """Tiefe und Länge je als (Zoll, Radien) in der Zone des Spielers an der Reihe."""
     tiefe, länge = erwartet
     return stelleInDerZoneDesSpielersAnDerReihe(
         aufstellung, inZoll(tiefe, radius), inZoll(länge, radius)
@@ -243,7 +228,6 @@ def stelleInDerZoneDesSpielersAnDerReihe(
 
 
 def stellenAllerModelle(spielstand) -> dict[Modell, Stelle | None]:
-    """Die Stelle jedes Modells beider Spieler; der Spielstand nennt seine `ausgangslage`."""
     ausgangslage = spielstand.ausgangslage
     spieler = (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
     return {
@@ -258,13 +242,11 @@ def yamlAusDenDaten(*teileDesPfads: str):
 
 
 def modellartenImKatalog(eintrag: dict) -> dict:
-    """Die Modellarten des Datenblatts eines Eintrags der Ausgangslage, aus dem Katalog."""
     datenblätter = yamlAusDenDaten("katalog", eintrag["fraktion"], "datenblaetter.yaml")
     return datenblätter[eintrag["datenblatt"]]["modellarten"]
 
 
 def profileDerModelle(eintrag: dict) -> list[tuple[str, dict]]:
-    """Je Modell des Eintrags seine Modellart und ihr Profil aus dem Katalog."""
     modellarten = modellartenImKatalog(eintrag)
     return [
         (modellart, modellarten[modellart])
@@ -280,7 +262,6 @@ def eintragDerAusgangslage(datenblatt: str) -> dict:
 
 
 def reihenDerFormation(einheitenname: str) -> list[int]:
-    """Die Modelle je Reihe aus `formation.yaml`, nicht kopiert."""
     return yamlAusDenDaten("formation.yaml")["formation"][einheitenname]
 
 

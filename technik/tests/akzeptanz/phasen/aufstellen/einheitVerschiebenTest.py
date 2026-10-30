@@ -49,7 +49,6 @@ hineinrücken = pytest.mark.parametrize(
 
 
 def endstellen(aufstellung, radius: Fraction, erwartet) -> tuple[Stelle, Stelle]:
-    """Die Stellen der zwei Modelle in einer Reihe entlang y, das erste an `erwartet`."""
     erstes = erwarteteStelle(aufstellung, radius, erwartet)
     return erstes, Stelle(x=erstes.x, y=erstes.y + 2 * radius)
 

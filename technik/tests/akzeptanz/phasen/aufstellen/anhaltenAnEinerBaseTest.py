@@ -145,8 +145,7 @@ zügeFürDieAbfrage = pytest.mark.parametrize(
 )
 
 
-def nichtAuswählen(aufstellung, einheit, modell):
-    """Die Einheit bleibt, wie sie ist: nicht ausgewählt."""
+def nichtAuswählen(aufstellung, einheit, modell): ...
 
 
 mitUndOhneEbene = pytest.mark.parametrize(

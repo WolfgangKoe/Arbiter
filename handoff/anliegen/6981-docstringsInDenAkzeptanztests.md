@@ -4,8 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nach [Es 8](../../prozess/praemissen/es.md) steht ein Docstring nur als Kopf
@@ -24,4 +23,10 @@ Token: eine mechanische Änderung, je Docstring eine Zeile weniger; den Kopf lä
 einzige Anweisung ist, setze `...`. Prüfe mit
 `python3 -m pytest prozess/pruefungen/formregeln/kommentareTest.py`.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: In `technik/tests/akzeptanz/` steht nur noch
+der Kopf jeder Testdatei; entfernt sind 117 Docstrings in 19 Dateien, auch die Modulköpfe der
+Hilfsmodule (`handgriffe.py`, `conftest.py` und andere), die keine Akzeptanztestdateien sind.
+Sechs Funktionen bestehen nur noch aus `...`, nach `ruff format` auf einer Zeile. Das Verhalten
+ist unverändert: Der Syntaxbaum jeder Datei gleicht dem vorigen ohne die Docstrings, und
+nichts liest `__doc__`. `kommentareTest.py` ist grün, `ruff check` und `ruff format --check`
+auch.

@@ -32,8 +32,7 @@ zurücklegenAdresse = "**/api/zur%C3%BCcklegen"
 anzahlGesetzter = 3
 
 
-def ohneAuswahl(aufstellung, einheit, _modell):
-    """Die Einheit bleibt, wie sie ist: nicht ausgewählt."""
+def ohneAuswahl(aufstellung, einheit, _modell): ...
 
 
 def ausgewählt(aufstellung, einheit, _modell):
@@ -54,12 +53,10 @@ mitAusgewählterEinheit = pytest.mark.parametrize(
 
 
 def gesetzteStellen(aufstellung):
-    """Die gesetzten Modelle, die die Karte zeigen muss."""
     return [stelle for stelle in stellenAllerModelle(aufstellung).values() if stelle is not None]
 
 
-def keineEinheitInAufstellung(aufstellung, einheit):
-    """Die Zonenwahl ist getroffen, kein Modell ist gesetzt."""
+def keineEinheitInAufstellung(aufstellung, einheit): ...
 
 
 def eineEinheitAufgestellt(aufstellung, einheit):
@@ -75,7 +72,6 @@ ohneEinheitInAufstellung = pytest.mark.parametrize(
 
 @pytest.fixture
 def boyzMitEbene(aufstellungNachDerZonenwahl, boyz, boyzSetzen, ebeneLegen):
-    """Drei gesetzte Boyz; die Ebene und die Auswahl legt der Test fest."""
     [(erstes, _), *_] = boyzSetzen(anzahlGesetzter)
     ebeneLegen(aufstellungNachDerZonenwahl, boyz, erstes)
     return boyz

@@ -1,5 +1,3 @@
-"""Handgriffe der Akzeptanztests zur Schlacht: Phasen durchlaufen, Stellen und Wege."""
-
 from fractions import Fraction
 from itertools import pairwise
 from typing import NamedTuple
@@ -41,7 +39,6 @@ phasenAußerDerBewegungsphaseIds = [phase.name for phase in phasenAußerDerBeweg
 
 
 def phaseBeendenBis(schlacht, phase: Phase) -> None:
-    """Beendet Phasen, bis die Schlacht in der Phase ist; ist sie es schon, geschieht nichts."""
     for _ in phasenEinesZugs:
         if schlacht.phase is phase:
             return
@@ -50,7 +47,6 @@ def phaseBeendenBis(schlacht, phase: Phase) -> None:
 
 
 def zügeBeenden(schlacht, anzahl: int) -> None:
-    """Beendet ganze Züge, beginnend in der Kommandophase."""
     for _ in range(anzahl * len(phasenEinesZugs)):
         schlacht.phaseBeenden()
 
@@ -64,17 +60,14 @@ def zurBewegungsphaseDerNächstenSchlachtrunde(schlacht) -> None:
 
 
 def letzteSchlachtrunde() -> int:
-    """Die letzte Schlachtrunde der Mission aus `onlyWar.yaml`, nicht kopiert."""
     return yamlAusDenDaten("onlyWar.yaml")["Schlacht"]["schlachtrunde"]
 
 
 def zurLetztenSchlachtrunde(schlacht) -> None:
-    """Beide Spieler beenden alle Züge vor der letzten Schlachtrunde."""
     zügeBeenden(schlacht, 2 * (letzteSchlachtrunde() - 1))
 
 
 def bewegungsweite(datenblatt: str, modellart: str) -> Fraction:
-    """Bewegungsweite der Modellart in Zoll aus dem Datenblatt im Katalog, nicht kopiert."""
     modellarten = modellartenImKatalog(eintragDerAusgangslage(datenblatt))
     return Fraction(modellarten[modellart]["bewegungsweite"])
 
@@ -84,7 +77,6 @@ def jetzigeStellen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
 
 
 def stellenAlsZahlen(schlacht) -> frozenset[tuple[float, float]]:
-    """Die Stellen aller gesetzten Modelle als Zahlenpaare, wie die Karte sie zeichnet."""
     gesetzte = (stelle for stelle in stellenAllerModelle(schlacht).values() if stelle is not None)
     return frozenset(stelleImSpielstand(stelle) for stelle in gesetzte)
 
@@ -96,7 +88,6 @@ def stellenDerEinheitAlsZahlen(schlacht, einheit: Einheit) -> frozenset[tuple[fl
 def stellenVersetzt(
     stellen: dict[Modell, Stelle], weg: tuple[Fraction, Fraction]
 ) -> dict[Modell, Stelle]:
-    """Dieselben Modelle, jedes um den Weg versetzt."""
     wegInX, wegInY = weg
     return {
         modell: Stelle(x=stelle.x + wegInX, y=stelle.y + wegInY)
@@ -108,18 +99,15 @@ hundertstelZoll = Fraction(1, 100)
 
 
 def abstandImQuadrat(von: Stelle, nach: Stelle) -> Fraction:
-    """Das Quadrat der geraden Strecke, exakt (Vertrag S2)."""
     return (nach.x - von.x) ** 2 + (nach.y - von.y) ** 2
 
 
 def hältAnDerBewegungsweite(davor: Stelle, danach: Stelle, bewegungsweite: Fraction) -> bool:
-    """Das Modell steht höchstens die Bewegungsweite und höchstens 1/100″ davor (BEW-3.1)."""
     abstand = abstandImQuadrat(davor, danach)
     return (bewegungsweite - hundertstelZoll) ** 2 <= abstand <= bewegungsweite**2
 
 
 def liegtAufDerGeradenVon(davor: Stelle, ziel: Stelle, danach: Stelle) -> bool:
-    """Die Stelle `danach` liegt von `davor` aus in Richtung `ziel`."""
     zumZielInX, zumZielInY = ziel.x - davor.x, ziel.y - davor.y
     danachInX, danachInY = danach.x - davor.x, danach.y - davor.y
     parallel = zumZielInX * danachInY == zumZielInY * danachInX
@@ -128,7 +116,6 @@ def liegtAufDerGeradenVon(davor: Stelle, ziel: Stelle, danach: Stelle) -> bool:
 
 
 def einModellAusDerKohärenzZiehen(schlacht, einheit: Einheit) -> None:
-    """Das letzte Modell der Einheit geht fünf Zoll nach Osten, weit weg von seinen Nachbarn."""
     *_, letztes = einheit.modelle
     ziel = versetzt(schlacht.stelle(letztes), (Fraction(5), Fraction(0)))
     schlacht.modellLoslassen(letztes, ziel)

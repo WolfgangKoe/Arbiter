@@ -56,7 +56,6 @@ rundungDesGesendetenWegs = 1e-9
 
 
 def stellenDerReihe(aufstellung, radius) -> list[Stelle]:
-    """Zwei Bases Rand an Rand entlang y, weit genug von allen Rändern der Zone."""
     return [
         stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefeDerReihe, längeDesErsten),
         stelleInDerZoneDesSpielersAnDerReihe(
@@ -267,7 +266,6 @@ def testAuf24_3DieKarteZeigtBeimHaltenJedesModellDortWoEsBeimLoslassenStehtOhneS
 
 
 def seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung):
-    """Spielstand, Abfrage und Antwort aufs Loslassen liefern die Beispiele des Vertrags."""
     spielstand = spielstandDesVertrags()
     return bildschirm.seiteMitSpielstand(
         ausgangsaufstellung,

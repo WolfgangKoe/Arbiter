@@ -24,7 +24,6 @@ def aufstellungMitEinheitVon(modellzahl: int):
 
 
 def modelleMitAbständen(aufstellung, beginner, einheit, abstände: list[Fraction]) -> None:
-    """Setzt die ersten Modelle in einer Reihe; der erste Abstand ist null, danach je Base."""
     erstesModell, *_ = einheit.modelle
     länge = radiusInZoll(erstesModell)
     for modell, abstand in zip(einheit.modelle, abstände, strict=False):

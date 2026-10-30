@@ -10,7 +10,7 @@ Wartet auf: Technikphase 10
 ## Runde 1
 **Befund.** Wartet auf die nächste Technikphase ([Kritik](../../prozess/ablauf/kritik.md)): Der
 Test steht schon länger und gehört nicht zur laufenden Änderung, keine Prüfung ist rot. Gefunden
-bei der Nachprüfung von [7420](7420-dienstWaehltOhneEbeneWiderspruchZumGlossar.md).
+bei der Nachprüfung von Anliegen 7420.
 `testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitOhneEbene` in
 [ebeneTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ebeneTest.py) prüft AUF-20.6 in
 [ebene.md](../../domaene/anforderungen/phasen/aufstellen/ebene.md). Das Kriterium lautet:

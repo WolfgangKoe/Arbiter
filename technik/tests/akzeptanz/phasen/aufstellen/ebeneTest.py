@@ -42,15 +42,13 @@ längsDerZone = 30
 nummerDesGezogenen = 1
 
 
-def nichtAuswählen(aufstellung, einheit, modell):
-    """Die Einheit bleibt, wie sie ist: nicht ausgewählt."""
+def nichtAuswählen(aufstellung, einheit, modell): ...
 
 
 @pytest.fixture(
     params=[nichtAuswählen, modellZurEbeneMachen], ids=["nichtAusgewählt", "ebeneIstEinModell"]
 )
 def dreiBoyzNachDerVorgeschichte(request, aufstellungNachDerZonenwahl, boyz, boyzSetzen):
-    """Drei gesetzte Boyz; die Vorgeschichte betrifft das erste, gezogene Modell."""
     gesetzte = boyzSetzen(3)
     [(gezogenes, _), *_] = gesetzte
     request.param(aufstellungNachDerZonenwahl, boyz, gezogenes)

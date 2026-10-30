@@ -1,5 +1,3 @@
-"""Dienst der Akzeptanztests: Anfragen nach dem Vertrag und das Lesen des Spielstands."""
-
 import json
 from collections.abc import Mapping
 from fractions import Fraction
@@ -25,7 +23,6 @@ def dienstFür(aufstellung: Aufstellung):
 
 
 def dienstFürSchlacht(aufstellung: Aufstellung, schlacht):
-    """Der Flask-Testclient über der Aufstellung und genau dieser Schlacht (Schlacht, V11)."""
     return anwendungFür(aufstellung, schlacht=schlacht).test_client()
 
 
@@ -35,27 +32,22 @@ def _beispielDesVertrags(datei: str) -> dict:
 
 
 def spielstandDesVertrags() -> dict:
-    """Das Beispiel von V1 aus `spielstand.json`, nicht kopiert."""
     return _beispielDesVertrags("spielstand.json")
 
 
 def sperreDesVertrags() -> dict:
-    """Das Beispiel von V6 aus `sperre.json`, nicht kopiert."""
     return _beispielDesVertrags("sperre.json")
 
 
 def zurückgelegtDesVertrags() -> dict:
-    """Das Beispiel von V6 aus `zurueckgelegt.json`, nicht kopiert."""
     return _beispielDesVertrags("zurueckgelegt.json")
 
 
 def stelleBeimLoslassenDesVertrags() -> dict:
-    """Das Beispiel von V10 aus `stelleBeimLoslassen.json`, nicht kopiert."""
     return _beispielDesVertrags("stelleBeimLoslassen.json")
 
 
 def schlachtDesVertrags() -> dict:
-    """Das Beispiel der Schlacht aus `schlacht.json`, nicht kopiert."""
     return _beispielDesVertrags("schlacht.json")
 
 
@@ -98,7 +90,6 @@ def modellLoslassenUndÜbergehen(
 
 
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
-    """Die Stellen der Modelle des Spielers im Beispiel, in der Reihenfolge der Datei."""
     return [
         Stelle(x=Fraction(str(modell["x"])), y=Fraction(str(modell["y"])))
         for modell in spielstandDesVertrags()["modelle"]
@@ -124,7 +115,6 @@ def pfadDesModells(aufstellung: Aufstellung, einheit: Einheit, modell: Modell) -
 
 
 def stelleImSpielstand(stelle: Stelle) -> tuple[float, float]:
-    """Die Stelle als Zahlenpaar, wie der Spielstand sie führt (V1)."""
     return float(stelle.x), float(stelle.y)
 
 
@@ -150,7 +140,6 @@ def stelleBeimLoslassenAbfragen(
 def stellenDerAbfrage(
     einheit: Einheit, abfrage: Mapping[Modell, Stelle]
 ) -> dict[int, tuple[float, float]]:
-    """Die Antwort der Abfrage je Nummer des Modells in der Einheit, wie der Dienst sie nennt."""
     return {
         nummer: stelleImSpielstand(abfrage[modell])
         for nummer, modell in enumerate(einheit.modelle, start=1)
@@ -196,7 +185,6 @@ def ebeneDesVertrags() -> dict:
 
 
 def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple[float, float]]:
-    """Die Stellen der gesetzten Modelle der Einheit, je Nummer des Modells."""
     spielernummer, einheitennummer = kennungenDerEinheiten[einheitenname]
     return {
         modell["nummer"]: (modell["x"], modell["y"])
@@ -206,7 +194,6 @@ def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple
 
 
 def ebenenIm(spielstand: dict) -> frozenset[tuple[float, float]]:
-    """Die Stellen der Modelle, die der Spielstand als Ebene kennzeichnet."""
     return frozenset(
         (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell.get("ebene")
     )
@@ -234,7 +221,6 @@ def ersterZugWählen(dienst, spielernummer: int):
 
 
 def phaseBeenden(dienst, schlachtrunde: int, spielernummer: int, phase):
-    """Beendet die Phase, die die Seite im letzten Spielstand sah (Schlacht, V13)."""
     körper = {"schlachtrunde": schlachtrunde, "spieler": spielernummer, "phase": phase.value}
     return dienst.put("/api/phaseBeenden", json=körper)
 

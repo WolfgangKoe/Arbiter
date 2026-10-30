@@ -1,5 +1,3 @@
-"""Fixtures der Akzeptanztests: Testdaten, Spielstände, Bildschirm."""
-
 import os
 import select
 import subprocess
@@ -36,27 +34,21 @@ _freierPort = 0
 
 
 class Ende(NamedTuple):
-    """Was ein beendeter Befehl hinterließ; ein Code unter 0 heißt, er lief weiter."""
-
     ausgabe: str
     fehlerausgabe: str
     code: int
 
 
 class Befehl:
-    """Der Befehl `python3 -m arbiter` als eigener Prozess; beendet, was er gestartet hat."""
-
     def __init__(self) -> None:
         self._prozesse: list[subprocess.Popen] = []
 
     def starten(self) -> str:
-        """Startet Arbiter auf einem freien Port; gibt die Adresse der ersten Zeile zurück."""
         prozess = self._prozessStarten(_freierPort, subprocess.DEVNULL)
         bereit, _, _ = select.select([prozess.stdout], [], [], _sekundenBisZurAdresse)
         return prozess.stdout.readline().strip() if bereit else ""
 
     def startenBisZumEnde(self, port: int) -> Ende:
-        """Startet Arbiter auf dem Port und wartet auf sein Ende; läuft er weiter, endet er hier."""
         prozess = self._prozessStarten(port, subprocess.PIPE)
         try:
             ausgabe, fehlerausgabe = prozess.communicate(timeout=_sekundenBisZurAdresse)
@@ -129,7 +121,6 @@ def platz(zone: Aufstellungszone) -> Platz:
 def ersteEinheitDesSpielersAnDerReihe(
     aufstellung: Aufstellung, ersterSpieler: Spieler, zweiterSpieler: Spieler, zone
 ) -> Einheit:
-    """Der erste Spieler ist mit der Zone an der Reihe; kein Modell ist gesetzt."""
     andereZone = next(kandidat for kandidat in Aufstellungszone if kandidat is not zone)
     aufstellung.gewinnerWählen(zweiterSpieler)
     aufstellung.aufstellungszoneWählen(andereZone)
@@ -141,7 +132,6 @@ def ersteEinheitDesSpielersAnDerReihe(
 def einheitNachDemAnderenSpieler(
     aufstellung: Aufstellung, ersterSpieler: Spieler, zweiterSpieler: Spieler, zone
 ) -> Einheit:
-    """Beide haben ihre erste Einheit aufgestellt; der erste Spieler ist an der Reihe."""
     andereZone = next(kandidat for kandidat in Aufstellungszone if kandidat is not zone)
     ersteEinheit, zweiteEinheit = ersterSpieler.armee.einheiten
     einheitDesAnderenSpielers, _ = zweiterSpieler.armee.einheiten
@@ -195,7 +185,6 @@ def ausgangsaufstellung(ausgangslage: Ausgangslage) -> Aufstellung:
 def aufstellungNachDerZonenwahl(
     ausgangsaufstellung: Aufstellung, spielerZwei: Spieler
 ) -> Aufstellung:
-    """Spieler 2 hat gewonnen und die erste Zone gewählt; Spieler 1 ist an der Reihe."""
     ausgangsaufstellung.gewinnerWählen(spielerZwei)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     return ausgangsaufstellung
@@ -205,7 +194,6 @@ def aufstellungNachDerZonenwahl(
 def aufstellungDesBeispiels(
     ausgangsaufstellung: Aufstellung, spielerEins: Spieler, necronWarriors: Einheit
 ) -> Aufstellung:
-    """Der Start nach AUF-6.1 mit den gesetzten Modellen des Beispiels im Vertrag (V1)."""
     ausgangsaufstellung.gewinnerWählen(spielerEins)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     modelleAnStellenSetzen(ausgangsaufstellung, necronWarriors, stellenDesVertrags(2))
@@ -238,8 +226,6 @@ def bildschirm(browser: Browser):
 
 @pytest.fixture
 def boyzSetzen(aufstellungNachDerZonenwahl, boyz):
-    """Spieler 1 wählt die Boyz und setzt so viele ihrer Modelle, wie verlangt."""
-
     def setzen(anzahl: int) -> list[tuple[Modell, Stelle]]:
         return modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahl)
 
@@ -254,19 +240,16 @@ def einGesetztesModell(aufstellungNachDerZonenwahl, boyzSetzen) -> tuple[Aufstel
 
 @pytest.fixture
 def dienst(aufstellungNachDerZonenwahl: Aufstellung):
-    """Der Flask-Testclient der Anwendung über dem Spielstand der Zonenwahl."""
     return dienstFür(aufstellungNachDerZonenwahl)
 
 
 @pytest.fixture
 def dienstDesBeispiels(aufstellungDesBeispiels: Aufstellung):
-    """Der Flask-Testclient der Anwendung über dem Stand des Beispiels im Vertrag."""
     return dienstFür(aufstellungDesBeispiels)
 
 
 @pytest.fixture
 def beendeteAufstellung(ausgangsaufstellung: Aufstellung, spielerEins: Spieler) -> Aufstellung:
-    """Spieler 1 hat die erste Zone; beide Armeen sind aufgestellt, die Aufstellung ist beendet."""
     ausgangsaufstellung.gewinnerWählen(spielerEins)
     ausgangsaufstellung.aufstellungszoneWählen(Aufstellungszone.erste)
     alleEinheitenAufstellen(ausgangsaufstellung)
@@ -280,33 +263,28 @@ def schlacht(beendeteAufstellung: Aufstellung) -> Schlacht:
 
 @pytest.fixture
 def dienstNachDerAufstellung(beendeteAufstellung: Aufstellung):
-    """Der Flask-Testclient über der beendeten Aufstellung; die Schlacht baut `web/` selbst."""
     return dienstFür(beendeteAufstellung)
 
 
 @pytest.fixture
 def dienstDerSchlacht(beendeteAufstellung: Aufstellung, schlacht):
-    """Der Flask-Testclient über derselben Schlacht, die der Test in der Hand hält."""
     return dienstFürSchlacht(beendeteAufstellung, schlacht)
 
 
 @pytest.fixture
 def schlachtInDerKommandophase(schlacht, spielerEins: Spieler):
-    """Spieler 1 hat den ersten Zug und ist am Zug in der Kommandophase der Schlachtrunde 1."""
     schlacht.ersterZugWählen(spielerEins)
     return schlacht
 
 
 @pytest.fixture
 def schlachtInDerBewegungsphase(schlachtInDerKommandophase):
-    """Spieler 1 ist am Zug in der Bewegungsphase der Schlachtrunde 1."""
     schlachtInDerKommandophase.phaseBeenden()
     return schlachtInDerKommandophase
 
 
 @pytest.fixture
 def schlachtInDerBewegungsphaseDesZweitenSpielers(schlacht, spielerZwei: Spieler):
-    """Spieler 2 hat den ersten Zug und ist am Zug in der Bewegungsphase der Schlachtrunde 1."""
     schlacht.ersterZugWählen(spielerZwei)
     schlacht.phaseBeenden()
     return schlacht
@@ -334,7 +312,6 @@ def zugÜberEineBase(request, schlacht) -> ZugÜberEineBase:
 
 @pytest.fixture(params=["einheitDesSpielersAmZug", "einheitDesAnderenSpielers"])
 def einheitJederSeite(request, boyz: Einheit, necronWarriors: Einheit) -> Einheit:
-    """Spieler 1 ist am Zug; die Einheit gehört ihm oder dem anderen Spieler."""
     return {"einheitDesSpielersAmZug": boyz, "einheitDesAnderenSpielers": necronWarriors}[
         request.param
     ]

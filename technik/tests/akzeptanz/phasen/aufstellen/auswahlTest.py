@@ -261,7 +261,6 @@ def testAuf5_8EinKlickAufDieArmeelisteDesSpielersNichtAnDerReiheLässtSeineModel
     ids=["boyzOhneGesetztesModell", "warbossBeiBoyzInAufstellung", "necronWarriorsNichtAnDerReihe"],
 )
 def einheitenname(request, boyzSetzen):
-    """Der Name der angefragten Einheit, nachdem Spieler 1 die Boyz so weit gesetzt hat."""
     name, anzahlGesetzterBoyz = request.param
     boyzSetzen(anzahlGesetzterBoyz)
     return name

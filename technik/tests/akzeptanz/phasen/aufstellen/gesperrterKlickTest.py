@@ -26,8 +26,6 @@ from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
 
 @dataclass(frozen=True)
 class Sperrfall:
-    """Ein Klick auf die Karte, den AUF-7.2 oder 7.3 sperrt, mit dem erwarteten Grund."""
-
     stelle: Stelle
     grund: Grund
 
@@ -40,7 +38,6 @@ class Sperrfall:
     ids=["einheitDesSpielersNichtAnDerReihe", "andereEinheitBeiBegonnener"],
 )
 def sperrfall(request, aufstellungNachDerZonenwahl, spielerEins, boyz) -> Sperrfall:
-    """Boyz teils gesetzt, eine andere Einheit ausgewählt; die Stelle liegt in der Zone."""
     gesetzteBoyz, ausgewählte, grund = request.param
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, gesetzteBoyz)
     aufstellungNachDerZonenwahl.auswählen(request.getfixturevalue(ausgewählte))
