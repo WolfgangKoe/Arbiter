@@ -8,7 +8,17 @@
 </head>
 <body>
   <header class="kopfzeile"></header>
-  <main class="spielbereich"></main>
+  <main class="spielbereich">
+    <aside class="leiste leisteLinks" aria-label="Armeeliste Spieler 1">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 1 ein- und ausfahren">◀</button>
+      <div class="leistenInhalt"></div>
+    </aside>
+    <div class="spalte spalteMitte"></div>
+    <aside class="leiste leisteRechts" aria-label="Armeeliste Spieler 2">
+      <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Armeeliste Spieler 2 ein- und ausfahren">▶</button>
+      <div class="leistenInhalt"></div>
+    </aside>
+  </main>
   <aside class="leiste leisteUnten" aria-label="Protokoll">
     <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll ein- und ausfahren">▼</button>
     <div class="leistenInhalt"></div>
@@ -23,7 +33,6 @@
   <template id="kopfzeileAmZug"><span class="kopfzeileAmZug">Schlachtrunde 1 · Kommandophase</span></template>
   <template id="kopfzeileSchlachtBeendet"><span class="kopfzeileSchlachtBeendet">Schlacht beendet</span></template>
   <template id="kopfzeileTitel"><div class="kopfzeileTitel">ARBITER</div></template>
-  <template id="spalte"><aside class="spalte"></aside></template>
   <template id="armeeKarte"><div class="armeeKarte spieler1"><h2 class="armeeKartenName">Spieler 1</h2></div></template>
   <template id="einheitenKarte"><section class="einheitenKarte">
     <div class="einheitenKartenName"><span>Boyz</span><span class="einheitenKartenModelle">1</span></div>

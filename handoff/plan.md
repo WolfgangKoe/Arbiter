@@ -79,7 +79,7 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Architekt → Implementierer: Zwei neue Dateien des Katalogs bringen Erklärtexte mit, die die Regel zum Code verbietet; eine Prüfung ist darum rot. (Anliegen 7190); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
 - [x] Reviewer: Kritik am Code zu Item katalogwerteGliedern
   Hindernis: Reviewer → Implementierer: Im Katalog heißt der Eintrag einer Modellart Profil, obwohl er auch den Durchmesser hält, und ein Einheitstest bindet eine Konstante per Standardargument; der Implementierer benennt um. (Anliegen 7200); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
-- [ ] Fachkritiker: Item katalogwerteGliedern abgenommen
+- [x] Fachkritiker: Item katalogwerteGliedern abgenommen
 - [ ] Planer: Item katalogwerteGliedern gelöscht
 - [x] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
 - [x] Testautor: Tests zu Item gemeinsamUebergehen
@@ -88,7 +88,7 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Fachkritiker → Testautor: Ein Test zu „gemeinsam übergehen“ ist schon grün, obwohl es den Knopf noch nicht gibt; er prüft nicht, dass der Knopf erst da war und dann verschwindet. (Anliegen 7300); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
 - [x] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
   Hindernis: Architekt → Testautor: Ein Test übergab die übergangenen Gründe ohne Namen, anders als der Vertrag, und ein Test zu „gemeinsam übergehen nicht mehr angeboten“ war ohne Knopf schon grün; beides ist berichtigt, der Haken gilt seit der Nachprüfung. (Anliegen 7320); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
-- [ ] Implementierer: Tests zu Item gemeinsamUebergehen grün
+- [x] Implementierer: Tests zu Item gemeinsamUebergehen grün
 - [ ] Architekt: Kritik am Code zu Item gemeinsamUebergehen
 - [ ] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
 - [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen

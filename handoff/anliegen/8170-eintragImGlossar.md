@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** QUE-5.1 sagt „einen Eintrag mehr“ im *Protokoll*, das [Glossar](../../domaene/glossar.md)

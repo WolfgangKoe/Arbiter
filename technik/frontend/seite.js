@@ -1,4 +1,5 @@
 import { spielstandZeichnen } from "./anfragen.js"
+import { leisteUmschalten } from "./leisten.js"
 import {
   browserZiehenVerhindern,
   ziehenAbbrechen,
@@ -7,6 +8,7 @@ import {
   ziehenFolgen,
 } from "./bedienung.js"
 
+document.addEventListener("click", leisteUmschalten)
 document.addEventListener("pointerdown", ziehenBeginnen)
 document.addEventListener("dragstart", browserZiehenVerhindern)
 document.addEventListener("pointermove", ziehenFolgen)
