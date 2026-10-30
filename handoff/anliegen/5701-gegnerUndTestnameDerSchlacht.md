@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Namen und Ablage von Hilfsfunktionen), Diff `9be7f37..7aa6698`.
