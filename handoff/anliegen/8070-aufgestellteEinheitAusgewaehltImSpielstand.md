@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (zwei Tests von AUF-30.1), die übrigen Tests von AUF-30 sind grün.
@@ -26,4 +26,11 @@ auch schon geprüft) und lassen `ausgewählteEinheitenIm` und `ausgewählteEinhe
 wenn beide ohne Karte der *Armeeliste* auskommen. Will der Stakeholder die Karte, wäre das ein
 Kriterium am Anforderungsautor.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: AUF-30.1 verlangt die *Auswahl* mit der ganzen *Einheit* als
+*Ebene*, keine *Einheitenkarte*; nach Glossar (*Armeeliste*) und AUF-1.7 hat eine *aufgestellte*
+*Einheit* dort keine. In
+[aufgestellteEinheitAuswaehlenTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/aufgestellteEinheitAuswaehlenTest.py)
+prüft der Dienstest nur noch `ausgewählteModelleIm` (alle *Modelle* der Boyz) und `ebenenIm`
+(leer), der Seitentest `.karte .modell.ausgewählt` und `ausgewählteModelle` an den *Stellen*
+aller *Modelle* der Boyz; `ausgewählteEinheitenIm` und `ausgewählteEinheiten` sind entfallen.
+Alle 9 Tests von AUF-30 sind grün.

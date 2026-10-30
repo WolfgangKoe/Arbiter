@@ -5,10 +5,9 @@ from http import HTTPStatus
 import pytest
 from playwright.sync_api import expect
 
-from tests.akzeptanz.auswahl import ausgewählteEinheiten
+from tests.akzeptanz.auswahl import ausgewählteModelle
 from tests.akzeptanz.bildschirm import seiteMitEingabe
 from tests.akzeptanz.dienst import (
-    ausgewählteEinheitenIm,
     ausgewählteModelleIm,
     ebenenIm,
     modellAnklicken,
@@ -72,7 +71,6 @@ def testAuf30_1DerDienstWähltDieAufgestellteEinheitMitDerGanzenEinheitAlsEbene(
 
     spielstand = antwort.get_json()
     assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(spielstand) == {"Boyz"}
     assert ausgewählteModelleIm(spielstand) == {
         stelleImSpielstand(aufstellung.stelle(modell)) for modell in boyz.modelle
     }
@@ -90,4 +88,6 @@ def testAuf30_1DieSeiteKennzeichnetNachDemKlickDieAufgestellteEinheit(
     klickenMit[eingabe](seite, punktAufDerKarte(seite, aufstellung.stelle(angeklickt)))
 
     expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(boyz.modelle))
-    assert ausgewählteEinheiten(seite) == {"Boyz"}
+    assert ausgewählteModelle(seite) == {
+        stelleImSpielstand(aufstellung.stelle(modell)) for modell in boyz.modelle
+    }
