@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Punkte halten auf (Kritik: Zyklusziel und Klickpfad gegen Plan und Etappe):
