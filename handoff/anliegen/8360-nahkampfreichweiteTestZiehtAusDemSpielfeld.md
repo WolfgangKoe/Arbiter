@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** In
@@ -25,4 +25,12 @@ Test noch Regel.
 `Stelle(x=stelleDesAnderen.x - radien - abstand, y=stelle.y)` mit dem y des ziehenden
 Modells statt dem des anderen, und den Abstand weiter an der *Stelle* des Overlords messen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen. Das Ziel in
+`testBew6_2ZiehtEinModellInDieNahkampfreichweiteDesAnderenSpielersHältArbiterEsDavorAn`
+liegt jetzt auf der y-Linie des Warboss, einen halben Zoll westlich der Grenze der Radien
+zum Overlord; die Hilfsfunktion heißt dafür `westlichDavorAufDerLinieVon` und nimmt das y
+von der *Stelle* des Warboss. Der Weg bleibt im *Spielfeld*. Eine Prüfung in der
+Vorgeschichte sichert, dass das Ziel weiter in der *Nahkampfreichweite* des Overlords
+liegt; den Abstand misst der Test weiter an der *Stelle* des Overlords. Alle 17 Tests der
+[Datei](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py) grün,
+ruff und Benennung grün.

@@ -43,8 +43,10 @@ jeZweiZollNachOstenUndSüden = (zweiZoll, zweiZoll)
 flachZurWestkante = (Fraction(-3, 2), Fraction(12))
 
 
-def westlichDavorMitAbstand(stelle: Stelle, radien: Fraction, abstand: Fraction) -> Stelle:
-    return Stelle(x=stelle.x - radien - abstand, y=stelle.y)
+def westlichDavorAufDerLinieVon(
+    stelle: Stelle, linie: Stelle, radien: Fraction, abstand: Fraction
+) -> Stelle:
+    return Stelle(x=stelle.x - radien - abstand, y=linie.y)
 
 
 @pytest.fixture(params=["westen", "norden", "osten"])
@@ -123,8 +125,11 @@ def testBew6_2ZiehtEinModellInDieNahkampfreichweiteDesAnderenSpielersHältArbite
     aufeinanderZuZiehen(schlachtInDerBewegungsphase, modell, modellDesAnderenSpielers, dreiZoll)
     davor = schlachtInDerBewegungsphase.stelle(modell)
     stelleDesAnderen = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
-    ziel = westlichDavorMitAbstand(stelleDesAnderen, radien, halberZoll)
+    ziel = westlichDavorAufDerLinieVon(stelleDesAnderen, davor, radien, halberZoll)
     assert abstandImQuadrat(davor, ziel) <= modell.bewegungsweite**2
+    assert not außerhalbDerNahkampfreichweite(
+        ziel, modell, stelleDesAnderen, modellDesAnderenSpielers
+    )
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
 
