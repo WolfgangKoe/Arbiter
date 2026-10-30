@@ -106,9 +106,9 @@ geändert:
 - Elf Mutanten zählen als gleichwertig nicht gegen die Schwelle
   ([gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json), Anliegen
   6994): vier in `ausgangslage.py`, drei in `spielobjekte.py`, zwei in `setzenPerKlick.py`,
-  je einer in `web/darstellung.py` und `web/server.py`. Sieben davon nehmen `frozen` oder
+  je einer in `web/darstellung.py` und `web/server.py`. Sechs davon, je drei in `spielobjekte.py` und `ausgangslage.py`, nehmen `frozen` oder
   `eq=False` aus `@dataclass`, weil kein Code die Felder neu setzt oder die Objekte
-  vergleicht; die übrigen vier begründen je einen Wert, der nicht wirken kann. Die Gründe
+  vergleicht; die übrigen fünf begründen je einen Wert, der nicht wirken kann. Die Gründe
   halte ich für stichhaltig.
 
 Probleme, keins hält auf:
@@ -171,10 +171,11 @@ zu stören.
   zurück, lasst ein *Modell* neben der *Karte* los, durch die *Nahkampfreichweite* eines
   Gegners zieht kein *Modell* mehr hindurch, eine *Einheit* in ihr rückt nicht vor,
   „Phase beenden“ gibt es nur für den *Spieler* am Zug, Ork-Psioniker und Canoptek-Spinne
-  stehen in den Armeen, zuletzt bleibt die *Karte* ruhig. Noch nicht: sehen, welche *Einheit* schon gezogen hat, und ein
-  Anhalten übergehen (Etappe 3). Reihenfolge nach der Klärung in 8880, F2 offen bei dir: erst
-  diese Teile, dann das Aufräumen aus 22 Anliegen der Technikphase 10 und 7800; braucht ein
-  Teil eines davon vorher, zieht der Planer es vor und nennt es.
+  stehen in den Armeen, zuletzt bleibt die *Karte* ruhig. Noch nicht: sehen, welche
+  *Einheit* schon gezogen hat, und ein Anhalten übergehen (Etappe 3). Reihenfolge nach der
+  Klärung in 8880, von dir mit F2 A bestätigt: erst diese Teile, dann das Aufräumen aus 22
+  Anliegen der Technikphase 10 und 7800; braucht ein Teil eines davon vorher, zieht der
+  Planer es vor und nennt es.
 
 ## Fortschritt
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel

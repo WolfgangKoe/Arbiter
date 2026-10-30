@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am [Review 9](../review.md), Stand 9cb9142 („Review 9 bis auf Mutation
@@ -62,4 +62,5 @@ Mutation nachträgst.
 **Gegenvorschlag.** „Sechs davon …; die übrigen fünf“, im selben Zug wie die Zahl der
 Mutation.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: „Sechs davon, je drei in `spielobjekte.py` und
+`ausgangslage.py`, …; die übrigen fünf“. Gleich jetzt statt mit der Zahl der Mutation.

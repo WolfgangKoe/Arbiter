@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Punkte halten auf (Kritik: Zyklusziel und Klickpfad gegen Plan und Etappe):
@@ -66,3 +66,5 @@ der Stakeholder beantwortet F2 ein zweites Mal.
 
 **Gegenvorschlag.** „F2 offen bei dir“ ersetzen, etwa: „Reihenfolge nach der Klärung in
 8880, von dir mit F2 A bestätigt: erst diese Teile, dann das Aufräumen …“.
+
+**Stellungnahme.** Umgesetzt wie vorgeschlagen.
