@@ -186,6 +186,7 @@ class Abfragen:
     def __init__(self, seite: Page) -> None:
         self.gestellt = 0
         self.erledigt = 0
+        self._gezählte: set[Request] = set()
         seite.on("request", self._gestellt)
         seite.on("requestfinished", self._erledigt)
         seite.on("requestfailed", self._erledigt)
@@ -196,10 +197,11 @@ class Abfragen:
 
     def _gestellt(self, anfrage: Request) -> None:
         if self._istAbfrage(anfrage):
+            self._gezählte.add(anfrage)
             self.gestellt += 1
 
     def _erledigt(self, anfrage: Request) -> None:
-        if self._istAbfrage(anfrage):
+        if anfrage in self._gezählte:
             self.erledigt += 1
 
     def ruhig(self) -> bool:
@@ -243,6 +245,5 @@ def haltenUndLosslassen(
     return gezeigt
 
 
-def aufDieEbeneWarten(seite: Page):
-    """Wartet auf die Antwort des Dienstes auf das Anklicken eines Modells (V9)."""
-    return seite.expect_response("**/ebene")
+def aufDasAnklickenWarten(seite: Page):
+    return seite.expect_response("**/anklicken")

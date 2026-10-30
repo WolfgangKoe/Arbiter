@@ -6,7 +6,7 @@ from tests.akzeptanz.grenzen import (
     ganzeEinheitAuswählen,
     grenzeDerBewegung,
     grenzenDerEinheit,
-    zweiZollZurMitte,
+    zweiZollEntlangDerReihe,
 )
 from tests.akzeptanz.schlacht import mitteDesSpielfelds
 
@@ -33,11 +33,13 @@ def testBew15_1NachErneuterAuswahlZeigtDieKarteDieEinhüllendeUmDieStellenZuBegi
     schlacht, einheit, andereEinheit, _ = einheitAmZug
     stellen = ganzeEinheitAuswählen(schlacht, einheit)
     erstes, *_ = einheit.modelle
-    schlacht.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlacht.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
     abwahlen[abwahl](schlacht, andereEinheit)
     ganzeEinheitAuswählen(schlacht, andereEinheit)
     (modellDerAnderen, *_) = andereEinheit.modelle
-    schlacht.modellLoslassen(modellDerAnderen, zweiZollZurMitte(schlacht.stelle(modellDerAnderen)))
+    schlacht.modellLoslassen(
+        modellDerAnderen, zweiZollEntlangDerReihe(schlacht.stelle(modellDerAnderen))
+    )
 
     schlacht.modellAnklicken(erstes)
 

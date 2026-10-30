@@ -8,6 +8,7 @@ from tests.akzeptanz.bildschirm import (
     gründeAlsText,
     kreiseDerKarte,
     seiteDerSchlachtMitEingabe,
+    sperrmeldungenDerSeite,
     sperrmeldungWarten,
 )
 from tests.akzeptanz.dienst import modellLoslassen, spielstandVon
@@ -23,7 +24,7 @@ from tests.akzeptanz.schlacht import (
     stellenAlsZahlen,
     stellenVersetzt,
 )
-from tests.akzeptanz.ziehen import mitMausUndFinger, modellZiehen
+from tests.akzeptanz.ziehen import halten, mitMausUndFinger, modellZiehen
 
 nichts = Fraction(0)
 dreiZoll = Fraction(3)
@@ -245,6 +246,23 @@ def testBew2_6DieSeiteNenntBeiEinerÜberdeckungBeideGründeUndZeigtDasModellWieD
     assert sperrmeldungWarten(seite, gründe) == gründeAlsText(gründe)
     assert schlachtInDerBewegungsphase.stelle(modell) == davor
     assert kreiseDerKarte(seite) == stellenAlsZahlen(schlachtInDerBewegungsphase)
+
+
+def testBew2_6DieSeiteNenntDenGrundNochWährendSieBeimNächstenZiehenNachDerStelleFragt(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+):
+    gezogenes, _, drittes, *_ = boyz.modelle
+    davor = schlachtInDerBewegungsphase.stelle(gezogenes)
+    davorDesDritten = schlachtInDerBewegungsphase.stelle(drittes)
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+    )
+    modellZiehen(seite, davor, versetzt(davor, nachOsten(fünfZoll)))
+    sperrmeldungWarten(seite, {Grund.überEineBase})
+
+    halten(seite, davorDesDritten, versetzt(davorDesDritten, nachOsten(dreiZoll)), "maus")
+
+    assert sperrmeldungenDerSeite(seite) == [Grund.überEineBase.value]
 
 
 def testBew2_6DieSeiteNenntDenGrundBisDieNächsteHandlungBeantwortetIst(

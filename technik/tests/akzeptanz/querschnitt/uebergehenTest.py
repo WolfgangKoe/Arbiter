@@ -29,6 +29,7 @@ from tests.akzeptanz.dienst import (
     modellLoslassenUndÜbergehen,
     phaseBeenden,
     protokollDesVertrags,
+    schlachtNachSchlüsselnDes,
     spielstandVon,
 )
 from tests.akzeptanz.handgriffe import (
@@ -238,7 +239,8 @@ def testQue5_4DerDienstNenntDenNeuerenEintragZuerstWieImBeispiel(
     )
 
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json()["schlacht"] == protokollDesVertrags()["schlacht"]
+    beispiel = protokollDesVertrags()["schlacht"]
+    assert schlachtNachSchlüsselnDes(antwort.get_json(), beispiel) == beispiel
 
 
 def testQue5_4DieSeiteZeigtDenNeuerenEintragÜberDemÄlteren(

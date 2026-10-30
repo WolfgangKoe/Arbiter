@@ -22,10 +22,12 @@ from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import (
     hältAnDerBewegungsweite,
     jetzigeStellen,
+    mitteDesSpielfelds,
     phaseBeendenBis,
     phasenAußerDerBewegungsphase,
     phasenAußerDerBewegungsphaseIds,
 )
+from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
 
 vorrückenKnopf = "Vorrücken"
 zweiZoll = Fraction(2)
@@ -110,11 +112,15 @@ def testBew5_1DieSeiteZeigtZurAusgewähltenEinheitDenKnopfVorrücken(
 
 
 def testBew5_1DieSeiteZeigtOhneAuswahlKeinenKnopfVorrücken(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
+    ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
+    expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(1)
+
+    mitDerMausKlicken(seite, punktAufDerKarte(seite, mitteDesSpielfelds))
 
     expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(0)
 

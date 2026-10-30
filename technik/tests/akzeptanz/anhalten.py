@@ -4,17 +4,12 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
-from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
+from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.dienst import stelleImSpielstand
 from tests.akzeptanz.handgriffe import (
     erwarteteStelle,
     stellenAllerModelle,
 )
-
-
-def ebeneAufDasModellLegen(aufstellung: Aufstellung, einheit: Einheit, modell: Modell) -> None:
-    aufstellung.auswählen(einheit)
-    aufstellung.ebeneWählen(modell)
 
 
 def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]:

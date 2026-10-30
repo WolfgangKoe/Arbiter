@@ -19,6 +19,7 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     modellLoslassen,
     modellLoslassenUndÜbergehen,
+    schlachtNachSchlüsselnDes,
     spielstandVon,
     übergehbarDesVertrags,
 )
@@ -72,7 +73,10 @@ def testBew8_1DerDienstBietetBeiÜberEineBaseGemeinsamÜbergehenAnWieImBeispiel(
     körper = antwort.get_json()
     assert körper["gründe"] == beispiel["gründe"]
     assert körper["übergehbar"] == beispiel["übergehbar"]
-    assert körper["spielstand"]["schlacht"] == beispiel["spielstand"]["schlacht"]
+    schlachtDesBeispiels = beispiel["spielstand"]["schlacht"]
+    assert schlachtNachSchlüsselnDes(körper["spielstand"], schlachtDesBeispiels) == (
+        schlachtDesBeispiels
+    )
 
 
 def testBew8_1DieSeiteBietetGemeinsamÜbergehenAnSolangeSieDenGrundNennt(

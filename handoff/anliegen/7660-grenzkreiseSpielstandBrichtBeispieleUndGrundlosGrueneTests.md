@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item grenzkreise (uncommittet, Formprüfungen und `ruff`
@@ -45,4 +45,12 @@ Zurücknehmen den Kreis des Wurfs weiter zeigt oder Grenze und Knöpfe nie zeich
 4. In [grenzen.py](../../technik/tests/akzeptanz/grenzen.py) `kreis["r"]` →
    `kreis["radius"]`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alles umgesetzt; `ruff` und Formprüfungen grün.
+1. `schlachtNachSchlüsselnDes` in [dienst.py](../../technik/tests/akzeptanz/dienst.py); die
+   vier Tests vergleichen damit. `testQue9_2` grün; `testQue10_1`, `testQue5_4` rot am
+   fehlenden `protokoll`, `testBew8_1` am fehlenden `übergehbar`: am Produkt.
+2. Nach dem Klick: `.karte g.grenze.spieler1` gleich 1.
+3. `testBew11_4…` und `testBew5_1…` zählen erst *Grenze* bzw. „Vorrücken“ (1), klicken
+   die leere *Karte* und zählen dann das Fehlen. `testBew12_1…` prüft zu ausgewählten Boyz:
+   „Vorrücken“ da, „Vorrücken zurücknehmen“ fehlt. Alle drei rot am Produkt.
+4. `kreis["radius"]` in [grenzen.py](../../technik/tests/akzeptanz/grenzen.py).

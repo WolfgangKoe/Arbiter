@@ -6,7 +6,6 @@ import pytest
 from playwright.sync_api import expect
 
 from tests.akzeptanz.anhalten import (
-    ebeneAufDasModellLegen,
     freiesZiel,
     hineinrückenOhneBase,
     stellenAlsZahlen,
@@ -26,6 +25,7 @@ from tests.akzeptanz.handgriffe import (
     millionstel,
     modelleAnStellenSetzen,
     modelleSetzen,
+    modellZurEbeneMachen,
     radiusInZoll,
     stelleInDerZoneDesSpielersAnDerReihe,
     tiefeDerZone,
@@ -151,7 +151,7 @@ def nichtAuswählen(aufstellung, einheit, modell):
 
 mitUndOhneEbene = pytest.mark.parametrize(
     "ebeneLegen",
-    [nichtAuswählen, ebeneAufDasModellLegen],
+    [nichtAuswählen, modellZurEbeneMachen],
     ids=["nichtAusgewählt", "ebeneIstEinModell"],
 )
 

@@ -14,7 +14,7 @@ from tests.akzeptanz.grenzen import (
     mitJederEbene,
     vorgerücktMit,
     wartetAufDenVorrückwurf,
-    zweiZollZurMitte,
+    zweiZollEntlangDerReihe,
 )
 
 dreiAugen = 3
@@ -69,7 +69,7 @@ def testBew13_2NachDemZiehenBleibtDieGrenzeDesWurfsAnDenStellenZuBeginnDerBewegu
     schlacht, einheit, _, _ = einheitAmZug
     stellen = vorgerücktMit(schlacht, einheit, dreiAugen)
     erstes, *_ = einheit.modelle
-    schlacht.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlacht.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
 
     assert schlacht.stelle(erstes) != stellen[erstes]
     assert grenzenDerEinheit(schlacht, einheit) == grenzenNachDemVorrückwurf(stellen, dreiAugen)

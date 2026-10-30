@@ -14,13 +14,19 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import (
     auswählen,
-    modellAlsEbene,
+    ebenenIm,
+    modellAnklicken,
     spielstandDesVertrags,
     spielstandVon,
     zurückgelegtDesVertrags,
     zurücklegen,
 )
-from tests.akzeptanz.handgriffe import einheitAufstellen, modelleSetzen, stellenAllerModelle
+from tests.akzeptanz.handgriffe import (
+    einheitAufstellen,
+    modelleSetzen,
+    modellZurEbeneMachen,
+    stellenAllerModelle,
+)
 
 zurücklegenAdresse = "**/api/zur%C3%BCcklegen"
 anzahlGesetzter = 3
@@ -34,20 +40,15 @@ def ausgewählt(aufstellung, einheit, _modell):
     aufstellung.auswählen(einheit)
 
 
-def einModellAlsEbene(aufstellung, einheit, modell):
-    aufstellung.auswählen(einheit)
-    aufstellung.ebeneWählen(modell)
-
-
 mitJederEbene = pytest.mark.parametrize(
-    "ebeneWählen",
-    [ohneAuswahl, ausgewählt, einModellAlsEbene],
+    "ebeneLegen",
+    [ohneAuswahl, ausgewählt, modellZurEbeneMachen],
     ids=["nichtAusgewählt", "ganzeEinheit", "einModell"],
 )
 
 mitAusgewählterEinheit = pytest.mark.parametrize(
-    "ebeneWählen",
-    [ausgewählt, einModellAlsEbene],
+    "ebeneLegen",
+    [ausgewählt, modellZurEbeneMachen],
     ids=["ganzeEinheit", "einModell"],
 )
 
@@ -73,10 +74,10 @@ ohneEinheitInAufstellung = pytest.mark.parametrize(
 
 
 @pytest.fixture
-def boyzMitEbene(aufstellungNachDerZonenwahl, boyz, boyzSetzen, ebeneWählen):
+def boyzMitEbene(aufstellungNachDerZonenwahl, boyz, boyzSetzen, ebeneLegen):
     """Drei gesetzte Boyz; die Ebene und die Auswahl legt der Test fest."""
     [(erstes, _), *_] = boyzSetzen(anzahlGesetzter)
-    ebeneWählen(aufstellungNachDerZonenwahl, boyz, erstes)
+    ebeneLegen(aufstellungNachDerZonenwahl, boyz, erstes)
     return boyz
 
 
@@ -199,10 +200,11 @@ def testAuf23_3MitEinemModellAlsEbeneLässtDerDienstDieEinheitMitDerGanzenEinhei
 ):
     auswählen(dienstDesBeispiels, "Necron Warriors")
     _, _, drittes, *_ = necronWarriors.modelle
-    modellAlsEbene(dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes)
+    mitEbene = modellAnklicken(dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes)
 
     antwort = zurücklegen(dienstDesBeispiels)
 
+    assert len(ebenenIm(mitEbene.get_json())) == 1
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == zurückgelegtDesVertrags()
     assert aufstellungDesBeispiels.ganzeEinheitIstEbene(necronWarriors)

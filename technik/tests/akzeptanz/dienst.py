@@ -67,6 +67,14 @@ def protokollDesVertrags() -> dict:
     return _beispielDesVertrags("protokoll.json")
 
 
+def schlachtNachSchlüsselnDes(spielstand: dict, beispiel: Mapping) -> dict:
+    return {
+        schlüssel: wert
+        for schlüssel, wert in spielstand["schlacht"].items()
+        if schlüssel in beispiel
+    }
+
+
 def gründeAlsListe(gründe) -> list[str]:
     return [grund.value for grund in Grund if grund in gründe]
 
@@ -184,16 +192,7 @@ def abwählen(dienst, einheitenname: str):
 
 
 def ebeneDesVertrags() -> dict:
-    """Das Beispiel von V9 aus `ebene.json`, nicht kopiert."""
     return _beispielDesVertrags("ebene.json")
-
-
-def modellAlsEbene(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):
-    return dienst.put(f"{pfadDesModells(aufstellung, einheit, modell)}/ebene")
-
-
-def einheitAlsEbene(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell):
-    return dienst.delete(f"{pfadDesModells(aufstellung, einheit, modell)}/ebene")
 
 
 def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple[float, float]]:

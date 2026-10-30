@@ -57,11 +57,10 @@ def zügeBeenden(schlacht, anzahl: int) -> None:
 
 def zurBewegungsphaseDerNächstenSchlachtrunde(schlacht) -> None:
     runde = schlacht.schlachtrunde
-    for _ in range(2 * len(phasenEinesZugs)):
-        if schlacht.schlachtrunde != runde:
-            break
-        schlacht.phaseBeenden()
+    zügeBeenden(schlacht, 2)
     phaseBeendenBis(schlacht, Phase.bewegungsphase)
+    if schlacht.schlachtrunde != runde + 1:
+        raise AssertionError(f"Auf die Schlachtrunde {runde} folgte nicht die nächste")
 
 
 def letzteSchlachtrunde() -> int:
@@ -234,8 +233,3 @@ def hältAnDerSpielfeldkante(stelle: Stelle, modell: Modell) -> bool:
 mitteDesSpielfelds = Stelle(
     x=Fraction(breiteDesSpielfelds, 2), y=Fraction(längeDerSpielfeldkante, 2)
 )
-
-
-def modellZurEbeneMachen(schlacht, einheit: Einheit, modell: Modell) -> None:
-    schlacht.auswählen(einheit)
-    schlacht.modellAnklicken(modell)

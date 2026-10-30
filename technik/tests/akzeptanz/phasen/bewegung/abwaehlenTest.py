@@ -6,7 +6,8 @@ from playwright.sync_api import expect
 
 from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
 from tests.akzeptanz.dienst import ausgewählteEinheitenIm, ausgewählteModelleIm, karteAnklicken
-from tests.akzeptanz.schlacht import mitteDesSpielfelds, modellZurEbeneMachen
+from tests.akzeptanz.handgriffe import modellZurEbeneMachen
+from tests.akzeptanz.schlacht import mitteDesSpielfelds
 from tests.akzeptanz.ziehen import klickenMit, mitMausUndFinger, punktAufDerKarte
 
 

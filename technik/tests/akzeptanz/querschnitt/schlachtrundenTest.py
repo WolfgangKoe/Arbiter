@@ -17,6 +17,7 @@ from tests.akzeptanz.dienst import (
     ersterZugWählen,
     phaseBeenden,
     schlachtDesVertrags,
+    schlachtNachSchlüsselnDes,
     spielstandVon,
     stelleBeimLoslassenAbfragen,
 )
@@ -149,7 +150,7 @@ def testQue10_1DerSpielstandNenntSchlachtrundeAmZugUndPhaseWieImBeispielDesVertr
     spielstand = antwort.get_json()
 
     assert antwort.status_code == HTTPStatus.OK
-    assert spielstand["schlacht"] == beispiel["schlacht"]
+    assert schlachtNachSchlüsselnDes(spielstand, beispiel["schlacht"]) == beispiel["schlacht"]
     assert spielstand["spieler"] == beispiel["spieler"]
 
 

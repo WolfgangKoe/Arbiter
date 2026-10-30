@@ -21,14 +21,13 @@ from tests.akzeptanz.dienst import (
     auswählen,
     ebenenIm,
     karteAnklicken,
-    modellAlsEbene,
     modellAnklicken,
     modellLoslassen,
     spielstandVon,
     stelleImSpielstand,
     stellenDerEinheitIm,
 )
-from tests.akzeptanz.handgriffe import stelleInDerZoneVon
+from tests.akzeptanz.handgriffe import modellZurEbeneMachen, stelleInDerZoneVon
 from tests.akzeptanz.schlacht import stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import (
     klickenMit,
@@ -47,13 +46,8 @@ def nichtAuswählen(aufstellung, einheit, modell):
     """Die Einheit bleibt, wie sie ist: nicht ausgewählt."""
 
 
-def ebeneAufDasModellLegen(aufstellung, einheit, modell):
-    aufstellung.auswählen(einheit)
-    aufstellung.ebeneWählen(modell)
-
-
 @pytest.fixture(
-    params=[nichtAuswählen, ebeneAufDasModellLegen], ids=["nichtAusgewählt", "ebeneIstEinModell"]
+    params=[nichtAuswählen, modellZurEbeneMachen], ids=["nichtAusgewählt", "ebeneIstEinModell"]
 )
 def dreiBoyzNachDerVorgeschichte(request, aufstellungNachDerZonenwahl, boyz, boyzSetzen):
     """Drei gesetzte Boyz; die Vorgeschichte betrifft das erste, gezogene Modell."""
@@ -75,8 +69,7 @@ def testAuf20_2WiederAusgewähltIstDieEbeneDieGanzeEinheitAuchNachEinemModell(
     aufstellungNachDerZonenwahl, boyzSetzen, boyz, warboss
 ):
     [(modell, _), *_] = boyzSetzen(3)
-    aufstellungNachDerZonenwahl.auswählen(boyz)
-    aufstellungNachDerZonenwahl.ebeneWählen(modell)
+    modellZurEbeneMachen(aufstellungNachDerZonenwahl, boyz, modell)
     aufstellungNachDerZonenwahl.auswählen(warboss)
 
     aufstellungNachDerZonenwahl.auswählen(boyz)
@@ -89,7 +82,7 @@ def testAuf20_2DerDienstKennzeichnetNachDemWiederAuswählenKeinModellAlsEbene(
 ):
     [(modell, _), *_] = boyzSetzen(3)
     auswählen(dienst, "Boyz")
-    mitEbene = modellAlsEbene(dienst, aufstellungNachDerZonenwahl, boyz, modell)
+    mitEbene = modellAnklicken(dienst, aufstellungNachDerZonenwahl, boyz, modell)
     auswählen(dienst, "Warboss")
 
     antwort = auswählen(dienst, "Boyz")
@@ -105,7 +98,7 @@ def testAuf20_2DieSeiteKennzeichnetNachDemAuswählenAlleGesetztenModelleDerEinhe
 ):
     gesetzte = boyzSetzen(3)
     [(modell, _), *_] = gesetzte
-    ebeneAufDasModellLegen(aufstellungNachDerZonenwahl, boyz, modell)
+    modellZurEbeneMachen(aufstellungNachDerZonenwahl, boyz, modell)
     aufstellungNachDerZonenwahl.abwählen(boyz)
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
 
@@ -137,7 +130,7 @@ def testAuf20_4ZiehenEinesAnderenModellsAlsDerEbeneLässtAuchDieEbeneStehen(
     aufstellungNachDerZonenwahl, spielerEins, boyz, boyzSetzen
 ):
     [(modellDerEbene, stelleDerEbene), (gezogenes, _), (drittes, stelleDrittes)] = boyzSetzen(3)
-    ebeneAufDasModellLegen(aufstellungNachDerZonenwahl, boyz, modellDerEbene)
+    modellZurEbeneMachen(aufstellungNachDerZonenwahl, boyz, modellDerEbene)
     ziel = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 20)
 
     aufstellungNachDerZonenwahl.modellLoslassen(gezogenes, ziel)
@@ -265,6 +258,37 @@ def testAuf20_6EinKlickAufEinGesetztesModellInDerAufstellungWähltDieGanzeEinhei
     assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyz)
 
 
+def testAuf20_6EinKlickAufEinGesetztesModellInDerAufstellungWähltKeineAndereEinheit(
+    aufstellungNachDerZonenwahl, boyzSetzen, boyz, warboss
+):
+    [(angeklickt, _), *_] = boyzSetzen(3)
+    aufstellungNachDerZonenwahl.auswählen(warboss)
+
+    aufstellungNachDerZonenwahl.modellAnklicken(angeklickt)
+
+    assert aufstellungNachDerZonenwahl.ausgewählt(boyz)
+    assert not aufstellungNachDerZonenwahl.ausgewählt(warboss)
+
+
+@pytest.fixture(
+    params=["boyz", "necronWarriors"],
+    ids=["einheitDesSpielersAnDerReihe", "einheitDesAnderenSpielers"],
+)
+def aufgestellteEinheitJederSeite(request):
+    return request.getfixturevalue(request.param)
+
+
+def testAuf20_6EinKlickInDerAufstellungWähltDieGanzeEinheitGleichWerAnDerReiheIst(
+    aufstellungMitModellenBeiderSpieler, aufgestellteEinheitJederSeite
+):
+    angeklickt, *_ = aufgestellteEinheitJederSeite.modelle
+
+    aufstellungMitModellenBeiderSpieler.modellAnklicken(angeklickt)
+
+    assert aufstellungMitModellenBeiderSpieler.ausgewählt(aufgestellteEinheitJederSeite)
+    assert aufstellungMitModellenBeiderSpieler.ganzeEinheitIstEbene(aufgestellteEinheitJederSeite)
+
+
 def testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitOhneEbene(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, einheitJederSeite
 ):
@@ -309,6 +333,23 @@ def testAuf20_6DerDienstWähltBeimAnklickenEinesGesetztenModellsInDerAufstellung
         stelleImSpielstand(stelle) for _, stelle in gesetzte
     }
     assert ebenenIm(spielstand) == frozenset()
+
+
+def testAuf20_6DerDienstWähltBeimAnklickenEinesGesetztenModellsInDerAufstellungKeineAndereEinheit(
+    dienst, aufstellungNachDerZonenwahl, boyzSetzen, boyz
+):
+    gesetzte = boyzSetzen(3)
+    [(angeklickt, _), *_] = gesetzte
+    auswählen(dienst, "Warboss")
+
+    antwort = modellAnklicken(dienst, aufstellungNachDerZonenwahl, boyz, angeklickt)
+
+    spielstand = antwort.get_json()
+    assert antwort.status_code == HTTPStatus.OK
+    assert ausgewählteEinheitenIm(spielstand) == {"Boyz"}
+    assert ausgewählteModelleIm(spielstand) == {
+        stelleImSpielstand(stelle) for _, stelle in gesetzte
+    }
 
 
 @mitMausUndFinger

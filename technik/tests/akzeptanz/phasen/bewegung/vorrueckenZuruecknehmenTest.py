@@ -16,10 +16,11 @@ from tests.akzeptanz.grenzen import (
     mitJedemWurf,
     vorgerücktMit,
     wartetAufDenVorrückwurf,
-    zweiZollZurMitte,
+    zweiZollEntlangDerReihe,
 )
 from tests.akzeptanz.schlacht import jetzigeStellen, mitteDesSpielfelds
 
+vorrückenKnopf = "Vorrücken"
 zurücknehmenKnopf = "Vorrücken zurücknehmen"
 dreiAugen = 3
 
@@ -88,10 +89,12 @@ def testBew12_1DieSeiteZeigtOhneVorrückenKeinenKnopfZurücknehmen(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
+
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
 
+    expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(1)
     expect(knopfDerSeite(seite, zurücknehmenKnopf)).to_have_count(0)
 
 
@@ -124,7 +127,7 @@ def testBew12_2NachDemZurücknehmenStehtJedesModellWoEsZuBeginnDerBewegungsphase
     schlacht, einheit, _, _ = einheitAmZug
     stellen = vorgerücktMit(schlacht, einheit, dreiAugen)
     erstes, *_ = einheit.modelle
-    schlacht.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlacht.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
     assert jetzigeStellen(schlacht, einheit) != stellen
 
     schlacht.vorrückenZurücknehmen()
@@ -136,7 +139,7 @@ def testBew12_2OhneAngebotBleibtJedesModellWoEsHingezogenWurde(einheitAmZug):
     schlacht, einheit, _, _ = einheitAmZug
     stellen = ganzeEinheitAuswählen(schlacht, einheit)
     erstes, *_ = einheit.modelle
-    schlacht.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlacht.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
     gezogen = jetzigeStellen(schlacht, einheit)
 
     schlacht.vorrückenZurücknehmen()
@@ -149,7 +152,7 @@ def testBew12_2DerDienstNenntNachDemZurücknehmenDieStellenZuBeginnDerBewegungsp
 ):
     stellen = vorgerücktMit(schlachtInDerBewegungsphase, boyz, dreiAugen)
     erstes, *_ = boyz.modelle
-    schlachtInDerBewegungsphase.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlachtInDerBewegungsphase.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
 
     antwort = vorrückenZurücknehmen(dienstDerSchlacht)
 
@@ -172,5 +175,6 @@ def testBew12_2AmBildschirmNimmtDerKnopfDieGrenzeDesWurfsZurück(
 
     knopfDerSeite(seite, zurücknehmenKnopf).click()
 
+    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
     expect(knopfDerSeite(seite, zurücknehmenKnopf)).to_have_count(0)
     assert not schlachtInDerBewegungsphase.vorgerückt(boyz)

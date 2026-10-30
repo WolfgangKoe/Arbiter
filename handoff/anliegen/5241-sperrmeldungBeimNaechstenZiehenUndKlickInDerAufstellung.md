@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ich 3: Lücken abseits des Happy Path).
@@ -32,4 +31,21 @@ bleibt 2, bliebe in der *Aufstellung* eine zweite *Einheit* *ausgewählt*, unbem
 2. Ein Test in der *Aufstellung*: Warboss *ausgewählt*, Klick auf ein *gesetztes* Boyz; danach
    sind nur die Boyz *ausgewählt*.
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt.
+1. Jetzt BEW-2.6. Eine Frage an den Architekten war nicht nötig: V7
+   ([Querschnitt](../../technik/architektur/vertrag/querschnitt.md)) nennt V10 bereits bei den
+   Abfragen, die keine Handlung sind. Neuer Test
+   `testBew2_6DieSeiteNenntDenGrundNochWährendSieBeimNächstenZiehenNachDerStelleFragt`
+   ([sperrenBeimZiehenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/sperrenBeimZiehenTest.py)):
+   nach der *Sperre* ein anderes *Modell* halten, bis die Abfragen beantwortet sind; dann steht
+   der *Grund* noch. Dass er nach dem Loslassen fehlt, prüft weiter der bisherige Test. Dabei
+   gefunden: `halten` wartete endlos, wenn Abfragen des vorigen Zugs erst danach beantwortet
+   wurden. `Abfragen` ([ziehen.py](../../technik/tests/akzeptanz/ziehen.py)) zählt jetzt nur
+   Antworten auf Abfragen, die es auch gestellt gezählt hat. Der Test ist grün, weil die Seite
+   den *Grund* schon behält.
+2. In [ebeneTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ebeneTest.py):
+   `testAuf20_6EinKlickAufEinGesetztesModellInDerAufstellungWähltKeineAndereEinheit`
+   (Domäne) und
+   `testAuf20_6DerDienstWähltBeimAnklickenEinesGesetztenModellsInDerAufstellungKeineAndereEinheit`
+   (Dienst): Warboss *ausgewählt*, Klick auf ein *gesetztes* Boyz-*Modell*; danach sind nur die
+   Boyz *ausgewählt*. Beide grün, wie in der *Schlacht* ohne Bildschirmtest.

@@ -282,3 +282,10 @@ def eintragDerAusgangslage(datenblatt: str) -> dict:
 def reihenDerFormation(einheitenname: str) -> list[int]:
     """Die Modelle je Reihe aus `formation.yaml`, nicht kopiert."""
     return yamlAusDenDaten("formation.yaml")["formation"][einheitenname]
+
+
+def modellZurEbeneMachen(spiel, einheit: Einheit, modell: Modell) -> None:
+    spiel.auswählen(einheit)
+    spiel.modellAnklicken(modell)
+    if not spiel.modellIstEbene(modell):
+        raise AssertionError("Der Klick machte das Modell nicht zur Ebene")

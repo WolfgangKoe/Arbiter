@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item grenzkreise. Hält auf nach
@@ -50,4 +50,9 @@ Wurf, Klick im *Grenzkreis* aus BEW-11 und außerhalb des sechsten hebt die *Aus
 Anhalten an *Bewegungsweite* plus Wurf, Maus und Finger am Bildschirm. Zu Recht schon grün
 sind die drei Tests der Seite ohne *Auswahl* (kein Knopf, keine Grenze).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beides umgesetzt.
+1. `zweiZollEntlangDerReihe` in [grenzen.py](../../technik/tests/akzeptanz/grenzen.py) zieht
+   `(0, 2″)`; es überdeckt nur *Modelle* der eigenen *Einheit* (BEW-2.7 sperrt nicht).
+   Gelaufen: Die 13 Fälle sind nur noch am fehlenden Produkt rot (`grenzen`,
+   `vorrückenZurücknehmen`, `karteAnklicken`).
+2. Nach dem Klick: `.karte g.grenze.spieler1` gleich 1.

@@ -13,7 +13,7 @@ from tests.akzeptanz.bildschirm import (
     kopfzeileVon,
     spielerAmZug,
 )
-from tests.akzeptanz.dienst import ersterZugWählen, spielstandVon
+from tests.akzeptanz.dienst import ersterZugWählen, schlachtNachSchlüsselnDes, spielstandVon
 
 ersterZugKnopf = "Erster Zug"
 spielernamen = pytest.mark.parametrize(
@@ -102,14 +102,15 @@ def testQue9_2DerDienstSetztDenSpielerMitDemErstenZugAmZugInDieKommandophaseDerS
 ):
     antwort = ersterZugWählen(dienstNachDerAufstellung, spielernummer)
 
-    assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json()["schlacht"] == {
+    beispiel = {
         "ersterZug": spielernummer,
         "amZug": spielernummer,
         "schlachtrunde": 1,
         "phase": "Kommandophase",
         "beendet": False,
     }
+    assert antwort.status_code == HTTPStatus.OK
+    assert schlachtNachSchlüsselnDes(antwort.get_json(), beispiel) == beispiel
 
 
 def testQue9_2DieSeiteZeigtNachDemKlickAufErsterZugDenSpielerAmZugInDerKommandophase(

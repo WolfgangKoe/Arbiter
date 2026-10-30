@@ -13,12 +13,8 @@ from tests.akzeptanz.dienst import (
     modellAnklicken,
     stelleImSpielstand,
 )
-from tests.akzeptanz.handgriffe import versetzt
-from tests.akzeptanz.schlacht import (
-    jetzigeStellen,
-    modellZurEbeneMachen,
-    stellenDerEinheitAlsZahlen,
-)
+from tests.akzeptanz.handgriffe import modellZurEbeneMachen, versetzt
+from tests.akzeptanz.schlacht import jetzigeStellen, stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import (
     klickenMit,
     liegtEinPixelGenauAn,

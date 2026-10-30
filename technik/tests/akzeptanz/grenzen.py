@@ -6,8 +6,8 @@ import pytest
 
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from tests.akzeptanz.dienst import kennungenDerEinheiten, stelleImSpielstand
-from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
-from tests.akzeptanz.schlacht import jetzigeStellen, mitteDesSpielfelds, modellZurEbeneMachen
+from tests.akzeptanz.handgriffe import modellZurEbeneMachen, radiusInZoll, versetzt
+from tests.akzeptanz.schlacht import jetzigeStellen
 
 würfe = tuple(range(1, 7))
 würfeIds = [f"wurf{wurf}" for wurf in würfe]
@@ -99,7 +99,7 @@ def grenzenDerEinheitIm(spielstand: dict, einheitenname: str) -> frozenset[Grenz
     kennung = kennungenDerEinheiten[einheitenname]
     return frozenset(
         GrenzeDerKarte(
-            frozenset((kreis["x"], kreis["y"], kreis["r"]) for kreis in grenze["kreise"]),
+            frozenset((kreis["x"], kreis["y"], kreis["radius"]) for kreis in grenze["kreise"]),
             grenze.get("wurf"),
             grenze.get("wählbar", False),
             grenze.get("nahkampfreichweite", False),
@@ -138,9 +138,8 @@ def stelleAufDemKreis(schlacht, einheit: Einheit, wurf: int) -> Stelle:
     return unterDemLetztenModell(schlacht, einheit, Fraction(wurf))
 
 
-def zweiZollZurMitte(stelle: Stelle) -> Stelle:
-    richtung = 1 if stelle.x < mitteDesSpielfelds.x else -1
-    return versetzt(stelle, (Fraction(2 * richtung), Fraction(0)))
+def zweiZollEntlangDerReihe(stelle: Stelle) -> Stelle:
+    return versetzt(stelle, (Fraction(0), Fraction(2)))
 
 
 def wartetAufDenVorrückwurf(schlacht, einheit: Einheit, ebene: str) -> dict[Modell, Stelle]:

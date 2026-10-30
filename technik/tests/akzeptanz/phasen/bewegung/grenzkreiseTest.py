@@ -17,7 +17,7 @@ from tests.akzeptanz.grenzen import (
     grenzenDerEinheitIm,
     letztesModellZurEbeneMachen,
     mitJederEbene,
-    zweiZollZurMitte,
+    zweiZollEntlangDerReihe,
 )
 from tests.akzeptanz.schlacht import (
     jetzigeStellen,
@@ -26,6 +26,7 @@ from tests.akzeptanz.schlacht import (
     phasenAußerDerBewegungsphase,
     phasenAußerDerBewegungsphaseIds,
 )
+from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
 
 
 def testBew11_1UmEinModellAlsEbeneZeigtDieKarteSeinenGrenzkreis(einheitAmZug):
@@ -41,7 +42,7 @@ def testBew11_1NachDemZiehenBleibtDerGrenzkreisAnDerStelleZuBeginnDerBewegungsph
     schlacht, einheit, _, _ = einheitAmZug
     stellen = letztesModellZurEbeneMachen(schlacht, einheit)
     ((modell, stelle),) = stellen.items()
-    schlacht.modellLoslassen(modell, zweiZollZurMitte(stelle))
+    schlacht.modellLoslassen(modell, zweiZollEntlangDerReihe(stelle))
 
     assert schlacht.stelle(modell) != stelle
     assert grenzenDerEinheit(schlacht, einheit) == {grenzeDerBewegung(stellen)}
@@ -71,7 +72,7 @@ def testBew11_5NachDemZiehenBleibtDieEinhüllendeAnDenStellenZuBeginnDerBewegung
     schlacht, einheit, _, _ = einheitAmZug
     stellen = ganzeEinheitAuswählen(schlacht, einheit)
     erstes, *_ = einheit.modelle
-    schlacht.modellLoslassen(erstes, zweiZollZurMitte(stellen[erstes]))
+    schlacht.modellLoslassen(erstes, zweiZollEntlangDerReihe(stellen[erstes]))
 
     assert jetzigeStellen(schlacht, einheit) != stellen
     assert grenzenDerEinheit(schlacht, einheit) == {grenzeDerBewegung(stellen)}
@@ -166,10 +167,14 @@ def testBew11_4DerDienstNenntOhneAuswahlKeineGrenze(dienstDerSchlacht):
 
 
 def testBew11_4DieSeiteZeigtOhneAuswahlKeineGrenze(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
+    ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
+    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
+
+    mitDerMausKlicken(seite, punktAufDerKarte(seite, mitteDesSpielfelds))
 
     expect(seite.locator(".karte g.grenze")).to_have_count(0)
