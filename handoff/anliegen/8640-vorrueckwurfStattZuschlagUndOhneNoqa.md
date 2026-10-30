@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code verletzt Lesbarkeit, [Es](../../prozess/praemissen/es.md)),
