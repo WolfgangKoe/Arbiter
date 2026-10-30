@@ -39,7 +39,7 @@ class Schlacht:
             for modell in spieler.armee.modelle
             if (stelle := aufstellung.stelle(modell))
         }
-        self._bewegungsphase = Bewegungsphase(self._stellen)
+        self._bewegungsphase = Bewegungsphase(self._stellen, ausgangslage.spielfeld)
         self._auswahl = Auswahl()
         self._protokoll = Protokoll()
         self._ersterZug: Spieler | None = None
@@ -96,7 +96,7 @@ class Schlacht:
         if nächste is not None:
             self._phase = nächste
             if nächste is Phase.bewegungsphase:
-                self._bewegungsphase = Bewegungsphase(self._stellen)
+                self._bewegungsphase = Bewegungsphase(self._stellen, self._ausgangslage.spielfeld)
             return
         self._phase = Phase.kommandophase
         self._zugBeenden()

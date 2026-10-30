@@ -5,7 +5,7 @@ from arbiter.domaene import messen
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
-_nahkampfreichweite = Fraction(1)
+nahkampfreichweite = Fraction(1)
 
 
 def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
@@ -26,7 +26,7 @@ def inNahkampfreichweite(
     return any(
         anderes not in eigene
         and messen.abstandHöchstens(
-            modell.base, stelle, anderes.base, andereStelle, _nahkampfreichweite
+            modell.base, stelle, anderes.base, andereStelle, nahkampfreichweite
         )
         for anderes, andereStelle in stellen.items()
     )

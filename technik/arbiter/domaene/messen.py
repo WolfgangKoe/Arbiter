@@ -11,6 +11,7 @@ _rasterJeZoll = 100
 type BaseAnStelle = tuple[Base, Stelle]
 type BasenAnStellen = Collection[BaseAnStelle]
 type Weg = tuple[Fraction, Fraction]
+type Berührung = Callable[[Base, Stelle, Base, Stelle], bool]
 
 
 def radiusInZoll(base: Base) -> Fraction:
@@ -87,11 +88,17 @@ def _rückung(vorn: Fraction, hinten: Fraction, grenzen: tuple[Fraction, Fractio
     return max(von - vorn, Fraction(0)) or min(bis - hinten, Fraction(0))
 
 
-def _überdecktAm(bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, anteil: Fraction) -> bool:
+def _berührtAm(
+    bewegt: BaseAnStelle,
+    ruhend: BaseAnStelle,
+    weg: Weg,
+    anteil: Fraction,
+    berührt: Berührung,
+) -> bool:
     base, start = bewegt
     ruhendeBase, ort = ruhend
     stelle = verschoben(start, teilDesWegs(weg, anteil))
-    return überdecken(base, stelle, ruhendeBase, ort)
+    return berührt(base, stelle, ruhendeBase, ort)
 
 
 def _anteilDesNächstenPunkts(von: Stelle, weg: Weg, ort: Stelle) -> Fraction:
@@ -103,20 +110,20 @@ def ersterSchrittMit(trifftMonotonAb: Callable[[int], bool], bis: int) -> int:
     return bisect_left(range(bis), x=True, key=trifftMonotonAb)
 
 
-def _ersterÜberdeckenderSchritt(
-    bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, schritte: int
+def _ersterBerührenderSchritt(
+    bewegt: BaseAnStelle, ruhend: BaseAnStelle, weg: Weg, schritte: int, berührt: Berührung
 ) -> int | None:
     _, start = bewegt
     _, ort = ruhend
 
-    def überdecktBeiSchritt(schritt: int) -> bool:
-        return _überdecktAm(bewegt, ruhend, weg, Fraction(schritt, schritte))
+    def berührtBeiSchritt(schritt: int) -> bool:
+        return _berührtAm(bewegt, ruhend, weg, Fraction(schritt, schritte), berührt)
 
     davor = min(max(floor(_anteilDesNächstenPunkts(start, weg, ort) * schritte), 0), schritte)
     danach = min(davor + 1, schritte)
-    if not überdecktBeiSchritt(davor):
-        return danach if überdecktBeiSchritt(danach) else None
-    return ersterSchrittMit(überdecktBeiSchritt, davor)
+    if not berührtBeiSchritt(davor):
+        return danach if berührtBeiSchritt(danach) else None
+    return ersterSchrittMit(berührtBeiSchritt, davor)
 
 
 def schritteDesWegs(weg: Weg) -> int:
@@ -135,17 +142,37 @@ def streckeÜberdeckt(
     return überdecken(bewegteBase, stelle, ruhendeBase, ort)
 
 
+def anteilVorDemErstenSchrittMit(
+    trifftMonotonAb: Callable[[Fraction], bool], weg: Weg
+) -> Fraction:
+    schritte = schritteDesWegs(weg)
+    if schritte == 0 or not trifftMonotonAb(Fraction(1)):
+        return Fraction(1)
+
+    def trifftBeiSchritt(schritt: int) -> bool:
+        return trifftMonotonAb(Fraction(schritt, schritte))
+
+    erster = ersterSchrittMit(trifftBeiSchritt, schritte + 1)
+    return Fraction(max(erster - 1, 0), schritte)
+
+
 def anteilBisZurBerührung(
-    bewegte: BasenAnStellen, hindernisse: BasenAnStellen, weg: Weg
+    bewegte: BasenAnStellen,
+    hindernisse: BasenAnStellen,
+    weg: Weg,
+    berührt: Berührung = überdecken,
 ) -> Fraction:
     schritte = schritteDesWegs(weg)
     if schritte == 0:
         return Fraction(1)
     paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]
-    if not any(_überdecktAm(bewegt, hindernis, weg, Fraction(1)) for bewegt, hindernis in paare):
+    if not any(
+        _berührtAm(bewegt, hindernis, weg, Fraction(1), berührt) for bewegt, hindernis in paare
+    ):
         return Fraction(1)
     erste = [
-        _ersterÜberdeckenderSchritt(bewegt, hindernis, weg, schritte) for bewegt, hindernis in paare
+        _ersterBerührenderSchritt(bewegt, hindernis, weg, schritte, berührt)
+        for bewegt, hindernis in paare
     ]
     ersterÜberhaupt = min(schritt for schritt in erste if schritt is not None)
     return Fraction(max(ersterÜberhaupt - 1, 0), schritte)

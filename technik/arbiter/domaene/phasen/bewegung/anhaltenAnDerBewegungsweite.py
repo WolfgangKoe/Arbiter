@@ -9,24 +9,16 @@ def _distanzÜberDerBewegungsweite(gezogenes: Modell, anfang: Stelle, stelle: St
     return messen.abstandImQuadrat(anfang, stelle) > gezogenes.bewegungsweite**2
 
 
-def anDerBewegungsweiteAngehalten(
+def anteilBisZurBewegungsweite(
     vorige: Mapping[Modell, Stelle], weg: messen.Weg, anfang: Mapping[Modell, Stelle]
-) -> dict[Modell, Stelle]:
-    schritte = messen.schritteDesWegs(weg)
-
-    def stellenBeiSchritt(schritt: int) -> dict[Modell, Stelle]:
-        kurz = messen.teilDesWegs(weg, Fraction(schritt, schritte))
-        return {gezogenes: messen.verschoben(stelle, kurz) for gezogenes, stelle in vorige.items()}
-
-    def überBeiSchritt(schritt: int) -> bool:
+) -> Fraction:
+    def überBeiAnteil(anteil: Fraction) -> bool:
+        kurz = messen.teilDesWegs(weg, anteil)
         return any(
-            _distanzÜberDerBewegungsweite(gezogenes, anfang[gezogenes], stelle)
-            for gezogenes, stelle in stellenBeiSchritt(schritt).items()
+            _distanzÜberDerBewegungsweite(
+                gezogenes, anfang[gezogenes], messen.verschoben(stelle, kurz)
+            )
+            for gezogenes, stelle in vorige.items()
         )
 
-    if schritte == 0:
-        return dict(vorige)
-    if not überBeiSchritt(schritte):
-        return stellenBeiSchritt(schritte)
-    erster = messen.ersterSchrittMit(überBeiSchritt, schritte + 1)
-    return stellenBeiSchritt(erster - 1)
+    return messen.anteilVorDemErstenSchrittMit(überBeiAnteil, weg)
