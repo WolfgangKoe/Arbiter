@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am [Review 9](../review.md), Stand 9cb9142 („Review 9 bis auf Mutation
@@ -42,4 +42,7 @@ Begründungen in einem Satz mit ihren Modulen. 2: Betreff in Anführungszeichen 
 mit Link auf [8961](8961-vollerMutationslaufJeEtappe.md); die Zahl trägst du nach, sobald der
 Lauf fertig ist.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt im [Review](../review.md): 1 drei Punkte unter „Neu oder
+geändert“; dazu Problem 8: Ein gleichwertiger Eintrag gilt für jede Zeile mit gleichem
+Text, auch eine neue Klasse. 2 Betreffe statt Kennungen. 3 Commit „Freigabe Etappe 1“. 4 ein
+Satz zum Warten mit Anliegen 8961.

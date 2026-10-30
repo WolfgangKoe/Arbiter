@@ -22,8 +22,14 @@ Ganzes, normal oder mit *Vorrücken*.
 7. Die Boyz weit ziehen: Sie halten an, sobald ein *Modell* *Bewegungsweite* plus 3″ von
    seiner *Stelle* zu Beginn der Phase entfernt ist (der Boy aus Schritt 3 zuerst).
 8. „Vorrücken zurücknehmen“: Die Boyz stehen wieder, wo die Phase begann, ohne Wurf.
+9. Den *Griff* der unteren *Leiste* (▼ am unteren Rand) klicken: Sie fährt ein, nur der
+   *Griff* ▲ bleibt. Noch ein Klick: Sie fährt aus und zeigt wieder das *Protokoll*. Links und
+   rechts geht es ebenso.
+10. Ein Klick auf die leere *Karte*, dann den untersten Boy 5″ nach rechts ziehen, weg von
+   den Boyz, und „Phase beenden“: Arbiter nennt ‚keine Kohärenz‘, bietet „gemeinsam
+   übergehen“ nicht an, die *Bewegungsphase* bleibt.
 
-Am laufenden Arbiter mit der Maus gesehen: 2 bis 8 in Folge; die Aufstellung habe ich dafür
+Am laufenden Arbiter mit der Maus gesehen: 2 bis 10 in Folge; die Aufstellung habe ich dafür
 vorbereitet statt geklickt. Nur Tests zeigen: Anhalten an der *Spielfeldkante* und 1″ vor
 einer gegnerischen *Base* ([anhaltenVorDerGrenzeTest](../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py)),
 *Modelle* des Gegners lassen sich nicht ziehen ([fremdeModelleTest](../technik/tests/akzeptanz/phasen/bewegung/fremdeModelleTest.py)),
@@ -32,25 +38,30 @@ Klick auf eine *aufgestellte* *Einheit* beim Aufstellen ([aufgestellteEinheitAus
 Ziehst du den Warboss nach links zur Kante, springt er zurück: Die Boyz stehen im Weg,
 ‚über eine Base‘.
 
-Du bist den Klickpfad durchgegangen und einverstanden.
+Du bist den Klickpfad durchgegangen und einverstanden; Schritte 9 und 10 sind danach
+dazugekommen (Anliegen 8950), sieh sie dir bitte noch an.
 
 ## DoD
 1. **Erfüllt.** Alle Tests in `technik/tests` grün, Abdeckung über 95 % (Prüfung `abdeckung`).
 2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 937 grün; SonarLint ohne Fund. Die
    Meldung S1172 am Parameter `vorrückwurf`, die der Implementierer in der IDE sah, gibt es
-   auf ca2bda8 nicht: Dieselbe SonarLint-Version meldet in einer Kopie einen wirklich
-   unbenutzten Parameter derselben Funktion, `vorrückwurf` nicht. Wohl ein veralteter Stand
-   im Editor. Seither hat sich nur der Mutationslauf geändert (8122): Auf 1cafd47 sind seine
-   18 Tests, die Prüfungen zu Benennung, Kommentaren und Komplexität, ruff und SonarLint grün.
+   nach dem Commit „grenzkreise: Kritik am Code zu 8640, Item gelöscht“ nicht: Dieselbe
+   SonarLint-Version meldet in einer Kopie einen wirklich unbenutzten Parameter derselben
+   Funktion, `vorrückwurf` nicht. Wohl ein veralteter Stand im Editor. Seither hat sich nur
+   der Mutationslauf geändert, Commit „Mutationslauf parallel auf allen Kernen (Anliegen
+   8122)“: Danach sind seine 18 Tests, die Prüfungen zu Benennung, Kommentaren und
+   Komplexität, ruff und SonarLint grün.
 3. **Erfüllt.** Alle vier Items gelöscht; die Kriterien beschreiben das Gebaute.
 4. **Erfüllt.** Der Fachkritiker hat alle vier Items abgenommen.
 
 Oberfläche: **Erfüllt.** Bildschirmtests grün; die acht Mockups des Gebauten sind gelöscht,
 unter `domaene/mockups/` liegen nur noch die der offenen Items. Anliegen 8760 ist erledigt;
 `erledigteLoeschen.py` hat es nach dem Commit gelöscht, wie vorgesehen.
-Mutation: **offen.** Der volle Lauf mit 8 Kernen läuft seit 22:19 auf 1cafd47 und hat noch
-kein Modul fertig. Danach holt der gezielte Lauf über die geänderten Zeilen seine Ergebnisse
-aus dem Merkzettel; ich trage die Zahl nach, Lücken gehen an den Testautor.
+Mutation: **offen.** Die Schwelle misst der gezielte Lauf über die geänderten Zeilen. Ich
+starte ihn erst, wenn der volle Lauf fertig ist, der seit 22:19 mit 8 Kernen läuft: Ein
+zweiter Lauf daneben verfälschte deine Messung, wie schnell der volle Lauf parallel ist
+([Anliegen 8961](anliegen/8961-vollerMutationslaufJeEtappe.md)), und der gezielte holt sich danach die fertigen Ergebnisse aus dem
+Merkzettel, statt sie neu zu rechnen. Die Zahl trage ich nach, Lücken gehen an den Testautor.
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 9“:
@@ -60,12 +71,15 @@ nur eine *vorgerückt* ist, fehlt (Anliegen 8740); zwei Tests zur *Auswahl* prü
 (Anliegen 8720).
 
 ## Empfehlung
-Gib Review 9 frei, sobald die Mutation die Schwelle hält: Der Klickpfad zeigt, was Plan 9 versprochen hat, Schritte 1 bis 5 des Happy Path.
-Die übrigen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
+Gib Review 9 frei, sobald die Mutation die Schwelle hält: Der Klickpfad zeigt, was Plan 9
+versprochen hat, Schritte 1 bis 5 des Happy Path. Beantworte vor der Domänenphase 10 die
+Fragen in Anliegen 8840, sie ändern den Umfang von Plan 10 (Nächstes Vorgehen). Die übrigen
+Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
 
 ## Rundgang Prüfcode
-Seit „Freigabe Review 8“ 95 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
-[.claude/settings.json](../.claude/settings.json), 1.317 Zeilen neu, 713 fort. Gut 60 Dateien
+Seit „Freigabe Review 8“ 96 Dateien in [prozess/pruefungen](../prozess/pruefungen),
+[.claude/settings.json](../.claude/settings.json) und [eslint.config.mjs](../eslint.config.mjs),
+1.318 Zeilen neu, 713 fort. Gut 60 Dateien
 haben nur ihre Docstrings verloren (P4, Anliegen 6430); daran ist nichts zu prüfen. Neu oder
 geändert:
 - Länge der Anliegen ([anliegenLaenge.py](../prozess/pruefungen/anliegenregeln/anliegenLaenge.py)):
@@ -84,6 +98,18 @@ geändert:
 - Mutationslauf schreibt und merkt sich jedes fertige Modul und verteilt die Mutanten eines
   Moduls auf alle Kerne, je Kern eine Kopie in `/tmp` ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py), Anliegen 8122).
 - Schreibgrenze erkennt das Ziel von `cp -t` ([bashSchreiben.py](../prozess/pruefungen/rollenregeln/bashSchreiben.py)).
+  Ein Hook mit leerer Eingabe gilt als Aufruf ohne Angaben und lässt durch
+  ([hookProtokoll.py](../prozess/pruefungen/gemeinsam/hookProtokoll.py), Zeile 56); vorher
+  brach er mit einem Fehler ab, der ebenso nicht sperrte. Claude Code schickt nie leer.
+- ESLint verbietet Kommentare hinter Code ([eslint.config.mjs](../eslint.config.mjs),
+  Zeile 32, `no-inline-comments`), passend zu Es 8.
+- Elf Mutanten zählen als gleichwertig nicht gegen die Schwelle
+  ([gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json), Anliegen
+  6994): vier in `ausgangslage.py`, drei in `spielobjekte.py`, zwei in `setzenPerKlick.py`,
+  je einer in `web/darstellung.py` und `web/server.py`. Sieben davon nehmen `frozen` oder
+  `eq=False` aus `@dataclass`, weil kein Code die Felder neu setzt oder die Objekte
+  vergleicht; die übrigen vier begründen je einen Wert, der nicht wirken kann. Die Gründe
+  halte ich für stichhaltig.
 
 Probleme, keins hält auf:
 1. Der Hook „Stand“ vor jeder Rolle braucht jetzt 5,3 von 10 Sekunden: `belegungAlsText`
@@ -120,21 +146,35 @@ Probleme, keins hält auf:
 7. Klein: Strg+C beendet den Lauf erst, wenn alle eingereichten Mutanten des Moduls fertig
    sind; wird der Prozess beendet, laufen bis zu 8 Testläufe weiter (Zeile 170,
    `ThreadPoolExecutor` ohne `cancel_futures`).
+8. Ein gleichwertiger Mutant gilt für jede Zeile mit demselben Text in derselben Datei
+   ([gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json)). Eine neue
+   Klasse mit `@dataclass(frozen=True, eq=False)` in `spielobjekte.py` ist damit ungeprüft
+   ausgenommen, auch wenn Code sie vergleicht; bei `Modell` zählt so schon ein gefangener
+   Mutant nicht. Empfehlung: den Eintrag an die Klasse binden, etwa mit ihrem Namen.
 
-Empfehlung: 1 und 5 mit 6 als Anliegen an den Regelumsetzer, je ein Zug von wenigen Zeilen;
-2 bis 4 und 7 beim nächsten Eingriff in die Dateien, sonst bleiben sie liegen, ohne zu stören.
+Empfehlung: 1, 5 mit 6 und 8 als Anliegen an den Regelumsetzer, je ein Zug von wenigen
+Zeilen; 2 bis 4 und 7 beim nächsten Eingriff in die Dateien, sonst bleiben sie liegen, ohne
+zu stören.
 
 ## Nächstes Vorgehen
-- **Produktziel:** Etappe 1 von 10 ist erreicht, Etappe 2 läuft. Am meisten fehlt die Partie
-  nach der *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
-- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt, was Plan 9 unter
-  „Danach“ nennt: Zurücksetzen, Anhalten übergehen, Ork-Psioniker und Canoptek-Spinne,
-  Loslassen neben der *Karte*, ruhige *Karte*, „Phase beenden“ nur im Zug; der Stand nennt
-  57 von 63 Kriterien der Etappe belegt. Ich schätze zwei Zyklen.
-- **Zyklusziel:** Plan 10: Eine gezogene *Einheit* setzt ihr zurück, Arbiter zeigt, welche
-  schon gezogen hat; ein Anhalten übergeht ihr *gemeinsam*; „Phase beenden“ gibt es nur für
-  den *Spieler* am Zug. Noch nicht: Ork-Psioniker und Canoptek-Spinne. Vorher: Anliegen 8740,
-  8720 und 8620 (Schnittstelle des Ziehens).
+- **Produktziel:** Etappe 1 von 10 ist erreicht (Commit „Freigabe Etappe 1“), Etappe 2 läuft.
+  Am meisten fehlt die Partie nach der *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
+- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt nach deiner Antwort
+  A in Anliegen 8880: Zurücksetzen, Loslassen neben der *Karte* (mit 8480),
+  *Nahkampfreichweite* auf der ganzen Strecke und kein *Vorrücken* aus ihr (Anliegen 6986),
+  „Phase beenden“ nur im Zug, Ork-Psioniker und Canoptek-Spinne, die ruhige *Karte*; der
+  Stand nennt 57 von 63 Kriterien der Etappe belegt. Ein Zyklus, zwei, wenn die ruhige *Karte*
+  hängt. Anliegen 8840 wartet auf deine Antworten: Mit F1 kann in der Etappe Anhalten vor
+  fremden *Bases* die *Sperre* ‚über eine Base‘ ersetzen, F2 entscheidet, ob sich ein
+  Anhalten übergehen lässt.
+- **Zyklusziel:** Plan 10 schließt Etappe 2 ab. Danach setzt ihr eine gezogene *Einheit*
+  zurück, lasst ein *Modell* neben der *Karte* los, durch die *Nahkampfreichweite* eines
+  Gegners zieht kein *Modell* mehr hindurch, eine *Einheit* in ihr rückt nicht vor,
+  „Phase beenden“ gibt es nur für den *Spieler* am Zug, Ork-Psioniker und Canoptek-Spinne
+  stehen in den Armeen, zuletzt bleibt die *Karte* ruhig. Noch nicht: sehen, welche *Einheit* schon gezogen hat, und ein
+  Anhalten übergehen (Etappe 3). Reihenfolge nach der Klärung in 8880, F2 offen bei dir: erst
+  diese Teile, dann das Aufräumen aus 22 Anliegen der Technikphase 10 und 7800; braucht ein
+  Teil eines davon vorher, zieht der Planer es vor und nennt es.
 
 ## Fortschritt
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel

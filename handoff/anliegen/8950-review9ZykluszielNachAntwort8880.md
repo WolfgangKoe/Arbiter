@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Punkte halten auf (Kritik: Zyklusziel und Klickpfad gegen Plan und Etappe):
@@ -49,4 +49,6 @@ Minute am Bildschirm.
    ziehen, „Phase beenden“: Arbiter nennt ‚keine Kohärenz‘ und bietet „gemeinsam übergehen“
    nicht an. Lässt sich ein Schritt nicht zeigen, unter „Nur Tests zeigen“ mit Grund.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt im [Review](../review.md): 1 wie vorgeschlagen, dazu 8840
+und F2 aus 8880 als offen. 2 als Schritte 9 und 10 angehängt, damit die abgenommenen Nummern
+bleiben; am laufenden Arbiter gesehen, das Review bittet den Stakeholder, sie anzusehen.

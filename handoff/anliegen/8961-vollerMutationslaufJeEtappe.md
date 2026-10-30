@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Dein Vorschlag, über den Koordinator: Der volle Mutationslauf (`--voll`) läuft
@@ -52,4 +52,4 @@ C: Wie bisher in jedem Zyklus (DoD, Anliegen 6960). Lücken früh, Kerne in jede
 belegt.
 Empfehlung: A. Der gezielte Lauf hält die Schwelle in jedem Zyklus; B gewinnt nur Zeit, wenn
 nach der Abnahme nichts mehr an `technik/` geschieht.
-Antwort: .
+Antwort: A
