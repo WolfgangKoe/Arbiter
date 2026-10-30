@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Ux
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Eine Anregung noch für die nächste Domänenphase. Es wäre gut, wenn Grenzen für Nahkampfreichweite und Bewegung jeweils durch einen Kreis leicht angezeigt würden. UX soll in der nächsten Domänenphase ein Mockup vorstellen. Eine Idee dazu gibt es auch schon in ArbiterMap und auch wie das Verhalten sein soll.“

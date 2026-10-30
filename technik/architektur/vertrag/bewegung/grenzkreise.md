@@ -5,12 +5,14 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md). Die Domäne rechnet je
 die Seite zeichnet nur, was der Spielstand nennt (W2, O5).
 
 ## Domäne
-- **V20** `phasen/bewegung/vorruecken.py` hält je *Einheit*, ob sie auf ihren *Vorrückwurf*
-  wartet, *vorgerückt* ist und mit welchem Wurf; `phasen/bewegung/grenzkreise.py` rechnet
-  die *Grenzkreise* als `Kreis(stelle, radius)` in *Zoll*, den Radius aus `messen.py`
-  (halber *Durchmesser* plus *Abstand*, M1). `Schlacht` gibt weiter: `vorrücken()`,
-  `vorrückenZurücknehmen()`, `karteAnklicken(stelle)` (V19), Abfrage `grenzen`: je Eintrag
-  `Grenze(einheit, kreise, wurf, wählbar, nahkampfreichweite)`, Felder wie V21.
+- **V20** `Bewegungsphase` hält je *Einheit*, ob sie auf ihren *Vorrückwurf* wartet,
+  *vorgerückt* ist und mit welchem Wurf; das brauchen BEW-5, 12, 13, 14 und V16 zusammen
+  ([Grundschnitt](../../domaene.md#grundschnitt-der-domäne)). `phasen/bewegung/grenzkreise.py`
+  rechnet je Eintrag eine `Einhüllende(einheit, kreise, wurf, wählbar, nahkampfreichweite)`
+  aus `Grenzkreis(stelle, radius)` in *Zoll*, Radius `messen.radiusInZoll` plus *Abstand*
+  (M1); bei einem *Modell* ist sie sein *Grenzkreis*. `Schlacht` gibt weiter: `vorrücken()`,
+  `vorrückenZurücknehmen()`, `karteAnklicken(stelle)` (V19), Abfrage `grenzen` mit diesen
+  Einträgen, Felder wie V21.
   - BEW-11: um die *ausgewählte* *Einheit* des *Spielers* *am Zug* in der
     *Bewegungsphase* je *Modell* der *Ebene* ein Kreis um seine *Stelle* zu Beginn der
     *Bewegungsphase* (BEW-15.1), *Abstand* seine *Bewegungsweite*; je *Einheit* des anderen

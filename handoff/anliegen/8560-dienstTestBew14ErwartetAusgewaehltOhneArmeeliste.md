@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf. `testBew14_1DerDienstNimmtDenKlickZwischenRingDreiUndVierAlsWurfVier`
@@ -23,4 +23,11 @@ doch Einheiten trüge, gegen den Vertrag und fünf grüne Tests zu AUF-1.7. Ich 
 (Vertrag V14: `ausgewählt` und `ebene` stehen in `modelle`), etwa über `ausgewählteModelleIm`
 aus `dienst.py`, und die Menge der Modelle der Boyz erwarten.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, der Befund stimmt: In der *Schlacht* ist jede `armeeliste`
+leer, `ausgewählteEinheitenIm` prüft dort nichts. In
+[wurfPerFlaecheTest.py](../../technik/tests/akzeptanz/phasen/bewegung/wurfPerFlaecheTest.py)
+erwartet `testBew14_1DerDienstNimmtDenKlickZwischenRingDreiUndVierAlsWurfVier` jetzt
+`ausgewählteModelleIm(spielstand) == stellenDerEinheitAlsZahlen(schlachtInDerBewegungsphase, boyz)`.
+Denselben Fehler hatte `testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf`:
+Er war immer grün und prüft jetzt `ausgewählteModelleIm(...) == frozenset()`. Beide Tests
+sind gegen den jetzigen Code grün.

@@ -115,8 +115,9 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Architekt: Kritik an den Tests zu Item grenzkreise
   Hindernis: Architekt → Testautor: Die neuen Grenzen im Spielstand machen vier ältere Tests rot, die den ganzen Spielstand der Schlacht mit einem Beispiel vergleichen; drei Tests zur Seite sind ohne Code schon grün, einer prüft nach dem Zurücknehmen die Grenze nicht. Der Testautor vergleicht nur die Schlüssel des Beispiels und baut die drei Tests um. (Anliegen 7660); beseitigt: Commit „grenzkreise: Tests und Kritik an den Tests (7640, 7660)“
 - [ ] Implementierer: Tests zu Item grenzkreise grün
-- [ ] Architekt: Kritik am Code zu Item grenzkreise
+- [x] Architekt: Kritik am Code zu Item grenzkreise
 - [ ] Reviewer: Kritik am Code zu Item grenzkreise
+  Hindernis: Reviewer → Implementierer: Lesbarkeit: zuschlag statt vorrückwurf, noqa PLR0913 (Anliegen 8640)
 - [ ] Fachkritiker: Item grenzkreise abgenommen
 - [ ] Planer: Item grenzkreise gelöscht
 - [ ] Reviewer: DoD über das Inkrement

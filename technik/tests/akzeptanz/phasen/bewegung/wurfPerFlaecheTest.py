@@ -6,7 +6,7 @@ import pytest
 from playwright.sync_api import expect
 
 from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
-from tests.akzeptanz.dienst import ausgewählteEinheitenIm, karteAnklicken
+from tests.akzeptanz.dienst import ausgewählteModelleIm, karteAnklicken
 from tests.akzeptanz.grenzen import (
     alsZahlen,
     außerhalbDerSechsRinge,
@@ -19,6 +19,7 @@ from tests.akzeptanz.grenzen import (
     stelleImRing,
     wartetAufDenVorrückwurf,
 )
+from tests.akzeptanz.schlacht import stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import klickenMit, mitMausUndFinger, punktAufDerKarte
 
 vierAugen = 4
@@ -80,7 +81,9 @@ def testBew14_1DerDienstNimmtDenKlickZwischenRingDreiUndVierAlsWurfVier(
     assert grenzenDerEinheitIm(spielstand, "Boyz") == alsZahlen(
         grenzenNachDemVorrückwurf(stellen, vierAugen)
     )
-    assert ausgewählteEinheitenIm(spielstand) == {"Boyz"}
+    assert ausgewählteModelleIm(spielstand) == stellenDerEinheitAlsZahlen(
+        schlachtInDerBewegungsphase, boyz
+    )
 
 
 def testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf(
@@ -92,7 +95,7 @@ def testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf(
     antwort = karteAnklicken(dienstDerSchlacht, stelle)
 
     assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(antwort.get_json()) == frozenset()
+    assert ausgewählteModelleIm(antwort.get_json()) == frozenset()
 
 
 @mitMausUndFinger
