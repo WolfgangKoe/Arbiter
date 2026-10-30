@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Architektur nachziehen, keine Prüfung rot), Diff `039da85..b14cdf7`,

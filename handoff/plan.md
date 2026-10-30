@@ -63,9 +63,9 @@ Begriffe aus 6998, 7000, 7005.
   Anliegen 6998,
   Anliegen 7000,
   Anliegen 7005.
-- Deine Nachprüfung: [6400](anliegen/6400-anhaltenVorDerNahkampfreichweite.md),
+- Deine Nachprüfung: Anliegen 6400,
   [6410](anliegen/6410-grenzkreiseNahkampfUndBewegung.md),
-  [6420](anliegen/6420-einzelnesModellNachAuswahlDerEinheitZiehen.md).
+  Anliegen 6420.
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
@@ -89,7 +89,7 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
   Hindernis: Architekt → Testautor: Ein Test übergab die übergangenen Gründe ohne Namen, anders als der Vertrag, und ein Test zu „gemeinsam übergehen nicht mehr angeboten“ war ohne Knopf schon grün; beides ist berichtigt, der Haken gilt seit der Nachprüfung. (Anliegen 7320); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
 - [x] Implementierer: Tests zu Item gemeinsamUebergehen grün
-- [ ] Architekt: Kritik am Code zu Item gemeinsamUebergehen
+- [x] Architekt: Kritik am Code zu Item gemeinsamUebergehen
   Hindernis: Architekt → Implementierer: Beim Loslassen fragt Arbiter nicht, ob die Sperre übergangen werden darf, und verlässt sich allein auf den Knopf; so stünde ‚keine Kohärenz‘ nicht sicher fest, sobald eine Sperre beim Ziehen sie meldet. Die Abfrage beim Ziehen bietet das Übergehen zu Unrecht an. Je eine bis drei Zeilen. (Anliegen 8240); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
 - [x] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
   Hindernis: Reviewer → Implementierer: Im Code, der die Leisten ein- und ausfährt, heißt ein Wert eingefahren, obwohl er wahr ist, wenn die Leiste ausgefahren ist; am Bildschirm stimmt alles, nur der Name sagt laut Glossar das Gegenteil. Empfehlung: umbenennen in ausgefahren, eine Zeile. (Anliegen 8260); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
@@ -102,7 +102,7 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
   Hindernis: Architekt → Testautor: Ein Test zur Auswahl einer aufgestellten Einheit heißt „ohne Ebene“, obwohl die ganze Einheit ihre Ebene ist; der Testautor benennt ihn um. (Anliegen 7420); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
 - [ ] Implementierer: Tests zu Item anhaltenUndAuswahl grün
-  Hindernis: Implementierer → Testautor: Test BEW-2.8 Nahkampfreichweite in sperrenBeimZiehenTest.py zieht aus dem Spielfeld (Anliegen 8280)
+  Hindernis: Implementierer → Testautor: Test BEW-2.8 Nahkampfreichweite in sperrenBeimZiehenTest.py zieht aus dem Spielfeld (Anliegen 8280); beseitigt: Commit „Lauf 2: Architektur zu 8241, Test BEW-2.8 berichtigt (8280), 6400 und 6420 erledigt“
 - [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
   Hindernis: Reviewer → Implementierer: Der neue Einheitstest der Bewegungsphase liegt nicht, wo man ihn nach dem Modul sucht, und einer seiner Tests wäre auch grün, wenn das Modell gar nicht zieht; der Implementierer verschiebt die Datei und prüft die genaue Stelle. (Anliegen 8040); beseitigt: Commit „Schlacht nutzt gegnerVon, Route der Ebene entfällt (5701, 8030, 8040)“
