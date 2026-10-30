@@ -6,8 +6,8 @@ Implementierer 5380, 5701, 6122, 6982, 6991, 6992; Testautor 4901, 4921, 5241, 5
 
 ## Dran
 Blockiert das Inkrement (Fortschritt im Plan):
-- Item 2: [7300](anliegen/7300-uebergehenNichtMehrAngebotenOhneVorbedingung.md) und
-  [7320](anliegen/7320-uebergehenBenanntUndKnopfVorDerHandlung.md), Testautor; sie halten die
+- Item 2: Anliegen 7300 und
+  Anliegen 7320, Testautor; sie halten die
   Kritik an den Tests auf, der Implementierer wartet darauf.
 - Item 1: nichts Offenes mehr außer den Haken (7150, 7190, 7200, 7210 sind erledigt);
   7191 und 7201 warten auf Technikphase 10.

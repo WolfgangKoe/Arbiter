@@ -29,7 +29,7 @@ Ablage von `eintragLesen` und zusammengesetzte Schlüssel: [7191](7191-ablageDer
    `laden` und übergibt `gemischt.__getitem__`; eine unbekannte *Fraktion* gäbe dort
    `KeyError`. Dass neue Einheitstests wieder echte Dateien mit kopierten Werten lesen
    (`datenblaetterTest.py`, `yamlLesenTest.py`), gehört zu
-   [5380](5380-testmodellUndKopierteWerteImKatalogtest.md), Befund 2.
+   Anliegen 5380, Befund 2.
 
 **Kosten.** Am Bildschirm nichts. Zu 1: Ein Tippfehler in einem späteren Katalog fällt nicht
 auf. Zu 2: ein Lesen je *Einheit* statt je *Fraktion*, wächst mit der Armee. Zu 3: eine

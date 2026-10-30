@@ -39,7 +39,7 @@ Greifst du ein *Modell* am Rand, springt es nicht mehr mit der Mitte unter den Z
 (AUF-8.7, [ziehenTest](../technik/tests/akzeptanz/phasen/aufstellen/ziehenTest.py)).
 Lässt du ein *Modell* in *Nahkampfreichweite* eines gegnerischen los, sperrt Arbiter schon
 ‚Nahkampfreichweite‘, obwohl Plan 8 sie unter „Noch nicht“ nennt; ein Test dazu fehlt noch
-([Anliegen 6241](anliegen/6241-bewegungOhneTestZuQue1_3UndAuf8_7.md)).
+(Anliegen 6241).
 
 ## DoD
 1. **Erfüllt.** `python3 -m pytest technik/tests`: 845 grün; Abdeckung über 95 %.
@@ -56,7 +56,7 @@ Mutanten zur *Kohärenz* nach dem neuen Test aus Anliegen 6330: alle gefangen.
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 8“:
 nichts hält auf. Zwei Nachbauten in der Messung und *Distanz* ohne Namen im Code warten auf
-Technikphase 9 ([Anliegen 6290](anliegen/6290-reviewNachbauUndDistanz.md)).
+Technikphase 9 (Anliegen 6290).
 
 ## Empfehlung
 Gib Review 8 frei: Die DoD ist erfüllt, und der Klickpfad zeigt, was Plan 8 versprochen hat.

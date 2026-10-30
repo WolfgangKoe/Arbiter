@@ -10,7 +10,7 @@ Wartet auf: Prozessphase
 ## Runde 1
 **Befund.** Zwei Entscheidungen des Stakeholders ändern denselben Satz der
 [Kennzahlen](../../prozess/kennzahlen.md#höchstmaße), Höchstmaße der Architektur:
-1. [7022](7022-vertragEinerPhaseUeberDemHoechstmass.md) F1 A: Eine volle Vertragsdatei wird
+1. Anliegen 7022 F1 A: Eine volle Vertragsdatei wird
    ein Ordner, darin je Abschnitt eine Datei zu 6.000, ohne Summe. Umgesetzt für die
    *Aufstellung*, die *Schlacht* und die *Bewegungsphase*: `technik/architektur/vertrag/aufstellen/`,
    `…/schlacht/`, `…/bewegung/` ([Übersicht](../../technik/architektur.md#schichten)). Die
