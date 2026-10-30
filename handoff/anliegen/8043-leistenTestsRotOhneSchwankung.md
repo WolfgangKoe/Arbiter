@@ -4,7 +4,7 @@ Form: Fragen
 Von: Reviewer
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Dein Hinweis: Die roten Tests der *Leisten* schwanken. Ich habe
@@ -58,7 +58,7 @@ einen Prozess-Item. Ohne: nichts zu tun, der volle Lauf bleibt so lang wie heute
   Organisationsentwickler für die Prozessphase 9, zusammen mit P9; 8043 schließe ich danach.
   Empfehlung.
 - b) Nein: gezielt und mit Fortschritt (P9) genügt; ich setze 8122 und 8043 auf erledigt.
-Antwort: .
+Antwort: Ja.
 Annahme: Ich lege 8122 schon an; es wartet auf die Prozessphase 9.
 
 **Stellungnahme.**
