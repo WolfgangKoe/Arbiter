@@ -80,7 +80,7 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Reviewer: Kritik am Code zu Item katalogwerteGliedern
   Hindernis: Reviewer → Implementierer: Im Katalog heißt der Eintrag einer Modellart Profil, obwohl er auch den Durchmesser hält, und ein Einheitstest bindet eine Konstante per Standardargument; der Implementierer benennt um. (Anliegen 7200); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
 - [x] Fachkritiker: Item katalogwerteGliedern abgenommen
-- [ ] Planer: Item katalogwerteGliedern gelöscht
+- [x] Planer: Item katalogwerteGliedern gelöscht
 - [x] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
 - [x] Testautor: Tests zu Item gemeinsamUebergehen
   Hindernis: Testautor → Planer: Die Tests zu BEW-8, QUE-5 und QUE-6 stehen vollständig, Formprüfungen grün. Das Häkchen setzt sich nicht, weil die Zeile Abhängigkeit in domaene/items/gemeinsamUebergehen.md BEW-2 nennt; die Prüfung zählt damit BEW-2 zum Item, und BEW-2.8 gehört zu Item 3 (anhaltenUndAuswahl) und hat dort noch keinen Test. Empfehlung: in der Abhängigkeit die Kennung streichen (die Sperren beim Ziehen stehen) statt BEW-2 zu nennen; Alternative für den Regelumsetzer: itemKriterienGetestet liest nur die Zeile Umfang. (Anliegen 7210); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
