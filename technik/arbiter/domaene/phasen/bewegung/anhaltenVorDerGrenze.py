@@ -31,4 +31,4 @@ def anteilBisZurNahkampfreichweite(
     bewegte = [(gezogenes.base, stelle) for gezogenes, stelle in vorige.items()]
     hindernisse = [(anderes.base, stelle) for anderes, stelle in gegner.items()]
     inReichweite = partial(messen.abstandHöchstens, zoll=nahkampfreichweite)
-    return messen.anteilBisZurBerührung(bewegte, hindernisse, weg, inReichweite)
+    return messen.anteilBisZurBerührungAufDemWeg(bewegte, hindernisse, weg, inReichweite)

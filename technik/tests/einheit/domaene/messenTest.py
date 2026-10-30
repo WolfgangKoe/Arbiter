@@ -3,6 +3,7 @@ from fractions import Fraction
 from arbiter.domaene.messen import (
     abstandHöchstens,
     anteilBisZurBerührung,
+    anteilBisZurBerührungAufDemWeg,
     ganzIn,
     rückungInDieFläche,
     streckeÜberdeckt,
@@ -223,6 +224,16 @@ def testDerSchrägeWegBisZurBerührungHältVorDerÜberdeckungAuchAußerhalbDesUr
     halt = verschoben(start, teilDesWegs(weg, anteil))
     assert not überdecken(zehnZoll, halt, zehnZoll, ort)
     assert abstandHöchstens(zehnZoll, halt, zehnZoll, ort, Fraction(1, 100))
+
+
+def testAufDemWegHältDerAnteilVorEinerBaseAnDieDasEndeSchonÜberquertHat(zehnZoll):
+    ruhend = [(zehnZoll, Stelle(x=Fraction(15), y=Fraction(0)))]
+
+    anteil = anteilBisZurBerührungAufDemWeg(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(40), Fraction(0))
+    )
+
+    assert anteil == Fraction(1, 8)
 
 
 def testEineSchrägeStreckeÜberdecktDieBaseAmNächstenPunktAußerhalbDesUrsprungs(zehnZoll):

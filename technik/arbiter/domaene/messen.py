@@ -162,17 +162,29 @@ def anteilBisZurBerührung(
     weg: Weg,
     berührt: Berührung = überdecken,
 ) -> Fraction:
-    schritte = schritteDesWegs(weg)
-    if schritte == 0:
-        return Fraction(1)
     paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]
     if not any(
         _berührtAm(bewegt, hindernis, weg, Fraction(1), berührt) for bewegt, hindernis in paare
     ):
         return Fraction(1)
+    return anteilBisZurBerührungAufDemWeg(bewegte, hindernisse, weg, berührt)
+
+
+def anteilBisZurBerührungAufDemWeg(
+    bewegte: BasenAnStellen,
+    hindernisse: BasenAnStellen,
+    weg: Weg,
+    berührt: Berührung = überdecken,
+) -> Fraction:
+    schritte = schritteDesWegs(weg)
+    if schritte == 0:
+        return Fraction(1)
+    paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]
     erste = [
         _ersterBerührenderSchritt(bewegt, hindernis, weg, schritte, berührt)
         for bewegt, hindernis in paare
     ]
-    ersterÜberhaupt = min(schritt for schritt in erste if schritt is not None)
-    return Fraction(max(ersterÜberhaupt - 1, 0), schritte)
+    berührende = [schritt for schritt in erste if schritt is not None]
+    if not berührende:
+        return Fraction(1)
+    return Fraction(max(min(berührende) - 1, 0), schritte)
