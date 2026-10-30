@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Lesbarkeit der Änderung seit 85fe22c (Stand b473b0b, Teillauf 1 und 2 von
@@ -29,4 +29,8 @@ Stellen gleich geändert werden. Umbenennen kostet zwei Zeilen, keinen Test.
 `self._auswahl.aufheben()`; `abwählen(einheit)` ruft innerhalb seiner Bedingung
 `self.aufheben()`, statt die Felder selbst zurückzusetzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, mit dem Namen `auswahlAufheben` statt `aufheben()` (wie in
+Anliegen 8420, derselbe Befund): [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py)
+und [schlachtrunden.py](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py)
+umgestellt; `abwählen(einheit)` setzt die Felder nicht mehr selbst zurück, sondern ruft
+`auswahlAufheben()`.

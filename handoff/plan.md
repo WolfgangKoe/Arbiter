@@ -103,11 +103,11 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Architekt → Testautor: Ein Test zur Auswahl einer aufgestellten Einheit heißt „ohne Ebene“, obwohl die ganze Einheit ihre Ebene ist; der Testautor benennt ihn um. (Anliegen 7420); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
 - [x] Implementierer: Tests zu Item anhaltenUndAuswahl grün
   Hindernis: Implementierer → Testautor: Test BEW-2.8 Nahkampfreichweite in sperrenBeimZiehenTest.py zieht aus dem Spielfeld (Anliegen 8280); beseitigt: Commit „Lauf 2: Architektur zu 8241, Test BEW-2.8 berichtigt (8280), 6400 und 6420 erledigt“
-- [ ] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
-- [ ] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
+- [x] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
+- [x] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
   Hindernis: Reviewer → Implementierer: Der neue Einheitstest der Bewegungsphase liegt nicht, wo man ihn nach dem Modul sucht, und einer seiner Tests wäre auch grün, wenn das Modell gar nicht zieht; der Implementierer verschiebt die Datei und prüft die genaue Stelle. (Anliegen 8040); beseitigt: Commit „Schlacht nutzt gegnerVon, Route der Ebene entfällt (5701, 8030, 8040)“
-- [ ] Fachkritiker: Item anhaltenUndAuswahl abgenommen
-- [ ] Planer: Item anhaltenUndAuswahl gelöscht
+- [x] Fachkritiker: Item anhaltenUndAuswahl abgenommen
+- [x] Planer: Item anhaltenUndAuswahl gelöscht
 - [x] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften
 - [x] Testautor: Tests zu Item grenzkreise
 - [x] Fachkritiker: Kritik an den Tests zu Item grenzkreise

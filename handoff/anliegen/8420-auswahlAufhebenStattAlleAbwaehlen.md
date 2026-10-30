@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf (neuer Code verletzt Lesbarkeit, Es und Wir 2), Diff `85fe22c..b473b0b`,
@@ -36,4 +36,8 @@ def abwählen(self, einheit: Einheit) -> None:
         self.auswahlAufheben()
 ```
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt wie vorgeschlagen: `alleAbwählen` heißt jetzt
+`auswahlAufheben` in [auswahl.py](../../technik/arbiter/domaene/phasen/aufstellen/auswahl.py),
+`abwählen(einheit)` ruft es nach seiner Prüfung; der Aufruf in
+[schlachtrunden.py](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py) heißt
+`self._auswahl.auswahlAufheben()`. Verhalten unverändert, ruff grün.

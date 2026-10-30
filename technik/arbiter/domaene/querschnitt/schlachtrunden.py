@@ -160,7 +160,7 @@ class Schlacht:
         self._auswahl.auswählen(einheit)
 
     def karteAnklicken(self, _stelle: Stelle) -> None:
-        self._auswahl.alleAbwählen()
+        self._auswahl.auswahlAufheben()
 
     def _zugBeenden(self) -> None:
         if self._amZug is self._ersterZug:

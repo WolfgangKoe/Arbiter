@@ -21,10 +21,9 @@ class Auswahl:
 
     def abwählen(self, einheit: Einheit) -> None:
         if self._einheit is einheit:
-            self._einheit = None
-            self._modellAlsEbene = None
+            self.auswahlAufheben()
 
-    def alleAbwählen(self) -> None:
+    def auswahlAufheben(self) -> None:
         self._einheit = None
         self._modellAlsEbene = None
 
