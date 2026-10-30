@@ -124,7 +124,9 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Reviewer → Ux: Acht Mockups der gebauten Bewegungsphase liegen noch da; die DoD verlangt sie gelöscht. UX löscht acht Dateien. (Anliegen 8760); beseitigt: Commit „Review 9 geschrieben, Mockups gelöscht, drei Anliegen des Stakeholders aufgenommen“
 - [x] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
+  Hindernis: Fachkritiker → Reviewer: Das nächste Vorgehen im Review steht noch wie vor deiner Antwort auf 8880 (Abschluss der Etappe 2 mit Zyklus 10, erst Neues, dann Aufräumen), und der Klickpfad zeigt das Ein- und Ausfahren der Leisten und ‚keine Kohärenz‘ ohne Übergehen nicht; der Reviewer berichtigt etwa zehn Zeilen. (Anliegen 8950)
 - [ ] Organisationsentwickler: Kritik am Review
+  Hindernis: Organisationsentwickler → Reviewer: Im Review fehlen drei Änderungen am Prüfcode, darunter elf Mutanten, die nicht mehr zählen, und Plan 10 folgt noch nicht deiner Antwort in 8880. (Anliegen 8960)
 - [ ] Stakeholder: Freigabe Review 9
 
 ## Freigabe
