@@ -4,6 +4,7 @@ from fractions import Fraction
 from http import HTTPStatus
 
 from arbiter.domaene.sperre import Grund
+from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
     gründeAlsText,
     kreiseDerKarte,
@@ -14,6 +15,7 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import modellLoslassen, spielstandVon
 from tests.akzeptanz.handgriffe import sperrgründe, versetzt
 from tests.akzeptanz.schlacht import (
+    abstandImQuadrat,
     aufeinanderZuZiehen,
     hältAnDerSpielfeldkante,
     hältVorDerNahkampfreichweite,
@@ -23,6 +25,7 @@ from tests.akzeptanz.schlacht import (
     schrägOhneHindernis,
     stellenAlsZahlen,
     stellenVersetzt,
+    summeDerRadien,
 )
 from tests.akzeptanz.ziehen import halten, mitMausUndFinger, modellZiehen
 
@@ -304,14 +307,16 @@ def testBew2_8HältArbiterVorDerNahkampfreichweiteAnPrüftQue1NurDieStelleDesAnh
     (modellDesAnderenSpielers,) = overlord.modelle
     aufeinanderZuZiehen(schlachtInDerBewegungsphase, modell, modellDesAnderenSpielers, dreiZoll)
     davor = schlachtInDerBewegungsphase.stelle(modell)
-    aufDieBaseDesAnderen = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
+    stelleDesAnderen = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
+    aufDieBaseDesAnderen = Stelle(x=stelleDesAnderen.x, y=davor.y)
+    assert abstandImQuadrat(aufDieBaseDesAnderen, stelleDesAnderen) < (
+        summeDerRadien(modell, modellDesAnderenSpielers) ** 2
+    )
 
     schlachtInDerBewegungsphase.modellLoslassen(modell, aufDieBaseDesAnderen)
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
-    assert hältVorDerNahkampfreichweite(
-        danach, modell, aufDieBaseDesAnderen, modellDesAnderenSpielers
-    )
+    assert hältVorDerNahkampfreichweite(danach, modell, stelleDesAnderen, modellDesAnderenSpielers)
     assert liegtAufDerGeradenVon(davor, aufDieBaseDesAnderen, danach)
 
 

@@ -35,20 +35,22 @@
   über Rolle und Namen (`get_by_role`).
 - **O5** Die Seite sind JavaScript-Module mit je einer Aufgabe, Importe nur in Pfeilrichtung:
   `seite.js` → `bedienung.js` → `anfragen.js` → `zeichnen.js` → `komponenten/`, dazu
-  `seite.js` → `anfragen.js`.
-  - `seite.js`: Einstieg aus `index.html`; meldet die Ereignisse von `bedienung.js` am
-    Dokument an und zeichnet den ersten Spielstand.
+  `seite.js` → `anfragen.js` und `seite.js` → `leisten.js` (O4).
+  - `seite.js`: Einstieg aus `index.html`; meldet die Ereignisse von `bedienung.js` und das
+    Ein- und Ausfahren am Dokument an und zeichnet den ersten Spielstand.
   - `bedienung.js`: was Zeiger und Klick bedeuten (V8, V10), mit dem Zustand des Zugs.
   - `anfragen.js`: Pfade, `fetch`, Antworten (V1, V2, V5, V10, V14); hält den letzten
-    Spielstand und die `gründe` der letzten 409 (V7). Die Knöpfe der `knopfGruppe` als
-    Tabelle Text → Handlung und wann angeboten (V7); ein neuer Knopf ist eine Zeile.
+    Spielstand, die `gründe` der letzten 409 (V7) und deren übergehbare Anfrage (V18). Die
+    Knöpfe der `knopfGruppe` als Tabelle Text → Handlung und wann angeboten (V7); ein neuer
+    Knopf ist eine Zeile.
   - `zeichnen.js`: setzt aus Spielstand, `gründe` und Knöpfen die Komponenten zur Seite
     zusammen, ohne `fetch` und Zustand.
   - `komponenten/`: je Komponente ein Modul, benannt nach der Klasse ihrer Vorlage
     (`kopfzeile.js`, `armeeKarte.js`, `sperrmeldung.js`, `knopfGruppe.js`, `karte.js`,
-    `grenze.js`). Es füllt seine Vorlage und kennt keine Regel, nur Formen, *Abstände* und
-    Art; Komponenten importieren nur Komponenten. Das Klonen einer Vorlage, auch einer im
-    `<svg>` (O1), und die Farbe des Spielers stehen einmal in `komponenten/vorlage.js`.
+    `protokoll.js`, `grenze.js`). Es füllt seine Vorlage und kennt keine Regel, nur Formen,
+    *Abstände* und Art; Komponenten importieren nur Komponenten. Das Klonen einer Vorlage,
+    auch einer im `<svg>` (O1), und die Farbe des Spielers stehen einmal in
+    `komponenten/vorlage.js`.
 
   Warum: Zeichnen liest sich ohne Server, Bedienung ohne Vorlagen, eine Komponente ohne die
   Seite. Prüft: Verhalten die Bildschirmtests; Richtung nur Text, Kritik am Code.

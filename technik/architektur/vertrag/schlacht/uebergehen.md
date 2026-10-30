@@ -6,9 +6,11 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
 - **V18** Bietet die Domäne die *Sperre* zum Übergehen an (`Sperre(*gründe,
   übergehbar=True)`, nur `modellLoslassen` der *Bewegungsphase*, BEW-8.1), trägt die 409
   (V6) `"übergehbar": true`, sonst fehlt er; mit ‚keine Kohärenz‘ ist `Sperre.übergehbar`
-  nie wahr (QUE-5.5). Solange die Seite deren `sperrmeldung` zeigt (V7), bietet sie
-  „gemeinsam übergehen“ an und schickt auf Klick dieselbe Anfrage, im Körper dazu
-  `"übergehen": [<gründe der 409>]`; keine Liste von Texten eines `Grund`: 400.
+  nie wahr (QUE-5.5). Danach bietet die Seite „gemeinsam übergehen“ an, bis zur nächsten
+  Antwort auf eine Handlung oder ein Auswählen (V2, V14); die `sperrmeldung` bleibt nach V7.
+  Warum: Das Einvernehmen gilt der *Sperre*, die beide gesehen haben. Auf Klick schickt sie
+  dieselbe Anfrage, im Körper dazu `"übergehen": [<gründe der 409>]`; keine Liste von
+  Texten eines `Grund`: 400.
   `modellLoslassen(modell, stelle, übergehen=frozenset())` prüft wie immer (D2); sind die
   *Gründe* übergehbar und alle in `übergehen`, *setzt* es wie ohne *Sperre*, auch nach
   Anhalten (BEW-8.2, 2.8), und trägt ins *Protokoll* die *Gründe* der *Sperre* ein, sonst
@@ -31,4 +33,5 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
 Prüft wie im Querschnitt: Loslassen über eine *Base*, 409 mit `übergehbar`, dieselbe Anfrage
 mit `übergehen`: 200, *Stellen* wie V10 ohne *Sperre*, ein Eintrag mehr; mit einem *Grund*
 außerhalb von `übergehen` 409 und Stand unverändert; V17 ohne `übergehbar`. Die Schlüssel
-der Beispiele nach deren Anfragen gleich `uebergehbar.json` und `protokoll.json`.
+der Beispiele nach deren Anfragen gleich `uebergehbar.json` und `protokoll.json`. Das Ende
+des Angebots nach einem Auswählen: nur Text.

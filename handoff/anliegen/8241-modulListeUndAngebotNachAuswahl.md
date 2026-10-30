@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Architektur nachziehen, keine Prüfung rot), Diff `039da85..b14cdf7`,
@@ -31,4 +30,11 @@ Zeile in `anfragen.js` (Technikphase 10 nach 8261).
    (V2, V14); die `sperrmeldung` bleibt nach V7.“ Warum: Das Einvernehmen gilt der *Sperre*,
    die beide gesehen haben.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt.
+1. [O5](../../technik/architektur/frontend.md): Pfeil `seite.js` → `leisten.js` (O4),
+   `seite.js` meldet das Ein- und Ausfahren an, `anfragen.js` hält die übergehbare Anfrage
+   der letzten 409 (V18), unter `komponenten/` steht `protokoll.js`.
+2. [V18](../../technik/architektur/vertrag/schlacht/uebergehen.md): Das Angebot endet mit der
+   nächsten Antwort auf eine Handlung oder ein Auswählen (V2, V14), die `sperrmeldung` bleibt
+   nach V7; Prüft: das Ende nach einem Auswählen nur Text. Der Code folgt mit
+   [8261](8261-uebergehenNachVertragUndAuswahl.md) Punkt 3 (Technikphase 10).

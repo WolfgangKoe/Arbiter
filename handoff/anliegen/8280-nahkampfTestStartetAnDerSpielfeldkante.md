@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** In
@@ -25,4 +25,12 @@ BEW-6.2 allein hielte er bei 207/458 des Wegs. Der Test verlangt das Anhalten vo
 in `aufeinanderZuZiehen` auf gleicher y-Linie ziehen oder in der Mitte des *Spielfelds*
 beginnen, oder als Ziel eine *Stelle* mit gleichem y wie der Warboss nehmen.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, dritte Variante: Das Ziel in
+`testBew2_8HältArbiterVorDerNahkampfreichweiteAnPrüftQue1NurDieStelleDesAnhaltens` liegt
+jetzt auf der y-Linie des Warboss über dem Mittelpunkt des Overlords
+(`Stelle(x=stelleDesAnderen.x, y=davor.y)`); der Weg bleibt im *Spielfeld*. Eine Prüfung in
+der Vorgeschichte sichert, dass das Ziel weiter die *Base* des Overlords überdeckt, QUE-1 am
+Ziel also sperren würde. Die Nahkampfreichweite misst der Test nun an der *Stelle* des
+Overlords statt am Ziel. `aufeinanderZuZiehen` bleibt, weil BEW-6 es mitnutzt. Alle 21 Tests
+der [Datei](../../technik/tests/akzeptanz/phasen/bewegung/sperrenBeimZiehenTest.py) grün,
+ruff und Benennung grün.
