@@ -9,7 +9,7 @@ Wartet auf: Technikphase 10
 
 ## Runde 1
 **Befund.** Wartet (Randfall ohne Test, Ablage einer Hilfsfunktion, keine Prüfung rot),
-Diff `50efea0..902d800` zu [8640](8640-vorrueckwurfStattZuschlagUndOhneNoqa.md). Die
+Diff `50efea0..902d800` zu Anliegen 8640. Die
 Architektur hält: Die Schnittstelle von `stellenMitGründenNachDemZiehen` ist schmaler, das
 einzige `noqa` gegen eine Schwelle ist weg, Importvertrag, Benennung, Glossar, ruff grün,
 1274 Tests grün.

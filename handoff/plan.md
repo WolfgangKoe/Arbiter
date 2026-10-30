@@ -121,7 +121,8 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Fachkritiker: Item grenzkreise abgenommen
 - [x] Planer: Item grenzkreise gelöscht
 - [ ] Reviewer: DoD über das Inkrement
-- [ ] Reviewer: Review geschrieben
+  Hindernis: Reviewer → Ux: Acht Mockups der gebauten Bewegungsphase liegen noch da; die DoD verlangt sie gelöscht. UX löscht acht Dateien. (Anliegen 8760)
+- [x] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
 - [ ] Organisationsentwickler: Kritik am Review
 - [ ] Stakeholder: Freigabe Review 9

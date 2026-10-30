@@ -27,8 +27,7 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
   dieselbe Anfrage mit `übergehen`, danach ebenso den Warboss über eine *Base* der Boyz.
 - Seite: die *Leisten* nach [O4](../../frontend.md), unten je Eintrag ein `protokollEintrag
   spieler<n>` mit `protokollEinheit`, `protokollSpieler` („Spieler <n>“) und je *Grund*
-  `protokollGrund` (Mockup que-5); in der *Aufstellung* leer. Aus Mockup bew-8 „gemeinsam
-  übergehen“; „Vorrücken“ dort nach [Grenzkreise](../bewegung/grenzkreise.md#seite).
+  `protokollGrund`; in der *Aufstellung* leer. Der Knopf „gemeinsam übergehen“ nach V7.
 
 Prüft wie im Querschnitt: Loslassen über eine *Base*, 409 mit `übergehbar`, dieselbe Anfrage
 mit `übergehen`: 200, *Stellen* wie V10 ohne *Sperre*, ein Eintrag mehr; mit einem *Grund*
