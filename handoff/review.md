@@ -187,5 +187,5 @@ zu stören.
 - [ ] Stakeholder: Freigabe Plan 10
 
 ## Freigabe
-Freigabe:
+Freigabe: ja
 Kommentar:
