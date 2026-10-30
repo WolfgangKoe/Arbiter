@@ -7,9 +7,10 @@ from arbiter.domaene.phasen import einheitVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.reihenfolge import gegnerVon
-from arbiter.domaene.phasen.bewegung import Bewegungsphase
+from arbiter.domaene.phasen.bewegung import Bewegungsphase, StellenMitGründen
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
-from arbiter.domaene.sperre import Sperre
+from arbiter.domaene.querschnitt.uebergehen import Protokoll
+from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 
@@ -40,6 +41,7 @@ class Schlacht:
         }
         self._bewegungsphase = Bewegungsphase(self._stellen)
         self._auswahl = Auswahl()
+        self._protokoll = Protokoll()
         self._ersterZug: Spieler | None = None
         self._amZug: Spieler | None = None
         self._schlachtrunde = _ersteSchlachtrunde
@@ -65,6 +67,10 @@ class Schlacht:
     @property
     def phase(self) -> Phase:
         return self._phase
+
+    @property
+    def protokoll(self) -> Protokoll:
+        return self._protokoll
 
     @property
     def beendet(self) -> bool:
@@ -105,19 +111,33 @@ class Schlacht:
         return einheitInKohärenz(einheit, self._stellen)
 
     def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
+        neue, gründe = self._stellenMitGründen(modell, stelle)
+        if gründe:
+            raise Sperre(*gründe, übergehbar=True)
+        return neue
+
+    def modellLoslassen(
+        self, modell: Modell, stelle: Stelle, übergehen: frozenset[Grund] = frozenset()
+    ) -> None:
+        neue, gründe = self._stellenMitGründen(modell, stelle)
+        if not gründe <= übergehen:
+            raise Sperre(*gründe, übergehbar=True)
+        self._stellen.update(neue)
+        if gründe and self._amZug is not None:
+            einheit = einheitVon(self._beideSpieler, modell)
+            self._protokoll.eintragen(einheit, self._amZug, frozenset(gründe))
+
+    def _stellenMitGründen(self, modell: Modell, stelle: Stelle) -> StellenMitGründen:
         spieler = self._amZug
         if self._phase is not Phase.bewegungsphase or spieler is None:
-            return {}
+            return {}, set()
         if modell not in spieler.armee.modelle:
-            return {}
+            return {}, set()
         einheit = einheitVon(self._beideSpieler, modell)
         ebene = self._auswahl.ebene(einheit, modell, self._stellen)
-        return self._bewegungsphase.stellenNachDemZiehen(
+        return self._bewegungsphase.stellenMitGründenNachDemZiehen(
             ebene, modell, stelle, self._stellen, spieler.armee.modelle
         )
-
-    def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
-        self._stellen.update(self.stellenBeimLoslassen(modell, stelle))
 
     def modellAnklicken(self, modell: Modell) -> None:
         if self.gesetzt(modell):

@@ -233,6 +233,15 @@ def testPhaseBeendenMitFalschemKörperIstEineFalscheAnfrage(dienstNachDerAufstel
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
+@pytest.mark.parametrize("übergehen", ["über eine Base", ["Gelände"], [1], None])
+def testÜbergehenMitFalscherListeIstEineFalscheAnfrage(dienstNachDerAufstellung, übergehen):
+    antwort = dienstNachDerAufstellung.put(
+        pfadDesModells.format(1, 1, 1), json={**eineStelle, "übergehen": übergehen}
+    )
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
 @pytest.mark.parametrize(
     "körper",
     [

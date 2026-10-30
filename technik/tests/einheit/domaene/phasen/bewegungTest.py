@@ -13,11 +13,12 @@ def testDasZiehenGibtDieNeuenStellenDerEbeneZurück(zehnZoll):
     modell = modellMit(zehnZoll)
     stellen = {modell: stelleAn(0, 0)}
 
-    neue = Bewegungsphase(stellen).stellenNachDemZiehen(
+    neue, gründe = Bewegungsphase(stellen).stellenMitGründenNachDemZiehen(
         stellen, modell, stelleAn(4, 0), stellen, {modell}
     )
 
     assert neue == {modell: stelleAn(4, 0)}
+    assert gründe == set()
 
 
 def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
@@ -25,7 +26,7 @@ def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
     beginn = {modell: stelleAn(0, 0)}
     jetzt = {modell: stelleAn(3, 0)}
 
-    neue = Bewegungsphase(beginn).stellenNachDemZiehen(
+    neue, _ = Bewegungsphase(beginn).stellenMitGründenNachDemZiehen(
         jetzt, modell, stelleAn(9, 0), jetzt, {modell}
     )
 

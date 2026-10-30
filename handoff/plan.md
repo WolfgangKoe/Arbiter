@@ -75,7 +75,7 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Architekt: Kritik an den Tests zu Item katalogwerteGliedern
   Hindernis: Architekt → Testautor: Eine Testhilfe sucht die Bewegungsweite noch in der alten Ausgangslage; die Tests der Bewegungsphase laufen darum nicht. (Anliegen 7150); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
 - [x] Implementierer: Tests zu Item katalogwerteGliedern grün
-- [ ] Architekt: Kritik am Code zu Item katalogwerteGliedern
+- [x] Architekt: Kritik am Code zu Item katalogwerteGliedern
   Hindernis: Architekt → Implementierer: Zwei neue Dateien des Katalogs bringen Erklärtexte mit, die die Regel zum Code verbietet; eine Prüfung ist darum rot. (Anliegen 7190); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
 - [x] Reviewer: Kritik am Code zu Item katalogwerteGliedern
   Hindernis: Reviewer → Implementierer: Im Katalog heißt der Eintrag einer Modellart Profil, obwohl er auch den Durchmesser hält, und ein Einheitstest bindet eine Konstante per Standardargument; der Implementierer benennt um. (Anliegen 7200); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“

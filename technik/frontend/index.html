@@ -9,6 +9,16 @@
 <body>
   <header class="kopfzeile"></header>
   <main class="spielbereich"></main>
+  <aside class="leiste leisteUnten" aria-label="Protokoll">
+    <button class="leistenGriff" type="button" aria-expanded="true" aria-label="Protokoll ein- und ausfahren">▼</button>
+    <div class="leistenInhalt"></div>
+  </aside>
+  <template id="protokoll"><ul class="protokoll"></ul></template>
+  <template id="protokollEintrag"><li class="protokollEintrag spieler1">
+    <span class="protokollEinheit">Boyz</span>
+    <span class="protokollSpieler">Spieler 1</span>
+  </li></template>
+  <template id="protokollGrund"><span class="protokollGrund">über eine Base</span></template>
   <template id="kopfzeileSpieler"><div class="kopfzeileSpieler spieler1 anDerReihe">Spieler 1<span class="kopfzeileAnDerReihe">an der Reihe</span></div></template>
   <template id="kopfzeileAmZug"><span class="kopfzeileAmZug">Schlachtrunde 1 · Kommandophase</span></template>
   <template id="kopfzeileSchlachtBeendet"><span class="kopfzeileSchlachtBeendet">Schlacht beendet</span></template>

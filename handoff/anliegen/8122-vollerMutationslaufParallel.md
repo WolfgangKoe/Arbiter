@@ -9,7 +9,7 @@ Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** Wunsch des Stakeholders aus der DoD (Wortlaut in
-[8043](8043-leistenTestsRotOhneSchwankung.md), Runde 1): Mutationstests gezielt, „und falls
+Anliegen 8043, Runde 1): Mutationstests gezielt, „und falls
 wirklich alles durchlaufen muss, dass parallelisiert und der Fortschritt protokolliert wird“.
 Gezielt gibt es ([Mutationsregeln](../../prozess/regeln/mutationsregeln.md)), den Fortschritt
 bringt Retro P9 (6960). Parallel fehlt: `mutationsregeln/mutation.py` prüft alle Mutanten

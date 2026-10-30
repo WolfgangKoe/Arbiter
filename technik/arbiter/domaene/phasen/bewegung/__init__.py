@@ -6,29 +6,28 @@ from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
 )
 from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.bewegung.sperrenBeimZiehen import gründeBeimZiehen
-from arbiter.domaene.sperre import Grund, Sperre
+from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
+
+StellenMitGründen = tuple[dict[Modell, Stelle], set[Grund]]
 
 
 class Bewegungsphase:
     def __init__(self, stellen: Mapping[Modell, Stelle]) -> None:
         self._stellenZuBeginn = dict(stellen)
 
-    def stellenNachDemZiehen(
+    def stellenMitGründenNachDemZiehen(
         self,
         ebene: Mapping[Modell, Stelle],
         gezogenes: Modell,
         ziel: Stelle,
         stellen: Mapping[Modell, Stelle],
         eigene: Collection[Modell],
-    ) -> dict[Modell, Stelle]:
+    ) -> StellenMitGründen:
         weg = messen.wegZwischen(ebene[gezogenes], ziel)
         neue = anDerBewegungsweiteAngehalten(ebene, weg, self._stellenZuBeginn)
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in neue}
-        gründe = gründeBeimZiehen(ebene, neue, fremde, eigene)
-        if gründe:
-            raise Sperre(*gründe)
-        return neue
+        return neue, gründeBeimZiehen(ebene, neue, fremde, eigene)
 
     def gründeGegenDasBeenden(
         self, einheiten: Iterable[Einheit], stellen: Mapping[Modell, Stelle]

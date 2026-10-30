@@ -1,11 +1,13 @@
 import { zeichnen } from "./zeichnen.js"
 
 let gründeDerLetztenSperre = []
+let übergehbareAnfrage = null
 let letzterSpielstand = null
 
 const knöpfe = [
   { text: "Einheit zurücklegen", ort: "mitte", handlung: zurücklegen, angeboten: stand => !stand.schlacht && stand.einheitInAufstellung },
   { text: "Aufstellen der Einheit beenden", ort: "mitte", handlung: aufstellenDerEinheitBeenden, angeboten: stand => !stand.schlacht },
+  { text: "gemeinsam übergehen", ort: "mitte", handlung: gemeinsamÜbergehen, angeboten: () => übergehbareAnfrage !== null },
   { text: "Phase beenden", ort: "mitte", handlung: phaseBeenden, angeboten: stand => stand.schlacht && stand.schlacht.amZug !== null },
   { text: "Erster Zug", ort: "armee", handlung: ersterZugWählen, angeboten: stand => stand.schlacht?.ersterZug === null },
 ]
@@ -43,6 +45,7 @@ async function zeichneAntwort(antwort) {
 async function handlungSenden(pfad, methode, körper) {
   const antwort = await senden(pfad, methode, körper).catch(() => null)
   if (!antwort) return neuZeichnen(letzterSpielstand)
+  übergehbareAnfrage = null
   if (antwort.ok) {
     gründeDerLetztenSperre = []
     return neuZeichnen(await antwort.json())
@@ -50,10 +53,18 @@ async function handlungSenden(pfad, methode, körper) {
   if (antwort.status === 409) {
     const sperre = await antwort.json()
     gründeDerLetztenSperre = sperre.gründe
+    if (sperre.übergehbar) {
+      übergehbareAnfrage = { pfad, methode, körper: { ...körper, übergehen: sperre.gründe } }
+    }
     return neuZeichnen(sperre.spielstand)
   }
   gründeDerLetztenSperre = []
   neuZeichnen(await spielstandHolen())
+}
+
+function gemeinsamÜbergehen() {
+  const { pfad, methode, körper } = übergehbareAnfrage
+  return handlungSenden(pfad, methode, körper)
 }
 
 function einheitenPfad({ spieler, einheit }) {

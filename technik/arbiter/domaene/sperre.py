@@ -13,7 +13,8 @@ class Grund(Enum):
 
 
 class Sperre(Exception):
-    def __init__(self, grund: Grund, *weitere: Grund) -> None:
+    def __init__(self, grund: Grund, *weitere: Grund, übergehbar: bool = False) -> None:
         gründe = (grund, *weitere)
         super().__init__(", ".join(sorted(einzelner.value for einzelner in gründe)))
         self.gründe = frozenset(gründe)
+        self.übergehbar = übergehbar and Grund.keineKohärenz not in self.gründe

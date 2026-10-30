@@ -9,7 +9,7 @@ from flask import Flask, abort, jsonify, request, send_from_directory
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.querschnitt.schlachtrunden import Phase, Schlacht
-from arbiter.domaene.sperre import Sperre
+from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.darstellung import spielstand, stellenBeimLoslassen, texteDerGründe
 from arbiter.web.kennungen import (
@@ -44,6 +44,17 @@ def _stelleDerAnfrage() -> Stelle:
     if not isinstance(körper, dict):
         abort(HTTPStatus.BAD_REQUEST)
     return Stelle(x=_zahl(körper, "x"), y=_zahl(körper, "y"))
+
+
+def _gründeZumÜbergehen() -> frozenset[Grund]:
+    körper = request.get_json(silent=True)
+    texte = körper.get("übergehen", []) if isinstance(körper, dict) else []
+    gründe = {grund.value: grund for grund in Grund}
+    if not isinstance(texte, list) or not all(
+        isinstance(text, str) and text in gründe for text in texte
+    ):
+        abort(HTTPStatus.BAD_REQUEST)
+    return frozenset(gründe[text] for text in texte)
 
 
 def _jsonZahl(text: str | None) -> object:
@@ -165,7 +176,12 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
 
     def modellLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        spiel().modellLoslassen(modell, _stelleDerAnfrage())
+        stelle = _stelleDerAnfrage()
+        schlacht = laufendeSchlacht()
+        if schlacht is None:
+            aufstellung.modellLoslassen(modell, stelle)
+        else:
+            schlacht.modellLoslassen(modell, stelle, _gründeZumÜbergehen())
         return spielstandLiefern()
 
     def modellAnklicken(spielernummer: int, einheitennummer: int, modellnummer: int):
@@ -201,7 +217,8 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     def sperreMelden(sperre: Sperre):
         gründe = texteDerGründe(sperre.gründe)
         stand = spielstand(aufstellung, laufendeSchlacht())
-        antwort = jsonify({"gründe": gründe, "spielstand": stand})
+        übergehbar = {"übergehbar": True} if sperre.übergehbar else {}
+        antwort = jsonify({"gründe": gründe, **übergehbar, "spielstand": stand})
         antwort.status_code = HTTPStatus.CONFLICT
         return antwort
 

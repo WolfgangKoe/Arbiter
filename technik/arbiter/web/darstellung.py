@@ -4,6 +4,7 @@ from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
+from arbiter.domaene.querschnitt.uebergehen import Eintrag
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.web.kennungen import (
@@ -41,6 +42,19 @@ def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
         "schlachtrunde": schlacht.schlachtrunde,
         "phase": schlacht.phase.value,
         "beendet": schlacht.beendet,
+        "protokoll": [
+            _eintrag(aufstellung, eintrag) for eintrag in reversed(list(schlacht.protokoll))
+        ],
+    }
+
+
+def _eintrag(aufstellung: Aufstellung, eintrag: Eintrag) -> dict:
+    spielernummer, einheitennummer = kennungenDerEinheit(aufstellung, eintrag.einheit)
+    return {
+        "spieler": spielernummer,
+        "einheit": einheitennummer,
+        "name": eintrag.einheit.name,
+        "gründe": texteDerGründe(eintrag.gründe),
     }
 
 
