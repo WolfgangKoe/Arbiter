@@ -90,9 +90,9 @@ Begriffe aus 6998, 7000, 7005.
   Hindernis: Architekt → Testautor: Ein Test übergab die übergangenen Gründe ohne Namen, anders als der Vertrag, und ein Test zu „gemeinsam übergehen nicht mehr angeboten“ war ohne Knopf schon grün; beides ist berichtigt, der Haken gilt seit der Nachprüfung. (Anliegen 7320); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
 - [x] Implementierer: Tests zu Item gemeinsamUebergehen grün
 - [ ] Architekt: Kritik am Code zu Item gemeinsamUebergehen
-  Hindernis: Architekt → Implementierer: Beim Loslassen fragt Arbiter nicht, ob die Sperre übergangen werden darf, und verlässt sich allein auf den Knopf; so stünde ‚keine Kohärenz‘ nicht sicher fest, sobald eine Sperre beim Ziehen sie meldet. Die Abfrage beim Ziehen bietet das Übergehen zu Unrecht an. Je eine bis drei Zeilen. (Anliegen 8240)
-- [ ] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
-  Hindernis: Reviewer → Implementierer: Im Code, der die Leisten ein- und ausfährt, heißt ein Wert eingefahren, obwohl er wahr ist, wenn die Leiste ausgefahren ist; am Bildschirm stimmt alles, nur der Name sagt laut Glossar das Gegenteil. Empfehlung: umbenennen in ausgefahren, eine Zeile. (Anliegen 8260)
+  Hindernis: Architekt → Implementierer: Beim Loslassen fragt Arbiter nicht, ob die Sperre übergangen werden darf, und verlässt sich allein auf den Knopf; so stünde ‚keine Kohärenz‘ nicht sicher fest, sobald eine Sperre beim Ziehen sie meldet. Die Abfrage beim Ziehen bietet das Übergehen zu Unrecht an. Je eine bis drei Zeilen. (Anliegen 8240); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
+- [x] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
+  Hindernis: Reviewer → Implementierer: Im Code, der die Leisten ein- und ausfährt, heißt ein Wert eingefahren, obwohl er wahr ist, wenn die Leiste ausgefahren ist; am Bildschirm stimmt alles, nur der Name sagt laut Glossar das Gegenteil. Empfehlung: umbenennen in ausgefahren, eine Zeile. (Anliegen 8260); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
 - [ ] Fachkritiker: Item gemeinsamUebergehen abgenommen
 - [ ] Planer: Item gemeinsamUebergehen gelöscht
 - [x] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
