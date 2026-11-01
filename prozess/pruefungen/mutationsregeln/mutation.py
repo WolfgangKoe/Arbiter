@@ -5,7 +5,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 from typing import NamedTuple
 
@@ -14,6 +14,7 @@ from gemeinsam.pfade import projektordner
 from mutationsregeln.abdeckungKontext import Messung, auswahl, messen
 from mutationsregeln.ergebnisse import (
     Gleichwertig,
+    bereichVon,
     gemerkt,
     gleichwertigeLesen,
     merken,
@@ -107,7 +108,8 @@ def mutantenWählen(
         if zeilen is not None and mutant.zeile not in zeilen.get(modul, set()):
             continue
         quelle = quellzeilen[mutant.zeile - 1].strip()
-        if Gleichwertig(modul, quelle, mutant.beschreibung) in gleichwertige:
+        bereich = bereichVon(original, mutant.zeile)
+        if Gleichwertig(modul, bereich, quelle, mutant.beschreibung) in gleichwertige:
             begründet += 1
         else:
             gewählt.append((nummer, mutant))
@@ -130,6 +132,7 @@ class Prüfstand(NamedTuple):
     messung: Messung
     pfade: tuple[str, ...]
     wartezeit: float
+    kernpool: ThreadPoolExecutor
 
 
 def mutantPrüfen(stand: Prüfstand, modul: str, original: str, mutant: Mutant) -> bool:
@@ -143,13 +146,30 @@ def mutantPrüfen(stand: Prüfstand, modul: str, original: str, mutant: Mutant) 
         stand.freieKopien.put(kopie)
 
 
+def modulEinreichen(
+    stand: Prüfstand,
+    wurzel: Path,
+    modul: str,
+    vorgaben: Vorgaben,
+    ergebnisse: dict[str, bool],
+) -> tuple[str, list[tuple[int, Mutant]], int, dict[int, "Future[bool]"]]:
+    original = (wurzel / modul).read_text(encoding="utf-8")
+    mutanten, begründet = mutantenWählen(modul, original, vorgaben.zeilen, vorgaben.gleichwertige)
+    offene = {
+        nummer: stand.kernpool.submit(mutantPrüfen, stand, modul, original, mutant)
+        for nummer, mutant in mutanten
+        if f"{modul}#{nummer}" not in ergebnisse
+    }
+    return modul, mutanten, begründet, offene
+
+
 def mutationenPrüfen(
     wurzel: Path,
     module: list[str],
     pfade: tuple[str, ...] = testpfade,
     vorgaben: Vorgaben = Vorgaben(),  # noqa: B008
 ) -> Ergebnis:
-    zeilen, ablage, gleichwertige, kerne = vorgaben
+    ablage, kerne = vorgaben.ablage, vorgaben.kerne
     überlebende: list[Überlebender] = []
     gesamt = 0
     ohneWirkung = 0
@@ -166,18 +186,15 @@ def mutationenPrüfen(
         freieKopien: queue.Queue[Path] = queue.Queue()
         for kopie in kopien:
             freieKopien.put(kopie)
-        prüfstand = Prüfstand(freieKopien, messung, pfade, wartezeit)
-        with ThreadPoolExecutor(max_workers=kerne) as kernpool:
-            for modul in module:
+        kernpool = ThreadPoolExecutor(max_workers=kerne)
+        prüfstand = Prüfstand(freieKopien, messung, pfade, wartezeit, kernpool)
+        try:
+            eingereicht = [
+                modulEinreichen(prüfstand, wurzel, modul, vorgaben, ergebnisse) for modul in module
+            ]
+            for modul, mutanten, begründet, offene in eingereicht:
                 gesamtVorher, überlebendeVorher = gesamt, len(überlebende)
-                original = (wurzel / modul).read_text(encoding="utf-8")
-                mutanten, begründet = mutantenWählen(modul, original, zeilen, gleichwertige)
                 ohneWirkung += begründet
-                offene = {
-                    nummer: kernpool.submit(mutantPrüfen, prüfstand, modul, original, mutant)
-                    for nummer, mutant in mutanten
-                    if f"{modul}#{nummer}" not in ergebnisse
-                }
                 for nummer, mutant in mutanten:
                     gesamt += 1
                     schlüssel = f"{modul}#{nummer}"
@@ -185,11 +202,13 @@ def mutationenPrüfen(
                         ergebnisse[schlüssel] = offene[nummer].result()
                     if ergebnisse[schlüssel]:
                         überlebende.append(Überlebender(modul, mutant.zeile, mutant.beschreibung))
-                merken(ablage, stand, ergebnisse)
                 print(
                     modulZeile(modul, gesamt - gesamtVorher, len(überlebende) - überlebendeVorher),
                     flush=True,
                 )
+                merken(ablage, stand, ergebnisse)
+        finally:
+            kernpool.shutdown(cancel_futures=True)
     merken(ablage, stand, ergebnisse)
     return Ergebnis(gesamt, überlebende, ohneWirkung)
 

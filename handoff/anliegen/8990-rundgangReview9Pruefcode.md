@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Vier Probleme aus dem [Rundgang Prüfcode](../review.md#rundgang-prüfcode) des
@@ -41,5 +41,18 @@ Die Probleme 2 bis 4 und 7 bleiben beim nächsten Eingriff in die Dateien.
 **Stellungnahme.** Punkt 1 umgesetzt in Retro 9 P3: [produktstand.py](../../prozess/pruefungen/standregeln/produktstand.py)
 (`belegungJeKriterium`) zählt einmal und gibt je Kriterium Etappe und Belegung zurück;
 Scheiter-Test `testDerStandSuchtDieFehlendenTestsNurEinmalAuchMitEtappe` in
-[standTest.py](../../prozess/pruefungen/standregeln/standTest.py). Die Punkte 5, 6 und 8 folgen in
-P4; bis dahin bleibt der Status `offen`.
+[standTest.py](../../prozess/pruefungen/standregeln/standTest.py). Die Punkte 5, 6 und 8 umgesetzt in Retro 9 P4:
+- 5: [mutation.py](../../prozess/pruefungen/mutationsregeln/mutation.py) (`modulEinreichen`)
+  reicht die Mutanten aller Module zugleich ein und holt die Ergebnisse je Modul der Reihe nach
+  ab; Scheiter-Test `testDieMutantenAllerModuleLaufenZugleichNichtNachModulGetrennt` in
+  [mutationTest.py](../../prozess/pruefungen/mutationsregeln/mutationTest.py).
+- 6: `testMutantenLaufenParallelJeKernInEigenerKopie` schreibt Beginn und Ende je Testlauf mit
+  und prüft die größte Zahl gleichzeitiger Läufe (zwei Kerne: 2, ein Kern: 1).
+- 8: Jeder Eintrag in [gleichwertig.json](../../prozess/pruefungen/mutationsregeln/gleichwertig.json)
+  nennt seinen `bereich` (Klasse oder Funktion, `bereichVon` in
+  [ergebnisse.py](../../prozess/pruefungen/mutationsregeln/ergebnisse.py)); Scheiter-Tests
+  `testEinGleichwertigerMutantGiltNurInSeinerFunktion` und
+  `testDerBereichIstDieInnersteKlasseOderFunktionAuchAmDekorator`. Die Einträge sind auf die
+  Bereiche aufgeteilt, in denen die Zeile heute steht; ein veralteter Eintrag
+  (`anhaltenAnDerBewegungsweite.py`) entfiel.
+Regeltext: [mutationsregeln](../../prozess/regeln/mutationsregeln.md). Status `angenommen`.

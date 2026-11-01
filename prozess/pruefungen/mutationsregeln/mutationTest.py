@@ -1,7 +1,10 @@
+from typing import NamedTuple
+
 import pytest
 
 from mutationsregeln import mutation
 from mutationsregeln.ergebnisse import Gleichwertig, gemerkt, standKennung
+from mutationsregeln.mutanten import mutantenVon
 from mutationsregeln.mutation import (
     Ergebnis,
     Vorgaben,
@@ -165,11 +168,25 @@ def testEinErgebnisGiltSolangeDerStandGleichBleibt(tmp_path, monkeypatch):
     assert zähle(protokoll, "probe") > nachBeginn + 2
 
 
+kleinerGleichwertig = Gleichwertig(modul, "kleiner", "return erste < zweite", "Lt wird LtE")
+
+
 def testEinGleichwertigerMutantMitBegründungZähltNicht(tmp_path):
-    gleichwertig = frozenset({Gleichwertig(modul, "return erste < zweite", "Lt wird LtE")})
+    gleichwertig = frozenset({kleinerGleichwertig})
     projekt = projektMit(tmp_path, lückenhaft)
     ergebnis = mutationenPrüfen(projekt, [modul], testpfade, Vorgaben(gleichwertige=gleichwertig))
     assert (ergebnis.gesamt, ergebnis.überlebende, ergebnis.gleichwertige) == (1, [], 1)
+
+
+def testEinGleichwertigerMutantGiltNurInSeinerFunktion(tmp_path):
+    zweiGleicheZeilen = quelle + "\n\ndef zuerst(erste, zweite):\n    return erste < zweite\n"
+    gleichwertig = frozenset({kleinerGleichwertig})
+    projekt = projektMit(tmp_path, lückenhaft)
+    (projekt / modul).write_text(zweiGleicheZeilen, encoding="utf-8")
+    ergebnis = mutationenPrüfen(projekt, [modul], testpfade, Vorgaben(gleichwertige=gleichwertig))
+    assert ergebnis.gleichwertige == 1
+    assert [lücke.zeile for lücke in ergebnis.überlebende] == [6, 6]
+    assert "Lt wird LtE" in {lücke.beschreibung for lücke in ergebnis.überlebende}
 
 
 def testDerBerichtNenntDieGleichwertigen():
@@ -188,14 +205,14 @@ andereModul = "technik/arbiter/domaene/andere.py"
 
 
 def abbruchBeiAnderem(monkeypatch):
-    echt = mutation.mutantenWählen
+    echt = mutation.modulZeile
 
     def abbrechenBeiAnderem(name, *rest):
         if name == andereModul:
             raise KeyboardInterrupt
         return echt(name, *rest)
 
-    monkeypatch.setattr(mutation, "mutantenWählen", abbrechenBeiAnderem)
+    monkeypatch.setattr(mutation, "modulZeile", abbrechenBeiAnderem)
 
 
 def testNachDemErstenModulStehtSeineZeileUndSeinMerkzettel(tmp_path, monkeypatch, capsys):
@@ -226,29 +243,68 @@ def testEinNachDemErstenModulAbgebrochenerLaufPrüftEsBeimNächstenNichtNeu(tmp_
     assert zähle(protokoll, "probe") == nachAbbruch + 1
 
 
-langsamerTest = (
-    "import os\nimport time\n\nfrom arbiter.domaene.probe import kleiner\n\n\n"
-    "def testKleinerAlsDrei():\n"
-    "    with open(os.environ['MUTATIONSLOG'], 'a') as datei:\n"
-    "        datei.write(os.getcwd() + '\\n')\n"
-    "    time.sleep(0.5)\n"
-    "    assert kleiner(1, 3)\n    assert not kleiner(2, 2)\n"
+def langsamerTest(importzeile, prüfung):
+    return (
+        f"import os\nimport time\n\n{importzeile}\n\n\n"
+        "def testLangsam():\n"
+        "    beginn = time.time()\n"
+        "    time.sleep(1)\n"
+        "    with open(os.environ['MUTATIONSLOG'], 'a') as datei:\n"
+        "        datei.write(f'{os.getcwd()} {beginn} {time.time()}\\n')\n"
+        f"    {prüfung}\n"
+    )
+
+
+langsamerProbeTest = langsamerTest(
+    "from arbiter.domaene.probe import kleiner", "assert kleiner(1, 3) and not kleiner(2, 2)"
+)
+langsamerAndererTest = langsamerTest(
+    "from arbiter.domaene.andere import eins", "assert eins() == 1"
 )
 
 
-def benutzteKopien(tmp_path, monkeypatch, kerne):
+class Lauf(NamedTuple):
+    kopie: str
+    beginn: float
+    ende: float
+
+
+def protokollierteLäufe(protokoll):
+    zeilen = protokoll.read_text(encoding="utf-8").splitlines()
+    felder = map(str.split, zeilen)
+    return [Lauf(kopie, float(beginn), float(ende)) for kopie, beginn, ende in felder]
+
+
+def meisteGleichzeitig(läufe):
+    return max(
+        sum(anderer.beginn <= lauf.beginn < anderer.ende for anderer in läufe) for lauf in läufe
+    )
+
+
+def läufeMit(tmp_path, monkeypatch, module, kerne):
     protokoll = tmp_path / "protokoll.txt"
     monkeypatch.setenv("MUTATIONSLOG", str(protokoll))
-    projekt = projektMit(tmp_path / "projekt", langsamerTest)
-    mutationenPrüfen(projekt, [modul], testpfade, Vorgaben(kerne=kerne))
-    return set(protokoll.read_text(encoding="utf-8").splitlines())
+    projekt = projektMit(tmp_path / "projekt", langsamerProbeTest)
+    (projekt / "technik/arbiter/domaene/andere.py").write_text(andereQuelle, encoding="utf-8")
+    (projekt / "technik/tests/andereTest.py").write_text(langsamerAndererTest, encoding="utf-8")
+    mutationenPrüfen(projekt, module, testpfade, Vorgaben(kerne=kerne))
+    return protokollierteLäufe(protokoll)
 
 
 def testMutantenLaufenParallelJeKernInEigenerKopie(tmp_path, monkeypatch):
     zweiKerne = 2
     einKern = 1
-    assert len(benutzteKopien(tmp_path / "zwei", monkeypatch, kerne=zweiKerne)) == zweiKerne
-    assert len(benutzteKopien(tmp_path / "einer", monkeypatch, kerne=einKern)) == einKern
+    zwei = läufeMit(tmp_path / "zwei", monkeypatch, [modul], zweiKerne)
+    einer = läufeMit(tmp_path / "einer", monkeypatch, [modul], einKern)
+    assert meisteGleichzeitig(zwei) == zweiKerne
+    assert len({lauf.kopie for lauf in zwei}) == zweiKerne
+    assert meisteGleichzeitig(einer) == einKern
+
+
+def testDieMutantenAllerModuleLaufenZugleichNichtNachModulGetrennt(tmp_path, monkeypatch):
+    kerne = 4
+    läufe = läufeMit(tmp_path, monkeypatch, [modul, andereModul], kerne)
+    assert meisteGleichzeitig(läufe) > len(mutantenVon(quelle))
 
 
 def testDerVolleLaufUmfasstAuchDasWeb(tmp_path):

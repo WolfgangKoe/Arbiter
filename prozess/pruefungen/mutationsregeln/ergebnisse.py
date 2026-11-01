@@ -1,3 +1,4 @@
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -11,6 +12,7 @@ gleichwertigDatei = Path(__file__).with_name("gleichwertig.json")
 
 class Gleichwertig(NamedTuple):
     datei: str
+    bereich: str
     quelle: str
     fehler: str
 
@@ -58,7 +60,24 @@ def gleichwertigeLesen(datei: Path = gleichwertigDatei) -> set[Gleichwertig]:
     if not datei.is_file():
         return set()
     return {
-        Gleichwertig(eintrag["datei"], eintrag["quelle"], eintrag["fehler"])
+        Gleichwertig(eintrag["datei"], eintrag["bereich"], eintrag["quelle"], eintrag["fehler"])
         for eintrag in json.loads(datei.read_text(encoding="utf-8"))
         if eintrag["grund"].strip()
     }
+
+
+def bereichVon(quelltext: str, zeile: int) -> str:
+    namen: list[str] = []
+    knoten: ast.AST = ast.parse(quelltext)
+    gefunden = True
+    while gefunden:
+        gefunden = False
+        for kind in ast.iter_child_nodes(knoten):
+            if isinstance(kind, ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
+                beginn = min([kind.lineno, *(deko.lineno for deko in kind.decorator_list)])
+                if beginn <= zeile <= (kind.end_lineno or kind.lineno):
+                    namen.append(kind.name)
+                    knoten = kind
+                    gefunden = True
+                    break
+    return ".".join(namen)

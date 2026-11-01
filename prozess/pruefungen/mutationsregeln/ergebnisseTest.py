@@ -2,6 +2,7 @@ import json
 
 from mutationsregeln.ergebnisse import (
     Gleichwertig,
+    bereichVon,
     gemerkt,
     gleichwertigeLesen,
     merken,
@@ -55,10 +56,23 @@ def testOhneAblageOderMitDefekterAblageIstNichtsGemerkt(tmp_path):
 
 def testNurGleichwertigeMitBegründungZählen(tmp_path):
     datei = tmp_path / "gleichwertig.json"
-    eintrag = {"datei": "a.py", "quelle": "x = 1", "fehler": "1 wird 2"}
+    eintrag = {"datei": "a.py", "bereich": "Eins", "quelle": "x = 1", "fehler": "1 wird 2"}
     datei.write_text(
         json.dumps([{**eintrag, "grund": "Wert wird nie gelesen"}, {**eintrag, "grund": " "}]),
         encoding="utf-8",
     )
-    assert gleichwertigeLesen(datei) == {Gleichwertig("a.py", "x = 1", "1 wird 2")}
+    assert gleichwertigeLesen(datei) == {Gleichwertig("a.py", "Eins", "x = 1", "1 wird 2")}
     assert gleichwertigeLesen(tmp_path / "fehlt.json") == set()
+
+
+bereichsquelle = (
+    "x = 1\n\n\n@dataclass(frozen=True)\nclass Eins:\n    def innen(self):\n        return 1\n\n\n"
+    "@dataclass(frozen=True)\nclass Zwei:\n    wert: int\n"
+)
+
+
+def testDerBereichIstDieInnersteKlasseOderFunktionAuchAmDekorator():
+    assert bereichVon(bereichsquelle, 1) == ""
+    assert bereichVon(bereichsquelle, 4) == "Eins"
+    assert bereichVon(bereichsquelle, 7) == "Eins.innen"
+    assert bereichVon(bereichsquelle, 10) == "Zwei"
