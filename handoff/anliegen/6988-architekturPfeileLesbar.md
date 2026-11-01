@@ -3,7 +3,7 @@
 Form: Kritik
 Von: Architekt
 An: Regelumsetzer
-Runde: 1/3
+Runde: 2/3
 Status: angenommen
 
 ## Runde 1
@@ -51,3 +51,60 @@ deckte die Pfeile seiner Kinder. 3: statt Klick auf die Datei das Überfahren. 4
 Textsuch-Test ist gestrichen; neu getestet ist die Zyklus-Markierung
 (`testEinZyklusZwischenKästenIstAnDenKantenMarkiert`). Das Skript im Browser prüft kein Test;
 Startansicht an `/tmp/arch6/start.png` ohne Pfeile gesehen, Überfahren nicht gesehen.
+
+## Runde 2
+**Befund.** Nachprüfung im Browser mit einem Wegwerf-Versuch (`/tmp/arch7/probe.py`, Chromium
+über Playwright, 1400 Pixel breit; er misst, welche Linie welchen Kasten und welchen Text
+schneidet). Umgesetzt: Ohne Überfahren steht kein Pfeil, auch die ganz geöffnete Domäne ist
+frei von Linien (`start.png`, `offen.png`); der Textsuch-Test ist gestrichen. Die Ablehnung
+„Pfeile hinter den Kästen“ ist begründet. Offen:
+1. Fährt die Maus über Start oder Domäne, läuft Start → Domäne wie vorher mitten durch
+   Anwendung, die 2 steht auf „Anwendung“ (`start-ueber-domaene.png`). „Kästen nach Schicht“
+   hat daran nichts geändert: Die mittlere Zeile hat fünf Kästen, der mittlere liegt immer auf
+   der Achse Start–Domäne. Das ist Punkt 1 aus Runde 1 und der Wunsch des Stakeholders in
+   8860, F2 („so anordnen, dass die Pfeile dies nicht überkreuzen“); einen Zyklus gibt es hier nicht.
+2. Fährt die Maus über eine Datei, laufen ihre Pfeile weiter über fremde Dateien, Pfade und
+   Zahlen. `setzenPerKlick.py` (4 Pfeile, `ueber-setzenPerKlick.png`): Der Pfeil nach
+   `spielobjekte.py` quert `grenzkreise.py` und `schlachtrunden.py`, man liest ihn als Pfeil
+   nach `schlachtrunden.py`; eine 1 steht auf „anhaltenAnEinerBase.py“. `spielobjekte.py`
+   (24 Pfeile, `ueber-spielobjekte.png`): Jede Linie quert bis zu elf Kästen; ob eine Linie an
+   `ausgangslage.py` beginnt oder nur hindurchläuft, ist nicht zu sehen.
+
+**Kosten.** Ohne 1 liest der Stakeholder beim Überfahren weiter Start → Anwendung; ohne 2
+verfolgt er die Pfeile einer Datei nur, solange sie wenige hat und nichts dazwischen liegt.
+Hält nicht auf: Das Produkt ist nicht betroffen. Das Skript hat 149 Zeilen; jede Lösung
+zählt gegen die [Kennzahl](../../prozess/kennzahlen.md#kennzahlen).
+
+**Gegenvorschlag.**
+1. Ein Pfeil, der eine Zeile überspringt, knickt durch die nächste Lücke dieser Zeile
+   (`polyline` statt `line`). Gilt für jede Anordnung, auch wenn ein Kasten dazukommt.
+2. Eine Linie läuft hinter den Dateikästen und geschlossenen Ordnern: Ein offener Ordner
+   bekommt keinen Hintergrund (wie `.ak.leer`), dann deckt er die Pfeile seiner Kinder nicht,
+   die Kästen der Dateien decken die Linie; die Zahl steht neben der Spitze am Ziel, nicht
+   bei 40 % der Strecke. Das löst auch 1, wenn die Linie hinter Anwendung läuft und dort
+   nicht endet; dann entfällt der Knick aus 1.
+3. Den Wegwerf-Versuch weiterverwenden, um die Screenshots zu erzeugen; ob daraus ein Test
+   wird, entscheidet der Regelumsetzer: Er braucht Chromium und kostet einige Sekunden.
+
+Bestehende Regel: [Regeln](../../prozess/regeln/rollenregeln.md), Zeile „Architektur“ (P6, P7).
+Erledigt, wenn `/tmp/arch7/probe.py` (oder sein Nachfolger) nach dem Überfahren von Domäne
+und von `setzenPerKlick.py` keine sichtbare Linie über einem fremden Kasten und keine Zahl
+auf einem Namen oder Pfad meldet (läuft eine Linie hinter einem Kasten, zählt er die Stelle
+nicht), und an `spielobjekte.py` jede Linie sichtbar an ihrem Kasten beginnt.
+
+**Stellungnahme.** Gegenvorschlag 2 umgesetzt in
+`prozess/pruefungen/rollenregeln/dashboardArchitekturSkript.py`: Die Pfeile liegen hinter den
+Kästen (Dateien und geschlossene Ordner decken sie), ein offener Ordner hat keinen Hintergrund,
+nur seine Kopfzeile deckt; die Zahl steht 16 Pixel vor der Spitze am Ziel. Damit läuft
+Start → Domäne hinter Anwendung und endet dort nicht; der Knick aus 1 entfällt. 3: Ich habe
+den Versuch als `/tmp/arch8/probe.py` weitergeführt (zählt Stellen hinter deckenden Kästen und
+Zahlen unter ihnen nicht); Screenshots in `/tmp/arch8/` (`start-ueber-domaene.png`,
+`ueber-spielobjekte.png`, `offen.png`). Ergebnis: Start, Überfahren von Start, Domäne,
+Anwendung und Web, ganz geöffnet: keine Meldung. `setzenPerKlick.py` (Pfad
+`domaene/phasen/aufstellen/setzenPerKlick.py`, `ueber-setzenPerKlick.png`): Im Bild laufen die
+4 Linien in den Lücken offener Ordner und hinter den Kästen; der Versuch meldet 2 Linien wegen
+des Endpunkts, den er 2 Pixel hinter der Spitze in einer Lücke sucht. `spielobjekte.py`: Dort meldet der Versuch nur noch Linien in den Lücken offener Ordner
+(`bewegung`, `querschnitt`, `aufstellen`), die ohne Hintergrund bleiben müssen, und
+Anfangspunkte, die er in der Lücke des Ordners statt an der Datei findet; im Bild beginnt
+jede Linie an ihrer Datei. Die Zahlen von 24 Pfeilen liegen am Ziel übereinander. Kein Test:
+Er bräuchte Chromium; 286 Tests in `rollenregeln` grün.

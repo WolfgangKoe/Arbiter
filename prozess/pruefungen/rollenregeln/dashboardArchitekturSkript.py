@@ -1,11 +1,12 @@
 architekturStil = """
 .architektur{position:relative;padding:10px 0 20px}
 .ak-zeile{display:flex;flex-wrap:wrap;gap:8px 40px;justify-content:center;margin-bottom:64px}
-.ak{background:var(--panel);border:1.5px solid var(--c-subagent);border-radius:7px;
-padding:6px 9px;min-width:140px;flex:0 1 auto}
+.ak{position:relative;z-index:1;background:var(--panel);border:1.5px solid var(--c-subagent);
+border-radius:7px;padding:6px 9px;min-width:140px;flex:0 1 auto}
 .ak.leer{border-style:dashed;background:none}
 .ak.unbekannt{border-color:var(--c-warnung)}
-.ak.offen.ordner{flex:1 1 100%}
+.ak.offen.ordner{flex:1 1 100%;background:none}
+.ak.offen.ordner>.ak-kopf{background:var(--panel)}
 .ak-kopf{cursor:default}
 .ak.ordner>.ak-kopf{cursor:pointer}
 .ak-name{color:var(--accent-text);font-weight:600;font-size:.86rem}
@@ -15,7 +16,7 @@ padding:6px 9px;min-width:140px;flex:0 1 auto}
 .ak.offen>.ak-kinder{display:flex}
 .ak-kinder>.ak{flex:0 1 auto}
 .ak-pfeile{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;
-background:none;max-width:none}
+background:none;max-width:none;z-index:0}
 .pfeil{stroke:var(--text-muted);stroke-width:1.5;fill:none}
 .pfeil.verboten{stroke:var(--c-warnung);stroke-width:2.5}
 .pfeil-spitze{fill:var(--text-muted)}.pfeil-spitze.verboten{fill:var(--c-warnung)}
@@ -104,13 +105,14 @@ architekturSkript = """
       var richtungY = nachMitte[1] - vonMitte[1];
       var anfang = rand(von, richtungX, richtungY);
       var ende = rand(nach, -richtungX, -richtungY);
+      var laenge = Math.hypot(richtungX, richtungY) || 1;
       var klasse = pfeil.erlaubt ? "" : " verboten";
       inhalt += '<line class="pfeil' + klasse + '" x1="' + anfang[0] + '" y1="' + anfang[1] +
         '" x2="' + ende[0] + '" y2="' + ende[1] + '" marker-end="url(#spitze' +
         (pfeil.erlaubt ? "" : "Verboten") + ')"/>' +
         '<text class="pfeil-text' + klasse + '" text-anchor="middle" x="' +
-        (anfang[0] + (ende[0] - anfang[0]) * 0.4) + '" y="' +
-        (anfang[1] + (ende[1] - anfang[1]) * 0.4 - 4) + '">' +
+        (ende[0] - richtungX / laenge * 16) + '" y="' +
+        (ende[1] - richtungY / laenge * 16 + 3) + '">' +
         (pfeil.text || pfeil.anzahl) + '</text>';
     });
     bild.innerHTML = inhalt;
