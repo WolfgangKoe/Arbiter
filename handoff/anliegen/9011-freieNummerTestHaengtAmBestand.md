@@ -11,7 +11,7 @@ Status: angenommen
 `testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess` in
 [anliegenTest.py](../../prozess/pruefungen/anliegenregeln/anliegenTest.py) ruft
 `anliegenregeln.freieNummer 9000 9001` am echten Projektordner und erwartet `9000`. Seit der
-Fachkritiker [9000](9000-retro9WartendesDerDomaeneUndBegruendeteTests.md) angelegt hat, kommt
+Fachkritiker Anliegen 9000 angelegt hat, kommt
 `9001`: am Arbeitsbaum geprüft, 1 von 188 rot. Der Test hängt am Bestand der Anliegen, nicht
 an dem, was sein Name sagt (der Befehl läuft als Kindprozess).
 

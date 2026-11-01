@@ -94,5 +94,65 @@
   "quelle": "@dataclass(frozen=True, eq=False)",
   "fehler": "False wird True",
   "grund": "Ausgangslage vergleicht und hasht kein Code (Anliegen 6994)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "quelle": "if schritte == 0 or not trifftMonotonAb(Fraction(1)):",
+  "fehler": "1 wird 2",
+  "grund": "Die Prüfung ist monoton: Trifft sie bei 1, dann auch bei 2; sonst trifft kein Schritt, die Suche liefert schritte + 1, der Anteil ist 1 (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "quelle": "if schritte == 0 or not trifftMonotonAb(Fraction(1)):",
+  "fehler": "Or wird And",
+  "grund": "Anders nur bei Weg 0, wenn schon die jetzige Stelle trifft; nach jedem Loslassen liegen die Stellen innerhalb von Bewegungsweite und Spielfeld, Anhalten lässt sich nicht übergehen. Wird es übergehbar (Anliegen 8840, F2), ist es eine Lücke (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "quelle": "erster = ersterSchrittMit(trifftBeiSchritt, schritte + 1)",
+  "fehler": "1 wird 2",
+  "grund": "Die Suche läuft nur, wenn Schritt schritte trifft; ein Schritt dahinter ändert den ersten Treffer nicht (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/aufstellen/auswahl.py",
+  "quelle": "return {}",
+  "fehler": "Rückgabe wird None",
+  "grund": "Die Schlacht fragt nur mit ausgewählter Einheit (schlachtrunden.py); die Zeile steht für mypy (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/__init__.py",
+  "quelle": "return False",
+  "fehler": "Rückgabe wird None",
+  "grund": "Zeilen 102 und 110: Die einzige Aufruferin karteAnklicken wertet nur die Wahrheit aus (Anliegen 6301, 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/grenzkreise.py",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Grenzkreis, Einhüllende: Kein Code weist einem Feld neu zu (mypy prüft das), keiner hasht sie (Anliegen 6994, 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/querschnitt/uebergehen.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "True wird False",
+  "grund": "Eintrag: Kein Code weist einem Feld neu zu; mit eq=False bleibt der Hash der Identität (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/querschnitt/uebergehen.py",
+  "quelle": "@dataclass(frozen=True, eq=False)",
+  "fehler": "False wird True",
+  "grund": "Kein Code vergleicht oder hasht Einträge; darstellung._eintrag liest nur die Felder (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/katalog/datenblaetter.py",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Modellart: Kein Code weist einem Feld neu zu, keiner hasht sie (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/web/anwendung.py",
+  "quelle": "körper = request.get_json(silent=True)",
+  "fehler": "True wird False",
+  "grund": "Gemeint ist _gründeZumÜbergehen: modellLoslassen ruft vorher _stelleDerAnfrage, die mit 400 abbricht, ist der Körper kein JSON-Objekt; danach liefert get_json den zwischengespeicherten Körper. Der Eintrag deckt bis P4 der Retro 9 auch die gefangenen Mutanten in _stelleDerAnfrage und _phaseBeenden (Anliegen 8973)."
  }
 ]
