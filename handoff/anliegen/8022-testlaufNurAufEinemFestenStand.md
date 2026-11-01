@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder fand die Schwankung der roten Tests der *Leisten*
@@ -37,19 +36,16 @@ Tests oder Prüfungen als Beleg meldet („Tests grün“, [DoD](../../prozess/a
 neben einem Lauf des Testautors startet. Ob du daraus einen Mechanismus machst, entscheidest
 du mit dem Regelumsetzer.
 
-**Stellungnahme.** Zugestimmt. Den Ablauf ändert die Schreibgrenze erst in der Prozessphase,
-darum wartet es; die Retro 9 übernimmt:
-- [Gleichzeitige Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md) (Ich 4): Ein Beleglauf
-  (DoD 1, 2, „Tests grün“) liest alles; schreibt daneben ein Lauf in `technik/` oder
-  `prozess/pruefungen/`, prüft er auf einem Abzug; die Meldung nennt den Stand. Nur Text.
-  Technikphase 3 verlinkt es.
-- `-x` steht einmal, in DoD 1 und 2, mit 8042 (Wir 3).
-- Abzug, erprobt: `git clone --no-hardlinks` nach `/tmp`, `node_modules` und `.venv`
-  verlinkt, `.venv/bin/pre-commit install`, eigene uncommittete Dateien per `cp --parents`
-  (`git archive` fehlt das `.git` mancher Prüfungen). Auf `90801c5`: `technik/tests` 372 rot,
-  24 Fehler, 6:27 min; `prozess/pruefungen` 10:10 min, grün bis auf den Commit-Hook, den
-  `pre-commit install` behebt.
-- `isolation: worktree` von Claude Code zweigt vom Standardzweig ab und verlangt
-  Zusammenführen: zu teuer. Mechanismus erst, wenn es wieder vorkommt.
-- Bis dahin startet der Koordinator „Tests grün“ nicht neben einem Lauf, der in `technik/`
-  schreibt, oder lässt auf einem Abzug prüfen.
+**Stellungnahme.** Umgesetzt mit P2 der [Retro 9](../retro.md), bestehende Regel angepasst
+(Ich 4): [DoD](../../prozess/ablauf/dod.md), Absatz „Belege zu 1 und 2“, gilt auch für
+„Tests grün“ (Technikphase 3 verlinkt DoD 1, 2): Läufe vollständig, ohne `-x`; schreibt nach
+dem Auftrag daneben ein Lauf in `technik/` oder `prozess/pruefungen/`, prüft die Rolle auf
+einem Abzug; die Meldung nennt den Stand. [Gleichzeitige Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md)
+verlinkt den Absatz, statt ihn zu wiederholen (Wir 3).
+- Abzug erprobt: `git clone --no-hardlinks` nach `/tmp`, `.venv` und `node_modules`
+  verlinkt, `pre-commit install` (`git archive` fehlt das `.git` mancher Prüfungen). Auf
+  `90801c5`: `technik/tests` 6:27 min, `prozess/pruefungen` 10:10 min. Auf `1ff5ee3`: ein
+  Fehler, der nur im Abzug in `technik/arbiter` steht, macht dort die Tests rot; der Abzug
+  prüft also seinen Code, nicht den des Projekts.
+- Mechanismus: nur Text. `isolation: worktree` von Claude Code zweigt vom Standardzweig ab
+  und verlangt Zusammenführen: zu teuer. Ein Skript erst, wenn es wieder vorkommt.

@@ -4,8 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Der Mutationstest muss früher starten. Mir scheint es so, dass er
@@ -64,6 +63,8 @@ B: Nein, wie bisher am Ende (`mutation.py`).
 Empfehlung: A, unterbrechen kostet dann nichts.
 Antwort: A
 
-**Nachprüfung (Organisationsentwickler).** F1 steht in der [DoD](../../prozess/ablauf/dod.md)
-(P8, [Retro 8](../retro.md)); F2 und F4 trägt `mutation.py` (P9, Tests grün). In der
-DoD ersetze ich „nur Text“ in der Prozessphase 9, davor gesperrt; dann `erledigt`.
+**Nachprüfung (Organisationsentwickler).** F1 steht in der [DoD](../../prozess/ablauf/dod.md),
+seit [8961](8961-vollerMutationslaufJeEtappe.md) nur im Zyklus, der die Etappe abschließt.
+F2 und F4 trägt `mutation.py` (Tests `testNachDemErstenModulStehtSeineZeileUndSeinMerkzettel`,
+`testEinNachDemErstenModulAbgebrochenerLaufPrüftEsBeimNächstenNichtNeu`); die DoD nennt es
+statt „nur Text“ (P2, [Retro 9](../retro.md)).

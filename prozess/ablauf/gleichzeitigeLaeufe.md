@@ -11,6 +11,8 @@ oder Items, auch derselben Rolle, wenn (Anliegen 279):
 Was danach gleichzeitig laufen darf, startet der Koordinator gleichzeitig (Anliegen 730). Sein
 Auftrag nennt jeder Rolle, wer neben ihr läuft, und den Bereich, aus dem sie Nummern für neue
 Anliegen vergibt; sie vergibt nur daraus. Mechanismus: nur Text; Nummern: `anliegenregeln/freieNummer.py` ([Anliegenregeln](../regeln/anliegenregeln.md)).
+Ein Lauf, der Tests oder Prüfungen als Beleg meldet, liest alle Dateien, auch die der
+Nachbarn: [DoD, Belege zu 1 und 2](dod.md).
 Die Moderation nennt je Rolle die Stränge: was gleichzeitig läuft, was eine Kette bleibt.
 Der Koordinator committet je Item nach dessen Pfaden ([Commits](commits.md)); die Zeile eines
 Nachbarn in `prozess/regeln/` geht mit. Ist eine Prüfung nur in Dateien eines laufenden Nachbarn

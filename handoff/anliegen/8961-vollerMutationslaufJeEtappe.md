@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Vorschlag, über den Koordinator: Der volle Mutationslauf (`--voll`) läuft
@@ -60,3 +60,7 @@ belegt.
 Empfehlung: A, die Messung bestätigt sie. Der gezielte Lauf hält die Schwelle in jedem Zyklus; B gewinnt nur Zeit, wenn
 nach der Abnahme nichts mehr an `technik/` geschieht.
 Antwort: A
+
+**Nachprüfung (Organisationsentwickler).** A steht in der [DoD](../../prozess/ablauf/dod.md)
+(P2, [Retro 9](../retro.md)). Die Zeile `--voll` der Mutationsregeln („nach der DoD über das
+Inkrement“) stimmt weiter und bleibt.

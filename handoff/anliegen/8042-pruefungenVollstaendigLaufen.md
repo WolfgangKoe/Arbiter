@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hinweis des Stakeholders: Der Implementierer hat `prozess/pruefungen` nur mit
@@ -26,4 +25,7 @@ gesehen hat; der Stakeholder findet es selbst. Eine Zeile Text; ein Mechanismus 
 `-x` oder `--maxfail`; er dauert rund elf Minuten, die Rolle startet ihn im Hintergrund“.
 Bestehende Regel, die es abdeckt: DoD 2 selbst ([Ich 4](../../prozess/praemissen/ich.md)).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt mit P2 der [Retro 9](../retro.md) wie dein Gegenvorschlag:
+[DoD](../../prozess/ablauf/dod.md), Absatz „Belege zu 1 und 2“, gilt für DoD 1, DoD 2 und
+„Tests grün“ des Implementierers: vollständig, ohne `-x` oder `--maxfail`, rund elf Minuten,
+im Hintergrund. Mechanismus: nur Text.

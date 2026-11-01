@@ -15,6 +15,16 @@
 4. Review geschrieben, Fachkritik hat gegen Ziel, Etappe und Kriterien abgenommen (Urteil).
    Mechanismus: nur Text.
 
+Belege zu 1 und 2, auch „Tests grün“ des Implementierers ([Technikphase](technikphase.md) 3):
+Jeder Lauf ist vollständig, ohne `-x` oder `--maxfail`; `prozess/pruefungen` dauert rund elf
+Minuten, die Rolle startet ihn im Hintergrund (Anliegen 8042). Schreibt nach ihrem Auftrag
+daneben ein Lauf in `technik/` oder `prozess/pruefungen/`, prüft sie auf einem Abzug ihres
+Stands: `git clone --no-hardlinks <Projekt> /tmp/<Name>`, darin `.venv` und `node_modules`
+als Verweis auf die des Projekts (`ln -s`), `.venv/bin/pre-commit install`, ihre
+uncommitteten Dateien vom Projekt aus mit `cp --parents <Datei> /tmp/<Name>`. Ihre Meldung
+nennt den Stand: `Stand <Commit> und <n> eigene Dateien` auf dem Abzug, sonst
+`Stand <Commit> und Arbeitsbaum` (Anliegen 8022). Mechanismus: nur Text.
+
 Bei einer Oberfläche gelten auch Bildschirmtest grün, Mockup gelöscht. Dazu die
 Mutationsschwelle: mindestens 95 % gefangene Mutanten in den geänderten Zeilen der
 Domänenmodule. Je Mutant laufen nur die Tests, die seine Zeile ausführen (Zeilen auf
@@ -27,12 +37,14 @@ sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Mechanismu
 `mutationsregeln/mutation.py` (Befehle: [Mutationsregeln](../regeln/mutationsregeln.md));
 „jeder Überlebende“ und Lesbarkeit: nur Text.
 
-Den vollen Lauf (`--voll`) über alle Module, auch `web/`, startet der Koordinator im
-Hintergrund, sobald die DoD über das Inkrement grün ist ([Technikphase](technikphase.md) 4);
-ändert sich `technik/` danach, startet er ihn neu. Der Lauf hält nichts auf (Anliegen 6960,
-F1); seine Lücken: [Prozessphase](prozessphase.md) 1. Mechanismus: nur Text.
-Je fertigem Modul schreibt er eine Zeile ins Protokoll (Modul, Mutanten, Überlebende) und
-merkt sich die Ergebnisse, ein unterbrochener Lauf setzt dort fort (6960, F2 und F4).
-Mechanismus: nur Text (P9 der [Retro 8](../../handoff/retro.md) baut ihn in `mutation.py`).
+Den vollen Lauf (`--voll`) über alle Module, auch `web/`, startet der Koordinator nur im
+Zyklus, dessen Plan die Etappe abschließen soll, im Hintergrund, sobald die DoD über das
+Inkrement grün ist ([Technikphase](technikphase.md) 4); ändert sich `technik/` danach,
+startet er ihn neu; erreicht der Zyklus die Etappe nicht, läuft er im nächsten wieder
+(Anliegen 8961). Der Lauf hält nichts auf (Anliegen 6960, F1); seine Lücken:
+[Prozessphase](prozessphase.md) 1. Mechanismus: nur Text.
+Je fertigem Modul zeigt er seinen Stand im Protokoll, ein unterbrochener Lauf setzt dort fort
+(6960, F2 und F4). Mechanismus: `mutationsregeln/mutation.py`
+([Mutationsregeln](../regeln/mutationsregeln.md)).
 
 Schwellen der Werkzeuge: [Werkzeuge](werkzeuge.md).
