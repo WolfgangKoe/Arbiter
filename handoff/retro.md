@@ -70,7 +70,7 @@ weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
   Hindernis: Architekt → Regelumsetzer: Ein Test der freien Nummern ist rot, seit Anliegen 9000 besteht; Commits der Prozess-Items scheitern daran (Anliegen 9011); beseitigt: Commit „Kritik an Retro 9 nachgeprüft, Test der freien Nummern repariert“
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 9
-- [ ] Regelumsetzer: P1
+- [x] Regelumsetzer: P1
 - [x] Organisationsentwickler: P2
 - [ ] Regelumsetzer: P3
 - [ ] Regelumsetzer: P4
