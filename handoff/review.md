@@ -57,11 +57,13 @@ dazugekommen (Anliegen 8950), sieh sie dir bitte noch an.
 Oberfläche: **Erfüllt.** Bildschirmtests grün; die acht Mockups des Gebauten sind gelöscht,
 unter `domaene/mockups/` liegen nur noch die der offenen Items. Anliegen 8760 ist erledigt;
 `erledigteLoeschen.py` hat es nach dem Commit gelöscht, wie vorgesehen.
-Mutation: **offen.** Die Schwelle misst der gezielte Lauf über die geänderten Zeilen. Ich
-starte ihn erst, wenn der volle Lauf fertig ist, der seit 22:19 mit 8 Kernen läuft: Ein
-zweiter Lauf daneben verfälschte deine Messung, wie schnell der volle Lauf parallel ist
-([Anliegen 8961](anliegen/8961-vollerMutationslaufJeEtappe.md)), und der gezielte holt sich danach die fertigen Ergebnisse aus dem
-Merkzettel, statt sie neu zu rechnen. Die Zahl trage ich nach, Lücken gehen an den Testautor.
+Mutation: **nicht erfüllt.** Der gezielte Lauf über die geänderten Zeilen fängt 93 % von 190
+Mutanten, die Schwelle ist 95 %; der volle 96 % von 628
+([8970](anliegen/8970-vollerMutationslauf9AlleMutanten.md)). Am Bildschirm ändert das
+nichts. Von den 21 Überlebenden sind zwölf gleichwertig, Begründung trägt der
+Organisationsentwickler ein ([8973](anliegen/8973-gleichwertigeMutantenVollerLauf9.md));
+danach 98 %. Acht Tests fehlen, Technikphase 10 ([8971](anliegen/8971-mutationslueckenMessenUndKatalog.md)),
+und ein Kriterium, Domänenphase 10 ([8972](anliegen/8972-protokollOhneSperreUnveraendert.md)).
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 9“:
