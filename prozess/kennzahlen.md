@@ -29,9 +29,10 @@ In Zeichen: Etappen, Agentendefinition, Beschreibung, Root- und Ordner-CLAUDE.md
 `handoff/moderation.md` (4.000), Plan, Review, Retro je 4.000 (jede Zeile `Kommentar:` zählt
 als `Kommentar: .`, Anliegen 167; ohne den Abschnitt
 [Fortschritt](ablauf/fortschritt.md), Anliegen 421), je Datei in `domaene/mockups/` 8.000, Architektur:
-Regeln (`technik/architektur.md` und je Datei in `technik/architektur/`) je 6.000, zusammen
-24.000 (Anliegen 159, 211); Vertrag je Phase eine Datei in `technik/architektur/vertrag/` zu
-je 6.000, ohne Summe (Anliegen 2570); Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
+Regeln (`technik/architektur.md` und je Datei in `technik/architektur/`) je 6.000, ohne Summe
+(Anliegen 159, 211, 7090); Vertrag je Phase eine Datei in `technik/architektur/vertrag/` zu
+je 6.000; wird sie voll, ein Ordner gleichen Namens mit je Abschnitt einer Datei zu je 6.000;
+ohne Summe (Anliegen 2570, 7022); Anforderung, Item, Glossarzeile (`domaene/CLAUDE.md`), je Datei in
 `prozess/ablauf/` ([CLAUDE.md](ablauf/CLAUDE.md), Anliegen 2590), je Datei in
 `prozess/praemissen/` 3.000.
 

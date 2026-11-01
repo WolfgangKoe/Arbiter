@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Entscheidungen des Stakeholders ändern denselben Satz der
@@ -34,4 +33,7 @@ die der Stakeholder abgeschafft hat. Umsetzen: ein Satz, kein Mechanismus.
 eine Datei in `technik/architektur/vertrag/` zu je 6.000; wird sie voll, ein Ordner gleichen
 Namens mit je Abschnitt einer Datei zu je 6.000; ohne Summe (Anliegen 2570, 7022);“
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie dein Gegenvorschlag in den
+[Kennzahlen](../../prozess/kennzahlen.md#höchstmaße) (Retro 9, P9): Regeln der Architektur je
+6.000 ohne Summe; eine volle Vertragsdatei wird ein Ordner gleichen Namens, je Abschnitt eine
+Datei zu 6.000, ohne Summe. Kein anderer Text nannte die Summe von 24.000.
