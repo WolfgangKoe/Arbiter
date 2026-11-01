@@ -17,6 +17,7 @@ planText = (
 )
 hindernis = "Pfad gesperrt."
 nummerNachDerGelöschten = 41
+zweiHindernisse = 2
 
 
 def schreiben(wurzel: Path, pfad: str, text: str) -> Path:
@@ -129,6 +130,33 @@ def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_p
     zeile = f"{vermerk}; beseitigt: Commit „Pfad freigegeben“\n"
     assert zeile in plan.read_text(encoding="utf-8")
     assert fortschrittSchreiben(tmp_path) is None
+
+
+def statusSetzen(datei: Path, von: str, nach: str) -> None:
+    datei.write_text(
+        datei.read_text(encoding="utf-8").replace(f"Status: {von}", f"Status: {nach}"),
+        encoding="utf-8",
+    )
+
+
+def testEineNeueRundeLässtDasHindernisOffenBisIhrCommitDenStatusTrägt(tmp_path, gitRepo, plan):
+    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
+    (datei,) = anliegenDateien(tmp_path)
+    statusSetzen(datei, "offen", "angenommen")
+    gitRepo.festhalten("Runde 1 nachgebessert")
+    statusSetzen(datei, "angenommen", "offen")
+    datei.write_text(datei.read_text(encoding="utf-8") + "\n## Runde 2\n**Befund.** Neu.\n")
+    hindernisMelden(tmp_path, "Fachkritiker", "abgenommen", "Planer", hindernis, 1)
+    fortschrittSchreiben(tmp_path)
+    assert plan.read_text(encoding="utf-8").count("Hindernis:") == zweiHindernisse
+    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    statusSetzen(datei, "offen", "angenommen")
+    fortschrittSchreiben(tmp_path)
+    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    gitRepo.festhalten("Runde 2 nachgebessert")
+    fortschrittSchreiben(tmp_path)
+    beseitigende = plan.read_text(encoding="utf-8").count("Commit „Runde 2 nachgebessert“")
+    assert beseitigende == zweiHindernisse
 
 
 def testEinGelöschtesErledigtesAnliegenBeseitigtMitDemCommitDavor(tmp_path, gitRepo, plan):

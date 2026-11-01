@@ -4,8 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
-Wartet auf: 7030
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Hook „stand“ in `.pre-commit-config.yaml` (`pytest prozess/pruefungen -m
@@ -101,3 +100,14 @@ Antwort: Ja
 gerade). Dein „C“ bei F1 gab es dort nicht; ich lese es mit F2 „Ja“ als Wunsch nach C. C
 braucht 7030, das auf die Prozessphase 9 wartet; bis dahin ändere ich keinen Hook-Code, die
 Commits bleiben bis dahin gesperrt. Dann setze ich C um und prüfe erneut.
+
+**Klärung.** C steht (Retro 9 P3). Vor jedem Commit prüft der Hook jetzt alles außer den fehlenden
+Tests der Anforderungen, die ein Item des Plans nennt; ein Test zu einem Kriterium, das es nicht
+gibt, und doppelte Kennungen scheitern weiter. Im Gesamtlauf (`python3 -m pytest
+prozess/pruefungen`) fehlen diese Tests weiter als Fehler. Mechanismus:
+[rueckverfolgung.py](../../prozess/pruefungen/kriterienregeln/rueckverfolgung.py)
+(`ohneTestsDerItems`), Marke `vollstaendig` in [pyproject.toml](../../pyproject.toml), Hook
+[.pre-commit-config.yaml](../../.pre-commit-config.yaml). Scheiter-Test:
+`testDerCommitHookÜbergehtDieFehlendenTestsDerItemsDesPlans` in
+[rueckverfolgungTest.py](../../prozess/pruefungen/kriterienregeln/rueckverfolgungTest.py). Rückweg:
+`git revert` des Commits von P3. Mit 7030 gilt als Item nur ein Link unter „Items“.

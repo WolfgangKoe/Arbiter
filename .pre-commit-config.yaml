@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: stand
         name: Stand des Repos (Benennung, Glossar, Importvertrag, Anliegen, Kriterium zu Test)
-        entry: python3 -m pytest prozess/pruefungen -q -m "stand and not abdeckung"
+        entry: python3 -m pytest prozess/pruefungen -q -m "stand and not abdeckung and not vollstaendig"
         language: system
         pass_filenames: false
         always_run: true

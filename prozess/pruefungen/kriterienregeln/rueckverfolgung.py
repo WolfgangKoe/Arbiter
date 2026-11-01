@@ -182,8 +182,8 @@ def anforderungsVerstöße(wurzel: Path, anforderungsdatei: Path, itemTexte: lis
     return meldungen
 
 
-def verstöße(wurzel: Path) -> list[str]:
-    itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
+def verstöße(wurzel: Path, *, ohneTestsDerItems: bool = False) -> list[str]:
+    itemTexte = [] if ohneTestsDerItems else itemTexteDesFreigegebenenPlans(wurzel)
     meldungen = []
     for anforderungsdatei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
         meldungen += anforderungsVerstöße(wurzel, anforderungsdatei, itemTexte)

@@ -14,6 +14,7 @@ addopts = ["--continue-on-collection-errors"]
 markers = [
     "stand: prüft den Stand des Repos, keine Probe",
     "abdeckung: misst die Abdeckung über das echte Repo, trägt auch stand, läuft nur bei technik/",
+    "vollstaendig: prüft das echte Repo ohne Ausnahme für die Items des Plans, trägt auch stand, läuft nur im Lauf über alles",
 ]
 
 [tool.ruff]

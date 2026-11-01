@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase 9
 
 ## Runde 1
@@ -25,4 +25,9 @@ Zeile `Hindernis:` kam: etwa nur, wenn der Status im Arbeitsstand ebenfalls `ang
 `erledigt` ist, oder wenn der Commit, der die Zeile ins plan.md brachte, älter ist als der
 beseitigende.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 9 P3 nach dem ersten Weg: [beseitigt.py](../../prozess/pruefungen/standregeln/beseitigt.py)
+(`beseitigtDurch`) nennt einen Commit nur, wenn die Datei des Anliegens im Arbeitsstand gleich
+`HEAD` ist und dort `angenommen` oder `erledigt` trägt; eine neue Runde oder ein noch nicht
+committeter Status ergibt keinen Vermerk. Scheiter-Test in
+[hindernisTest.py](../../prozess/pruefungen/standregeln/hindernisTest.py)
+(`testEineNeueRundeLässtDasHindernisOffenBisIhrCommitDenStatusTrägt`). `erledigt` folgt dem Haken P3.

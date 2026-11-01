@@ -26,6 +26,9 @@ def beseitigtDurch(wurzel: Path, nummer: str) -> str | None:
     if pfad is None:
         return None
     festgehalten = gitAusgabe(wurzel, "show", f"HEAD:{pfad}")
+    datei = wurzel / pfad
+    if (datei.read_text(encoding="utf-8") if datei.is_file() else "") != festgehalten:
+        return None
     gelesen = kopfAusText(festgehalten, Path(pfad))
     gelöscht = not festgehalten
     if not gelöscht and (gelesen is None or gelesen.status not in behoben):

@@ -19,25 +19,38 @@ def etappenzahl(wurzel: Path) -> int:
     return max(nummern, default=0)
 
 
-def kriterienZählen(wurzel: Path, etappe: int | None = None) -> tuple[int, int]:
+Belegung = dict[Kriterium, tuple[int | None, bool]]
+
+
+def belegungJeKriterium(wurzel: Path) -> Belegung:
     itemTexte = itemTexteDesFreigegebenenPlans(wurzel)
-    alle: dict[Kriterium, int | None] = {}
+    etappen: dict[Kriterium, int | None] = {}
     for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
-        alle |= etappeJeKriterium(datei)
-    gezählt = {kriterium for kriterium, nummer in alle.items() if etappe in (None, nummer)}
-    fehlende = fehlendeTests(wurzel, itemTexte)
-    ohneTest = {kriterium for fehlend in fehlende for kriterium in fehlend.kriterien}
-    inItems = {kriterium for kriterium in gezählt if umfasst(itemTexte, kriterium)}
-    return len(gezählt - ohneTest - inItems), len(gezählt)
+        etappen |= etappeJeKriterium(datei)
+    ohneTest = {
+        kriterium
+        for fehlend in fehlendeTests(wurzel, itemTexte)
+        for kriterium in fehlend.kriterien
+    }
+    return {
+        kriterium: (nummer, kriterium not in ohneTest and not umfasst(itemTexte, kriterium))
+        for kriterium, nummer in etappen.items()
+    }
+
+
+def zählen(belegung: Belegung, etappe: int | None) -> tuple[int, int]:
+    gezählt = [belegt for nummer, belegt in belegung.values() if etappe in (None, nummer)]
+    return sum(gezählt), len(gezählt)
 
 
 def belegungAlsText(wurzel: Path, aktuell: Lage) -> str:
-    belegt, alle = kriterienZählen(wurzel)
+    belegung = belegungJeKriterium(wurzel)
+    belegt, alle = zählen(belegung, None)
     text = f"{belegt} von {alle} Kriterien belegt"
     treffer = etappenüberschrift.match(aktuell.etappe)
     if not treffer:
         return text
-    belegtInEtappe, alleInEtappe = kriterienZählen(wurzel, int(treffer[1]))
+    belegtInEtappe, alleInEtappe = zählen(belegung, int(treffer[1]))
     return f"{text}, davon Etappe {treffer[1]}: {belegtInEtappe} von {alleInEtappe}"
 
 

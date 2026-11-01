@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from standregeln import produktstand
 from standregeln.stand import stand
 
 
@@ -107,6 +108,21 @@ def testStandNenntDieBelegtenKriterienDerEtappeNebenAllen(repo):
     repo.datei("domaene/anforderungen/aufstellung.md", text)
     repo.datei("technik/tests/akzeptanz/aufstellungTest.py", "def testAu1_1Eins(): ...\n")
     assert "; 1 von 4 Kriterien belegt, davon Etappe 2: 1 von 2 · " in stand(repo.wurzel)
+
+
+def testDerStandSuchtDieFehlendenTestsNurEinmalAuchMitEtappe(repo, monkeypatch):
+    repo.datei("domaene/etappen/02-bewegen.md", "# Etappe 2 · Bewegen\n")
+    repo.datei("domaene/anforderungen/aufstellung.md", "### AU-1 · A\n\n- AU-1.1 Eins.\n")
+    aufrufe = []
+    echte = produktstand.fehlendeTests
+
+    def gezählteSuche(*argumente):
+        aufrufe.append(argumente)
+        return echte(*argumente)
+
+    monkeypatch.setattr(produktstand, "fehlendeTests", gezählteSuche)
+    assert "davon Etappe 2: 0 von 0" in stand(repo.wurzel)
+    assert len(aufrufe) == 1
 
 
 @pytest.mark.stand

@@ -18,12 +18,23 @@ def zyklus(datei: Path) -> int | None:
     return zyklusAusText(datei.read_text(encoding="utf-8"))
 
 
+def abschnittItems(plan: str) -> str:
+    gelesen = []
+    imAbschnitt = False
+    for zeile in plan.splitlines():
+        if zeile.startswith("## "):
+            imAbschnitt = zeile.rstrip() == "## Items"
+        elif imAbschnitt:
+            gelesen.append(zeile)
+    return "\n".join(gelesen)
+
+
 def itemNamen(wurzel: Path) -> list[str]:
     plan = wurzel / planDatei
     if not plan.is_file():
         return []
     muster = rf"\]\(\.\./{re.escape(itemsOrdner)}/([^)#\s]+\.md)"
-    return re.findall(muster, plan.read_text(encoding="utf-8"))
+    return re.findall(muster, abschnittItems(plan.read_text(encoding="utf-8")))
 
 
 def offeneItems(wurzel: Path) -> list[str]:

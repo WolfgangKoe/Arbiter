@@ -72,6 +72,12 @@ def testDerStandLäuftBeiJedemCommitOhneDieAbdeckung():
     assert "not abdeckung" in standEntry
 
 
+def testDerStandLässtDieVollständigePrüfungDerItemsAus():
+    assert "not vollstaendig" in entries(alsHooks, {"stand"})
+    marken = " ".join(pyproject()["tool"]["pytest"]["ini_options"]["markers"])
+    assert "vollstaendig:" in marken
+
+
 def testDieProbenNehmenDenStandNichtMit():
     assert '-m "not stand"' in entries(alsHooks, {"proben"})
 

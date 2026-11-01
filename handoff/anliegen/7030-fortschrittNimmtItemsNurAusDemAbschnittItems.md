@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase 9
 
 ## Runde 1
@@ -26,4 +26,6 @@ freigegeben hat. Die Änderung: ein Abschnittsfilter in `itemNamen` und ein Sche
 **Gegenvorschlag.** `itemNamen` liest Links nur zwischen `## Items` und der nächsten Zeile mit
 `## `; Scheiter-Test: ein Link unter `## Danach` ergibt kein Item.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 9 P3: [plan.py](../../prozess/pruefungen/lesen/plan.py)
+(`abschnittItems`), Scheiter-Test in [planTest.py](../../prozess/pruefungen/lesen/planTest.py)
+(Link unter `## Danach` oder vor `## Items` ergibt kein Item). `erledigt` folgt dem Haken P3.

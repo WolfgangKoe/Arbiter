@@ -38,4 +38,8 @@ selbst, keine neue Regel.
 
 Die Probleme 2 bis 4 und 7 bleiben beim nächsten Eingriff in die Dateien.
 
-**Stellungnahme.**
+**Stellungnahme.** Punkt 1 umgesetzt in Retro 9 P3: [produktstand.py](../../prozess/pruefungen/standregeln/produktstand.py)
+(`belegungJeKriterium`) zählt einmal und gibt je Kriterium Etappe und Belegung zurück;
+Scheiter-Test `testDerStandSuchtDieFehlendenTestsNurEinmalAuchMitEtappe` in
+[standTest.py](../../prozess/pruefungen/standregeln/standTest.py). Die Punkte 5, 6 und 8 folgen in
+P4; bis dahin bleibt der Status `offen`.

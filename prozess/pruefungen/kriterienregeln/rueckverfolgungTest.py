@@ -33,6 +33,12 @@ def aufbau(tmp_path: Path, testtext: str) -> None:
 
 
 @pytest.mark.stand
+def testDasRepoHältDieRückverfolgungAußerDenTestsDerItems():
+    assert verstöße(wurzel, ohneTestsDerItems=True) == []
+
+
+@pytest.mark.stand
+@pytest.mark.vollstaendig
 def testDasRepoHältDieRückverfolgung():
     assert verstöße(wurzel) == []
 
@@ -58,7 +64,7 @@ def freigegebenerPlanMitItem(gitRepo, itemtext: str) -> None:
     wurzel = gitRepo.ordner
     (wurzel / "handoff").mkdir(exist_ok=True)
     (wurzel / "handoff" / "plan.md").write_text(
-        "# Plan · Zyklus 1\n\n1. [Probe](../domaene/items/probe.md)\n", encoding="utf-8"
+        "# Plan · Zyklus 1\n\n## Items\n1. [Probe](../domaene/items/probe.md)\n", encoding="utf-8"
     )
     (wurzel / "domaene" / "items").mkdir(parents=True, exist_ok=True)
     (wurzel / "domaene" / "items" / "probe.md").write_text(itemtext, encoding="utf-8")
@@ -225,6 +231,21 @@ def testSpurZuUnbekanntemKriteriumIstEinFehler(tmp_path, eingabe, monkeypatch, c
 
 def planMitUmfang(gitRepo, umfang: str) -> None:
     freigegebenerPlanMitItem(gitRepo, f"# Probe\n\nUmfang: {umfang}.\n")
+
+
+def testDerCommitHookÜbergehtDieFehlendenTestsDerItemsDesPlans(tmp_path, gitRepo):
+    aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
+    assert len(verstöße(tmp_path)) == 1
+    assert verstöße(tmp_path, ohneTestsDerItems=True) == []
+
+
+def testDerCommitHookBehältDenSchutzFürTestsOhneKriterium(tmp_path, gitRepo):
+    aufbau(tmp_path, "def testAuf1_1Eins(): ...\n\n\ndef testAuf1_9Neun(): ...\n")
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
+    meldungen = verstöße(tmp_path, ohneTestsDerItems=True)
+    assert len(meldungen) == 1
+    assert "Test zu AUF-1.9" in meldungen[0]
 
 
 def testFehlendeTestdateiEinerUmfasstenAnforderungIstRot(tmp_path, gitRepo):
