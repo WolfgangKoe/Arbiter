@@ -1,7 +1,8 @@
 # Ablauf
 
 Wie das Agentensystem arbeitet (Perspektive Prozess), je Abschnitt eine Datei: Eine Rolle
-liest nur, was sie braucht. Autor: Organisationsentwickler.
+liest nur, was sie braucht. Autor:
+[Organisationsentwickler](../../.claude/agents/organisationsentwickler.md).
 
 - Phasen in ihrer Folge: [Domänenphase](domaenenphase.md) mit [DoR](dor.md),
   [Technikphase](technikphase.md) mit [DoD](dod.md) und [Werkzeugen](werkzeuge.md),
@@ -14,4 +15,5 @@ liest nur, was sie braucht. Autor: Organisationsentwickler.
 Format: Dateiname in camelCase nach dem Abschnitt, erste Zeile `# <Abschnitt>`. Jede Regel
 nennt ihren Mechanismus oder „nur Text“; die gebauten stehen in den [Regeln](../regeln/).
 Eine Aussage steht in genau einer Datei, die anderen verlinken sie ([Wir 3](../praemissen/wir.md)).
-Höchstens 6.000 Zeichen je Datei; darüber wird die Datei geteilt.
+Höchstens 6.000 Zeichen je Datei ([Kennzahlen](../kennzahlen.md#höchstmaße)); darüber wird
+die Datei geteilt.

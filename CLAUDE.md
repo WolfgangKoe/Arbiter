@@ -16,7 +16,8 @@ handeln außen.
   [absicht.md](prozess/praemissen/absicht.md), unten zuerst geladen.
 - Innen, gemeinsam: Wir, gemeinsame Sprache: [wir.md](prozess/praemissen/wir.md), unten geladen.
 - Außen, einzeln: Ich, Haltung jeder Rolle: [ich.md](prozess/praemissen/ich.md), unten
-  geladen; Es, Handwerk am Code (Lesbarkeit, SOLID): [es.md](prozess/praemissen/es.md).
+  geladen; Es, Handwerk am Code (Lesbarkeit, SOLID): [es.md](prozess/praemissen/es.md);
+  Aufgabe und Schreibpfade je Rolle: [Rollen](.claude/agents/).
 - Außen, gemeinsam: System, Phasen, Status, Mechanismen: [Ablauf](prozess/ablauf/),
   [Regeln](prozess/regeln/), Offenes: [Backlog](prozess/backlog.md).
 

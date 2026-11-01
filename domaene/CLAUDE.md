@@ -1,10 +1,10 @@
 # Domäne
 
-`ziel.md` ändert nur der Stakeholder.
+`ziel.md` ändert nur der Stakeholder. Autoren: Planer, Anforderungsautor, UX
+([Rollen](../.claude/agents/)).
 
 - `etappen/<nn>-<kurz>.md`, `<nn>` zweistellig: `# Etappe <n> · <Name>`, Zweck in einem
-  Satz, wann erreicht. Aktuell: kleinste Nummer; Erreichtes wird gelöscht; höchstens 1.000
-  Zeichen.
+  Satz, wann erreicht. Erreichtes wird gelöscht; höchstens 1.000 Zeichen.
 - `anforderungen/<bereich>/<name>.md`: `spielobjekte` (OBJ), `missionsvorbereitung` (MIV),
   `phasen/<phase>` (AUF, BEW, je Phase eins), `querschnitt` (QUE); je Datei eine, nach
   Inhalt benannt. `### <Kürzel>-<n> · <Name>`, `Etappe: <n>`, `Zweck:` in 1–2 Sätzen, bei
@@ -22,5 +22,4 @@
   Anliegen; höchstens 400 Zeichen.
 
 Quellen: `referenz/rules/` (Fundstelle `<datei>:<zeile>`); Absicht:
-`referenz/domainRules.md`, `Arbiter-old/Arbiter_Specs/`; Vorbild: ArbiterMap, Arbiter-old
-(Absicht 3). Das Ziel geht vor, sonst Ich 1.
+`referenz/domainRules.md`, `Arbiter-old/Arbiter_Specs/`. Das Ziel geht vor, sonst Ich 1.

@@ -3,16 +3,17 @@
 Auslöser: `Freigabe Review <n>`. Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
 Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `Freigabe Retro
 <n>`; davor beschreibt die Retro die Änderung. Ausnahme: Seine Zeilen in `prozess/regeln/`
-trägt der Regelumsetzer in jeder Phase ein (Anliegen 731, 1900). Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
+trägt der [Regelumsetzer](../../.claude/agents/regelumsetzer.md) in jeder Phase ein (Anliegen 731, 1900). Mechanismus: `rollenregeln/regelnNurInProzessphase.py`
 in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Standregeln](../regeln/standregeln.md)).
-1. Organisationsentwickler: `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
+1. [Organisationsentwickler](../../.claude/agents/organisationsentwickler.md):
+   `handoff/retro.md` (`# Retro · Zyklus <n>`, darunter der Absatz
    „Dashboard öffnen“ aus dem vorigen Retro unverändert, Anliegen 405) aus Anliegen an den
    Prozess, Kennzahlen (`prozess/kennzahlen.md`) und Auslösezählern (nur Text). Sie beginnt
    mit dem Fortschritt des Produkts: Etappe, belegte Kriterien, was am Bildschirm neu geht.
    Höchstens zwei Prozess-Items aus Befunden, die das Produkt aufgehalten haben, dazu die
    Aufträge des Stakeholders (Anliegen 630, 730, 1671); jedes in Worten beschrieben: was
    danach anders geschieht. Die Lücken des vollen Mutationslaufs ([DoD](dod.md)) schreibt
-   der Reviewer als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
+   der [Reviewer](../../.claude/agents/reviewer.md) als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
    (Anliegen 1671, F2). Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
    Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine

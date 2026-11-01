@@ -1,9 +1,11 @@
 # Technikphase
 
 Auslöser: `Freigabe Plan <n>`. Fehlen Rollen, schlägt der
-Organisationsentwickler sie vor. Die Regeln der Architektur ändern sich nur in dieser
-Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechanismus: nur Text.
-1. Testautor: Akzeptanztests je Kriterium der Items, rot. Hat ein Item beide Hälften
+[Organisationsentwickler](../../.claude/agents/organisationsentwickler.md) sie vor. Die Regeln
+der Architektur ändern sich nur in dieser Phase; davor zieht der
+[Architekt](../../.claude/agents/architekt.md) nur Namen und Pfade nach (Anliegen 370).
+Mechanismus: nur Text.
+1. [Testautor](../../.claude/agents/testautor.md): Akzeptanztests je Kriterium der Items, rot. Hat ein Item beide Hälften
    (Handlung über HTTP, ihre Anzeige), legt vorher der Architekt den Vertrag fest: Pfade
    und je Antwort ein JSON-Beispiel in `technik/architektur/web.md`. Daraus testet der
    Testautor das Backend mit dem Flask-Testclient, das Frontend mit einem Bildschirmtest,
@@ -12,10 +14,10 @@ Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechan
 2. Kritik an den Tests ([Kritik](kritik.md)). Ein Test, dessen Befund aufhält, geht nicht in
    die Umsetzung, bis das Anliegen geklärt ist; widerspricht der Testautor, wird es an den Anforderungsautor zum Kriterium gehoben. Der
    Rest läuft weiter. Mechanismus: nur Text.
-3. Implementierer: macht die Tests grün. Refactoring nur aus einem Befund, als Anliegen an
+3. [Implementierer](../../.claude/agents/implementierer.md): macht die Tests grün. Refactoring nur aus einem Befund, als Anliegen an
    ihn von dem, der den Befund hat; der Gegenvorschlag nennt die Erledigt-Bedingung, dazu gilt
    „Verhalten unverändert“ (Akzeptanztests grün). Nach jedem Lauf prüfen Architekt
-   (Architektur) und Reviewer (Lesbarkeit) gleichzeitig ([Kritik am Code](kritik.md#kritik-am-code)).
+   (Architektur) und [Reviewer](../../.claude/agents/reviewer.md) (Lesbarkeit) gleichzeitig ([Kritik am Code](kritik.md#kritik-am-code)).
    Bei einer Oberfläche übernimmt er Markup und CSS des Mockups ohne Umschreiben und ersetzt nur Beispielinhalte durch Daten (Anliegen 151). Er meldet erst
    fertig, wenn alle Tests in `technik/tests` grün sind, auch die Bildschirmtests, und
    SonarLint grün ist ([DoD](dod.md) 1, 2; Retro 6, Befund 4). Mechanismus: nur Text.
@@ -24,7 +26,8 @@ Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechan
    Mechanismus: nur Text.
 4. Reviewer: [DoD](dod.md) über das Inkrement, `/code-review`, Wiederverwendung, Vereinfachung,
    Effizienz, Flughöhe.
-5. Fachkritiker: fachliche Abnahme gegen Kriterien und Etappe. Danach löscht der Planer
+5. [Fachkritiker](../../.claude/agents/fachkritiker.md): fachliche Abnahme gegen Kriterien
+   und Etappe. Danach löscht der [Planer](../../.claude/agents/planer.md)
    die abgenommenen Items mit `rm` ([Ich 2](../praemissen/ich.md)). Mechanismus: nur Text.
 6. Reviewer: `handoff/review.md`, erste Zeile `# Review · Zyklus <n>`, darunter der
    Startbefehl der App mit Link auf [Web, W5](../../technik/architektur/web.md#aufbau) (auf
@@ -49,7 +52,7 @@ Phase; davor zieht der Architekt nur Namen und Pfade nach (Anliegen 370). Mechan
    Stakeholder kommentiert; was er beauftragt, wird in der Nachkorrektur ein Anliegen an den
    Regelumsetzer. Mechanismus: nur Text.
 7. Kritik am Review ([Kritik](kritik.md)), dann Freigabe ([Freigabe und Kommentare](freigabe.md))
-   → Koordinator committet `Freigabe Review <n>`. Danach [Prozessphase](prozessphase.md).
+   → [Koordinator](../../.claude/agents/koordinator.md) committet `Freigabe Review <n>`. Danach [Prozessphase](prozessphase.md).
    Mechanismus: nur Text.
 
 Ausnahmen vom Test vor dem Code: Oberfläche (Mockup zuerst, Bildschirmtest danach),
