@@ -10,9 +10,9 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
 - Regelumsetzer: [3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
   [6432](anliegen/6432-antwortOhneZeileUndRolleUx.md),
   [6988](anliegen/6988-architekturPfeileLesbar.md),
-  [7030](anliegen/7030-fortschrittNimmtItemsNurAusDemAbschnittItems.md),
+  Anliegen 7030,
   [8044](anliegen/8044-sonarlintVersionInDenFormregeln.md),
-  [8962](anliegen/8962-beseitigtVorDerNeuenRunde.md),
+  Anliegen 8962,
   [8990](anliegen/8990-rundgangReview9Pruefcode.md).
 - Organisationsentwickler: [6471](anliegen/6471-frontendOhneAbdeckung.md),
   Anliegen 7080,

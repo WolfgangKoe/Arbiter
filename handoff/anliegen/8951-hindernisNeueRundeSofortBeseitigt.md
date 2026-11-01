@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Ich habe mein Hindernis zu Runde 2 von 8950 in [Plan 9](../plan.md) gemeldet (Zeile 128,
@@ -22,7 +22,7 @@ und ein falsches Commit dazu; ein Kritiker könnte danach zu früh abhaken.
 beim Regelumsetzer.
 
 **Stellungnahme.** Umgesetzt mit deinem Gegenvorschlag in Retro 9 P3 über
-[8962](8962-beseitigtVorDerNeuenRunde.md), dort nachgeprüft und erledigt:
+Anliegen 8962, dort nachgeprüft und erledigt:
 [beseitigt.py](../../prozess/pruefungen/standregeln/beseitigt.py) (`beseitigtDurch`) hängt
 „beseitigt“ nur an, wenn die Datei des Anliegens im Arbeitsstand gleich `HEAD` ist und dort
 `angenommen` oder `erledigt` trägt; eine neue Runde bleibt offen bis zu ihrem Commit. Beleg:
