@@ -342,13 +342,18 @@ def testDerInRegelnGenannteBefehlFürFreieNummernLäuftAlsKindprozess():
     zeile = next(zeile for zeile in regeln.splitlines() if "anliegenregeln.freieNummer" in zeile)
     befehl = re.search(r"`(python3 [^`]*anliegenregeln\.freieNummer <erste> <letzte>)`", zeile)
     assert befehl, "Regeln nennen keinen Befehl mit <erste> <letzte>"
+    erste, letzte = 9000, 9001
+    erwartet = freieNummer(wurzel, range(erste, letzte + 1))
     lauf = subprocess.run(
-        befehl.group(1).replace("<erste>", "9000").replace("<letzte>", "9001").split(),
+        befehl.group(1).replace("<erste>", str(erste)).replace("<letzte>", str(letzte)).split(),
         cwd=wurzel,
         env={name: wert for name, wert in os.environ.items() if name != "PYTHONPATH"},
         capture_output=True,
         text=True,
         check=False,
     )
+    if erwartet is None:
+        assert lauf.returncode == 1
+        return
     assert lauf.returncode == 0, lauf.stderr
-    assert lauf.stdout.strip() == "9000"
+    assert lauf.stdout.strip() == str(erwartet)

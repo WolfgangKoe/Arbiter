@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf, Nachkorrektur der [Retro 9](../retro.md) (Prozessphase 3): Der
