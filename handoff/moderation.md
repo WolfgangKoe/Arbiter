@@ -7,11 +7,11 @@ die Freigabe auf (P6 wartet auf deine Antwort).
 Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
 - Stakeholder: [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) (`rückfrage`, du
   bist Absender und dran).
-- Regelumsetzer: [3960](anliegen/3960-pythonOhneStrichUndLueckenInRegeln.md),
-  [6432](anliegen/6432-antwortOhneZeileUndRolleUx.md),
+- Regelumsetzer: Anliegen 3960,
+  Anliegen 6432,
   [6988](anliegen/6988-architekturPfeileLesbar.md),
   Anliegen 7030,
-  [8044](anliegen/8044-sonarlintVersionInDenFormregeln.md),
+  Anliegen 8044,
   Anliegen 8962,
   Anliegen 8990.
 - Organisationsentwickler: [6471](anliegen/6471-frontendOhneAbdeckung.md),
