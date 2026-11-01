@@ -33,8 +33,10 @@ Auftrag | Neues umsetzen; er fragt nach, lehnt aber nicht ab | Stakeholder
 
 Je Runde (`## Runde <n>`) die Absätze `**Befund.**`, `**Kosten.**`, `**Gegenvorschlag.**`,
 `**Stellungnahme.**`, vor dem Punkt darf die Rolle in Klammern stehen; die Stellungnahme legt
-der Absender leer an. Eine Rückfrage steht in der Stellungnahme, die Antwort des Absenders
-darunter als `**Klärung.**`; beide kosten keine Runde. Unter jeder Frage an den Stakeholder
+der Absender leer an. Eine Rückfrage steht in der Stellungnahme, auch als Fragen an den
+Stakeholder; mit ihr setzt der Empfänger `rückfrage`, sonst bliebe er dran
+([Status](anliegenStatus.md)). Die Antwort des Absenders steht darunter als `**Klärung.**`;
+beide kosten keine Runde. Unter jeder Frage an den Stakeholder
 (`**F<n> · …**`) steht eine eigene Zeile `Antwort: .`; „.“ heißt bei `angenommen`: Die
 Empfehlung gilt. Arbeitet der Absender mit der Empfehlung weiter ([Ich 1](../praemissen/ich.md)),
 steht darüber `Annahme: <was er damit tut>`. Mechanismus: nur Text.
