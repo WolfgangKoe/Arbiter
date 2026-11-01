@@ -8,6 +8,9 @@ import tempfile
 from pathlib import Path
 from typing import NamedTuple
 
+from formregeln.frontendMessung import umgebungsvariable
+from formregeln.frontendZeilen import zeilenabdeckung
+
 schwelle = 95
 vultureGültig = (0, 3)
 
@@ -16,6 +19,7 @@ class Abdeckung(NamedTuple):
     zeilen: float
     zweige: float
     rote: int = 0
+    frontendZeilen: float | None = None
 
 
 def prozentText(prozent: float) -> str:
@@ -32,9 +36,14 @@ def abdeckungText(name: str, abdeckung: Abdeckung) -> str:
 def verstoß(name: str, abdeckung: Abdeckung) -> str | None:
     if abdeckung.rote:
         return f"{name}: {abdeckung.rote} Tests rot, die Schwelle gilt erst, wenn sie grün sind"
-    if min(abdeckung.zeilen, abdeckung.zweige) >= schwelle:
-        return None
-    return f"{abdeckungText(name, abdeckung)}, verlangt {schwelle} %"
+    if min(abdeckung.zeilen, abdeckung.zweige) < schwelle:
+        return f"{abdeckungText(name, abdeckung)}, verlangt {schwelle} %"
+    if abdeckung.frontendZeilen is not None and abdeckung.frontendZeilen < schwelle:
+        return (
+            f"Abdeckung des Frontends: Zeilen {prozentText(abdeckung.frontendZeilen)}, "
+            f"verlangt {schwelle} %"
+        )
+    return None
 
 
 def aussetzung(abdeckung: Abdeckung) -> str | None:
@@ -65,12 +74,25 @@ def coverageAufrufen(wurzel: Path, umgebung: dict, *argumente: str):
     )
 
 
-def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None = None) -> Abdeckung:
+def frontendEinstellen(umgebung: dict, frontendMessdatei: Path) -> list[str]:
+    umgebung[umgebungsvariable] = str(frontendMessdatei)
+    umgebung["PYTHONPATH"] = os.pathsep.join(
+        filter(None, [str(Path(__file__).parent), umgebung.get("PYTHONPATH")])
+    )
+    return ["-p", "frontendMessung"]
+
+
+def abdeckungMessen(
+    wurzel: Path, quelle: str, tests: str, auswahl: str | None = None, frontend: str | None = None
+) -> Abdeckung:
     with tempfile.TemporaryDirectory() as ablage:
         messdatei = Path(ablage) / "messung"
+        frontendMessdatei = Path(ablage) / "frontend.jsonl"
         umgebung = {**os.environ, "COVERAGE_FILE": str(messdatei)}
         aufruf = ["run", "--branch", f"--source={quelle}", "--omit=*Test.py,*conftest.py"]
         aufruf += ["-m", "pytest", "-q", "-p", "no:cacheprovider"]
+        if frontend:
+            aufruf += frontendEinstellen(umgebung, frontendMessdatei)
         if auswahl:
             aufruf += ["-m", auswahl]
         lauf = coverageAufrufen(wurzel, umgebung, *aufruf, tests)
@@ -88,6 +110,7 @@ def abdeckungMessen(wurzel: Path, quelle: str, tests: str, auswahl: str | None =
             quote(summen["covered_lines"], summen["num_statements"]),
             quote(summen["covered_branches"], summen["num_branches"]),
             roteTests(lauf.stdout),
+            zeilenabdeckung(frontendMessdatei, wurzel / frontend) if frontend else None,
         )
 
 

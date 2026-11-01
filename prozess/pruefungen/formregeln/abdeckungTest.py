@@ -11,7 +11,7 @@ from formregeln.abdeckung import (
     unbenutzterCode,
     verstoß,
 )
-from gemeinsam.pfade import akzeptanzOrdner, wurzel
+from gemeinsam.pfade import akzeptanzOrdner, frontendOrdner, wurzel
 
 vollständig = 100
 modulMitZweig = "def zeichen(wert):\n    if wert:\n        return 'ja'\n    return 'nein'\n"
@@ -164,11 +164,61 @@ def testRoteTestsBeiLeererAusgabeIstNull():
 @pytest.mark.stand
 @pytest.mark.abdeckung
 def testDasProduktErreichtDieSchwelleMitSeinenTests():
-    gemessen = abdeckungMessen(wurzel, "technik/arbiter", "technik/tests")
+    gemessen = abdeckungMessen(wurzel, "technik/arbiter", "technik/tests", frontend=frontendOrdner)
     ausgesetzt = aussetzung(gemessen)
     if ausgesetzt:
         pytest.skip(ausgesetzt)
     assert verstoß("technik/arbiter", gemessen) is None, verstoß("technik/arbiter", gemessen)
+
+
+skriptMitEinerUngenutztenFunktion = (
+    "export function benutzt() {\n  return 1\n}\n\n"
+    "export function unbenutzt() {\n  return 2\n  return 3\n  return 4\n}\n"
+)
+seiteDerProbe = '<script type="module">import { benutzt } from "/modul.js"; benutzt()</script>'
+testDerEineSeiteÖffnet = (
+    "from pathlib import Path\n"
+    "import modul\n"
+    "from playwright.sync_api import sync_playwright\n\n\n"
+    "def testSeite():\n"
+    "    skript = Path('frontend/modul.js').read_text()\n"
+    "    with sync_playwright() as playwright:\n"
+    "        browser = playwright.chromium.launch()\n"
+    "        kontext = browser.new_context()\n"
+    "        seite = kontext.new_page()\n"
+    "        seite.route('**/modul.js', lambda route: route.fulfill(\n"
+    "            body=skript, content_type='text/javascript'))\n"
+    "        seite.route('**/index.html', lambda route: route.fulfill(\n"
+    f"            body={seiteDerProbe!r}, content_type='text/html'))\n"
+    "        seite.goto('http://probe.test/index.html')\n"
+    "        seite.wait_for_function('true')\n"
+    "        kontext.close()\n"
+    "        browser.close()\n"
+)
+
+
+def frontendMessen(tmp_path, skript: str) -> Abdeckung:
+    probeAnlegen(tmp_path, modulMitZweig, testDerEineSeiteÖffnet)
+    (tmp_path / "frontend").mkdir()
+    (tmp_path / "frontend" / "modul.js").write_text(skript)
+    return abdeckungMessen(tmp_path, "quelle", "tests", frontend="frontend")
+
+
+def testEineNieAufgerufeneFunktionImFrontendIstUnterDerSchwelle(tmp_path):
+    gemessen = frontendMessen(tmp_path, skriptMitEinerUngenutztenFunktion)
+    assert gemessen.frontendZeilen < schwelle
+    assert "Frontends" in verstoß("probe", gemessen._replace(zeilen=100, zweige=100))
+
+
+def testEinVollGeprobtesFrontendErreichtDieSchwelle(tmp_path):
+    gemessen = frontendMessen(tmp_path, "export function benutzt() {\n  return 1\n}\n")
+    assert gemessen.frontendZeilen == vollständig
+
+
+def testDieSchwelleGiltAuchFürDasFrontend():
+    assert verstoß("probe", Abdeckung(100, 100, 0, 90)) is not None
+    assert verstoß("probe", Abdeckung(100, 100, 0, 100)) is None
+    assert verstoß("probe", Abdeckung(100, 100)) is None
 
 
 def vultureProbe(tmp_path, quelle: str, akzeptanz: str, einheit: str) -> list[str]:
