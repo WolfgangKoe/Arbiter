@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Regelumsetzer
 Runde: 1/3
-Status: rückfrage
+Status: offen
 Wartet auf: Prozessphase 9
 
 ## Runde 1
@@ -48,3 +48,4 @@ Antwort: .
 Antwort: .
 Kommentar: F2: Kann man die Kästen nicht so anordnen, dass die Pfeile dies nicht überkreuzen. Außerdem nur die Pfeile anzeigen, wenn ich über einen Kasten drübergehe. Problematische Pfeile immer anzeigen. Auch so etwas wie Zyklen. Ansonsten wie empfoheln.
 Stellungnahme: F2: Pfeile nur beim Überfahren (Touch: Antippen) eines Kastens; verbotene und Zyklen immer, rot. Die Kästen nach Schicht ordnen, das senkt Kreuzungen; kreuzungsfrei ist bei Zyklen nicht immer möglich. Gilt dein „Ansonsten wie empfohlen“ auch für F1 (Tokenbericht seitenweise, sechs Sitzungen) und F3 (Seite, Aufklappzustand, Scrollstand merken)? Empfehlung: ja. Bis zur Antwort setze ich nichts um.
+Kommentar: Ja.
