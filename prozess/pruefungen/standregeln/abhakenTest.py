@@ -74,3 +74,30 @@ def testDieRolleSiehtNurIhreOffenenSchritte(tmp_path):
     abhaken(tmp_path, "Reviewer", "Kritik am Code")
     assert "Kritik am Code zu Item stellen" not in offeneZeilen(tmp_path, "reviewer")
     assert "Item stellen abgenommen" not in offeneZeilen(tmp_path, "reviewer")
+
+
+def akzeptanztestAnlegen(wurzel: Path, rumpf: str) -> None:
+    schreiben(wurzel, ".claude/agents/testautor.md", "---\nname: testautor\n---\n")
+    inhalt = f"def testAuf1_1EinModell():\n    {rumpf}\n"
+    schreiben(wurzel, "technik/tests/akzeptanz/aufTest.py", inhalt)
+
+
+@pytest.mark.usefixtures("plan")
+def testEinGrünerTestVorDemCodeMeldetDemTestautorEinHindernis(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
+    assert "schon grün" in capsys.readouterr().err
+    text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
+    assert "- [ ] Fachkritiker: Kritik an den Tests zu Item stellen\n" in text
+    assert "  Hindernis: Fachkritiker → Testautor:" in text
+    assert "testAuf1_1EinModell" in text
+
+
+@pytest.mark.usefixtures("plan")
+def testEinRoterTestVorDemCodeLässtDieKritikAbhaken(tmp_path, monkeypatch):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert False")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
+    assert "- [x] Fachkritiker: Kritik an den Tests zu Item stellen\n" in text

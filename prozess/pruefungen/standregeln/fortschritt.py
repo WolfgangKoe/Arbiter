@@ -33,6 +33,10 @@ class Zeile(NamedTuple):
         return f"{self.rolle}: {self.schritt}"
 
 
+def gleicheRolle(zeile: Zeile, rolle: str) -> bool:
+    return zeile.rolle.casefold() == rolle.casefold()
+
+
 def ungetestete(text: str, verlangt: set[Kriterium], testdatei: Path) -> list[Kriterium]:
     getestet = getesteKriterien(testdatei) if testdatei.is_file() else set()
     return [

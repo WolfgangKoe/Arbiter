@@ -12,13 +12,13 @@ from lesen.anliegenKopf import (
     nummerAusDatei,
     stakeholder,
 )
-from standregeln.abhaken import gleicheRolle
 from standregeln.fortschritt import (
     Zeile,
     abschnittBauen,
     abschnittEinsetzen,
     bisherigeZeilen,
     fortschrittSchreiben,
+    gleicheRolle,
     zielUndZeilen,
 )
 from standregeln.phasenfolge import lage

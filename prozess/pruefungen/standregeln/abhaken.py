@@ -8,15 +8,14 @@ from standregeln.fortschritt import (
     abschnittEinsetzen,
     bisherigeZeilen,
     fortschrittSchreiben,
+    gleicheRolle,
     zielUndZeilen,
 )
+from standregeln.hindernis import hindernisMelden, nächsteNummer
 from standregeln.phasenfolge import lage
+from standregeln.testsRot import grüneTests, itemDesSchritts
 
 aufrufteileRolleUndSchritt = 2
-
-
-def gleicheRolle(zeile: Zeile, rolle: str) -> bool:
-    return zeile.rolle.casefold() == rolle.casefold()
 
 
 def eigeneZeilen(wurzel: Path, rolle: str) -> tuple[Path, list[Zeile]] | None:
@@ -57,6 +56,28 @@ def bereitsAbgehakt(wurzel: Path, rolle: str, schritt: str) -> list[str]:
     ]
 
 
+def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> list[str]:
+    ziel = zielUndZeilen(wurzel, lage(wurzel))
+    if ziel is None:
+        return []
+    _, zeilen = ziel
+    for zeile in zeilen:
+        itemName = itemDesSchritts(zeile.schritt)
+        if not itemName or not passt(zeile, rolle, schritt):
+            continue
+        grün = grüneTests(wurzel, itemName)
+        if grün:
+            nummer = nächsteNummer(wurzel)
+            text = (
+                "Diese Tests sind grün, bevor der Code besteht: " + ", ".join(grün) + ". "
+                "Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt."
+            )
+            freie = range(nummer, nummer + 1)
+            hindernisMelden(wurzel, rolle, zeile.schritt, "Testautor", text, freie)
+            return grün
+    return []
+
+
 def abhaken(wurzel: Path, rolle: str, schritt: str) -> list[str]:
     fortschrittSchreiben(wurzel)
     ziel = zielUndZeilen(wurzel, lage(wurzel))
@@ -86,6 +107,14 @@ def hauptprogramm(argumente: list[str]) -> int:
         return 1
     rolle, schritt = argumente
     wurzel = projektordner()
+    grün = grünVorDemCode(wurzel, rolle, schritt)
+    if grün:
+        print(
+            "Nicht abgehakt: Diese Tests sind schon grün, ein Hindernis an den Testautor ist "
+            "gemeldet: " + ", ".join(grün),
+            file=sys.stderr,
+        )
+        return 1
     gehakt = abhaken(wurzel, rolle, schritt)
     schon = [] if gehakt else bereitsAbgehakt(wurzel, rolle, schritt)
     if schon:
