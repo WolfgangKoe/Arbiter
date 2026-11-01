@@ -7,3 +7,4 @@ Am Bildschirm: in der *Aufstellung* ziehen ([AUF-8](../phasen/aufstellen/ziehen.
 - QUE-1.1 **Wenn** ein *Spieler* ein *Modell* an eine *Stelle* *setzt* und keine *Sperre* greift, **dann** ist es an dieser *Stelle* *gesetzt*.
 - QUE-1.2 **Wenn** ein *Spieler* ein *Modell* an eine *Stelle* *setzt*, an der seine *Base* die eines anderen *gesetzten* *Modells* *überdeckt*, **dann** *Sperre* ‚Base überdeckt‘.
 - QUE-1.3 **Wenn** ein *Spieler* ein *Modell* an eine *Stelle* *setzt*, an der es in *Nahkampfreichweite* eines *gesetzten* *Modells* des anderen *Spielers* ist, **dann** *Sperre* ‚Nahkampfreichweite‘ (`core_rules.txt:450`).
+- QUE-1.4 **Gegeben** eine *Sperre* nach QUE-1.2, **dann** bietet Arbiter *gemeinsam übergehen* nie an (Anliegen 8840 F1 A).

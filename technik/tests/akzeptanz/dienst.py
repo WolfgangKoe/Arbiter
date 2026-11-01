@@ -51,10 +51,6 @@ def schlachtDesVertrags() -> dict:
     return _beispielDesVertrags("schlacht.json")
 
 
-def übergehbarDesVertrags() -> dict:
-    return _beispielDesVertrags("uebergehbar.json")
-
-
 def protokollDesVertrags() -> dict:
     return _beispielDesVertrags("protokoll.json")
 

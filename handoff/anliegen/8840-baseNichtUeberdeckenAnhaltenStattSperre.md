@@ -4,41 +4,38 @@ Form: Kritik
 Von: Stakeholder
 An: Anforderungsautor
 Runde: 1/3
-Status: rückfrage
+Status: erledigt
 
 ## Runde 1
-**Befund.** Wortlaut des Stakeholders:
+**Befund.** Ihr Wortlaut:
 „Die Funktion "Base überdeckt" finde ich so nicht gut. Die Base sollte nicht überdeckt werden können. ArbiterMap hat dies durch "Klemmen" gelöst. Das ist deutlich besser und intuitiver. Die Möglichkeit das zu übersteuern, macht es eher schlimmer als besser. Die Übersteuerung sollte ermöglicht werden, um die Position einer Einheit oder von die von Modellen korrigieren zu können, um den Gamestate auf dem Tisch herzustellen. Aber es ist sehr unwahrscheinlich, dass es jemals dazu kommt, dass Bases überdeckt werden können. Das ist noch nicht gut gelöst und das Zurückspringen an der Stelle ebenfalls nicht.“
-Screenshot: *Bewegungsphase*, ein rotes *Modell* über anderen *Bases*, Meldung „Base überdeckt / über eine Base“, Knopf „gemeinsam übergehen“.
+Screenshot: rotes *Modell* über fremden *Bases*, „Base überdeckt“, „gemeinsam übergehen“.
 
-**Kosten (Anforderungsautor).** Heute zeigt die *Karte* beim Ziehen das *Modell* auch über fremden *Bases*; beim Loslassen sperren [QUE-1.2](../../domaene/anforderungen/querschnitt/setzen.md) und [BEW-2.5](../../domaene/anforderungen/phasen/bewegung/sperrenBeimZiehen.md), BEW-2.6 stellt alles zurück (das Zurückspringen), [BEW-8](../../domaene/anforderungen/phasen/bewegung/uebergehenBeimZiehen.md) bietet *gemeinsam übergehen* an.
-ArbiterMap hält schon beim Ziehen an der ersten fremden *Base* an und gleitet an ihr entlang (`ArbiterMap/docs/spec/interaction_map.md:401`, `:407`). Arbiter hat das als [AUF-29](../../domaene/anforderungen/phasen/aufstellen/anhaltenAufDemWeg.md) nur für die *Aufstellung*, Gleiten erst in Etappe 3 (Anliegen 2363); Kante und *Nahkampfreichweite* hält [BEW-6](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md) schon an (Anliegen 6400).
-Aufwand etwa ein Item wie anhaltenUndAuswahl: drei bis vier neue Kriterien mit Tests, die zu BEW-2 und BEW-8 entfallen; Anhalten ist für die *Aufstellung* gebaut, Gleiten noch nirgends. Folge: In der *Bewegungsphase* bleibt nur die *Sperre* ‚keine Kohärenz‘, nichts zu übergehen.
+**Kosten (Anforderungsautor).** Heute sperren QUE-1.2 und BEW-2.5 beim Loslassen, BEW-2.6 springt zurück, BEW-8 bietet *gemeinsam übergehen*. ArbiterMap hält beim Ziehen an und gleitet entlang (`interaction_map.md:401`), Arbiter nur in der *Aufstellung* (AUF-29). Etwa ein Item.
 
 **Gegenvorschlag (Anforderungsautor).**
-1. In der *Bewegungsphase* hält Arbiter vor jeder fremden *Base* an wie AUF-29.1 bis 29.3, schon beim Ziehen; Loslassen *setzt*, wo die *Karte* zeigt. Keine *Sperre*, kein Übergehen, kein Zurückspringen, wie BEW-6.
-2. BEW-2.5 bis 2.8 und BEW-8 entfallen, QUE-1.2 gilt nicht in BEW-1.5.
-3. Die Bedingung von Etappe 2 („sperrt über fremde Bases“, „Jede Sperre … gemeinsam übergehen“) gehört dem Planer; nach Ihrer Antwort geht ein Anliegen an ihn.
+1. Keine *Base* *überdeckt* je eine fremde: Arbiter hält beim Ziehen davor an wie AUF-29, in jeder Phase, auch beim Übergehen (`core_rules.txt:729`, `:884`).
+2. Übergehen heißt: eine Position auf den Stand am Tisch korrigieren, so über die *Bewegungsweite* hinaus (BEW-3), in *Nahkampfreichweite* (BEW-6.2) oder eine *aufgestellte* *Einheit*.
+3. Wann was kommt, entscheidet der Planer.
 
 **Stellungnahme.**
+Kommentar: Eine Klärung zum Begriff "übergehbar". Bezieht sich das nur auf das Überdecken von Bases? Denn das sollte niemals passieren. Wenn es darum geht, dass ein Modell mal weiter als Bewegungsweite gezogen werden können soll, oder eine Einheit verschoben werden soll, deren Aufstellung bereits abgeschlossen ist oder auf dem Tisch ist eine Einheit in Angriffsreichweite, in der App ist das aber nicht so. In allen diesen Fällen sollte die Position einer Einheit oder eines Modells verändert im Sinne von "übergehen" werden können, um den Status auf dem Tisch nachzubilden. Dennoch sollten sich Bases selbst in diesen Fällen nicht überdecken können. Bei Fähigkeiten wie "Fliegen" sollte eine Einheit Bases anderer Einheiten bei der Bewegung ignorieren können. Beim Loslassen darf die Bases aber dennoch nicht auf anderen Bases stehen bleiben. Man darf es dann nur darüber hinwegziehen. Vielleicht sind hier die Anforderungen am Anfang nicht klar gewesen, aber bevor hier etwas umgesetzt wird, bitte nochmal genau mit mir klären.
+Stellungnahme: Gegenvorschlag 1 und 2 nach Ihrem Kommentar.
 
-Annahme: Bis zur Antwort ändere ich nichts; in der Domänenphase 10 gelten die Empfehlungen.
+**F1 · Gegenvorschlag 1 und 2?** A Ja, Satz in `ziel.md` (Ihr Kommentar) · empfohlen; B Nein (neu)
+Antwort: Ja
 
-**F1 · Was kommt in Etappe 2?**
-- Anhalten und Entlanggleiten in der *Bewegungsphase* (ArbiterMap) · empfohlen: ohne Gleiten bleibt das *Modell* an der ersten *Base* hängen
-- Nur Anhalten an der ersten fremden *Base* wie AUF-29.1, Gleiten in Etappe 3 (Anliegen 2363)
-- *Sperre* wie heute bis Etappe 3 (Anliegen 2363)
-
+**F2 · Übergehen?** A *gemeinsam übergehen* nach dem Loslassen (QUE-5) · empfohlen; B Schalter „korrigieren“ (ArbiterMap)
 Antwort: .
 
-**F2 · Anhalten an *Bewegungsweite* oder vor *Nahkampfreichweite* übergehbar machen?** Ich lese: Übergehen dient dem Korrigieren auf den Stand am Tisch; BEW-3 und 6.2 halten heute ohne Übergehen an.
-- Nein, die *Karte* bildet den Spielstand ab, nicht den exakten Tisch; BEW-1.6 lässt nachziehen (Ziel, Anliegen 5180 F6 A, 6400) · empfohlen
-- Ja, nach dem Loslassen dort bietet Arbiter *gemeinsam übergehen* an und *setzt*, wo losgelassen wurde, mit *Eintrag* im *Protokoll* (neu; Grund: Ihr Wortlaut, Ziel „einvernehmlich übergehen“)
+**F3 · Entlanggleiten?** A Ja (ArbiterMap) · empfohlen; B Nein (Anliegen 2363)
+Antwort: Ja
 
-Antwort: .
+**F4 · „Fliegen“: *Modell* über fremder *Base* losgelassen?** Hinwegziehen ja, darauf enden nein (`core_rules.txt:884`).
+- A: *setzt* an die nächste *Stelle* ohne Überdeckung (ArbiterMap `interaction_map.md:675`) · empfohlen: kein Zurückspringen
+- B: *setzt* an die letzte freie *Stelle* des Weges (neu)
 
-**F3 · ‚Base überdeckt‘ auch in der *Aufstellung* nicht mehr übergehbar?**
-- Nein, dort hält AUF-29.1 schon an, das Übergehen bleibt wie freigegeben (Anliegen 2361 F1 A) · empfohlen
-- Ja, nirgends übergehbar; dazu ergänzen Sie im letzten Satz von `domaene/ziel.md` die Ausnahme um ‚Base überdeckt‘ (Ihr Wortlaut)
-
-Antwort: .
+Antwort: A
+Kommentar: Ich folge bei Fragen F2 und F3 deiner Empfhelung. Du nutzt hier kein A,B und C, daher ist es etwas schwierig, einfach deine Fragen zu beantworten.
+Stellungnahme: F1 bis F3 gelten als A; ab jetzt steht vor jeder Antwortmöglichkeit ein Buchstabe. Offen ist F4 (A oder B), dann schreibe ich um und stelle das Anliegen an den Planer. Ihr Schritt aus F1 (`domaene/ziel.md` ändern nur Sie): den letzten Satz dort ersetzen durch „Ausnahmen: ‚keine Kohärenz‘ und überdeckte Bases können nicht übergangen werden.“
+Stellungnahme: Umgesetzt: BEW-17, BEW-8, AUF-31, QUE-1.4, BEW-18, Glossar; BEW-2 fort. Offen: 9270, Plan: 9271.

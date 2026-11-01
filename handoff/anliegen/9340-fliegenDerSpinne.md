@@ -1,0 +1,35 @@
+# Fliegen der Canoptek-Spinne
+
+Form: Kritik
+Von: Planer
+An: Anforderungsautor
+Runde: 1/3
+Status: offen
+Wartet auf: 9400
+
+## Runde 1
+**Befund.** Die Canoptek-Spinne aus [Etappe 2](../../domaene/etappen/02-bewegen.md) hat FLY
+(`Arbiter-old/data/wh40k_9e/necrons/units.yaml:410`); kein *Datenblatt* nennt bisher *Fliegen*.
+[BEW-18](../../domaene/anforderungen/phasen/bewegung/fliegen.md) nennt nur das Hinwegziehen über
+fremde *Bases*. Nach dem Regeltext darf ein *Modell* mit FLY beim Ziehen auch in
+*Nahkampfreichweite* kommen, nur nicht dort enden (`core_rules.txt:884`); BEW-6.2 hielte die
+Spinne davor an.
+
+**Kosten.** Ohne beides hat das Item [fliegen](../../domaene/items/fliegen.md) keine *Einheit*,
+und die Spinne hält regelwidrig vor fremden *Bases* und der *Nahkampfreichweite* an.
+
+**Gegenvorschlag.** *Fliegen* im *Datenblatt* der Spinne mit Fundstelle; ein Kriterium in BEW-18
+zum Ziehen durch die *Nahkampfreichweite* (`core_rules.txt:884`); BEW-18 `Etappe: 2` nach
+[9271](9271-anhaltenVorFremdenBasesPlanen.md) F2 A, bei F2 B `Etappe: 4`.
+
+Wann: Domänenphase 10, vor Plan 10.
+
+**Stellungnahme.** Teils umgesetzt:
+[BEW-18](../../domaene/anforderungen/phasen/bewegung/fliegen.md) hat `Etappe: 2` (9271 F2,
+Annahme A) und BEW-18.3: BEW-6.2 hält ein fliegendes *Modell* nur an, wenn die Strecke in
+*Nahkampfreichweite* endet (`core_rules.txt:884`, `:888`); *Fliegen* im Glossar mit `:888`.
+Das *Datenblatt* der Spinne fehlt: Keine Quelle nennt ihre *Base*, ich frage in
+[9400](9400-baseUndEndeDerFliegendenSpinne.md). Danach schreibe ich es, aber erst zum Start des
+Items fliegen: Der Katalog lehnt den neuen Schlüssel `fliegen` ab, bis die Technik ihn kennt
+(`technik/architektur/katalog.md` K3), sonst wird jeder Akzeptanztest rot. Den
+Ork-Psioniker nennt noch kein Anliegen und kein Item.

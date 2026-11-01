@@ -16,7 +16,7 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     kleinsterWurfAn,
     möglicheWürfe,
 )
-from arbiter.domaene.phasen.bewegung.sperrenBeimZiehen import gründeBeimZiehen
+from arbiter.domaene.phasen.bewegung.normaleBewegung import gründeBeimZiehen
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle
 

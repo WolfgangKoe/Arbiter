@@ -25,7 +25,6 @@ dreiZoll = Fraction(3)
 einHauch = hundertstelZoll / 2
 bewegungsweiteDesWarboss = bewegungsweite("Warboss", "Warboss")
 weiterAlsDieBewegungsweiteDesWarboss = bewegungsweiteDesWarboss + 1
-weiterAlsDieBewegungsweiteDerBoyz = bewegungsweite("Boyz", "Ork Boy") + 1
 
 wegeÜberDieBewegungsweite = pytest.mark.parametrize(
     "weg",
@@ -188,24 +187,6 @@ def testBew3_1DasModellMitDerWeitestenDistanzBestimmtDenHaltepunktDesBlocks(
         startDesWeitenModells, danach[weitesModell], bewegungsweite("Boyz", weitesModell.modellart)
     )
     assert danach == stellenVersetzt(davor, gesetzterWeg)
-
-
-def testBew3_1HältArbiterAnDerBewegungsweiteAnPrüftEsÜberEineBaseNurAnDerAngehaltenenStelle(
-    schlachtInDerBewegungsphase, boyz, warboss
-):
-    (modellDesWarboss,) = warboss.modelle
-    gezogenes, *_ = boyz.modelle
-    stelleDesWarboss = schlachtInDerBewegungsphase.stelle(modellDesWarboss)
-    schlachtInDerBewegungsphase.modellLoslassen(
-        modellDesWarboss, versetzt(stelleDesWarboss, (bewegungsweiteDesWarboss, nichts))
-    )
-    davor = schlachtInDerBewegungsphase.stelle(gezogenes)
-    ziel = versetzt(davor, (weiterAlsDieBewegungsweiteDerBoyz, nichts))
-
-    schlachtInDerBewegungsphase.modellLoslassen(gezogenes, ziel)
-
-    danach = schlachtInDerBewegungsphase.stelle(gezogenes)
-    assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Boyz", gezogenes.modellart))
 
 
 def testBew3_1DerDienstHältWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAnUndAntwortetOhneGrund(

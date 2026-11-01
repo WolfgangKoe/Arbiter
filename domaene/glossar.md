@@ -27,15 +27,16 @@ Einheit | unit | Einheit | Ein oder mehrere *Modelle* desselben *Datenblatts*, d
 erster Zug | first turn | ersterZug | Der Zug, mit dem jede *Schlachtrunde* beginnt; ihn hat in allen derselbe *Spieler* (`core_rules.txt:639`, `:2329`).
 Einheit in Aufstellung | – | einheitInAufstellung | Die eine nicht *aufgestellte* *Einheit*, deren *Modelle* gerade *gesetzt* werden; zeitweise ist es keine.
 Einhüllende | – | Einhüllende | Rand der Fläche, die mehrere *Grenzkreise* zusammen bedecken, etwa je einer um jedes *Modell* einer *Einheit*; die *Karte* zeigt sie statt dieser *Grenzkreise*. Nur Anzeige wie ein *Grenzkreis* (Anliegen 6410 Punkt 2, Vorbild `ArbiterMap/docs/spec/interaction_map.md:538`).
-Eintrag | – | Eintrag | Zeile des *Protokolls* je *gemeinsam übergehen*: die *Einheit*, der die *Sperre* galt, ihr *Spieler* und jeder übergangene *Grund* (QUE-5.1, Anliegen 362 F4 A).
+Eintrag | – | Eintrag | Zeile des *Protokolls* je *gemeinsam übergehen*: die *Einheit*, der die *Sperre* oder das Anhalten galt, ihr *Spieler* und jeder übergangene *Grund* (QUE-5.1, Anliegen 362 F4 A).
 Fraktion | faction | fraktion | Zugehörigkeit einer *Einheit*, die ihr *Datenblatt* unter den Faction keywords nennt (`core_rules.txt:2483`, `:2484`). Arbiter führt je Fraktion ihre *Datenblätter*, bisher Orks und Necrons (Anliegen 4800 F2 B, 7005).
+Fliegen | Flying, FLY | fliegen | Fähigkeit einer *Einheit*, deren *Datenblatt* FLY nennt: In *Normaler Bewegung*, *Vorrücken* und Fall Back ziehen ihre *Modelle* über andere hinweg und durch *Nahkampfreichweite*, enden aber weder darauf noch darin (`core_rules.txt:871`, `:884`, `:888`).
 Formation | – | Formation | Anordnung, in der Arbiter die *Modelle* einer *Einheit* auf einmal *setzt*: Reihen parallel zur *Spielfeldkante* ihrer *Aufstellungszone*, mittig untereinander, so dicht, wie es `domaene/daten/formation.yaml` vorgibt (Anliegen 374 F2 A, 377 F1 A).
 ganz in | wholly within | ganzIn | Eine *Base* liegt ganz in einer Fläche, wenn jeder ihrer Punkte in der Fläche liegt, ihr Rand eingeschlossen (`core_rules.txt:473`).
-gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* aufheben; die gesperrte Handlung geschieht doch und steht im *Protokoll*; nie bei ‚keine Kohärenz‘ (`domaene/ziel.md`, `core_rules.txt:434`, Anliegen 2361 F1 A).
+gemeinsam übergehen | – | gemeinsamÜbergehen | Handlung, mit der beide *Spieler* einvernehmlich eine *Sperre* oder ein Anhalten aufheben, um den Stand am Tisch abzubilden; es steht im *Protokoll*; nie bei ‚keine Kohärenz‘ und ‚Base überdeckt‘ (`domaene/ziel.md`, `core_rules.txt:434`, Anliegen 2361 F1 A, 8840 F1 A).
 Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_rules.txt:506`).
 Grenzkreis | – | Grenzkreis | Leicht gezeigter Kreis auf der *Karte*, der eine Grenze für die *Base* eines *Modells* zeigt; nur Anzeige, er hält nichts an und sperrt nichts (Anliegen 6410, Vorbild `ArbiterMap/docs/spec/interaction_map.md:532`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
-Grund | – | Grund | Kurzer Name einer *Sperre*, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
+Grund | – | Grund (überEineBase) | Kurzer Name einer *Sperre* oder eines übergangenen Anhaltens, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz. ‚über eine Base‘ nennt Arbiter bis zum Item anhaltenAufDemWeg (`core_rules.txt:729`, Anliegen 8840).
 Karte | – | Karte | Abbild des *Spielfelds* mit seinen *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich in *Zoll*; sie bildet den Spielstand ab, nicht den exakten Tisch (`domaene/ziel.md`).
 Kohärenz | unit coherency | kohärenz | Zustand einer *Einheit*, deren *Modelle* als eine Gruppe beisammenstehen (`core_rules.txt:434`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
 Kommandophase | Command phase | kommandophase | Erste *Phase* eines Zugs (`core_rules.txt:641`).
@@ -50,12 +51,12 @@ Normale Bewegung | Normal Move | normaleBewegung | Bewegung einer *Einheit* in d
 Name | unit name | name | Name einer *Einheit*, wie ihn ihr *Datenblatt* nennt; jede *Einheit* hat einen (`core_rules.txt:552`, `:553`). Werte: Schlüssel der *Datenblätter* in `domaene/daten/katalog/`.
 Phase | phase | Phase (kommandophase, bewegungsphase, psiphase, schussphase, angriffsphase, nahkampfphase, moralphase) | Abschnitt eines Zugs; sieben in dieser Reihenfolge: *Kommandophase*, *Bewegungsphase*, Psiphase, Schussphase, Angriffsphase, Nahkampfphase, *Moralphase* (`core_rules.txt:639`).
 Profil | profile | profil | Werte einer *Modellart* auf ihrem *Datenblatt*, darunter die *Bewegungsweite*; jede *Modellart* hat eines (`core_rules.txt:561`, `:562`, `:565`). Werte in `domaene/daten/katalog/<fraktion>/datenblaetter.yaml`.
-Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).
+Protokoll | – | Protokoll | Liste, in der Arbiter festhält, wann die *Spieler* eine *Sperre* oder ein Anhalten *gemeinsam übergehen*; stets einsehbar (`domaene/ziel.md`).
 Roll-off | roll-off | RollOff | Beide *Spieler* würfeln je einen W6, der höhere gewinnt; bei Gleichstand wird wiederholt, kein Würfel darf neu gewürfelt oder verändert werden (`core_rules.txt:506`).
 Schlacht | battle | Schlacht | Folge der *Schlachtrunden* nach der *Aufstellung*; sie endet nach der letzten *Schlachtrunde* der *Mission* (`core_rules.txt:2333`, `:2337`). Wert in `domaene/daten/onlyWar.yaml`.
 Schlachtrunde | battle round | schlachtrunde | Teil der *Schlacht*, gezählt ab 1, in dem jeder *Spieler* einen Zug hat, zuerst der mit dem *ersten Zug* (`core_rules.txt:639`, `:667`).
 setzen | set up | setzen | Handlung, die ein *Modell* an eine *Stelle* bringt; danach ist es gesetzt (`core_rules.txt:2322`).
-Sperre | – | Sperre | Arbiter verweigert eine regelwidrige Handlung und nennt den *Grund*; *gemeinsam übergehen* nach `domaene/ziel.md`, außer ‚keine Kohärenz‘ (Anliegen 2361 F1 A).
+Sperre | – | Sperre | Arbiter verweigert eine regelwidrige Handlung und nennt den *Grund*; *gemeinsam übergehen* nach `domaene/ziel.md`, außer ‚keine Kohärenz‘ und ‚Base überdeckt‘ (Anliegen 2361 F1 A, 8840 F1 A).
 Spieler | player | Spieler | Einer der zwei Menschen am Gerät; jeder führt eine *Armee* (`core_rules.txt:305`).
 Spielfeld | battlefield | Spielfeld | Rechteckige Fläche, auf der die Schlacht geschlagen wird; die *Mission* nennt die Größe (`core_rules.txt:452`).
 Spielfeldkante | battlefield edge | Spielfeldkante | Eine der vier Kanten des *Spielfelds* (`core_rules.txt:452`, `:2320`).

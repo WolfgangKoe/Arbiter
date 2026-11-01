@@ -19,7 +19,6 @@ from tests.akzeptanz.handgriffe import (
 )
 
 schrägOhneHindernis = (Fraction(1), Fraction(2))
-ostenUndNorden = (Fraction(2), Fraction(3))
 
 phasenEinesZugs = (
     Phase.kommandophase,

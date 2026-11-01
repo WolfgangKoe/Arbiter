@@ -18,20 +18,16 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     aufstellenDerEinheitBeenden,
     dienstFür,
-    modellLoslassen,
     spielstandVon,
 )
 from tests.akzeptanz.handgriffe import (
     einheitenAufstellen,
-    modelleSetzen,
     nachDerWahlDerAufstellungszone,
     sperrgründe,
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
 from tests.akzeptanz.ziehen import modellZiehen
-
-übergehen = "gemeinsam übergehen"
 
 
 @dataclass(frozen=True)
@@ -43,15 +39,6 @@ class Loslassen:
 
 def inDerDomäneLoslassen(aufstellung, fall: Loslassen) -> None:
     aufstellung.modellLoslassen(fall.modell, fall.stelle)
-
-
-def imDienstLoslassen(dienst, aufstellung, fall: Loslassen):
-    return modellLoslassen(dienst, aufstellung, fall.einheit, fall.modell, fall.stelle)
-
-
-def amBildschirmLoslassen(seite, aufstellung, fall: Loslassen):
-    start = aufstellung.stelle(fall.modell)
-    return modellZiehen(seite, start, fall.stelle)
 
 
 def freieStelleDesSpielersAnDerReihe(aufstellung) -> Stelle:
@@ -106,75 +93,6 @@ def testAuf12_5EinSperrendesLoslassenNenntNichtWählbarUndLässtJedesModellWoEsW
 
     assert gründe == {Grund.nichtWählbar}
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
-
-
-def testAuf12_6EinSperrendesLoslassenNenntDenGrund(
-    aufstellungNachDerZonenwahl, sperrendesLoslassen
-):
-    gründe = sperrgründe(inDerDomäneLoslassen, aufstellungNachDerZonenwahl, sperrendesLoslassen)
-
-    assert gründe == {Grund.nichtWählbar}
-
-
-def testAuf12_6DerDienstAntwortetMitDemGrundUndDemStandWieDavor(
-    aufstellungNachDerZonenwahl, sperrendesLoslassen
-):
-    dienst = dienstFür(aufstellungNachDerZonenwahl)
-    davor = spielstandVon(dienst)
-
-    antwort = imDienstLoslassen(dienst, aufstellungNachDerZonenwahl, sperrendesLoslassen)
-
-    assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json()["gründe"] == [Grund.nichtWählbar.value]
-    assert antwort.get_json()["spielstand"] == davor
-
-
-def testAuf12_6DieSeiteNenntDenGrundUndBietetGemeinsamÜbergehenNichtAn(
-    bildschirm, aufstellungNachDerZonenwahl, sperrendesLoslassen
-):
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
-
-    antwort = amBildschirmLoslassen(seite, aufstellungNachDerZonenwahl, sperrendesLoslassen)
-    genannt = sperrmeldungWarten(seite, {Grund.nichtWählbar})
-
-    assert antwort.status == HTTPStatus.CONFLICT
-    assert genannt == gründeAlsText({Grund.nichtWählbar})
-    assert knopfDerSeite(seite, übergehen).count() == 0
-    assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
-
-
-def einAufgestelltesModellAufDieKarteZiehen(seite, aufstellung, boyz) -> None:
-    aufgestelltesModell, *_ = boyz.modelle
-    freieStelle = freieStelleDesSpielersAnDerReihe(aufstellung)
-    modellZiehen(seite, aufstellung.stelle(aufgestelltesModell), freieStelle)
-    sperrmeldungWarten(seite, {Grund.nichtWählbar})
-
-
-def testAuf12_6DieSeiteNenntDenGrundNochNachDemAuswählen(
-    bildschirm, aufstellungNachDerZonenwahl, boyz
-):
-    einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    einAufgestelltesModellAufDieKarteZiehen(seite, aufstellungNachDerZonenwahl, boyz)
-
-    klickenUndWarten(seite, "Spieler 1", "Warboss")
-
-    assert sperrmeldungWarten(seite, {Grund.nichtWählbar}) == gründeAlsText({Grund.nichtWählbar})
-
-
-def testAuf12_6DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
-    bildschirm, aufstellungNachDerZonenwahl, boyz, warboss, spielerEins
-):
-    einheitenAufstellen(aufstellungNachDerZonenwahl, 2)
-    (_, stelleDesWarboss), *_ = modelleSetzen(aufstellungNachDerZonenwahl, warboss, 1)
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
-    einAufgestelltesModellAufDieKarteZiehen(seite, aufstellungNachDerZonenwahl, boyz)
-    neueStelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
-
-    modellZiehen(seite, stelleDesWarboss, neueStelle)
-
-    assert sperrmeldungWarten(seite, set()) == frozenset()
 
 
 @sperrenBeimBeenden
