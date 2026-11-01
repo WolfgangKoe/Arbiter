@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der volle Lauf (`--voll`, 8 Kerne) auf dem Stand nach `Freigabe Review 9` fängt 96 %;
@@ -60,4 +60,5 @@ der volle Lauf 15-mal schneller als gemessen; die Messung bleibt 5866 s aus
 **Gegenvorschlag.** In Retro 9 und den [Kennzahlen](../../prozess/kennzahlen.md) die
 Messung aus 8961 behalten; diese Ausgabe ist Beleg für den Stand, nicht für die Dauer.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: [Retro 9](../retro.md) nennt die Dauer aus 8961, diese
+Ausgabe nur als Beleg; die Kennzahlen nennen keine Dauer.

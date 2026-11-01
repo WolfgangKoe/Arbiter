@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Von den 21 Überlebenden des vollen Laufs 9 ([8970](8970-vollerMutationslauf9AlleMutanten.md))
@@ -51,4 +51,8 @@ Zeilen. Mit den Einträgen: 180 gezählte Mutanten, drei Überlebende, 98 %; der
 **Gegenvorschlag.** Die zwölf Gründe in gleichwertig.json eintragen, Quelle und Fehler je
 Zeile wie oben.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: zehn Einträge in
+[gleichwertig.json](../../prozess/pruefungen/mutationsregeln/gleichwertig.json) für die zwölf
+(5 und 6, 7 und 8 je einer, gleiche Zeile). 12 deckt bis P4 der Retro 9 auch die gefangenen
+Mutanten in `anwendung.py` Zeilen 43 und 107 (gleicher Text), der Lauf zählt zwei weniger.
+Committen geht erst nach 9011 (Hook „proben“).

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Die Items werden gebaut, wie sie in der [Retro 9](../retro.md) stehen.
@@ -57,4 +57,5 @@ Regelumsetzer, ohne 5 entscheidest du ohne die Folgen. Ändern: Text der Retro.
 7. P7: Zeilen wie DoD 1, Zweige nur, wenn der Versuch sie vergleichbar misst; ein neues
    Paket kritisiere ich vor dem Einbau.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Retro 9: 1 P3, 2 P1, 3 P4, 4 P8, 5 Vorspann, P5,
+Folgen, 6 P6, 7 P7.

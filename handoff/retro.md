@@ -11,55 +11,56 @@ Kriterien belegt, davon Etappe 2: 57 von 63 (Zyklus 8: 95 von 123). Neu am Bilds
 
 ## Was geklappt hat
 Alle vier Items abgenommen. Der volle Mutationslauf brauchte auf 8 Kernen gut anderthalb
-statt drei Stunden, 96 % gefangen (8961).
+statt drei Stunden (8961, 8970).
 
 ## Was nicht geklappt hat
-1. 8 von 20 Hindernissen gingen an den Testautor, auch auf Opus: Vier Tests waren grün vor dem
-   Code (7300, 7320, 7400, 7660), zwei nie grün (7640, 8280). „Am Ende rot“ steht beim
-   [Testautor](../.claude/agents/testautor.md) nur als Text.
-2. Du suchtest einen Fehler in den Tests der *Leisten*, der aus einem Nachbarlauf kam; ein Lauf
-   mit `-x` meldete grün, ohne alle Prüfungen zu sehen (8022, 8042).
+1. 8 von 20 Hindernissen gingen an den Testautor: vier Tests grün vor dem Code (7300, 7320,
+   7400, 7660), zwei nie grün (7640, 8280).
+2. Du suchtest einen Fehler in den Tests der *Leisten* aus einem Nachbarlauf; ein Lauf mit
+   `-x` meldete grün, ohne alle Prüfungen zu sehen (8022, 8042).
 3. Ein neues Hindernis trug sofort „beseitigt“ (8951, 8962).
 
 Kennzahlen unter der Schwelle: Prozesslast 19 von 126, Prüfcode 843 gegen 1.093 Zeilen. Keine
-Neuerung von Claude Code ersetzt einen Mechanismus. 6361 ist nachgeprüft und erledigt.
+Neuerung von Claude Code ersetzt einen Mechanismus.
 
 ## Prozess-Items
-Eingeplant ist jedes Anliegen, das auf diese Phase wartet (dein Auftrag); P1 bis P3 gelten den
-Befunden.
-- P1 Tests rot vor dem Code (Regelumsetzer): Hakt der Testautor „Tests zu Item <k>“ ab, laufen
-  dessen Tests; ist einer grün, hakt der Befehl nicht ab, bis der Test den Zustand vorher prüft
-  oder begründet ist. Nicht erprobt, Rückweg: Commit zurücknehmen.
-- P2 Belege in der DoD (Organisationsentwickler), 8022, 8042, 8961, 6960:
-  [DoD](../prozess/ablauf/dod.md) 1 und 2 ohne `-x`, bei einem Lauf daneben auf einem Abzug in
-  `/tmp`, die Meldung nennt den Stand: „grün“ gilt für einen Stand, den es gab. Der volle
-  Mutationslauf nur im Zyklus, der die Etappe abschließen soll (Antwort A).
-- P3 Stand und Fortschritt (Regelumsetzer), 8962 mit 8951, 7030, 8990 (1): „beseitigt“ erst
-  durch einen Commit nach dem Hindernis, Items nur aus dem Abschnitt „Items“, der Stand lädt
-  schneller.
-- P4 Mutationslauf (Regelumsetzer), 8990 (5, 6, 8): Alle Kerne bleiben belegt, ein Test
-  belegt das; ein gleichwertiger Mutant gilt nur für seine Klasse.
-- P5 Sperren und Anliegen (Regelumsetzer), 3960, 6432, 8044: Python ohne Skriptdatei ist
-  gesperrt, die Regeln nennen die übrigen Lücken; fehlt die Zeile `Antwort:`, geht deine Antwort
-  nicht verloren; „UX“ gilt als Rolle; SonarLint 6.2.
-- P6 Dashboard (Regelumsetzer), 8860 mit 6988: Tokenbericht je Seite, Pfeile nur am
-  angeklickten Kasten, die Ansicht bleibt beim Neuladen.
-- P7 Abdeckung des Frontends (Regelumsetzer, dann Organisationsentwickler), 6471: Nach einem
-  Versuch in `/tmp` misst DoD 1 auch `technik/frontend/`: Verhalten ohne Test fällt ohne Lesen
-  auf. Unterschreitet der Bestand die Schwelle, fragt dich ein Anliegen.
-- P8 Rollen verlinkt, Wartendes im Plan (Organisationsentwickler), 6987, 7380: CLAUDE.md und die
-  drei Phasen verlinken die Rollen, jede Ordner-CLAUDE.md nur die ihrer Perspektive; der Plan
-  nennt die Anliegen, die auf seine Technikphase warten: Du siehst, wann das Aufräumen kommt.
-- P9 Formate (Organisationsentwickler), 6500, 7080: [Domäne](../domaene/CLAUDE.md) mit
-  `Etappe: <n>`; [Kennzahlen](../prozess/kennzahlen.md) ohne Summe der Architektur, ein voller
-  Vertrag wird Ordner.
+Eingeplant ist jedes Anliegen an diese Phase (dein Auftrag), Einzelheiten stehen in 9000 und
+9010. Erprobt ist keines, Rückweg: Commit `P<k>:` zurücknehmen.
+- P1 Tests rot vor dem Code (Regelumsetzer): Ist beim Abhaken der Tests eines Items einer
+  grün, meldet der Befehl dem Testautor ein Hindernis: rot machen oder die Stelle nennen, die
+  das Kriterium schon erfüllt; das prüft die Kritik.
+- P2 Belege in der DoD (Organisationsentwickler), 8022, 8042, 8961, 6960: DoD 1 und 2 ohne
+  `-x`, neben einem Lauf auf einem Abzug, die Meldung nennt den Stand; der volle
+  Mutationslauf nur im Zyklus, der die Etappe abschließt (Antwort A).
+- P3 Stand und Fortschritt (Regelumsetzer), 7030, 7031, 8951, 8962, 8990 (1): Items des Plans
+  nur aus „Items“; Commits gelingen, solange nur deren Tests fehlen (7031 C); „beseitigt“ erst
+  nach einem späteren Commit und mit `angenommen` oder `erledigt` auf der Platte; der Stand
+  lädt schneller.
+- P4 Mutationslauf (Regelumsetzer), 8990 (5, 6, 8): Alle Module laufen zugleich, ein Test
+  belegt das; ein gleichwertiger Mutant gilt nur in seiner Klasse oder Funktion.
+- P5 Sperren und Anliegen (Regelumsetzer), 9011, 3960, 6432, 8044: 9011 vor deiner Freigabe
+  (Commits an Prüfskripten scheitern). Python ohne Skriptdatei gesperrt, `pytest` nicht, je
+  Rolle geprobt; ohne Zeile `Antwort:` geht deine Antwort nicht verloren; „UX“ ist Rolle;
+  SonarLint 6.2.
+- P6 Dashboard (Regelumsetzer), 8860, 6988: Tokenbericht je Seite, Pfeile nur am angeklickten
+  Kasten, die Ansicht bleibt beim Neuladen; der Test, der nur Text sucht, entfällt.
+- P7 Abdeckung des Frontends (Regelumsetzer, dann Organisationsentwickler), 6471: Misst ein
+  Versuch die Zeilen von `technik/frontend/`, verlangt DoD 1 dort 95 %; liegt der Bestand
+  darunter, fragt dich ein Anliegen.
+- P8 Wartendes, Rollen (Regelumsetzer, dann Organisationsentwickler), 7380, 6987: Wartet ein
+  Anliegen auf eine Domänen- oder Technikphase, wird es dort ein Schritt im Fortschritt,
+  in der Retro steht es in einem Item. CLAUDE.md und die Phasen verlinken die Rollen,
+  Ordner-CLAUDE.md die ihrer Perspektive.
+- P9 Formate (Organisationsentwickler), 6500, 7080: Domäne mit `Etappe: <n>`;
+  Kennzahlen ohne Summe der Architektur, ein voller Vertrag wird Ordner.
 
 ## Empfehlung
 Beantworte F1 bis F3 in [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) im
 Dashboard; vorher wartet P6. Dann gib frei.
-Folgen: 10 Läufe zu je unter 120.000 Token, höchstens 1,2 Millionen. Der
-Regelumsetzer nacheinander, Bestand zuerst (306): P3, P5, P4, P6, P1, P7; ich daneben P2,
-P9, P8, dann P7. Die Domänenphase 10 beginnt nach 7 Läufen nacheinander.
+Folgen: 12 Läufe zu je unter 120.000 Token. Regelumsetzer nacheinander, Bestand zuerst
+(306): P3, P5, P4, P6, P1, P7, P8; ich daneben P2, P9, P7, P8; Domänenphase 10 nach 8
+Läufen. Rund 300 Zeilen Prüfcode zählen in Zyklus 10 (räumt auf, 8880); bei
+weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
@@ -67,7 +68,7 @@ P9, P8, dann P7. Die Domänenphase 10 beginnt nach 7 Läufen nacheinander.
 - [ ] Architekt: Kritik an der Retro
   Hindernis: Architekt → Organisationsentwickler: Ein wartendes Anliegen (7031) fehlt, P1, P4, P6, P7 und P8 lassen Fälle offen, Probe und Rückweg fehlen (Anliegen 9010)
   Hindernis: Architekt → Regelumsetzer: Ein Test der freien Nummern ist rot, seit Anliegen 9000 besteht; Commits der Prozess-Items scheitern daran (Anliegen 9011)
-- [ ] Organisationsentwickler: Nachkorrektur
+- [x] Organisationsentwickler: Nachkorrektur
 - [ ] Stakeholder: Freigabe Retro 9
 - [ ] Regelumsetzer: P1
 - [ ] Organisationsentwickler: P2
@@ -76,7 +77,7 @@ P9, P8, dann P7. Die Domänenphase 10 beginnt nach 7 Läufen nacheinander.
 - [ ] Regelumsetzer: P5
 - [ ] Regelumsetzer: P6
 - [ ] Regelumsetzer: P7
-- [ ] Organisationsentwickler: P8
+- [ ] Regelumsetzer: P8
 - [ ] Organisationsentwickler: P9
 - [ ] Koordinator: nach dev gepusht
 

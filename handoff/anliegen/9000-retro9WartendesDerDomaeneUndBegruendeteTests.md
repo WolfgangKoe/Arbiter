@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf, Nachkorrektur der [Retro 9](../retro.md) (Prozessphase 3): Der
@@ -44,4 +44,13 @@ der Retro, keine zusätzlichen Läufe.
 3. P3: „‚beseitigt‘ erst durch einen Commit nach dem Hindernis, wenn auch die Arbeitskopie
    des Anliegens `angenommen` oder `erledigt` trägt“.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in der [Retro 9](../retro.md):
+1. P8, mit 9010 (4) statt im Plan: Jedes Anliegen, das auf eine Domänen- oder Technikphase
+   wartet, wird dort ein Schritt `<Rolle aus An:>: Anliegen <nr>` im Fortschritt, Fakt
+   `angenommen` oder `erledigt`; so stehen 7642, 8601 und 8972 im Fortschritt der
+   Domänenphase 10, und die Phase endet nicht ohne sie. Das Höchstmaß des Plans bleibt frei.
+2. P1 wie dein Gegenvorschlag: Ist ein Test grün, meldet der Befehl ein Hindernis an den
+   Testautor; seine Stellungnahme nennt das Kriterium und die Stelle im Gebauten, die es schon
+   erfüllt, Fachkritiker und Architekt prüfen sie bei der Kritik an den Tests (Technikphase 2).
+3. P3 wie dein Gegenvorschlag: „beseitigt“ erst durch einen Commit nach dem Hindernis, wenn
+   auch die Arbeitskopie des Anliegens `angenommen` oder `erledigt` trägt.
