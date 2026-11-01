@@ -72,7 +72,7 @@ weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
 - [x] Stakeholder: Freigabe Retro 9
 - [x] Regelumsetzer: P1
 - [x] Organisationsentwickler: P2
-- [ ] Regelumsetzer: P3
+- [x] Regelumsetzer: P3
 - [ ] Regelumsetzer: P4
 - [ ] Regelumsetzer: P5
 - [ ] Regelumsetzer: P6
