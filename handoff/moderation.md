@@ -15,9 +15,9 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
   [8962](anliegen/8962-beseitigtVorDerNeuenRunde.md),
   [8990](anliegen/8990-rundgangReview9Pruefcode.md).
 - Organisationsentwickler: [6471](anliegen/6471-frontendOhneAbdeckung.md),
-  [7080](anliegen/7080-kennzahlenVertragAlsOrdner.md),
+  Anliegen 7080,
   [7380](anliegen/7380-wartendeAnliegenEinplanen.md),
-  [8022](anliegen/8022-testlaufNurAufEinemFestenStand.md),
+  Anliegen 8022,
   [8042](anliegen/8042-pruefungenVollstaendigLaufen.md); Nachprüfung 6500, 6960, 6987, 8961.
 - Reviewer: Nachprüfung 8970, 8973.
 
