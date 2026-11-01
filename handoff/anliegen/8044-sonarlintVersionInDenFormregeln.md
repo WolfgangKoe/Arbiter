@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Beim Nachgehen des Hinweises zu S5332 in `server.py` (das klärt Anliegen 8020

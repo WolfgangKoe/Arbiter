@@ -4,8 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Deine Frage: „Müsste in den Prämissen (speziell in Quadrant 1 und/oder 2) nicht

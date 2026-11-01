@@ -45,6 +45,9 @@ nach der [Domäne](../../domaene/CLAUDE.md) oder eine bestehende Regel, etwa „
 „(ArbiterMap)“, „(Anliegen 2362)“, „(Ich 4)“, sonst „(neu)“; eine neue empfiehlt die Rolle nur
 mit Grund aus dem Ziel ([Absicht 3](../praemissen/absicht.md), Anliegen 3820). Ja oder Nein
 zum Gegenvorschlag desselben Anliegens trägt dessen Quelle, so die Frage aus
-`standregeln/hindernis.py`. Mechanismus: nur Text.
+`standregeln/hindernis.py`. Jede Möglichkeit steht in einer eigenen Zeile `A: …`, `B: …`,
+`C: …` mit ihrer Quelle, darunter `Empfehlung: <Buchstabe>, <Grund>`, dann `Antwort: .`; der
+Stakeholder antwortet mit dem Buchstaben (Anliegen 9250). Mechanismus: nur Text; die Prüfung
+in `anliegenregeln/anliegen.py` ist beauftragt (Anliegen 9250).
 
 Status, Züge und wer dran ist: [Status der Anliegen](anliegenStatus.md).

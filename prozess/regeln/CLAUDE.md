@@ -2,7 +2,8 @@
 
 Welcher Mechanismus eine Regel durchsetzt und welcher Test ihn scheitern lässt (Perspektive
 Prozess). Je Ordner unter `prozess/pruefungen/` eine Datei gleichen Namens; Pfade darin
-gelten ab `prozess/pruefungen/`. Autor: Regelumsetzer, in jeder Phase
+gelten ab `prozess/pruefungen/`. Autor:
+[Regelumsetzer](../../.claude/agents/regelumsetzer.md), in jeder Phase
 ([Prozessphase](../ablauf/prozessphase.md)). Neue Regeln kommen, wenn sie gebraucht werden.
 
 Format: erste Zeile `# Regeln · <ordner>`, darunter die Tabelle
