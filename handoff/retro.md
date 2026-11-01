@@ -82,5 +82,5 @@ weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
