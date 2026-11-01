@@ -65,6 +65,8 @@ P9, P8, dann P7. Die Domänenphase 10 beginnt nach 7 Läufen nacheinander.
 - [x] Organisationsentwickler: Retro geschrieben
 - [ ] Fachkritiker: Kritik an der Retro
 - [ ] Architekt: Kritik an der Retro
+  Hindernis: Architekt → Organisationsentwickler: Ein wartendes Anliegen (7031) fehlt, P1, P4, P6, P7 und P8 lassen Fälle offen, Probe und Rückweg fehlen (Anliegen 9010)
+  Hindernis: Architekt → Regelumsetzer: Ein Test der freien Nummern ist rot, seit Anliegen 9000 besteht; Commits der Prozess-Items scheitern daran (Anliegen 9011)
 - [ ] Organisationsentwickler: Nachkorrektur
 - [ ] Stakeholder: Freigabe Retro 9
 - [ ] Regelumsetzer: P1
