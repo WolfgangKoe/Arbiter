@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Von den 21 Überlebenden des vollen Laufs 9 ([8970](8970-vollerMutationslauf9AlleMutanten.md))

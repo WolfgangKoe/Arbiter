@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der volle Lauf (`--voll`, 8 Kerne) auf dem Stand nach `Freigabe Review 9` fängt 96 %;

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hinweis des Stakeholders: Der Implementierer hat `prozess/pruefungen` nur mit
