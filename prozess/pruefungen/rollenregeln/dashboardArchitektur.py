@@ -2,7 +2,13 @@ import html
 import json
 from pathlib import Path
 
-from rollenregeln.architekturKanten import Kante, kantenMessen, kastenPfeile
+from rollenregeln.architekturKanten import (
+    Kante,
+    kantenMessen,
+    kastenDerKante,
+    kastenPfeile,
+    zyklischePfeile,
+)
 from rollenregeln.architekturMessung import (
     Kasten,
     Knoten,
@@ -87,7 +93,15 @@ def zeilenZeichnen(kästen: list[Kasten]) -> str:
 
 
 def kantenAlsJson(kanten: list[Kante]) -> str:
-    daten = [kante._asdict() | {"text": None} for kante in kanten] + [httpKante | {"text": "HTTP"}]
+    zyklisch = zyklischePfeile(kanten)
+    daten = [
+        kante._asdict()
+        | {
+            "text": None,
+            "zyklisch": (kastenDerKante(kante.von), kastenDerKante(kante.nach)) in zyklisch,
+        }
+        for kante in kanten
+    ] + [httpKante | {"text": "HTTP", "zyklisch": False}]
     return json.dumps(daten).replace("</", "<\\/")
 
 
@@ -110,6 +124,7 @@ def architekturSeite(wurzel: Path) -> str:
     return (
         f"<style>{architekturStil}</style>"
         f'<p class="muted">{urteil(kästen, kanten)} Ein Klick öffnet oder schließt einen Kasten. '
+        "Pfeile zeigt, worüber die Maus fährt oder was man antippt; Verbotene und Zyklen immer. "
         "Zahlen an Pfeilen: Importzeilen. Zeichen: Übersicht "
         f"{tausender(übersicht)} und Vertrag {tausender(vertrag)}.</p>"
         f'<div class="architektur" id="architektur">{zeilenZeichnen(kästen)}</div>'

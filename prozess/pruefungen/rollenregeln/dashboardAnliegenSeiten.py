@@ -37,10 +37,17 @@ neuladenSkript = """
 (function () {
   var stand = null;
   var geaendert = false;
+  var schluessel = "scroll:" + location.pathname + location.search;
+  window.addEventListener("load", function () {
+    window.scrollTo(0, Number(sessionStorage.getItem(schluessel)) || 0);
+  });
   document.addEventListener("input", function () { geaendert = true; });
   function pruefen() {
     fetch("/stand").then(function (antwort) { return antwort.text(); }).then(function (neu) {
-      if (stand !== null && neu !== stand && !geaendert) location.reload();
+      if (stand !== null && neu !== stand && !geaendert) {
+        sessionStorage.setItem(schluessel, String(window.scrollY));
+        location.reload();
+      }
       if (stand === null) stand = neu;
     }).catch(function () {});
   }

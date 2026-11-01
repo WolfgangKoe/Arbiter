@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nachprüfung von Anliegen 4140 an den
@@ -45,4 +44,10 @@ Erledigt, wenn Screenshots unter `/tmp` die Startansicht ohne geschnittenen Kast
 geöffnete Domäne mit allen Namen, Pfaden und Zahlen frei von Linien und eine hervorgehobene
 Datei zeigen, deren Pfeile man bis zu ihren Zielen verfolgen kann.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt mit Retro 9, P6 (Anliegen 8860, F2 mit Stakeholder-Kommentar):
+1 und 2 gelöst durch weniger Pfeile: Sie erscheinen nur beim Überfahren oder Antippen eines
+Kastens, Verbotene und Zyklen immer. Pfeile hinter den Kästen: nein, ein offener Ordner
+deckte die Pfeile seiner Kinder. 3: statt Klick auf die Datei das Überfahren. 4: der
+Textsuch-Test ist gestrichen; neu getestet ist die Zyklus-Markierung
+(`testEinZyklusZwischenKästenIstAnDenKantenMarkiert`). Das Skript im Browser prüft kein Test;
+Startansicht an `/tmp/arch6/start.png` ohne Pfeile gesehen, Überfahren nicht gesehen.

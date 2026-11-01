@@ -72,7 +72,6 @@ def testEinOrdnerÖffnetSichBisZurDateiUndLeereInitDateienFehlen(tmp_path):
         assert f'data-pfad="{pfad}"' in text
     assert "__init__.py" not in text
     assert 'class="ak ordner"' in text
-    assert "ak-kinder" in text and 'classList.toggle("offen")' in text
 
 
 def testPfeileZählenImportzeilenAusPythonJavaScriptUndHtml(tmp_path):
@@ -83,7 +82,7 @@ def testPfeileZählenImportzeilenAusPythonJavaScriptUndHtml(tmp_path):
     assert gemessen[("technik/frontend/index.html", "technik/frontend/seite.js")].anzahl == 1
     eingebettet = re.search(r'id="architektur-kanten">(.*?)</script>', seite(tmp_path))
     http = {"von": "technik/frontend", "nach": f"{produkt}/web", "anzahl": 0, "erlaubt": True}
-    assert http | {"text": "HTTP"} in json.loads(eingebettet.group(1))
+    assert http | {"text": "HTTP", "zyklisch": False} in json.loads(eingebettet.group(1))
 
 
 def testSeitenVerweiseAufDateienAußerhalbDerSeiteZählenNicht(tmp_path):
@@ -150,6 +149,26 @@ def testKastenPfeileFassenDieDateienZusammen(tmp_path):
     zusammen = kastenPfeile(list(kanten(tmp_path).values()))
     pfeile = {(pfeil.von, pfeil.nach): pfeil for pfeil in zusammen}
     assert pfeile[("web", "domaene")].anzahl == 2  # noqa: PLR2004
+
+
+def eingebetteteKanten(wurzel):
+    eingebettet = re.search(r'id="architektur-kanten">(.*?)</script>', seite(wurzel))
+    return json.loads(eingebettet.group(1))
+
+
+def testEinZyklusZwischenKästenIstAnDenKantenMarkiert(tmp_path):
+    baum(tmp_path)
+    datei(tmp_path, f"{produkt}/domaene/zurück.py", "from arbiter.web import server\n")
+    zyklisch = {
+        (kante["von"], kante["nach"]) for kante in eingebetteteKanten(tmp_path) if kante["zyklisch"]
+    }
+    assert (f"{produkt}/domaene/zurück.py", f"{produkt}/web/server.py") in zyklisch
+    assert (f"{produkt}/web/server.py", f"{produkt}/domaene/sperre.py") in zyklisch
+
+
+def testOhneZyklusIstKeineKanteAlsZyklischMarkiert(tmp_path):
+    baum(tmp_path)
+    assert not any(kante["zyklisch"] for kante in eingebetteteKanten(tmp_path))
 
 
 def testWebDarfDieDomäneNurSolangeAnwendungKeinenCodeHat():

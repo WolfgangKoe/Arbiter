@@ -77,9 +77,14 @@ architekturSkript = """
       var eintrag = summe[schluessel] || (summe[schluessel] = {
         von: von, nach: nach, anzahl: 0, erlaubt: true, text: kante.text});
       eintrag.anzahl += kante.anzahl;
-      eintrag.erlaubt = eintrag.erlaubt && kante.erlaubt;
+      eintrag.erlaubt = eintrag.erlaubt && kante.erlaubt && !kante.zyklisch;
     });
     return Object.keys(summe).map(function (schluessel) { return summe[schluessel]; });
+  }
+  var gewaehlt = null;
+  function gezeigt(pfeil) {
+    return !pfeil.erlaubt || (gewaehlt !== null &&
+      (enthalten(gewaehlt, pfeil.von) || enthalten(gewaehlt, pfeil.nach)));
   }
   function spitzen() {
     return '<defs><marker id="spitze" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" ' +
@@ -90,7 +95,7 @@ architekturSkript = """
   }
   function zeichnen() {
     var inhalt = spitzen();
-    zusammenfassen().forEach(function (pfeil) {
+    zusammenfassen().filter(gezeigt).forEach(function (pfeil) {
       var von = relativ(pfeil.von);
       var nach = relativ(pfeil.nach);
       var vonMitte = mitte(von);
@@ -115,9 +120,30 @@ architekturSkript = """
     var kasten = kopf && kopf.parentElement;
     if (!kasten || !kasten.classList.contains("ordner")) return;
     kasten.classList.toggle("offen");
+    merken();
     zeichnen();
   });
+  wurzel.addEventListener("mouseover", function (ereignis) {
+    gewaehlt = ereignis.target.closest(".ak");
+    zeichnen();
+  });
+  wurzel.addEventListener("mouseleave", function () {
+    gewaehlt = null;
+    zeichnen();
+  });
+  function merken() {
+    var offen = Array.prototype.map.call(wurzel.querySelectorAll(".ak.offen"),
+      function (kasten) { return kasten.dataset.pfad; });
+    sessionStorage.setItem("architektur:offen", JSON.stringify(offen));
+  }
+  function wiederherstellen() {
+    var offen = JSON.parse(sessionStorage.getItem("architektur:offen") || "[]");
+    wurzel.querySelectorAll(".ak.ordner").forEach(function (kasten) {
+      if (offen.indexOf(kasten.dataset.pfad) >= 0) kasten.classList.add("offen");
+    });
+  }
   window.addEventListener("resize", zeichnen);
+  wiederherstellen();
   zeichnen();
 })();
 """

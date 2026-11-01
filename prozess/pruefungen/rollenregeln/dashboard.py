@@ -6,7 +6,12 @@ from gemeinsam.pfade import wurzel
 from rollenregeln.dashboardDiagramm import histogramm, kilo, säulendiagramm
 from rollenregeln.dashboardGruppen import belegungNachRolle, nachSitzung, sitzungsTitel
 from rollenregeln.dashboardHinweise import hinweise, hinweisStil
-from rollenregeln.dashboardSeiten import schalterSkriptFür, schalterStil, seitenschalter
+from rollenregeln.dashboardSeiten import (
+    schalterStil,
+    seiteBegrenzt,
+    seitenschalter,
+    sitzungenDerSeite,
+)
 from rollenregeln.dashboardStil import legende, stil
 from rollenregeln.laufLesen import Lauf, läufeLesen
 from standregeln.phasenfolge import lage
@@ -76,16 +81,18 @@ def legendeErzeugen() -> str:
     return f'<section class="kasten legende"><h3>Legende</h3><ul>{punktListe}</ul></section>'
 
 
-def seiteErzeugen(läufe: list[Lauf], lageText: str = "", hinweisText: str = "") -> str:
+def seiteErzeugen(
+    läufe: list[Lauf], lageText: str = "", hinweisText: str = "", seite: int = 1
+) -> str:
     if läufe:
         sitzungen = list(nachSitzung(läufe).items())
-        neuesteZuerst = reversed(sitzungen)
-        karten = seitenschalter(len(sitzungen)) + "".join(
+        aktuell = seiteBegrenzt(seite, len(sitzungen))
+        neuesteZuerst = sitzungenDerSeite(sitzungen[::-1], aktuell)
+        karten = seitenschalter(len(sitzungen), aktuell) + "".join(
             sitzungsKarte(name, gruppe) for name, gruppe in neuesteZuerst
         )
         verteilung = histogramm(läufe) + rollenZeilen(läufe)
     else:
-        sitzungen = []
         karten = verteilung = "<p>Noch kein Lauf protokolliert.</p>"
     return (
         '<!doctype html><html lang="de"><head><meta charset="utf-8">'
@@ -96,16 +103,16 @@ def seiteErzeugen(läufe: list[Lauf], lageText: str = "", hinweisText: str = "")
         '<p class="muted">Belegung je Lauf und Sitzung.</p><div class="bericht-zeile">'
         f'<div class="karten-spalte">{karten}</div><aside class="seiten-spalte">'
         f'<section class="kasten"><h3>Verteilung der Tokenstände</h3>{verteilung}</section>'
-        f"{legendeErzeugen()}</aside></div>{schalterSkriptFür(len(sitzungen))}</body></html>\n"
+        f"{legendeErzeugen()}</aside></div></body></html>\n"
     )
 
 
-def dashboardSchreiben(ordner: Path) -> Path:
+def dashboardSchreiben(ordner: Path, seite: int = 1) -> Path:
     ziel = ordner / dashboardDatei
     aktuell = lage(ordner)
     lageText = f"{aktuell.alsText()} · {belegungAlsText(ordner, aktuell)}"
-    seite = seiteErzeugen(läufeLesen(ordner), lageText, hinweise(ordner))
-    ziel.write_text(seite, encoding="utf-8")
+    text = seiteErzeugen(läufeLesen(ordner), lageText, hinweise(ordner), seite)
+    ziel.write_text(text, encoding="utf-8")
     return ziel
 
 

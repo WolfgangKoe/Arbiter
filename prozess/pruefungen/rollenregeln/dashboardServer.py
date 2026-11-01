@@ -54,8 +54,13 @@ def weiterleitung(ort: str) -> Antwort:
     return Antwort(HTTPStatus.SEE_OTHER, ort=ort)
 
 
-def tokenbericht(ordner: Path) -> Antwort:
-    datei = dashboardSchreiben(ordner)
+def seitenNummer(frage: str) -> int:
+    angabe = feldwert(parse_qs(frage), "seite")
+    return int(angabe) if angabe.isdigit() else 1
+
+
+def tokenbericht(ordner: Path, frage: str) -> Antwort:
+    datei = dashboardSchreiben(ordner, seitenNummer(frage))
     zusatz = (
         f"<style>{seitenStil}</style>{navigation('Tokenbericht')}<script>{neuladenSkript}</script>"
     )
@@ -101,11 +106,12 @@ def fremderUrsprung(kopf: dict[str, str | None]) -> bool:
     return herkunft is not None and herkunft != f"{lokalesSchema}://{kopf.get('Host')}"
 
 
-def lesen(ordner: Path, pfad: str) -> Antwort:
+def lesen(ordner: Path, anfrage: str) -> Antwort:
+    pfad, _, frage = anfrage.partition("?")
     if pfad == "/":
         return text(anliegenSeite(ordner))
     if pfad == "/tokens":
-        return tokenbericht(ordner)
+        return tokenbericht(ordner, frage)
     if pfad == "/architektur":
         return text(seite("Architektur", "Architektur", architekturSeite(ordner)))
     if pfad == "/stand":
@@ -145,7 +151,8 @@ def anwendung(ordner: Path) -> Callable:
         länge = int(umgebung.get("CONTENT_LENGTH") or 0)
         körper = umgebung["wsgi.input"].read(länge)
         kopf = {"Origin": umgebung.get("HTTP_ORIGIN"), "Host": umgebung.get("HTTP_HOST", "")}
-        pfad = umgebung.get("PATH_INFO", "/")
+        frage = umgebung.get("QUERY_STRING")
+        pfad = umgebung.get("PATH_INFO", "/") + (f"?{frage}" if frage else "")
         antwort = antworten(ordner, umgebung["REQUEST_METHOD"], pfad, körper, kopf)
         zeilen = [("Content-Type", antwort.typ), ("Content-Length", str(len(antwort.inhalt)))]
         if antwort.ort:

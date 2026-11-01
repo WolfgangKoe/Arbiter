@@ -74,7 +74,7 @@ weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
 - [x] Organisationsentwickler: P2
 - [x] Regelumsetzer: P3
 - [x] Regelumsetzer: P4
-- [ ] Regelumsetzer: P5
+- [x] Regelumsetzer: P5
 - [ ] Regelumsetzer: P6
 - [ ] Regelumsetzer: P7
 - [ ] Regelumsetzer: P8

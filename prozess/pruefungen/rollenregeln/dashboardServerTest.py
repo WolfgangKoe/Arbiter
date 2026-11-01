@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import threading
@@ -142,6 +143,26 @@ def testVerworfenesStehtAufDerSeiteBisDerStakeholderEsGelesenHat(ordner):
 def testTokenberichtTrägtDenReiterZurAnliegenSeite(ordner):
     text = holen(ordner, "/tokens").inhalt.decode()
     assert '<a href="/">Anliegen</a>' in text and 'aria-current="page">Tokenbericht' in text
+
+
+def testTokenberichtLiefertNurDieSeiteAusDerAdresse(ordner):
+    protokoll = ordner / "prozess" / "dashboard" / "laeufe.jsonl"
+    protokoll.parent.mkdir(parents=True)
+    zeilen = [
+        {
+            "zeit": "2026-10-04T12:30:00",
+            "rolle": "planer",
+            "sitzung": f"{nummer:08d}-x",
+            "belegung": 5,
+        }
+        for nummer in range(8)
+    ]
+    protokoll.write_text("".join(json.dumps(zeile) + "\n" for zeile in zeilen), encoding="utf-8")
+    erste = holen(ordner, "/tokens").inhalt.decode()
+    zweite = holen(ordner, "/tokens?seite=2").inhalt.decode()
+    assert erste.count('class="sitzungs-karte"') == 6  # noqa: PLR2004
+    assert zweite.count('class="sitzungs-karte"') == 2  # noqa: PLR2004
+    assert "Sitzung 00000007" in erste and "Sitzung 00000007" not in zweite
 
 
 def testStandÄndertSichMitJederDateiInHandoff(ordner):

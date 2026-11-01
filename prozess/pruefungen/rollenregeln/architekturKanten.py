@@ -139,6 +139,26 @@ def kantenMessen(wurzel: Path, kästen: list[Kasten]) -> list[Kante]:
     ]
 
 
+def erreichbar(start: str, nachbarn: dict[str, set[str]]) -> set[str]:
+    gesehen: set[str] = set()
+    offen = [start]
+    while offen:
+        for nach in nachbarn.get(offen.pop(), set()) - gesehen:
+            gesehen.add(nach)
+            offen.append(nach)
+    return gesehen
+
+
+def zyklischePfeile(kanten: list[Kante]) -> set[tuple[str, str]]:
+    pfeile = kastenPfeile(kanten)
+    nachbarn: dict[str, set[str]] = {}
+    for pfeil in pfeile:
+        nachbarn.setdefault(pfeil.von, set()).add(pfeil.nach)
+    return {
+        (pfeil.von, pfeil.nach) for pfeil in pfeile if pfeil.von in erreichbar(pfeil.nach, nachbarn)
+    }
+
+
 def kastenPfeile(kanten: list[Kante]) -> list[Kante]:
     summe: dict[tuple[str, str], list] = {}
     for kante in kanten:
