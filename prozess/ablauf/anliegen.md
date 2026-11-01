@@ -47,7 +47,8 @@ mit Grund aus dem Ziel ([Absicht 3](../praemissen/absicht.md), Anliegen 3820). J
 zum Gegenvorschlag desselben Anliegens trägt dessen Quelle, so die Frage aus
 `standregeln/hindernis.py`. Jede Möglichkeit steht in einer eigenen Zeile `A: …`, `B: …`,
 `C: …` mit ihrer Quelle, darunter `Empfehlung: <Buchstabe>, <Grund>`, dann `Antwort: .`; der
-Stakeholder antwortet mit dem Buchstaben (Anliegen 9250). Mechanismus: nur Text; die Prüfung
-in `anliegenregeln/anliegen.py` ist beauftragt (Anliegen 9250).
+Stakeholder antwortet mit dem Buchstaben (Anliegen 9250). Mechanismus: Zeilen `A:` und
+`Empfehlung:` unter einer unbeantworteten Frage: `anliegenregeln/anliegen.py`
+([Anliegenregeln](../regeln/anliegenregeln.md)); Quelle und übrige Form: nur Text.
 
 Status, Züge und wer dran ist: [Status der Anliegen](anliegenStatus.md).

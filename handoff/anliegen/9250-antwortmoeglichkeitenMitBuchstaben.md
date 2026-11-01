@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Befund in Anliegen 8840: Die Antwortmöglichkeiten trugen keine Buchstaben
