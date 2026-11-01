@@ -4,8 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
