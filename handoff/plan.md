@@ -129,7 +129,7 @@ Begriffe aus 6998, 7000, 7005.
 - [x] Organisationsentwickler: Kritik am Review
   Hindernis: Organisationsentwickler → Reviewer: Im Review fehlen drei Änderungen am Prüfcode, darunter elf Mutanten, die nicht mehr zählen, und Plan 10 folgt noch nicht deiner Antwort in 8880. (Anliegen 8960); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
   Hindernis: Organisationsentwickler → Reviewer: Das Review nennt sieben von elf Mutanten, die wegen der Dataclass nicht zählen, es sind sechs; der Reviewer berichtigt zwei Wörter, wenn er die Zahl der Mutation nachträgt. (Anliegen 8960); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
-- [ ] Stakeholder: Freigabe Review 9
+- [x] Stakeholder: Freigabe Review 9
 
 ## Freigabe
 Freigabe: ja

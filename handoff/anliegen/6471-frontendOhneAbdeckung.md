@@ -5,7 +5,6 @@ Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: Prozessphase 9
 
 ## Runde 1
 **Befund.** Wartet ([Ich 3](../../prozess/praemissen/ich.md): keine Prüfung rot, kein Schritt
@@ -23,4 +22,7 @@ Bewegung), hängt jeder solche Fund an meinem Lesen.
 Neuland, nicht erprobt: Wie die Bildschirmtests (Playwright, Python) die Abdeckung von
 JavaScript messen, klärt vor dem Bau ein Wegwerf-Versuch in `/tmp`.
 
-**Stellungnahme.**
+**Stellungnahme.** Zugestimmt, statt Backlog als Prozess-Item P7 der [Retro 9](../retro.md)
+(Auftrag des Stakeholders, alle wartenden Anliegen einzuplanen): erst der Wegwerf-Versuch in
+`/tmp`, dann die Messung und die Schwelle in [DoD](../../prozess/ablauf/dod.md) 1;
+`angenommen`, sobald die Regel steht.

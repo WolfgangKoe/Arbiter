@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** Lücken in [Review 8](../review.md), die erst beim nächsten Review zählen:
@@ -50,3 +49,7 @@ ein Test; unter Code in einem Halbsatz, was am Code nachgebaut ist.
 5. Wo der Stakeholder antwortet, steht zuerst meine Empfehlung, dann wie er antwortet.
 
 Nachprüfbar erst am fertigen Review 9, darum `Wartet auf: Prozessphase 9`.
+
+**Nachprüfung (Organisationsentwickler).** In [Review 9](../review.md) erfüllt: Dateien als
+Link, das Nächste Vorgehen mit Belegen (Commit, 57 von 63), was nur ein Test zeigt, mit Link
+auf den Test, die Empfehlung vor der Antwort. Darum `erledigt`.

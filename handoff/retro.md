@@ -1,137 +1,83 @@
-# Retro · Zyklus 8
+# Retro · Zyklus 9
 
 Dashboard: im Projektordner
 `python3 prozess/pruefungen/gemeinsam/lauf.py rollenregeln.dashboardServer` starten,
 `http://127.0.0.1:8765/` öffnen, Strg+C beendet.
 
-Etappe 2 von 10 (Phasen und Bewegungsphase) läuft ([Review 8](review.md)); 95 von 123
-Kriterien belegt (Zyklus 7: 78 von 108). Neu am Bildschirm: „Erster Zug“, *Schlachtrunden*
-mit „Phase beenden“, in der *Bewegungsphase* ein Zug bis zur *Bewegungsweite*, Sperre über
-eine fremde *Base* und in *Nahkampfreichweite*, ‚keine Kohärenz‘ beim Phasenende,
-Schlachtende nach Runde 5.
+Etappe 2 von 10 (Phasen und Bewegungsphase) läuft ([Review 9](review.md)); 132 von 151
+Kriterien belegt, davon Etappe 2: 57 von 63 (Zyklus 8: 95 von 123). Neu am Bildschirm:
+„gemeinsam übergehen“ mit *Protokoll*, *Auswahl* von *Einheit* oder *Modell*, *Grenzkreise*,
+*Vorrücken* samt Zurücknehmen, Anhalten an der Grenze, ein- und ausfahrende *Leisten*.
 
 ## Was geklappt hat
-Alle drei Items abgenommen, DoD erfüllt, 17 Kriterien mehr belegt. Die Kritik am Review fand
-vor deiner Freigabe, was der Klickpfad ausließ (6335, 6360).
+Alle vier Items abgenommen. Der volle Mutationslauf brauchte auf 8 Kernen gut anderthalb
+statt drei Stunden, 96 % gefangen (8961).
 
 ## Was nicht geklappt hat
-1. 6 der 12 Hindernisse gingen an den Testautor: Tests prüften nur einen Fall (nur Spieler 1,
-   nur Runde 1, nur auf den Achsen); die Mutation fing zuerst 84 %. Damit trat der Auslöser
-   „Testautor auf Opus“ ein ([Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md)).
-2. Zwei Verhalten kamen ohne Test: Das Greifen am Rand (AUF-8.7) fand die Kritik am Code
-   (6101). ‚Nahkampfreichweite‘ sperrt in der *Bewegungsphase*, wie BEW-1.5 und QUE-1.3
-   verlangen, der Test fehlt (6241, Technikphase 9). „Kein Verhalten ohne Test“ steht in
-   [Es 3](../prozess/praemissen/es.md) und beim [Implementierer](../.claude/agents/implementierer.md),
-   darum kein Item. Im Frontend fängt es nur die Kritik am Code (6471, Prozessphase 9).
-3. 572 neue Zeilen Prüfcode gegen 530 Produktcode: über der Schwelle. Prozesslast 13 von 93
-   Anliegen: darunter. Darum beauftragt diese Retro keinen neuen Mechanismus außer auf deinen
-   Wunsch, und 3960 (weitere Bash-Sperren) wartet auf Prozessphase 9.
-4. Deine Frage nach den Kommentaren (6430): Im Produkt steht kein `#`, aber 71 Docstrings,
-   38 mit Kennungen wie „(QUE-10.5)“; mit Tests und Prüfcode rund 500. Du hast in 6431 F1 A
-   gewählt: Ein Docstring bleibt nur als Kopf einer Testdatei, die Überschrift ihrer
-   Anforderung mit Kürzel (`"""AUF-7 · Einheit in Aufstellung."""`,
-   [T1](../technik/architektur/tests.md), geprüft von `spiegel.py`), heute 31; alle übrigen
-   fallen, was ein Modul tut, sagt sein Name. F1 gilt nur Docstrings: `# Warum:` in
-   `pyproject.toml` und die Fundstellen in den Daten-YAML bleiben, Es 8 und `kommentare.py`
-   erfassen sie nicht.
-5. Das Dashboard verwirft deine Antwort, wenn unter der Frage keine Zeile `Antwort:` steht;
-   die Prüfung der Anliegen verlangt „Ux“ statt „UX“ (6432 an den Regelumsetzer).
+1. 8 von 20 Hindernissen gingen an den Testautor, auch auf Opus: Vier Tests waren grün vor dem
+   Code (7300, 7320, 7400, 7660), zwei nie grün (7640, 8280). „Am Ende rot“ steht beim
+   [Testautor](../.claude/agents/testautor.md) nur als Text.
+2. Du suchtest einen Fehler in den Tests der *Leisten*, der aus einem Nachbarlauf kam; ein Lauf
+   mit `-x` meldete grün, ohne alle Prüfungen zu sehen (8022, 8042).
+3. Ein neues Hindernis trug sofort „beseitigt“ (8951, 8962).
 
-Nicht bestätigt: `.venv/bin/python -c` war in meinem Lauf gesperrt; der Befehl zum Abhaken
-nimmt mit Absicht nur eigene Schritte. Ins [Backlog](../prozess/backlog.md): Abkürzungen in
-zusammengesetzten Namen, tote Links, Formfehler erst beim Commit, Kommentare im Chat,
-lange Läufe, `gleichwertig.json` für den Testautor.
+Kennzahlen unter der Schwelle: Prozesslast 19 von 126, Prüfcode 843 gegen 1.093 Zeilen. Keine
+Neuerung von Claude Code ersetzt einen Mechanismus. 6361 ist nachgeprüft und erledigt.
 
 ## Prozess-Items
-P1 gilt Befund 1; sonst deine Aufträge 6430, 6380, 4040, 3550, 6960.
-- P1 Tests für jeden Fall (Organisationsentwickler): Nach deiner Antwort F2 A läuft der
-  Testautor auf Opus (`model: opus` in seiner Definition); der Auslöser fällt aus
-  [Rollen mit Auslöser](../prozess/ablauf/rollenMitAusloeser.md). Danach prüft ein Test eher
-  gleich, was für beide Spieler oder jede Runde gilt; jeder Lauf des Testautors kostet je
-  Token doppelt so viel. Nach deiner Antwort B in Anliegen 6640
-  zeigt seine [Anleitung](../.claude/skills/akzeptanztest-schreiben/SKILL.md) zudem das
-  Gegenbeispiel „nur Spieler 1“: ein Test, der nur einen Spieler prüft, mit Grund.
-- P3 Prämissen nach deinen Antworten (Organisationsentwickler): Es 8 nach F1 A (Befund 4):
-  Docstring nur als Kopf der Testdatei nach T1, sonst keiner; unter `technik/` rot ab der
-  Technikphase 9 (Mechanismus P4). Es S: „sein Name nennt sie“. Die sechs Verschiebungen
-  nach F3 A (6380): Ich 1 ohne „die Moderation listet … zuoberst“, dafür „Fragen an dich nur
-  in einem Anliegen“ statt Ich 5 „als Datei in `handoff/`“; Ich 2 verlinkt die
-  [Rollenregeln](../prozess/regeln/rollenregeln.md) statt Skripte und Lücken zu nennen; die
-  Einordnung aus Ich 3 nach [Kritik](../prozess/ablauf/kritik.md); „Akzeptanztests entstehen
-  vor dem Code“ aus der Root-CLAUDE.md nach Es; Es L und I ohne „Noch ohne Anlass“. Dazu das
-  Kürzel je Phase in der Domäne (4620). Ich wird rund 1.000 Zeichen kürzer.
-- P4 Docstrings im Prüfcode (Regelumsetzer), nach P3: `formregeln/kommentare.py` lässt einen
-  Docstring nur noch als Modul-Docstring einer Akzeptanztestdatei zu
-  (`technik/tests/akzeptanz/**/<name>Test.py`; den Wortlaut prüft weiter `spiegel.py`). Jeder
-  andere, auch einzeilig, in Modul, Klasse oder Funktion, auch in `handgriffe.py` und
-  `conftest.py`, ist rot: „Docstring nur als Spiegel der Anforderung (Es 8)“; die Prüfungen
-  „einzeilig“ und „TODO im Docstring“ entfallen.
-  1. Zuerst entfernt er die 282 Docstrings in `prozess/pruefungen/`, je Lauf unter 120.000
-     Token ein `P4 Zwischenstand`; ist der Docstring die einzige Anweisung (`Umleitung` in
-     `rollenregeln/bashSchreiben.py`), tritt `...` an seine Stelle. `standregeln/` erst nach
-     4301, es ändert dieselben Dateien.
-  2. Dann die Prüfung: außerhalb von `technik/` im Test mit Marke `stand`; unter `technik/` in
-     einem eigenen Test ohne `stand`, erst ab `Freigabe Plan 9` (Schwelle wie
-     `ersteGeprüfteTechnikphase` in `formregeln/technikphase.py`). So ist er in der DoD rot
-     (`python3 -m pytest prozess/pruefungen`), hält aber keinen Commit auf. Scheiter-Tests:
-     Docstring von Modul und Funktion im Prüfcode rot; Kopf einer Akzeptanztestdatei grün,
-     eine Funktion darin mit Docstring rot; unter `technik/` vor Plan 9 grün, ab Plan 9 rot.
-     Dazu die Zeile Kommentare in den [Formregeln](../prozess/regeln/formregeln.md).
-  3. Je ein Anliegen mit `Wartet auf: Technikphase 9` an den Testautor (118 Docstrings in
-     `technik/tests/akzeptanz/` außer den 31 Köpfen, sechs Fixtures bestehen nur aus ihm) und
-     an den Implementierer (71 in `technik/arbiter/`, einer in `technik/tests/einheit/`).
-- P5 Ablauf schlanker (Organisationsentwickler): Streichungen 1 bis 6 aus
-  Anliegen 4040; an einer Kopie in `/tmp`
-  arbeiten und committen alle Rollen wie vorher.
-- P6 Regeln schlanker (Regelumsetzer): Punkt 7 aus 4040, das Format `Hindernis:` einmal
-  (4120), dazu 3780, Punkt 1.
-- P7 Belegte Kriterien je Etappe (Regelumsetzer): Stand und Dashboard zeigen „Etappe 2: x von
-  y Kriterien belegt“ neben allen (3550, A). Ein Kriterium zählt zur Etappe aus `(Etappe <n>)`
-  am Satzende, sonst aus `Etappe: <n>` seiner Anforderung, ohne beides nur unter allen
-  (Annahme bis zur Antwort des Anforderungsautors, [6500](anliegen/6500-etappeEinesKriteriums.md)).
-- P8 Mutationslauf früher (Organisationsentwickler), nach deinen Antworten in
-  [6960](anliegen/6960-mutationslaufFrueherStarten.md): Ab Technikphase 9 startet der
-  Koordinator den vollen Lauf, sobald die DoD über das Inkrement grün ist, nicht erst mit der
-  Prozessphase; ändert sich `technik/` danach, startet er neu ([DoD](../prozess/ablauf/dod.md)).
-- P9 Mutationslauf zeigt und merkt je Modul (Regelumsetzer), nach P8: `mutation.py` schreibt
-  je fertigem Modul sofort eine Zeile ins Protokoll (Modul, Mutanten, Überlebende) und das
-  Ergebnis in `.git/arbiter/mutation.json`; ein unterbrochener Lauf beim gleichen Stand
-  übernimmt die fertigen Module. Scheiter-Tests in `mutationTest.py`: nach dem ersten Modul
-  steht seine Zeile, bevor das zweite fertig ist; ein nach dem ersten Modul abgebrochener Lauf
-  prüft es beim nächsten nicht neu. Dazu die Zeile in den
-  [Mutationsregeln](../prozess/regeln/mutationsregeln.md), `--voll` „nach der DoD über das
-  Inkrement“ statt „für die Retro“.
+Eingeplant ist jedes Anliegen, das auf diese Phase wartet (dein Auftrag); P1 bis P3 gelten den
+Befunden.
+- P1 Tests rot vor dem Code (Regelumsetzer): Hakt der Testautor „Tests zu Item <k>“ ab, laufen
+  dessen Tests; ist einer grün, hakt der Befehl nicht ab, bis der Test den Zustand vorher prüft
+  oder begründet ist. Nicht erprobt, Rückweg: Commit zurücknehmen.
+- P2 Belege in der DoD (Organisationsentwickler), 8022, 8042, 8961, 6960:
+  [DoD](../prozess/ablauf/dod.md) 1 und 2 ohne `-x`, bei einem Lauf daneben auf einem Abzug in
+  `/tmp`, die Meldung nennt den Stand: „grün“ gilt für einen Stand, den es gab. Der volle
+  Mutationslauf nur im Zyklus, der die Etappe abschließen soll (Antwort A).
+- P3 Stand und Fortschritt (Regelumsetzer), 8962 mit 8951, 7030, 8990 (1): „beseitigt“ erst
+  durch einen Commit nach dem Hindernis, Items nur aus dem Abschnitt „Items“, der Stand lädt
+  schneller.
+- P4 Mutationslauf (Regelumsetzer), 8990 (5, 6, 8): Alle Kerne bleiben belegt, ein Test
+  belegt das; ein gleichwertiger Mutant gilt nur für seine Klasse.
+- P5 Sperren und Anliegen (Regelumsetzer), 3960, 6432, 8044: Python ohne Skriptdatei ist
+  gesperrt, die Regeln nennen die übrigen Lücken; fehlt die Zeile `Antwort:`, geht deine Antwort
+  nicht verloren; „UX“ gilt als Rolle; SonarLint 6.2.
+- P6 Dashboard (Regelumsetzer), 8860 mit 6988: Tokenbericht je Seite, Pfeile nur am
+  angeklickten Kasten, die Ansicht bleibt beim Neuladen.
+- P7 Abdeckung des Frontends (Regelumsetzer, dann Organisationsentwickler), 6471: Nach einem
+  Versuch in `/tmp` misst DoD 1 auch `technik/frontend/`: Verhalten ohne Test fällt ohne Lesen
+  auf. Unterschreitet der Bestand die Schwelle, fragt dich ein Anliegen.
+- P8 Rollen verlinkt, Wartendes im Plan (Organisationsentwickler), 6987, 7380: CLAUDE.md und die
+  drei Phasen verlinken die Rollen, jede Ordner-CLAUDE.md nur die ihrer Perspektive; der Plan
+  nennt die Anliegen, die auf seine Technikphase warten: Du siehst, wann das Aufräumen kommt.
+- P9 Formate (Organisationsentwickler), 6500, 7080: [Domäne](../domaene/CLAUDE.md) mit
+  `Etappe: <n>`; [Kennzahlen](../prozess/kennzahlen.md) ohne Summe der Architektur, ein voller
+  Vertrag wird Ordner.
 
 ## Empfehlung
-Für dich ist nichts zu tun. Der Regelumsetzer arbeitet nach deiner Entscheidung in dieser
-Reihenfolge: die Hook-Zeile aus Anliegen 6760; 3780
-Punkt 4, ob `Wartet auf` eine Phase oder eine Nummer nennt, an einer Stelle statt an vier
-(Anliegen 3780); keine Testzeilen im Fortschritt für ein
-Item ohne Kriterium (Anliegen 4301); P4 nach 4301,
-ohne Teilung um `standregeln/`, weil beide dort ändern; P9 nach P4, es wirkt ab der
-Technikphase 9 (6960, F3); zuletzt der Reiter Architektur
-(Anliegen 4140): erst Bestand abbauen, dann
-Neues (306).
+Beantworte F1 bis F3 in [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) im
+Dashboard; vorher wartet P6. Dann gib frei.
+Folgen: 10 Läufe zu je unter 120.000 Token, höchstens 1,2 Millionen. Der
+Regelumsetzer nacheinander, Bestand zuerst (306): P3, P5, P4, P6, P1, P7; ich daneben P2,
+P9, P8, dann P7. Die Domänenphase 10 beginnt nach 7 Läufen nacheinander.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
-- [x] Fachkritiker: Kritik an der Retro
-  Hindernis: Fachkritiker → Organisationsentwickler: P2 nähme die von BEW-1.5 und QUE-1.3 verlangte Sperre ‚Nahkampfreichweite‘ weg; P7 nennt einen falschen Stand zu Etappe: (Anliegen 6450); beseitigt: Commit „Nachkorrektur Retro 8, Rückfrage des Stakeholders zu 6431“
-- [x] Architekt: Kritik an der Retro
-  Hindernis: Architekt → Organisationsentwickler: F1 widerspricht T1, P2 steht schon, P7 zählt ungeregelt (Anliegen 6470); beseitigt: Commit „Nachkorrektur Retro 8, Rückfrage des Stakeholders zu 6431“
-- [x] Organisationsentwickler: Nachkorrektur
-- [x] Stakeholder: Freigabe Retro 8
-- [x] Organisationsentwickler: P1
-- [x] Organisationsentwickler: P3
-- [x] Regelumsetzer: P4
-- [x] Organisationsentwickler: P5
-- [x] Regelumsetzer: P6
-- [x] Regelumsetzer: P7
-- [x] Organisationsentwickler: P8
-- [x] Regelumsetzer: P9
-- [x] Koordinator: nach dev gepusht
+- [ ] Fachkritiker: Kritik an der Retro
+- [ ] Architekt: Kritik an der Retro
+- [ ] Organisationsentwickler: Nachkorrektur
+- [ ] Stakeholder: Freigabe Retro 9
+- [ ] Regelumsetzer: P1
+- [ ] Organisationsentwickler: P2
+- [ ] Regelumsetzer: P3
+- [ ] Regelumsetzer: P4
+- [ ] Regelumsetzer: P5
+- [ ] Regelumsetzer: P6
+- [ ] Regelumsetzer: P7
+- [ ] Organisationsentwickler: P8
+- [ ] Organisationsentwickler: P9
+- [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: ja
-Kommentar: Zu P1, bitte nochmal erläutern, was esmit dem Gegenbeispiel auf sich hatte. Viellicht habe ich etwas missverstanden.
-Stellungnahme: Erläutert in Anliegen 6640, dort F1 mit Empfehlung; P1 im Abschnitt Prozess-Items verweist darauf.
+Freigabe: offen
+Kommentar: .
