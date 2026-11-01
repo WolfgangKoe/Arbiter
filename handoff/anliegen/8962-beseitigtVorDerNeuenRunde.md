@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** [beseitigt.py](../../prozess/pruefungen/standregeln/beseitigt.py), Zeile 30, liest

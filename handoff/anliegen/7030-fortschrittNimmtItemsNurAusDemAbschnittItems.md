@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase 9
+Status: erledigt
 
 ## Runde 1
 **Befund.** `lesen/plan.py` (`itemNamen`) nimmt jeden Link auf `../domaene/items/` im ganzen
@@ -29,3 +28,7 @@ freigegeben hat. Die Änderung: ein Abschnittsfilter in `itemNamen` und ein Sche
 **Stellungnahme.** Umgesetzt in Retro 9 P3: [plan.py](../../prozess/pruefungen/lesen/plan.py)
 (`abschnittItems`), Scheiter-Test in [planTest.py](../../prozess/pruefungen/lesen/planTest.py)
 (Link unter `## Danach` oder vor `## Items` ergibt kein Item). `erledigt` folgt dem Haken P3.
+
+**Nachprüfung.** `abschnittItems` liest nur unter `## Items` bis zur nächsten `## `-Zeile, wie
+vorgeschlagen; beide Scheiter-Tests grün, Haken P3 in der [Retro](../retro.md) gesetzt. Der
+Plan führt seine Items unter `## Items`. Erledigt.
