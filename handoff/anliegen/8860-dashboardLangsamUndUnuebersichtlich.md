@@ -3,8 +3,9 @@
 Form: Kritik
 Von: Stakeholder
 An: Regelumsetzer
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
+Wartet auf: Prozessphase 10
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -48,3 +49,13 @@ Antwort: .
 Kommentar: F2: Kann man die Kästen nicht so anordnen, dass die Pfeile dies nicht überkreuzen. Außerdem nur die Pfeile anzeigen, wenn ich über einen Kasten drübergehe. Problematische Pfeile immer anzeigen. Auch so etwas wie Zyklen. Ansonsten wie empfoheln.
 Stellungnahme: Umgesetzt (Retro 9, P6): `/tokens?seite=n` rendert nur sechs Sitzungen (`dashboardSeiten.py`, `dashboardServer.py`); Pfeile der Architektur nur beim Überfahren oder Antippen, Verbotene und Zyklen immer rot, Kästen nach Schicht; offene Kästen und Scrollstand bleiben beim Neuladen (`sessionStorage`). Das Skript im Browser prüft kein Test.
 Kommentar: Ja.
+
+## Runde 2
+**Befund.** Wortlaut des Stakeholders:
+„Ich habe immer noch den Eindruck, dass das Laden der Anliegen- und des Tokenberichts mehrere Sekunden dauert. Prüfe in der nächsten Prozessphase, woran das liegt. Irgendetwas sorgt dafür, dass die Ladezeit sehr lang ist.“
+
+**Kosten.**
+
+**Gegenvorschlag.**
+
+**Stellungnahme.**
