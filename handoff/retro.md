@@ -69,7 +69,7 @@ weniger Produktcode löscht Retro 10 einen Mechanismus vor jedem neuen.
   Hindernis: Architekt → Organisationsentwickler: Ein wartendes Anliegen (7031) fehlt, P1, P4, P6, P7 und P8 lassen Fälle offen, Probe und Rückweg fehlen (Anliegen 9010); beseitigt: Commit „Retro 9 nach Kritik nachgebessert: 9000, 9010, 8970 und 8973 angenommen“
   Hindernis: Architekt → Regelumsetzer: Ein Test der freien Nummern ist rot, seit Anliegen 9000 besteht; Commits der Prozess-Items scheitern daran (Anliegen 9011); beseitigt: Commit „Kritik an Retro 9 nachgeprüft, Test der freien Nummern repariert“
 - [x] Organisationsentwickler: Nachkorrektur
-- [ ] Stakeholder: Freigabe Retro 9
+- [x] Stakeholder: Freigabe Retro 9
 - [ ] Regelumsetzer: P1
 - [ ] Organisationsentwickler: P2
 - [ ] Regelumsetzer: P3
