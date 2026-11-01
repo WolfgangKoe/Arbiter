@@ -55,7 +55,7 @@ Die 23 schon begründeten, Grund je Eintrag in
 
 **Kosten.** Am Bildschirm: nichts. Für Retro 9: Nimmt sie 393 s als Dauer mit 8 Kernen, wirkt
 der volle Lauf 15-mal schneller als gemessen; die Messung bleibt 5866 s aus
-[8961](8961-vollerMutationslaufJeEtappe.md). Token: keine.
+Anliegen 8961. Token: keine.
 
 **Gegenvorschlag.** In Retro 9 und den [Kennzahlen](../../prozess/kennzahlen.md) die
 Messung aus 8961 behalten; diese Ausgabe ist Beleg für den Stand, nicht für die Dauer.
