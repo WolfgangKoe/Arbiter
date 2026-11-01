@@ -18,7 +18,7 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
   Anliegen 7080,
   [7380](anliegen/7380-wartendeAnliegenEinplanen.md),
   Anliegen 8022,
-  [8042](anliegen/8042-pruefungenVollstaendigLaufen.md); Nachprüfung 6500, 6960, 6987, 8961.
+  Anliegen 8042; Nachprüfung 6500, 6960, 6987, 8961.
 - Reviewer: Nachprüfung 8970, 8973.
 
 ## Vorschläge

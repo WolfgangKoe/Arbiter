@@ -10,7 +10,7 @@ Wartet auf: Technikphase 10
 ## Runde 1
 **Befund.** Der volle Mutationslauf von Zyklus 9 fängt 96 %, der gezielte über die
 geänderten Zeilen 93 %, unter der Schwelle (Ausgaben in
-[8970](8970-vollerMutationslauf9AlleMutanten.md)); darunter wird nach der
+Anliegen 8970); darunter wird nach der
 [DoD](../../prozess/ablauf/dod.md) jeder Überlebende angegangen. Acht sind Lücken in den
 Tests, 1 und 2 in geänderten Zeilen; jeder ist am Code nachgeprüft:
 1. [messen.py, Zeile 149](../../technik/arbiter/domaene/messen.py#L149), `schritte == 0` wird

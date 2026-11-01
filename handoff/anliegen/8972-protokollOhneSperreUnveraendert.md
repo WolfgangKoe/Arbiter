@@ -9,7 +9,7 @@ Wartet auf: Domänenphase 10
 
 ## Runde 1
 **Befund.** Der volle Mutationslauf von Zyklus 9 (Ausgabe in
-[8970](8970-vollerMutationslauf9AlleMutanten.md)) zeigt einen ungeregelten Fall:
+Anliegen 8970) zeigt einen ungeregelten Fall:
 [schlachtrunden.py, Zeile 131](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py#L131),
 `if gründe and self._amZug is not None`, `And wird Or`. Mit dem Mutanten schreibt jedes
 Loslassen eines *Modells* ohne *Sperre* einen *Eintrag* ohne *Grund* ins *Protokoll*, und alle

@@ -59,9 +59,9 @@ unter `domaene/mockups/` liegen nur noch die der offenen Items. Anliegen 8760 is
 `erledigteLoeschen.py` hat es nach dem Commit gelöscht, wie vorgesehen.
 Mutation: **nicht erfüllt.** Der gezielte Lauf über die geänderten Zeilen fängt 93 % von 190
 Mutanten, die Schwelle ist 95 %; der volle 96 % von 628
-([8970](anliegen/8970-vollerMutationslauf9AlleMutanten.md)). Am Bildschirm ändert das
+(Anliegen 8970). Am Bildschirm ändert das
 nichts. Von den 21 Überlebenden sind zwölf gleichwertig, Begründung trägt der
-Organisationsentwickler ein ([8973](anliegen/8973-gleichwertigeMutantenVollerLauf9.md));
+Organisationsentwickler ein (Anliegen 8973);
 danach 98 %. Acht Tests fehlen, Technikphase 10 ([8971](anliegen/8971-mutationslueckenMessenUndKatalog.md)),
 und ein Kriterium, Domänenphase 10 ([8972](anliegen/8972-protokollOhneSperreUnveraendert.md)).
 
