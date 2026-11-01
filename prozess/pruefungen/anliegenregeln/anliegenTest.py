@@ -87,6 +87,28 @@ def testFalscherKopfIstRot(tmp_path, ersetzung, bis):
     assert kopfVerstöße(datei, tmp_path) != []
 
 
+gutFrage = "**F1 · Wie?**\nA: Ja (neu)\nB: Nein (neu)\nEmpfehlung: A, weil\nAntwort: .\n"
+
+
+@pytest.mark.parametrize(
+    "frage, verstöße",
+    [
+        pytest.param(gutFrage, 0, id="mit A und Empfehlung grün"),
+        pytest.param(gutFrage.replace("A: Ja (neu)\n", "- Ja (neu)\n"), 1, id="ohne A rot"),
+        pytest.param(gutFrage.replace("Empfehlung: A, weil\n", ""), 1, id="ohne Empfehlung rot"),
+        pytest.param(
+            gutFrage.replace("Antwort: .", "Antwort: B").replace("A:", "-"), 0, id="beantwortet"
+        ),
+    ],
+)
+def testFrageAnDenStakeholderBrauchtBuchstabenUndEmpfehlung(tmp_path, frage, verstöße):
+    kopf = kopfVon("Fragen", "Planer", "Stakeholder", "offen")
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+    datei.write_text(datei.read_text(encoding="utf-8") + frage, encoding="utf-8")
+    (tmp_path / ".claude" / "agents" / "stakeholder.md").write_text("---\nname: s\n---\n")
+    assert len(kopfVerstöße(datei, tmp_path)) == verstöße
+
+
 def testRückfrageIstEinGültigerStatus(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "rückfrage"))
     assert kopfVerstöße(datei, tmp_path) == []

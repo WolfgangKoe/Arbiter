@@ -1,9 +1,21 @@
+import re
 from pathlib import Path
 
 from lesen.agenten import rollennamen
-from lesen.anliegenKopf import Status, felderLesen, höchstRunde, kopfLesen, stakeholder, typWerte
+from lesen.anliegenKopf import (
+    Anliegen,
+    Status,
+    felderLesen,
+    höchstRunde,
+    kopfLesen,
+    stakeholder,
+    typWerte,
+)
 
 kürzelLänge = 2
+frageZeile = re.compile(r"\*\*F\d+ · ")
+offeneAntwort = {"", "."}
+pflichtZeilen = ("A:", "Empfehlung:")
 
 
 def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
@@ -36,7 +48,30 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
             verstöße.append(f"Rolle {rolle} gibt es nicht in .claude/agents/")
         elif rolle != schreibweise(rolle):
             verstöße.append(f"Rolle {rolle} wird so geschrieben: {schreibweise(rolle)}")
+    return verstöße + antwortVerstöße(zeilen, anliegen)
+
+
+def antwortVerstöße(zeilen: list[str], anliegen: Anliegen) -> list[str]:
+    if anliegen.empfänger != stakeholder or anliegen.status == Status.erledigt:
+        return []
+    verstöße = []
+    for beginn, zeile in enumerate(zeilen):
+        if frageZeile.match(zeile):
+            fehlend = fehlendeZeilen(zeilen[beginn + 1 :])
+            verstöße += [f"Zeile {beginn + 1}: Frage ohne Zeile `{text}`" for text in fehlend]
     return verstöße
+
+
+def fehlendeZeilen(frage: list[str]) -> list[str]:
+    antworten = [stelle for stelle, text in enumerate(frage) if text.startswith("Antwort:")]
+    if not antworten or frage[antworten[0]].removeprefix("Antwort:").strip() not in offeneAntwort:
+        return []
+    davor = frage[: antworten[0]]
+    return [
+        pflicht
+        for pflicht in pflichtZeilen
+        if not any(zeile.startswith(pflicht) for zeile in davor)
+    ]
 
 
 def schreibweise(rolle: str) -> str:

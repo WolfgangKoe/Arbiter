@@ -45,8 +45,9 @@ Status: offen
 {frage}**Stellungnahme.**
 """
 frageVorlage = """**F1 · Beseitigst du das Hindernis?**
-A: Ja, wie im Gegenvorschlag. B: Nein, der Schritt entfällt.
-Empfehlung: A.
+A: Ja, wie im Gegenvorschlag.
+B: Nein, der Schritt entfällt.
+Empfehlung: A, das Hindernis hält den Schritt auf.
 Antwort: .
 
 """
