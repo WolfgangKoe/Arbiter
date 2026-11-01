@@ -91,6 +91,16 @@ def testAufEineRückfrageAnDenStakeholderAntwortetErUnterDerFrageDerLetztenRunde
     assert zeilen[-1] == "Antwort: A" and "Antwort:" in zeilen
 
 
+def testFehltDieZeileAntwortHängtSieDasSkriptUnterDieFrageAn(ordner):
+    datei = anlegen(ordner)
+    text = datei.read_text(encoding="utf-8")
+    ohneZeile = "\n".join(zeile for zeile in text.splitlines() if not zeile.startswith("Antwort:"))
+    datei.write_text(ohneZeile, encoding="utf-8")
+    zugVormerken(ordner, Zug(10, "antwort", "B", frage="F1"))
+    assert übernehmen(ordner) == (1, 0)
+    assert "Antwort: B" in datei.read_text(encoding="utf-8").splitlines()
+
+
 def testStatusFremderAnliegenWirdVerworfenKommentarAberÜbernommen(ordner):
     datei = anlegen(ordner, richtung=("planer", "architekt"))
     zugVormerken(ordner, Zug(10, "status", "erledigt"))

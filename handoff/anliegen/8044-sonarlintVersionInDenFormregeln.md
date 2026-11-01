@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Beim Nachgehen des Hinweises zu S5332 in `server.py` (das klärt Anliegen 8020
@@ -19,3 +18,5 @@ Ein Wort.
 **Gegenvorschlag.** In den Formregeln `6.2.` statt `6.1.`.
 
 **Stellungnahme.**
+Umgesetzt in P5 (Retro 9): [Formregeln](../../prozess/regeln/formregeln.md) nennt `6.2.`.
+Dabei ist die Datei unter das Kürzungsmaß gerückt (Anliegensnummern entfallen).

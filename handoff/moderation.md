@@ -13,7 +13,7 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
   Anliegen 7030,
   [8044](anliegen/8044-sonarlintVersionInDenFormregeln.md),
   Anliegen 8962,
-  [8990](anliegen/8990-rundgangReview9Pruefcode.md).
+  Anliegen 8990.
 - Organisationsentwickler: [6471](anliegen/6471-frontendOhneAbdeckung.md),
   Anliegen 7080,
   [7380](anliegen/7380-wartendeAnliegenEinplanen.md),

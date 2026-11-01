@@ -3,6 +3,8 @@ from pathlib import Path
 from lesen.agenten import rollennamen
 from lesen.anliegenKopf import Status, felderLesen, höchstRunde, kopfLesen, stakeholder, typWerte
 
+kürzelLänge = 2
+
 
 def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     zeilen = datei.read_text(encoding="utf-8").splitlines()
@@ -32,6 +34,10 @@ def kopfVerstöße(datei: Path, wurzel: Path) -> list[str]:
     for rolle in (anliegen.absender, anliegen.empfänger):
         if rolle.lower() not in bekannt:
             verstöße.append(f"Rolle {rolle} gibt es nicht in .claude/agents/")
-        elif rolle != rolle.capitalize():
-            verstöße.append(f"Rolle {rolle} wird groß geschrieben: {rolle.capitalize()}")
+        elif rolle != schreibweise(rolle):
+            verstöße.append(f"Rolle {rolle} wird so geschrieben: {schreibweise(rolle)}")
     return verstöße
+
+
+def schreibweise(rolle: str) -> str:
+    return rolle.upper() if len(rolle) <= kürzelLänge else rolle.capitalize()

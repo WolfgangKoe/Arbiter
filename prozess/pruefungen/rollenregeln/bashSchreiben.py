@@ -1,4 +1,5 @@
 import os
+import re
 import shlex
 import tempfile
 from collections.abc import Callable
@@ -18,6 +19,8 @@ gitÄnderungen = {"add", "commit", "checkout", "restore", "reset", "stash", "rm"
 alleZieleFrei = {"rm", "mv", "touch", "tee"}
 nurZielFrei = {"cp"}
 löschenUndUmbenennen = {"rm", "mv"}
+pythonName = re.compile(r"python\d*(\.\d+)?")
+pythonOptionenMitWert = {"-W", "-X"}
 weg = "Nimm Write und Edit; Bash nur zum Lesen, für Prüfungen und Tests und in /tmp."
 nichtLesbar = "Befehl nicht lesbar"
 ausweg = " Schreibe den Befehl ohne verschachtelte Anführung oder in einzelnen Aufrufen."
@@ -172,11 +175,39 @@ def urteilenÜber(
     return grundGegenEntfernen(wörter, entfernen, gewechselt=gewechselt)
 
 
+def ohneUmleitungen(wörter: list[str]) -> list[str]:
+    übrige: list[str] = []
+    stelle = 0
+    while stelle < len(wörter):
+        wort = wörter[stelle]
+        folgt = wörter[stelle + 1] if stelle + 1 < len(wörter) else ""
+        stelle += 2 if isinstance(wort, Umleitung) else 1
+        ziffer = wort.isdigit() and isinstance(folgt, Umleitung)
+        if not isinstance(wort, Umleitung) and not ziffer:
+            übrige.append(wort)
+    return übrige
+
+
+def pythonLiestSeinProgrammAusDerEingabe(wörter: list[str]) -> bool:
+    rest = ohneUmleitungen(wörter[1:])
+    stelle = 0
+    while stelle < len(rest) and rest[stelle].startswith("-") and rest[stelle] != "-":
+        option = rest[stelle]
+        if not option.startswith("--") and "m" in option:
+            return False
+        if not option.startswith("--") and "c" in option:
+            return True
+        stelle += 2 if option in pythonOptionenMitWert else 1
+    return stelle >= len(rest) or rest[stelle] == "-" or rest[stelle].startswith("<")
+
+
 def befehlImProjekt(wörter: list[str], *, inTmp: bool) -> str | None:
     wörter = ohneUmhüllung(wörter)
     if not wörter:
         return None
     name = PurePosixPath(wörter[0]).name
+    if pythonName.fullmatch(name) and pythonLiestSeinProgrammAusDerEingabe(wörter):
+        return f"{name} ohne Skriptdatei"
     if name == "git":
         return None if inTmp else gitÄndertImProjekt(wörter)
     if name == "sed" and any(ändertInPlace(wort) for wort in wörter[1:]):

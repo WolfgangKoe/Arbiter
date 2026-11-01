@@ -59,6 +59,17 @@ def testStakeholderAlsRolleIstErlaubt(tmp_path):
 
 
 @pytest.mark.parametrize(
+    "schreibweise, verstöße",
+    [pytest.param("UX", 0, id="UX grün"), pytest.param("Ux", 1, id="Ux rot")],
+)
+def testDieRolleUxSchreibtSichGroß(tmp_path, schreibweise, verstöße):
+    kopf = kopfVon("Anliegen", "Architekt", schreibweise, "offen")
+    datei = anliegenAnlegen(tmp_path, "12-probe.md", kopf)
+    (tmp_path / ".claude" / "agents" / "ux.md").write_text("---\nname: ux\n---\n", encoding="utf-8")
+    assert len(kopfVerstöße(datei, tmp_path)) == verstöße
+
+
+@pytest.mark.parametrize(
     "ersetzung, bis",
     [
         pytest.param("offen", "fertig", id="unbekannter Status"),

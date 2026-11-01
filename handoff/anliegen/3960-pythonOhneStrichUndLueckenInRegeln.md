@@ -4,8 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase 9
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nachprüfung von P4 (Retro 7): Die Formen aus
@@ -46,3 +45,9 @@ als sie ist.
    510, `bash -c` und `sh -c`, `parallel`, `perl -i` und was nach 1 offen bleibt.
 
 **Stellungnahme.**
+Umgesetzt in P5 (Retro 9), Weg `bashSchreiben.py`: Der Hook sperrt `python`, `python3` und
+`python3.<n>` ohne Skriptdatei oder `-m` (Heredoc mit und ohne Strich, `<`, Pipe, `-c`),
+auch nach `cd /tmp`, in `for` und mit Pfad; `python3 -m pytest` und Skripte mit Pfad bleiben
+frei. Fälle in `schreibgrenzeTest.py`, je Rolle geprobt. Die Zeile in
+[Rollenregeln](../../prozess/regeln/rollenregeln.md) nennt die Lücken (510, `bash -c`, `sh -c`,
+`parallel`, `perl -i`). Kein Eintrag in `permissions.deny` dazu: der Hook sieht den ganzen Text.

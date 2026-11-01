@@ -80,12 +80,18 @@ def antwortSetzen(text: str, zug: Zug) -> str | None:
     )
     if start is None:
         return None
-    for stelle in range(start + 1, len(zeilen)):
-        if zeilen[stelle].startswith("**F"):
-            return None
+    ende = next(
+        (stelle for stelle in range(start + 1, len(zeilen)) if zeilen[stelle].startswith("**F")),
+        len(zeilen),
+    )
+    for stelle in range(start + 1, ende):
         if zeilen[stelle].startswith("Antwort:"):
             return zeileErsetzen(text, stelle, f"Antwort: {einzeiler(zug.wert)}")
-    return None
+    while ende - 1 > start and not zeilen[ende - 1].strip():
+        ende -= 1
+    zeilen[ende - 1] = zeilen[ende - 1].rstrip("\n") + "\n"
+    zeilen.insert(ende, f"Antwort: {einzeiler(zug.wert)}\n")
+    return "".join(zeilen)
 
 
 def kommentarAnhängen(text: str, zug: Zug) -> str:

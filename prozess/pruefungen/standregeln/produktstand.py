@@ -28,9 +28,7 @@ def belegungJeKriterium(wurzel: Path) -> Belegung:
     for datei in sorted((wurzel / anforderungsOrdner).rglob("*.md")):
         etappen |= etappeJeKriterium(datei)
     ohneTest = {
-        kriterium
-        for fehlend in fehlendeTests(wurzel, itemTexte)
-        for kriterium in fehlend.kriterien
+        kriterium for fehlend in fehlendeTests(wurzel, itemTexte) for kriterium in fehlend.kriterien
     }
     return {
         kriterium: (nummer, kriterium not in ohneTest and not umfasst(itemTexte, kriterium))

@@ -211,6 +211,17 @@ def bash(befehl, rolle="probe"):
         pytest.param("rm -rf /tmp/probe technik/x", id="rm -rf gemischt"),
         pytest.param("python3 -c 'print(1)' > technik/x.py", id="python3 -c mit Umleitung"),
         pytest.param("python3 - > technik/x.py <<EOF\nprint(1)\nEOF", id="python3 - mit Umleitung"),
+        pytest.param("python3 -c 'print(1)'", id="python3 -c"),
+        pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 - mit Heredoc"),
+        pytest.param("python3 - <<'E'\nprint(1)\nE", id="python3 - mit Heredoc in Anführung"),
+        pytest.param("python3 <<'E'\nprint(1)\nE", id="python3 Heredoc ohne Strich"),
+        pytest.param("python3 < skript.py", id="python3 mit Eingabedatei"),
+        pytest.param("echo 'print(1)' | python3", id="python3 hinter einer Pipe"),
+        pytest.param("python3.12 -c 'print(1)'", id="python3.12 -c"),
+        pytest.param("cd /tmp && python3 -c 'print(1)'", id="python3 -c nach cd /tmp"),
+        pytest.param("for f in a; do python3 -c 'print(1)'; done", id="python3 -c in for"),
+        pytest.param("/usr/bin/python3 -c 'print(1)'", id="python3 -c mit Pfad"),
+        pytest.param("python -c 'print(1)'", id="python -c"),
         pytest.param("git add prozess/x.md", id="git add"),
         pytest.param("ls && git commit -m x", id="git commit nach &&"),
         pytest.param("git checkout -- prozess/x.md", id="git checkout"),
@@ -261,8 +272,10 @@ def testBashSchreibenInsProjektWirdGesperrt(wurzel, befehl):
         pytest.param("rm /tmp/probe.md", id="rm in /tmp"),
         pytest.param("rm -rf /tmp/kopie /tmp/probe", id="rm -rf in /tmp"),
         pytest.param("mv -T /tmp/a /tmp/b", id="mv in /tmp mit jeder Option"),
-        pytest.param("python3 -c 'print(1)'", id="python3 -c"),
-        pytest.param("python3 - <<EOF\nprint(1)\nEOF", id="python3 -"),
+        pytest.param("python3 -I prozess/pruefungen/gemeinsam/lauf.py x.y", id="python3 -I Skript"),
+        pytest.param("python3.12 -m pytest prozess/pruefungen", id="python3.12 -m"),
+        pytest.param("python3 skript.py < eingabe.txt", id="Skript mit Eingabedatei"),
+        pytest.param("python3 skript.py 2>/dev/null", id="Skript mit Fehlerkanal nach null"),
         pytest.param("cp prozess/ablauf/dod.md /tmp/dod.md", id="cp nach /tmp"),
         pytest.param("cp prozess/a.md /tmp/a.md 2>/dev/null", id="cp nach /tmp mit Fehlerkanal"),
         pytest.param("cp --target-directory=/tmp prozess/a.md", id="cp Zielverzeichnis /tmp"),
@@ -311,3 +324,25 @@ def testBashGiltNichtFürDenKoordinator(wurzel):
 def testDerHauptchatKoordinatorDarfPerBashAddenUndCommitten(wurzel):
     befehl = "git add prozess/x.md && git commit -m x && git push"
     assert entscheide(bash(befehl, rolle="koordinator"), wurzel) is None
+
+
+@pytest.mark.parametrize(
+    "rolle",
+    [
+        "anforderungsautor",
+        "architekt",
+        "fachkritiker",
+        "implementierer",
+        "moderator",
+        "organisationsentwickler",
+        "planer",
+        "regelumsetzer",
+        "reviewer",
+        "testautor",
+        "ux",
+    ],
+)
+def testPythonOhneSkriptdateiIstFürJedeRolleGesperrtPytestNicht(wurzel, rolle):
+    gesperrt = entscheide(bash("python3 <<'E'\nprint(1)\nE", rolle=rolle), wurzel)
+    assert gesperrt["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert entscheide(bash("python3 -m pytest prozess/pruefungen", rolle=rolle), wurzel) is None
