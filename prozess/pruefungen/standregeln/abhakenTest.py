@@ -94,6 +94,76 @@ def testEinGrünerTestVorDemCodeMeldetDemTestautorEinHindernis(tmp_path, monkeyp
     assert "testAuf1_1EinModell" in text
 
 
+def hindernisEintragen(
+    wurzel: Path, rolle: str, tests: str, nummer: int, *, beseitigt: bool
+) -> None:
+    fortschrittSchreiben(wurzel)
+    schreiben(wurzel, f"handoff/anliegen/{nummer}-hindernis.md", "# Hindernis\n")
+    datei = wurzel / "handoff/plan.md"
+    zeile = f"- [ ] {rolle}: Kritik an den Tests zu Item stellen\n"
+    eintrag = f"  Hindernis: {rolle} → Testautor: Grün: {tests}. (Anliegen {nummer})"
+    eintrag += "; beseitigt: Commit „Tests“\n" if beseitigt else "\n"
+    text = datei.read_text(encoding="utf-8")
+    datei.write_text(text.replace(zeile, zeile + eintrag), encoding="utf-8")
+
+
+def anliegenNummern(wurzel: Path) -> list[str]:
+    return sorted(datei.name.partition("-")[0] for datei in (wurzel / "handoff/anliegen").glob("*"))
+
+
+@pytest.mark.usefixtures("plan")
+def testEinGrünerTestImBeseitigtenHindernisDesSchrittsLässtDieKritikAbhaken(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    hindernisEintragen(tmp_path, "Fachkritiker", "testAuf1_1EinModell", 5, beseitigt=True)
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
+    assert "- [x] Fachkritiker: Kritik an den Tests zu Item stellen\n" in text
+    assert anliegenNummern(tmp_path) == ["5"]
+
+
+@pytest.mark.usefixtures("plan")
+def testEinGrünerTestNurImHindernisDesAnderenKritikersMeldetEinNeues(
+    tmp_path, monkeypatch, capsys
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    hindernisEintragen(tmp_path, "Architekt", "testAuf1_1EinModell", 5, beseitigt=True)
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
+    assert "schon grün" in capsys.readouterr().err
+    assert anliegenNummern(tmp_path) == ["06", "5"]
+
+
+@pytest.mark.usefixtures("plan")
+def testEinGrünerTestImOffenenHindernisDesSchrittsMeldetKeinNeuesUndNenntEs(
+    tmp_path, monkeypatch, capsys
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    hindernisEintragen(tmp_path, "Fachkritiker", "testAuf1_1EinModell", 5, beseitigt=False)
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
+    assert "Anliegen 5" in capsys.readouterr().err
+    assert anliegenNummern(tmp_path) == ["5"]
+
+
+@pytest.mark.usefixtures("plan")
+def testTeilsGenannteGrüneTestsMeldenNurDieÜbrigen(tmp_path, monkeypatch):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    datei = tmp_path / "technik/tests/akzeptanz/aufTest.py"
+    zusatz = "\n\ndef testAuf1_1NochEinModell():\n    assert True\n"
+    datei.write_text(datei.read_text(encoding="utf-8") + zusatz, encoding="utf-8")
+    hindernisEintragen(tmp_path, "Fachkritiker", "testAuf1_1EinModell", 5, beseitigt=True)
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
+    (neues,) = (tmp_path / "handoff/anliegen").glob("06-*")
+    inhalt = neues.read_text(encoding="utf-8")
+    assert "testAuf1_1NochEinModell" in inhalt
+    assert "testAuf1_1EinModell," not in inhalt
+    assert "testAuf1_1EinModell." not in inhalt
+
+
 @pytest.mark.usefixtures("plan")
 def testEinRoterTestVorDemCodeLässtDieKritikAbhaken(tmp_path, monkeypatch):
     monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))

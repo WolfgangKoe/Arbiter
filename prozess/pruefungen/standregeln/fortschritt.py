@@ -8,7 +8,7 @@ from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, proj
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import Zuordnung, anforderungUmfasst, umfasst, zuordnungen
 from lesen.plan import itemNamen, zyklus
-from standregeln.beseitigt import beseitigtErgänzen
+from standregeln.beseitigt import beseitigtErgänzen, verwaisteFallenLassen
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, itemRollen, lage
 from standregeln.planFassung import neuGefasst
 from standregeln.wartendeSchritte import wartendeSchritte
@@ -239,7 +239,7 @@ def abschnittSchreiben(
     text = datei.read_text(encoding="utf-8")
     bisher = bisherigeZeilen(text) if bisherAusDatei else {}
     bisher = {
-        schlüssel: (abgehakt, beseitigtErgänzen(wurzel, zusatz))
+        schlüssel: (abgehakt, beseitigtErgänzen(wurzel, verwaisteFallenLassen(wurzel, zusatz)))
         for schlüssel, (abgehakt, zusatz) in bisher.items()
     }
     if planNeuGefasst:

@@ -1,5 +1,7 @@
+import re
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 from gemeinsam.pfade import projektordner
 from standregeln.fortschritt import (
@@ -16,6 +18,15 @@ from standregeln.phasenfolge import lage
 from standregeln.testsRot import grüneTests, itemDesSchritts
 
 aufrufteileRolleUndSchritt = 2
+testnamenMuster = re.compile(r"\btest\w+(?:\[[^\]\s]*\])?")
+anliegenMuster = re.compile(r"\(Anliegen (\d+)\)")
+hindernisBeginn = "  Hindernis:"
+beseitigtMarke = "; beseitigt:"
+
+
+class Grün(NamedTuple):
+    tests: list[str]
+    anliegen: int | None
 
 
 def eigeneZeilen(wurzel: Path, rolle: str) -> tuple[Path, list[Zeile]] | None:
@@ -56,26 +67,47 @@ def bereitsAbgehakt(wurzel: Path, rolle: str, schritt: str) -> list[str]:
     ]
 
 
-def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> list[str]:
+def genannteTests(zeilen: list[str]) -> set[str]:
+    return {name for zeile in zeilen for name in testnamenMuster.findall(zeile)}
+
+
+def zuTestsGemeldet(zusatz: list[str], grün: list[str]) -> tuple[list[str], int | None]:
+    hindernisse = [zeile for zeile in zusatz if zeile.startswith(hindernisBeginn)]
+    beseitigte = [zeile for zeile in hindernisse if beseitigtMarke in zeile]
+    offene = [zeile for zeile in hindernisse if beseitigtMarke not in zeile]
+    übrige = [name for name in grün if name not in genannteTests(beseitigte)]
+    for zeile in offene:
+        nummer = anliegenMuster.search(zeile)
+        if übrige and nummer and set(übrige) <= genannteTests([zeile]):
+            return übrige, int(nummer[1])
+    return übrige, None
+
+
+def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> Grün:
+    fortschrittSchreiben(wurzel)
     ziel = zielUndZeilen(wurzel, lage(wurzel))
     if ziel is None:
-        return []
-    _, zeilen = ziel
+        return Grün([], None)
+    datei, zeilen = ziel
+    bisher = bisherigeZeilen(datei.read_text(encoding="utf-8"))
     for zeile in zeilen:
         itemName = itemDesSchritts(zeile.schritt)
         if not itemName or not passt(zeile, rolle, schritt):
             continue
         grün = grüneTests(wurzel, itemName)
-        if grün:
+        übrige, bestehendes = zuTestsGemeldet(bisher.get(zeile.schlüssel, (False, []))[1], grün)
+        if übrige and bestehendes is None:
             nummer = nächsteNummer(wurzel)
             text = (
-                "Diese Tests sind grün, bevor der Code besteht: " + ", ".join(grün) + ". "
+                "Diese Tests sind grün, bevor der Code besteht: " + ", ".join(übrige) + ". "
                 "Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt."
             )
             freie = range(nummer, nummer + 1)
             hindernisMelden(wurzel, rolle, zeile.schritt, "Testautor", text, freie)
-            return grün
-    return []
+            return Grün(übrige, nummer)
+        if übrige:
+            return Grün(übrige, bestehendes)
+    return Grün([], None)
 
 
 def abhaken(wurzel: Path, rolle: str, schritt: str) -> list[str]:
@@ -108,10 +140,10 @@ def hauptprogramm(argumente: list[str]) -> int:
     rolle, schritt = argumente
     wurzel = projektordner()
     grün = grünVorDemCode(wurzel, rolle, schritt)
-    if grün:
+    if grün.tests:
         print(
-            "Nicht abgehakt: Diese Tests sind schon grün, ein Hindernis an den Testautor ist "
-            "gemeldet: " + ", ".join(grün),
+            "Nicht abgehakt: Diese Tests sind schon grün, ein Hindernis an den Testautor "
+            f"besteht (Anliegen {grün.anliegen}): " + ", ".join(grün.tests),
             file=sys.stderr,
         )
         return 1

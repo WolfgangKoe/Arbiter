@@ -3,7 +3,7 @@ from pathlib import Path
 
 from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner
-from lesen.anliegenKopf import Status, kopfAusText
+from lesen.anliegenKopf import Status, anliegenDateien, kopfAusText, nummerAusDatei
 
 hindernisMuster = re.compile(r"^ {2}Hindernis: .*\(Anliegen (\d+)\)$")
 behoben = (Status.angenommen, Status.erledigt)
@@ -35,6 +35,20 @@ def beseitigtDurch(wurzel: Path, nummer: str) -> str | None:
         return None
     betreffe = beseitigendeBetreffe(wurzel, pfad)
     return betreffe[0] if betreffe else None
+
+
+def anliegenBesteht(wurzel: Path, nummer: str) -> bool:
+    vorhanden = any(nummerAusDatei(datei) == int(nummer) for datei in anliegenDateien(wurzel))
+    return vorhanden or anliegenDatei(wurzel, nummer) is not None
+
+
+def verwaisteFallenLassen(wurzel: Path, zusatz: list[str]) -> list[str]:
+    behalten = []
+    for zeile in zusatz:
+        treffer = hindernisMuster.match(zeile)
+        if treffer is None or anliegenBesteht(wurzel, treffer[1]):
+            behalten.append(zeile)
+    return behalten
 
 
 def beseitigtErgänzen(wurzel: Path, zusatz: list[str]) -> list[str]:

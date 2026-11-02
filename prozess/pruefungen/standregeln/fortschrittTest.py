@@ -89,6 +89,7 @@ def testEinKriteriumOhneTestLässtDieZeileOffen(tmp_path, gitRepo):
 
 def testHakenUndHindernisBleibenBeimNeuschreibenStehen(tmp_path, gitRepo):
     plan = planMitItem(tmp_path, gitRepo)
+    schreiben(tmp_path, "handoff/anliegen/560-pfad.md", "# Pfad\n")
     fortschrittSchreiben(tmp_path)
     text = plan.read_text(encoding="utf-8")
     zeile = "Implementierer: Tests zu Item stellen grün\n"
@@ -98,6 +99,20 @@ def testHakenUndHindernisBleibenBeimNeuschreibenStehen(tmp_path, gitRepo):
     plan.write_text(text, encoding="utf-8")
     assert fortschrittSchreiben(tmp_path) is None
     assert plan.read_text(encoding="utf-8") == text
+
+
+def testEinHindernisOhneAnliegenFälltWegEinesMitUncommittetemBleibt(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    schreiben(tmp_path, "handoff/anliegen/561-da.md", "# Da\n")
+    fortschrittSchreiben(tmp_path)
+    zeile = "- [ ] Implementierer: Tests zu Item stellen grün\n"
+    hindernisse = "  Hindernis: A → B: weg (Anliegen 560)\n  Hindernis: A → B: da (Anliegen 561)\n"
+    text = plan.read_text(encoding="utf-8").replace(zeile, zeile + hindernisse)
+    plan.write_text(text, encoding="utf-8")
+    fortschrittSchreiben(tmp_path)
+    ergebnis = plan.read_text(encoding="utf-8")
+    assert "(Anliegen 560)" not in ergebnis
+    assert "(Anliegen 561)" in ergebnis
 
 
 def testEinZweiterLaufÄndertNichts(tmp_path, gitRepo):
