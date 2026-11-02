@@ -1,55 +1,63 @@
 # Moderation
 
-Stand: Prozessphase, Retro 9 wartet auf Kritik und Freigabe ([Retro](retro.md)). Nur 8860 hält
-die Freigabe auf (P6 wartet auf deine Antwort).
+Stand: Domänenphase 10, Plan 10 wartet auf Kritik und Freigabe ([Plan](plan.md)). 38 Anliegen
+offen, 34 warten auf eine Phase.
 
 ## Dran
-Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
-- Stakeholder: [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) (`rückfrage`, du
-  bist Absender und dran).
-- Regelumsetzer: Anliegen 3960,
-  Anliegen 6432,
-  Anliegen 6988,
-  Anliegen 7030,
-  Anliegen 8044,
-  Anliegen 8962,
-  Anliegen 8990.
-- Organisationsentwickler: Anliegen 6471,
-  Anliegen 7080,
-  [7380](anliegen/7380-wartendeAnliegenEinplanen.md),
-  Anliegen 8022,
-  Anliegen 8042; Nachprüfung 6500, 6960, 6987, 8961.
-- Reviewer: Nachprüfung 8970, 8973.
+Blockiert das Inkrement (Items in Plan 10):
+- Anforderungsautor, Item 2: Nachprüfung von
+  [9760](anliegen/9760-loslassenNebenDerKarteUndFremdeModelle.md) (angenommen). F1 A gilt,
+  dazu Regelrecherche zu Flugzeugen am Kartenrand; F2 B heißt neue *Sperre* ‚nicht am Zug‘.
+  Danach [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md), dann
+  [6986](anliegen/6986-bewegungLueckenFuerSpaeter.md).
+- Fachkritiker: „Kritik am Plan“ steht offen (siehe Vorschläge, Punkt 2).
+- Stakeholder: [9941](anliegen/9941-wohinUebergehenSetzt.md) F1 (Item 1; ohne Antwort gilt
+  B), die Fragen unten.
+- Koordinator: 9880 ist gelöscht, noch nicht committet.
+
+Hält nichts auf: Stakeholder [9860](anliegen/9860-roteProbeBeiTeilweiseGestagedemCommit.md);
+Nachprüfung von 7380 und 9440 (Vorschläge). Regelumsetzer: 8860, 9801, 8021 (wartet auf
+8020), alle später. Planer: Plan 11 (9340). Alle übrigen Anliegen warten auf Technikphase 10.
 
 ## Vorschläge
-Befund zu deinem Auftrag (Fragen an den Stakeholder, ohne dass er am Zug ist). Geprüft sind
-alle Anliegen mit `**F<n>`: 6960, 6987, 7031, 7800, 8840, 8860, 8880, 8961.
-- Gleiches Muster nur in Anliegen 8840:
-  Absender Stakeholder, `offen`, F1 bis F3 mit `Antwort: .`; dran wäre der Anforderungsautor,
-  du hast keine Antwortfelder. Anforderungsautor: Status auf `rückfrage` setzen
-  ([Status der Anliegen](../prozess/ablauf/anliegenStatus.md)). Er ist erst in der
-  Domänenphase 10 dran; setzt er es nicht früher, kannst du 8840 nicht beantworten. Ob er es
-  vor dieser Phase tun darf, entscheidet der Koordinator.
-- Die anderen sechs sind unauffällig: An Stakeholder mit `angenommen` (6960, 6987, 7031,
-  7800, 8880, 8961), Antworten stehen; 7031 hat in Runde 2 beantwortete Fragen.
-- Ursache ist eine Regellücke, kein Einzelfall: Eine Rolle stellt Fragen in der Stellungnahme
-  eines `offen`-Anliegens, das sie als Empfänger bearbeitet. [Anliegen](../prozess/ablauf/anliegen.md)
-  sagt „Eine Rückfrage steht in der Stellungnahme“, nennt aber nicht, dass der Status dann
-  `rückfrage` sein muss. Organisationsentwickler (Autor des Ablaufs): das ergänzen (Ich 4,
-  bestehende Regel anpassen); ein Prüfskript dazu wäre Sache des Regelumsetzers, nur mit
-  Vorschlag und Probe in `/tmp` (Ich 5).
-- Regelumsetzer: 8860 ist mit `rückfrage` behoben; das Formular dafür deckt
-  `rollenregeln/zuegeUebernehmen.py` schon ab, kein weiterer Hook nötig.
-- Zusammen: 8042 und 8022 (Prüfläufe); 6960, 8961, 8970, 8973 (Mutationslauf).
-- Stränge Regelumsetzer: Hook-Code höchstens einer (7030, 8962, 6988 nacheinander); 3960,
-  6432, 8044 daneben. Organisationsentwickler: Ablauf (7380, 8022, 8042) getrennt von
-  Formaten (6471, 7080).
+1. **Einvernehmlich:** Die Streichung in
+   [uebergehen.md](../domaene/anforderungen/querschnitt/uebergehen.md) hält nicht auf. Titel
+   und QUE-5.1 sagen „gemeinsam übergehen“, das Glossar definiert es als einvernehmlich, die
+   Datei hat 1.187 Zeichen. Die Anforderung bleibt aber schwächer als `domaene/ziel.md`.
+   Anforderungsautor: das Wort zurückholen und anderswo kürzen (13 Zeichen frei);
+   Fachkritiker ordnet ein, ob das aufhält. Ändern darf es nur der Anforderungsautor.
+2. **Fortschritt:** Er zeigt die Kritik nicht vollständig. Die Domänenzeilen stehen nicht im
+   Plan, sondern im Fortschritt der [Review](review.md) ([Fortschritt](../prozess/ablauf/fortschritt.md)).
+   Dort offen: „UX: Mockups“, „Fachkritiker: Kritik am Plan“. Erledigt: Anforderungen und
+   Mockups (Fachkritiker), Kritik am Plan (Architekt). Der Plan wurde in f3ebfad neu gefasst,
+   Haken der Kritik am Plan fallen dann zurück. Der Fachkritiker hat also nach der neuen
+   Fassung nicht abgehakt (oder nur vor ihr). Koordinator: Fachkritiker erneut beauftragen.
+   UX: Items 1 und 2 haben Oberfläche, kein Mockup verlinkt; Koordinator klärt, ob UX läuft
+   oder die Zeile mangels neuer Komponente entfällt.
+3. **9890:** Der Architekt soll V18 vor den Tests zu Item 1 fassen (Gegenvorschlag), im Plan
+   steht die Zeile zuletzt. Architekt: mit „Vertrag zu Item anhaltenUebergehen“ erledigen.
+4. **Schließen:** Stakeholder: 7380 erledigt (Fortschritt zeigt wartende Anliegen);
+   9440 mit Freigabe Plan 10 (Plan setzt es um).
+5. **AUF-27.2:** Deine Deutung von 9270 F2 hat kein offenes Anliegen (9270 ist gelöscht).
+   Anforderungsautor: vor Etappe 7 eine Frage anlegen (Nummer aus 9980–9999).
+6. **Zusammen:** 7050 und 7681 (derselbe Test); 7191 und 7201; 8620 und 8740;
+   7401 und 8421 (`anhaltenVorDerGrenzeTest.py`); 7641 und 7661. Je ein Lauf der
+   Empfängerrolle.
+
+### Stränge (Technikphase 10)
+- Kette: Architekt (9890, Vertrag) → Testautor Item 1 (mit 7321) → Implementierer Item 1
+  (mit 8261) → Item 3 (mit 9401). Item 2 vor Item 3; 1 und 2 nur gleichzeitig, wenn `git status`
+  getrennte Dateien zeigt.
+- Testautor, daneben: Katalog (7151 → 8971, nach Implementierer 7191, 7201); Leisten 7301;
+  Grenzkreise (7641, 7661, 7401, 8421); Auswahl 7601, 8720 nach Implementierer 8100, 8121;
+  7072.
+- Implementierer, daneben: Verschieben (7042, 7050, 7681, 8020); 8620 → 8740; 8641 nach 8261
+  (`schlachtrunden.py`, auch 8100). 8041 erst nach Item 3 (gleiche Einheitstests).
+- Regelumsetzer: Hook-Code höchstens einer.
 
 ## Fragen an dich
 Zuoberst mit Annahme:
-- [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) F1 Tokenbericht seitenweise,
-  F2 Architektur (dein Kommentar liegt vor), F3 Ansicht merken. Die Rolle fragt, ob
-  „Ansonsten wie empfohlen“ auch für F1 und F3 gilt. Annahme: bis zur Antwort setzt sie
-  nichts um.
-- Anliegen 8840 F1 bis F3: Annahme
-  Empfehlungen ab Domänenphase 10; beantwortbar erst nach `rückfrage` (siehe Vorschläge).
+- [9941](anliegen/9941-wohinUebergehenSetzt.md) F1: Wo stehen die Boyz nach dem Übergehen?
+  Annahme: BEW-8.4 steht nach B.
+- [9860](anliegen/9860-roteProbeBeiTeilweiseGestagedemCommit.md) F1: Wie mit der nicht
+  nachvollziehbaren roten Probe umgehen? Empfehlung A.
