@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Commit-Hook `proben` (`python3 -m pytest prozess/pruefungen -q -m "not stand"`,

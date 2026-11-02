@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Zwei Fälle der *Bewegungsphase* regeln Regeltext und Ziel nicht eindeutig.

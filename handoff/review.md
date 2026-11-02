@@ -181,10 +181,10 @@ zu stören.
 
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
-- [ ] UX: Mockups, bei einer Oberfläche
+- [x] UX: Mockups, bei einer Oberfläche
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
-- [ ] Fachkritiker: Kritik am Plan
+- [x] Fachkritiker: Kritik am Plan
 - [x] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 10
 

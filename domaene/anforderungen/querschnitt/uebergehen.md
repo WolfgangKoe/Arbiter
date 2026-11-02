@@ -1,7 +1,7 @@
 ### QUE-5 · Gemeinsam übergehen
 
 Etappe: 2
-Zweck: Die *Spieler* übergehen eine *Sperre* oder ein Anhalten nach dem Stand am Tisch; das *Protokoll* hält es fest (`domaene/ziel.md`, Anliegen 2361 F1 A, 8840 F1 A).
+Zweck: Die *Spieler* übergehen eine *Sperre* oder ein Anhalten einvernehmlich nach dem Stand am Tisch; das *Protokoll* nennt es (`domaene/ziel.md`, Anliegen 2361 F1 A, 8840 F1 A).
 Am Bildschirm: „gemeinsam übergehen“ klicken.
 
 - QUE-5.1 **Wenn** die *Spieler* bei einer *Sperre* *gemeinsam übergehen* wählen, **dann** hat das *Protokoll* einen *Eintrag* mehr, der die *Einheit*, der die *Sperre* galt, ihren *Spieler* und jeden übergangenen *Grund* nennt (Anliegen 362 F4 A). (Etappe 7)
