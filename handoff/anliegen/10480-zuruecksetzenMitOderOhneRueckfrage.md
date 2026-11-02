@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Du hast in 2364 F4 A entschieden, dass man eine gezogene *Einheit* bis zum Ende
@@ -29,6 +29,6 @@ A: Ein Klick auf „Einheit zurücksetzen“ unter der *Karte*, ohne Rückfrage,
 B: Wie ArbiterMap: Knopf mit der gezogenen Strecke auf der Karte der *Einheit*, Dialog mit Skizze, „Bestätigen“ oder „Abbrechen“ (ArbiterMap).
 Empfehlung: A, gleiche Bedienung wie die beiden anderen Rücknahmen, und ein Fehlklick kostet nichts: Die *Einheit* zieht man neu.
 Annahme: BEW-24 und bew-24 bleiben, wie sie sind; mit deiner Antwort schreibe ich sie als Quelle an BEW-24.1.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
