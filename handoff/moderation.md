@@ -8,8 +8,8 @@ Blockiert das Inkrement (Items in Plan 10):
 - Anforderungsautor, Item 2: Nachprüfung von
   Anliegen 9760 (angenommen). F1 A gilt,
   dazu Regelrecherche zu Flugzeugen am Kartenrand; F2 B heißt neue *Sperre* ‚nicht am Zug‘.
-  Danach [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md), dann
-  [6986](anliegen/6986-bewegungLueckenFuerSpaeter.md).
+  Danach Anliegen 8480, dann
+  Anliegen 6986.
 - Fachkritiker: „Kritik am Plan“ steht offen (siehe Vorschläge, Punkt 2).
 - Stakeholder: Anliegen 9941 F1 (Item 1; ohne Antwort gilt
   B), die Fragen unten.

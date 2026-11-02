@@ -1,8 +1,7 @@
 # Plan · Zyklus 10
 
 Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
-Zyklusziel aus [Review 9](review.md) und dein Auftrag
-Anliegen 9440 (höchste Priorität), Abweichungen unten.
+Zyklusziel aus [Review 9](review.md) und Anliegen 9440, Abweichungen unten.
 
 ## Dein Happy Path nach Zyklus 10
 1. Arbiter startet, ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie
@@ -18,52 +17,54 @@ Anliegen 9440 (höchste Priorität), Abweichungen unten.
    *Nahkampfreichweite* hinaus. Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr. (Item 3)
 
 ## Items
-1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3, BEW-8.4,
-   BEW-8.5, QUE-5.6.
+1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3, BEW-8.4
+   ohne BEW-17, BEW-8.5, QUE-5.6.
 2. [Loslassen neben der Karte](../domaene/items/loslassenNebenDerKarte.md): Schritt 3;
-   AUF-28.1, AUF-16.7, AUF-16.8, AUF-12.8, BEW-20.1.
+   AUF-28.1, AUF-16.7, AUF-16.8, BEW-20.1.
 3. [Anhalten auf dem Weg](../domaene/items/anhaltenAufDemWeg.md): Schritt 4; BEW-17 (auch
-   BEW-17.3), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-21.1.
+   BEW-17.3), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-8.4 in BEW-17.
+
+AUF-12.8 und BEW-21.1 kommen in Etappe 7, erst dann erreichbar
+([10200](anliegen/10200-plan10SchnittUndKostenVonItem3.md)).
 
 Reihenfolge nach 9440: Item 1 baut die Tests auf das neue Übergehen um (9320), sonst würden
 sie mit Item 3 rot. Item 2 vor 3: Sonst spränge zurück, wer vor einer *Base* anhält und neben
-der *Karte* loslässt (8840). Erst Item 3 entfernt ‚über eine Base‘; bis dahin bleibt der
-Glossareintrag (9440, A).
+der *Karte* loslässt (8840). Erst Item 3 entfernt ‚über eine Base‘ (9440, A).
 
-Danach in Zyklus 10 (8880 F2 A): Aufräumen aus den übrigen Anliegen der Technikphase 10 und
-7800, dann Review 10. Vorgezogen: 7321 und 8261 in Item 1 (dieselben Tests, derselbe Code),
-9401 in Item 3.
+Danach (8880 F2 A): Aufräumen aus den Anliegen der Technikphase 10 und 7800, dann Review 10.
+Vorgezogen: 7321 und 8261 in Item 1, 9401 in Item 3.
 
 ## Abweichungen vom Zyklusziel
-- Etappe 2 endet mit Zyklus 11, nicht 10: Seit 9271 (F1 B, F2 A) gehören Anhalten übergehen und
-  *Fliegen* zur Etappe, 9440 setzt den Umbau zuerst, und ein Plan hat höchstens drei Items
-  (Domänenphase 6). Mit Ausnahme: sechs Items, Token etwa doppelt; ich rate ab.
-- Das Aufräumen kommt nach diesen drei Items, nicht erst nach allen Teilen der Etappe: Zyklus 11
-  baut auf Code, den 8620, 8121 und 8641 umbauen, und 7800 wird mit neuem Code teurer
-  (7800 F3). Du nimmst die drei Items ab, während aufgeräumt wird.
+- Mit drei Items endet Etappe 2 mit Zyklus 11, nicht 10: Seit 9271 gehören Anhalten
+  übergehen und *Fliegen* dazu, 9440 setzt den Umbau zuerst, ein Plan hat höchstens drei
+  Items (Domänenphase 6). Mit deiner Ausnahme endet sie mit Zyklus 10 (10160 F1 B).
+- Das Aufräumen kommt nach den Items: Neuer Code baut auf dem, den 8620, 8121 und 8641
+  umbauen, 7800 wird mit ihm teurer (7800 F3). Du nimmst ab, während aufgeräumt wird.
 
-## Danach (Plan 11, schließt Etappe 2)
-1. [Fliegen](../domaene/items/fliegen.md) mit Ork-Psioniker und Canoptek-Spinne in den Armeen;
-   wartet auf das *Datenblatt* ([9340](anliegen/9340-fliegenDerSpinne.md)).
-2. Zurücksetzen, *Nahkampfreichweite* auf der ganzen Strecke, kein *Vorrücken* aus ihr
-   ([6986](anliegen/6986-bewegungLueckenFuerSpaeter.md)), dazu
-   [Phase beenden nur im Zug](../domaene/items/phaseBeendenNurImZug.md).
+## Einschätzung: Schließt Plan 10 Etappe 2 ab?
+Nein. Danach fehlen *Fliegen* mit der Canoptek-Spinne, der Ork-Psioniker, das Zurücksetzen,
+BEW-22.1, BEW-9.2, QUE-11.1 und die ruhige *Karte*; Optionen, Token, Folgen von 10020 C:
+[10160](anliegen/10160-schliesstPlanZehnEtappeZwei.md).
+
+## Danach (Plan 11 oder mit Ausnahme hier)
+1. [Fliegen](../domaene/items/fliegen.md) mit Spinne und Ork-Psioniker
+   ([9340](anliegen/9340-fliegenDerSpinne.md)).
+2. [Zurücksetzen und Lücken](../domaene/items/zuruecksetzenUndLuecken.md).
 3. Zuletzt die [ruhige Karte](../domaene/items/ruhigeKarte.md).
 
-Später: [Randfälle des Aufstellens](../domaene/items/randfaelleDesAufstellens.md) (Etappe 7;
-AUF-27.2 wartet auf deine Deutung von 9270 F2),
+Später: [Randfälle des Aufstellens](../domaene/items/randfaelleDesAufstellens.md) (Etappe 7),
 [Gewinner und Zone](../domaene/items/gewinnerUndZone.md) (Etappe 8).
 
 ## Empfehlung
-Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen; ihre Kriterien
-stehen. Beantworte dazu 9941 (wo die Boyz nach dem Übergehen stehen); Empfehlung B, BEW-8.4
-steht schon so.
+Beantworte zuerst 10160; ich rate zu F1 B, sechs Items, dann schreibe ich den Plan neu. Sonst
+gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen. Item 3 ist technisches
+Neuland, etwa doppelt so teuer wie Items 1 und 2: Der Architekt prüft es vor den Tests mit
+einem Wegwerf-Versuch; geht es nicht wie gedacht, kommt ein Anliegen vor dem Vertrag (10200).
 
 ## Offene Anliegen
-- An dich, für Item 1: Anliegen 9941.
-- An den Anforderungsautor, für Item 2:
-  [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md) (Nachprüfung von 9760); für Plan 11:
-  6986.
+- An dich: 10160, vor der Freigabe.
+- An den Anforderungsautor: [10180](anliegen/10180-etappe2LueckenNachPlan10.md) (Punkt 3 vor
+  den Tests zu Item 1), [10162](anliegen/10162-auf12Punkt8UndBew21InEtappeSieben.md), 9340.
 - [7800](anliegen/7800-karteUndEbeneBenennen.md) im Aufräumen, Glossar und Code zugleich.
 - Übrige: [Moderation](moderation.md).
 

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** [BEW-23](../../domaene/anforderungen/phasen/bewegung/sperreNichtAmZug.md) ist
@@ -44,4 +43,13 @@ nur der *Grund*. Gibt das die Antwort aus 9760 F2 B nicht her, eine Frage an den
 Stakeholder; Empfehlung: nur der *Grund*, denn wer *am Zug* ist, zeigt Arbiter schon in der
 Leiste (Etappe 2), und mehr hat er nicht verlangt (Absicht 3).
 
-**Stellungnahme.**
+**Stellungnahme.** Beides umgesetzt in
+[BEW-23](../../domaene/anforderungen/phasen/bewegung/sperreNichtAmZug.md):
+1. Neu BEW-23.3: „Phase beenden“ sperrt mit ‚keine Kohärenz‘ auch, wenn eine *Einheit* des
+   *Spielers*, der nicht *am Zug* ist, nicht in *Kohärenz* ist (`core_rules.txt:434`, `:730`,
+   QUE-5.5). Als eigenes Kriterium in BEW-23 statt in BEW-4, denn nur BEW-23.2 führt dorthin;
+   BEW-4.1 bleibt, wie getestet.
+2. „wie AUF-22.1“ ersetzt durch „ohne Zeile unter dem *Grund*“. Ohne Frage an den
+   Stakeholder: Seine Antwort auf 9760 F2 verlangt nur, dass es außer durch Übergehen nicht
+   möglich ist, keine Zeile; Absicht 3 schließt die Zeile damit aus. BEW-23.1 hatte noch keinen
+   Test, darum in derselben Kennung neu gefasst.
