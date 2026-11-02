@@ -44,7 +44,7 @@ dem Arbiter einer *Einheit* in *Nahkampfreichweite* eines Gegners *Vorrücken* n
 [BEW-6.2](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md) hält „auf der
 Strecke“ an (Commit 7ad25ee, Anliegen 6985), Test
 `testBew6_2ZiehtEinModellAufDerStreckeDurchDieNahkampfreichweiteHältArbiterEsDavorAn`.
-2: Frage an den Stakeholder in [9760](9760-loslassenNebenDerKarteUndFremdeModelle.md) F2,
+2: Frage an den Stakeholder in Anliegen 9760 F2,
 Empfehlung B. 3: umgesetzt,
 [BEW-22.1](../../domaene/anforderungen/phasen/bewegung/keinVorrueckenAusDerNahkampfreichweite.md);
 die *Normale Bewegung* aus der *Nahkampfreichweite* (`:739`) sperre ich nicht, sie verlangt Fall

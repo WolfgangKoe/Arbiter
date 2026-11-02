@@ -41,7 +41,7 @@ wo die *Karte* es zuletzt zeigte (wie AUF-28.1, Zweck von BEW-6); B: steht jedes
 es vor dem Ziehen war (wie AUF-16.8). Empfehlung: A, denn BEW-6 soll anhalten statt den Zug zu
 verwerfen, und die *Karte* zeigt beim Ziehen schon das Anhalten.
 
-**Stellungnahme.** Frage an den Stakeholder in [9760](9760-loslassenNebenDerKarteUndFremdeModelle.md)
+**Stellungnahme.** Frage an den Stakeholder in Anliegen 9760
 F1, Empfehlung A; dazu Vorbild `ArbiterMap/…/model_drag.js:1536` (Loslassen am Dokument
 schickt den zuletzt gezeigten Punkt). Mit der Empfehlung steht
 [BEW-20.1](../../domaene/anforderungen/phasen/bewegung/loslassenNebenDerKarte.md): *setzt*

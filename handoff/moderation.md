@@ -6,16 +6,16 @@ offen, 34 warten auf eine Phase.
 ## Dran
 Blockiert das Inkrement (Items in Plan 10):
 - Anforderungsautor, Item 2: Nachprüfung von
-  [9760](anliegen/9760-loslassenNebenDerKarteUndFremdeModelle.md) (angenommen). F1 A gilt,
+  Anliegen 9760 (angenommen). F1 A gilt,
   dazu Regelrecherche zu Flugzeugen am Kartenrand; F2 B heißt neue *Sperre* ‚nicht am Zug‘.
   Danach [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md), dann
   [6986](anliegen/6986-bewegungLueckenFuerSpaeter.md).
 - Fachkritiker: „Kritik am Plan“ steht offen (siehe Vorschläge, Punkt 2).
-- Stakeholder: [9941](anliegen/9941-wohinUebergehenSetzt.md) F1 (Item 1; ohne Antwort gilt
+- Stakeholder: Anliegen 9941 F1 (Item 1; ohne Antwort gilt
   B), die Fragen unten.
 - Koordinator: 9880 ist gelöscht, noch nicht committet.
 
-Hält nichts auf: Stakeholder [9860](anliegen/9860-roteProbeBeiTeilweiseGestagedemCommit.md);
+Hält nichts auf: Stakeholder Anliegen 9860;
 Nachprüfung von 7380 und 9440 (Vorschläge). Regelumsetzer: 8860, 9801, 8021 (wartet auf
 8020), alle später. Planer: Plan 11 (9340). Alle übrigen Anliegen warten auf Technikphase 10.
 
@@ -57,7 +57,7 @@ Nachprüfung von 7380 und 9440 (Vorschläge). Regelumsetzer: 8860, 9801, 8021 (w
 
 ## Fragen an dich
 Zuoberst mit Annahme:
-- [9941](anliegen/9941-wohinUebergehenSetzt.md) F1: Wo stehen die Boyz nach dem Übergehen?
+- Anliegen 9941 F1: Wo stehen die Boyz nach dem Übergehen?
   Annahme: BEW-8.4 steht nach B.
-- [9860](anliegen/9860-roteProbeBeiTeilweiseGestagedemCommit.md) F1: Wie mit der nicht
+- Anliegen 9860 F1: Wie mit der nicht
   nachvollziehbaren roten Probe umgehen? Empfehlung A.

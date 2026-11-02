@@ -60,7 +60,7 @@ stehen. Beantworte dazu 9941 (wo die Boyz nach dem Übergehen stehen); Empfehlun
 steht schon so.
 
 ## Offene Anliegen
-- An dich, für Item 1: [9941](anliegen/9941-wohinUebergehenSetzt.md).
+- An dich, für Item 1: Anliegen 9941.
 - An den Anforderungsautor, für Item 2:
   [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md) (Nachprüfung von 9760); für Plan 11:
   6986.

@@ -7,7 +7,7 @@ Runde: 1/3
 Status: offen
 
 ## Runde 1
-**Befund.** Deine Antwort auf [9760](9760-loslassenNebenDerKarteUndFremdeModelle.md) F1
+**Befund.** Deine Antwort auf Anliegen 9760 F1
 verlangt eine Regelrecherche zu Flugzeugen am Kartenrand. Ergebnis:
 - Kein *Modell* fährt über die Kante; Arbiter hält es dort an (`core_rules.txt:729`,
   [BEW-20.1](../../domaene/anforderungen/phasen/bewegung/loslassenNebenDerKarte.md)).

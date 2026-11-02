@@ -5,6 +5,6 @@ Umfang: BEW-8.3, BEW-8.4, BEW-8.5, QUE-5.6; Tests zu QUE-5.2 bis 5.4, QUE-6, BEW
 
 Warum jetzt: Etappe 2, zuerst (9440, 9271 F1), sonst rot mit anhaltenAufDemWeg.
 
-Abhängigkeit: [9941](../../handoff/anliegen/9941-wohinUebergehenSetzt.md), BEW-8.4.
+Abhängigkeit: Anliegen 9941, BEW-8.4.
 
 Mockup: [bew-8](../mockups/bew-8.html).
