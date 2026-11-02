@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 9760
+Status: erledigt
 
 ## Runde 1
 **Befund.** Diese Punkte warten (Kritik: Lücken abseits des Happy Path, *Sperren*, die nur der
@@ -44,8 +43,10 @@ dem Arbiter einer *Einheit* in *Nahkampfreichweite* eines Gegners *Vorrücken* n
 [BEW-6.2](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md) hält „auf der
 Strecke“ an (Commit 7ad25ee, Anliegen 6985), Test
 `testBew6_2ZiehtEinModellAufDerStreckeDurchDieNahkampfreichweiteHältArbiterEsDavorAn`.
-2: Frage an den Stakeholder in Anliegen 9760 F2,
-Empfehlung B. 3: umgesetzt,
+2: umgesetzt nach Anliegen 9760 F2 B („Das soll nicht möglich sein außer durch
+übergehen“): [BEW-23](../../domaene/anforderungen/phasen/bewegung/sperreNichtAmZug.md) sperrt
+mit ‚nicht am Zug‘, bietet *gemeinsam übergehen* an und ersetzt BEW-10.1; einplanen tut es der
+Planer. 3: umgesetzt,
 [BEW-22.1](../../domaene/anforderungen/phasen/bewegung/keinVorrueckenAusDerNahkampfreichweite.md);
 die *Normale Bewegung* aus der *Nahkampfreichweite* (`:739`) sperre ich nicht, sie verlangt Fall
-Back, das in Etappe 2 fehlt. `angenommen` folgt, wenn 9760 erledigt ist.
+Back, das in Etappe 2 fehlt.

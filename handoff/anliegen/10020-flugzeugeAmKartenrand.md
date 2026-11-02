@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Deine Antwort auf Anliegen 9760 F1
@@ -36,4 +36,4 @@ bis git sie archiviert.
 A: Jetzt, als Anforderung ohne Etappe mit den drei Begriffen; der Planer plant sie ein (Anliegen 9760 F1).
 B: Erst wenn der Planer ein Flugzeug in eine Etappe nimmt, etwa mit dem Armeebau (Etappe 9) (Absicht 3).
 Empfehlung: B, denn Orks gegen Necrons läuft bisher ohne Flugzeug, und erst die wesentlichen Funktionen entlang der *Phasen* (Absicht 3).
-Antwort: .
+Antwort: C: Wir packen es in Etappe 3, wo wir einerseits ein passendes Flugzeug mit ovaler Base und zusätzlich die nötige Logik für die Bewegungsphase ergänzen.

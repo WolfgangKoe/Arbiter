@@ -183,6 +183,7 @@ zu stören.
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [x] UX: Mockups, bei einer Oberfläche
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
+- [ ] Anforderungsautor: Anliegen 10140 BEW-23: Kohärenz nach dem Übergehen und die Zeile unter dem Grund
 - [x] Planer: Plan geschrieben
 - [x] Fachkritiker: Kritik am Plan
 - [x] Architekt: Kritik am Plan
