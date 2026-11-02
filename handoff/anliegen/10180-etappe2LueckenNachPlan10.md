@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: 10240
+Wartet auf: 10340
 
 ## Runde 1
 **Befund.** Kritik an den Kriterien von [Etappe 2](../../domaene/etappen/02-bewegen.md). Nichts
@@ -55,4 +55,4 @@ zurück, und das *Protokoll* zeigt einen falschen *Grund*.
    ‚Nahkampfreichweite‘ *gemeinsam übergehen* an? A: ja (Ziel). B: erst mit QUE-5.1 in
    Etappe 7 (Anliegen 9940). Empfehlung: A, denn so verlangt es das Ziel.
 
-**Stellungnahme.** 1: BEW-24 (2364 F4 A). 2: 10240. 3: abgelehnt, Zweck BEW-25 und BEW-21.
+**Stellungnahme.** 1: BEW-24. 2: MIV-2; Daten: 10340. 3: abgelehnt, Zweck BEW-25, BEW-21.

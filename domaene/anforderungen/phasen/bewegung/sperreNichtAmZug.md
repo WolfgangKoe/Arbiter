@@ -1,6 +1,7 @@
 ### BEW-23 · Sperre für Modelle des anderen Spielers
 
-Zweck: Arbiter sperrt das Ziehen eines *Modells* des *Spielers*, der nicht *am Zug* ist; die *Spieler* können es *gemeinsam übergehen* (Anliegen 9760 F2 B). Ersetzt [BEW-10.1](fremdeModelle.md).
+Etappe: 3
+Zweck: Arbiter sperrt das Ziehen eines *Modells* des *Spielers*, der nicht *am Zug* ist; die *Spieler* können es *gemeinsam übergehen*. Ersetzt [BEW-10.1](fremdeModelle.md).
 Am Bildschirm: ein *Modell* des anderen *Spielers* ziehen und loslassen, „gemeinsam übergehen“ klicken.
 
 - BEW-23.1 **Gegeben** die *Bewegungsphase*, **wenn** jemand ein *Modell* des *Spielers*, der nicht *am Zug* ist, zieht und loslässt, **dann** steht jedes *Modell*, wo es vor dem Ziehen war, und Arbiter nennt bis zur nächsten Handlung die *Sperre* ‚nicht am Zug‘ und bietet *gemeinsam übergehen* an, ohne Zeile unter dem *Grund* (`core_rules.txt:710`, Anliegen 9760 F2 B, Absicht 3).

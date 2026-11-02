@@ -185,6 +185,8 @@ zu stören.
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
+  Hindernis: Fachkritiker → Planer: Schritte 2 und 6 und die Empfehlung beschreiben anderes, als Arbiter zeigen wird (Anliegen 10300)
+  Hindernis: Fachkritiker → Anforderungsautor: Das Datenblatt der Canoptek-Spinne ist erst für Zyklus 11 vorgemerkt, Item fliegen liegt in Zyklus 10 (Anliegen 10301)
 - [ ] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 10
 

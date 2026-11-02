@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält die Freigabe von Plan 10 auf, weil sonst ein Test sein Kriterium nicht

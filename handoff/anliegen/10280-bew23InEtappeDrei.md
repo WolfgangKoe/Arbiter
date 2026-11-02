@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 10160 F2 B
@@ -22,4 +22,6 @@ Etappe 3 gälte ohne sie als erreicht.
 
 Wann: jetzt, mit [10180](10180-etappe2LueckenNachPlan10.md); hält Plan 10 nicht auf.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: [BEW-23](../../domaene/anforderungen/phasen/bewegung/sperreNichtAmZug.md)
+trägt `Etappe: 3`. Damit die Datei unter 1.200 Zeichen bleibt, nennt der Zweck „Anliegen 9760
+F2 B“ nicht mehr; die Kriterien nennen es.
