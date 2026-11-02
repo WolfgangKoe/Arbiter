@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase
 
 ## Runde 1
@@ -43,4 +43,8 @@ stehen in zwei Türen; bleibt 2, kennt die Domäne ein Bedienelement. Je Punkt w
 2. Die Meldung mit dem Begriff des Glossars, etwa „Eine aufgestellte Einheit steht nicht in
    der Armeeliste“.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Punkte angenommen und umgesetzt. Punkt 1:
+`Auswahl.modellAnklicken(beideSpieler, modell, stellen)` ignoriert ein nicht *gesetztes*
+*Modell*, holt die *Einheit* selbst über `einheitVon`; `Aufstellung` und `Schlacht` rufen nur
+noch diese Zeile; `auswahlTest.py` angepasst, dazu zwei Tests (ungesetztes *Modell*, *Modell*
+keines Spielers). Punkt 2: Meldung „Eine aufgestellte Einheit steht nicht in der Armeeliste“.

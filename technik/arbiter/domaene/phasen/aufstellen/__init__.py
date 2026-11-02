@@ -150,7 +150,7 @@ class Aufstellung:
     def auswählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)
         if einheit in self._aufgestellt:
-            raise ValueError("Eine aufgestellte Einheit wählt man nicht über die Einheitenkarte")
+            raise ValueError("Eine aufgestellte Einheit steht nicht in der Armeeliste")
         self._auswahl.auswählen(einheit)
 
     def abwählen(self, einheit: Einheit) -> None:
@@ -158,9 +158,7 @@ class Aufstellung:
         self._auswahl.abwählen(einheit)
 
     def modellAnklicken(self, modell: Modell) -> None:
-        einheit = einheitVon(self._beideSpieler, modell)
-        if self.gesetzt(modell):
-            self._auswahl.modellAnklicken(einheit, modell)
+        self._auswahl.modellAnklicken(self._beideSpieler, modell, self._stellen)
 
     @property
     def _spielerAnDerReihe(self) -> Spieler:

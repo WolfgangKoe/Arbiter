@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase 11
 
 ## Runde 1
@@ -24,3 +24,6 @@ Glossar nicht gibt. Eine Zeile.
 
 **Gegenvorschlag.** Die Meldung nennt den Begriff des Glossars, etwa „Eine aufgestellte Einheit
 steht nicht in der Armeeliste“.
+
+**Stellungnahme.** Angenommen, umgesetzt mit Anliegen 10880 Punkt 2: Die Meldung lautet
+„Eine aufgestellte Einheit steht nicht in der Armeeliste“.

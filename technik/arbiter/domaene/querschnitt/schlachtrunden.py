@@ -149,8 +149,7 @@ class Schlacht:
         )
 
     def modellAnklicken(self, modell: Modell) -> None:
-        if self.gesetzt(modell):
-            self._auswahl.modellAnklicken(einheitVon(self._beideSpieler, modell), modell)
+        self._auswahl.modellAnklicken(self._beideSpieler, modell, self._stellen)
 
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)

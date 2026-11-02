@@ -1,7 +1,8 @@
 from collections.abc import Mapping
 
+from arbiter.domaene.phasen import einheitVon
 from arbiter.domaene.querschnitt.setzen import gesetzteModelle
-from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 
 class Auswahl:
@@ -50,7 +51,15 @@ class Auswahl:
     def modellIstEbene(self, modell: Modell) -> bool:
         return self._modellAlsEbene is modell
 
-    def modellAnklicken(self, einheit: Einheit, modell: Modell) -> None:
+    def modellAnklicken(
+        self,
+        beideSpieler: tuple[Spieler, Spieler],
+        modell: Modell,
+        stellen: Mapping[Modell, Stelle],
+    ) -> None:
+        if modell not in stellen:
+            return
+        einheit = einheitVon(beideSpieler, modell)
         if not self.ausgewählt(einheit):
             self.auswählen(einheit)
             return
