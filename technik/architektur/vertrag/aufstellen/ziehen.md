@@ -3,16 +3,28 @@
 Abschnitt der *Aufstellung*, die anderen: [Architektur](../../../architektur.md#schichten);
 was alle Phasen teilen: [Querschnitt](../querschnitt.md).
 
-Nach V10 (AUF-24.3, 26.5; 28.2, 29.1 und 29.3 nur für das erste Weiterrücken, Rest:
-Anliegen 2180): `stellenBeimLoslassen(modell, stelle)` → *Modell* → *Stelle* nennt jedes
-*Modell*, das `modellLoslassen` *setzen* würde (das gezogene oder jedes *gesetzte* der
-*Einheit*, [V3](auswahl.md)), an seiner *Stelle* nach AUF-8.2, 21.1, 21.2, 26.1 und 29.1,
-ohne zu *setzen*, Wächter wie dort. `modellLoslassen` *setzt* genau diese, so steht nach dem
-Loslassen alles, wo die *Karte* es zeigte (AUF-28.2). Der Weg beginnt an der *gesetzten*
-*Stelle*, nicht an der zuletzt gezeigten. Angehalten wird nur, wenn die *Stelle* am Ende
-eine *Base* *überdecken* würde, an der ersten, an die eine *Base* auf der geraden Strecke
-stößt (AUF-29, [S3](../../domaene.md#stelle-und-rechnen)); bis AUF-27 *überdeckt* am Anfang
-des Wegs keine *Base* eine, gegen die angehalten wird. Beispiel
+Nach V10 (AUF-24.3, 26.5, 28.2, 29): `stellenBeimLoslassen(modell, stelle, weiter)` →
+`Gezeigt` nennt in `stellen` (*Modell* → *Stelle*) jedes *Modell*, das
+`modellLoslassen(modell, stelle, weiter)` *setzen* würde (das gezogene oder jedes *gesetzte*
+der *Einheit*, [V3](auswahl.md)), ohne zu *setzen*, Wächter wie dort; `modellLoslassen`
+*setzt* genau diese (AUF-28.2). `weiter: Weiterrücken | None` trägt die übrigen Eingaben
+(V10): `zuvor` (*Stelle* des gezogenen) und `angehaltenAufDemWeg`; `Gezeigt` auch dieses.
+Ohne `weiter` gilt die *Stelle* vor dem Ziehen als zuvor, so bleiben die bisherigen Aufrufe.
+
+**Gleiten** (AUF-29, in `querschnitt/anhaltenAufDemWeg.py`, auch für BEW-17): Alle
+*Modelle* der *Ebene* gehen um denselben Weg; zuvor gezeigt ist jedes um den des gezogenen
+von seiner *Stelle* vor dem Ziehen nach `zuvor` verschoben. Ziel ist die *Stelle* nach
+AUF-8.2, 21.1, 21.2 und 26.1 (Bewegung: [Ziehen](../bewegung/ziehen.md)). Hindernis ist jede
+nach AUF-29.3 fremde *Base*, die zuvor keine der *Ebene* *überdeckt*. *Überdeckt* am Ziel
+keine eines, zeigt sie das Ziel. Sonst rückt sie ab zuvor um den waagrechten, dann den
+senkrechten Teil des Wegs zum Ziel, wenn er nicht null ist und an seinem Ende keine eines
+*überdeckt* (29.2); sonst so weit auf der geraden Strecke zum Ziel, wie keine eines
+*überdeckt* (29.1, Raster [S3](../../domaene.md#stelle-und-rechnen)). Geprüft wird nur das
+Ende, nicht der Weg dorthin (Zweck AUF-29). `angehaltenAufDemWeg` ist wahr, wenn es die
+Eingabe war oder 29.1 oder 29.2 griff. Warum zuvor aus der Seite: Die Seite schickt sie als
+double, `web/` rundet nach S2 bis 10⁻¹¹″ daneben; im Versuch zu 10321 *überdeckt* ein Halt
+10⁻⁹″ vor der Berührung danach nie, enger liegt einer nach S3 etwa einmal in 10⁹, dann zählt
+diese *Base* einen Schritt lang nicht. Beispiel
 [stelleBeimLoslassen.json](../stelleBeimLoslassen.json): Stand von V1, `x=35&y=28` für
 *Modell* 1, AUF-21.2 rückt den Block hinein.
 
@@ -33,7 +45,10 @@ jedem Punkt 200 gleich `zurueckgelegt.json`. Eine 409 in V10 liefert die Seite w
 Prüft wie im Querschnitt: AUF-29.1 mit einem Weiterrücken ab der *gesetzten* *Stelle*, an
 der *Stelle* nach dem Loslassen (28.2): auf der Strecke zur *Stelle*, wie `web/` sie liest
 (S2, exakt kollinear), keine *Base* *überdeckt*, zur ersten angestoßenen `abstandHöchstens`
-1/100″; den Raster prüfen nur Unit-Tests. AUF-24.3, 26.5 und 28.1 am Bildschirm nach V10.
+1/100″; den Raster prüfen nur Unit-Tests. AUF-29.1 und 29.2 mit zwei Abfragen, die zweite
+mit `zuvorX`, `zuvorY` aus der ersten; 28.2: V5 mit den Eingaben der zweiten *setzt* deren
+`modelle[]` exakt. Am Bildschirm mit `page.route`: Die zweite Abfrage trägt `x`, `y` des
+gezogenen aus der ersten 200, der Körper von V5 die Eingaben der letzten Abfrage. AUF-24.3, 26.5 und 28.1 am Bildschirm nach V10.
 AUF-28.1 mit `page.route`: Der Körper von V5 gleicht dem Punkt der letzten 200, auch wenn
 danach eine 409 kam; die Kreise stehen wie `losgelassen.json`. Am Dienst: die Antworten
 gleich den Beispielen. Am echten Server: über die *Spielfeldkante* auf eine *Armeeliste* und daneben

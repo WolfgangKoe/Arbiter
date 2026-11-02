@@ -11,20 +11,21 @@ Am Bildschirm | Anfrage (V5) | `Schlacht`
   - Angebot (BEW-8.3, 25.1): Hat V16 beim `modellLoslassen` nach BEW-3.1 oder 6.2 angehalten
     (deren Anteil ist der kleinste der drei und kleiner 1) und *setzt* es ohne *Sperre*, merkt
     sich die *Bewegungsphase* die gezogenen *Modelle* (die *Ebene* beim Loslassen), das
-    gezogene und den Punkt des Loslassens. Abfrage `Schlacht.gemeinsamÜbergehenAngeboten`.
+    gezogene, den Punkt des Loslassens und die *Stelle* des gezogenen vor dem Ziehen;
+    *angehalten* auch nach BEW-17 ([Ziehen](../bewegung/ziehen.md)). Abfrage `Schlacht.gemeinsamÜbergehenAngeboten`.
     Jede weitere Handlung ohne *Sperre* (die Tabellen der *Schlacht* und *Bewegungsphase*, V5)
     beendet das Angebot, ein Loslassen ersetzt es nach derselben Regel; Auswählen (V2, V14)
     und Abfragen beenden es nicht, eine *Sperre* auch nicht (D2). Warum gemerkt: Das Angebot
     hängt an den *Modellen*, die angehalten haben, nicht an der *Auswahl* danach (8261, 3);
     wiederholt (P2) entsteht es neu.
   - `gemeinsamÜbergehen()` ohne Angebot ändert nichts, ohne `Sperre` (wie `vorrücken`). Sonst
-    rückt es die gemerkten *Modelle* um denselben Weg von der *Stelle* des gezogenen zum Punkt
-    weiter, gekürzt nur nach BEW-6.1 (BEW-8.4 ohne BEW-17, das bringt Item anhaltenAufDemWeg),
-    und prüft QUE-1 ohne QUE-1.3; jeder übrige *Grund* wirft `Sperre` wie V15, das Angebot
+    rückt es die gemerkten *Modelle* wie das Loslassen am Punkt mit der *Stelle* vor dem
+    Ziehen und der jetzigen als zuvor ([Ziehen](../bewegung/ziehen.md)), nur ohne BEW-3.1 und
+    6.2, auch in 17.1, 17.3 und 17.4 (BEW-8.4), und prüft QUE-1 ohne QUE-1.3; jeder übrige *Grund* wirft `Sperre` wie V15, das Angebot
     bleibt. Ohne *Sperre* *setzt* es und trägt ins *Protokoll* ein (BEW-8.5): *Einheit* des
     gezogenen *Modells*, *Spieler* *am Zug*, ‚Bewegungsweite‘, wenn `anteilBisZurBewegungsweite`
     auf diesem Weg kleiner 1 ist, ‚Nahkampfreichweite‘, wenn `anteilBisZurNahkampfreichweite`
-    es ist. Rechnen in `phasen/bewegung/uebergehenBeimZiehen.py`; `Protokoll`,
+    es ist; dieser Weg führt von der *Stelle* des gezogenen davor zu der danach. Rechnen in `phasen/bewegung/uebergehenBeimZiehen.py`; `Protokoll`,
     `Eintrag(einheit, spieler, gründe)`: `querschnitt/uebergehen.py`, `Schlacht.protokoll`,
     der älteste Eintrag zuerst. Neu `Grund.bewegungsweite` „Bewegungsweite“ direkt vor
     `nahkampfreichweite`.
