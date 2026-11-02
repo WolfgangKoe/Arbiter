@@ -7,7 +7,7 @@ Runde: 1/3
 Status: offen
 
 ## Runde 1
-**Befund.** Aus [9881](9881-uebergehenNachAnhaltenPruefbarFassen.md) (Architekt): Hält Arbiter
+**Befund.** Aus Anliegen 9881 (Architekt): Hält Arbiter
 die Boyz an der *Bewegungsweite* an und ihr zieht den Zeiger weiter, etwa um den Warboss herum,
 und übergeht dann *gemeinsam*, ist offen, wo die Boyz stehen. Meist gleich, anders nur, wenn
 am Punkt des Loslassens eine fremde *Base* steht.

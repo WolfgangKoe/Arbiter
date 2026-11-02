@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Für Kriterien, die die Items meinen, verlangt keine Prüfung einen Test.

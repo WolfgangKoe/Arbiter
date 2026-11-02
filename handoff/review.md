@@ -185,7 +185,7 @@ zu stören.
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
-- [ ] Architekt: Kritik am Plan
+- [x] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 10
 
 ## Freigabe
