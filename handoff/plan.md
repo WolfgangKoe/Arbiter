@@ -28,7 +28,7 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
 2. [Loslassen neben der Karte](../domaene/items/loslassenNebenDerKarte.md): Schritt 3;
    AUF-28.1, AUF-16.7, AUF-16.8, BEW-20.1.
 3. [Anhalten auf dem Weg](../domaene/items/anhaltenAufDemWeg.md): Schritt 4; BEW-17 (auch
-   BEW-17.3), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-8.4 in BEW-17.
+   BEW-17.3 und BEW-17.4), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-8.4 in BEW-17.
 4. [Fliegen](../domaene/items/fliegen.md): Schritt 5; BEW-18, Spinne.
 5. [Zurücksetzen und Lücken](../domaene/items/zuruecksetzenUndLuecken.md): Schritt 6;
    BEW-24, BEW-22.1, BEW-9.2, QUE-11.1, MIV-2.
@@ -65,9 +65,9 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Vertrag zu Item anhaltenUebergehen, bei beiden Hälften
 - [ ] Testautor: Tests zu Item anhaltenUebergehen
 - [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUebergehen
-  Hindernis: Fachkritiker → Testautor: Kein Test wählt nach BEW-25.1 erneut gemeinsam übergehen: Stelle am zweiten Punkt und Eintrag mit Gründen ungeprüft (Anliegen 10980)
+  Hindernis: Fachkritiker → Testautor: Kein Test wählt nach BEW-25.1 erneut gemeinsam übergehen: Stelle am zweiten Punkt und Eintrag mit Gründen ungeprüft (Anliegen 10980); beseitigt: Commit „Tests zu Item anhaltenUebergehen: 10980 und 11001 beseitigt, Helfer zu 10560“
 - [ ] Architekt: Kritik an den Tests zu Item anhaltenUebergehen
-  Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells, testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand, testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAn, testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell, testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDasLoslassen, testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand, testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[maus], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[finger], testBew8_3DieSeiteZeigtOhneAnhaltenKeinGemeinsamÜbergehen, testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[links], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[rechts], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[unten], testQue6_2NachDemStartIstKeineLeisteEingefahren[links], testQue6_2NachDemStartIstKeineLeisteEingefahren[rechts], testQue6_2NachDemStartIstKeineLeisteEingefahren[unten], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[links], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[rechts], testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11001)
+  Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells, testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand, testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAn, testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell, testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDasLoslassen, testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand, testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[maus], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[finger], testBew8_3DieSeiteZeigtOhneAnhaltenKeinGemeinsamÜbergehen, testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[links], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[rechts], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[unten], testQue6_2NachDemStartIstKeineLeisteEingefahren[links], testQue6_2NachDemStartIstKeineLeisteEingefahren[rechts], testQue6_2NachDemStartIstKeineLeisteEingefahren[unten], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[links], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[rechts], testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11001); beseitigt: Commit „Tests zu Item anhaltenUebergehen: 10980 und 11001 beseitigt, Helfer zu 10560“
 - [ ] Implementierer: Tests zu Item anhaltenUebergehen grün
 - [ ] Architekt: Kritik am Code zu Item anhaltenUebergehen
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUebergehen
@@ -76,13 +76,15 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
 - [x] Testautor: Tests zu Item loslassenNebenDerKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item loslassenNebenDerKarte
+  Hindernis: Fachkritiker → Testautor: Diese Tests sind grün, bevor der Code besteht: testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-nebenDerKarte], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-nebenDerKarte], testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11262)
 - [ ] Architekt: Kritik an den Tests zu Item loslassenNebenDerKarte
+  Hindernis: Architekt → Testautor: Drei neue Dienst-Tests vergleichen das Beispiel des Vertrags ganz statt nach T3 und werden rot, sobald Weirdboy oder Spinne in einer Armee stehen: testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag (losgelassen.json), testAuf16_7DerDienstNenntNachDemZurücklegenKeineStelleWieDasBeispielImVertrag (Spielstand gegen zurückgelegt.json) und testAuf16_7DerDienstSetztNachDemZurücklegenNichtsWieDasBeispielImVertrag (zurückgelegt.json). Vergleiche mit imUmfangDes aus dienst.py wie in einheitZuruecklegenTest.py. (Anliegen 11260)
 - [ ] Implementierer: Tests zu Item loslassenNebenDerKarte grün
 - [ ] Architekt: Kritik am Code zu Item loslassenNebenDerKarte
 - [ ] Reviewer: Kritik am Code zu Item loslassenNebenDerKarte
 - [ ] Fachkritiker: Item loslassenNebenDerKarte abgenommen
 - [ ] Planer: Item loslassenNebenDerKarte gelöscht
-- [ ] Architekt: Vertrag zu Item anhaltenAufDemWeg, bei beiden Hälften
+- [x] Architekt: Vertrag zu Item anhaltenAufDemWeg, bei beiden Hälften
 - [ ] Testautor: Tests zu Item anhaltenAufDemWeg
 - [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenAufDemWeg
 - [ ] Architekt: Kritik an den Tests zu Item anhaltenAufDemWeg
@@ -119,7 +121,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
 - [ ] Anforderungsautor: Anliegen 10180 Etappe 2: Zurücksetzen, Ork-Psioniker, Weiterziehen nach dem Übergehen
-- [ ] Implementierer: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
+- [x] Architekt: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [x] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
