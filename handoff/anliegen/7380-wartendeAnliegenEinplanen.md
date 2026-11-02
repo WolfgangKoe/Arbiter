@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 9800
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -26,8 +25,16 @@ Bestehende Regeln, die es abdecken oder angepasst abdecken können ([Ich 4](../.
 - [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md), letzter Punkt: Wartende
   sind nicht dran, bis die Phase läuft.
 
-**Kosten.** Offen.
+**Kosten.** Ein Lauf des Regelumsetzers und ein kurzer des Organisationsentwicklers (Retro 9, P8).
 
 **Gegenvorschlag.** Keiner.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt mit P8 der [Retro 9](../retro.md). Wartet ein Anliegen auf die
+Domänen- oder Technikphase, steht es dort als Zeile im Fortschritt: „<Rolle, die dran ist>:
+Anliegen <nr> <Titel>“, im Review vor „Planer: Plan geschrieben“, im Plan vor der DoD,
+abgehakt, sobald es `angenommen` ist ([Fortschritt](../../prozess/ablauf/fortschritt.md),
+Tabelle). Wartet es auf die Prozessphase, nennt ein Prozess-Item der Retro seine Nummer
+([Prozessphase](../../prozess/ablauf/prozessphase.md) 1). Zusammengefasst im letzten Punkt
+von [Status der Anliegen](../../prozess/ablauf/anliegenStatus.md). Mechanismus:
+`standregeln/wartendeSchritte.py` ([Standregeln](../../prozess/regeln/standregeln.md));
+Prozess-Item: nur Text. `erledigt` folgt dem Haken von P8 im Fortschritt der Retro.

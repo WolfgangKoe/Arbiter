@@ -375,3 +375,38 @@ def testDerAbschnittEinesÄlterenZyklusImReviewVerliertSeineHaken(tmp_path, gitR
     fortschrittSchreiben(tmp_path)
     text = review.read_text(encoding="utf-8")
     assert "Alt." not in text and "- [x]" not in text
+
+
+def wartendesAnliegen(wurzel: Path, nummer: int, wartetAuf: str, status: str = "offen") -> None:
+    schreiben(
+        wurzel,
+        f"handoff/anliegen/{nummer}-wartet.md",
+        f"# Wartet {nummer}\n\nForm: Kritik\nVon: Architekt\nAn: Testautor\nRunde: 1/3\n"
+        f"Status: {status}\nWartet auf: {wartetAuf}\n\n## Runde 1\n",
+    )
+
+
+def testEinAnliegenDasAufDieTechnikphaseWartetIstEinSchrittImPlan(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7001, "Technikphase")
+    fortschrittSchreiben(tmp_path)
+    assert "- [ ] Testautor: Anliegen 7001 Wartet 7001\n" in plan.read_text(encoding="utf-8")
+
+
+def testEinAnliegenDasAufDieDomänenphaseDesFolgezyklusWartetStehtImReviewDavor(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    wartendesAnliegen(tmp_path, 7002, "Domänenphase 2")
+    wartendesAnliegen(tmp_path, 7003, "Domänenphase 3")
+    fortschrittSchreiben(tmp_path)
+    review = (tmp_path / "handoff/review.md").read_text(encoding="utf-8")
+    assert "- [ ] Testautor: Anliegen 7002 Wartet 7002\n" in review
+    assert "7003" not in review
+    assert "7002" not in plan.read_text(encoding="utf-8")
+
+
+def testEinAngenommenesWartendesAnliegenIstAbgehakt(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7004, "Technikphase", "angenommen")
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Architekt: Anliegen 7004 Wartet 7004\n" in plan.read_text(encoding="utf-8")

@@ -11,6 +11,7 @@ from lesen.plan import itemNamen, zyklus
 from standregeln.beseitigt import beseitigtErgänzen
 from standregeln.phasenfolge import Lage, Phase, hatItemCommit, itemRollen, lage
 from standregeln.planFassung import neuGefasst
+from standregeln.wartendeSchritte import wartendeSchritte
 
 planName, reviewName, retroName = "plan.md", "review.md", "retro.md"
 kritiker = ("Fachkritiker", "Architekt")
@@ -78,6 +79,10 @@ def itemKriterienGetestet(wurzel: Path, itemName: str) -> bool:
     )
 
 
+def wartendeZeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
+    return [Zeile(*schritt) for schritt in wartendeSchritte(wurzel, aktuell)]
+
+
 def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     planFertig = zyklus(wurzel / handoffOrdner / planName) == aktuell.zyklus
     freigegeben = freigabeCommit(wurzel, "Plan", aktuell.zyklus) is not None
@@ -85,6 +90,7 @@ def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
         Zeile("Anforderungsautor", "Happy Paths zum Zyklusziel"),
         Zeile("UX", "Mockups, bei einer Oberfläche"),
         Zeile("Fachkritiker", "Kritik an Anforderungen und Mockups"),
+        *wartendeZeilen(wurzel, aktuell),
         Zeile("Planer", "Plan geschrieben", planFertig),
         *(Zeile(rolle, kritikAmPlan) for rolle in kritiker),
         Zeile("Stakeholder", f"Freigabe Plan {aktuell.zyklus}", freigegeben),
@@ -117,6 +123,7 @@ def technikzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     zeilen = [zeile for name in itemNamen(wurzel) for zeile in itemzeilen(wurzel, name, bisher)]
     return [
         *zeilen,
+        *wartendeZeilen(wurzel, aktuell),
         Zeile("Reviewer", "DoD über das Inkrement"),
         Zeile("Reviewer", "Review geschrieben", review),
         *(Zeile(rolle, "Kritik am Review") for rolle in reviewkritiker),

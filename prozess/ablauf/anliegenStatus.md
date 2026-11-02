@@ -69,5 +69,7 @@ nur Text.
   Belegung unter 120.000 Token, setzt er sie mit `SendMessage` fort, sonst startet er sie
   neu. Ein Anliegen, das aufhält ([Kritik](kritik.md)), bearbeitet der Empfänger in
   jeder Phase; die übrigen tragen `Wartet auf: <Phase>` seiner Perspektive.
-  Mechanismus: Wartende sind nicht dran, `anliegenregeln/anliegenDran.py`; ob ein Anliegen
-  aufhält: nur Text.
+  Wartende sind nicht dran, bis die Phase läuft; dann steht jedes als Zeile im
+  [Fortschritt](fortschritt.md) dieser Phase, auf die Prozessphase in einem Prozess-Item
+  ([Prozessphase](prozessphase.md) 1). Mechanismus: `anliegenregeln/anliegenDran.py`,
+  `standregeln/wartendeSchritte.py`; Prozess-Item und ob ein Anliegen aufhält: nur Text.

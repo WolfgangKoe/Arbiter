@@ -38,6 +38,7 @@ Phase · Schritt | Zeile | abgehakt durch
 Domäne 1 bis 3, nur ohne Etappe | Planer: Etappe · Architekt: Kritik an der Etappe · Stakeholder: Freigabe Etappe | Fakt: Etappendatei neu · Befehl · Fakt: Commit
 Domäne 4 | Anforderungsautor: Happy Paths zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
 Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
+Domäne 5 und Technik 3 je Anliegen, das auf diese Phase wartet ([Anliegen](anliegen.md)) | <Rolle, die dran ist>: Anliegen <nr> <Titel> | Fakt: Status `angenommen`
 Domäne 6 | Planer: Plan geschrieben | Fakt: `# Plan · Zyklus <n>`
 Domäne 7 | je Kritiker: Kritik am Plan, offen wieder bei neuer Fassung des Plans | Befehl
 Domäne 8 | Stakeholder: Freigabe Plan | Fakt: Commit
@@ -58,6 +59,6 @@ Mechanismus: `standregeln/fortschritt.py` (Zeilen und Fakten, `nächsteLage`, `a
 auch die Zeilen „Kritik am Review“, Anliegen 3660); neue Fassung des Plans:
 `standregeln/planFassung.py`; Befehl zum Abhaken: `standregeln/abhaken.py` (Retro 5, P2);
 Hindernis: `standregeln/hindernis.py` (Bereich oder vorhandenes Anliegen, Retro 7, P5),
-`standregeln/beseitigt.py`; beide Befehle beim Start: `rollenregeln/rollenkontext.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
+`standregeln/beseitigt.py`; wartende Anliegen: `standregeln/wartendeSchritte.py` (Anliegen 7380); beide Befehle beim Start: `rollenregeln/rollenkontext.py`; Dashboard: `rollenregeln/dashboardFortschritt.py` (Liste, Haken,
 Sperre der Zeilen mit Fakt), `standregeln/zeilenZug.py` (weist den Haken darauf ab; Anliegen
 2061); ob sich die Haken deutlich abheben: Urteil des Stakeholders.

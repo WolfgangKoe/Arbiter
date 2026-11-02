@@ -2,7 +2,9 @@ from fnmatch import fnmatch
 from pathlib import Path
 
 from gemeinsam.gitAufruf import freigabeCommit
-from standregeln.phasenfolge import Phase, lage
+from gemeinsam.pfade import handoffOrdner
+from lesen.plan import zyklus
+from standregeln.phasenfolge import Phase, lage, offenesProzessItem
 
 geschützteMuster = (
     "prozess/*.md",
@@ -28,7 +30,17 @@ def istGeschützt(relativ: str) -> bool:
     return any(fnmatch(relativ, muster) for muster in geschützteMuster)
 
 
+def retroMitOffenemProzessItem(wurzel: Path) -> bool:
+    retro = zyklus(wurzel / handoffOrdner / "retro.md")
+    if retro is None:
+        return False
+    freigabe = freigabeCommit(wurzel, "Retro", retro)
+    return freigabe is not None and offenesProzessItem(wurzel, retro, freigabe) is not None
+
+
 def prozessphaseFreigegeben(wurzel: Path) -> bool:
+    if retroMitOffenemProzessItem(wurzel):
+        return True
     aktuell = lage(wurzel)
     if aktuell.phase != Phase.prozessphase:
         return False

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Planer hat [Plan 10](../plan.md) geschrieben, während P8 aus der
@@ -29,4 +29,12 @@ ein Prozess-Item ohne Commit hat (`phasenfolge.offenesProzessItem` für den Zykl
 gleich, ob schon ein neuer Plan liegt. Scheiter-Test: Plan n+1 geschrieben, P<k> ohne Commit,
 Write auf `prozess/ablauf/` durch den Organisationsentwickler ist erlaubt; mit Commit gesperrt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen. `prozessphaseFreigegeben` gilt jetzt auch,
+solange die zuletzt freigegebene Retro (Zyklus aus `handoff/retro.md`) ein Prozess-Item ohne
+Commit `P<k>:` hat (`retroMitOffenemProzessItem`, über `phasenfolge.offenesProzessItem`),
+gleich, ob schon ein neuer Plan liegt; sonst bleibt es bei der Phase aus `lage`. Scheiter-Test:
+`rollenregeln/schreibgrenzeTest.py` (`testProzessphaseGiltBisJedesProzessItemSeinenCommitHatAuchBeiNeuemPlan`):
+Plan 4 geschrieben, P1 ohne Commit, Write auf `prozess/ablauf/dod.md` erlaubt; nach `P1:`
+gesperrt. Ohne die Änderung bricht schon die erste Prüfung. Zeile in
+[Standregeln](../../prozess/regeln/standregeln.md). Die Phasenfolge selbst (`lage`) bleibt
+unverändert: Der Stand meldet weiter die Domänenphase 10, sobald der Plan liegt.

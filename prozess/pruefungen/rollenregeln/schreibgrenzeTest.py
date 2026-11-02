@@ -129,6 +129,23 @@ def testRegelnSindInDerProzessphaseErstNachDerFreigabeDerRetroFrei(wurzel, gitRe
     assert entscheide(ablauf, wurzel) is None
 
 
+def testProzessphaseGiltBisJedesProzessItemSeinenCommitHatAuchBeiNeuemPlan(wurzel, gitRepo):
+    (wurzel / "handoff").mkdir()
+    (wurzel / "handoff" / "review.md").write_text("# Review · Zyklus 3\n", encoding="utf-8")
+    retro = "# Retro · Zyklus 3\n\n## Prozess-Items\n- P1 Eins\n"
+    (wurzel / "handoff" / "retro.md").write_text(retro, encoding="utf-8")
+    (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 3\n", encoding="utf-8")
+    gitRepo.festhalten("Freigabe Plan 3")
+    gitRepo.festhalten("Freigabe Review 3")
+    gitRepo.festhalten("Freigabe Retro 3")
+    (wurzel / "handoff" / "plan.md").write_text("# Plan · Zyklus 4\n", encoding="utf-8")
+    ablauf = schreiben(wurzel / "prozess" / "ablauf" / "dod.md")
+    assert entscheide(ablauf, wurzel) is None
+    gitRepo.festhalten("P1: Eins")
+    antwort = entscheide(ablauf, wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
 def testRegelnDateienSindFürDenRegelumsetzerInJederPhaseFrei(wurzel, gitRepo):
     (wurzel / ".claude" / "agents" / "regelumsetzer.md").write_text(
         rollenkopf.replace("probe", "regelumsetzer"), encoding="utf-8"
