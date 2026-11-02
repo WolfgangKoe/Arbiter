@@ -4,7 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Wortlaut zu [Plan 10](../plan.md): „Bevor ich den Plan freigebe, möchte ich
@@ -60,4 +60,7 @@ B: Etappe 4, mit ovaler *Base*, Drehen und Fahrzeugen; das Flugzeug ist VEHICLE 
 Empfehlung: B, die ovale *Base* entsteht einmal samt Drehen, und Etappe 3 bringt euch früher zur Partie Orks gegen Necrons, die kein Flugzeug braucht (Absicht 1).
 Antwort: B
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: F1 B in [Plan 10](../plan.md) mit sechs Items; F2 B in
+[Etappe 3](../../domaene/etappen/03-angriffUndFallBack.md), `Etappe: 3` an BEW-23 in
+[10280](10280-bew23InEtappeDrei.md); F3 B in
+[Etappe 4](../../domaene/etappen/04-fahrzeugeUndJedeBaseform.md).

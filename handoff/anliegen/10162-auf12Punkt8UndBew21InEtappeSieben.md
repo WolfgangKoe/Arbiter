@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach [10200](10200-plan10SchnittUndKostenVonItem3.md) Punkt 2 hat
@@ -22,4 +22,8 @@ ans Ende, oder `Etappe: 7` für BEW-21, wenn es nur dieses Kriterium hat.
 
 Wann: jetzt, vor der Freigabe von Plan 10.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt nach dem Gegenvorschlag. Geprüft: Die Zonen liegen 44″ − 2 · 9″ =
+26″ auseinander (`domaene/daten/onlyWar.yaml`), die *Nahkampfreichweite* ist 1″. AUF-12.8 endet
+in [Sperre ohne Stelle](../../domaene/anforderungen/phasen/aufstellen/sperreOhneStelle.md) auf
+„(Etappe 7)“; [BEW-21](../../domaene/anforderungen/phasen/bewegung/sperreBeimLoslassen.md) hat
+nur BEW-21.1 und trägt `Etappe: 7`.

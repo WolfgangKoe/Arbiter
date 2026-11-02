@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an [Plan 10](../plan.md), Abschnitt „Danach (Plan 11, schließt Etappe 2)“,

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: 10162
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält die Freigabe von Plan 10 auf, weil sonst ein Test sein Kriterium nicht
@@ -55,4 +54,5 @@ Vertrag zu Item anhaltenAufDemWeg“.
 **Stellungnahme.** Umgesetzt: 1 in beiden Items; 2 im Item randfaelleDesAufstellens,
 „(Etappe 7)“ in [10162](10162-auf12Punkt8UndBew21InEtappeSieben.md); 3 im Plan unter
 „Empfehlung“ und in den Kosten von [10160](10160-schliesstPlanZehnEtappeZwei.md) F1.
-BEW-9.2 und BEW-22.1 stehen im Item zuruecksetzenUndLuecken.
+BEW-9.2 und BEW-22.1 stehen im Item zuruecksetzenUndLuecken. 10162 ist erledigt: AUF-12.8
+und BEW-21 tragen Etappe 7.
