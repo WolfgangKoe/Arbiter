@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Bei der Kritik an den Tests zu Item grenzkreise. Wartet nach
@@ -26,4 +25,6 @@ BEW-5.2, ein Test.
 das *Vorrücken* zurücknimmt (BEW-12); so ist der Klick auf „Vorrücken“ nicht verloren und
 BEW-12 nimmt ihn zurück. Ist das neu, fragt ihr den *Stakeholder* mit dieser Empfehlung.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt ohne Frage, denn es ist nicht neu: Das Warten beginnt mit BEW-5.2
+und endet nur nach BEW-5.3 oder 12.2. [BEW-9.2](../../domaene/anforderungen/phasen/bewegung/abwaehlen.md)
+sagt es ausdrücklich: Hebt BEW-9.1 die *Auswahl* auf, wartet die *Einheit* weiter.

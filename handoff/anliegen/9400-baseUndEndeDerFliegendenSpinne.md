@@ -4,7 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Die Canoptek-Spinne fliegt in [Etappe 2](../../domaene/etappen/02-bewegen.md)

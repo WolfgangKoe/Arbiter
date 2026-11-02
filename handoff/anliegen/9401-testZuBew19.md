@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Technikphase
 
 ## Runde 1
-**Befund.** Nach [9420](9420-bew15ModelleDerselbenEinheit.md) steht das gestrichene BEW-2.7
+**Befund.** Nach Anliegen 9420 steht das gestrichene BEW-2.7
 wieder als [BEW-19.1](../../domaene/anforderungen/phasen/bewegung/einheitAlsGanzes.md). Sein
 Test fiel mit `sperrenBeimZiehenTest.py` (9272); es steht noch in
 `HEAD:technik/tests/akzeptanz/phasen/bewegung/sperrenBeimZiehenTest.py:288`.

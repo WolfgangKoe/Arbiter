@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 10
+Wartet auf: 9760
 
 ## Runde 1
 **Befund.** Fachliche Abnahme zu Item anhaltenUndAuswahl, wartet nach
@@ -41,4 +41,8 @@ wo die *Karte* es zuletzt zeigte (wie AUF-28.1, Zweck von BEW-6); B: steht jedes
 es vor dem Ziehen war (wie AUF-16.8). Empfehlung: A, denn BEW-6 soll anhalten statt den Zug zu
 verwerfen, und die *Karte* zeigt beim Ziehen schon das Anhalten.
 
-**Stellungnahme.**
+**Stellungnahme.** Frage an den Stakeholder in [9760](9760-loslassenNebenDerKarteUndFremdeModelle.md)
+F1, Empfehlung A; dazu Vorbild `ArbiterMap/…/model_drag.js:1536` (Loslassen am Dokument
+schickt den zuletzt gezeigten Punkt). Mit der Empfehlung steht
+[BEW-20.1](../../domaene/anforderungen/phasen/bewegung/loslassenNebenDerKarte.md): *setzt*
+statt nach AUF-16.8, wie AUF-28.1. `angenommen` folgt, wenn 9760 erledigt ist.

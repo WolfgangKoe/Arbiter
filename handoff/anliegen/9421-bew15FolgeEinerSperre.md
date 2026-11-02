@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** BEW-1.5 sagt „es sperrt nur QUE-1“. Was danach am Bildschirm steht, sagte bisher
@@ -25,4 +24,9 @@ es vor dem Ziehen war, und Arbiter nennt den *Grund* bis zur nächsten Handlung 
 AUF-12.8).“ Oder BEW-1.5 verweist auf eine querschnittliche Regel in QUE-1, falls du
 AUF-12.8 dorthin hebst.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als eigenes Kriterium, denn BEW-1.5 hat Tests und ihre Datei
+ist voll: [BEW-21.1](../../domaene/anforderungen/phasen/bewegung/sperreBeimLoslassen.md)
+„**Gegeben** die *Bewegungsphase*, **wenn** QUE-1 beim Loslassen nach BEW-1.5 sperrt, **dann**
+steht jedes *Modell* danach, wo es vor dem Ziehen war, und Arbiter nennt jeden *Grund* bis zur
+nächsten Handlung (wie AUF-12.8)“. Den Vertrag (BEW-2.6) zieht der Architekt mit dem Vertrag zu
+Item anhaltenAufDemWeg nach.

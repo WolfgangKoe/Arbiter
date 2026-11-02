@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der volle Mutationslauf von Zyklus 9 (Ausgabe in
@@ -27,4 +26,8 @@ ein Test.
 *Sperre* loslässt, **dann** hat das *Protokoll* dieselben *Einträge* wie davor.“ Ein Test dazu
 fängt den Mutanten.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, allgemeiner:
+[QUE-5.6](../../domaene/anforderungen/querschnitt/uebergehen.md) „**Wenn** jemand ein *Modell*
+loslässt, **dann** ändert sich das *Protokoll* nicht“, also auch bei *Sperre* oder Anhalten;
+einen *Eintrag* bringt nur der Klick nach QUE-5.1 und BEW-8.4. Für die 1.200 Zeichen ist der
+Halbsatz zu QUE-1.4 aus dem Zweck gefallen, er steht dort und im Glossar.

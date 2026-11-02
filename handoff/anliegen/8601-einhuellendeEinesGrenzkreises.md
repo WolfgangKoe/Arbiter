@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Lücke abseits des Happy Path, keine Prüfung rot). Der Code nennt jeden
@@ -25,4 +24,5 @@ Halbsatz im Glossar.
 *Grenzkreise* zusammen bedecken; bei einem ist sie dieser *Grenzkreis*“. Geometrisch stimmt
 das, und die Anforderungen können bei „*Grenzkreis* oder *Einhüllende*“ bleiben.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt im [Glossar](../../domaene/glossar.md): „Rand der Fläche, die ein
+oder mehrere *Grenzkreise* zusammen bedecken …; bei einem ist sie dieser.“

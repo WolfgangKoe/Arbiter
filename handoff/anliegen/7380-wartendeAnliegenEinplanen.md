@@ -5,7 +5,7 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: Prozessphase 9
+Wartet auf: 9800
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:

@@ -4,8 +4,7 @@ Form: Fragen
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: Domänenphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Wortlaut: „Wir sollten mit diesem Zyklus Etappe 2 an sich fast abgeschlossen haben. Das bitte nochmal prüfen. Für Zyklus 10 haben wir inzwischen sehr viele Anliegen angesammelt. Vielleicht lohnt es sich Zyklus 10 als Abschluss für Etappe 2 zu planen. Das bitte mal kritisch prüfen.“

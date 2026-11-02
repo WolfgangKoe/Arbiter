@@ -1,136 +1,133 @@
-# Plan · Zyklus 9
+# Plan · Zyklus 10
 
 Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
-Zyklusziel aus [Review 8](review.md), Abweichungen unten.
+Zyklusziel aus [Review 9](review.md) und dein Auftrag
+[9440](anliegen/9440-umbauNach8840HoechstePrioritaet.md) (höchste Priorität), Abweichungen unten.
 
-## Dein Happy Path nach Zyklus 9
+## Dein Happy Path nach Zyklus 10
 1. Arbiter startet, ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie
-   bisher. (Item 1)
-2. Sperrt Arbiter beim Loslassen ‚über eine Base‘, klickt ihr „gemeinsam übergehen“: Die
-   *Modelle* stehen, wo ihr losgelassen habt, das *Protokoll* in der unteren *Leiste* nennt
-   *Einheit*, *Spieler* und *Grund*. Jede *Leiste* fährt per *Griff* ein und aus. ‚keine
-   Kohärenz‘ bleibt ohne Übergehen. (Item 2)
-3. Zieht ihr an die *Spielfeldkante* oder auf einen Gegner zu, hält Arbiter an der Kante oder
-   1″ vor seiner *Base* an. *Modelle* des Gegners lassen sich nicht ziehen. (Item 3)
-4. Ein Klick auf einen Boy der *ausgewählten* Boyz: Nur er zieht. Noch ein Klick: wieder die
-   ganze *Einheit*. Ein Klick auf die leere *Karte* hebt die *Auswahl* auf. Schon beim
-   Aufstellen wählt ein Klick auch eine *aufgestellte* *Einheit* aus. (Item 3)
-5. Um die *ausgewählte* *Einheit* zeigt die *Karte* leicht, bis wohin sie zieht (*Einhüllende*
-   ihrer *Grenzkreise*), um jede gegnerische ihre *Nahkampfreichweite*. Nach „Vorrücken“
-   erscheinen sechs Kreise +1″ bis +6″; ihr klickt in den Ring eures Wurfs, nur er bleibt, die
-   *Modelle* ziehen bis *Bewegungsweite* plus Wurf. Verklickt: „Vorrücken zurücknehmen“, die
-   *Modelle* stehen wieder, wo die Phase begann. Wählt ihr gezogene Boyz wieder aus, gelten
-   die *Grenzkreise* ab ihren *Stellen* zu Beginn der Phase. (Item 4)
+   bisher.
+2. Hält Arbiter die Boyz an der *Bewegungsweite* oder vor einem Gegner an, bietet er nach dem
+   Loslassen „gemeinsam übergehen“ an, ohne *Grund*. Klick: Die Boyz stehen, wo ihr sie ohne
+   Anhalten hingezogen hättet; das *Protokoll* nennt ‚Bewegungsweite‘ oder
+   ‚Nahkampfreichweite‘. (Item 1)
+3. Lasst ihr ein *Modell* neben der *Karte* los, steht es, wo die *Karte* es zuletzt zeigte,
+   auch beim Aufstellen. (Item 2)
+4. Zieht ihr einen Boy auf eine fremde *Base* zu, hält Arbiter davor an und gleitet entlang,
+   auch beim Aufstellen. Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr. (Item 3)
 
 ## Items
-1. [Katalogwerte gliedern](../domaene/items/katalogwerteGliedern.md): Schritt 1; MIV-1.5.
-2. [Gemeinsam übergehen mit Protokoll](../domaene/items/gemeinsamUebergehen.md): Schritt 2;
-   BEW-8, QUE-5, QUE-6.
-3. [Anhalten und Auswahl](../domaene/items/anhaltenUndAuswahl.md): Schritte 3 und 4; BEW-6,
-   BEW-2.8, BEW-7, BEW-9, BEW-10, AUF-30.
-4. [Grenzkreise und Vorrücken](../domaene/items/grenzkreise.md): Schritt 5; BEW-11, BEW-13,
-   BEW-14, BEW-5, BEW-12, BEW-15.
+1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3 bis 8.5,
+   Kriterium aus 8972.
+2. [Loslassen neben der Karte](../domaene/items/loslassenNebenDerKarte.md): Schritt 3;
+   AUF-28.1, AUF-16.7, AUF-16.8, AUF-8.7, AUF-12.8, Kriterium aus 8480.
+3. [Anhalten auf dem Weg](../domaene/items/anhaltenAufDemWeg.md): Schritt 4; BEW-17, BEW-19,
+   AUF-29, AUF-28.2, QUE-1.4, Kriterium aus 9421.
 
-Reihenfolge 1 bis 4: Arbiter startet seit der neuen *Ausgangslage* nicht; Item 1 behebt das.
-Item 2 vor 3: BEW-2.8 *setzt* nach BEW-8.2. Item 3 vor 4: Ein Boy als *Ebene* (BEW-7) zeigt
-seinen *Grenzkreis* (BEW-11.1), der Klick auf einen Kreis hebt die *Auswahl* nicht auf
-(BEW-5.3, BEW-9.1). Item 4 kostet am meisten Code (*Einhüllende*, Anliegen 7004), darum
-zuletzt: Hängt es, bekommst du Schritte 1 bis 4, Item 4 rückt in Plan 10.
+Reihenfolge nach 9440: Item 1 baut die Tests auf das neue Übergehen um (9320), sonst würden
+sie mit Item 3 rot. Item 2 vor 3: Sonst spränge zurück, wer vor einer *Base* anhält und neben
+der *Karte* loslässt (8840). Erst Item 3 entfernt ‚über eine Base‘; bis dahin bleibt der
+Glossareintrag (9440, A).
+
+Danach in Zyklus 10 (8880 F2 A): Aufräumen aus den übrigen Anliegen der Technikphase 10 und
+7800, dann Review 10. Vorgezogen: 7321 und 8261 in Item 1 (dieselben Tests, derselbe Code),
+9401 in Item 3.
 
 ## Abweichungen vom Zyklusziel
-- Dazu Item 1 (4882 F1 A), BEW-7 (6420), BEW-10 und AUF-30 (6300, 6996), die *Grenzkreise*:
-  Mit ihnen wählt ihr den *Vorrückwurf* (6998 F1), ohne sie kein *Vorrücken* (6999). Kosten:
-  vier statt drei Items, die Technikphase dauert länger; ohne Item 4 käme *Vorrücken* erst
-  mit Plan 10.
-- Kante und *Nahkampfreichweite* halten an statt zu sperren (6400); der Test aus 6241 prüft
-  dann BEW-6.2.
-- „Jede *Einheit* nur einmal“ ohne neues Kriterium: Korrigieren bleibt (7000 F4 A).
-- BEW-15 auf deine Frage: Sonst zeigten die *Grenzkreise* nach erneuter *Auswahl* zu weit.
+- Etappe 2 endet mit Zyklus 11, nicht 10: Seit 9271 (F1 B, F2 A) gehören Anhalten übergehen und
+  *Fliegen* zur Etappe, 9440 setzt den Umbau zuerst, und ein Plan hat höchstens drei Items
+  (Domänenphase 6). Mit Ausnahme: sechs Items, Token etwa doppelt; ich rate ab.
+- Das Aufräumen kommt nach diesen drei Items, nicht erst nach allen Teilen der Etappe: Zyklus 11
+  baut auf Code, den 8620, 8121 und 8641 umbauen, und 7800 wird mit neuem Code teurer
+  (7800 F3). Du nimmst die drei Items ab, während aufgeräumt wird.
 
-Vorher in der Technikphase: Anliegen 6102, 6241, 6290.
+## Danach (Plan 11, schließt Etappe 2)
+1. [Fliegen](../domaene/items/fliegen.md) mit Ork-Psioniker und Canoptek-Spinne in den Armeen;
+   wartet auf [9400](anliegen/9400-baseUndEndeDerFliegendenSpinne.md) und das *Datenblatt*
+   (9340).
+2. Zurücksetzen, *Nahkampfreichweite* auf der ganzen Strecke, kein *Vorrücken* aus ihr
+   ([6986](anliegen/6986-bewegungLueckenFuerSpaeter.md), 7642), dazu
+   [Phase beenden nur im Zug](../domaene/items/phaseBeendenNurImZug.md).
+3. Zuletzt die [ruhige Karte](../domaene/items/ruhigeKarte.md).
 
-## Danach
-Zurücksetzen und was Arbiter an einer gezogenen *Einheit* zeigt (7000 F3), Anhalten übergehen
-(7000 F2), Ork-Psioniker und Canoptek-Spinne, Loslassen neben der *Karte*, ruhige *Karte*, die
-Lücken aus 6986, „Phase beenden“ nur im Zug (QUE-11). Ich schätze zwei Zyklen bis Etappe 2.
+Später: [Randfälle des Aufstellens](../domaene/items/randfaelleDesAufstellens.md) (Etappe 7;
+AUF-27.2 wartet auf deine Deutung von 9270 F2),
+[Gewinner und Zone](../domaene/items/gewinnerUndZone.md) (Etappe 8).
 
 ## Empfehlung
-Gib die vier Items frei, wenn Schritte 1 bis 5 deinem Bild entsprechen; damit gelten die
-Begriffe aus 6998, 7000, 7005.
+Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen. Vorher schreibt der
+Anforderungsautor die Kriterien aus 8972, 8480 (mit Frage an dich, Empfehlung: *setzen*, wo
+die *Karte* zuletzt zeigte) und 9421; bis dahin sind die Items nicht bereit.
 
 ## Offene Anliegen
-- Von dir beantwortet, der Anforderungsautor prüft nach:
-  Anliegen 6998,
-  Anliegen 7000,
-  Anliegen 7005.
-- Deine Nachprüfung: Anliegen 6400,
-  Anliegen 6410,
-  Anliegen 6420.
+- An den Anforderungsautor, für diese Items:
+  [8972](anliegen/8972-protokollOhneSperreUnveraendert.md),
+  [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md),
+  [9421](anliegen/9421-bew15FolgeEinerSperre.md); für Plan 11: 6986, 7642,
+  [8601](anliegen/8601-einhuellendeEinesGrenzkreises.md).
+- [7800](anliegen/7800-karteUndEbeneBenennen.md) im Aufräumen, Glossar und Code zugleich.
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
-- [x] Architekt: Vertrag zu Item katalogwerteGliedern, bei beiden Hälften
-- [x] Testautor: Tests zu Item katalogwerteGliedern
-- [x] Fachkritiker: Kritik an den Tests zu Item katalogwerteGliedern
-- [x] Architekt: Kritik an den Tests zu Item katalogwerteGliedern
-  Hindernis: Architekt → Testautor: Eine Testhilfe sucht die Bewegungsweite noch in der alten Ausgangslage; die Tests der Bewegungsphase laufen darum nicht. (Anliegen 7150); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
-- [x] Implementierer: Tests zu Item katalogwerteGliedern grün
-- [x] Architekt: Kritik am Code zu Item katalogwerteGliedern
-  Hindernis: Architekt → Implementierer: Zwei neue Dateien des Katalogs bringen Erklärtexte mit, die die Regel zum Code verbietet; eine Prüfung ist darum rot. (Anliegen 7190); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
-- [x] Reviewer: Kritik am Code zu Item katalogwerteGliedern
-  Hindernis: Reviewer → Implementierer: Im Katalog heißt der Eintrag einer Modellart Profil, obwohl er auch den Durchmesser hält, und ein Einheitstest bindet eine Konstante per Standardargument; der Implementierer benennt um. (Anliegen 7200); beseitigt: Commit „katalogwerteGliedern: Tests grün, Umbau vor den Items und Verträge“
-- [x] Fachkritiker: Item katalogwerteGliedern abgenommen
-- [x] Planer: Item katalogwerteGliedern gelöscht
-- [x] Architekt: Vertrag zu Item gemeinsamUebergehen, bei beiden Hälften
-- [x] Testautor: Tests zu Item gemeinsamUebergehen
-  Hindernis: Testautor → Planer: Die Tests zu BEW-8, QUE-5 und QUE-6 stehen vollständig, Formprüfungen grün. Das Häkchen setzt sich nicht, weil die Zeile Abhängigkeit in domaene/items/gemeinsamUebergehen.md BEW-2 nennt; die Prüfung zählt damit BEW-2 zum Item, und BEW-2.8 gehört zu Item 3 (anhaltenUndAuswahl) und hat dort noch keinen Test. Empfehlung: in der Abhängigkeit die Kennung streichen (die Sperren beim Ziehen stehen) statt BEW-2 zu nennen; Alternative für den Regelumsetzer: itemKriterienGetestet liest nur die Zeile Umfang. (Anliegen 7210); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
-- [x] Fachkritiker: Kritik an den Tests zu Item gemeinsamUebergehen
-  Hindernis: Fachkritiker → Testautor: Ein Test zu „gemeinsam übergehen“ ist schon grün, obwohl es den Knopf noch nicht gibt; er prüft nicht, dass der Knopf erst da war und dann verschwindet. (Anliegen 7300); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
-- [x] Architekt: Kritik an den Tests zu Item gemeinsamUebergehen
-  Hindernis: Architekt → Testautor: Ein Test übergab die übergangenen Gründe ohne Namen, anders als der Vertrag, und ein Test zu „gemeinsam übergehen nicht mehr angeboten“ war ohne Knopf schon grün; beides ist berichtigt, der Haken gilt seit der Nachprüfung. (Anliegen 7320); beseitigt: Commit „gemeinsamUebergehen: Tests berichtigt (7300, 7320, 7210)“
-- [x] Implementierer: Tests zu Item gemeinsamUebergehen grün
-- [x] Architekt: Kritik am Code zu Item gemeinsamUebergehen
-  Hindernis: Architekt → Implementierer: Beim Loslassen fragt Arbiter nicht, ob die Sperre übergangen werden darf, und verlässt sich allein auf den Knopf; so stünde ‚keine Kohärenz‘ nicht sicher fest, sobald eine Sperre beim Ziehen sie meldet. Die Abfrage beim Ziehen bietet das Übergehen zu Unrecht an. Je eine bis drei Zeilen. (Anliegen 8240); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
-- [x] Reviewer: Kritik am Code zu Item gemeinsamUebergehen
-  Hindernis: Reviewer → Implementierer: Im Code, der die Leisten ein- und ausfährt, heißt ein Wert eingefahren, obwohl er wahr ist, wenn die Leiste ausgefahren ist; am Bildschirm stimmt alles, nur der Name sagt laut Glossar das Gegenteil. Empfehlung: umbenennen in ausgefahren, eine Zeile. (Anliegen 8260); beseitigt: Commit „gemeinsamUebergehen: Übergehen nur nach Sperre, ausgefahren benannt (8240, 8260)“
-- [x] Fachkritiker: Item gemeinsamUebergehen abgenommen
-- [x] Planer: Item gemeinsamUebergehen gelöscht
-- [x] Architekt: Vertrag zu Item anhaltenUndAuswahl, bei beiden Hälften
-- [x] Testautor: Tests zu Item anhaltenUndAuswahl
-- [x] Fachkritiker: Kritik an den Tests zu Item anhaltenUndAuswahl
-  Hindernis: Fachkritiker → Testautor: Drei Tests zum Klick auf das Modell der Ebene sind schon grün, obwohl ein Klick heute nie ein Modell zur Ebene macht; sie prüfen nicht, dass vorher ein Modell die Ebene war. (Anliegen 7400); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
-- [x] Architekt: Kritik an den Tests zu Item anhaltenUndAuswahl
-  Hindernis: Architekt → Testautor: Ein Test zur Auswahl einer aufgestellten Einheit heißt „ohne Ebene“, obwohl die ganze Einheit ihre Ebene ist; der Testautor benennt ihn um. (Anliegen 7420); beseitigt: Commit „anhaltenUndAuswahl: Tests und Kritik an den Tests (7400, 7420, 7600)“
-- [x] Implementierer: Tests zu Item anhaltenUndAuswahl grün
-  Hindernis: Implementierer → Testautor: Test BEW-2.8 Nahkampfreichweite in sperrenBeimZiehenTest.py zieht aus dem Spielfeld (Anliegen 8280); beseitigt: Commit „Lauf 2: Architektur zu 8241, Test BEW-2.8 berichtigt (8280), 6400 und 6420 erledigt“
-- [x] Architekt: Kritik am Code zu Item anhaltenUndAuswahl
-- [x] Reviewer: Kritik am Code zu Item anhaltenUndAuswahl
-  Hindernis: Reviewer → Implementierer: Der neue Einheitstest der Bewegungsphase liegt nicht, wo man ihn nach dem Modul sucht, und einer seiner Tests wäre auch grün, wenn das Modell gar nicht zieht; der Implementierer verschiebt die Datei und prüft die genaue Stelle. (Anliegen 8040); beseitigt: Commit „Schlacht nutzt gegnerVon, Route der Ebene entfällt (5701, 8030, 8040)“
-- [x] Fachkritiker: Item anhaltenUndAuswahl abgenommen
-- [x] Planer: Item anhaltenUndAuswahl gelöscht
-- [x] Architekt: Vertrag zu Item grenzkreise, bei beiden Hälften
-- [x] Testautor: Tests zu Item grenzkreise
-- [x] Fachkritiker: Kritik an den Tests zu Item grenzkreise
-  Hindernis: Fachkritiker → Testautor: 13 Testfälle zu Grenzkreisen und Vorrücken ziehen die ganze Einheit gegen die Nachbareinheit und werden so nie grün; ein Test der Seite prüft nicht, dass der Kreis des Wurfs verschwindet (Anliegen 7640); beseitigt: Commit „grenzkreise: Tests und Kritik an den Tests (7640, 7660)“
-- [x] Architekt: Kritik an den Tests zu Item grenzkreise
-  Hindernis: Architekt → Testautor: Die neuen Grenzen im Spielstand machen vier ältere Tests rot, die den ganzen Spielstand der Schlacht mit einem Beispiel vergleichen; drei Tests zur Seite sind ohne Code schon grün, einer prüft nach dem Zurücknehmen die Grenze nicht. Der Testautor vergleicht nur die Schlüssel des Beispiels und baut die drei Tests um. (Anliegen 7660); beseitigt: Commit „grenzkreise: Tests und Kritik an den Tests (7640, 7660)“
-- [x] Implementierer: Tests zu Item grenzkreise grün
-- [x] Architekt: Kritik am Code zu Item grenzkreise
-- [x] Reviewer: Kritik am Code zu Item grenzkreise
-  Hindernis: Reviewer → Implementierer: Lesbarkeit: zuschlag statt vorrückwurf, noqa PLR0913 (Anliegen 8640); beseitigt: Commit „grenzkreise: Vorrückwurf benannt, Tests zu BEW-14.1 nachgeprüft, Item abgenommen“
-- [x] Fachkritiker: Item grenzkreise abgenommen
-- [x] Planer: Item grenzkreise gelöscht
+- [ ] Architekt: Vertrag zu Item anhaltenUebergehen, bei beiden Hälften
+- [ ] Testautor: Tests zu Item anhaltenUebergehen
+- [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUebergehen
+- [ ] Architekt: Kritik an den Tests zu Item anhaltenUebergehen
+- [ ] Implementierer: Tests zu Item anhaltenUebergehen grün
+- [ ] Architekt: Kritik am Code zu Item anhaltenUebergehen
+- [ ] Reviewer: Kritik am Code zu Item anhaltenUebergehen
+- [ ] Fachkritiker: Item anhaltenUebergehen abgenommen
+- [ ] Planer: Item anhaltenUebergehen gelöscht
+- [ ] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
+- [ ] Testautor: Tests zu Item loslassenNebenDerKarte
+- [ ] Fachkritiker: Kritik an den Tests zu Item loslassenNebenDerKarte
+- [ ] Architekt: Kritik an den Tests zu Item loslassenNebenDerKarte
+- [ ] Implementierer: Tests zu Item loslassenNebenDerKarte grün
+- [ ] Architekt: Kritik am Code zu Item loslassenNebenDerKarte
+- [ ] Reviewer: Kritik am Code zu Item loslassenNebenDerKarte
+- [ ] Fachkritiker: Item loslassenNebenDerKarte abgenommen
+- [ ] Planer: Item loslassenNebenDerKarte gelöscht
+- [ ] Architekt: Vertrag zu Item anhaltenAufDemWeg, bei beiden Hälften
+- [ ] Testautor: Tests zu Item anhaltenAufDemWeg
+- [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenAufDemWeg
+- [ ] Architekt: Kritik an den Tests zu Item anhaltenAufDemWeg
+- [ ] Implementierer: Tests zu Item anhaltenAufDemWeg grün
+- [ ] Architekt: Kritik am Code zu Item anhaltenAufDemWeg
+- [ ] Reviewer: Kritik am Code zu Item anhaltenAufDemWeg
+- [ ] Fachkritiker: Item anhaltenAufDemWeg abgenommen
+- [ ] Planer: Item anhaltenAufDemWeg gelöscht
+- [ ] Implementierer: Anliegen 7042 Meldung von einheitVon nach dem Umzug
+- [ ] Implementierer: Anliegen 7050 Unit-Test des Verschiebens am alten Ort
+- [ ] Testautor: Anliegen 7072 Griff abseits der Mitte doppelt, Vorgeschichte ohne eigene Grenze
+- [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
+- [ ] Implementierer: Anliegen 7191 Ablage der Tabellenprüfung und ein TypeError im Katalog
+- [ ] Implementierer: Anliegen 7201 Katalog liest mehrfach und vergleicht Schlüssel am Text
+- [ ] Testautor: Anliegen 7301 Leisten: nicht eingefahren am Inhalt prüfen, Namen nach dem Glossar
+- [ ] Testautor: Anliegen 7321 Hilfen der Tests zum Übergehen
+- [ ] Testautor: Anliegen 7401 BEW-6.3 ohne Test für Kante und Nahkampfreichweite zusammen
+- [ ] Testautor: Anliegen 7601 Dienst der Schlacht wählt „ohne Ebene“: derselbe Name wie in 7420
+- [ ] Testautor: Anliegen 7641 Tests zu den Grenzkreisen: Einhüllende am Bildschirm, Modell im Ring
+- [ ] Testautor: Anliegen 7661 Grenzkreise: Hilfen nach Aufgabe ablegen
+- [ ] Implementierer: Anliegen 7681 Test von verschobeneStellen am alten Ort
+- [ ] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
+- [ ] Implementierer: Anliegen 8020 verschobeneStellen zur Aufstellung, Adresse des Servers ohne SonarLint-Meldung
+- [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
+- [ ] Implementierer: Anliegen 8100 Gegner und Klick auf ein Modell je einmal
+- [ ] Implementierer: Anliegen 8121 Auswahl: Modell anklicken einfacher, Meldung zur aufgestellten Einheit
+- [ ] Implementierer: Anliegen 8261 Übergehen nach Vertrag, Angebot nach Auswahlwechsel
+- [ ] Testautor: Anliegen 8421 Ziel vor der Nahkampfreichweite benennen
+- [ ] Implementierer: Anliegen 8620 Ziehen verlangt mehr, als es braucht
+- [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
+- [ ] Testautor: Anliegen 8720 Auswahl in der Schlacht nur an Modellen prüfen, mit Vorbedingung
+- [ ] Implementierer: Anliegen 8740 Vorrückwurf nur für die eigene Einheit geprüft
+- [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
+- [ ] Testautor: Anliegen 9401 Test zu BEW-19
 - [ ] Reviewer: DoD über das Inkrement
-  Hindernis: Reviewer → Ux: Acht Mockups der gebauten Bewegungsphase liegen noch da; die DoD verlangt sie gelöscht. UX löscht acht Dateien. (Anliegen 8760); beseitigt: Commit „Review 9 geschrieben, Mockups gelöscht, drei Anliegen des Stakeholders aufgenommen“
-- [x] Reviewer: Review geschrieben
-- [x] Fachkritiker: Kritik am Review
-  Hindernis: Fachkritiker → Reviewer: Das nächste Vorgehen im Review steht noch wie vor deiner Antwort auf 8880 (Abschluss der Etappe 2 mit Zyklus 10, erst Neues, dann Aufräumen), und der Klickpfad zeigt das Ein- und Ausfahren der Leisten und ‚keine Kohärenz‘ ohne Übergehen nicht; der Reviewer berichtigt etwa zehn Zeilen. (Anliegen 8950); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
-  Hindernis: Fachkritiker → Reviewer: Das Review nennt die Reihenfolge für Plan 10 (erst Neues, dann Aufräumen) noch als offen bei dir, obwohl du sie in 8880 mit A bestätigt hast; der Reviewer berichtigt einen Halbsatz. (Anliegen 8950); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
-- [x] Organisationsentwickler: Kritik am Review
-  Hindernis: Organisationsentwickler → Reviewer: Im Review fehlen drei Änderungen am Prüfcode, darunter elf Mutanten, die nicht mehr zählen, und Plan 10 folgt noch nicht deiner Antwort in 8880. (Anliegen 8960); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
-  Hindernis: Organisationsentwickler → Reviewer: Das Review nennt sieben von elf Mutanten, die wegen der Dataclass nicht zählen, es sind sechs; der Reviewer berichtigt zwei Wörter, wenn er die Zahl der Mutation nachträgt. (Anliegen 8960); beseitigt: Commit „Review 9 nach Kritik nachgebessert, 8880 vom Stakeholder beantwortet“
-- [x] Stakeholder: Freigabe Review 9
+- [ ] Reviewer: Review geschrieben
+- [ ] Fachkritiker: Kritik am Review
+- [ ] Organisationsentwickler: Kritik am Review
+- [ ] Stakeholder: Freigabe Review 10
 
 ## Freigabe
-Freigabe: ja
+Freigabe: offen
 Kommentar: .

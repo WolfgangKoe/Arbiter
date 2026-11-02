@@ -1,9 +1,11 @@
 # DoD (Item fertig)
 
 1. Akzeptanz-, Gesamt- und Architekturtests grün: `python3 -m pytest technik/tests`;
-   Zeilen und Zweige mindestens 95 % für `technik/arbiter`. Mechanismus:
-   `formregeln/abdeckung.py` im Lauf von `python3 -m pytest prozess/pruefungen`.
-   Ist in `technik/tests` ein Test rot, gilt die Schwelle nicht: Die Prüfung misst nicht und
+   Zeilen und Zweige mindestens 95 % für `technik/arbiter`, Zeilen mindestens 95 % für
+   `technik/frontend/` (gemessen in den Bildschirmtests). Mechanismus:
+   `formregeln/abdeckung.py` im Lauf von `python3 -m pytest prozess/pruefungen`, wie er misst:
+   [Formregeln](../regeln/formregeln.md).
+   Ist in `technik/tests` ein Test rot, gilt keine Schwelle: Die Prüfung misst nicht und
    nennt die Zahl der roten Tests (Tests vor dem Code brechen auch geteilte Fixtures).
    Mechanismus: `formregeln/abdeckung.py` (`aussetzung`, `verstoß`).
 2. Prüfmechanismen grün: `python3 -m pytest prozess/pruefungen` und SonarLint mit

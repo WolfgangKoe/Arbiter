@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 10
+Wartet auf: 9760
 
 ## Runde 1
 **Befund.** Diese Punkte warten (Kritik: Lücken abseits des Happy Path, *Sperren*, die nur der
@@ -40,4 +40,12 @@ können (Ziel). Empfehlung: B, denn das Ziel verlangt die *Sperre*. 3: ein Krite
 dem Arbiter einer *Einheit* in *Nahkampfreichweite* eines Gegners *Vorrücken* nicht anbietet
 (`core_rules.txt:724`).
 
-**Stellungnahme.**
+**Stellungnahme.** 1: steht schon,
+[BEW-6.2](../../domaene/anforderungen/phasen/bewegung/anhaltenVorDerGrenze.md) hält „auf der
+Strecke“ an (Commit 7ad25ee, Anliegen 6985), Test
+`testBew6_2ZiehtEinModellAufDerStreckeDurchDieNahkampfreichweiteHältArbiterEsDavorAn`.
+2: Frage an den Stakeholder in [9760](9760-loslassenNebenDerKarteUndFremdeModelle.md) F2,
+Empfehlung B. 3: umgesetzt,
+[BEW-22.1](../../domaene/anforderungen/phasen/bewegung/keinVorrueckenAusDerNahkampfreichweite.md);
+die *Normale Bewegung* aus der *Nahkampfreichweite* (`:739`) sperre ich nicht, sie verlangt Fall
+Back, das in Etappe 2 fehlt. `angenommen` folgt, wenn 9760 erledigt ist.

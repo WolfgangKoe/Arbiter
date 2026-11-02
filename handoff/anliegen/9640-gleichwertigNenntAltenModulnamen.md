@@ -4,11 +4,10 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
-**Befund.** Nach [9540](9540-commitNach8840ModulOhneAnforderung.md) heißt
+**Befund.** Nach Anliegen 9540 heißt
 `technik/arbiter/domaene/phasen/bewegung/sperrenBeimZiehen.py` jetzt `normaleBewegung.py`.
 Die Begründung des ersten Eintrags in
 [gleichwertig.json](../../prozess/pruefungen/mutationsregeln/gleichwertig.json)
@@ -20,4 +19,5 @@ Namen, keine Prüfung rot).
 
 **Gegenvorschlag.** In der Begründung `sperrenBeimZiehen` durch `normaleBewegung` ersetzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Die Begründung nennt `normaleBewegung`
+([gleichwertig.json](../../prozess/pruefungen/mutationsregeln/gleichwertig.json)).

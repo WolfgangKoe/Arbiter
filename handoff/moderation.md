@@ -9,7 +9,7 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
   bist Absender und dran).
 - Regelumsetzer: Anliegen 3960,
   Anliegen 6432,
-  [6988](anliegen/6988-architekturPfeileLesbar.md),
+  Anliegen 6988,
   Anliegen 7030,
   Anliegen 8044,
   Anliegen 8962,
@@ -24,7 +24,7 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
 ## Vorschläge
 Befund zu deinem Auftrag (Fragen an den Stakeholder, ohne dass er am Zug ist). Geprüft sind
 alle Anliegen mit `**F<n>`: 6960, 6987, 7031, 7800, 8840, 8860, 8880, 8961.
-- Gleiches Muster nur in [8840](anliegen/8840-baseNichtUeberdeckenAnhaltenStattSperre.md):
+- Gleiches Muster nur in Anliegen 8840:
   Absender Stakeholder, `offen`, F1 bis F3 mit `Antwort: .`; dran wäre der Anforderungsautor,
   du hast keine Antwortfelder. Anforderungsautor: Status auf `rückfrage` setzen
   ([Status der Anliegen](../prozess/ablauf/anliegenStatus.md)). Er ist erst in der
@@ -51,5 +51,5 @@ Zuoberst mit Annahme:
   F2 Architektur (dein Kommentar liegt vor), F3 Ansicht merken. Die Rolle fragt, ob
   „Ansonsten wie empfohlen“ auch für F1 und F3 gilt. Annahme: bis zur Antwort setzt sie
   nichts um.
-- [8840](anliegen/8840-baseNichtUeberdeckenAnhaltenStattSperre.md) F1 bis F3: Annahme
+- Anliegen 8840 F1 bis F3: Annahme
   Empfehlungen ab Domänenphase 10; beantwortbar erst nach `rückfrage` (siehe Vorschläge).

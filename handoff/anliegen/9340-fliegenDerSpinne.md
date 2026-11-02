@@ -5,7 +5,7 @@ Von: Planer
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: 9400
+Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Die Canoptek-Spinne aus [Etappe 2](../../domaene/etappen/02-bewegen.md) hat FLY
@@ -20,7 +20,7 @@ und die Spinne hält regelwidrig vor fremden *Bases* und der *Nahkampfreichweite
 
 **Gegenvorschlag.** *Fliegen* im *Datenblatt* der Spinne mit Fundstelle; ein Kriterium in BEW-18
 zum Ziehen durch die *Nahkampfreichweite* (`core_rules.txt:884`); BEW-18 `Etappe: 2` nach
-[9271](9271-anhaltenVorFremdenBasesPlanen.md) F2 A, bei F2 B `Etappe: 4`.
+Anliegen 9271 F2 A, bei F2 B `Etappe: 4`.
 
 Wann: Domänenphase 10, vor Plan 10.
 
@@ -33,3 +33,7 @@ Das *Datenblatt* der Spinne fehlt: Keine Quelle nennt ihre *Base*, ich frage in
 Items fliegen: Der Katalog lehnt den neuen Schlüssel `fliegen` ab, bis die Technik ihn kennt
 (`technik/architektur/katalog.md` K3), sonst wird jeder Akzeptanztest rot. Den
 Ork-Psioniker nennt noch kein Anliegen und kein Item.
+Nach 9400: *Durchmesser* 60 (F1 A), Ende des Flugs wie BEW-18.3 (F2 A). Zum Start der
+Technikphase 11 (Item fliegen, Plan 11) schreibe ich das *Datenblatt* `Canoptek Spyder`:
+`bewegungsweite: 6` (`units.yaml:417`), `durchmesser: 60` (Anliegen 9400 F1 A), `fliegen`
+(`units.yaml:410`), dazu die Spinne in der *Armee* (`necrons_test.yaml:17`).

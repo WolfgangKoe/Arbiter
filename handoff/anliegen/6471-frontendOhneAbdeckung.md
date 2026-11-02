@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet ([Ich 3](../../prozess/praemissen/ich.md): keine Prüfung rot, kein Schritt
@@ -24,5 +24,8 @@ JavaScript messen, klärt vor dem Bau ein Wegwerf-Versuch in `/tmp`.
 
 **Stellungnahme.** Zugestimmt, statt Backlog als Prozess-Item P7 der [Retro 9](../retro.md)
 (Auftrag des Stakeholders, alle wartenden Anliegen einzuplanen): erst der Wegwerf-Versuch in
-`/tmp`, dann die Messung und die Schwelle in [DoD](../../prozess/ablauf/dod.md) 1;
-`angenommen`, sobald die Regel steht.
+`/tmp`, dann die Messung und die Schwelle in [DoD](../../prozess/ablauf/dod.md) 1.
+Umgesetzt mit P7: Die Abdeckungsprüfung misst im Lauf der Prüfungen auch die Zeilen von
+`technik/frontend/` in den Bildschirmtests, Schwelle 95 %, Bestand 96,8 %
+([Formregeln](../../prozess/regeln/formregeln.md)); DoD 1 verlangt sie. `erledigt` folgt dem
+Haken von P7 in der [Retro 9](../retro.md).

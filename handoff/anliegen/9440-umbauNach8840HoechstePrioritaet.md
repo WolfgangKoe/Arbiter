@@ -4,8 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Planer
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 10
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders, auf die Frage, ob `Grund.überEineBase` jetzt aus dem
@@ -14,15 +13,15 @@ Code fällt (B) oder der Glossareintrag bleibt, bis das Item ihn entfernt (A):
 Anliegen für die Domänenphase anlegen. Es hat höchste Priorität.“
 
 Festgehalten vom Planer. Gemeint ist der Umbau nach
-[8840](8840-baseNichtUeberdeckenAnhaltenStattSperre.md), wie in
-[9271](9271-anhaltenVorFremdenBasesPlanen.md) und
-[9320](9320-testsMitUeberEineBaseAlsMittel.md) geplant:
+Anliegen 8840, wie in
+Anliegen 9271 und
+Anliegen 9320 geplant:
 - Anhalten übergehen und Umbau der Tests, die ‚über eine Base‘ als Mittel nutzen: Item
   [anhaltenUebergehen](../../domaene/items/anhaltenUebergehen.md);
 - Anhalten vor fremden *Bases* und Entfernen von ‚über eine Base‘ aus dem Code: Item
   [anhaltenAufDemWeg](../../domaene/items/anhaltenAufDemWeg.md);
 - dabei bleibt die Ausnahme für *Modelle* derselben *Einheit*:
-  [9420](9420-bew15ModelleDerselbenEinheit.md).
+  Anliegen 9420.
 
 Bis dahin bleibt der Glossareintrag zu ‚über eine Base‘ (A).
 
@@ -30,4 +29,8 @@ Bis dahin bleibt der Glossareintrag zu ‚über eine Base‘ (A).
 
 **Gegenvorschlag.** Keiner.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [Plan 10](../plan.md): anhaltenUebergehen als Item 1,
+loslassenNebenDerKarte als Item 2 (sonst spränge zurück, wer vor einer *Base* anhält und neben
+der *Karte* loslässt), anhaltenAufDemWeg als Item 3; es entfernt ‚über eine Base‘ aus dem Code,
+BEW-19 hält die Ausnahme aus 9420. Bis dahin bleibt der Glossareintrag (A). Folge: Etappe 2
+endet mit Zyklus 11 (höchstens drei Items je Plan).

@@ -180,10 +180,10 @@ zu stören.
   Planer es vor und nennt es.
 
 ## Fortschritt
-- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
+- [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [ ] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
-- [ ] Planer: Plan geschrieben
+- [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan
 - [ ] Stakeholder: Freigabe Plan 10

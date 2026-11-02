@@ -2,7 +2,7 @@
 
 Umfang: QUE-7.
 
-Warum jetzt: Etappe 2 (Anliegen 2361 F2), Anliegen 670. Mit dem Klick erscheint und
+Warum jetzt: Etappe 2, Plan 11 zuletzt (Anliegen 2361 F2, 8880), Anliegen 670. Mit dem Klick erscheint und
 verschwindet mehr neben der Karte; wer nach einem Grund klickt oder greift, trifft die
 Stelle, die er sieht.
 

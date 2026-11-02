@@ -5,7 +5,7 @@ Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
 Status: angenommen
-Wartet auf: Domänenphase 10
+Wartet auf: Technikphase 10
 
 ## Runde 1
 **Befund.** Dein Auftrag: *Karte* meint auch armeeKarte und einheitenKarte, *Ebene* stört.
