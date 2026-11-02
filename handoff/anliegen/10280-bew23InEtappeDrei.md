@@ -7,7 +7,7 @@ Runde: 1/3
 Status: offen
 
 ## Runde 1
-**Befund.** Der Stakeholder hat in [10160](10160-schliesstPlanZehnEtappeZwei.md) F2 B
+**Befund.** Der Stakeholder hat in Anliegen 10160 F2 B
 geantwortet: [BEW-23](../../domaene/anforderungen/phasen/bewegung/sperreNichtAmZug.md) (‚nicht am
 Zug‘, übergehbar) gehört in Etappe 3. Ich habe es in
 [Etappe 3](../../domaene/etappen/03-angriffUndFallBack.md) aufgenommen. BEW-23 trägt bisher weder

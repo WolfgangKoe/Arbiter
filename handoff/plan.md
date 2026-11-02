@@ -2,7 +2,7 @@
 
 Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
 Zyklusziel aus [Review 9](review.md), 9440 und deine Antworten auf
-[10160](anliegen/10160-schliesstPlanZehnEtappeZwei.md): sechs Items, Etappe 2 endet mit Zyklus 10.
+Anliegen 10160: sechs Items, Etappe 2 endet mit Zyklus 10.
 
 ## Dein Happy Path nach Zyklus 10
 1. Aufstellen, erster Zug, *Bewegungsphase* wie bisher.

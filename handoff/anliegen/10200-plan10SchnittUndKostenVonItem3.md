@@ -52,7 +52,7 @@ Vertrag zu Item anhaltenAufDemWeg“.
    einem Wegwerf-Versuch; geht es nicht wie gedacht, kommt ein Anliegen vor dem Vertrag.
 
 **Stellungnahme.** Umgesetzt: 1 in beiden Items; 2 im Item randfaelleDesAufstellens,
-„(Etappe 7)“ in [10162](10162-auf12Punkt8UndBew21InEtappeSieben.md); 3 im Plan unter
-„Empfehlung“ und in den Kosten von [10160](10160-schliesstPlanZehnEtappeZwei.md) F1.
+„(Etappe 7)“ in Anliegen 10162; 3 im Plan unter
+„Empfehlung“ und in den Kosten von Anliegen 10160 F1.
 BEW-9.2 und BEW-22.1 stehen im Item zuruecksetzenUndLuecken. 10162 ist erledigt: AUF-12.8
 und BEW-21 tragen Etappe 7.
