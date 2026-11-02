@@ -18,8 +18,8 @@ Blockiert das Inkrement (Items 1 und 2 in [Plan](plan.md), Vertrag beider steht)
   (mit [8261](anliegen/8261-uebergehenNachVertragUndAuswahl.md)).
 
 Dran, hält nichts auf:
-- Implementierer: [10880](anliegen/10880-modellAnklickenOhneDoppelteEinheit.md) samt
-  [10900](anliegen/10900-meldungNenntDieArmeeliste.md); Anliegen 10561.
+- Implementierer: Anliegen 10880 samt
+  Anliegen 10900; Anliegen 10561.
 - Planer: Anliegen 10380 und
   Anliegen 10860 sind angenommen; die Absender
   prüfen nach (Testautor-Lauf bzw. Reviewer).
