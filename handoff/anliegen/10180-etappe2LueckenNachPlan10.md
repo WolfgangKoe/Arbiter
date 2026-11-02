@@ -5,7 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: 10340
+Wartet auf: Technikphase 10
 
 ## Runde 1
 **Befund.** Kritik an den Kriterien von [Etappe 2](../../domaene/etappen/02-bewegen.md). Nichts

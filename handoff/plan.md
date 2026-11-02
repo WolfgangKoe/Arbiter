@@ -117,6 +117,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Reviewer: Kritik am Code zu Item ruhigeKarte
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
+- [ ] Anforderungsautor: Anliegen 10180 Etappe 2: Zurücksetzen, Ork-Psioniker, Weiterziehen nach dem Übergehen
 - [ ] Testautor: Anliegen 10380 Fixtures unabhängig von der Zahl der Einheiten je Armee
 - [ ] Implementierer: Anliegen 7042 Meldung von einheitVon nach dem Umzug
 - [ ] Implementierer: Anliegen 7050 Unit-Test des Verschiebens am alten Ort

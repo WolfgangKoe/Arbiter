@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält die Freigabe von Plan 10 auf, weil eine *Sperre* zu Unrecht greift und ein

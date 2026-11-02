@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält die Freigabe auf: Der Stakeholder gibt frei, „wenn Schritte 1 bis 7 deinem
