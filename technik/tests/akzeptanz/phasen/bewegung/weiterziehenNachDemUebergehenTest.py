@@ -6,7 +6,7 @@ from http import HTTPStatus
 import pytest
 
 from arbiter.domaene.sperre import Grund
-from tests.akzeptanz.dienst import gemeinsamÜbergehen, modellLoslassen
+from tests.akzeptanz.dienst import gemeinsamÜbergehen, modellLoslassen, spielstandVon
 from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
 from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
@@ -182,12 +182,14 @@ def testBew25_1DerDienstSetztNachDemErneutenGemeinsamenÜbergehenAmPunktDesLosla
     (boss,) = warboss.modelle
     vorige = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
     anhaltenUndÜbergehen(schlachtInDerBewegungsphase, boss, vorige)
+    (älterer,) = spielstandVon(dienstDerSchlacht)["schlacht"]["protokoll"]
     ziel = versetzt(vorige, zweiZollNachOsten)
     modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
 
     antwort = gemeinsamÜbergehen(dienstDerSchlacht)
 
     assert antwort.status_code == HTTPStatus.OK
-    _, neuer = antwort.get_json()["schlacht"]["protokoll"]
+    neuer, davor = antwort.get_json()["schlacht"]["protokoll"]
+    assert davor == älterer
     assert neuer["gründe"] == [Grund.bewegungsweite.value]
     assert schlachtInDerBewegungsphase.stelle(boss) == ziel

@@ -46,6 +46,10 @@ def stelleBeimLoslassenDesVertrags() -> dict:
     return _beispielDesVertrags("stelleBeimLoslassen.json")
 
 
+pfadDesGezogenenImBeispiel = "/api/spieler/2/einheiten/1/modelle/1"
+stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
+
+
 def losgelassenDesVertrags() -> dict:
     return _beispielDesVertrags("losgelassen.json")
 

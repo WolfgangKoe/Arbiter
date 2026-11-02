@@ -1,6 +1,5 @@
 """AUF-24 · Block als Ganzes."""
 
-from fractions import Fraction
 from http import HTTPStatus
 from urllib.parse import urlparse
 
@@ -17,11 +16,14 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import (
     auswählen,
+    körperDerStelle,
     modellLoslassen,
+    pfadDesGezogenenImBeispiel,
     spielstandDesVertrags,
     spielstandVon,
     stelleBeimLoslassenAbfragen,
     stelleBeimLoslassenDesVertrags,
+    stelleDesLoslassensImBeispiel,
     stelleImSpielstand,
     stellenDerAbfrage,
     stellenDerEinheitIm,
@@ -224,7 +226,8 @@ def testAuf24_3DerDienstNenntDieStellenDesBlocksWieDasBeispielImVertrag(dienstDe
     auswählen(dienstDesBeispiels, "Necron Warriors")
 
     antwort = dienstDesBeispiels.get(
-        "/api/spieler/2/einheiten/1/modelle/1/stelleBeimLoslassen", query_string={"x": 35, "y": 28}
+        f"{pfadDesGezogenenImBeispiel}/stelleBeimLoslassen",
+        query_string=körperDerStelle(stelleDesLoslassensImBeispiel),
     )
 
     assert antwort.status_code == HTTPStatus.OK
@@ -277,9 +280,6 @@ def seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung):
     )
 
 
-stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
-
-
 def testAuf24_3DieSeiteSetztBeimHaltenDieKreiseAnDieStellenDerAntwortImBeispiel(
     bildschirm, ausgangsaufstellung
 ):
@@ -308,7 +308,7 @@ def testAuf24_3DieSeiteSendetBeimLoslassenDenPunktDesZeigersNichtDenGezeigten(
     toleranz = zollJePixel(seite)
     assert (anfrage.method, urlparse(anfrage.url).path) == (
         "PUT",
-        "/api/spieler/2/einheiten/1/modelle/1/stelle",
+        f"{pfadDesGezogenenImBeispiel}/stelle",
     )
     assert abs(gesendet["x"] - float(stelleDesLoslassensImBeispiel.x)) <= toleranz
     assert abs(gesendet["y"] - float(stelleDesLoslassensImBeispiel.y)) <= toleranz

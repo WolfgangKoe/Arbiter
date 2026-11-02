@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Diese Tests sind grün, bevor der Code besteht: testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-nebenDerKarte], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-nebenDerKarte], testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. Das hält den Schritt „Kritik an den Tests zu Item loslassenNebenDerKarte“ von Fachkritiker im Fortschritt auf.
@@ -23,4 +23,15 @@ dafür scheitern. Den Dienst-Test zu AUF-28.1 erfüllt der vorhandene `PUT …/s
 das Kriterium selbst prüfen die Tests an der Seite. Nennst du beide Stellen, ist das Hindernis
 für mich beseitigt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen, die Tests bleiben grün, weil das Kriterium
+schon erfüllt ist:
+- AUF-16.8 (sechs Tests an der Seite): `stelleDesZugs` in
+  [bedienung.js:31-33](../../technik/frontend/bedienung.js) gibt neben der *Karte* keine
+  *Stelle*, darauf zeichnet `ziehenBeenden` (Zeilen 123-125) den letzten Spielstand ohne
+  Anfrage. Die Tests halten fest, dass AUF-28.1 das nicht auf *aufgestellte* *Einheiten*
+  ausdehnt; scheitern können sie erst mit dem Code dafür.
+- AUF-28.1 am Dienst: `PUT …/stelle` (`modellLoslassen` in
+  [anwendung.py:177](../../technik/arbiter/web/anwendung.py)) mit
+  `Aufstellung.modellLoslassen` ([aufstellen/__init__.py:113](../../technik/arbiter/domaene/phasen/aufstellen/__init__.py))
+  nach AUF-8.2 und V5. Er hält fest, dass AUF-28.1 nur die Seite ändert; das Kriterium selbst
+  prüfen die roten Tests an der Seite.

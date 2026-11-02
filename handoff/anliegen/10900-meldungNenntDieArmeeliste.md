@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase 11
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit) zur Umsetzung von

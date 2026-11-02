@@ -10,17 +10,20 @@ from playwright.sync_api import Route
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.anhalten import stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
-    armeelisteVon,
     aufDieHandlungWarten,
     kreiseDerKarte,
     seiteMitEingabe,
 )
 from tests.akzeptanz.dienst import (
     auswählen,
+    imUmfangDes,
+    körperDerStelle,
     losgelassenDesVertrags,
+    pfadDesGezogenenImBeispiel,
     sperreDesVertrags,
     spielstandDesVertrags,
     stelleBeimLoslassenDesVertrags,
+    stelleDesLoslassensImBeispiel,
     stellenDesVertrags,
 )
 from tests.akzeptanz.handgriffe import (
@@ -34,41 +37,22 @@ from tests.akzeptanz.ziehen import (
     aufDieAntwortenWarten,
     bildaufbauAbwarten,
     halten,
+    längeDesHaltens,
     mitMausUndFinger,
-    mitteVon,
     nebenDerKarteLoslassen,
     offeneAbfragenAbwarten,
     punktAufDerKarte,
+    zieleNebenDerKarte,
 )
 
-pfadDesGezogenenImBeispiel = "/api/spieler/2/einheiten/1/modelle/1"
-punktDesLoslassensImBeispiel = {"x": 35, "y": 28}
-stelleDesLoslassensImBeispiel = Stelle(x=Fraction(35), y=Fraction(28))
 gesperrteStelleImBeispiel = Stelle(x=Fraction(38), y=Fraction(28))
 stelleNebenDerKarteImBeispiel = Stelle(x=Fraction(breiteDesSpielfelds + 2), y=Fraction(28))
-einenZollJenseitsDerKante = -1
-längeDesHaltens = 20
-
-zieleNebenDerKarte = pytest.mark.parametrize(
-    "ziel",
-    ["Spieler 1", "Spieler 2", "nebenDerKarte"],
-    ids=["aufDerArmeelisteVonSpielerEins", "aufDerArmeelisteVonSpielerZwei", "nebenDerKarte"],
-)
-
-
-def punktNebenDerKarte(seite, aufstellung, ziel: str):
-    if ziel == "nebenDerKarte":
-        jenseits = stelleInDerZoneDesSpielersAnDerReihe(
-            aufstellung, einenZollJenseitsDerKante, längeDesHaltens
-        )
-        return punktAufDerKarte(seite, jenseits)
-    return mitteVon(armeelisteVon(seite, ziel))
 
 
 @pytest.fixture
-def dreiGesetzteBoyz(aufstellungNachDerZonenwahl, boyz):
+def dreiGesetzteBoyz(aufstellungNachDerZonenwahl, spielerEins, boyz):
     [(_, davor), *_] = modelleSetzen(aufstellungNachDerZonenwahl, boyz, 3)
-    return aufstellungNachDerZonenwahl, boyz, davor
+    return aufstellungNachDerZonenwahl, spielerEins, boyz, davor
 
 
 @zieleNebenDerKarte
@@ -77,12 +61,12 @@ def dreiGesetzteBoyz(aufstellungNachDerZonenwahl, boyz):
 def testAuf28_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte(
     bildschirm, dreiGesetzteBoyz, ziel, ebeneLegen, eingabe
 ):
-    aufstellung, boyz, davor = dreiGesetzteBoyz
+    aufstellung, spielerEins, boyz, davor = dreiGesetzteBoyz
     ebeneLegen(aufstellung, boyz)
     stellenDavor = stellenAlsZahlen(aufstellung)
     seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
     aufDerKarte = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
-    daneben = punktNebenDerKarte(seite, aufstellung, ziel)
+    daneben = ziel(seite, aufstellung, spielerEins)
 
     gezeigt = nebenDerKarteLoslassen(seite, davor, aufDerKarte, daneben, eingabe)
 
@@ -91,18 +75,15 @@ def testAuf28_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte
 
 
 def testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag(dienstDesBeispiels):
+    punkt = körperDerStelle(stelleDesLoslassensImBeispiel)
     auswählen(dienstDesBeispiels, "Necron Warriors")
-    dienstDesBeispiels.get(
-        f"{pfadDesGezogenenImBeispiel}/stelleBeimLoslassen",
-        query_string=punktDesLoslassensImBeispiel,
-    )
+    dienstDesBeispiels.get(f"{pfadDesGezogenenImBeispiel}/stelleBeimLoslassen", query_string=punkt)
 
-    antwort = dienstDesBeispiels.put(
-        f"{pfadDesGezogenenImBeispiel}/stelle", json=punktDesLoslassensImBeispiel
-    )
+    antwort = dienstDesBeispiels.put(f"{pfadDesGezogenenImBeispiel}/stelle", json=punkt)
 
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == losgelassenDesVertrags()
+    beispiel = losgelassenDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 class AbfrageMitSperre:

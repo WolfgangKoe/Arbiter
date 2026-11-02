@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Kritik: Namen und Ablage von Hilfsfunktionen, keine Prüfung rot),

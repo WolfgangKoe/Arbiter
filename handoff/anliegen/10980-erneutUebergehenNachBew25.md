@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item anhaltenUebergehen. Hält auf nach

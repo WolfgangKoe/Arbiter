@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 11
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item loslassenNebenDerKarte (Commit 6812e74). Wartet nach
@@ -31,4 +30,18 @@ drei Dateien nachzuziehen; ein weiteres Ziel neben der *Karte* braucht einen Zwe
 `(seite, aufstellung, spieler) -> Bildpunkt`, je eine für jede *Armeeliste* und eine für
 neben der *Karte*; `zugOhneBewegung` als zwei Funktionen wie `danach`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und schon jetzt umgesetzt, weil dieselben Dateien für 11260
+offen waren.
+1. `pfadDesGezogenenImBeispiel` und `stelleDesLoslassensImBeispiel` stehen einmal in
+   [dienst.py](../../technik/tests/akzeptanz/dienst.py) neben `stelleBeimLoslassenDesVertrags`;
+   den Punkt bildet `körperDerStelle`. `blockAlsGanzesTest.py` liest beide statt des Texts.
+2. Die Ziele stehen einmal in [ziehen.py](../../technik/tests/akzeptanz/ziehen.py) als
+   Funktionen `(seite, aufstellung, spieler) -> Bildpunkt`: `aufDerArmeelisteVonSpielerEins`,
+   `aufDerArmeelisteVonSpielerZwei`, `jenseitsDerKante`, dazu `zieleNebenDerKarte`,
+   `einenZollJenseitsDerKante` und `längeDesHaltens`; die ids sind unverändert. AUF-28.1 nimmt
+   den *Spieler* aus der Fixture `dreiGesetzteBoyz`.
+3. `zugOhneBewegung` in
+   [loslassenNebenDerKarteTest.py](../../technik/tests/akzeptanz/phasen/bewegung/loslassenNebenDerKarteTest.py)
+   ruft eine von zwei Funktionen, `außerhalbDerBewegungsphase` und `modellDesAnderenSpielers`,
+   als Parameter der Fixture; kein Zweig mehr. Ein Parameter am Test statt der Fixture
+   bräuchte sieben Argumente (ruff PLR0913).

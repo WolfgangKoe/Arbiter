@@ -1,19 +1,24 @@
 """AUF-16 · Loslassen ohne Ziel."""
 
+from fractions import Fraction
 from http import HTTPStatus
 
 import pytest
 
+from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
-    armeelisteVon,
     kreiseDerKarte,
     seiteMitEingabe,
     sperrmeldungenDerSeite,
 )
 from tests.akzeptanz.dienst import (
     auswählen,
+    imUmfangDes,
     keineStelleBeimLoslassenDesVertrags,
+    körperDerStelle,
+    pfadDesGezogenenImBeispiel,
     spielstandVon,
+    stelleDesLoslassensImBeispiel,
     zurückgelegtDesVertrags,
     zurücklegen,
 )
@@ -21,23 +26,19 @@ from tests.akzeptanz.handgriffe import (
     einheitAufstellen,
     modelleSetzen,
     stelleInDerZoneDesSpielersAnDerReihe,
-    stelleInDerZoneVon,
     stellenAllerModelle,
 )
 from tests.akzeptanz.ziehen import (
     bildaufbauAbwarten,
+    einenZollJenseitsDerKante,
     haltenUndLosslassen,
+    längeDesHaltens,
     mitMausUndFinger,
-    mitteVon,
     nebenDerKarteLoslassen,
     punktAufDerKarte,
     ziehenOhneAnfrage,
+    zieleNebenDerKarte,
 )
-
-pfadDesGezogenenImBeispiel = "/api/spieler/2/einheiten/1/modelle/1"
-punktDesLoslassensImBeispiel = {"x": 35, "y": 28}
-einenZollJenseitsDerKante = -1
-längeDesHaltens = 20
 
 
 def nurZurücklegen(aufstellung, warboss): ...
@@ -98,29 +99,33 @@ def testAuf16_7DerDienstNenntNachDemZurücklegenKeineStelleWieDasBeispielImVertr
 
     antwort = dienstDesBeispiels.get(
         f"{pfadDesGezogenenImBeispiel}/stelleBeimLoslassen",
-        query_string=punktDesLoslassensImBeispiel,
+        query_string=körperDerStelle(stelleDesLoslassensImBeispiel),
     )
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == keineStelleBeimLoslassenDesVertrags()
-    assert spielstandVon(dienstDesBeispiels) == zurückgelegtDesVertrags()
+    beispiel = zurückgelegtDesVertrags()
+    assert imUmfangDes(beispiel, spielstandVon(dienstDesBeispiels)) == beispiel
 
 
 @pytest.mark.parametrize(
-    "punkt",
-    [punktDesLoslassensImBeispiel, {"x": 5, "y": 28}],
+    "stelle",
+    [stelleDesLoslassensImBeispiel, Stelle(x=Fraction(5), y=Fraction(28))],
     ids=["amPunktDesBeispiels", "inDerZoneDesAnderenSpielers"],
 )
 def testAuf16_7DerDienstSetztNachDemZurücklegenNichtsWieDasBeispielImVertrag(
-    dienstDesBeispiels, punkt
+    dienstDesBeispiels, stelle
 ):
     auswählen(dienstDesBeispiels, "Necron Warriors")
     zurücklegen(dienstDesBeispiels)
 
-    antwort = dienstDesBeispiels.put(f"{pfadDesGezogenenImBeispiel}/stelle", json=punkt)
+    antwort = dienstDesBeispiels.put(
+        f"{pfadDesGezogenenImBeispiel}/stelle", json=körperDerStelle(stelle)
+    )
 
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == zurückgelegtDesVertrags()
+    beispiel = zurückgelegtDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 def aufDerKarteLoslassen(seite, aufstellung, davor, eingabe):
@@ -159,22 +164,6 @@ def testAuf16_7EineSeiteVonVorDemZurücklegenZeigtNachDemLoslassenKeinModellUndK
     assert sperrmeldungenDerSeite(seite) == []
 
 
-zieleNebenDerKarte = pytest.mark.parametrize(
-    "ziel",
-    ["Spieler 1", "Spieler 2", "nebenDerKarte"],
-    ids=["aufDerArmeelisteVonSpielerEins", "aufDerArmeelisteVonSpielerZwei", "nebenDerKarte"],
-)
-
-
-def punktNebenDerKarte(seite, aufstellung, spieler, ziel: str):
-    if ziel == "nebenDerKarte":
-        jenseits = stelleInDerZoneVon(
-            aufstellung, spieler, einenZollJenseitsDerKante, längeDesHaltens
-        )
-        return punktAufDerKarte(seite, jenseits)
-    return mitteVon(armeelisteVon(seite, ziel))
-
-
 @pytest.fixture
 def aufgestellteBoyz(aufstellungNachDerZonenwahl, spielerEins, boyz):
     einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
@@ -192,7 +181,7 @@ def testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWi
     seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
     kreiseDavor = kreiseDerKarte(seite)
     von = punktAufDerKarte(seite, aufstellung.stelle(erstesModell))
-    daneben = punktNebenDerKarte(seite, aufstellung, spielerEins, ziel)
+    daneben = ziel(seite, aufstellung, spielerEins)
 
     anfragen = ziehenOhneAnfrage(seite, von, daneben, eingabe)
 

@@ -6,9 +6,10 @@ from math import hypot
 import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
-from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
-from tests.akzeptanz.bildschirm import aufDieHandlungWarten, kreiseDerKarte
-from tests.akzeptanz.handgriffe import radiusInZoll
+from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
+from tests.akzeptanz.bildschirm import armeelisteVon, aufDieHandlungWarten, kreiseDerKarte
+from tests.akzeptanz.handgriffe import radiusInZoll, stelleInDerZoneVon
 from tests.akzeptanz.schlacht import hundertstelZoll
 
 
@@ -280,6 +281,34 @@ def nebenDerKarteLoslassen(
     with aufDieHandlungWarten(seite):
         zeiger.loslassen(daneben)
     return gezeigt
+
+
+einenZollJenseitsDerKante = -1
+längeDesHaltens = 20
+
+
+def aufDerArmeelisteVonSpielerEins(
+    seite: Page, _aufstellung: Aufstellung, _spieler: Spieler
+) -> Bildpunkt:
+    return mitteVon(armeelisteVon(seite, "Spieler 1"))
+
+
+def aufDerArmeelisteVonSpielerZwei(
+    seite: Page, _aufstellung: Aufstellung, _spieler: Spieler
+) -> Bildpunkt:
+    return mitteVon(armeelisteVon(seite, "Spieler 2"))
+
+
+def jenseitsDerKante(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> Bildpunkt:
+    jenseits = stelleInDerZoneVon(aufstellung, spieler, einenZollJenseitsDerKante, längeDesHaltens)
+    return punktAufDerKarte(seite, jenseits)
+
+
+zieleNebenDerKarte = pytest.mark.parametrize(
+    "ziel",
+    [aufDerArmeelisteVonSpielerEins, aufDerArmeelisteVonSpielerZwei, jenseitsDerKante],
+    ids=["aufDerArmeelisteVonSpielerEins", "aufDerArmeelisteVonSpielerZwei", "nebenDerKarte"],
+)
 
 
 def aufDasAnklickenWarten(seite: Page):

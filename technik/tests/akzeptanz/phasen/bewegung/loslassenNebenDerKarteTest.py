@@ -56,15 +56,25 @@ def testBew20_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte
     assert hältAnDerSpielfeldkante(schlacht.stelle(modell), modell)
 
 
-@pytest.fixture(params=["außerhalbDerBewegungsphase", "modellDesAnderenSpielers"])
-def zugOhneBewegung(request, schlachtNachDerWahlDesErstenZugs, boyz, necronWarriors):
-    schlacht = schlachtNachDerWahlDesErstenZugs
-    if request.param == "außerhalbDerBewegungsphase":
-        *_, modell = boyz.modelle
-        return schlacht, modell, anDerWestkante
+def außerhalbDerBewegungsphase(_schlacht, boyz, _necronWarriors):
+    *_, modell = boyz.modelle
+    return modell, anDerWestkante
+
+
+def modellDesAnderenSpielers(schlacht, _boyz, necronWarriors):
     schlacht.phaseBeenden()
     *_, modell = necronWarriors.modelle
-    return schlacht, modell, anDerOstkante
+    return modell, anDerOstkante
+
+
+@pytest.fixture(
+    params=[außerhalbDerBewegungsphase, modellDesAnderenSpielers],
+    ids=["außerhalbDerBewegungsphase", "modellDesAnderenSpielers"],
+)
+def zugOhneBewegung(request, schlachtNachDerWahlDesErstenZugs, boyz, necronWarriors):
+    schlacht = schlachtNachDerWahlDesErstenZugs
+    modell, kante = request.param(schlacht, boyz, necronWarriors)
+    return schlacht, modell, kante
 
 
 @mitMausUndFinger
