@@ -153,5 +153,5 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Stakeholder: Freigabe Review 10
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
