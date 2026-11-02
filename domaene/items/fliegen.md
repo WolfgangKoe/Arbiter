@@ -6,5 +6,5 @@ Warum jetzt: Etappe 2, Plan 10 (10160 F1 B). Ohne BEW-18 hielte Arbiter die Spin
 regelwidrig vor fremden Bases an (`core_rules.txt:871`).
 
 Abhängigkeit: anhaltenAufDemWeg (BEW-17.1); Fixtures, dann *Datenblatt* der Spinne
-([10340](../../handoff/anliegen/10340-dritteEinheitBrichtFixtures.md)); Neuland, erprobt vor
+(Anliegen 10340); Neuland, erprobt vor
 den Tests (10321).

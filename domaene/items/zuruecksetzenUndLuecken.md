@@ -6,6 +6,6 @@ Warum jetzt: Etappe 2 (2364 F4 A), Plan 10 (10160 F1 B); BEW-22.1 aus 6986, QUE-
 4261. Klein, an derselben Auswahl.
 
 Abhängigkeit: Fixtures, dann Daten zum Weirdboy
-([10340](../../handoff/anliegen/10340-dritteEinheitBrichtFixtures.md)).
+(Anliegen 10340).
 
 Mockup: [bew-24](../mockups/bew-24.html).

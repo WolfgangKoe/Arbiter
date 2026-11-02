@@ -14,7 +14,7 @@ Canoptek-Spinne bei den Necrons ([9340](9340-fliegenDerSpinne.md)). Die Fixtures
 `warboss`, `necronWarriors` und `overlord` (`technik/tests/akzeptanz/conftest.py:157` bis
 `:177`) erwarten genau zwei *Einheiten* je *Armee*. Der Anforderungsautor hat es an einer Kopie
 in `/tmp` mit nur dem Weirdboy gemessen: 12 Tests rot, 471 brechen ab
-([10340](10340-dritteEinheitBrichtFixtures.md)).
+(Anliegen 10340).
 
 **Kosten.** Bleibt es, darf der Anforderungsautor die Daten zu Weirdboy und Spinne nicht
 schreiben; ohne sie fehlen Schritt 5 und 6 des Happy Path ([Plan 10](../plan.md)), Item 4 und 5

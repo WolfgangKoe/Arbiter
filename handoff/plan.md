@@ -47,8 +47,8 @@ Andere Etappen: AUF-12.8, BEW-21.1 in 7 (10200), BEW-23 in 3 (F2 B), Flugzeug in
 
 ## Abweichungen vom Zyklusziel
 - Sechs Items statt höchstens drei (Domänenphase 6), mit deiner Ausnahme (F1 B): Die
-  Technikphase dauert etwa doppelt so lang, dafür entfällt ein Zyklus. Hängt Item 3, 4 oder
-  6, rückt nur dieses in Zyklus 11.
+  Technikphase dauert etwa doppelt so lang, dafür entfällt ein Zyklus. Hängt Item 3, rücken
+  3 und 4 in Zyklus 11 (Schritte 4 und 5); hängt 4 oder 6, nur dieses.
 - Anhalten übergehen ist dabei, nicht erst in Etappe 3 (9271).
 
 ## Empfehlung
@@ -58,8 +58,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 
 ## Offene Anliegen
 - An den Anforderungsautor: [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
-  [9340](anliegen/9340-fliegenDerSpinne.md), [10320](anliegen/10320-bew25UndBew18Pruefbar.md).
-- Vom Anforderungsautor: [10340](anliegen/10340-dritteEinheitBrichtFixtures.md).
+  [9340](anliegen/9340-fliegenDerSpinne.md), Anliegen 10320.
+- Vom Anforderungsautor: Anliegen 10340.
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt

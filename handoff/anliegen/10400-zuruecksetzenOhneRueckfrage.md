@@ -5,6 +5,7 @@ Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
+Wartet auf: 10480
 
 ## Runde 1
 **Befund.** Hält auf, weil das Item [zuruecksetzenUndLuecken](../../domaene/items/zuruecksetzenUndLuecken.md)
@@ -34,4 +35,7 @@ bis dahin gilt die Empfehlung, also hält die Frage den Happy Path nicht auf
 Empfehlung A: gleiche Bedienung wie die beiden anderen Rücknahmen, und ein Fehlklick kostet
 nichts, die *Einheit* zieht man neu. Schreib die Entscheidung als Quelle an BEW-24.1.
 
-**Stellungnahme.**
+**Stellungnahme.** Befund trifft zu (`ArbiterMap/frontend/CLAUDE.md:350`). Die Frage steht mit
+deinen Möglichkeiten und Empfehlung A in [10480](10480-zuruecksetzenMitOderOhneRueckfrage.md);
+bis zur Antwort gilt A, BEW-24 und bew-24 bleiben. Mit der Antwort schreibe ich sie als Quelle an
+BEW-24.1 (A) oder lege das Kriterium für den Dialog an (B) und setze `angenommen`.
