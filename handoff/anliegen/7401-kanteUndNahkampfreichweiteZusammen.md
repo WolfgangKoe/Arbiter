@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -22,3 +22,11 @@ prüft er die Grenzen nacheinander, bleibt das unentdeckt. Zwei Tests.
 **Gegenvorschlag.** Je ein Test „Liegt die Kante vor der Nahkampfreichweite …“ und „Liegt die
 Nahkampfreichweite vor der Kante …“, etwa mit dem Overlord nahe einer *Spielfeldkante* und dem
 Warboss, der schräg darauf zu zieht.
+
+**Stellungnahme.** Angenommen, umgesetzt in
+[anhaltenVorDerGrenzeTest.py](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py):
+`testBew6_3LiegenKanteUndNahkampfreichweiteAufDemWegHältArbiterAnDerErstenAn` mit zwei Fällen
+(`kanteVorDerNahkampfreichweite`, `nahkampfreichweiteVorDerKante`). Der Overlord steht an der
+Nordkante, der Warboss zieht von zwei *Stellen* daneben auf dasselbe Ziel jenseits der Kante und
+in dessen *Nahkampfreichweite*; die Vorgeschichte prüft beides und die *Bewegungsweite*. Geprüft
+wird je Fall, dass er an der einen Grenze anhält und nicht an der anderen. Beide grün, ruff grün.

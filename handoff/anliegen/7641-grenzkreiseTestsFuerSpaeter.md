@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -31,4 +31,27 @@ Wartet auf: Technikphase 10
 *Einheit* wartet weiter. 3: Namen aus Anforderung und Glossar, oder „Ring“ über den
 Anforderungsautor ins Glossar (der Plan nutzt es schon).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle drei umgesetzt; die Tests sind grün, der Code kann es schon.
+1. Neu `testBew11_5DieSeiteZeigtJedeEinhüllendeDurchIhreMaskeAusDenselbenGrenzkreisen` in
+   [grenzkreiseTest.py](../../technik/tests/akzeptanz/phasen/bewegung/grenzkreiseTest.py) und
+   `testBew13_1DieSeiteZeigtJedeDerSiebenEinhüllendenDurchIhreEigeneMaske` in
+   [grenzkreiseBeimVorrueckenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/grenzkreiseBeimVorrueckenTest.py):
+   Jede `g.grenze` verweist über `mask` auf eine `mask.grenzeMaske` mit denselben Kreisen, und
+   jede hat so viele Kreise, wie ihre *Einheit* *Modelle* hat. Hilfe
+   `kreiseDerGrenzenUndIhrerMasken` in [bildschirm.py](../../technik/tests/akzeptanz/bildschirm.py).
+   Das hält sich an den Abschnitt Seite des
+   [Vertrags](../../technik/architektur/vertrag/bewegung/grenzkreise.md) (`grenzeMaske` je Eintrag);
+   der Architekt sieht es bei seiner Kritik an den Tests.
+2. Neu in [wurfPerFlaecheTest.py](../../technik/tests/akzeptanz/phasen/bewegung/wurfPerFlaecheTest.py):
+   `testBew14_1EinKlickAufEinModellImGrenzkreisEinesWurfsWähltKeinenWurf` (Domäne) und
+   `testBew14_1AmBildschirmWähltEinKlickAufEinModellImGrenzkreisEinesWurfsKeinenWurf` (Maus und
+   Finger). Der letzte Boy ist *Ebene*, die *Einheit* wartet; Klick auf den dritten Boy, der nur im
+   *Grenzkreis* für 4 steht: kein *Vorrückwurf*, nicht *vorgerückt*, sie wartet weiter, am
+   Bildschirm bleiben sechs `wählbar`.
+3. „Ring“ ist aus allen Namen heraus: `stelleNurImGrenzkreisDesWurfs`,
+   `stelleAufDemGrenzkreisDesWurfs`, `außerhalbDerSechsGrenzkreise`, Tests `…NurImGrenzkreisFürVier…`,
+   `…AnJederAnderenStelle…` (Wortlaut von BEW-14.1). Tests, die sagen, was die *Karte* zeigt,
+   heißen jetzt nach *Grenzkreis* und *Einhüllende*: `…KeinenGrenzkreis`, `…SechsWählbarenEinhüllenden`,
+   `…EinhüllendeDesWurfs…` (BEW-5.2, 11, 12.2, 13). „Grenze“ bleibt nur in Hilfen, die die
+   Abfrage `grenzen` aus V20 und V21 des Vertrags lesen (`grenzenDerEinheit`, `GrenzeDerKarte`):
+   Das ist der Name der Schnittstelle, nicht der Fachsprache.

@@ -65,6 +65,21 @@ def kreiseDerKarte(seite: Page) -> frozenset[tuple[float, float]]:
     return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
 
 
+_kreiseDerGrenzenUndMasken = """gruppen => gruppen.map(gruppe => {
+    const kreiseVon = element => [...element.querySelectorAll("circle")]
+        .map(kreis => ["cx", "cy", "r"].map(name => kreis.getAttribute(name)).join(" "))
+        .sort()
+    const kennung = /^url\\(#(.+)\\)$/.exec(gruppe.getAttribute("mask") ?? "")?.[1]
+    const maske = kennung ? document.getElementById(kennung) : null
+    return [kreiseVon(gruppe), maske?.matches("mask.grenzeMaske") ? kreiseVon(maske) : null]
+})"""
+
+
+def kreiseDerGrenzenUndIhrerMasken(seite: Page) -> tuple[list, list]:
+    paare = seite.locator(".karte g.grenze").evaluate_all(_kreiseDerGrenzenUndMasken)
+    return [gruppe for gruppe, _ in paare], [maske for _, maske in paare]
+
+
 def inhaltDerSeite(seite: Page) -> str:
     return seite.evaluate(
         "() => ['.kopfzeile', '.spielbereich'].map(a => document.querySelector(a).innerHTML).join()"

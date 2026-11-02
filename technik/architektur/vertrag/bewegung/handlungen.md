@@ -25,7 +25,9 @@ Am Bildschirm | Anfrage (V5) | `Schlacht`
   *Bewegungsweite* erreicht, höchstens 1/100″ davor. Ebenso hält er vor dem ersten Schritt,
   an dem eine *Base* nicht *ganz in* dem *Spielfeld* läge (BEW-6.1) oder ein *Modell* in
   *Nahkampfreichweite* eines des anderen *Spielers* käme (6.2); es gilt der früheste der drei
-  (6.3). Diese Grenzen in `phasen/bewegung/anhaltenVorDerGrenze.py`. Erst danach
+  (6.3). Diese Grenzen in `phasen/bewegung/anhaltenVorDerGrenze.py`. Steht schon an der
+  vorigen *Stelle* ein *Modell* der *Ebene* über seiner *Bewegungsweite* oder in
+  *Nahkampfreichweite* und ist der Weg nicht 0, ist deren Anteil 0 (BEW-25.1). Erst danach
   prüfen QUE-1 und BEW-2.5 die gekürzten *Stellen* (BEW-2.8). Anhalten ist kein *Grund*: 200.
   Ein *Modell* des anderen *Spielers* *setzt* nichts: V10 leer, V5 200 (BEW-10.1).
 - **V17** `phaseBeenden` in der *Bewegungsphase*: Ist eine *Einheit* des *Spielers* *am Zug*

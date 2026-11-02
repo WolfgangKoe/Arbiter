@@ -5,15 +5,16 @@ from typing import NamedTuple
 import pytest
 
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
-from tests.akzeptanz.dienst import kennungenDerEinheiten, stelleImSpielstand
-from tests.akzeptanz.handgriffe import modellZurEbeneMachen, radiusInZoll, versetzt
-from tests.akzeptanz.schlacht import jetzigeStellen
+from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
 
 würfe = tuple(range(1, 7))
 würfeIds = [f"wurf{wurf}" for wurf in würfe]
 mitJedemWurf = pytest.mark.parametrize("wurf", würfe, ids=würfeIds)
+einAuge = 1
+dreiAugen = 3
+vierAugen = 4
 halberZoll = Fraction(1, 2)
-außerhalbDerSechsRinge = len(würfe) + 1
+außerhalbDerSechsGrenzkreise = len(würfe) + 1
 innerhalbDesGrenzkreisesOhneWurf = 0
 
 
@@ -84,73 +85,19 @@ def grenzenDerEinheitenDes(schlacht, spieler: Spieler) -> dict[Einheit, frozense
     return {einheit: grenzenDerEinheit(schlacht, einheit) for einheit in spieler.armee.einheiten}
 
 
-def alsZahlen(grenzen: frozenset[GrenzeDerKarte]) -> frozenset[GrenzeDerKarte]:
-    return frozenset(
-        grenze._replace(
-            kreise=frozenset(
-                (*stelleImSpielstand(stelle), float(radius)) for stelle, radius in grenze.kreise
-            )
-        )
-        for grenze in grenzen
-    )
-
-
-def grenzenDerEinheitIm(spielstand: dict, einheitenname: str) -> frozenset[GrenzeDerKarte]:
-    kennung = kennungenDerEinheiten[einheitenname]
-    return frozenset(
-        GrenzeDerKarte(
-            frozenset((kreis["x"], kreis["y"], kreis["radius"]) for kreis in grenze["kreise"]),
-            grenze.get("wurf"),
-            grenze.get("wählbar", False),
-            grenze.get("nahkampfreichweite", False),
-        )
-        for grenze in spielstand["schlacht"]["grenzen"]
-        if (grenze["spieler"], grenze["einheit"]) == kennung
-    )
-
-
-def ganzeEinheitAuswählen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
-    schlacht.auswählen(einheit)
-    return jetzigeStellen(schlacht, einheit)
-
-
-def letztesModellZurEbeneMachen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
-    *_, letztes = einheit.modelle
-    modellZurEbeneMachen(schlacht, einheit, letztes)
-    return {letztes: schlacht.stelle(letztes)}
-
-
-ebenen = {"ganzeEinheit": ganzeEinheitAuswählen, "einModell": letztesModellZurEbeneMachen}
-mitJederEbene = pytest.mark.parametrize("ebene", list(ebenen), ids=list(ebenen))
-
-
 def unterDemLetztenModell(schlacht, einheit: Einheit, mehrAlsDieBewegung: Fraction) -> Stelle:
     *_, letztes = einheit.modelle
     abstand = letztes.bewegungsweite + radiusInZoll(letztes) + mehrAlsDieBewegung
     return versetzt(schlacht.stelle(letztes), (Fraction(0), abstand))
 
 
-def stelleImRing(schlacht, einheit: Einheit, wurf: int) -> Stelle:
+def stelleNurImGrenzkreisDesWurfs(schlacht, einheit: Einheit, wurf: int) -> Stelle:
     return unterDemLetztenModell(schlacht, einheit, wurf - halberZoll)
 
 
-def stelleAufDemKreis(schlacht, einheit: Einheit, wurf: int) -> Stelle:
+def stelleAufDemGrenzkreisDesWurfs(schlacht, einheit: Einheit, wurf: int) -> Stelle:
     return unterDemLetztenModell(schlacht, einheit, Fraction(wurf))
 
 
 def zweiZollEntlangDerReihe(stelle: Stelle) -> Stelle:
     return versetzt(stelle, (Fraction(0), Fraction(2)))
-
-
-def wartetAufDenVorrückwurf(schlacht, einheit: Einheit, ebene: str) -> dict[Modell, Stelle]:
-    stellen = ebenen[ebene](schlacht, einheit)
-    schlacht.vorrücken()
-    return stellen
-
-
-def vorgerücktMit(
-    schlacht, einheit: Einheit, wurf: int, ebene: str = "ganzeEinheit"
-) -> dict[Modell, Stelle]:
-    stellen = wartetAufDenVorrückwurf(schlacht, einheit, ebene)
-    schlacht.karteAnklicken(stelleImRing(schlacht, einheit, wurf))
-    return stellen

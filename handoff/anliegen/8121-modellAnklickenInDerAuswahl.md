@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -32,4 +32,10 @@ ein Weg braucht; bleibt 2, sucht ein Leser die Regel an der falschen Stelle.
    *Einheitenkarte* einer *aufgestellten* *Einheit* sie auswählen soll, fragst du den
    Anforderungsautor, statt es im Code zu entscheiden.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Punkte angenommen und umgesetzt. 1: `modellAnklicken` setzt die
+*Ebene* einmal (`None if modellIstEbene else modell`), `ebeneWählen` und `ebeneAbwählen`
+entfallen, die Unit-Tests prüfen `modellAnklicken` (siehe 8100). 2: Die Meldung heißt jetzt
+„Eine aufgestellte Einheit wählt man nicht über die Einheitenkarte“. Ob die *Einheitenkarte*
+einer *aufgestellten* *Einheit* sie auswählen soll, entscheide ich nicht; das Verhalten bleibt
+wie bisher gesperrt, und AUF-30 regelt nur den Klick auf ein *Modell*. Ich stelle dazu keine
+Frage, solange der Stakeholder den Bildschirm nicht anders verlangt.

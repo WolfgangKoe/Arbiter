@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ablage und Schnittstelle von Hilfsfunktionen, keine Prüfung rot),
@@ -33,4 +32,8 @@ einen zu großen *Vorrückwurf*, ohne dass ein Test es merkt. Änderung: etwa ze
    `gegner: Mapping[Modell, Stelle]`; `Schlacht` sondert sie aus, das `noqa` entfällt.
 2. `min((grenze.wurf for grenze in würfe if enthält(grenze.kreise, stelle)), default=None)`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, mit einer Abweichung bei 1. `stellenMitGründenNachDemZiehen`
+nimmt `ebene, gezogenes, ziel, stellen, gegner` (fünf Parameter, `noqa` entfällt); `Schlacht`
+sondert die `gegner` aus, die eigenen Modelle folgen aus `stellen` ohne `gegner`. Die
+`einheit` braucht es nicht, weil der Wurf über `einheitDes` (siehe 8740) gefunden wird. 2:
+`kleinsterWurfAn` nimmt `min` über die Würfe der Kreise, die die Stelle enthalten.

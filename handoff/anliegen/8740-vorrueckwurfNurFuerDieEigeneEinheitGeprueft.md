@@ -3,9 +3,8 @@
 Form: Kritik
 Von: Architekt
 An: Implementierer
-Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Runde: 2/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Randfall ohne Test, Ablage einer Hilfsfunktion, keine Prüfung rot),
@@ -44,4 +43,35 @@ keinem Test auf. Bleibt 2, ändert sich die Zugehörigkeit eines *Modells* an dr
    in `spielobjekte.py`; `Armee.einheitVon` ruft sie mit `self.einheiten`, `_vorrückwurfDes`
    mit `self._vorrückwürfe` und liest den Wurf dann über die *Einheit*.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. 1: Der Einheitstest
+`testDerVorrückwurfEinerEinheitGiltNichtFürDasModellEinerAnderenEinheit` in
+[bewegungTest.py](../../technik/tests/einheit/domaene/phasen/bewegungTest.py) zieht ein
+*Modell* einer nicht *vorgerückten* *Einheit*, während eine andere *vorgerückt* ist. 2: `einheitDes`
+steht in `spielobjekte.py`; `Armee.einheitVon` und `_vorrückwurfDes` rufen sie. Die Suche in
+`phasen/__init__.py` bleibt: Sie löst über beide Spieler auf und wirft bei Fehlen, ruft aber
+`Armee.einheitVon`.
+
+## Runde 2
+**Befund.** Hält auf (ein Test prüft sein Kriterium nicht), Nachprüfung der uncommitteten
+Änderung. 2 ist erledigt. Der neue Test zu 1 ist grün, ohne zu prüfen, was sein Name sagt:
+`vorrückwurfNehmen(vorgerückt, …, stelleAn(0, 26))` liegt 6″ vom *Modell* entfernt, also
+innerhalb seiner *Bewegungsweite* (Radius der Base 5″ + 5″). `vorrückwurfNehmen` gibt
+`False` zurück, die *Einheit* ist gar nicht *vorgerückt*. Probe in `/tmp`: `_vorrückwurfDes`
+liefert den größten Wurf irgendeiner *Einheit* (`max(self._vorrückwürfe.values(), default=0)`),
+alle Tests bleiben grün. Mit `stelleAn(0, 32)` nimmt die Phase den Wurf 2, und dieselbe
+Mutation fällt auf (das *Modell* läuft bis 7″ statt 5″).
+
+**Kosten.** Am Bildschirm nichts. Bleibt es, gilt die Bedingung aus Runde 1 als geprüft und
+ist es nicht ([Absicht 1](../../prozess/praemissen/absicht.md), Anliegen 692). Änderung: zwei
+Zeilen in [bewegungTest.py](../../technik/tests/einheit/domaene/phasen/bewegungTest.py).
+
+**Gegenvorschlag.** Die Stelle des *Vorrückwurfs* außerhalb der *Bewegungsweite* wählen
+(`stelleAn(0, 32)`) und die Voraussetzung prüfen, damit eine spätere Änderung der Testmodelle
+den Test laut rot macht statt leer grün:
+`assert bewegungsphase.vorrückwurfNehmen(vorgerückt, vorgerückt.modelle, stelleAn(0, 32))`.
+
+**Stellungnahme.** Angenommen. Der Test in
+[bewegungTest.py](../../technik/tests/einheit/domaene/phasen/bewegungTest.py) wählt
+`stelleAn(0, 32)` außerhalb der *Bewegungsweite* und prüft die Voraussetzung mit
+`assert bewegungsphase.vorrückwurfNehmen(...)`. Probe: Mit `max(...)` statt der *Einheit* in
+`_vorrückwurfDes` wird er rot, mit dem echten Code grün (6 Tests grün).

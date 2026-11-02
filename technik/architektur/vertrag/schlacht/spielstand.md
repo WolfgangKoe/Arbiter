@@ -10,8 +10,8 @@ Beispiele der *Aufstellung* unverändert:
 `null`, jede `armeeliste` leer (AUF-1.7), `anDerReihe` überall `false`. Beispiel
 [schlacht.json](../schlacht.json), nur `schlacht` und `spieler`: Stand nach
 `PUT /api/spieler/1/ersterZug` und `PUT /api/phaseBeenden` mit
-`{"schlachtrunde": 1, "spieler": 1, "phase": "Kommandophase"}`. Dazu `protokoll`
-([V18](uebergehen.md)).
+`{"schlachtrunde": 1, "spieler": 1, "phase": "Kommandophase"}`. Dazu `protokoll` und
+`gemeinsamÜbergehen` ([V18](uebergehen.md)).
 
 Prüft wie im Querschnitt: nach den Anfragen des Beispiels `spieler` gleich `schlacht.json`, von
 `schlacht` die Schlüssel, die ein Beispiel nennt; so bricht ein neuer Schlüssel (V21) kein

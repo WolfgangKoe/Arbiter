@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -34,4 +34,11 @@ YAML-Datei endet mit einer Meldung, die keine Datei nennt.
    `yaml.ScalarNode`, `ValueError` mit dem Dateinamen; ein Fall mehr in
    [yamlLesenTest.py](../../technik/tests/einheit/katalog/yamlLesenTest.py).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. Zu 1: Das Modul
+[eintragLesen.py](../../technik/arbiter/katalog/eintragLesen.py) trägt `ganzeZahlÜberNull`,
+`genauDieseSchlüsselLesen` (im Code so benannt, nicht `eintragLesen`) und `abbildungLesen`
+(aus 7201, 4); `datenblaetter.py` und `ausgangslage.py` importieren von dort; der Test zog nach
+[eintragLesenTest.py](../../technik/tests/einheit/katalog/eintragLesenTest.py). K7 in
+`technik/architektur/katalog.md` ist deine Datei und braucht das Modul noch. Zu 2: Ein Schlüssel,
+der kein Text ist, ist ein `ValueError` mit dem Dateinamen; Fälle in `yamlLesenTest.py`.
+Status: angenommen

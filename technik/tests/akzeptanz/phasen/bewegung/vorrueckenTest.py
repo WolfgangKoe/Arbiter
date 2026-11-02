@@ -9,15 +9,7 @@ from playwright.sync_api import expect
 from arbiter.domaene.querschnitt.schlachtrunden import Phase
 from tests.akzeptanz.bildschirm import knopfDerSeite, seiteDerSchlachtMitEingabe
 from tests.akzeptanz.dienst import spielstandVon, vorrücken
-from tests.akzeptanz.grenzen import (
-    ebenen,
-    ganzeEinheitAuswählen,
-    mitJedemWurf,
-    mitJederEbene,
-    stelleImRing,
-    vorgerücktMit,
-    wartetAufDenVorrückwurf,
-)
+from tests.akzeptanz.grenzen import einAuge, mitJedemWurf, stelleNurImGrenzkreisDesWurfs
 from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import (
     hältAnDerBewegungsweite,
@@ -27,11 +19,17 @@ from tests.akzeptanz.schlacht import (
     phasenAußerDerBewegungsphase,
     phasenAußerDerBewegungsphaseIds,
 )
+from tests.akzeptanz.vorruecken import (
+    ebenen,
+    ganzeEinheitAuswählen,
+    mitJederEbene,
+    vorgerücktMit,
+    wartetAufDenVorrückwurf,
+)
 from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
 
 vorrückenKnopf = "Vorrücken"
 zweiZoll = Fraction(2)
-einAuge = 1
 
 
 def nachUnten(stelle, strecke: Fraction):
@@ -163,7 +161,7 @@ def testBew5_2DerDienstNenntNachVorrückenZurücknehmenStattVorrücken(
     assert schlachtInDerBewegungsphase.wartetAufVorrückwurf(boyz)
 
 
-def testBew5_2AmBildschirmZeigtDerKlickAufVorrückenDieSechsWählbarenGrenzen(
+def testBew5_2AmBildschirmZeigtDerKlickAufVorrückenDieSechsWählbarenEinhüllenden(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
@@ -186,7 +184,7 @@ def testBew5_3DerKlickAufEinenDerSechsIstIhrVorrückwurfUndSieIstVorgerückt(
     schlacht, einheit, _, _ = einheitAmZug
     wartetAufDenVorrückwurf(schlacht, einheit, ebene)
 
-    schlacht.karteAnklicken(stelleImRing(schlacht, einheit, wurf))
+    schlacht.karteAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
 
     assert schlacht.vorrückwurf(einheit) == wurf
     assert schlacht.vorgerückt(einheit)

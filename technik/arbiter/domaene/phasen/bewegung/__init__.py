@@ -18,7 +18,7 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
 )
 from arbiter.domaene.phasen.bewegung.normaleBewegung import gründeBeimZiehen
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle, einheitDes
 
 StellenMitGründen = tuple[dict[Modell, Stelle], set[Grund]]
 
@@ -54,10 +54,8 @@ class Bewegungsphase:
         return self._vorrückwürfe.get(einheit)
 
     def _vorrückwurfDes(self, gezogenes: Modell) -> int:
-        return next(
-            (wurf for einheit, wurf in self._vorrückwürfe.items() if gezogenes in einheit.modelle),
-            0,
-        )
+        einheit = einheitDes(gezogenes, self._vorrückwürfe)
+        return self._vorrückwürfe[einheit] if einheit else 0
 
     def stellenMitGründenNachDemZiehen(
         self,
@@ -65,10 +63,10 @@ class Bewegungsphase:
         gezogenes: Modell,
         ziel: Stelle,
         stellen: Mapping[Modell, Stelle],
-        eigene: Collection[Modell],
+        gegner: Mapping[Modell, Stelle],
     ) -> StellenMitGründen:
         weg = messen.wegZwischen(ebene[gezogenes], ziel)
-        gegner = {anderes: ort for anderes, ort in stellen.items() if anderes not in eigene}
+        eigene = stellen.keys() - gegner.keys()
         anteil = min(
             anteilBisZurBewegungsweite(
                 ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)

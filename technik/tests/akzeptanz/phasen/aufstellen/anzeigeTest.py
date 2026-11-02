@@ -80,16 +80,17 @@ def testAuf4_2DieArmeelisteDesSpielersDerZweitenArmeeHeißtSpieler2(bildschirm, 
 
 
 @pytest.mark.parametrize(
-    ("spielername", "modelleJeEinheit"),
-    [
-        ("Spieler 1", {"Boyz": "10", "Warboss": "1"}),
-        ("Spieler 2", {"Necron Warriors": "10", "Overlord": "1"}),
-    ],
+    ("spielername", "spielerDerArmeeliste"),
+    [("Spieler 1", "spielerEins"), ("Spieler 2", "spielerZwei")],
     ids=["armeelisteVonSpielerEins", "armeelisteVonSpielerZwei"],
 )
 def testAuf4_3DieArmeelisteZeigtJedeEinheitMitDerAnzahlIhrerNichtGesetztenModelle(
-    bildschirm, ausgangsaufstellung, spielername, modelleJeEinheit
+    bildschirm, ausgangsaufstellung, request, spielername, spielerDerArmeeliste
 ):
+    spieler = request.getfixturevalue(spielerDerArmeeliste)
+    modelleJeEinheit = {
+        einheit.name: str(len(einheit.modelle)) for einheit in spieler.armee.einheiten
+    }
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
     armeeliste = armeelisteVon(seite, spielername)
@@ -130,7 +131,7 @@ def testAuf4_3SindAlleModelleGesetztZeigtDieArmeelisteDieEinheitOhneAnzahl(
 
 
 def testAuf4_3DieArmeelisteZeigtKeineAufgestellteEinheit(
-    bildschirm, aufstellungNachDerZonenwahl, spielerZwei
+    bildschirm, aufstellungNachDerZonenwahl, spielerEins, spielerZwei, boyz
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, 1)
 
@@ -138,8 +139,9 @@ def testAuf4_3DieArmeelisteZeigtKeineAufgestellteEinheit(
 
     armeelisteEins = armeelisteVon(seite, "Spieler 1")
     armeelisteZwei = armeelisteVon(seite, "Spieler 2")
-    assert armeelisteEins.locator(".einheitenKarte").count() == 1
-    assert armeelisteEins.locator(".einheitenKarte", has_text="Warboss").count() == 1
+    nichtAufgestellte = len(spielerEins.armee.einheiten) - 1
+    assert armeelisteEins.locator(".einheitenKarte").count() == nichtAufgestellte
+    assert armeelisteEins.locator(".einheitenKarte", has_text=boyz.name).count() == 0
     assert armeelisteZwei.locator(".einheitenKarte").count() == len(spielerZwei.armee.einheiten)
 
 

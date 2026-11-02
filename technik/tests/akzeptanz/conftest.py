@@ -26,7 +26,11 @@ from tests.akzeptanz.handgriffe import (
     spielerMit,
     versetzt,
 )
-from tests.akzeptanz.schlacht import ZugÜberEineBase, fünfZollNachOsten, fünfZollNachWesten
+from tests.akzeptanz.schlacht import (
+    ZugÜberDieBewegungsweite,
+    zehnZollNachOsten,
+    zehnZollNachWesten,
+)
 
 _technik = Path(__file__).parents[2]
 _sekundenBisZurAdresse = 15
@@ -153,28 +157,29 @@ def spielerZwei(ausgangslage: Ausgangslage) -> Spieler:
     return ausgangslage.zweiterSpieler
 
 
+def _einheitMitDemNamen(spieler: Spieler, name: str) -> Einheit:
+    (einheit,) = (einheit for einheit in spieler.armee.einheiten if einheit.name == name)
+    return einheit
+
+
 @pytest.fixture
 def boyz(spielerEins: Spieler) -> Einheit:
-    einheit, _ = spielerEins.armee.einheiten
-    return einheit
+    return _einheitMitDemNamen(spielerEins, "Boyz")
 
 
 @pytest.fixture
 def warboss(spielerEins: Spieler) -> Einheit:
-    _, einheit = spielerEins.armee.einheiten
-    return einheit
+    return _einheitMitDemNamen(spielerEins, "Warboss")
 
 
 @pytest.fixture
 def necronWarriors(spielerZwei: Spieler) -> Einheit:
-    einheit, _ = spielerZwei.armee.einheiten
-    return einheit
+    return _einheitMitDemNamen(spielerZwei, "Necron Warriors")
 
 
 @pytest.fixture
 def overlord(spielerZwei: Spieler) -> Einheit:
-    _, einheit = spielerZwei.armee.einheiten
-    return einheit
+    return _einheitMitDemNamen(spielerZwei, "Overlord")
 
 
 @pytest.fixture
@@ -297,18 +302,18 @@ def spielerMitDemErstenZug(request, spielerEins: Spieler, spielerZwei: Spieler) 
 
 
 @pytest.fixture(params=["spielerEins", "spielerZwei"])
-def zugÜberEineBase(request, schlacht) -> ZugÜberEineBase:
+def zugÜberDieBewegungsweite(request, schlacht) -> ZugÜberDieBewegungsweite:
     einheitDesSpielers, weg = {
-        "spielerEins": ("boyz", fünfZollNachOsten),
-        "spielerZwei": ("necronWarriors", fünfZollNachWesten),
+        "spielerEins": ("warboss", zehnZollNachOsten),
+        "spielerZwei": ("overlord", zehnZollNachWesten),
     }[request.param]
     spieler = request.getfixturevalue(request.param)
     einheit = request.getfixturevalue(einheitDesSpielers)
     schlacht.ersterZugWählen(spieler)
     schlacht.phaseBeenden()
-    erstes, *_ = einheit.modelle
-    ziel = versetzt(schlacht.stelle(erstes), weg)
-    return ZugÜberEineBase(schlacht, spieler, einheit, erstes, ziel)
+    (modell,) = einheit.modelle
+    ziel = versetzt(schlacht.stelle(modell), weg)
+    return ZugÜberDieBewegungsweite(schlacht, spieler, einheit, modell, ziel)
 
 
 @pytest.fixture(params=["einheitDesSpielersAmZug", "einheitDesAnderenSpielers"])

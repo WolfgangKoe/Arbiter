@@ -17,6 +17,7 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import (
     Bildpunkt,
+    griffAbseitsDerMitte,
     liegtEinPixelGenauAn,
     mitMausUndFinger,
     modellAmPunktZiehen,
@@ -24,9 +25,9 @@ from tests.akzeptanz.ziehen import (
     punktAufDerKarte,
     ziehenOhneAnfrage,
     zollJePixel,
+    zugschwelleInPixeln,
 )
 
-zugschwelleInPixeln = 4
 abweichungUnterDerSchwelle = zugschwelleInPixeln - 1
 dreiZollNachOsten = (Fraction(3), Fraction(0))
 
@@ -87,14 +88,10 @@ def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
 ):
     [(modell, stelleDavor)] = boyzSetzen(1)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
-    mitte = punktAufDerKarte(seite, stelleDavor)
-    radiusInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite)
-    versatzDesGriffsInPixeln = radiusInPixeln * 0.8
-    griff = Bildpunkt(mitte.links + versatzDesGriffsInPixeln, mitte.oben)
+    griff = griffAbseitsDerMitte(seite, modell, punktAufDerKarte(seite, stelleDavor))
     wegInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
     ende = Bildpunkt(griff.links, griff.oben + wegInPixeln)
     erwartet = Stelle(x=stelleDavor.x, y=stelleDavor.y + Fraction(1, 2))
-    assert versatzDesGriffsInPixeln > zugschwelleInPixeln
 
     modellAmPunktZiehen(seite, griff, ende, eingabe)
 
@@ -113,13 +110,11 @@ def testAuf8_7InDerBewegungsphaseFolgtEinModellDemWegDesZeigersUndNichtDemPunktU
     )
     mitte = punktAufDerKarte(seite, davor)
     punktDesErwarteten = punktAufDerKarte(seite, erwartet)
-    versatzDesGriffsInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite) * 0.8
-    griff = Bildpunkt(mitte.links + versatzDesGriffsInPixeln, mitte.oben)
+    griff = griffAbseitsDerMitte(seite, modell, mitte)
     ende = Bildpunkt(
         griff.links + punktDesErwarteten.links - mitte.links,
         griff.oben + punktDesErwarteten.oben - mitte.oben,
     )
-    assert versatzDesGriffsInPixeln > zugschwelleInPixeln
 
     modellAmPunktZiehen(seite, griff, ende, eingabe)
 

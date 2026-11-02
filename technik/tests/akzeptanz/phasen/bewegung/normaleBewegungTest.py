@@ -3,7 +3,6 @@
 from fractions import Fraction
 from http import HTTPStatus
 
-from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.bildschirm import (
     kreiseDerKarte,
     seiteDerSchlachtMitEingabe,
@@ -18,6 +17,7 @@ from tests.akzeptanz.dienst import (
 )
 from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import (
+    anhaltenUndÜbergehen,
     bewegungsweite,
     einModellAusDerKohärenzZiehen,
     hältAnDerBewegungsweite,
@@ -25,6 +25,7 @@ from tests.akzeptanz.schlacht import (
     schrägOhneHindernis,
     stellenAlsZahlen,
     stellenVersetzt,
+    zehnZollNachOsten,
 )
 from tests.akzeptanz.ziehen import (
     halten,
@@ -240,20 +241,21 @@ def testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand(
     assert spielstandVon(dienstDerSchlacht) == spielstandDavor
 
 
-def testBew1_7DerDienstAntwortetBeiEinerSperreWieBeimLoslassenMitDemGrundUndDemStandWieDavor(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+def testBew1_7DerDienstNenntNachDemÜbergehenBeimWeiterziehenDieVorigeStelleWieDasLoslassen(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
-    gezogenes, *_ = boyz.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), (Fraction(5), nichts))
-    spielstandDavor = spielstandVon(dienstDerSchlacht)
+    (modell,) = warboss.modelle
+    vorige = versetzt(schlachtInDerBewegungsphase.stelle(modell), zehnZollNachOsten)
+    anhaltenUndÜbergehen(schlachtInDerBewegungsphase, modell, vorige)
 
     antwort = stelleBeimLoslassenAbfragen(
-        dienstDerSchlacht, beendeteAufstellung, boyz, gezogenes, ziel
+        dienstDerSchlacht, beendeteAufstellung, warboss, modell, versetzt(vorige, einigeZoll)
     )
 
-    assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json()["gründe"] == [Grund.überEineBase.value]
-    assert antwort.get_json()["spielstand"] == spielstandDavor
+    assert antwort.status_code == HTTPStatus.OK
+    assert stellenDerEinheitIm(antwort.get_json(), "Warboss") == stellenDerAbfrage(
+        warboss, {modell: vorige}
+    )
 
 
 @mitMausUndFinger

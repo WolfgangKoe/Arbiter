@@ -11,18 +11,16 @@ from tests.akzeptanz.dienst import (
     stellenDerEinheitIm,
     vorrückenZurücknehmen,
 )
-from tests.akzeptanz.grenzen import (
+from tests.akzeptanz.grenzen import dreiAugen, mitJedemWurf, zweiZollEntlangDerReihe
+from tests.akzeptanz.schlacht import jetzigeStellen, mitteDesSpielfelds
+from tests.akzeptanz.vorruecken import (
     ganzeEinheitAuswählen,
-    mitJedemWurf,
     vorgerücktMit,
     wartetAufDenVorrückwurf,
-    zweiZollEntlangDerReihe,
 )
-from tests.akzeptanz.schlacht import jetzigeStellen, mitteDesSpielfelds
 
 vorrückenKnopf = "Vorrücken"
 zurücknehmenKnopf = "Vorrücken zurücknehmen"
-dreiAugen = 3
 
 
 def testBew12_1WartetDieEinheitAufIhrenVorrückwurfBietetArbiterZurücknehmenAn(einheitAmZug):
@@ -164,7 +162,7 @@ def testBew12_2DerDienstNenntNachDemZurücknehmenDieStellenZuBeginnDerBewegungsp
     assert not schlachtInDerBewegungsphase.vorgerückt(boyz)
 
 
-def testBew12_2AmBildschirmNimmtDerKnopfDieGrenzeDesWurfsZurück(
+def testBew12_2AmBildschirmNimmtDerKnopfDieEinhüllendeDesWurfsZurück(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     vorgerücktMit(schlachtInDerBewegungsphase, boyz, dreiAugen)

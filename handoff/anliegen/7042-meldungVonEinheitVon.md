@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -21,4 +21,7 @@ Fehler in der *Aufstellung*.
 **Gegenvorschlag.** Die Meldung ohne *Phase*, etwa „Das Modell gehört keinem der beiden
 Spieler“.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. Die Meldung lautet jetzt „Das Modell gehört keinem der beiden
+Spieler“ ([phasen/\_\_init\_\_.py](../../technik/arbiter/domaene/phasen/__init__.py)).
+
+Status: angenommen

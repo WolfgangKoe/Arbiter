@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
 from fractions import Fraction
 
@@ -37,6 +38,10 @@ class Einheit:
     modelle: tuple[Modell, ...]
 
 
+def einheitDes(modell: Modell, einheiten: Iterable[Einheit]) -> Einheit | None:
+    return next((einheit for einheit in einheiten if modell in einheit.modelle), None)
+
+
 @dataclass(frozen=True, eq=False)
 class Armee:
     einheiten: tuple[Einheit, ...] = ()
@@ -46,7 +51,7 @@ class Armee:
         return frozenset(modell for einheit in self.einheiten for modell in einheit.modelle)
 
     def einheitVon(self, modell: Modell) -> Einheit | None:
-        return next((einheit for einheit in self.einheiten if modell in einheit.modelle), None)
+        return einheitDes(modell, self.einheiten)
 
 
 @dataclass(frozen=True, eq=False)

@@ -1,7 +1,9 @@
 from fractions import Fraction
 
-from arbiter.domaene.phasen import verschobeneStellen
-from arbiter.domaene.phasen.aufstellen.einheitVerschieben import hineingerückt
+from arbiter.domaene.phasen.aufstellen.einheitVerschieben import (
+    hineingerückt,
+    verschobeneStellen,
+)
 from arbiter.domaene.spielobjekte import Stelle
 from tests.einheit.modelle import modellMit
 

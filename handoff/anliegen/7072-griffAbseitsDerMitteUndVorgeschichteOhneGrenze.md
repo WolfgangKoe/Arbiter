@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -38,4 +38,19 @@ Zeile Meldung.
 3. `bewegungsweite(einheitenname)` aus `schlacht.py`, wie die Nachbartests; oder, falls
    Item katalogwerteGliedern das ablöst, eine Quelle für alle.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt:
+1. [ziehen.py](../../technik/tests/akzeptanz/ziehen.py): `griffAbseitsDerMitte(seite,
+   modell, mitte) -> Bildpunkt` mit `anteilDesRadius = 0.8` und dem Wächter gegen
+   `zugschwelleInPixeln`, das mit hierher zog. Beide `testAuf8_7…` in
+   [ziehenTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ziehenTest.py) rufen sie.
+2. [schlacht.py](../../technik/tests/akzeptanz/schlacht.py): `aufDasAndereZu` prüft nach
+   jedem Schritt `schlacht.stelle(modell) == ziel` mit Meldung von *Modellart* und *Stelle*.
+3. Die Schrittweite kommt aus den Daten: `bewegungsweiteDerModellart(modellart)` sucht das
+   Datenblatt der *Modellart* in `ausgangslage.yaml` und ruft `bewegungsweite(datenblatt,
+   modellart)` wie die Nachbartests. Die *Modellart* statt der *Einheit*, weil
+   `aufeinanderZuZiehen` nur *Modelle* bekommt und mit der *Einheit* über fünf Parameter
+   käme (PLR0913). Der Wächter in `testBew6_2ZiehtEinModellIn…` nimmt
+   `bewegungsweite("Warboss", "Warboss")`
+   ([anhaltenVorDerGrenzeTest.py](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py)).
+   `modell.bewegungsweite` aus dem Produkt steht in beiden Dateien nicht mehr.
+BEW-6 und AUF-8 grün; ruff und Formregeln grün.

@@ -3,7 +3,6 @@ from itertools import pairwise
 from typing import NamedTuple
 
 from arbiter.domaene.querschnitt.schlachtrunden import Phase
-from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from tests.akzeptanz.dienst import stelleImSpielstand
 from tests.akzeptanz.handgriffe import (
@@ -12,7 +11,6 @@ from tests.akzeptanz.handgriffe import (
     längeDerSpielfeldkante,
     modellartenImKatalog,
     radiusInZoll,
-    sperrgründe,
     stellenAllerModelle,
     versetzt,
     yamlAusDenDaten,
@@ -120,11 +118,11 @@ def einModellAusDerKohärenzZiehen(schlacht, einheit: Einheit) -> None:
     schlacht.modellLoslassen(letztes, ziel)
 
 
-fünfZollNachOsten = (Fraction(5), Fraction(0))
-fünfZollNachWesten = (Fraction(-5), Fraction(0))
+zehnZollNachOsten = (Fraction(10), Fraction(0))
+zehnZollNachWesten = (Fraction(-10), Fraction(0))
 
 
-class ZugÜberEineBase(NamedTuple):
+class ZugÜberDieBewegungsweite(NamedTuple):
     schlacht: object
     spieler: Spieler
     einheit: Einheit
@@ -132,24 +130,21 @@ class ZugÜberEineBase(NamedTuple):
     ziel: Stelle
 
 
-def gemeinsamÜbergehen(schlacht, modell: Modell, ziel: Stelle) -> frozenset[Grund]:
-    gründe = sperrgründe(schlacht.modellLoslassen, modell, ziel)
-    schlacht.modellLoslassen(modell, ziel, übergehen=gründe)
-    return gründe
+def angehaltenLoslassen(schlacht, modell: Modell, ziel: Stelle) -> None:
+    schlacht.modellLoslassen(modell, ziel)
+    assert schlacht.gemeinsamÜbergehenAngeboten is True, f"{modell.modellart} hielt nicht an"
 
 
-def boyÜberDenWarbossÜbergehen(schlacht, boyz: Einheit) -> Stelle:
-    erster, *_ = boyz.modelle
-    ziel = versetzt(schlacht.stelle(erster), fünfZollNachOsten)
-    gemeinsamÜbergehen(schlacht, erster, ziel)
-    return ziel
+def anhaltenUndÜbergehen(schlacht, modell: Modell, ziel: Stelle) -> None:
+    angehaltenLoslassen(schlacht, modell, ziel)
+    schlacht.gemeinsamÜbergehen()
 
 
-def warbossÜberDieBoyzÜbergehen(schlacht, warboss: Einheit) -> Stelle:
-    (modell,) = warboss.modelle
-    ziel = versetzt(schlacht.stelle(modell), fünfZollNachOsten)
-    gemeinsamÜbergehen(schlacht, modell, ziel)
-    return ziel
+def warbossUndDanachEinenBoyÜbergehen(schlacht, warboss: Einheit, boyz: Einheit) -> None:
+    (boss,) = warboss.modelle
+    boy, *_ = boyz.modelle
+    for modell in (boss, boy):
+        anhaltenUndÜbergehen(schlacht, modell, versetzt(schlacht.stelle(modell), zehnZollNachOsten))
 
 
 def zurBewegungsphaseDesNächstenZugs(schlacht) -> None:
@@ -166,11 +161,23 @@ def restBisZumAbstandInX(schlacht, modell: Modell, anderes: Modell, abstand: Fra
     return mittelpunkteInX - summeDerRadien(modell, anderes) - abstand
 
 
+def bewegungsweiteDerModellart(modellart: str) -> Fraction:
+    armeen = yamlAusDenDaten("ausgangslage.yaml")["Armee"]
+    einträge = (eintrag for armee in armeen for eintrag in armee)
+    datenblatt = next(
+        eintrag["datenblatt"] for eintrag in einträge if modellart in eintrag["modelle"]
+    )
+    return bewegungsweite(datenblatt, modellart)
+
+
 def aufDasAndereZu(schlacht, modell: Modell, anderes: Modell, abstand: Fraction) -> None:
     davor = schlacht.stelle(modell)
     richtung = 1 if schlacht.stelle(anderes).x > davor.x else -1
-    schritt = min(modell.bewegungsweite, restBisZumAbstandInX(schlacht, modell, anderes, abstand))
-    schlacht.modellLoslassen(modell, versetzt(davor, (richtung * schritt, Fraction(0))))
+    weite = bewegungsweiteDerModellart(modell.modellart)
+    schritt = min(weite, restBisZumAbstandInX(schlacht, modell, anderes, abstand))
+    ziel = versetzt(davor, (richtung * schritt, Fraction(0)))
+    schlacht.modellLoslassen(modell, ziel)
+    assert schlacht.stelle(modell) == ziel, f"{modell.modellart} steht nicht an {ziel}"
 
 
 def aufeinanderZuZiehen(

@@ -24,9 +24,8 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     aufstellenDerEinheitBeenden,
     dienstFür,
-    dienstFürSchlacht,
+    gemeinsamÜbergehen,
     modellLoslassen,
-    modellLoslassenUndÜbergehen,
     phaseBeenden,
     protokollDesVertrags,
     schlachtNachSchlüsselnDes,
@@ -35,24 +34,19 @@ from tests.akzeptanz.dienst import (
 from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     sperreBei,
-    sperrgründe,
     stelleInDerZoneVon,
     versetzt,
 )
 from tests.akzeptanz.schlacht import (
-    boyÜberDenWarbossÜbergehen,
+    angehaltenLoslassen,
+    anhaltenUndÜbergehen,
     einModellAusDerKohärenzZiehen,
-    fünfZollNachOsten,
-    warbossÜberDieBoyzÜbergehen,
+    warbossUndDanachEinenBoyÜbergehen,
+    zehnZollNachOsten,
 )
-from tests.akzeptanz.ziehen import modellZiehen
 
 weitAuseinander = (10, 30)
-aufDieBoyz = (Fraction(-5, 2), Fraction(0))
-
-
-def gründeDesEintrags(eintrag) -> frozenset[Grund]:
-    return frozenset(eintrag.gründe)
+dreiZollNachSüden = (Fraction(0), Fraction(3))
 
 
 def einheitOhneKohärenzSetzen(aufstellung, ersterSpieler, zweiterSpieler):
@@ -67,102 +61,18 @@ def einheitOhneKohärenzSetzen(aufstellung, ersterSpieler, zweiterSpieler):
     return einheit
 
 
-def testQue5_1GemeinsamÜbergehenTrägtEinheitSpielerUndGrundInsProtokollEin(zugÜberEineBase):
-    schlacht, spieler, einheit, modell, ziel = zugÜberEineBase
-    gründe = sperrgründe(schlacht.modellLoslassen, modell, ziel)
-
-    schlacht.modellLoslassen(modell, ziel, übergehen=gründe)
-
-    (eintrag,) = schlacht.protokoll
-    assert eintrag.einheit is einheit
-    assert eintrag.spieler is spieler
-    assert gründeDesEintrags(eintrag) == {Grund.überEineBase}
-
-
-def testQue5_1DerEintragNenntJedenÜbergangenenGrund(schlachtInDerBewegungsphase, warboss):
-    (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), aufDieBoyz)
-    gründe = sperrgründe(schlachtInDerBewegungsphase.modellLoslassen, modell, ziel)
-
-    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel, übergehen=gründe)
-
-    (eintrag,) = schlachtInDerBewegungsphase.protokoll
-    assert gründeDesEintrags(eintrag) == {Grund.baseÜberdeckt, Grund.überEineBase}
-
-
-def testQue5_1JedesÜbergehenTrägtGenauEinenEintragMehrEinUndBehältDieÄlteren(
-    schlachtInDerBewegungsphase, boyz, warboss
-):
-    boyÜberDenWarbossÜbergehen(schlachtInDerBewegungsphase, boyz)
-    (älterer,) = schlachtInDerBewegungsphase.protokoll
-    (modell,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), fünfZollNachOsten)
-    gründe = sperrgründe(schlachtInDerBewegungsphase.modellLoslassen, modell, ziel)
-
-    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel, übergehen=gründe)
-
-    davor, neuer = schlachtInDerBewegungsphase.protokoll
-    assert davor is älterer
-    assert neuer.einheit is warboss
-
-
-def testQue5_1EineSperreOhneGemeinsamÜbergehenTrägtNichtsInsProtokollEin(zugÜberEineBase):
-    schlacht, _, _, modell, ziel = zugÜberEineBase
-
-    sperrgründe(schlacht.modellLoslassen, modell, ziel)
-
-    assert list(schlacht.protokoll) == []
-
-
-def testQue5_1DerDienstNenntDenEintragImSpielstand(
-    beendeteAufstellung, zugÜberEineBase, spielerEins
-):
-    schlacht, spieler, einheit, modell, ziel = zugÜberEineBase
-    dienst = dienstFürSchlacht(beendeteAufstellung, schlacht)
-    spielernummer = 1 if spieler is spielerEins else 2
-    modellLoslassen(dienst, beendeteAufstellung, einheit, modell, ziel)
-
-    antwort = modellLoslassenUndÜbergehen(
-        dienst, beendeteAufstellung, modell, ziel, {Grund.überEineBase}
-    )
-
-    assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json()["schlacht"]["protokoll"] == [
-        {"spieler": spielernummer, "einheit": 1, "name": einheit.name, "gründe": ["über eine Base"]}
-    ]
-
-
-def testQue5_1DieSeiteZeigtNachDemKlickAufGemeinsamÜbergehenDenEintrag(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
-):
-    gezogenes, *_ = boyz.modelle
-    davor = schlachtInDerBewegungsphase.stelle(gezogenes)
-    seite = seiteDerSchlachtMitEingabe(
-        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
-    )
-    modellZiehen(seite, davor, versetzt(davor, fünfZollNachOsten))
-    sperrmeldungWarten(seite, {Grund.überEineBase})
-
-    with aufDieHandlungWarten(seite):
-        knopfDerSeite(seite, übergehenKnopf).click()
-
-    expect(protokollEinträge(seite)).to_have_count(1)
-    assert protokollDerSeite(seite) == {("Boyz", "Spieler 1", frozenset({"über eine Base"}))}
-
-
-def boyUndWarbossÜbergehen(schlacht, spieler) -> None:
-    boyz, warboss = spieler.armee.einheiten
-    boyÜberDenWarbossÜbergehen(schlacht, boyz)
-    warbossÜberDieBoyzÜbergehen(schlacht, warboss)
+@pytest.fixture
+def schlachtNachDemÜbergehenVonBoyUndWarboss(schlachtInDerBewegungsphase, boyz, warboss):
+    warbossUndDanachEinenBoyÜbergehen(schlachtInDerBewegungsphase, warboss, boyz)
+    return schlachtInDerBewegungsphase
 
 
 @pytest.mark.parametrize("erneut", ["neuLaden", "adresseErneutÖffnen"])
 def testQue5_2ÖffnetEinSpielerDieAdresseErneutZeigtDasProtokollDieselbenEinträge(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, spielerEins, erneut
+    bildschirm, beendeteAufstellung, schlachtNachDemÜbergehenVonBoyUndWarboss, erneut
 ):
-    boyUndWarbossÜbergehen(schlachtInDerBewegungsphase, spielerEins)
     davor = seiteDerSchlachtMitEingabe(
-        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+        bildschirm, beendeteAufstellung, schlachtNachDemÜbergehenVonBoyUndWarboss, "maus"
     )
     expect(protokollEinträge(davor)).to_have_count(2)
     einträgeDavor = protokollDerSeite(davor)
@@ -178,13 +88,14 @@ def testQue5_2ÖffnetEinSpielerDieAdresseErneutZeigtDasProtokollDieselbenEinträ
 
 
 def testQue5_2DerDienstLiefertAufJedeWeitereAnfrageDasselbeProtokoll(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
-    gezogenes, *_ = boyz.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(gezogenes), fünfZollNachOsten)
-    davor = modellLoslassenUndÜbergehen(
-        dienstDerSchlacht, beendeteAufstellung, gezogenes, ziel, {Grund.überEineBase}
-    ).get_json()
+    (boss,) = warboss.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
+    übergangen = gemeinsamÜbergehen(dienstDerSchlacht)
+    assert übergangen.status_code == HTTPStatus.OK
+    davor = übergangen.get_json()
 
     danach = spielstandVon(dienstDerSchlacht)
 
@@ -212,13 +123,24 @@ def testQue5_3DerDienstNenntZuBeginnDerSchlachtEinLeeresProtokoll(dienstNachDerA
 def testQue5_4DieSchlachtFührtDenÄlterenEintragVorDemNeueren(
     schlachtInDerBewegungsphase, boyz, warboss
 ):
-    boyÜberDenWarbossÜbergehen(schlachtInDerBewegungsphase, boyz)
+    (boss,) = warboss.modelle
+    anhaltenUndÜbergehen(
+        schlachtInDerBewegungsphase,
+        boss,
+        versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten),
+    )
+    boy, *_ = boyz.modelle
+    angehaltenLoslassen(
+        schlachtInDerBewegungsphase,
+        boy,
+        versetzt(schlachtInDerBewegungsphase.stelle(boy), zehnZollNachOsten),
+    )
 
-    warbossÜberDieBoyzÜbergehen(schlachtInDerBewegungsphase, warboss)
+    schlachtInDerBewegungsphase.gemeinsamÜbergehen()
 
     älterer, neuerer = schlachtInDerBewegungsphase.protokoll
-    assert älterer.einheit is boyz
-    assert neuerer.einheit is warboss
+    assert älterer.einheit is warboss
+    assert neuerer.einheit is boyz
 
 
 def testQue5_4DerDienstNenntDenNeuerenEintragZuerstWieImBeispiel(
@@ -226,17 +148,13 @@ def testQue5_4DerDienstNenntDenNeuerenEintragZuerstWieImBeispiel(
 ):
     boy, *_ = boyz.modelle
     (boss,) = warboss.modelle
-    zielDesBoys = versetzt(schlachtInDerBewegungsphase.stelle(boy), fünfZollNachOsten)
-    zielDesBoss = versetzt(schlachtInDerBewegungsphase.stelle(boss), fünfZollNachOsten)
-    modellLoslassen(dienstDerSchlacht, beendeteAufstellung, boyz, boy, zielDesBoys)
-    modellLoslassenUndÜbergehen(
-        dienstDerSchlacht, beendeteAufstellung, boy, zielDesBoys, {Grund.überEineBase}
-    )
+    zielDesBoss = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    zielDesBoys = versetzt(schlachtInDerBewegungsphase.stelle(boy), zehnZollNachOsten)
     modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, zielDesBoss)
+    gemeinsamÜbergehen(dienstDerSchlacht)
+    modellLoslassen(dienstDerSchlacht, beendeteAufstellung, boyz, boy, zielDesBoys)
 
-    antwort = modellLoslassenUndÜbergehen(
-        dienstDerSchlacht, beendeteAufstellung, boss, zielDesBoss, {Grund.überEineBase}
-    )
+    antwort = gemeinsamÜbergehen(dienstDerSchlacht)
 
     assert antwort.status_code == HTTPStatus.OK
     beispiel = protokollDesVertrags()["schlacht"]
@@ -244,18 +162,31 @@ def testQue5_4DerDienstNenntDenNeuerenEintragZuerstWieImBeispiel(
 
 
 def testQue5_4DieSeiteZeigtDenNeuerenEintragÜberDemÄlteren(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, warboss
+    bildschirm, beendeteAufstellung, schlachtNachDemÜbergehenVonBoyUndWarboss
 ):
-    boyÜberDenWarbossÜbergehen(schlachtInDerBewegungsphase, boyz)
-    warbossÜberDieBoyzÜbergehen(schlachtInDerBewegungsphase, warboss)
-
     seite = seiteDerSchlachtMitEingabe(
-        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+        bildschirm, beendeteAufstellung, schlachtNachDemÜbergehenVonBoyUndWarboss, "maus"
     )
 
     expect(protokollEinträge(seite)).to_have_count(2)
-    älterer = eintragDerEinheit(seite, "Boyz").bounding_box()
-    neuerer = eintragDerEinheit(seite, "Warboss").bounding_box()
+    älterer = eintragDerEinheit(seite, "Warboss").bounding_box()
+    neuerer = eintragDerEinheit(seite, "Boyz").bounding_box()
+    assert neuerer["y"] + neuerer["height"] <= älterer["y"]
+
+
+@pytest.mark.usefixtures("schlachtInDerBewegungsphase")
+def testQue5_4DieSeiteZeigtDasBeispielMitDemNeuerenEintragOben(
+    bildschirm, beendeteAufstellung, dienstDerSchlacht
+):
+    stand = spielstandVon(dienstDerSchlacht)
+    beispiel = protokollDesVertrags()["schlacht"]
+    spielstand = {**stand, "schlacht": {**stand["schlacht"], **beispiel}}
+
+    seite = bildschirm.seiteMitSpielstand(beendeteAufstellung, spielstand)
+
+    expect(protokollEinträge(seite)).to_have_count(2)
+    älterer = eintragDerEinheit(seite, "Warboss").bounding_box()
+    neuerer = eintragDerEinheit(seite, "Boyz").bounding_box()
     assert neuerer["y"] + neuerer["height"] <= älterer["y"]
 
 
@@ -267,20 +198,8 @@ def testQue5_5BeimBeendenDerBewegungsphaseOhneKohärenzBietetArbiterGemeinsamÜb
     sperre = sperreBei(schlachtInDerBewegungsphase.phaseBeenden)
 
     assert Grund.keineKohärenz in sperre.gründe
-    assert sperre.übergehbar is False
+    assert schlachtInDerBewegungsphase.gemeinsamÜbergehenAngeboten is False
     assert schlachtInDerBewegungsphase.phase is Phase.bewegungsphase
-
-
-def testQue5_5BeimAufstellenDerEinheitBeendenOhneKohärenzBietetArbiterGemeinsamÜbergehenNichtAn(
-    aufstellung, ersterSpieler, zweiterSpieler
-):
-    einheit = einheitOhneKohärenzSetzen(aufstellung, ersterSpieler, zweiterSpieler)
-
-    sperre = sperreBei(aufstellung.aufstellenDerEinheitBeenden)
-
-    assert Grund.keineKohärenz in sperre.gründe
-    assert sperre.übergehbar is False
-    assert not aufstellung.aufgestellt(einheit)
 
 
 def testQue5_5DerDienstNenntBeimBeendenDerBewegungsphaseOhneKohärenzKeinÜbergehbar(
@@ -292,7 +211,7 @@ def testQue5_5DerDienstNenntBeimBeendenDerBewegungsphaseOhneKohärenzKeinÜberge
 
     assert antwort.status_code == HTTPStatus.CONFLICT
     assert antwort.get_json()["gründe"] == [Grund.keineKohärenz.value]
-    assert "übergehbar" not in antwort.get_json()
+    assert set(antwort.get_json()) == {"gründe", "spielstand"}
 
 
 def testQue5_5DerDienstNenntBeimAufstellenDerEinheitBeendenOhneKohärenzKeinÜbergehbar(
@@ -305,7 +224,7 @@ def testQue5_5DerDienstNenntBeimAufstellenDerEinheitBeendenOhneKohärenzKeinÜbe
 
     assert antwort.status_code == HTTPStatus.CONFLICT
     assert antwort.get_json()["gründe"] == [Grund.keineKohärenz.value]
-    assert "übergehbar" not in antwort.get_json()
+    assert set(antwort.get_json()) == {"gründe", "spielstand"}
 
 
 def testQue5_5DieSeiteBietetBeimBeendenDerBewegungsphaseOhneKohärenzGemeinsamÜbergehenNichtAn(
@@ -334,3 +253,57 @@ def testQue5_5DieSeiteBietetBeimAufstellenDerEinheitBeendenOhneKohärenzGemeinsa
 
     assert sperrmeldungWarten(seite, {Grund.keineKohärenz}) == {Grund.keineKohärenz.value}
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
+
+
+def testQue5_5DieSeiteZeigtNebenDerSperrmeldungKeinGemeinsamÜbergehen(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, warboss
+):
+    einModellAusDerKohärenzZiehen(schlachtInDerBewegungsphase, boyz)
+    (boss,) = warboss.modelle
+    angehaltenLoslassen(
+        schlachtInDerBewegungsphase,
+        boss,
+        versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten),
+    )
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+    )
+    expect(knopfDerSeite(seite, übergehenKnopf)).to_be_visible()
+
+    with aufDieHandlungWarten(seite):
+        knopfDerSeite(seite, "Phase beenden").click()
+
+    assert sperrmeldungWarten(seite, {Grund.keineKohärenz}) == {Grund.keineKohärenz.value}
+    expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
+
+
+@pytest.mark.parametrize("weg", [dreiZollNachSüden, zehnZollNachOsten], ids=["frei", "angehalten"])
+def testQue5_6BeimLoslassenÄndertSichDasProtokollNicht(
+    schlachtInDerBewegungsphase, warboss, boyz, weg
+):
+    (boss,) = warboss.modelle
+    anhaltenUndÜbergehen(
+        schlachtInDerBewegungsphase,
+        boss,
+        versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten),
+    )
+    einträge = list(schlachtInDerBewegungsphase.protokoll)
+    *_, letzter = boyz.modelle
+
+    schlachtInDerBewegungsphase.modellLoslassen(
+        letzter, versetzt(schlachtInDerBewegungsphase.stelle(letzter), weg)
+    )
+
+    assert list(schlachtInDerBewegungsphase.protokoll) == einträge
+
+
+def testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    (boss,) = warboss.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    davor = spielstandVon(dienstDerSchlacht)["schlacht"]["protokoll"]
+
+    antwort = modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
+
+    assert antwort.get_json()["schlacht"]["protokoll"] == davor

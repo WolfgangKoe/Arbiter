@@ -19,7 +19,7 @@ def testDasZiehenGibtDieNeuenStellenDerEbeneZurück(zehnZoll):
     stellen = {modell: stelleAn(0, 0)}
 
     neue, gründe = Bewegungsphase(stellen, spielfeld).stellenMitGründenNachDemZiehen(
-        stellen, modell, stelleAn(4, 0), stellen, {modell}
+        stellen, modell, stelleAn(4, 0), stellen, {}
     )
 
     assert neue == {modell: stelleAn(4, 0)}
@@ -32,10 +32,26 @@ def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
     jetzt = {modell: stelleAn(3, 0)}
 
     neue, _ = Bewegungsphase(beginn, spielfeld).stellenMitGründenNachDemZiehen(
-        jetzt, modell, stelleAn(9, 0), jetzt, {modell}
+        jetzt, modell, stelleAn(9, 0), jetzt, {}
     )
 
     assert neue == {modell: stelleAn(int(bewegungsweiteDerTestmodelle), 0)}
+
+
+def testDerVorrückwurfEinerEinheitGiltNichtFürDasModellEinerAnderenEinheit(zehnZoll):
+    vorgerücktesModell = modellMit(zehnZoll)
+    normalesModell = modellMit(zehnZoll)
+    vorgerückt = Einheit("Vorgerückt", (vorgerücktesModell,))
+    stellen = {vorgerücktesModell: stelleAn(0, 20), normalesModell: stelleAn(0, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+    bewegungsphase.vorrückenBeginnen(vorgerückt)
+    assert bewegungsphase.vorrückwurfNehmen(vorgerückt, vorgerückt.modelle, stelleAn(0, 32))
+
+    neue, _ = bewegungsphase.stellenMitGründenNachDemZiehen(
+        {normalesModell: stelleAn(0, 0)}, normalesModell, stelleAn(9, 0), stellen, {}
+    )
+
+    assert neue == {normalesModell: stelleAn(int(bewegungsweiteDerTestmodelle), 0)}
 
 
 def testEineEinheitDieNichtVorrückteWirdVorrückenAngeboten():

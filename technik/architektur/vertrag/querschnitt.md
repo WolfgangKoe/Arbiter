@@ -5,7 +5,7 @@ Pfade und JSON zwischen `web/` und `frontend/`
 [Web](../web.md), [Frontend](../frontend.md). Hier steht, was alle Phasen teilen; Handlungen,
 Knöpfe und Beispiele je Phase in ihrem Ordner ([Übersicht](../../architektur.md#schichten)).
 Eine neue Route ist ein Anliegen an den
-Architekten. Routen gibt es nur nach V1, V2, V5, V10 und V12 bis V14.
+Architekten. Routen gibt es nur nach V1, V2, V5, V10, V12 bis V14, V18, V19 und V21.
 
 - **V1** `GET /api/spielstand` → 200 mit dem Spielstand. Beispiel:
   [spielstand.json](spielstand.json): Spieler 2 ist *an der Reihe*, seine erste
@@ -60,10 +60,12 @@ Architekten. Routen gibt es nur nach V1, V2, V5, V10 und V12 bis V14.
   höchstens eine Anfrage zugleich, danach nur mit dem jüngsten Punkt. Auf 200 setzt sie
   `cx`, `cy` jedes genannten Kreises, sonst bleibt jeder, wo er ist, auch bei 409 (ohne
   `sperrmeldung`: keine Handlung). Eine Antwort nach dem Loslassen verwirft sie. Beim
-  Loslassen schickt sie V5 mit dem Punkt des Zugs, nicht dem gezeigten; neben dem
-  *Spielfeld* mit dem Punkt der letzten 200 dieses Zugs, ohne sie keine Anfrage: Sie
-  zeichnet den letzten Stand. Warum der Punkt: Zu ihm *setzt* die Handlung die gezeigten
-  *Stellen*; welche *Modelle* mitgehen, entscheidet die Domäne. Prüft am Bildschirm:
+  Loslassen schickt sie V5 mit dem Punkt des Zugs, nicht dem gezeigten. Neben dem
+  *Spielfeld* (*neben der Karte*, auch auf einer *Armeeliste*) schickt sie den erfragten
+  Punkt der letzten vor dem Loslassen beantworteten 200 dieses Zugs, auch mit leerem
+  `modelle[]`; ohne sie keine Anfrage: Sie zeichnet den letzten Stand. Warum der
+  Punkt: Zu ihm *setzt* die Handlung die gezeigten *Stellen*; welche *Modelle* mitgehen,
+  entscheidet die Domäne. Prüft am Bildschirm:
   halten, auf die Antwort warten, `cx`, `cy` lesen, am selben Punkt oder neben dem
   *Spielfeld* loslassen; die *Stelle* danach gleicht den gelesenen Werten exakt (B3).
 

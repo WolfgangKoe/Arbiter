@@ -5,12 +5,15 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
     Ausgangslage,
     Grenzen,
 )
-from arbiter.domaene.phasen import einheitVon, verschobeneStellen
+from arbiter.domaene.phasen import einheitVon
 from arbiter.domaene.phasen.aufstellen.anhaltenAnEinerBase import angehalten
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.aufstellen.einheitInAufstellung import prüfenDassWählbar
-from arbiter.domaene.phasen.aufstellen.einheitVerschieben import hineingerückt
+from arbiter.domaene.phasen.aufstellen.einheitVerschieben import (
+    hineingerückt,
+    verschobeneStellen,
+)
 from arbiter.domaene.phasen.aufstellen.reihenfolge import nächsterAnDerReihe, zonenVerteilen
 from arbiter.domaene.phasen.aufstellen.setzenPerKlick import formationDerEinheit
 from arbiter.domaene.phasen.aufstellen.sperrenBeimSetzen import gründeGegenDieStelle
@@ -147,7 +150,7 @@ class Aufstellung:
     def auswählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)
         if einheit in self._aufgestellt:
-            raise ValueError("Eine aufgestellte Einheit ist nicht auswählbar")
+            raise ValueError("Eine aufgestellte Einheit wählt man nicht über die Einheitenkarte")
         self._auswahl.auswählen(einheit)
 
     def abwählen(self, einheit: Einheit) -> None:

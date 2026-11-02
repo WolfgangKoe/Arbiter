@@ -2,11 +2,7 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.katalog.datenblaetter import (
-    datenblätterLesen,
-    genauDieseSchlüsselLesen,
-    modellartLesen,
-)
+from arbiter.katalog.datenblaetter import datenblätterLesen, modellartLesen
 
 
 def testDieDatenblätterDerOrksNennenJeModellartDieWerteDerModellart():
@@ -28,15 +24,3 @@ def testEinWertKeineGanzeZahlÜberNullIstEinFehler(schlüssel, wert):
 
     with pytest.raises(ValueError):
         modellartLesen(werte)
-
-
-@pytest.mark.parametrize(
-    "eintrag",
-    [{"bewegungsweite": 5}, {"bewegungsweite": 5, "durchmesser": 32, "oc": 2}, [5, 32], None],
-    ids=["schlüsselFehlt", "schlüsselUnbekannt", "keineAbbildung", "leer"],
-)
-def testEinEintragMitAnderenSchlüsselnAlsDieTabelleIstEinFehler(eintrag):
-    tabelle = {"bewegungsweite": int, "durchmesser": int}
-
-    with pytest.raises(ValueError):
-        genauDieseSchlüsselLesen(eintrag, tabelle, "Eine Modellart")

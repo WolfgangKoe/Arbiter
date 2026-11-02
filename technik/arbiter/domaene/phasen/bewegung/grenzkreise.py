@@ -71,4 +71,11 @@ def kleinsterWurfAn(
 ) -> int | None:
     if enthält(bewegung.kreise, stelle):
         return None
-    return next((grenze.wurf for grenze in würfe if enthält(grenze.kreise, stelle)), None)
+    return min(
+        (
+            grenze.wurf
+            for grenze in würfe
+            if grenze.wurf is not None and enthält(grenze.kreise, stelle)
+        ),
+        default=None,
+    )

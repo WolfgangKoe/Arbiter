@@ -454,18 +454,16 @@ def testAuf5_12DieArmeelisteKennzeichnetImBeispielDesVertragsNurDieAusgewählteE
     assert ausgewählteEinheiten(seite) == ausgewählteEinheitenIm(spielstand) == {"Necron Warriors"}
 
 
-def testAuf5_12DerSpielstandKennzeichnetNurDieAusgewählteEinheit(dienst):
+def testAuf5_12DerSpielstandKennzeichnetNurDieAusgewählteEinheit(dienst, spielerEins, spielerZwei):
     auswählen(dienst, "Warboss")
 
     antwort = auswählen(dienst, "Overlord")
 
     einheiten = einheitenDerArmeelisten(antwort.get_json())
     ausgewähltJeEinheit = {name: einheit["ausgewählt"] for name, einheit in einheiten.items()}
+    alleEinheiten = spielerEins.armee.einheiten + spielerZwei.armee.einheiten
     assert ausgewähltJeEinheit == {
-        "Boyz": False,
-        "Warboss": False,
-        "Necron Warriors": False,
-        "Overlord": True,
+        einheit.name: einheit.name == "Overlord" for einheit in alleEinheiten
     }
 
 

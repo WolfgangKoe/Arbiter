@@ -16,6 +16,7 @@ from tests.akzeptanz.dienst import (
 from tests.akzeptanz.handgriffe import versetzt, wegVon
 from tests.akzeptanz.schlacht import (
     abstandImQuadrat,
+    abständeZuDenSpielfeldkanten,
     aufeinanderZuZiehen,
     außerhalbDerNahkampfreichweite,
     bewegungsweite,
@@ -43,10 +44,13 @@ jeZweiZollNachOstenUndSüden = (zweiZoll, zweiZoll)
 flachZurWestkante = (Fraction(-3, 2), Fraction(12))
 
 
-def westlichDavorAufDerLinieVon(
-    stelle: Stelle, linie: Stelle, radien: Fraction, abstand: Fraction
-) -> Stelle:
-    return Stelle(x=stelle.x - radien - abstand, y=linie.y)
+schrägÜberDieKante = (Fraction(-5), Fraction(2))
+geradeÜberDieKante = (-zweiZoll, dreiZoll)
+jenseitsDerKanteNebenDemOverlord = (-zweiZoll, Fraction(-1))
+
+
+def überDerSpielfeldkante(stelle: Stelle, modell) -> bool:
+    return min(abständeZuDenSpielfeldkanten(stelle, modell)) < 0
 
 
 @pytest.fixture(params=["westen", "norden", "osten"])
@@ -76,6 +80,15 @@ def vorDenOverlord(schlacht, warboss, overlord, abstand: Fraction):
     (modellDesAnderenSpielers,) = overlord.modelle
     aufeinanderZuZiehen(schlacht, modell, modellDesAnderenSpielers, abstand)
     return modell, modellDesAnderenSpielers
+
+
+def nebenDemOverlordAnDerKante(schlacht, warboss, overlord, versatz):
+    modell, modellDesAnderenSpielers = vorDenOverlord(schlacht, warboss, overlord, dreiZoll)
+    stelleDesAnderen = schlacht.stelle(modellDesAnderenSpielers)
+    schlacht.modellLoslassen(modell, versetzt(stelleDesAnderen, versatz))
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+    return modell, modellDesAnderenSpielers, stelleDesAnderen
 
 
 def testBew6_1ZiehtEinModellÜberDieSpielfeldkanteHältArbiterEsDavorAn(zugÜberEineSpielfeldkante):
@@ -125,8 +138,8 @@ def testBew6_2ZiehtEinModellInDieNahkampfreichweiteDesAnderenSpielersHältArbite
     aufeinanderZuZiehen(schlachtInDerBewegungsphase, modell, modellDesAnderenSpielers, dreiZoll)
     davor = schlachtInDerBewegungsphase.stelle(modell)
     stelleDesAnderen = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
-    ziel = westlichDavorAufDerLinieVon(stelleDesAnderen, davor, radien, halberZoll)
-    assert abstandImQuadrat(davor, ziel) <= modell.bewegungsweite**2
+    ziel = Stelle(x=stelleDesAnderen.x - radien - halberZoll, y=davor.y)
+    assert abstandImQuadrat(davor, ziel) <= bewegungsweite("Warboss", "Warboss") ** 2
     assert not außerhalbDerNahkampfreichweite(
         ziel, modell, stelleDesAnderen, modellDesAnderenSpielers
     )
@@ -244,6 +257,36 @@ def testBew6_3LiegtDieBewegungsweiteVorDerNahkampfreichweiteHältArbiterAnDerBew
 
     danach = schlachtInDerBewegungsphase.stelle(modell)
     assert hältAnDerBewegungsweite(davor, danach, bewegungsweite("Warboss", "Warboss"))
+
+
+@pytest.mark.parametrize(
+    ("versatz", "hältAnDerKante"),
+    [(schrägÜberDieKante, True), (geradeÜberDieKante, False)],
+    ids=["kanteVorDerNahkampfreichweite", "nahkampfreichweiteVorDerKante"],
+)
+def testBew6_3LiegenKanteUndNahkampfreichweiteAufDemWegHältArbiterAnDerErstenAn(
+    schlachtInDerBewegungsphase, warboss, overlord, versatz, hältAnDerKante
+):
+    modell, modellDesAnderenSpielers, stelleDesAnderen = nebenDemOverlordAnDerKante(
+        schlachtInDerBewegungsphase, warboss, overlord, versatz
+    )
+    davor = schlachtInDerBewegungsphase.stelle(modell)
+    ziel = versetzt(stelleDesAnderen, jenseitsDerKanteNebenDemOverlord)
+    assert abstandImQuadrat(davor, ziel) <= bewegungsweite("Warboss", "Warboss") ** 2
+    assert überDerSpielfeldkante(ziel, modell)
+    assert not außerhalbDerNahkampfreichweite(
+        ziel, modell, stelleDesAnderen, modellDesAnderenSpielers
+    )
+
+    schlachtInDerBewegungsphase.modellLoslassen(modell, ziel)
+
+    danach = schlachtInDerBewegungsphase.stelle(modell)
+    assert liegtAufDerGeradenVon(davor, ziel, danach)
+    assert hältAnDerSpielfeldkante(danach, modell) is hältAnDerKante
+    assert (
+        hältVorDerNahkampfreichweite(danach, modell, stelleDesAnderen, modellDesAnderenSpielers)
+        is not hältAnDerKante
+    )
 
 
 def testBew6_4DieStellenBeimLoslassenHaltenDenBlockAnDerKanteAn(schlachtInDerBewegungsphase, boyz):

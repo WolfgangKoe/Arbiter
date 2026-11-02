@@ -1,5 +1,6 @@
 from collections.abc import Callable, Mapping
 from fractions import Fraction
+from functools import cache
 from types import MappingProxyType
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import (
@@ -8,9 +9,9 @@ from arbiter.domaene.missionsvorbereitung.ausgangslage import (
     Formation,
 )
 from arbiter.domaene.spielobjekte import Armee, Base, Einheit, Modell, Spieler, Spielfeld
-from arbiter.katalog.datenblaetter import (
-    Datenblatt,
-    datenblätterLesen,
+from arbiter.katalog.datenblaetter import Datenblatt, datenblätterLesen
+from arbiter.katalog.eintragLesen import (
+    abbildungLesen,
     ganzeZahlÜberNull,
     genauDieseSchlüsselLesen,
 )
@@ -25,13 +26,12 @@ def _textLesen(text: object) -> str:
     return text
 
 
+def _modellzahlLesen(anzahl: object) -> int:
+    return ganzeZahlÜberNull(anzahl, "Die Zahl der Modelle")
+
+
 def _modellzahlenLesen(modelle: object) -> dict[str, int]:
-    if not isinstance(modelle, dict) or not modelle:
-        raise ValueError("Eine Einheit braucht mindestens eine Modellart")
-    return {
-        modellart: ganzeZahlÜberNull(anzahl, f"Die Zahl der Modelle von {modellart}")
-        for modellart, anzahl in modelle.items()
-    }
+    return abbildungLesen(modelle, _modellzahlLesen, "Eine Einheit")
 
 
 _einheitzeilen = {"fraktion": _textLesen, "datenblatt": _textLesen, "modelle": _modellzahlenLesen}
@@ -73,7 +73,7 @@ def ausgangslageLaden() -> Ausgangslage:
         yamlLesen("ausgangslage.yaml"),
         yamlLesen("onlyWar.yaml"),
         yamlLesen("formation.yaml"),
-        datenblätterLesen,
+        cache(datenblätterLesen),
     )
 
 

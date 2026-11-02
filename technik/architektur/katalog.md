@@ -43,7 +43,9 @@ Anforderungsautor fest.
 
 ## Aufbau
 - **K7** Je Modul eine Aufgabe, Fehler als `ValueError`: `yamlLesen.py` liest jede Datei aus
-  `domaene/daten/` nach K5, `datenblaetter.py` die einer Fraktion nach K3, K4,
+  `domaene/daten/` nach K5, `eintragLesen.py` hält die Prüfungen eines Eintrags, die mehr
+  als ein Modul nutzt (Tabelle nach K3, Abbildung nach K5, ganze Zahl über 0),
+  `datenblaetter.py` liest die Datenblätter einer Fraktion nach K3, K4,
   `ausgangslage.py` baut die Ausgangslage, ohne Datei prüfbar (`ausgangslageAus`), aus den
   Dateien `ausgangslageLaden()`. Die Domäne bekommt,
   was MIV-1.5 liest: je *Modell* `modellart`, den Namen; die *Einheit* heißt wie ihr

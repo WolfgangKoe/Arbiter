@@ -1,10 +1,9 @@
 import json
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from fractions import Fraction
 from pathlib import Path
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
-from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from arbiter.web.anwendung import anwendungFür
 
@@ -63,26 +62,12 @@ def schlachtNachSchlüsselnDes(spielstand: dict, beispiel: Mapping) -> dict:
     }
 
 
-def gründeAlsListe(gründe) -> list[str]:
-    return [grund.value for grund in Grund if grund in gründe]
+def gemeinsamÜbergehen(dienst):
+    return dienst.put("/api/gemeinsamÜbergehen")
 
 
-def einheitDesModells(aufstellung: Aufstellung, modell: Modell) -> Einheit:
-    ausgangslage = aufstellung.ausgangslage
-    return next(
-        einheit
-        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
-        for einheit in spieler.armee.einheiten
-        if modell in einheit.modelle
-    )
-
-
-def modellLoslassenUndÜbergehen(
-    dienst, aufstellung: Aufstellung, modell: Modell, stelle: Stelle, gründe
-):
-    pfad = pfadDesModells(aufstellung, einheitDesModells(aufstellung, modell), modell)
-    körper = {**körperDerStelle(stelle), "übergehen": gründeAlsListe(gründe)}
-    return dienst.put(f"{pfad}/stelle", json=körper)
+def angehaltenDesVertrags() -> dict:
+    return _beispielDesVertrags("angehalten.json")
 
 
 def stellenDesVertrags(spielernummer: int) -> list[Stelle]:
@@ -228,4 +213,28 @@ def modellAnklicken(dienst, aufstellung: Aufstellung, einheit: Einheit, modell: 
 def ausgewählteModelleIm(spielstand: dict) -> frozenset[tuple[float, float]]:
     return frozenset(
         (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell["ausgewählt"]
+    )
+
+
+def grenzenImSpielstand(grenzen: Iterable[tuple]) -> frozenset[tuple]:
+    return frozenset(
+        (
+            frozenset((*stelleImSpielstand(stelle), float(radius)) for stelle, radius in kreise),
+            *merkmale,
+        )
+        for kreise, *merkmale in grenzen
+    )
+
+
+def grenzenDerEinheitIm(spielstand: dict, einheitenname: str) -> frozenset[tuple]:
+    kennung = kennungenDerEinheiten[einheitenname]
+    return frozenset(
+        (
+            frozenset((kreis["x"], kreis["y"], kreis["radius"]) for kreis in grenze["kreise"]),
+            grenze.get("wurf"),
+            grenze.get("wählbar", False),
+            grenze.get("nahkampfreichweite", False),
+        )
+        for grenze in spielstand["schlacht"]["grenzen"]
+        if (grenze["spieler"], grenze["einheit"]) == kennung
     )

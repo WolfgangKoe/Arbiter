@@ -62,7 +62,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
-- [ ] Architekt: Vertrag zu Item anhaltenUebergehen, bei beiden Hälften
+- [x] Architekt: Vertrag zu Item anhaltenUebergehen, bei beiden Hälften
 - [ ] Testautor: Tests zu Item anhaltenUebergehen
 - [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUebergehen
 - [ ] Architekt: Kritik an den Tests zu Item anhaltenUebergehen
@@ -71,7 +71,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUebergehen
 - [ ] Fachkritiker: Item anhaltenUebergehen abgenommen
 - [ ] Planer: Item anhaltenUebergehen gelöscht
-- [ ] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
+- [x] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
 - [ ] Testautor: Tests zu Item loslassenNebenDerKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item loslassenNebenDerKarte
 - [ ] Architekt: Kritik an den Tests zu Item loslassenNebenDerKarte
@@ -117,35 +117,20 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
 - [ ] Anforderungsautor: Anliegen 10180 Etappe 2: Zurücksetzen, Ork-Psioniker, Weiterziehen nach dem Übergehen
-- [ ] Testautor: Anliegen 10380 Fixtures unabhängig von der Zahl der Einheiten je Armee
-- [ ] Implementierer: Anliegen 7042 Meldung von einheitVon nach dem Umzug
-- [ ] Implementierer: Anliegen 7050 Unit-Test des Verschiebens am alten Ort
-- [ ] Testautor: Anliegen 7072 Griff abseits der Mitte doppelt, Vorgeschichte ohne eigene Grenze
+- [x] Planer: Anliegen 10380 Fixtures unabhängig von der Zahl der Einheiten je Armee
+- [ ] Implementierer: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
-- [ ] Implementierer: Anliegen 7191 Ablage der Tabellenprüfung und ein TypeError im Katalog
-- [ ] Implementierer: Anliegen 7201 Katalog liest mehrfach und vergleicht Schlüssel am Text
-- [ ] Testautor: Anliegen 7301 Leisten: nicht eingefahren am Inhalt prüfen, Namen nach dem Glossar
-- [ ] Testautor: Anliegen 7321 Hilfen der Tests zum Übergehen
-- [ ] Testautor: Anliegen 7401 BEW-6.3 ohne Test für Kante und Nahkampfreichweite zusammen
 - [ ] Testautor: Anliegen 7601 Dienst der Schlacht wählt „ohne Ebene“: derselbe Name wie in 7420
-- [ ] Testautor: Anliegen 7641 Tests zu den Grenzkreisen: Einhüllende am Bildschirm, Modell im Ring
-- [ ] Testautor: Anliegen 7661 Grenzkreise: Hilfen nach Aufgabe ablegen
-- [ ] Implementierer: Anliegen 7681 Test von verschobeneStellen am alten Ort
+- [x] Fachkritiker: Anliegen 7641 Tests zu den Grenzkreisen: Einhüllende am Bildschirm, Modell im Ring
+- [x] Architekt: Anliegen 7661 Grenzkreise: Hilfen nach Aufgabe ablegen
 - [x] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
-- [ ] Implementierer: Anliegen 8020 verschobeneStellen zur Aufstellung, Adresse des Servers ohne SonarLint-Meldung
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
-- [ ] Implementierer: Anliegen 8100 Gegner und Klick auf ein Modell je einmal
-- [ ] Implementierer: Anliegen 8121 Auswahl: Modell anklicken einfacher, Meldung zur aufgestellten Einheit
 - [ ] Implementierer: Anliegen 8261 Übergehen nach Vertrag, Angebot nach Auswahlwechsel
-- [ ] Testautor: Anliegen 8421 Ziel vor der Nahkampfreichweite benennen
-- [ ] Implementierer: Anliegen 8620 Ziehen verlangt mehr, als es braucht
 - [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
 - [ ] Testautor: Anliegen 8720 Auswahl in der Schlacht nur an Modellen prüfen, mit Vorbedingung
-- [ ] Implementierer: Anliegen 8740 Vorrückwurf nur für die eigene Einheit geprüft
 - [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
 - [ ] Anforderungsautor: Anliegen 9340 Fliegen der Canoptek-Spinne
 - [ ] Testautor: Anliegen 9401 Test zu BEW-19
-- [ ] Architekt: Anliegen 9890 V18 nach BEW-8.3 bis 8.5 nachziehen
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review

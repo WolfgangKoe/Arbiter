@@ -41,7 +41,7 @@ def testDieEbeneEinesModellsMachtNurDiesesModellAusgewählt(auswahl, spieler):
     ersteEinheit, _, erstesModell, zweitesModell = einheitenUndModelle(spieler)
     auswahl.auswählen(ersteEinheit)
 
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     assert auswahl.modellIstEbene(erstesModell)
     assert auswahl.modellAusgewählt(erstesModell)
@@ -55,7 +55,7 @@ def testNurDieAusgewählteEinheitOhneModellAlsEbeneIstGanzDieEbene(auswahl, spie
     ganz = auswahl.ganzeEinheitIstEbene(ersteEinheit)
     anderer = auswahl.ganzeEinheitIstEbene(zweiteEinheit)
 
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     assert not ohneAuswahl
     assert ganz
@@ -68,27 +68,48 @@ def testNurDasGewählteModellIstEbene(auswahl, spieler):
     auswahl.auswählen(ersteEinheit)
     ohneEbene = auswahl.modellIstEbene(erstesModell)
 
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     assert not ohneEbene
     assert auswahl.modellIstEbene(erstesModell)
     assert not auswahl.modellIstEbene(zweitesModell)
 
 
-def testDieEbeneAbwählenKehrtZurEinheitZurück(auswahl, spieler):
+def testDasEbeneModellErneutAnklickenKehrtZurEinheitZurück(auswahl, spieler):
     ersteEinheit, _, erstesModell, _ = einheitenUndModelle(spieler)
     auswahl.auswählen(ersteEinheit)
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
-    auswahl.ebeneAbwählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+
+
+def testEinAnderesModellAnklickenWechseltDieEbene(auswahl, spieler):
+    ersteEinheit, _, erstesModell, zweitesModell = einheitenUndModelle(spieler)
+    auswahl.auswählen(ersteEinheit)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
+
+    auswahl.modellAnklicken(ersteEinheit, zweitesModell)
+
+    assert auswahl.modellIstEbene(zweitesModell)
+    assert not auswahl.modellIstEbene(erstesModell)
+
+
+def testEinModellEinerNichtAusgewähltenEinheitAnklickenWähltDieEinheitAus(auswahl, spieler):
+    ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
+    auswahl.auswählen(zweiteEinheit)
+
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
+
+    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert not auswahl.ausgewählt(zweiteEinheit)
 
 
 def testEineNeueAuswahlSetztDieEbeneZurück(auswahl, spieler):
     ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
     auswahl.auswählen(ersteEinheit)
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     auswahl.auswählen(zweiteEinheit)
     auswahl.auswählen(ersteEinheit)
@@ -99,24 +120,8 @@ def testEineNeueAuswahlSetztDieEbeneZurück(auswahl, spieler):
 def testDieselbeEinheitErneutAuswählenBehältDieEbene(auswahl, spieler):
     ersteEinheit, _, erstesModell, _ = einheitenUndModelle(spieler)
     auswahl.auswählen(ersteEinheit)
-    auswahl.ebeneWählen(erstesModell)
+    auswahl.modellAnklicken(ersteEinheit, erstesModell)
 
     auswahl.auswählen(ersteEinheit)
 
     assert auswahl.modellIstEbene(erstesModell)
-
-
-def testEinModellEinerNichtAusgewähltenEinheitKannNichtAbgewähltWerden(auswahl, spieler):
-    ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
-    auswahl.auswählen(zweiteEinheit)
-
-    with pytest.raises(ValueError):
-        auswahl.ebeneAbwählen(erstesModell)
-
-
-def testEinModellEinerNichtAusgewähltenEinheitKannNichtDieEbeneSein(auswahl, spieler):
-    ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
-    auswahl.auswählen(zweiteEinheit)
-
-    with pytest.raises(ValueError):
-        auswahl.ebeneWählen(erstesModell)

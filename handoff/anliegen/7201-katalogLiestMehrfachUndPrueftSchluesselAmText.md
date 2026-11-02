@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -45,4 +45,10 @@ seine Nachbarn. Je Punkt wenige Zeilen.
 4. Eine Hilfe `abbildungLesen(werte, lesen, was)` für beide.
 5. `laden` bekommt die Datenblätter als Parameter, der Test ruft `laden`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, alle fünf Punkte umgesetzt. 1: Schlüssel müssen ein
+`ScalarNode` mit Tag `str` sein (`yes`, `1`, `0x1` fallen durch). 2: `ausgangslageLaden()` übergibt
+`cache(datenblätterLesen)`. 3: oberste Ebene über `abbildungLesen`; die Meldung nennt die
+fehlende `datenblaetter.yaml`. 4: `abbildungLesen` in `eintragLesen.py` für Modellarten,
+Modellzahlen und Datenblätter. 5: `laden` im Test nimmt die Fraktionen als Parameter und ruft
+`ausgangslageAus`. Einheitstests der Katalogmodule grün, ruff grün.
+Status: angenommen

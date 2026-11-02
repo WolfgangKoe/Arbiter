@@ -1,7 +1,4 @@
-from collections.abc import Mapping
-
-from arbiter.domaene import messen
-from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler
 
 
 def einheitVon(beideSpieler: tuple[Spieler, Spieler], modell: Modell) -> Einheit:
@@ -9,15 +6,8 @@ def einheitVon(beideSpieler: tuple[Spieler, Spieler], modell: Modell) -> Einheit
         einheit = spieler.armee.einheitVon(modell)
         if einheit is not None:
             return einheit
-    raise ValueError("Das Modell gehört nicht zur Aufstellung")
+    raise ValueError("Das Modell gehört keinem der beiden Spieler")
 
 
-def verschobeneStellen(
-    gruppe: Mapping[Modell, Stelle], gezogenes: Modell, ziel: Stelle
-) -> dict[Modell, Stelle]:
-    davor = gruppe.get(gezogenes)
-    if davor is None:
-        return {gezogenes: ziel}
-    weg = messen.wegZwischen(davor, ziel)
-    verschobene = {modell: messen.verschoben(stelle, weg) for modell, stelle in gruppe.items()}
-    return {**verschobene, gezogenes: ziel}
+def gegnerVon(beideSpieler: tuple[Spieler, Spieler], spieler: Spieler) -> Spieler:
+    return next(andere for andere in beideSpieler if andere is not spieler)

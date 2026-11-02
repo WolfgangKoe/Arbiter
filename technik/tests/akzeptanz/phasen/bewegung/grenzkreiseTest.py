@@ -4,19 +4,13 @@ import pytest
 from playwright.sync_api import expect
 
 from arbiter.domaene.querschnitt.schlachtrunden import Phase
-from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
-from tests.akzeptanz.dienst import spielstandVon
+from tests.akzeptanz.bildschirm import kreiseDerGrenzenUndIhrerMasken, seiteDerSchlachtMitEingabe
+from tests.akzeptanz.dienst import grenzenDerEinheitIm, grenzenImSpielstand, spielstandVon
 from tests.akzeptanz.grenzen import (
-    alsZahlen,
-    ebenen,
-    ganzeEinheitAuswählen,
     grenzeDerBewegung,
     grenzeDerNahkampfreichweite,
     grenzenDerEinheit,
     grenzenDerEinheitenDes,
-    grenzenDerEinheitIm,
-    letztesModellZurEbeneMachen,
-    mitJederEbene,
     zweiZollEntlangDerReihe,
 )
 from tests.akzeptanz.schlacht import (
@@ -25,6 +19,12 @@ from tests.akzeptanz.schlacht import (
     phaseBeendenBis,
     phasenAußerDerBewegungsphase,
     phasenAußerDerBewegungsphaseIds,
+)
+from tests.akzeptanz.vorruecken import (
+    ebenen,
+    ganzeEinheitAuswählen,
+    letztesModellZurEbeneMachen,
+    mitJederEbene,
 )
 from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
 
@@ -54,7 +54,9 @@ def testBew11_1DerDienstNenntDenGrenzkreisDesModellsMitExaktemRadius(
     stellen = letztesModellZurEbeneMachen(schlachtInDerBewegungsphase, boyz)
 
     spielstand = spielstandVon(dienstDerSchlacht)
-    assert grenzenDerEinheitIm(spielstand, "Boyz") == alsZahlen({grenzeDerBewegung(stellen)})
+    assert grenzenDerEinheitIm(spielstand, "Boyz") == grenzenImSpielstand(
+        {grenzeDerBewegung(stellen)}
+    )
 
 
 def testBew11_5UmDieGanzeEinheitAlsEbeneZeigtDieKarteDieEinhüllendeIhrerGrenzkreise(
@@ -84,7 +86,26 @@ def testBew11_5DerDienstNenntDieEinhüllendeDerEinheitMitExaktenRadien(
     stellen = ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
 
     spielstand = spielstandVon(dienstDerSchlacht)
-    assert grenzenDerEinheitIm(spielstand, "Boyz") == alsZahlen({grenzeDerBewegung(stellen)})
+    assert grenzenDerEinheitIm(spielstand, "Boyz") == grenzenImSpielstand(
+        {grenzeDerBewegung(stellen)}
+    )
+
+
+def testBew11_5DieSeiteZeigtJedeEinhüllendeDurchIhreMaskeAusDenselbenGrenzkreisen(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, spielerZwei
+):
+    ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+    )
+    expect(seite.locator(".karte g.grenze")).to_have_count(3)
+
+    grenzen, masken = kreiseDerGrenzenUndIhrerMasken(seite)
+
+    assert masken == grenzen
+    assert sorted(map(len, grenzen)) == sorted(
+        len(einheit.modelle) for einheit in (boyz, *spielerZwei.armee.einheiten)
+    )
 
 
 @mitJederEbene
@@ -112,12 +133,12 @@ def testBew11_3DerDienstNenntDieNahkampfreichweiteDesGegnersMitExaktenRadien(
     stellen = jetzigeStellen(schlachtInDerBewegungsphase, gegner)
 
     spielstand = spielstandVon(dienstDerSchlacht)
-    assert grenzenDerEinheitIm(spielstand, einheitenname) == alsZahlen(
+    assert grenzenDerEinheitIm(spielstand, einheitenname) == grenzenImSpielstand(
         {grenzeDerNahkampfreichweite(stellen)}
     )
 
 
-def testBew11_3DieSeiteZeigtDieGrenzeDerAusgewähltenUndJeGegnerischeEinheitDieNahkampfreichweite(
+def testBew11_3DieSeiteZeigtJeEinheitDesAnderenSpielersDieNahkampfreichweite(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
@@ -161,12 +182,12 @@ def testBew11_4NachDemAbwählenZeigtDieKarteKeinenGrenzkreis(schlachtInDerBewegu
 
 
 @pytest.mark.usefixtures("schlachtInDerBewegungsphase")
-def testBew11_4DerDienstNenntOhneAuswahlKeineGrenze(dienstDerSchlacht):
+def testBew11_4DerDienstNenntOhneAuswahlKeinenGrenzkreis(dienstDerSchlacht):
     spielstand = spielstandVon(dienstDerSchlacht)
     assert spielstand["schlacht"]["grenzen"] == []
 
 
-def testBew11_4DieSeiteZeigtOhneAuswahlKeineGrenze(
+def testBew11_4DieSeiteZeigtOhneAuswahlKeinenGrenzkreis(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)

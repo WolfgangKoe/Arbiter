@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -28,4 +28,14 @@ Wartet auf: Technikphase 10
    `testQue6_4EinKlickAufDenGriffEinerEingefahrenenLeisteFährtSieNichtMehrEin`,
    `testQue6_5EinTippenAufDenGriffEinerEingefahrenenLeisteWirktWieEinKlick`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt in
+[leistenTest.py](../../technik/tests/akzeptanz/querschnitt/leistenTest.py):
+1. Neuer Test `testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt`, je *Armeeliste*
+   (`jedeArmeeliste`: links, rechts) `expect(inhaltVon(seite, leistenname)).to_be_visible()`.
+   Das *Protokoll* bleibt ohne Inhaltsprüfung, es ist nach dem Start leer. Eigener Test statt
+   eines Zusatzes im alten, damit das *Protokoll* ohne `if` im Test parametrisiert bleibt.
+2. Umbenannt: `testQue6_3EinKlickAufDenGriffEinerNichtEingefahrenenLeisteFährtSieEin`,
+   `testQue6_4EinKlickAufDenGriffEinerEingefahrenenLeisteFährtSieNichtMehrEin`,
+   `testQue6_5EinTippenAufDenGriffEinerNichtEingefahrenenLeisteWirktWieEinKlick`,
+   `testQue6_5EinTippenAufDenGriffEinerEingefahrenenLeisteWirktWieEinKlick`; „ausgefahren“
+   steht in keinem Namen mehr. Alle Tests der Datei grün.

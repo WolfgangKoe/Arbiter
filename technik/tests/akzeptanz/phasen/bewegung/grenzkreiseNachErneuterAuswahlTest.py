@@ -2,13 +2,9 @@
 
 import pytest
 
-from tests.akzeptanz.grenzen import (
-    ganzeEinheitAuswählen,
-    grenzeDerBewegung,
-    grenzenDerEinheit,
-    zweiZollEntlangDerReihe,
-)
+from tests.akzeptanz.grenzen import grenzeDerBewegung, grenzenDerEinheit, zweiZollEntlangDerReihe
 from tests.akzeptanz.schlacht import mitteDesSpielfelds
+from tests.akzeptanz.vorruecken import ganzeEinheitAuswählen
 
 
 def aufDieLeereKarteKlicken(schlacht, _andereEinheit) -> None:

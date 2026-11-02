@@ -2,27 +2,22 @@
 
 from playwright.sync_api import expect
 
-from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
-from tests.akzeptanz.dienst import spielstandVon
+from tests.akzeptanz.bildschirm import kreiseDerGrenzenUndIhrerMasken, seiteDerSchlachtMitEingabe
+from tests.akzeptanz.dienst import grenzenDerEinheitIm, grenzenImSpielstand, spielstandVon
 from tests.akzeptanz.grenzen import (
-    alsZahlen,
+    dreiAugen,
     grenzenDerEinheit,
-    grenzenDerEinheitIm,
     grenzenNachDemVorrückwurf,
     grenzenVorDemVorrückwurf,
     mitJedemWurf,
-    mitJederEbene,
-    vorgerücktMit,
-    wartetAufDenVorrückwurf,
+    vierAugen,
     zweiZollEntlangDerReihe,
 )
-
-dreiAugen = 3
-vierAugen = 4
+from tests.akzeptanz.vorruecken import mitJederEbene, vorgerücktMit, wartetAufDenVorrückwurf
 
 
 @mitJederEbene
-def testBew13_1WartetDieEinheitZeigtDieKarteSechsWeitereGrenzenUmEinBisSechsZollGrößer(
+def testBew13_1WartetDieEinheitZeigtDieKarteSechsWeitereEinhüllendeUmEinBisSechsZollGrößer(
     einheitAmZug, ebene
 ):
     schlacht, einheit, _, _ = einheitAmZug
@@ -31,16 +26,18 @@ def testBew13_1WartetDieEinheitZeigtDieKarteSechsWeitereGrenzenUmEinBisSechsZoll
     assert grenzenDerEinheit(schlacht, einheit) == grenzenVorDemVorrückwurf(stellen)
 
 
-def testBew13_1DerDienstNenntDieSechsWählbarenGrenzenMitWurfUndExaktenRadien(
+def testBew13_1DerDienstNenntDieSechsWählbarenEinhüllendenMitWurfUndExaktenRadien(
     dienstDerSchlacht, schlachtInDerBewegungsphase, boyz
 ):
     stellen = wartetAufDenVorrückwurf(schlachtInDerBewegungsphase, boyz, "ganzeEinheit")
 
     spielstand = spielstandVon(dienstDerSchlacht)
-    assert grenzenDerEinheitIm(spielstand, "Boyz") == alsZahlen(grenzenVorDemVorrückwurf(stellen))
+    assert grenzenDerEinheitIm(spielstand, "Boyz") == grenzenImSpielstand(
+        grenzenVorDemVorrückwurf(stellen)
+    )
 
 
-def testBew13_1DieSeiteZeigtSechsWählbareGrenzenUndDieAusBew11(
+def testBew13_1DieSeiteZeigtSechsWählbareEinhüllendeUndDieAusBew11(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     wartetAufDenVorrückwurf(schlachtInDerBewegungsphase, boyz, "ganzeEinheit")
@@ -50,6 +47,20 @@ def testBew13_1DieSeiteZeigtSechsWählbareGrenzenUndDieAusBew11(
 
     expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
     expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(7)
+
+
+def testBew13_1DieSeiteZeigtJedeDerSiebenEinhüllendenDurchIhreEigeneMaske(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+):
+    wartetAufDenVorrückwurf(schlachtInDerBewegungsphase, boyz, "ganzeEinheit")
+    seite = seiteDerSchlachtMitEingabe(
+        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
+    )
+    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(7)
+
+    grenzen, masken = kreiseDerGrenzenUndIhrerMasken(seite)
+
+    assert masken == grenzen
 
 
 @mitJederEbene
@@ -63,7 +74,7 @@ def testBew13_2IstDieEinheitVorgerücktZeigtDieKarteVonDenSechsNurDieIhresWurfs(
     assert grenzenDerEinheit(schlacht, einheit) == grenzenNachDemVorrückwurf(stellen, wurf)
 
 
-def testBew13_2NachDemZiehenBleibtDieGrenzeDesWurfsAnDenStellenZuBeginnDerBewegungsphase(
+def testBew13_2NachDemZiehenBleibtDieEinhüllendeDesWurfsAnDenStellenZuBeginnDerBewegungsphase(
     einheitAmZug,
 ):
     schlacht, einheit, _, _ = einheitAmZug
@@ -75,18 +86,18 @@ def testBew13_2NachDemZiehenBleibtDieGrenzeDesWurfsAnDenStellenZuBeginnDerBewegu
     assert grenzenDerEinheit(schlacht, einheit) == grenzenNachDemVorrückwurf(stellen, dreiAugen)
 
 
-def testBew13_2DerDienstNenntNurDieGrenzeDesWurfsNichtWählbar(
+def testBew13_2DerDienstNenntNurDieEinhüllendeDesWurfsNichtWählbar(
     dienstDerSchlacht, schlachtInDerBewegungsphase, boyz
 ):
     stellen = vorgerücktMit(schlachtInDerBewegungsphase, boyz, vierAugen)
 
     spielstand = spielstandVon(dienstDerSchlacht)
-    assert grenzenDerEinheitIm(spielstand, "Boyz") == alsZahlen(
+    assert grenzenDerEinheitIm(spielstand, "Boyz") == grenzenImSpielstand(
         grenzenNachDemVorrückwurf(stellen, vierAugen)
     )
 
 
-def testBew13_2DieSeiteZeigtKeineWählbareGrenzeMehr(
+def testBew13_2DieSeiteZeigtKeineWählbareEinhüllendeMehr(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     vorgerücktMit(schlachtInDerBewegungsphase, boyz, vierAugen)

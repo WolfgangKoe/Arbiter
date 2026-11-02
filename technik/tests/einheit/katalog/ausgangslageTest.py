@@ -18,10 +18,13 @@ armeenMitBoyz = [[einheit], [einheit]]
 formationDerBoyz = {"abstand": 1.5, "formation": {"Boyz": [1]}}
 
 
-def datenblätterVon(fraktion: str) -> dict:
-    if fraktion not in datenblätter:
-        raise ValueError(f"Die Fraktion {fraktion} hat keinen Ordner")
-    return datenblätter[fraktion]
+def datenblätterVon(fraktionen: dict):
+    def lesen(fraktion: str) -> dict:
+        if fraktion not in fraktionen:
+            raise ValueError(f"Die Fraktion {fraktion} hat keinen Ordner")
+        return fraktionen[fraktion]
+
+    return lesen
 
 
 def onlyWarMitKante(kante: int) -> dict:
@@ -33,12 +36,17 @@ def onlyWarMitKante(kante: int) -> dict:
     }
 
 
-def laden(armeen: list, formation: dict | None = None, onlyWar: dict | None = None):
+def laden(
+    armeen: list,
+    formation: dict | None = None,
+    onlyWar: dict | None = None,
+    fraktionen: dict = datenblätter,
+):
     return ausgangslageAus(
         {"Armee": armeen},
         onlyWar or onlyWarMitKante(60),
         formation or formationDerBoyz,
-        datenblätterVon,
+        datenblätterVon(fraktionen),
     )
 
 
@@ -145,11 +153,8 @@ def testEineEinheitMitVerschiedenenDurchmessernIstEinFehlerBeimLaden():
     gemischt = {"orks": {"Boyz": {"Ork Boy": modellart, "Boss Nob": breit}}}
     zwei = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1, "Boss Nob": 1}}
 
-    onlyWar = onlyWarMitKante(60)
-    reihen = {"abstand": 1.5, "formation": {"Boyz": [2]}}
-
     with pytest.raises(ValueError):
-        ausgangslageAus({"Armee": [[zwei], [zwei]]}, onlyWar, reihen, gemischt.__getitem__)
+        laden([[zwei], [zwei]], {"abstand": 1.5, "formation": {"Boyz": [2]}}, fraktionen=gemischt)
 
 
 @pytest.mark.parametrize("reihen", [[1, 0], [2, -1]], ids=["leereReihe", "negativeReihe"])

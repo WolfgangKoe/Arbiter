@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Kritik: In der Domänenphase ziehe ich nur Namen nach, Anliegen 370; hier
@@ -33,4 +32,11 @@ Loslassens; die Domäne rechnet ab der angehaltenen *Stelle* (nichts zusätzlich
 [P2](../../technik/architektur/speicher.md)) und bildet die *Gründe*. Der Weg über
 `Sperre(übergehbar=True)` bleibt für QUE-5.1 bis AUF-31. Antwort von 9941 vorher einarbeiten.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in [V18](../../technik/architektur/vertrag/schlacht/uebergehen.md),
+mit 9941 B: eigene Handlung `PUT /api/gemeinsamÜbergehen` ohne Körper. Abweichend vom
+Gegenvorschlag merkt sich die *Bewegungsphase* das Angebot (gezogene *Modelle*, Punkt des
+Loslassens), damit es nicht an der *Auswahl* danach hängt (8261, 3); P2 bleibt, es entsteht beim
+Wiederholen neu. 1 bis 3: Angebot nach 200, *Gründe* nach BEW-8.5, `Grund.bewegungsweite`;
+BEW-25.1 in [V16](../../technik/architektur/vertrag/bewegung/handlungen.md). 4: Loslassen trägt
+nie ein, `übergehen` und `Sperre.übergehbar` entfallen bis Etappe 7 (QUE-5.1, AUF-31).
+Beispiele `angehalten.json` und `protokoll.json`.

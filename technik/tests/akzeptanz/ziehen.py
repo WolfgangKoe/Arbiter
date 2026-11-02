@@ -5,8 +5,9 @@ from math import hypot
 import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
-from arbiter.domaene.spielobjekte import Stelle
+from arbiter.domaene.spielobjekte import Modell, Stelle
 from tests.akzeptanz.bildschirm import aufDieHandlungWarten, kreiseDerKarte
+from tests.akzeptanz.handgriffe import radiusInZoll
 from tests.akzeptanz.schlacht import hundertstelZoll
 
 
@@ -47,6 +48,16 @@ def liegtEinPixelGenauAn(seite: Page, ist: Stelle, soll: Stelle) -> bool:
     abweichungInX = abs(float(ist.x) - float(soll.x))
     abweichungInY = abs(float(ist.y) - float(soll.y))
     return abweichungInX <= toleranz and abweichungInY <= toleranz
+
+
+zugschwelleInPixeln = 4
+anteilDesRadius = 0.8
+
+
+def griffAbseitsDerMitte(seite: Page, modell: Modell, mitte: Bildpunkt) -> Bildpunkt:
+    versatzInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite) * anteilDesRadius
+    assert versatzInPixeln > zugschwelleInPixeln
+    return Bildpunkt(mitte.links + versatzInPixeln, mitte.oben)
 
 
 def hältAnDerBewegungsweiteAufEinenPixelGenau(

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code zur Umsetzung von Anliegen 7700 und 7701 (Architektur),
@@ -48,4 +47,13 @@ Prüfen: `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` ohn
 `server.py`, sobald 8021 die Ausnahme entfernt hat; `importvertrag.py`, `spiegel.py` und die
 Einheitentests grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt: `verschobeneStellen` liegt in
+[einheitVerschieben.py](../../technik/arbiter/domaene/phasen/aufstellen/einheitVerschieben.py),
+Import und Test sind nachgezogen; [server.py](../../technik/arbiter/web/server.py) hat
+`_wurzel = "http://127.0.0.1"` und `adresseMitPort` gibt `f"{_wurzel}:{port}/"`. Die
+SonarLint-Prüfung lief in meinem Lauf in die Zeitgrenze (120 s, Last durch Nachbarn), ein
+früherer Lauf vor der Umstellung meldete keine Funde; Anliegen 8021 kann die Ausnahme entfernen.
+
+Nachgeprüft (Architekt): 1 wie vorgeschlagen, `importvertrag.py`, `spiegel.py`, 218
+Einheitentests grün. 2 in `/tmp` mit SonarLint ohne die Liste `ausnahmen` geprüft: die Fassung
+von HEAD meldet S5332 in Zeile 22, die neue `server.py` nichts. 8021 kann die Ausnahme entfernen.

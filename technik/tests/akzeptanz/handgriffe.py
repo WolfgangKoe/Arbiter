@@ -21,6 +21,7 @@ längeDerSpielfeldkante = 60
 tiefeDerZone = 9
 abstandDerReihen = Fraction(5, 2)
 tiefeDerErstenReihe = Fraction(3, 2)
+reihenJeZone = 2
 durchmesserDerTestmodelle = 32
 bewegungsweiteDerTestmodelle = Fraction(5)
 modellartDerTestmodelle = "Testmodell"
@@ -67,9 +68,9 @@ def stellenDerEinheit(
     aufstellung: Aufstellung, spieler: Spieler, einheit: Einheit
 ) -> list[tuple[Modell, Stelle]]:
     zone = aufstellung.aufstellungszone(spieler)
-    reihe = spieler.armee.einheiten.index(einheit)
+    hälfteDerKante, reihe = divmod(spieler.armee.einheiten.index(einheit), reihenJeZone)
     tiefe = tiefeDerErstenReihe + abstandDerReihen * reihe
-    länge = Fraction(0)
+    länge = Fraction(längeDerSpielfeldkante, 2) * hälfteDerKante
     stellen = []
     for modell in einheit.modelle:
         länge += radiusInZoll(modell)

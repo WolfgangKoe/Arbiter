@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -30,4 +30,17 @@ Orten.
 3. Bei der nächsten Fixture die der *Schlacht* in eine eigene `conftest.py` unter
    `phasen/bewegung/` verschieben.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, umgesetzt bis auf den Typ der Fixture.
+1. `grenzenDerEinheitIm` und `alsZahlen` (jetzt `grenzenImSpielstand`) stehen in
+   [dienst.py](../../technik/tests/akzeptanz/dienst.py). Sie liefern einfache Tupel, so importiert
+   `dienst.py` nichts aus `grenzen.py` und es entsteht kein Kreis; der Vergleich mit `GrenzeDerKarte`
+   gilt, weil ein `NamedTuple` gleich dem Tupel ist. Die Handlungen (`ganzeEinheitAuswählen`,
+   `letztesModellZurEbeneMachen`, `ebenen`, `mitJederEbene`, `wartetAufDenVorrückwurf`,
+   `vorgerücktMit`) stehen in [vorruecken.py](../../technik/tests/akzeptanz/vorruecken.py).
+   [grenzen.py](../../technik/tests/akzeptanz/grenzen.py) hält die erwarteten *Grenzkreise* und die
+   Klickstellen, die aus deren Radien folgen; das ist eine Aufgabe. `EinheitAmZug` bleibt dort,
+   solange [conftest.py](../../technik/tests/akzeptanz/conftest.py) für 10380 in Arbeit ist; es
+   wandert mit der Teilung aus 3.
+2. `einAuge`, `dreiAugen`, `vierAugen` stehen einmal in `grenzen.py` neben `würfe`.
+3. Bei der nächsten Fixture der *Schlacht* teile ich `conftest.py` wie vorgeschlagen; heute hat sie
+   10.403 Zeichen.

@@ -6,8 +6,9 @@
     "phase": "Bewegungsphase",
     "beendet": false,
     "protokoll": [
-      {"spieler": 1, "einheit": 2, "name": "Warboss", "gründe": ["über eine Base"]},
-      {"spieler": 1, "einheit": 1, "name": "Boyz", "gründe": ["über eine Base"]}
-    ]
+      {"spieler": 1, "einheit": 1, "name": "Boyz", "gründe": ["Bewegungsweite"]},
+      {"spieler": 1, "einheit": 2, "name": "Warboss", "gründe": ["Bewegungsweite"]}
+    ],
+    "gemeinsamÜbergehen": {"angeboten": false}
   }
 }

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -28,4 +28,9 @@ etwa `westlichVon(stelleDesAnderen, radien + halberZoll, y=davor.y)` mit
 `Stelle(x=stelle.x - versatz, y=y)`; oder die Funktion streichen und das Ziel im Test mit
 `Stelle(...)` bauen, die Prüfung danach trägt die Bedeutung.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, zweite Variante: `westlichDavorAufDerLinieVon` ist gestrichen;
+`testBew6_2ZiehtEinModellInDieNahkampfreichweite…` baut das Ziel mit
+`Stelle(x=stelleDesAnderen.x - radien - halberZoll, y=davor.y)`, die Prüfung danach sichert die
+*Nahkampfreichweite*
+([anhaltenVorDerGrenzeTest.py](../../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py)).
+Grün, ruff grün.

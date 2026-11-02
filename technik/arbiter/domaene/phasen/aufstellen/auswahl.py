@@ -53,19 +53,8 @@ class Auswahl:
     def modellAnklicken(self, einheit: Einheit, modell: Modell) -> None:
         if not self.ausgewählt(einheit):
             self.auswählen(einheit)
-        elif self.modellIstEbene(modell):
-            self.ebeneAbwählen(modell)
-        else:
-            self.ebeneWählen(modell)
-
-    def ebeneWählen(self, modell: Modell) -> None:
-        self._prüfenDassZurAusgewähltenEinheit(modell)
-        self._modellAlsEbene = modell
-
-    def ebeneAbwählen(self, modell: Modell) -> None:
-        self._prüfenDassZurAusgewähltenEinheit(modell)
-        if self.modellIstEbene(modell):
-            self._modellAlsEbene = None
+            return
+        self._modellAlsEbene = None if self.modellIstEbene(modell) else modell
 
     def ganzeEinheitAlsEbene(self, einheit: Einheit) -> None:
         if self.ausgewählt(einheit):
@@ -74,7 +63,3 @@ class Auswahl:
     def modellAusgewählt(self, modell: Modell) -> bool:
         gehörtDazu = self._einheit is not None and modell in self._einheit.modelle
         return gehörtDazu and self._modellAlsEbene in (None, modell)
-
-    def _prüfenDassZurAusgewähltenEinheit(self, modell: Modell) -> None:
-        if self._einheit is None or modell not in self._einheit.modelle:
-            raise ValueError("Das Modell gehört nicht zur ausgewählten Einheit")

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -20,4 +20,8 @@ Modul `<modul>Test.py`).
 **Gegenvorschlag.** Die beiden Tests nach `tests/einheit/domaene/phasenTest.py`, sobald der
 Architekt die Ablage der Helfer in `phasen/__init__.py` entschieden hat (6122, Punkt 2 und 3).
 
-Status: offen
+**Stellungnahme.** Angenommen, anders umgesetzt nach Anliegen 8020: `verschobeneStellen` liegt jetzt
+in [einheitVerschieben.py](../../technik/arbiter/domaene/phasen/aufstellen/einheitVerschieben.py),
+seine Tests stehen im passenden `einheitVerschiebenTest.py`.
+
+Status: angenommen

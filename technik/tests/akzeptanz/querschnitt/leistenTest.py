@@ -4,7 +4,8 @@ import pytest
 from playwright.sync_api import Locator, Page, expect
 
 from tests.akzeptanz.bildschirm import griffVon, leisteVon
-from tests.akzeptanz.schlacht import boyÜberDenWarbossÜbergehen
+from tests.akzeptanz.handgriffe import versetzt
+from tests.akzeptanz.schlacht import anhaltenUndÜbergehen, zehnZollNachOsten
 
 
 def linksDerKarte(leiste: dict, karte: dict) -> bool:
@@ -32,11 +33,15 @@ lageJeLeiste = pytest.mark.parametrize(
 inhaltJeLeiste = {
     "Armeeliste Spieler 1": (".armeeKarte", "Spieler 1"),
     "Armeeliste Spieler 2": (".armeeKarte", "Spieler 2"),
-    "Protokoll": (".protokollEintrag", "Boyz"),
+    "Protokoll": (".protokollEintrag", "Warboss"),
 }
 
 jedeLeiste = pytest.mark.parametrize(
     "leistenname", list(inhaltJeLeiste), ids=["links", "rechts", "unten"]
+)
+
+jedeArmeeliste = pytest.mark.parametrize(
+    "leistenname", ["Armeeliste Spieler 1", "Armeeliste Spieler 2"], ids=["links", "rechts"]
 )
 
 
@@ -56,15 +61,22 @@ def istNichtEingefahren(seite: Page, leistenname: str) -> None:
     expect(inhaltVon(seite, leistenname)).to_be_visible()
 
 
+def warbossÜbergehen(schlacht, warboss) -> None:
+    (boss,) = warboss.modelle
+    anhaltenUndÜbergehen(schlacht, boss, versetzt(schlacht.stelle(boss), zehnZollNachOsten))
+
+
 @pytest.fixture
-def seiteMitProtokoll(bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz) -> Page:
-    boyÜberDenWarbossÜbergehen(schlachtInDerBewegungsphase, boyz)
+def seiteMitProtokoll(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+) -> Page:
+    warbossÜbergehen(schlachtInDerBewegungsphase, warboss)
     return bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
 
 
 @pytest.fixture
-def seiteZumTippen(bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz) -> Page:
-    boyÜberDenWarbossÜbergehen(schlachtInDerBewegungsphase, boyz)
+def seiteZumTippen(bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss) -> Page:
+    warbossÜbergehen(schlachtInDerBewegungsphase, warboss)
     return bildschirm.seiteZuSchlacht(
         beendeteAufstellung, schlachtInDerBewegungsphase, berührbar=True
     )
@@ -102,8 +114,19 @@ def testQue6_2NachDemStartIstKeineLeisteEingefahren(adresseDesBefehls, bildschir
     expect(griff).to_have_attribute("aria-expanded", "true")
 
 
+@jedeArmeeliste
+def testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt(
+    adresseDesBefehls, bildschirm, leistenname
+):
+    seite = bildschirm.seiteBei(adresseDesBefehls)
+
+    inhalt = inhaltVon(seite, leistenname)
+
+    expect(inhalt).to_be_visible()
+
+
 @jedeLeiste
-def testQue6_3EinKlickAufDenGriffEinerAusgefahrenenLeisteFährtSieEin(
+def testQue6_3EinKlickAufDenGriffEinerNichtEingefahrenenLeisteFährtSieEin(
     seiteMitProtokoll, leistenname
 ):
     istNichtEingefahren(seiteMitProtokoll, leistenname)
@@ -114,7 +137,7 @@ def testQue6_3EinKlickAufDenGriffEinerAusgefahrenenLeisteFährtSieEin(
 
 
 @jedeLeiste
-def testQue6_4EinKlickAufDenGriffEinerEingefahrenenLeisteFährtSieAus(
+def testQue6_4EinKlickAufDenGriffEinerEingefahrenenLeisteFährtSieNichtMehrEin(
     seiteMitProtokoll, leistenname
 ):
     griffVon(seiteMitProtokoll, leistenname).click()
@@ -126,7 +149,9 @@ def testQue6_4EinKlickAufDenGriffEinerEingefahrenenLeisteFährtSieAus(
 
 
 @jedeLeiste
-def testQue6_5EinTippenAufDenGriffFährtDieLeisteEinWieEinKlick(seiteZumTippen, leistenname):
+def testQue6_5EinTippenAufDenGriffEinerNichtEingefahrenenLeisteWirktWieEinKlick(
+    seiteZumTippen, leistenname
+):
     istNichtEingefahren(seiteZumTippen, leistenname)
 
     griffVon(seiteZumTippen, leistenname).tap()
@@ -135,7 +160,9 @@ def testQue6_5EinTippenAufDenGriffFährtDieLeisteEinWieEinKlick(seiteZumTippen, 
 
 
 @jedeLeiste
-def testQue6_5EinTippenAufDenGriffFährtDieLeisteAusWieEinKlick(seiteZumTippen, leistenname):
+def testQue6_5EinTippenAufDenGriffEinerEingefahrenenLeisteWirktWieEinKlick(
+    seiteZumTippen, leistenname
+):
     griffVon(seiteZumTippen, leistenname).tap()
     istEingefahren(seiteZumTippen, leistenname)
 

@@ -3,10 +3,9 @@ from enum import Enum
 from itertools import pairwise
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
-from arbiter.domaene.phasen import einheitVon
+from arbiter.domaene.phasen import einheitVon, gegnerVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
-from arbiter.domaene.phasen.aufstellen.reihenfolge import gegnerVon
 from arbiter.domaene.phasen.bewegung import Bewegungsphase, StellenMitGründen
 from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
@@ -140,8 +139,13 @@ class Schlacht:
             return {}, set()
         einheit = einheitVon(self._beideSpieler, modell)
         ebene = self._auswahl.ebene(einheit, modell, self._stellen)
+        gegner = {
+            anderes: ort
+            for anderes, ort in self._stellen.items()
+            if anderes not in spieler.armee.modelle
+        }
         return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            ebene, modell, stelle, self._stellen, spieler.armee.modelle
+            ebene, modell, stelle, self._stellen, gegner
         )
 
     def modellAnklicken(self, modell: Modell) -> None:

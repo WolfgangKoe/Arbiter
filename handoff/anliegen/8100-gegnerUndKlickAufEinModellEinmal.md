@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Kritik: Namen und Ablage von Hilfsfunktionen, keine Prüfung rot), Diff
@@ -42,4 +41,16 @@ Je Punkt wenige Zeilen.
    `modellAnklicken(auswahl, beideSpieler, modell, gesetzt)`; passt sie nicht sauber, genügt
    es, 3 zu verwerfen.
 
-**Stellungnahme.**
+**Stellungnahme.** Zu 1 und 2 angenommen und umgesetzt: `gegnerVon` liegt in
+`phasen/__init__.py`, `reihenfolge.py` und `schlachtrunden.py` importieren es dort.
+`ebeneWählen`, `ebeneAbwählen` und die Prüfung sind entfallen; `modellAnklicken` setzt die
+*Ebene* in einer Zeile, die Unit-Tests in `auswahlTest.py` gehen darüber (die zwei Tests des
+nicht mehr erreichbaren `ValueError` entfallen, dafür steht ein Test, dass ein Klick auf ein
+Modell einer anderen Einheit diese auswählt). Zu 3 verworfen: Eine gemeinsame Funktion bräuchte
+`Auswahl` in `phasen/__init__.py`, und `phasen.aufstellen` importiert dieses Modul schon, also
+ein Kreis. Die Regel selbst steht nur in `Auswahl.modellAnklicken`; die zwei Türen teilen nur
+die Zeile „nur ein *gesetztes* *Modell*, dann `einheitVon`“.
+
+**Nachprüfung.** In Ordnung. 1 und 2 stehen wie beschrieben; Importvertrag, Spiegel,
+Benennung und Kommentare grün, `auswahlTest.py` grün. Den Kreis zu 3 habe ich an einer Kopie
+in `/tmp` bestätigt; was vom Zusammenführen bleibt, steht in 10880.

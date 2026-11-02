@@ -1,11 +1,8 @@
 from collections.abc import Collection
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen import gegnerVon
 from arbiter.domaene.spielobjekte import Einheit, Spieler
-
-
-def gegnerVon(beideSpieler: tuple[Spieler, Spieler], spieler: Spieler) -> Spieler:
-    return next(andere for andere in beideSpieler if andere is not spieler)
 
 
 def zonenVerteilen(

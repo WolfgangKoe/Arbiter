@@ -9,6 +9,7 @@ from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
 from arbiter.web.anwendung import anwendungFür
 
 _gerät = "127.0.0.1"
+_wurzel = "http://127.0.0.1"
 _freierPort = 0
 
 
@@ -19,7 +20,7 @@ class AdresseBelegt(Exception):
 
 
 def adresseMitPort(port: int) -> str:
-    return f"http://{_gerät}:{port}/"
+    return f"{_wurzel}:{port}/"
 
 
 class Server:
