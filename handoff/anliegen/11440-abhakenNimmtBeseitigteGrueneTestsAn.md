@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf nach [Kritik](../../prozess/ablauf/kritik.md) (Prüfung hält den Happy

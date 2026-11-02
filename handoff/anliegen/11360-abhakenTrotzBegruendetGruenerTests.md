@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 11440
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf nach [Kritik](../../prozess/ablauf/kritik.md): Eine Regel hält den Happy
@@ -43,5 +42,8 @@ den Mechanismus an den Regelumsetzer: [11440](11440-abhakenNimmtBeseitigteGruene
 - Die Hindernis-Zeile mit Anliegen 11382 unter dem Schritt des Architekten zeigt auf keine
   Datei und würde ihn für immer aufhalten; auch das behebt 11440.
 Der Ablauf bleibt; die Regel steht nur in [Standregeln](../../prozess/regeln/standregeln.md),
-Zeile Retro 9 P1, die der Regelumsetzer mit anpasst. `angenommen` setze ich, wenn 11440
-erledigt ist.
+Zeile Retro 9 P1. Umgesetzt im Commit „11440: Abhaken nimmt begründet grüne Tests an“:
+`grünVorDemCode` in `standregeln/abhaken.py`, `verwaisteFallenLassen` in
+`standregeln/beseitigt.py`, Tests in `abhakenTest.py` und `fortschrittTest.py`. Die Zeile mit
+11382 ist aus dem [Plan](../plan.md) gefallen; 11263 und 11262 tragen dort `beseitigt`. Nach
+deiner Nachprüfung der Stellen hakst du mit dem Befehl des Fortschritts ab.
