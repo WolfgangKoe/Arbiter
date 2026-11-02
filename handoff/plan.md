@@ -131,7 +131,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Testautor: Anliegen 7641 Tests zu den Grenzkreisen: Einhüllende am Bildschirm, Modell im Ring
 - [ ] Testautor: Anliegen 7661 Grenzkreise: Hilfen nach Aufgabe ablegen
 - [ ] Implementierer: Anliegen 7681 Test von verschobeneStellen am alten Ort
-- [ ] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
+- [x] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
 - [ ] Implementierer: Anliegen 8020 verschobeneStellen zur Aufstellung, Adresse des Servers ohne SonarLint-Meldung
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [ ] Implementierer: Anliegen 8100 Gegner und Klick auf ein Modell je einmal

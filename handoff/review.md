@@ -190,7 +190,7 @@ zu stören.
   Hindernis: Fachkritiker → Anforderungsautor: Wie „Einheit zurücksetzen“ bedient wird, weicht von ArbiterMap ab, ohne dass du es entschieden hast; der Anforderungsautor fragt dich. (Anliegen 10400); beseitigt: Commit „Plan 10 bereinigt, 10400 und 10480 erledigt“
 - [x] Architekt: Kritik am Plan
   Hindernis: Architekt → Planer: Der Plan sagt, hängt Item 3, rücke nur dieses nach Zyklus 11; die Canoptek-Spinne aus Item 4 rückt dann mit. (Anliegen 10420); beseitigt: Commit „Plan 10: Item 4 rückt mit Item 3, Frage 10480 zum Zurücksetzen“
-- [ ] Stakeholder: Freigabe Plan 10
+- [x] Stakeholder: Freigabe Plan 10
 
 ## Freigabe
 Freigabe: ja
