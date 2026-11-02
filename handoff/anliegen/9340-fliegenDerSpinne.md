@@ -29,7 +29,7 @@ Wann: Domänenphase 10, vor Plan 10.
 Annahme A) und BEW-18.3: BEW-6.2 hält ein fliegendes *Modell* nur an, wenn die Strecke in
 *Nahkampfreichweite* endet (`core_rules.txt:884`, `:888`); *Fliegen* im Glossar mit `:888`.
 Das *Datenblatt* der Spinne fehlt: Keine Quelle nennt ihre *Base*, ich frage in
-[9400](9400-baseUndEndeDerFliegendenSpinne.md). Danach schreibe ich es, aber erst zum Start des
+Anliegen 9400. Danach schreibe ich es, aber erst zum Start des
 Items fliegen: Der Katalog lehnt den neuen Schlüssel `fliegen` ab, bis die Technik ihn kennt
 (`technik/architektur/katalog.md` K3), sonst wird jeder Akzeptanztest rot. Den
 Ork-Psioniker nennt noch kein Anliegen und kein Item.

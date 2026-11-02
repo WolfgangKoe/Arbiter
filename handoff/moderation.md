@@ -14,7 +14,7 @@ Blockiert das Inkrement: nichts außer 8860 (Stakeholder, siehe Fragen).
   Anliegen 8044,
   Anliegen 8962,
   Anliegen 8990.
-- Organisationsentwickler: [6471](anliegen/6471-frontendOhneAbdeckung.md),
+- Organisationsentwickler: Anliegen 6471,
   Anliegen 7080,
   [7380](anliegen/7380-wartendeAnliegenEinplanen.md),
   Anliegen 8022,

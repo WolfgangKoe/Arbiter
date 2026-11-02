@@ -9,20 +9,21 @@ Zyklusziel aus [Review 9](review.md) und dein Auftrag
    bisher.
 2. Hält Arbiter die Boyz an der *Bewegungsweite* oder vor einem Gegner an, bietet er nach dem
    Loslassen „gemeinsam übergehen“ an, ohne *Grund*. Klick: Die Boyz stehen, wo ihr sie ohne
-   Anhalten hingezogen hättet; das *Protokoll* nennt ‚Bewegungsweite‘ oder
-   ‚Nahkampfreichweite‘. (Item 1)
+   Anhalten hingezogen hättet; das *Protokoll* nennt ‚Bewegungsweite‘,
+   ‚Nahkampfreichweite‘ oder beide. (Item 1)
 3. Lasst ihr ein *Modell* neben der *Karte* los, steht es, wo die *Karte* es zuletzt zeigte,
-   auch beim Aufstellen. (Item 2)
+   beim Aufstellen für die *Einheit in Aufstellung*. (Item 2)
 4. Zieht ihr einen Boy auf eine fremde *Base* zu, hält Arbiter davor an und gleitet entlang,
-   auch beim Aufstellen. Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr. (Item 3)
+   auch beim Aufstellen, in der *Bewegungsphase* nie über *Bewegungsweite*, Kante oder
+   *Nahkampfreichweite* hinaus. Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr. (Item 3)
 
 ## Items
-1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3 bis 8.5,
-   Kriterium aus 8972.
+1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3, BEW-8.4,
+   BEW-8.5, QUE-5.6.
 2. [Loslassen neben der Karte](../domaene/items/loslassenNebenDerKarte.md): Schritt 3;
-   AUF-28.1, AUF-16.7, AUF-16.8, AUF-8.7, AUF-12.8, Kriterium aus 8480.
-3. [Anhalten auf dem Weg](../domaene/items/anhaltenAufDemWeg.md): Schritt 4; BEW-17, BEW-19,
-   AUF-29, AUF-28.2, QUE-1.4, Kriterium aus 9421.
+   AUF-28.1, AUF-16.7, AUF-16.8, AUF-12.8, BEW-20.1.
+3. [Anhalten auf dem Weg](../domaene/items/anhaltenAufDemWeg.md): Schritt 4; BEW-17 (auch
+   BEW-17.3), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-21.1.
 
 Reihenfolge nach 9440: Item 1 baut die Tests auf das neue Übergehen um (9320), sonst würden
 sie mit Item 3 rot. Item 2 vor 3: Sonst spränge zurück, wer vor einer *Base* anhält und neben
@@ -43,10 +44,9 @@ Danach in Zyklus 10 (8880 F2 A): Aufräumen aus den übrigen Anliegen der Techni
 
 ## Danach (Plan 11, schließt Etappe 2)
 1. [Fliegen](../domaene/items/fliegen.md) mit Ork-Psioniker und Canoptek-Spinne in den Armeen;
-   wartet auf [9400](anliegen/9400-baseUndEndeDerFliegendenSpinne.md) und das *Datenblatt*
-   (9340).
+   wartet auf das *Datenblatt* ([9340](anliegen/9340-fliegenDerSpinne.md)).
 2. Zurücksetzen, *Nahkampfreichweite* auf der ganzen Strecke, kein *Vorrücken* aus ihr
-   ([6986](anliegen/6986-bewegungLueckenFuerSpaeter.md), 7642), dazu
+   ([6986](anliegen/6986-bewegungLueckenFuerSpaeter.md)), dazu
    [Phase beenden nur im Zug](../domaene/items/phaseBeendenNurImZug.md).
 3. Zuletzt die [ruhige Karte](../domaene/items/ruhigeKarte.md).
 
@@ -55,16 +55,15 @@ AUF-27.2 wartet auf deine Deutung von 9270 F2),
 [Gewinner und Zone](../domaene/items/gewinnerUndZone.md) (Etappe 8).
 
 ## Empfehlung
-Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen. Vorher schreibt der
-Anforderungsautor die Kriterien aus 8972, 8480 (mit Frage an dich, Empfehlung: *setzen*, wo
-die *Karte* zuletzt zeigte) und 9421; bis dahin sind die Items nicht bereit.
+Gib die drei Items frei, wenn Schritte 1 bis 4 deinem Bild entsprechen; ihre Kriterien
+stehen. Beantworte dazu 9941 (wo die Boyz nach dem Übergehen stehen); Empfehlung B, BEW-8.4
+steht schon so.
 
 ## Offene Anliegen
-- An den Anforderungsautor, für diese Items:
-  [8972](anliegen/8972-protokollOhneSperreUnveraendert.md),
-  [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md),
-  [9421](anliegen/9421-bew15FolgeEinerSperre.md); für Plan 11: 6986, 7642,
-  [8601](anliegen/8601-einhuellendeEinesGrenzkreises.md).
+- An dich, für Item 1: [9941](anliegen/9941-wohinUebergehenSetzt.md).
+- An den Anforderungsautor, für Item 2:
+  [8480](anliegen/8480-ueberDieKanteHinausLoslassen.md) (Nachprüfung von 9760); für Plan 11:
+  6986.
 - [7800](anliegen/7800-karteUndEbeneBenennen.md) im Aufräumen, Glossar und Code zugleich.
 - Übrige: [Moderation](moderation.md).
 
@@ -122,6 +121,7 @@ die *Karte* zuletzt zeigte) und 9421; bis dahin sind die Items nicht bereit.
 - [ ] Implementierer: Anliegen 8740 Vorrückwurf nur für die eigene Einheit geprüft
 - [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
 - [ ] Testautor: Anliegen 9401 Test zu BEW-19
+- [ ] Architekt: Anliegen 9890 V18 nach BEW-8.3 bis 8.5 nachziehen
 - [ ] Reviewer: DoD über das Inkrement
 - [ ] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review

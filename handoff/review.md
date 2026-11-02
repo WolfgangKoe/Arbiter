@@ -63,7 +63,7 @@ Mutanten, die Schwelle ist 95 %; der volle 96 % von 628
 nichts. Von den 21 Überlebenden sind zwölf gleichwertig, Begründung trägt der
 Organisationsentwickler ein (Anliegen 8973);
 danach 98 %. Acht Tests fehlen, Technikphase 10 ([8971](anliegen/8971-mutationslueckenMessenUndKatalog.md)),
-und ein Kriterium, Domänenphase 10 ([8972](anliegen/8972-protokollOhneSperreUnveraendert.md)).
+und ein Kriterium, Domänenphase 10 (Anliegen 8972).
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 9“:
@@ -182,7 +182,7 @@ zu stören.
 ## Fortschritt
 - [x] Anforderungsautor: Happy Paths zum Zyklusziel
 - [ ] UX: Mockups, bei einer Oberfläche
-- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
+- [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan

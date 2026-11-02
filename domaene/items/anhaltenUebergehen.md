@@ -1,9 +1,9 @@
 # Anhalten übergehen
 
-Umfang: BEW-8.3 bis 8.5, das Kriterium aus Anliegen 8972 (QUE-5); dazu die Tests aus
-Anliegen 9320 (QUE-5.1 bis 5.4, QUE-6, BEW-1.7) mit diesem Übergehen statt ‚über eine Base‘.
+Umfang: BEW-8.3, BEW-8.4, BEW-8.5, QUE-5.6; dazu die Tests zu QUE-5.2, QUE-5.3, QUE-5.4,
+QUE-6 und BEW-1.7 mit diesem Übergehen statt ‚über eine Base‘ (9320), die Tests `testQue5_1…`
+als Tests zu BEW-8.5 (9940).
 
-Warum jetzt: Etappe 2, zuerst (Anliegen 9440, 9271 F1). Ohne das neue Mittel würden die Tests
-rot, sobald anhaltenAufDemWeg ‚über eine Base‘ entfernt.
+Warum jetzt: Etappe 2, zuerst (9440, 9271 F1), sonst rot mit anhaltenAufDemWeg.
 
-Abhängigkeit: Anliegen 8972.
+Abhängigkeit: [9941](../../handoff/anliegen/9941-wohinUebergehenSetzt.md), BEW-8.4.
