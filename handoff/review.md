@@ -184,11 +184,11 @@ zu stören.
 - [x] UX: Mockups, bei einer Oberfläche
 - [x] Fachkritiker: Kritik an Anforderungen und Mockups
 - [x] Planer: Plan geschrieben
-- [ ] Fachkritiker: Kritik am Plan
+- [x] Fachkritiker: Kritik am Plan
   Hindernis: Fachkritiker → Planer: Schritte 2 und 6 und die Empfehlung beschreiben anderes, als Arbiter zeigen wird (Anliegen 10300); beseitigt: Commit „Plan 10: Fixtures vor den Daten der dritten Einheit, 10280 erledigt“
   Hindernis: Fachkritiker → Anforderungsautor: Das Datenblatt der Canoptek-Spinne ist erst für Zyklus 11 vorgemerkt, Item fliegen liegt in Zyklus 10 (Anliegen 10301); beseitigt: Commit „Kritik an Plan 10 und Nachbesserung, Ork-Psioniker als MIV-2“
   Hindernis: Fachkritiker → Anforderungsautor: Wie „Einheit zurücksetzen“ bedient wird, weicht von ArbiterMap ab, ohne dass du es entschieden hast; der Anforderungsautor fragt dich. (Anliegen 10400)
-- [ ] Architekt: Kritik am Plan
+- [x] Architekt: Kritik am Plan
   Hindernis: Architekt → Planer: Der Plan sagt, hängt Item 3, rücke nur dieses nach Zyklus 11; die Canoptek-Spinne aus Item 4 rückt dann mit. (Anliegen 10420); beseitigt: Commit „Plan 10: Item 4 rückt mit Item 3, Frage 10480 zum Zurücksetzen“
 - [ ] Stakeholder: Freigabe Plan 10
 

@@ -5,9 +5,9 @@ offen, 36 warten auf eine Phase oder ein Anliegen, 10480 ist beim Stakeholder.
 
 ## Dran
 Blockiert das Inkrement (Item 5, [DoR 6](../prozess/ablauf/dor.md)):
-- Stakeholder: [10480](anliegen/10480-zuruecksetzenMitOderOhneRueckfrage.md) F1, kannst du mit
+- Stakeholder: Anliegen 10480 F1, kannst du mit
   der Freigabe beantworten; ohne Antwort gilt A.
-- Anforderungsautor: [10400](anliegen/10400-zuruecksetzenOhneRueckfrage.md) wartet auf 10480;
+- Anforderungsautor: Anliegen 10400 wartet auf 10480;
   danach Quelle an BEW-24.1 (A) oder Kriterium und Mockup für den Dialog (B).
 - Fachkritiker: „Kritik am Plan“ bleibt offen, bis 10400 erledigt ist. Mit A geschieht das
   nach der Freigabe; er darf den Haken dann setzen.
@@ -49,6 +49,6 @@ Dran, hält nichts auf:
 
 ## Fragen an dich
 Zuoberst mit Annahme:
-- [10480](anliegen/10480-zuruecksetzenMitOderOhneRueckfrage.md) F1: Wie setzt man eine gezogene
+- Anliegen 10480 F1: Wie setzt man eine gezogene
   Einheit zurück? Annahme: BEW-24 und bew-24 bleiben (A, ein Klick ohne Rückfrage).
   Empfehlung A.
