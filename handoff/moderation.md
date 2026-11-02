@@ -10,7 +10,7 @@ Blockiert das Inkrement (Items 1 und 2 in [Plan](plan.md), Vertrag beider steht)
 - Architekt: Kritik an denselben Tests, mit
   Anliegen 7661; dazu
   Anliegen 8740 nachprüfen und
-  [10560](anliegen/10560-vertragsbeispieleMitDritterEinheit.md) beantworten (V18).
+  Anliegen 10560 beantworten (V18).
 - Testautor: Tests zu Item loslassenNebenDerKarte, mit
   Anliegen 7601,
   Anliegen 8720.
@@ -27,7 +27,7 @@ Dran, hält nichts auf:
   [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
   [9340](anliegen/9340-fliegenDerSpinne.md) (Daten vor Item 4 und 5),
   [7800](anliegen/7800-karteUndEbeneBenennen.md) (angenommen).
-- Regelumsetzer: [8021](anliegen/8021-ausnahmeS5332Entfaellt.md) (wartet auf 8020, das
+- Regelumsetzer: Anliegen 8021 (wartet auf 8020, das
   gelöscht ist: Wartet-Zeile prüfen), [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md),
   [9801](anliegen/9801-wartendeZeileNachDemLoeschen.md) in der Prozessphase.
 - Übrige warten auf Technikphase 11 oder Domänenphase 11
