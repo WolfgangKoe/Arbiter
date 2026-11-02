@@ -9,5 +9,5 @@ Gemeinsame Sprache des Agentensystems, entschieden vom Stakeholder. Ausnahmen nu
 3. Jede Aussage steht genau einmal. Verlinke, statt zu wiederholen. Mechanismus: nur Text.
 4. Keine Historie in Dateien, git ist das Archiv. Mechanismus: nur Text.
 5. Was der Stakeholder liest, versteht er ohne Werkzeug: in Worten des Spielers mit den
-   Begriffen des Glossars (2), was am Bildschirm geschieht; Commits mit Betreff, Dateien als
-   Link. Mechanismus: nur Text.
+   Begriffen des Glossars (2), was am Bildschirm geschieht; Commits mit Betreff, Dateien als Link. Mechanismus: nur Text.
+6. Wir arbeiten nach Möglichkeit immer parallel an Aufgaben, sofern Abhängigkeiten zwischen den Aufgaben dies nicht unterbinden.

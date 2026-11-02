@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Planer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders, auf die Frage, ob `Grund.überEineBase` jetzt aus dem
