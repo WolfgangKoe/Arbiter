@@ -19,7 +19,7 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
    sie an die nächste freie *Stelle*. (Item 4)
 6. Bis zum Ende der *Bewegungsphase* setzt „Einheit zurücksetzen“ jede gezogene zurück. Aus
    *Nahkampfreichweite* bietet Arbiter kein *Vorrücken* an, „Phase beenden“ nur vom *ersten Zug*
-   bis zum Ende der *Schlacht*. Der Ork-Psioniker steht in der *Armee* der Orks. (Item 5)
+   bis zum Ende der *Schlacht*. Der Weirdboy steht in der *Armee* der Orks. (Item 5)
 7. Erscheint oder verschwindet etwas neben der *Karte*, bleibt jede *Stelle*, wo sie war. (Item 6)
 
 ## Items
@@ -31,12 +31,14 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
    BEW-17.3), BEW-19, AUF-29, AUF-28.2, QUE-1.4, BEW-8.4 in BEW-17.
 4. [Fliegen](../domaene/items/fliegen.md): Schritt 5; BEW-18, Spinne.
 5. [Zurücksetzen und Lücken](../domaene/items/zuruecksetzenUndLuecken.md): Schritt 6;
-   BEW-24, BEW-22.1, BEW-9.2, QUE-11.1, Ork-Psioniker.
+   BEW-24, BEW-22.1, BEW-9.2, QUE-11.1, MIV-2.
 6. [Ruhige Karte](../domaene/items/ruhigeKarte.md): Schritt 7; QUE-7.1.
 
 Reihenfolge: Item 1 zuerst, sonst macht Item 3 Tests rot (9320, 9440). Item 2 vor 3,
-sonst spränge zurück, wer vor einer *Base* anhält und neben der *Karte* loslässt (8840). Item 4 nach 3: *Fliegen* ersetzt dessen Anhalten (BEW-17.1). Item 5
-hängt an keinem. Item 6 zuletzt (2361 F2, 8880).
+sonst spränge zurück, wer vor einer *Base* anhält und neben der *Karte* loslässt (8840).
+Item 4 nach 3: *Fliegen* ersetzt dessen Anhalten (BEW-17.1). Item 6 zuletzt (2361 F2, 8880).
+Vor Item 4 und 5, neben Item 1: Fixtures für eine dritte *Einheit*, sonst brechen Tests ab
+(10380), dann Daten zu Spinne und Weirdboy (10340).
 
 Danach (8880 F2 A): Aufräumen aus Anliegen der Technikphase 10 und 7800, dann Review 10.
 Vorgezogen: 7321 und 8261 in Item 1, 9401 in Item 3.
@@ -50,16 +52,14 @@ Andere Etappen: AUF-12.8, BEW-21.1 in 7 (10200), BEW-23 in 3 (F2 B), Flugzeug in
 - Anhalten übergehen ist dabei, nicht erst in Etappe 3 (9271).
 
 ## Empfehlung
-Gib frei, wenn Schritte 1 bis 7 deinem Bild entsprechen. Das *Datenblatt* der Spinne folgt
-zum Start von Item 4 (9340). Item 3 und 4 sind Neuland, Item 4 etwa so teuer wie 1 und 2
-zusammen: Der Architekt erprobt beide vor den Tests (10200, 10321); geht es nicht, fragt dich
-ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
+Gib frei, wenn Schritte 1 bis 7 deinem Bild entsprechen. Item 3 und 4 sind Neuland, Item 4
+etwa so teuer wie 1 und 2 zusammen: Der Architekt erprobt beide vor den Tests (10321); geht es
+nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 
 ## Offene Anliegen
 - An den Anforderungsautor: [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
-  [9340](anliegen/9340-fliegenDerSpinne.md), [10280](anliegen/10280-bew23InEtappeDrei.md),
-  [10320](anliegen/10320-bew25UndBew18Pruefbar.md).
-- [7800](anliegen/7800-karteUndEbeneBenennen.md) im Aufräumen.
+  [9340](anliegen/9340-fliegenDerSpinne.md), [10320](anliegen/10320-bew25UndBew18Pruefbar.md).
+- Vom Anforderungsautor: [10340](anliegen/10340-dritteEinheitBrichtFixtures.md).
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
@@ -117,6 +117,7 @@ ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Reviewer: Kritik am Code zu Item ruhigeKarte
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
+- [ ] Testautor: Anliegen 10380 Fixtures unabhängig von der Zahl der Einheiten je Armee
 - [ ] Implementierer: Anliegen 7042 Meldung von einheitVon nach dem Umzug
 - [ ] Implementierer: Anliegen 7050 Unit-Test des Verschiebens am alten Ort
 - [ ] Testautor: Anliegen 7072 Griff abseits der Mitte doppelt, Vorgeschichte ohne eigene Grenze

@@ -23,7 +23,7 @@ einem der sechs Items.
    kommen sie mit „Einheit zurücksetzen“ (BEW-24). Das folgt dem Regeltext
    (`core_rules.txt:739`, `:745`), der Stakeholder sollte es aber so lesen, bevor er freigibt.
 3. Empfehlung und „Offene Anliegen“ verlangen noch seine Antwort auf
-   [10240](10240-baseDesWeirdboys.md); er hat sie gegeben (A, 50 mm).
+   Anliegen 10240; er hat sie gegeben (A, 50 mm).
 
 **Kosten.** Je ein Satz im Plan, keine Zeile Code. Bleibt 1 oder 2, gibt der Stakeholder ein
 Bild frei, das Arbiter nicht zeigt, und sucht es im Review 10 vergeblich; bleibt 3, sucht er

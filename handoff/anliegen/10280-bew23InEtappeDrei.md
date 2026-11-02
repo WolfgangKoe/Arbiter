@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder hat in Anliegen 10160 F2 B

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Planer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zum Item [fliegen](../../domaene/items/fliegen.md) schreibe ich die Daten zu
@@ -29,4 +29,15 @@ bei den übrigen Items.
 
 Wann: vor dem Start des Items fliegen; hält Plan 10 nicht auf.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, MIV-2 aber in Item 5 statt in fliegen: Der Weirdboy braucht weder
+*Fliegen* noch Item 3 und rückt so nicht mit Item 4 nach Zyklus 11 (10321).
+- [zuruecksetzenUndLuecken](../../domaene/items/zuruecksetzenUndLuecken.md): Umfang mit MIV-2,
+  Abhängigkeit: Fixtures, dann Daten zum Weirdboy. [fliegen](../../domaene/items/fliegen.md):
+  Fixtures, dann *Datenblatt* der Spinne.
+- Fortschritt: Die Zeile des Testautors entsteht aus
+  [10380](10380-fixturesDritteEinheit.md) (wartet auf die Technikphase 10); die Daten stehen
+  schon als „Anforderungsautor: Anliegen 9340“. Für den Weirdboy setze in
+  [10180](10180-etappe2LueckenNachPlan10.md) `Wartet auf: Technikphase 10`, wenn du dieses
+  abschließt, sonst bist du für 10180 vor den Fixtures dran.
+- [Plan 10](../plan.md), Reihenfolge: vor Item 4 und 5, neben Item 1, erst die Fixtures, dann
+  die Daten; Item, Schritt 6 und Item 5 nennen MIV-2 und den Weirdboy.

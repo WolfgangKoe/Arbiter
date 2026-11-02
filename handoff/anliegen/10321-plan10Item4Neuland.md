@@ -8,7 +8,7 @@ Status: angenommen
 
 ## Runde 1
 **Befund.** Hält die Freigabe von Plan 10 auf wie
-[10200](10200-plan10SchnittUndKostenVonItem3.md) Punkt 3: Der Plan nennt die Kosten von
+Anliegen 10200 Punkt 3: Der Plan nennt die Kosten von
 [Item 4](../../domaene/items/fliegen.md) nicht.
 1. BEW-18.2 rückt die Spinne „auf kürzestem Weg an die nächste *Stelle*“ ohne
    Überdeckung, in jede Richtung. Arbiter kann bisher nur entlang eines geraden Weges
