@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 10480
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf, weil das Item [zuruecksetzenUndLuecken](../../domaene/items/zuruecksetzenUndLuecken.md)
@@ -39,3 +38,6 @@ nichts, die *Einheit* zieht man neu. Schreib die Entscheidung als Quelle an BEW-
 deinen Möglichkeiten und Empfehlung A in [10480](10480-zuruecksetzenMitOderOhneRueckfrage.md);
 bis zur Antwort gilt A, BEW-24 und bew-24 bleiben. Mit der Antwort schreibe ich sie als Quelle an
 BEW-24.1 (A) oder lege das Kriterium für den Dialog an (B) und setze `angenommen`.
+Der Stakeholder hat in 10480 F1 A gewählt: ein Klick ohne Rückfrage. Die Entscheidung steht als
+Quelle an [BEW-24.1](../../domaene/anforderungen/phasen/bewegung/einheitZuruecksetzen.md)
+(Anliegen 2364 F4 A, 10480 F1 A); BEW-24.2 und bew-24 bleiben unverändert.

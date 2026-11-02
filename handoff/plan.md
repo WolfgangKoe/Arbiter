@@ -38,7 +38,7 @@ Reihenfolge: Item 1 zuerst, sonst macht Item 3 Tests rot (9320, 9440). Item 2 vo
 sonst spränge zurück, wer vor einer *Base* anhält und neben der *Karte* loslässt (8840).
 Item 4 nach 3: *Fliegen* ersetzt dessen Anhalten (BEW-17.1). Item 6 zuletzt (2361 F2, 8880).
 Vor Item 4 und 5, neben Item 1: Fixtures für eine dritte *Einheit*, sonst brechen Tests ab
-(10380), dann Daten zu Spinne und Weirdboy (10340).
+(10380), dann Daten zu Spinne (9340) und Weirdboy (10180).
 
 Danach (8880 F2 A): Aufräumen aus Anliegen der Technikphase 10 und 7800, dann Review 10.
 Vorgezogen: 7321 und 8261 in Item 1, 9401 in Item 3.
@@ -57,9 +57,8 @@ etwa so teuer wie 1 und 2 zusammen: Der Architekt erprobt beide vor den Tests (1
 nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 
 ## Offene Anliegen
-- An den Anforderungsautor: [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
-  [9340](anliegen/9340-fliegenDerSpinne.md), Anliegen 10320.
-- Vom Anforderungsautor: Anliegen 10340.
+- An den Anforderungsautor, in der Technikphase:
+  [10180](anliegen/10180-etappe2LueckenNachPlan10.md), [9340](anliegen/9340-fliegenDerSpinne.md).
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
