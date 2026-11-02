@@ -9,7 +9,7 @@ Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Wartet (Ablage und Form einer Hilfsrechnung, keine Prüfung rot), Kritik am Code
-(Lesbarkeit) zur Umsetzung von [8620](8620-ziehenVerlangtMehrAlsEsBraucht.md) Punkt 1,
+(Lesbarkeit) zur Umsetzung von Anliegen 8620 Punkt 1,
 uncommittet.
 1. `Schlacht._stellenMitGründen` in
    [schlachtrunden.py](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py) sondert

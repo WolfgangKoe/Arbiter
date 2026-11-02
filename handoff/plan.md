@@ -65,14 +65,16 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Vertrag zu Item anhaltenUebergehen, bei beiden Hälften
 - [ ] Testautor: Tests zu Item anhaltenUebergehen
 - [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenUebergehen
+  Hindernis: Fachkritiker → Testautor: Kein Test wählt nach BEW-25.1 erneut gemeinsam übergehen: Stelle am zweiten Punkt und Eintrag mit Gründen ungeprüft (Anliegen 10980)
 - [ ] Architekt: Kritik an den Tests zu Item anhaltenUebergehen
+  Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells, testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand, testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAn, testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell, testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDasLoslassen, testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand, testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[maus], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[finger], testBew8_3DieSeiteZeigtOhneAnhaltenKeinGemeinsamÜbergehen, testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[links], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[rechts], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[unten], testQue6_2NachDemStartIstKeineLeisteEingefahren[links], testQue6_2NachDemStartIstKeineLeisteEingefahren[rechts], testQue6_2NachDemStartIstKeineLeisteEingefahren[unten], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[links], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[rechts], testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11001)
 - [ ] Implementierer: Tests zu Item anhaltenUebergehen grün
 - [ ] Architekt: Kritik am Code zu Item anhaltenUebergehen
 - [ ] Reviewer: Kritik am Code zu Item anhaltenUebergehen
 - [ ] Fachkritiker: Item anhaltenUebergehen abgenommen
 - [ ] Planer: Item anhaltenUebergehen gelöscht
 - [x] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
-- [ ] Testautor: Tests zu Item loslassenNebenDerKarte
+- [x] Testautor: Tests zu Item loslassenNebenDerKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item loslassenNebenDerKarte
 - [ ] Architekt: Kritik an den Tests zu Item loslassenNebenDerKarte
 - [ ] Implementierer: Tests zu Item loslassenNebenDerKarte grün
@@ -117,17 +119,12 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
 - [ ] Anforderungsautor: Anliegen 10180 Etappe 2: Zurücksetzen, Ork-Psioniker, Weiterziehen nach dem Übergehen
-- [x] Planer: Anliegen 10380 Fixtures unabhängig von der Zahl der Einheiten je Armee
 - [ ] Implementierer: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
-- [ ] Testautor: Anliegen 7601 Dienst der Schlacht wählt „ohne Ebene“: derselbe Name wie in 7420
-- [x] Fachkritiker: Anliegen 7641 Tests zu den Grenzkreisen: Einhüllende am Bildschirm, Modell im Ring
-- [x] Architekt: Anliegen 7661 Grenzkreise: Hilfen nach Aufgabe ablegen
 - [x] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [ ] Implementierer: Anliegen 8261 Übergehen nach Vertrag, Angebot nach Auswahlwechsel
 - [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
-- [ ] Testautor: Anliegen 8720 Auswahl in der Schlacht nur an Modellen prüfen, mit Vorbedingung
 - [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
 - [ ] Anforderungsautor: Anliegen 9340 Fliegen der Canoptek-Spinne
 - [ ] Testautor: Anliegen 9401 Test zu BEW-19

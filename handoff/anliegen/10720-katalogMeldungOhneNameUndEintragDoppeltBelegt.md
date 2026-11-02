@@ -9,8 +9,8 @@ Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit) zur Umsetzung von
-[7191](7191-ablageDerTabellenpruefungImKatalog.md) und
-[7201](7201-katalogLiestMehrfachUndPrueftSchluesselAmText.md), uncommittet. Wartet nach
+Anliegen 7191 und
+Anliegen 7201, uncommittet. Wartet nach
 [Kritik](../../prozess/ablauf/kritik.md) (Meldungen, Namen von Hilfen, keine Prüfung rot:
 Einheitstests Katalog 56 grün, ruff, Benennung, Kommentare, Importvertrag, Glossar grün).
 1. `_modellzahlLesen` in [ausgangslage.py](../../technik/arbiter/katalog/ausgangslage.py)

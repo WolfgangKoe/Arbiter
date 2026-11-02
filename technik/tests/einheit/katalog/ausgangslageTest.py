@@ -68,9 +68,10 @@ def testDieWerteJedesModellsKommenAusSeinerModellart():
 
 
 def testDieAusgangslageLadenNenntDieEinheitenWieIhreDatenblätter():
-    boyz, warboss = ausgangslageLaden().ersterSpieler.armee.einheiten
+    einheiten = ausgangslageLaden().ersterSpieler.armee.einheiten
+    (boyz,) = (einheit for einheit in einheiten if einheit.name == "Boyz")
 
-    assert (boyz.name, warboss.name) == ("Boyz", "Warboss")
+    assert {"Boyz", "Warboss"} <= {einheit.name for einheit in einheiten}
     assert {modell.modellart for modell in boyz.modelle} == {"Ork Boy", "Boss Nob"}
 
 

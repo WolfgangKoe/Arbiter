@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 from fractions import Fraction
 from math import hypot
@@ -5,7 +6,7 @@ from math import hypot
 import pytest
 from playwright.sync_api import Locator, Page, Request, Response
 
-from arbiter.domaene.spielobjekte import Modell, Stelle
+from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from tests.akzeptanz.bildschirm import aufDieHandlungWarten, kreiseDerKarte
 from tests.akzeptanz.handgriffe import radiusInZoll
 from tests.akzeptanz.schlacht import hundertstelZoll
@@ -159,10 +160,14 @@ def ziehenOhneAnfrage(
 
     seite.on("request", merken)
     eingaben[eingabe](seite, von, nach)
-    seite.evaluate(_bildaufbauAbwarten)
-    seite.evaluate(_bildaufbauAbwarten)
+    bildaufbauAbwarten(seite)
     seite.remove_listener("request", merken)
     return anfragen
+
+
+def bildaufbauAbwarten(seite: Page) -> None:
+    seite.evaluate(_bildaufbauAbwarten)
+    seite.evaluate(_bildaufbauAbwarten)
 
 
 def mitDerMausKlicken(seite: Page, punkt: Bildpunkt) -> None:
@@ -199,8 +204,11 @@ class Abfragen:
         if anfrage in self._gezählte:
             self.erledigt += 1
 
+    def beantwortet(self) -> bool:
+        return self.gestellt == self.erledigt
+
     def ruhig(self) -> bool:
-        return self.gestellt > 0 and self.gestellt == self.erledigt
+        return self.gestellt > 0 and self.beantwortet()
 
 
 _pausenInMillisekunden = 50
@@ -208,14 +216,26 @@ _ruhigeProben = 4
 _höchstensProben = 200
 
 
-def aufDieAntwortenWarten(seite: Page, abfragen: Abfragen) -> None:
+def _wartenBis(seite: Page, bedingung: Callable[[], bool]) -> bool:
     ruhige = 0
     for _ in range(_höchstensProben):
         seite.wait_for_timeout(_pausenInMillisekunden)
-        ruhige = ruhige + 1 if abfragen.ruhig() else 0
+        ruhige = ruhige + 1 if bedingung() else 0
         if ruhige == _ruhigeProben:
-            return
-    raise TimeoutError("Die Seite fragt nicht nach der Stelle beim Loslassen oder antwortet nicht")
+            return True
+    return False
+
+
+def aufDieAntwortenWarten(seite: Page, abfragen: Abfragen) -> None:
+    if not _wartenBis(seite, abfragen.ruhig):
+        raise TimeoutError(
+            "Die Seite fragt nicht nach der Stelle beim Loslassen oder antwortet nicht"
+        )
+
+
+def offeneAbfragenAbwarten(seite: Page, abfragen: Abfragen) -> None:
+    if not _wartenBis(seite, abfragen.beantwortet):
+        raise TimeoutError("Die Seite bekommt keine Antwort auf die Stelle beim Loslassen")
 
 
 def halten(seite: Page, von: Stelle, nach: Stelle, eingabe: str) -> Maus | Finger:
@@ -234,6 +254,31 @@ def haltenUndLosslassen(
     gezeigt = kreiseDerKarte(seite)
     with aufDieHandlungWarten(seite):
         zeiger.loslassen(punktAufDerKarte(seite, nach))
+    return gezeigt
+
+
+def alleinZiehen(spiel, einheit: Einheit) -> None: ...
+
+
+def alsEbeneZiehen(spiel, einheit: Einheit) -> None:
+    spiel.auswählen(einheit)
+
+
+alleinUndAlsEbene = pytest.mark.parametrize(
+    "ebeneLegen", [alleinZiehen, alsEbeneZiehen], ids=["einModell", "ganzeEinheitAlsEbene"]
+)
+
+
+def nebenDerKarteLoslassen(
+    seite: Page, von: Stelle, aufDerKarte: Stelle, daneben: Bildpunkt, eingabe: str
+) -> frozenset[tuple[float, float]]:
+    zeiger = halten(seite, von, aufDerKarte, eingabe)
+    abfragen = Abfragen(seite)
+    zeiger.bewegen(daneben)
+    offeneAbfragenAbwarten(seite, abfragen)
+    gezeigt = kreiseDerKarte(seite)
+    with aufDieHandlungWarten(seite):
+        zeiger.loslassen(daneben)
     return gezeigt
 
 

@@ -73,5 +73,5 @@ Prüft: Der Testautor vor dem Code in den Akzeptanztests der Anforderung (T1), j
 das Backend mit `anwendungFür(aufstellung).test_client()` (ohne `flask`), das Frontend mit
 einem Bildschirmtest, dem `page.route` das Beispiel statt des Servers liefert; derselbe
 Ablauf gegen den echten Server ist der Akzeptanztest
-([B1 bis B5](../tests.md#bildschirmtests)). Tests lesen die Beispiele, statt sie zu kopieren.
+([B1 bis B5](../tests.md#bildschirmtests)). Tests lesen die Beispiele nach [T3](../tests.md#aufbau).
 400 und 404: Unit-Tests des Implementierers in `tests/einheit/web/anwendungTest.py`.

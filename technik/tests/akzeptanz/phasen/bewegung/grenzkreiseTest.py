@@ -139,8 +139,9 @@ def testBew11_3DerDienstNenntDieNahkampfreichweiteDesGegnersMitExaktenRadien(
 
 
 def testBew11_3DieSeiteZeigtJeEinheitDesAnderenSpielersDieNahkampfreichweite(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, spielerZwei
 ):
+    zahlDerEinheitenDesGegners = len(spielerZwei.armee.einheiten)
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
@@ -148,8 +149,10 @@ def testBew11_3DieSeiteZeigtJeEinheitDesAnderenSpielersDieNahkampfreichweite(
 
     expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
     expect(seite.locator(".karte g.grenze.spieler1.nahkampfreichweite")).to_have_count(0)
-    expect(seite.locator(".karte g.grenze.spieler2.nahkampfreichweite")).to_have_count(2)
-    expect(seite.locator(".karte g.grenze")).to_have_count(3)
+    expect(seite.locator(".karte g.grenze.spieler2.nahkampfreichweite")).to_have_count(
+        zahlDerEinheitenDesGegners
+    )
+    expect(seite.locator(".karte g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
 
 
 def testBew11_4OhneAuswahlZeigtDieKarteKeinenGrenzkreis(schlachtInDerBewegungsphase):

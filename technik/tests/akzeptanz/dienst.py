@@ -46,6 +46,14 @@ def stelleBeimLoslassenDesVertrags() -> dict:
     return _beispielDesVertrags("stelleBeimLoslassen.json")
 
 
+def losgelassenDesVertrags() -> dict:
+    return _beispielDesVertrags("losgelassen.json")
+
+
+def keineStelleBeimLoslassenDesVertrags() -> dict:
+    return _beispielDesVertrags("keineStelleBeimLoslassen.json")
+
+
 def schlachtDesVertrags() -> dict:
     return _beispielDesVertrags("schlacht.json")
 

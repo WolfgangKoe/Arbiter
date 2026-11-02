@@ -13,6 +13,12 @@
 - **T2** Der Weg vom Kriterium zum Test und zurück wird berechnet, nicht gespeichert: keine
   Links in Anforderung oder Test, die Zuordnung steht nur im Namen (`AUF-7.3`,
   `testAuf7_3…`). Spur: [Regeln](../../prozess/regeln/kriterienregeln.md).
+- **T3** Ein Test liest die Beispiele des [Vertrags](vertrag/querschnitt.md), statt sie zu
+  kopieren. Ein Beispiel nennt aus jeder *Armeeliste* nur die *Einheiten*, die es zeigt; der
+  Test vergleicht die Antwort ohne die Einträge der `armeeliste`, deren `nummer` das Beispiel
+  nicht nennt, sonst ganz (ein Helfer in `dienst.py`). Warum: Eine weitere *Einheit* einer
+  *Armee* ändert kein Beispiel; dass jede in der *Armeeliste* steht, prüft AUF-4.3. Prüft: nur
+  Text; mit einer weiteren *Einheit* in den Daten bleiben die Tests am Beispiel grün.
 - `tests/einheit/` spiegelt `arbiter/`, daneben nur Hilfsmodule (`modelle.py`).
 - Jeder Ordner unter `tests/einheit/` und `tests/akzeptanz/` hat ein `__init__.py`, sonst
   kollidieren gleiche Dateinamen in zwei Ordnern (`phasen/bewegung/beendenTest.py`,

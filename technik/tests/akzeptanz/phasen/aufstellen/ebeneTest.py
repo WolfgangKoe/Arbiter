@@ -287,7 +287,7 @@ def testAuf20_6EinKlickInDerAufstellungWähltDieGanzeEinheitGleichWerAnDerReiheI
     assert aufstellungMitModellenBeiderSpieler.ganzeEinheitIstEbene(aufgestellteEinheitJederSeite)
 
 
-def testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitOhneEbene(
+def testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitAlsEbene(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, einheitJederSeite
 ):
     angeklickt, *_ = einheitJederSeite.modelle

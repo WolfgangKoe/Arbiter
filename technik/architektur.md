@@ -18,7 +18,7 @@ Unter `technik/` | Aufgabe | Regeln
 `arbiter/katalog/` | Port Katalog: Datenblätter und Ausgangslage aus `domaene/daten/` | [Katalog](architektur/katalog.md): A3, K1 bis K7
 `arbiter/speicher/` | Port Partien: die Folge der Befehle | [Speicher](architektur/speicher.md): P1, P2
 `arbiter/domaene/` | Fachlogik: Regeln, *Sperren*, Messen | [Domäne](architektur/domaene.md): S1 bis S3, D1 bis D4, M1
-`tests/` | `akzeptanz/` je Anforderung, `einheit/` je Modul | [Tests](architektur/tests.md): T1, T2, B1 bis B5
+`tests/` | `akzeptanz/` je Anforderung, `einheit/` je Modul | [Tests](architektur/tests.md): T1 bis T3, B1 bis B5
 
 Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Den Vertrag zwischen `web/` und
 `frontend/`, Pfade und JSON, hält je Phase eine Datei oder ein Ordner mit je Abschnitt einer

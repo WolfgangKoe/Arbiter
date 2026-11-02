@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** `technik/tests/einheit/katalog/ausgangslageTest.py`, Test
@@ -21,4 +21,4 @@ Fixtures `boyz` und `warboss` in `technik/tests/akzeptanz/conftest.py`.
 
 Wann: vor den Daten zu Weirdboy und Spinne.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `technik/tests/einheit/katalog/ausgangslageTest.py`: Der Test findet die Boyz am Namen und prüft, dass Boyz und Warboss in der *Armee* stehen, unabhängig von der Zahl der *Einheiten*. `technik/tests/einheit/katalog` grün (56). `prozess/pruefungen`: 960 grün, 1 rot (`rueckverfolgungTest`, fehlende Akzeptanztestdateien wie `orkPsionikerTest.py`, nicht aus diesem Anliegen).

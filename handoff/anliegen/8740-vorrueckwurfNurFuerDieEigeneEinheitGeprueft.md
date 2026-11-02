@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Randfall ohne Test, Ablage einer Hilfsfunktion, keine Prüfung rot),
@@ -27,7 +27,7 @@ einzige `noqa` gegen eine Schwelle ist weg, Importvertrag, Benennung, Glossar, r
    `einheitVon` in [phasen/\_\_init\_\_.py](../../technik/arbiter/domaene/phasen/__init__.py),
    und nun wörtlich gleich (`next(... if modell in einheit.modelle)`) in `_vorrückwurfDes`.
    `Schlacht._stellenMitGründen` kennt die *Einheit* schon und gibt sie nicht weiter; der
-   Grund, die breite Schnittstelle, wartet in [8620](8620-ziehenVerlangtMehrAlsEsBraucht.md)
+   Grund, die breite Schnittstelle, wartet in Anliegen 8620
    Punkt 1.
 
 **Kosten.** Am Bildschirm heute nichts. Bleibt 1, fällt ein Umbau an der Suche (etwa nach 2)

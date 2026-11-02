@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet auf die nächste Technikphase, aufhaltende Befunde gibt es keine: Die beiden
@@ -38,4 +37,12 @@ Namen). Übrig bleiben zwei Lücken:
    nach `wartetAufDenVorrückwurf` die Vorbedingung
    `assert schlachtInDerBewegungsphase.ausgewählt(boyz)` ergänzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Punkte umgesetzt wie vorgeschlagen.
+1. [abwaehlenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/abwaehlenTest.py),
+   `testBew9_1DerDienstNenntNachDemKlickAufDieLeereKarteKeineAuswahl`: Zeile mit
+   `ausgewählteEinheitenIm` und Import gestrichen; die Prüfung an den Modellen bleibt.
+2. [wurfPerFlaecheTest.py](../../technik/tests/akzeptanz/phasen/bewegung/wurfPerFlaecheTest.py),
+   `testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf`: Vorbedingung
+   `assert schlachtInDerBewegungsphase.ausgewählt(boyz)` nach `wartetAufDenVorrückwurf`.
+
+Beide Dateien grün.

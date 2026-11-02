@@ -151,6 +151,12 @@ def corsFreigaben(quelltext: str) -> list[str]:
 
 
 @pytest.mark.stand
+def testDerServerBrauchtKeineAusnahmeVonS5332():
+    assert all(not datei.endswith("server.py") for datei, _regel in sonarlint.ausnahmen)
+    assert funde(wurzel, [wurzel / webOrdner / "server.py"]) == []
+
+
+@pytest.mark.stand
 def testDieAusnahmeVonS4502GiltNurSolangeWebKeinPostKeineAnsichtUndKeinCorsHat():
     ausnahme = (f"{webOrdner}/anwendung.py", "python:S4502")
     verstöße = [

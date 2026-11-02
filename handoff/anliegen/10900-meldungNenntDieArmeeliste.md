@@ -9,7 +9,7 @@ Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit) zur Umsetzung von
-[8121](8121-modellAnklickenInDerAuswahl.md) Punkt 2, uncommittet. Wartet nach
+Anliegen 8121 Punkt 2, uncommittet. Wartet nach
 [Kritik](../../prozess/ablauf/kritik.md): Namen, keine Prüfung rot.
 [aufstellen/\_\_init\_\_.py](../../technik/arbiter/domaene/phasen/aufstellen/__init__.py),
 `Aufstellung.auswählen`, meldet „Eine aufgestellte Einheit wählt man nicht über die

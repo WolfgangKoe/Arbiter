@@ -5,7 +5,7 @@ from http import HTTPStatus
 from playwright.sync_api import expect
 
 from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
-from tests.akzeptanz.dienst import ausgewählteEinheitenIm, ausgewählteModelleIm, karteAnklicken
+from tests.akzeptanz.dienst import ausgewählteModelleIm, karteAnklicken
 from tests.akzeptanz.handgriffe import modellZurEbeneMachen
 from tests.akzeptanz.schlacht import mitteDesSpielfelds
 from tests.akzeptanz.ziehen import klickenMit, mitMausUndFinger, punktAufDerKarte
@@ -43,7 +43,6 @@ def testBew9_1DerDienstNenntNachDemKlickAufDieLeereKarteKeineAuswahl(
 
     spielstand = antwort.get_json()
     assert antwort.status_code == HTTPStatus.OK
-    assert ausgewählteEinheitenIm(spielstand) == frozenset()
     assert ausgewählteModelleIm(spielstand) == frozenset()
 
 

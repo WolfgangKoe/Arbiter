@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet auf die nächste Technikphase ([Kritik](../../prozess/ablauf/kritik.md)): Der
@@ -26,4 +25,7 @@ Kriteriums und des [Glossars](../../domaene/glossar.md). Gemeint ist nur, dass i
 `testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitAlsEbene`. Die
 Prüfung bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen: In
+[ebeneTest.py](../../technik/tests/akzeptanz/phasen/aufstellen/ebeneTest.py) heißt der Test
+`testAuf20_6DerDienstWähltBeimAnklickenEinesModellsInDerSchlachtDieGanzeEinheitAlsEbene`, die
+Prüfung bleibt. Die Datei ist grün.

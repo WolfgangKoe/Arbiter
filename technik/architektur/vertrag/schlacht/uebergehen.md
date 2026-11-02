@@ -47,8 +47,8 @@ Am Bildschirm | Anfrage (V5) | `Schlacht`
   `protokollEintrag spieler<n>` mit `protokollEinheit`, `protokollSpieler` („Spieler <n>“)
   und je *Grund* `protokollGrund`; in der *Aufstellung* leer.
 
-Prüft wie im Querschnitt, am Dienst und am Bildschirm, auch mit `page.route` und den
-Beispielen (7321, 4): angehalten loslassen, 200, `angeboten`, *Stellen* wie V10 am selben
+Prüft wie im Querschnitt, am Dienst und am Bildschirm, `page.route` nur mit `protokoll.json`
+(7321, 4; den Knopf zeigt schon der Test am echten Server): angehalten loslassen, 200, `angeboten`, *Stellen* wie V10 am selben
 Punkt, *Protokoll* unverändert; `PUT /api/gemeinsamÜbergehen`: *Modelle* am Punkt, ein Eintrag
 mehr mit den *Gründen* nach BEW-8.5, danach `angeboten` falsch, ein zweites `PUT` ändert
 nichts; Auswählen dazwischen lässt das Angebot, eine 409 dazwischen den ganzen Stand. Die

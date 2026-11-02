@@ -29,7 +29,6 @@ abgeschalteteRegeln = (
 
 ausnahmen = (
     (f"{webOrdner}/anwendung.py", "python:S4502"),
-    (f"{webOrdner}/server.py", "python:S5332"),
 )
 
 

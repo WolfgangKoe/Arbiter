@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1

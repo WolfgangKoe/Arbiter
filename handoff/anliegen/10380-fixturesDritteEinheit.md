@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Testautor
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Etappe 2 bringt je *Armee* eine dritte *Einheit*: den Weirdboy bei den Orks

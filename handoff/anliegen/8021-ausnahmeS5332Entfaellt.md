@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: 8020
+Status: angenommen
 
 ## Runde 1
 **Befund.** Folge aus Anliegen 8020, Punkt 2: Schreibt
@@ -25,4 +24,7 @@ zu einem anderen Gerät, die W5 ausschließt. Token: gering.
 nur für ihre Datei“ in `sonarlintTest.py` setzt `ausnahmen` per `monkeypatch` und bleibt.
 Prüfen: `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: Eintrag für `server.py` aus `ausnahmen` in
+[sonarlint.py](../../prozess/pruefungen/formregeln/sonarlint.py) gestrichen;
+[formregeln.md](../../prozess/regeln/formregeln.md) nennt nur noch den Fund `python:S4502`.
+Scheiter-Test `testDerServerBrauchtKeineAusnahmeVonS5332` in `sonarlintTest.py`.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Erprobung zu Item [anhaltenAufDemWeg](../../domaene/items/anhaltenAufDemWeg.md)
@@ -28,3 +28,18 @@ BEW-17.1 gezeigt, hält 6.2 auch auf der Strecke von der zuvor gezeigten *Stelle
 
 Wann: vor dem Vertrag zu Item anhaltenAufDemWeg; sonst schreibe ich die Strecke ab der
 *Stelle* vor dem Ziehen in den Vertrag (heutiger Wortlaut).
+
+**Stellungnahme.** Angenommen wie vorgeschlagen, als neues Kriterium
+[BEW-17.4](../../domaene/anforderungen/phasen/bewegung/anhaltenVorFremdenBases.md): Hat
+BEW-17.1 beim selben Ziehen schon gegriffen, gilt BEW-6.2 auch ab der zuvor gezeigten
+*Stelle*, also auf der geraden Strecke von dort zur neuen. Keine Frage an den Stakeholder:
+Der Regeltext entscheidet. Die Fundstelle sagt nicht „at any point during the move“ (steht
+nicht in `core_rules.txt`), sondern `:745` „no model can be moved within Engagement Range“
+und `:729` „along any path“; nach dem Gleiten ist der Weg des *Modells* der gezeigte, nach
+BEW-17.2 *setzt* Arbiter es dort. „auch“ statt „statt“: Die Strecke ab der *Stelle* vor dem
+Ziehen bleibt geprüft wie heute; so lässt Arbiter nie ein *Modell* durch die
+*Nahkampfreichweite*, und wo er unnötig anhält, bleibt BEW-8 (*gemeinsam übergehen*).
+Ohne Sinnänderung gekürzt, damit die Datei unter 1.200 Zeichen bleibt: Zweck, 17.1 („wo
+BEW-1.7 und 6.4 sie zeigen würden“), 17.2 („die *Karte* zeigte zuletzt nach 17.1“), 17.3
+(„gilt BEW-6.3“). Zu BEW-17 gibt es noch keine Tests. Das Item nennt BEW-17 als Ganzes,
+17.4 gehört also dazu; der Planer kann „auch BEW-17.4“ ergänzen wie bei 17.3.

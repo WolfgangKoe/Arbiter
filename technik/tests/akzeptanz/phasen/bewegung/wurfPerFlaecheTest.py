@@ -109,6 +109,7 @@ def testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf(
     dienstDerSchlacht, schlachtInDerBewegungsphase, boyz
 ):
     wartetAufDenVorrückwurf(schlachtInDerBewegungsphase, boyz, "ganzeEinheit")
+    assert schlachtInDerBewegungsphase.ausgewählt(boyz)
     stelle = stelleNurImGrenzkreisDesWurfs(
         schlachtInDerBewegungsphase, boyz, innerhalbDesGrenzkreisesOhneWurf
     )
