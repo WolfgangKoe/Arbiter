@@ -6,24 +6,24 @@ dem letzten Stand gelöscht (nicht committet). Beim Stakeholder liegt nichts.
 ## Dran
 Blockiert das Inkrement (Items 1 und 2 in [Plan](plan.md), Vertrag beider steht):
 - Fachkritiker: Kritik an den Tests zu Item anhaltenUebergehen, mit
-  [7641](anliegen/7641-grenzkreiseTestsFuerSpaeter.md) (angenommen, nachprüfen).
+  Anliegen 7641 (angenommen, nachprüfen).
 - Architekt: Kritik an denselben Tests, mit
-  [7661](anliegen/7661-grenzkreiseHilfenAblegen.md); dazu
-  [8740](anliegen/8740-vorrueckwurfNurFuerDieEigeneEinheitGeprueft.md) nachprüfen und
+  Anliegen 7661; dazu
+  Anliegen 8740 nachprüfen und
   [10560](anliegen/10560-vertragsbeispieleMitDritterEinheit.md) beantworten (V18).
 - Testautor: Tests zu Item loslassenNebenDerKarte, mit
-  [7601](anliegen/7601-schlachtDienstWaehltOhneEbene.md),
-  [8720](anliegen/8720-auswahlInDerSchlachtNurAnModellenPruefen.md).
+  Anliegen 7601,
+  Anliegen 8720.
 - Implementierer: Tests zu Item anhaltenUebergehen grün, sobald die Kritik durch ist
   (mit [8261](anliegen/8261-uebergehenNachVertragUndAuswahl.md)).
 
 Dran, hält nichts auf:
 - Implementierer: [10880](anliegen/10880-modellAnklickenOhneDoppelteEinheit.md) samt
-  [10900](anliegen/10900-meldungNenntDieArmeeliste.md); [10561](anliegen/10561-einheitentestKatalogDritteEinheit.md).
-- Planer: [10380](anliegen/10380-fixturesDritteEinheit.md) und
-  [10860](anliegen/10860-vorrueckwurfTestOhneVorrueckwurf.md) sind angenommen; die Absender
+  [10900](anliegen/10900-meldungNenntDieArmeeliste.md); Anliegen 10561.
+- Planer: Anliegen 10380 und
+  Anliegen 10860 sind angenommen; die Absender
   prüfen nach (Testautor-Lauf bzw. Reviewer).
-- Anforderungsautor: [10540](anliegen/10540-nahkampfreichweiteNachDemGleiten.md),
+- Anforderungsautor: Anliegen 10540,
   [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
   [9340](anliegen/9340-fliegenDerSpinne.md) (Daten vor Item 4 und 5),
   [7800](anliegen/7800-karteUndEbeneBenennen.md) (angenommen).

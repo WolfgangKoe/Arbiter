@@ -11,7 +11,7 @@ Status: angenommen
 Beispiele, die die *Armeelisten* wiederholen) nennen genau Boyz, Warboss, Necron Warriors und
 Overlord. Mit einer dritten *Einheit* je *Armee* (Weirdboy, [10180](10180-etappe2LueckenNachPlan10.md);
 Spinne, [9340](9340-fliegenDerSpinne.md)) werden 6 Tests rot, gemessen an einer Kopie in `/tmp`
-mit Platzhaltern für beide *Einheiten* ([10380](10380-fixturesDritteEinheit.md)):
+mit Platzhaltern für beide *Einheiten* (Anliegen 10380):
 `auswahlTest.py::testAuf5_12DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags`,
 `beendenTest.py::testAuf10_3DerDienstSperrtDasBeendenMitDemBeispielDesVertrags`,
 `einheitZuruecklegenTest.py::testAuf23_1…` und `::testAuf23_3…`,
