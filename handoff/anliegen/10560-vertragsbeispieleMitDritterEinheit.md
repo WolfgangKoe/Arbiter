@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Die Beispiele in `technik/architektur/vertrag/` (`spielstand.json` und die

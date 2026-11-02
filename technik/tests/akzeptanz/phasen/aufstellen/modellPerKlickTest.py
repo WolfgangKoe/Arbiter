@@ -12,6 +12,7 @@ from tests.akzeptanz.dienst import (
     auswählen,
     ebeneDesVertrags,
     ebenenIm,
+    imUmfangDes,
     modellAnklicken,
     spielstandDesVertrags,
     spielstandVon,
@@ -93,7 +94,8 @@ def testAuf25_1DerDienstGleichtNachDemKlickAufEinModellDemBeispielDesVertrags(
     antwort = modellAnklicken(dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes)
 
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == ebeneDesVertrags()
+    beispiel = ebeneDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 @mitMausUndFinger
@@ -192,7 +194,8 @@ def testAuf25_2DerDienstGleichtNachDemZweitenKlickDemBeispielVonV1(
 
     assert len(ebenenIm(mitEbene.get_json())) == 1
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == spielstandDesVertrags()
+    beispiel = spielstandDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 @mitMausUndFinger

@@ -5,7 +5,8 @@ from http import HTTPStatus
 
 import pytest
 
-from tests.akzeptanz.dienst import modellLoslassen
+from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.dienst import gemeinsamÜbergehen, modellLoslassen
 from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
 from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
@@ -146,3 +147,47 @@ def testBew25_1DerDienstHältAnDerVorigenStelleAnUndNenntDasAngebot(
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json()["schlacht"]["gemeinsamÜbergehen"] == {"angeboten": True}
     assert schlachtInDerBewegungsphase.stelle(boss) == vorige
+
+
+@pytest.mark.parametrize(
+    ("abstandUndWeg", "gründe"),
+    [
+        ((Fraction(12), Fraction(8)), {"bewegungsweite"}),
+        ((Fraction(3), Fraction(5, 2)), {"nahkampfreichweite"}),
+        ((Fraction(7), Fraction(13, 2)), {"bewegungsweite", "nahkampfreichweite"}),
+    ],
+    ids=["überDerBewegungsweite", "inDerNahkampfreichweite", "beide"],
+)
+def testBew25_1ErneutGemeinsamÜbergehenSetztAmPunktDesLoslassensMitEinemEintragMehr(
+    schlachtInDerBewegungsphase, warboss, overlord, abstandUndWeg, gründe
+):
+    abstand, weg = abstandUndWeg
+    boss = übergangenVorDemOverlord(schlachtInDerBewegungsphase, warboss, overlord, abstand, weg)
+    (älterer,) = schlachtInDerBewegungsphase.protokoll
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), zweiZollNachWesten)
+    schlachtInDerBewegungsphase.modellLoslassen(boss, ziel)
+
+    schlachtInDerBewegungsphase.gemeinsamÜbergehen()
+
+    assert schlachtInDerBewegungsphase.stelle(boss) == ziel
+    davor, neuer = schlachtInDerBewegungsphase.protokoll
+    assert davor is älterer
+    assert neuer.einheit is warboss
+    assert {grund.name for grund in neuer.gründe} == gründe
+
+
+def testBew25_1DerDienstSetztNachDemErneutenGemeinsamenÜbergehenAmPunktDesLoslassens(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    (boss,) = warboss.modelle
+    vorige = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    anhaltenUndÜbergehen(schlachtInDerBewegungsphase, boss, vorige)
+    ziel = versetzt(vorige, zweiZollNachOsten)
+    modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
+
+    antwort = gemeinsamÜbergehen(dienstDerSchlacht)
+
+    assert antwort.status_code == HTTPStatus.OK
+    _, neuer = antwort.get_json()["schlacht"]["protokoll"]
+    assert neuer["gründe"] == [Grund.bewegungsweite.value]
+    assert schlachtInDerBewegungsphase.stelle(boss) == ziel

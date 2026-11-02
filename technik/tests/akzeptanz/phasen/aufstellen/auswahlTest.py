@@ -24,6 +24,7 @@ from tests.akzeptanz.dienst import (
     auswählen,
     dienstFür,
     einheitenDerArmeelisten,
+    imUmfangDes,
     spielstandDesVertrags,
     spielstandVon,
     stelleImSpielstand,
@@ -472,5 +473,6 @@ def testAuf5_12DieAntwortDesDienstesAufDieAuswahlGleichtDemBeispielDesVertrags(d
 
     antwort = auswählen(dienstDesBeispiels, "Necron Warriors")
 
-    assert antwort.get_json() == spielstandDesVertrags()
-    assert spielstandVon(dienstDesBeispiels) == spielstandDesVertrags()
+    beispiel = spielstandDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
+    assert imUmfangDes(beispiel, spielstandVon(dienstDesBeispiels)) == beispiel

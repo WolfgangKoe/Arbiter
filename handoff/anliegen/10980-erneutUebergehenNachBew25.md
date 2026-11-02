@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik an den Tests zu Item anhaltenUebergehen. Hält auf nach
@@ -35,3 +35,14 @@ des Loslassens, das *Protokoll* hat zwei *Einträge*, der neuere mit ‚Bewegung
 ‚Nahkampfreichweite‘ bzw. beiden (BEW-25.1 „im ersten Fall BEW-3.1, im zweiten 6.2, in beiden
 beide“, BEW-8.5). Dazu am Dienst: `PUT /api/gemeinsamÜbergehen` nach dem zweiten Loslassen, 200,
 *Stelle* am zweiten Punkt, zwei *Einträge*. Weg und Richtung wie im bestehenden Test.
+
+**Stellungnahme.** Umgesetzt wie vorgeschlagen in
+[weiterziehenNachDemUebergehenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/weiterziehenNachDemUebergehenTest.py):
+`testBew25_1ErneutGemeinsamÜbergehenSetztAmPunktDesLoslassensMitEinemEintragMehr` mit den drei
+Fällen (über der *Bewegungsweite*, in *Nahkampfreichweite*, beide): nach dem zweiten Loslassen
+*gemeinsam übergehen*; das *Modell* steht am zweiten Punkt des Loslassens, das *Protokoll* hat
+zwei *Einträge*, der ältere unverändert, der neuere für den Warboss mit ‚Bewegungsweite‘,
+‚Nahkampfreichweite‘ bzw. beiden. Am Dienst
+`testBew25_1DerDienstSetztNachDemErneutenGemeinsamenÜbergehenAmPunktDesLoslassens`: 200, zwei
+*Einträge*, der neuere mit ‚Bewegungsweite‘, *Stelle* am zweiten Punkt. Beide rot aus demselben
+Grund wie die übrigen der Datei (`gemeinsamÜbergehenAngeboten` fehlt).

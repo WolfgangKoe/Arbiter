@@ -70,6 +70,29 @@ def schlachtNachSchlüsselnDes(spielstand: dict, beispiel: Mapping) -> dict:
     }
 
 
+def imUmfangDes(beispiel: Mapping, antwort: dict) -> dict:
+    if "spielstand" in antwort:
+        return {
+            **antwort,
+            "spielstand": imUmfangDes(beispiel["spielstand"], antwort["spielstand"]),
+        }
+    spieler = zip(beispiel["spieler"], antwort["spieler"], strict=True)
+    return {
+        **antwort,
+        "spieler": [_armeelisteImUmfangDes(gezeigter, ganzer) for gezeigter, ganzer in spieler],
+    }
+
+
+def _armeelisteImUmfangDes(beispiel: Mapping, spieler: dict) -> dict:
+    gezeigt = {einheit["nummer"] for einheit in beispiel["armeeliste"]}
+    return {
+        **spieler,
+        "armeeliste": [
+            einheit for einheit in spieler["armeeliste"] if einheit["nummer"] in gezeigt
+        ],
+    }
+
+
 def gemeinsamÜbergehen(dienst):
     return dienst.put("/api/gemeinsamÜbergehen")
 

@@ -18,6 +18,7 @@ from tests.akzeptanz.dienst import (
     abwählen,
     aufstellenDerEinheitBeenden,
     dienstFür,
+    imUmfangDes,
     modellLoslassen,
     sperreDesVertrags,
 )
@@ -111,7 +112,8 @@ def testAuf10_3DerDienstSperrtDasBeendenMitDemBeispielDesVertrags(
     antwort = aufstellenDerEinheitBeenden(dienstDesBeispiels)
 
     assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json() == sperreDesVertrags()
+    beispiel = sperreDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 def antwortMitDerSperreDesVertrags(anfrage: Route) -> None:

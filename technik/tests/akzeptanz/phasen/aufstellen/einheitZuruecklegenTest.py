@@ -15,6 +15,7 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     auswählen,
     ebenenIm,
+    imUmfangDes,
     modellAnklicken,
     spielstandDesVertrags,
     spielstandVon,
@@ -134,7 +135,8 @@ def testAuf23_1DerDienstZeigtNachDemZurücklegenDasBeispielImVertrag(dienstDesBe
     antwort = zurücklegen(dienstDesBeispiels)
 
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == zurückgelegtDesVertrags()
+    beispiel = zurückgelegtDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
 @mitJederEbene
@@ -202,7 +204,8 @@ def testAuf23_3MitEinemModellAlsEbeneLässtDerDienstDieEinheitMitDerGanzenEinhei
 
     assert len(ebenenIm(mitEbene.get_json())) == 1
     assert antwort.status_code == HTTPStatus.OK
-    assert antwort.get_json() == zurückgelegtDesVertrags()
+    beispiel = zurückgelegtDesVertrags()
+    assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
     assert aufstellungDesBeispiels.ganzeEinheitIstEbene(necronWarriors)
 
 

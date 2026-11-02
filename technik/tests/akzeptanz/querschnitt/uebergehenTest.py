@@ -298,12 +298,19 @@ def testQue5_6BeimLoslassenÄndertSichDasProtokollNicht(
 
 
 def testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
     (boss,) = warboss.modelle
-    ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    anhaltenUndÜbergehen(
+        schlachtInDerBewegungsphase,
+        boss,
+        versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten),
+    )
     davor = spielstandVon(dienstDerSchlacht)["schlacht"]["protokoll"]
+    *_, letzter = boyz.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(letzter), zehnZollNachOsten)
 
-    antwort = modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
+    antwort = modellLoslassen(dienstDerSchlacht, beendeteAufstellung, boyz, letzter, ziel)
 
+    assert len(davor) == 1
     assert antwort.get_json()["schlacht"]["protokoll"] == davor
