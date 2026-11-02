@@ -2,7 +2,7 @@
 
 Etappe: [2 · Phasen und Bewegungsphase](../domaene/etappen/02-bewegen.md). Grundlage:
 Zyklusziel aus [Review 9](review.md) und dein Auftrag
-[9440](anliegen/9440-umbauNach8840HoechstePrioritaet.md) (höchste Priorität), Abweichungen unten.
+Anliegen 9440 (höchste Priorität), Abweichungen unten.
 
 ## Dein Happy Path nach Zyklus 10
 1. Arbiter startet, ihr stellt auf, wählt den ersten Zug und kommt in die *Bewegungsphase* wie
