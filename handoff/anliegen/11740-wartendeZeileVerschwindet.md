@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Im [Fortschritt](../plan.md) von Plan 10 standen „Anforderungsautor: Anliegen 10180 …“
