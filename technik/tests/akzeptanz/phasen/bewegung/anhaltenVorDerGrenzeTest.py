@@ -293,7 +293,7 @@ def testBew6_4DieStellenBeimLoslassenHaltenDenBlockAnDerKanteAn(schlachtInDerBew
     erstes, gezogenes, davor = blockSüdlichDerNordkante(schlachtInDerBewegungsphase, boyz)
     ziel = versetzt(davor[gezogenes], vierZollNachNorden)
 
-    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(gezogenes, ziel)
+    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(gezogenes, ziel).stellen
 
     assert hältAnDerSpielfeldkante(stellen[erstes], erstes)
     assert stellen == stellenVersetzt(davor, wegVon(davor[gezogenes], stellen[gezogenes]))
@@ -310,7 +310,7 @@ def testBew6_4DieStellenBeimLoslassenHaltenVorDerNahkampfreichweiteAn(
 
     stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(
         modell, versetzt(davor, (Fraction(8), nichts))
-    )
+    ).stellen
 
     assert hältVorDerNahkampfreichweite(
         stellen[modell], modell, stelleDesAnderen, modellDesAnderenSpielers

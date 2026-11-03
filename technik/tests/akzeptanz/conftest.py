@@ -13,17 +13,21 @@ from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 from arbiter.katalog.ausgangslage import ausgangslageLaden
+from tests.akzeptanz.anhalten import stelleAn
 from tests.akzeptanz.bildschirm import Bildschirm
 from tests.akzeptanz.dienst import dienstFür, dienstFürSchlacht, stellenDesVertrags
 from tests.akzeptanz.grenzen import EinheitAmZug
 from tests.akzeptanz.handgriffe import (
     Platz,
+    abstandDerReihen,
     alleEinheitenAufstellen,
     aufstellungVon,
     einheitAufstellen,
     modelleAnStellenSetzen,
     modelleSetzen,
+    radiusInZoll,
     spielerMit,
+    tiefeDerErstenReihe,
     versetzt,
 )
 from tests.akzeptanz.schlacht import (
@@ -236,6 +240,21 @@ def boyzSetzen(aufstellungNachDerZonenwahl, boyz):
         return modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahl)
 
     return setzen
+
+
+@pytest.fixture
+def warriorsVorDemOverlord(
+    aufstellungNachDerZonenwahl, boyz, overlord, warboss, necronWarriors
+) -> tuple[list[tuple[Modell, Stelle]], Stelle]:
+    for einheit in (boyz, overlord, warboss):
+        einheitAufstellen(aufstellungNachDerZonenwahl, einheit)
+    gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, necronWarriors, 3)
+    (gezogenes, _), *_ = gesetzte
+    zielAmOverlord = stelleAn(
+        aufstellungNachDerZonenwahl,
+        (tiefeDerErstenReihe + abstandDerReihen, 2 * radiusInZoll(gezogenes)),
+    )
+    return gesetzte, zielAmOverlord
 
 
 @pytest.fixture

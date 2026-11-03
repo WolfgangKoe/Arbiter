@@ -197,7 +197,7 @@ def testAuf24_3DieAbfrageNenntJedesGesetzteModellDerEinheitUndSetztNichts(
     tiefe, länge = ziel
     stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
 
-    abfrage = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
+    abfrage = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens).stellen
 
     assert set(abfrage) == {modell for modell, _ in gesetzte}
     for modell, davor in gesetzte:
@@ -214,7 +214,7 @@ def testAuf24_3BeimLoslassenStehtJedesModellDortWoDieAbfrageEsZeigte(
     aufstellung.auswählen(boyz)
     tiefe, länge = ziel
     stelleDesLoslassens = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
-    gezeigt = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens)
+    gezeigt = aufstellung.stellenBeimLoslassen(gezogenes, stelleDesLoslassens).stellen
 
     aufstellung.modellLoslassen(gezogenes, stelleDesLoslassens)
 
@@ -241,7 +241,7 @@ def testAuf24_3DerDienstNenntJedesGesetzteModellDerEinheitUndVerändertNichts(
     [(gezogenes, _), *_] = modelleSetzen(aufstellung, boyz, 3)
     auswählen(dienst, "Boyz")
     ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 12, 20)
-    erwartet = aufstellung.stellenBeimLoslassen(gezogenes, ziel)
+    erwartet = aufstellung.stellenBeimLoslassen(gezogenes, ziel).stellen
     spielstandDavor = spielstandVon(dienst)
 
     antwort = stelleBeimLoslassenAbfragen(dienst, aufstellung, boyz, gezogenes, ziel)

@@ -17,6 +17,12 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     möglicheWürfe,
 )
 from arbiter.domaene.phasen.bewegung.normaleBewegung import gründeBeimZiehen
+from arbiter.domaene.phasen.bewegung.uebergehenBeimZiehen import (
+    Angebot,
+    Anteile,
+    Übergangen,
+    gründeBeimÜbergehen,
+)
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle, einheitDes
 
@@ -29,6 +35,65 @@ class Bewegungsphase:
         self._stellenZuBeginn = dict(stellen)
         self._wartendeEinheiten: set[Einheit] = set()
         self._vorrückwürfe: dict[Einheit, int] = {}
+        self._angebot: Angebot | None = None
+
+    @property
+    def übergehenAngeboten(self) -> bool:
+        return self._angebot is not None
+
+    def angebotBeenden(self) -> None:
+        self._angebot = None
+
+    def angebotNachDemZiehen(
+        self,
+        ebene: Mapping[Modell, Stelle],
+        gezogenes: Modell,
+        ziel: Stelle,
+        gegner: Mapping[Modell, Stelle],
+    ) -> None:
+        weg = messen.wegZwischen(ebene[gezogenes], ziel)
+        anteile = self._anteile(ebene, gezogenes, weg, gegner)
+        self._angebot = (
+            Angebot(frozenset(ebene), gezogenes, ziel)
+            if anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
+            else None
+        )
+
+    def übergangen(
+        self, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
+    ) -> Übergangen | None:
+        angebot = self._angebot
+        if angebot is None:
+            return None
+        ebene = {modell: stellen[modell] for modell in angebot.ebene}
+        gezogenes = angebot.gezogenes
+        weg = messen.wegZwischen(ebene[gezogenes], angebot.punkt)
+        kurz = messen.teilDesWegs(weg, anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld))
+        neue = {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in neue}
+        eigene = stellen.keys() - gegner.keys()
+        anteile = self._anteile(ebene, gezogenes, kurz, gegner)
+        return Übergangen(
+            neue,
+            gründeBeimÜbergehen(neue, fremde, eigene),
+            anteile.gründeDesAnhaltens,
+            gezogenes,
+        )
+
+    def _anteile(
+        self,
+        ebene: Mapping[Modell, Stelle],
+        gezogenes: Modell,
+        weg: messen.Weg,
+        gegner: Mapping[Modell, Stelle],
+    ) -> Anteile:
+        return Anteile(
+            anteilBisZurBewegungsweite(
+                ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
+            ),
+            anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld),
+            anteilBisZurNahkampfreichweite(ebene, weg, gegner),
+        )
 
     def vorrückenAngeboten(self, einheit: Einheit) -> bool:
         return not self.vorrückenZurücknehmenAngeboten(einheit)
@@ -67,13 +132,7 @@ class Bewegungsphase:
     ) -> StellenMitGründen:
         weg = messen.wegZwischen(ebene[gezogenes], ziel)
         eigene = stellen.keys() - gegner.keys()
-        anteil = min(
-            anteilBisZurBewegungsweite(
-                ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
-            ),
-            anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld),
-            anteilBisZurNahkampfreichweite(ebene, weg, gegner),
-        )
+        anteil = min(self._anteile(ebene, gezogenes, weg, gegner))
         kurz = messen.teilDesWegs(weg, anteil)
         neue = {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in neue}

@@ -5,7 +5,7 @@ Von: Planer
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: Technikphase 10
+Wartet auf: 11840
 
 ## Runde 1
 **Befund.** Die Canoptek-Spinne aus [Etappe 2](../../domaene/etappen/02-bewegen.md) hat FLY
@@ -24,16 +24,20 @@ Anliegen 9271 F2 A, bei F2 B `Etappe: 4`.
 
 Wann: Domänenphase 10, vor Plan 10.
 
-**Stellungnahme.** Teils umgesetzt:
-[BEW-18](../../domaene/anforderungen/phasen/bewegung/fliegen.md) hat `Etappe: 2` (9271 F2,
-Annahme A) und BEW-18.3: BEW-6.2 hält ein fliegendes *Modell* nur an, wenn die Strecke in
-*Nahkampfreichweite* endet (`core_rules.txt:884`, `:888`); *Fliegen* im Glossar mit `:888`.
-Das *Datenblatt* der Spinne fehlt: Keine Quelle nennt ihre *Base*, ich frage in
-Anliegen 9400. Danach schreibe ich es, aber erst zum Start des
-Items fliegen: Der Katalog lehnt den neuen Schlüssel `fliegen` ab, bis die Technik ihn kennt
-(`technik/architektur/katalog.md` K3), sonst wird jeder Akzeptanztest rot. Den
-Ork-Psioniker: MIV-2, 10180.
-Nach 9400: *Durchmesser* 60 (F1 A), Ende des Flugs wie BEW-18.3 (F2 A). Zum Start des
-Items fliegen (Plan 10, Reihenfolge in 10340) schreibe ich das *Datenblatt* `Canoptek Spyder`:
-`bewegungsweite: 6` (`units.yaml:417`), `durchmesser: 60` (Anliegen 9400 F1 A), `fliegen`
-(`units.yaml:410`), dazu die Spinne in der *Armee* (`necrons_test.yaml:17`).
+**Stellungnahme.** Teils umgesetzt, nur noch der Wert `fliegen` wartet.
+- [BEW-18](../../domaene/anforderungen/phasen/bewegung/fliegen.md): `Etappe: 2` (9271 F2 A),
+  BEW-18.3 zum Ziehen durch die *Nahkampfreichweite* (`core_rules.txt:884`, `:888`, 9400 F2);
+  *Fliegen* im Glossar.
+- Neu [MIV-3](../../domaene/anforderungen/missionsvorbereitung/canoptekSpinne.md): die Spinne in
+  der *Armee* der Necrons (MIV-3.1) mit *Fliegen*, als einzige (MIV-3.2). Das ist „die
+  Canoptek-Spinne (9340)“ im Item [fliegen](../../domaene/items/fliegen.md); bitte nenne dort
+  MIV-3 im Umfang.
+- Geschrieben: *Datenblatt* `Canoptek Spyder` in `domaene/daten/katalog/necrons/datenblaetter.yaml`,
+  `bewegungsweite: 6` (`units.yaml:417`), `durchmesser: 60` (9400 F1 A).
+- Geschrieben: die Spinne in `domaene/daten/ausgangslage.yaml` (`necrons_test.yaml:17`) und
+  `formation.yaml`. An einer Kopie in `/tmp` sind mit ihr dieselben 37 Tests rot wie ohne sie
+  (laufende Items), keiner mehr.
+- Wartet: der Wert `fliegen: true` beim *Datenblatt*, Form nach
+  [Katalog](../../technik/architektur/katalog.md) K3 und K4 (Anliegen 11560). Erst legt der
+  Implementierer die Zeile in `katalog/` an ([11840](11840-zeileFliegenVorDenTests.md)), dann
+  trage ich ihn ein.

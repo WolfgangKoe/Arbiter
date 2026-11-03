@@ -46,6 +46,7 @@ def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
         "protokoll": [
             _eintrag(aufstellung, eintrag) for eintrag in reversed(list(schlacht.protokoll))
         ],
+        "gemeinsamÜbergehen": {"angeboten": schlacht.gemeinsamÜbergehenAngeboten},
         "grenzen": [_grenze(aufstellung, grenze) for grenze in schlacht.grenzen],
         "vorrücken": {
             "angeboten": schlacht.vorrückenAngeboten,

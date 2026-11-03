@@ -1,9 +1,11 @@
 # Datenblätter der Orks (Glossar: Datenblatt, Modellart, Profil), Gliederung nach
 # technik/architektur/katalog.md K1 bis K6; nur die Werte, die Kriterien lesen (Anliegen 4800 F3 A).
 # Modellarten: Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (model_groups, name_en);
-# ohne model_groups eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group).
+# ohne model_groups eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group),
+# ohne beides eine mit dem Namen des Datenblatts (units.yaml:<zeile>, name_en).
 # bewegungsweite: Zoll; Quelle Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (move).
-# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm).
+# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm),
+# ohne Datei dort die Antwort des Stakeholders im genannten Anliegen.
 
 Boyz:                       # units.yaml:493
   modellarten:
@@ -18,3 +20,8 @@ Warboss:                    # units.yaml:10
     Warboss:                # orks_warboss.yaml:15
       bewegungsweite: 5     # units.yaml:18
       durchmesser: 40       # orks_warboss.yaml:17
+Weirdboy:                   # units.yaml:251
+  modellarten:
+    Weirdboy:               # units.yaml:251
+      bewegungsweite: 5     # units.yaml:259
+      durchmesser: 50       # Anliegen 10240 F1 A

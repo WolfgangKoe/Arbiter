@@ -1,6 +1,7 @@
 from fractions import Fraction
 
 from arbiter.domaene.phasen.bewegung import Bewegungsphase
+from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Spielfeld, Stelle
 from tests.einheit.modelle import bewegungsweiteDerTestmodelle, modellMit
 
@@ -82,3 +83,57 @@ def testDasZurücknehmenMachtDieWartendeEinheitWiederFrei():
 
     assert bewegungsphase.vorrückenAngeboten(einheit)
     assert bewegungsphase.vorrückwurf(einheit) is None
+
+
+def testNachDemZiehenBisÜberDieBewegungsweiteHinausWirdDasÜbergehenAngeboten(zehnZoll):
+    modell = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+
+    assert bewegungsphase.übergehenAngeboten
+
+
+def testNachDemZiehenInnerhalbDerBewegungsweiteWirdKeinÜbergehenAngeboten(zehnZoll):
+    modell = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(4, 0), {})
+
+    assert not bewegungsphase.übergehenAngeboten
+
+
+def testOhneAngebotIstNichtsÜbergangen(zehnZoll):
+    modell = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0)}
+
+    assert Bewegungsphase(stellen, spielfeld).übergangen(stellen, {}) is None
+
+
+def testDasÜbergehenSetztDasModellAmPunktDesZiehensUndNenntDenGrundDesAnhaltens(zehnZoll):
+    modell = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+
+    übergangen = bewegungsphase.übergangen(stellen, {})
+
+    assert übergangen is not None
+    assert übergangen.stellen == {modell: stelleAn(9, 0)}
+    assert übergangen.gründe == set()
+    assert übergangen.angehalten == {Grund.bewegungsweite}
+    assert übergangen.gezogenes == modell
+
+
+def testDasBeendenDesAngebotsNimmtDasÜbergehenZurück(zehnZoll):
+    modell = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+
+    bewegungsphase.angebotBeenden()
+
+    assert not bewegungsphase.übergehenAngeboten
+    assert bewegungsphase.übergangen(stellen, {}) is None

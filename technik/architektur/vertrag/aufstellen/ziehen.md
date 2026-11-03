@@ -3,13 +3,18 @@
 Abschnitt der *Aufstellung*, die anderen: [Architektur](../../../architektur.md#schichten);
 was alle Phasen teilen: [Querschnitt](../querschnitt.md).
 
-Nach V10 (AUF-24.3, 26.5, 28.2, 29): `stellenBeimLoslassen(modell, stelle, weiter)` →
+Nach V10 (AUF-24.3, 26.5, 28.2, 29): `stellenBeimLoslassen(modell, stelle, weiter=None)` →
 `Gezeigt` nennt in `stellen` (*Modell* → *Stelle*) jedes *Modell*, das
-`modellLoslassen(modell, stelle, weiter)` *setzen* würde (das gezogene oder jedes *gesetzte*
-der *Einheit*, [V3](auswahl.md)), ohne zu *setzen*, Wächter wie dort; `modellLoslassen`
-*setzt* genau diese (AUF-28.2). `weiter: Weiterrücken | None` trägt die übrigen Eingaben
-(V10): `zuvor` (*Stelle* des gezogenen) und `angehaltenAufDemWeg`; `Gezeigt` auch dieses.
-Ohne `weiter` gilt die *Stelle* vor dem Ziehen als zuvor, so bleiben die bisherigen Aufrufe.
+`modellLoslassen(modell, stelle, weiter=None)` → `None` *setzen* würde (das gezogene oder jedes
+*gesetzte* der *Einheit*, [V3](auswahl.md)), ohne zu *setzen*, Wächter wie dort;
+`modellLoslassen` *setzt* genau diese (AUF-28.2). `Schlacht` hat beide gleich, ohne weiteren
+Parameter (übergangen wird nach [V18](../schlacht/uebergehen.md)). In
+`querschnitt/anhaltenAufDemWeg.py`, unveränderlich: `Weiterrücken(zuvor: Stelle | None,
+angehaltenAufDemWeg: bool)` trägt die übrigen Eingaben von V10, `zuvor` `None` heißt die
+*Stelle* vor dem Ziehen; `Gezeigt(stellen: Mapping[Modell, Stelle], angehaltenAufDemWeg:
+bool)`. `weiter=None` gilt wie `Weiterrücken(None, False)`; `web/` übergibt `None`, wenn die
+Anfrage keine der Eingaben nennt. Warum `Gezeigt` keine Zuordnung ist: Es trägt zwei Aussagen,
+ein Untertyp von `Mapping` mit Zusatzfeld hielte den Vertrag von `Mapping` nicht (Es, L).
 
 **Gleiten** (AUF-29, in `querschnitt/anhaltenAufDemWeg.py`, auch für BEW-17): Alle
 *Modelle* der *Ebene* gehen um denselben Weg; zuvor gezeigt ist jedes um den des gezogenen
@@ -31,8 +36,8 @@ diese *Base* einen Schritt lang nicht. Beispiel
 *Neben der Karte* loslassen (V10, Seite): AUF-28.1 mit dem Punkt der letzten 200; ein
 *Modell* einer *aufgestellten* *Einheit* bekommt in V10 nur 409, also keine Anfrage und
 keine `sperrmeldung` (AUF-16.8). Ist das gezogene *Modell* nicht *gesetzt* (eine zweite Seite
-zeigt es noch, AUF-16.7), geben vor jedem Wächter `stellenBeimLoslassen` `{}` (V10 200 mit
-leerem `modelle[]`) und `modellLoslassen` nichts zurück, ohne `Sperre`, Stand unverändert.
+zeigt es noch, AUF-16.7), geben vor jedem Wächter `stellenBeimLoslassen` `Gezeigt({}, False)`
+(V10 200 mit leerem `modelle[]`) und `modellLoslassen` nichts zurück, ohne `Sperre`, Stand unverändert.
 Warum vor den Wächtern: Kein *Grund* nach AUF-16.7, auch wenn inzwischen eine andere
 *Einheit in Aufstellung* ist. Beispiele: [losgelassen.json](../losgelassen.json), V5 200:
 Stand von `stelleBeimLoslassen.json`, dann `PUT …/modelle/1/stelle` mit `{"x": 35, "y": 28}`,

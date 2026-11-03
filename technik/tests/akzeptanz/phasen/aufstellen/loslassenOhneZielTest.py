@@ -70,7 +70,7 @@ def testAuf16_7DieStellenBeimLoslassenEinesNichtGesetztenModellsSindLeer(
     modell = zurückgelegterBoy(aufstellung, boyz, warboss, danach)
     ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
 
-    abfrage = aufstellung.stellenBeimLoslassen(modell, ziel)
+    abfrage = aufstellung.stellenBeimLoslassen(modell, ziel).stellen
 
     assert abfrage == {}
 

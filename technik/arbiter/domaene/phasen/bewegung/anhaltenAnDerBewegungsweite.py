@@ -26,4 +26,6 @@ def anteilBisZurBewegungsweite(
             for gezogenes, stelle in vorige.items()
         )
 
+    if weg != (0, 0) and überBeiAnteil(Fraction(0)):
+        return Fraction(0)
     return messen.anteilVorDemErstenSchrittMit(überBeiAnteil, weg)

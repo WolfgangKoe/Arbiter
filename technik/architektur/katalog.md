@@ -20,10 +20,15 @@
 - **K3** `katalog/` führt je Ebene und für den Eintrag der Ausgangslage (K1) eine Tabelle
   Schlüssel → Prüfung des Werts; der Schlüssel ist der Bezeichner aus dem Glossar. Ein
   unbekannter Schlüssel ist ein Fehler (so kommt kein `oc` hinein), ein fehlender auch: Wer
-  einen Schlüssel einführt, trägt ihn in jedes Datenblatt ein. Die Zeile darf vor dem
-  Kriterium kommen, das den Wert liest; die Domäne bekommt ihn erst mit diesem. Prüft:
+  einen Schlüssel einführt, trägt ihn in jedes Datenblatt ein. Die Zeile kommt vor den
+  Werten und liest den Schlüssel freiwillig, bis jedes Datenblatt ihn trägt; so ist dazwischen
+  nichts rot. Sie darf vor dem Kriterium kommen, das den Wert liest; die Domäne bekommt ihn
+  erst mit diesem. Ausnahme: Ein Wahrheitswert, den die Quelle nur bei manchen nennt, bleibt
+  freiwillig, fehlt er, gilt `false`: `fliegen` beim Datenblatt, `true` nur mit FLY (MIV-3.2,
+  `core_rules.txt:871`). Warum: Ein `false` hätte keine Fundstelle (K6). Prüft:
   Einheitstests je Fall.
-- **K4** Ein Wert ist eine Zahl in der Einheit des Glossars, ohne Zeichen (`bewegungsweite: 5`).
+- **K4** Ein Wert ist eine Zahl in der Einheit des Glossars, ohne Zeichen (`bewegungsweite: 5`),
+  oder ein YAML-Wahrheitswert `true`, `false` (`fliegen: true`, gelesen nur als `bool`).
   Eine andere Form (Strich `core_rules.txt:565`, Würfel `:483`, Schadensprofil `:586`) bekommt
   er mit der ersten Anforderung, die ihn liest, in seiner Zeile aus K3, unter seinem
   Schlüssel. Prüft: Tabelle aus K3.
@@ -49,6 +54,7 @@ Anforderungsautor fest.
   `ausgangslage.py` baut die Ausgangslage, ohne Datei prüfbar (`ausgangslageAus`), aus den
   Dateien `ausgangslageLaden()`. Die Domäne bekommt,
   was MIV-1.5 liest: je *Modell* `modellart`, den Namen; die *Einheit* heißt wie ihr
-  *Datenblatt*, ihre *Modelle* in der Folge von `modelle`. Die *Fraktion* nicht (K3), der
-  Spielstand bleibt. Prüft: Einheitstests `tests/einheit/katalog/<modul>Test.py`, MIV-1.5 ein
-  Akzeptanztest an `ausgangslageLaden()`; die Schnittstelle nur Text.
+  *Datenblatt*, ihre *Modelle* in der Folge von `modelle`; mit MIV-3.2 je *Einheit* `fliegen`
+  (`bool`, Vorgabe `False`). Die *Fraktion* nicht (K3), der
+  Spielstand bleibt. Prüft: Einheitstests `tests/einheit/katalog/<modul>Test.py`, MIV-1.5 und MIV-3.2
+  je ein Akzeptanztest an `ausgangslageLaden()`; die Schnittstelle nur Text.

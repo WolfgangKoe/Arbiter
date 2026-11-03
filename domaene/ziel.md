@@ -8,7 +8,7 @@ Spieler das Denken abzunehmen.
 
 - Kein Simulator: Gewürfelt wird am Tisch, die App nimmt die Ergebnisse entgegen.
   Kein Gelände, keine Sichtlinien.
-- Die Karte bildet den Spielstand ab, nicht den exakten Tisch.
-- Abstände zieht man auf der Karte, man tippt keine Zahlen ein. Maus und Touch.
+- Das Spielfeld bildet den Spielstand ab, nicht den exakten Tisch.
+- Abstände zieht man auf dem Spielfeld, man tippt keine Zahlen ein. Maus und Touch.
 - Regelkonformität vor Komfort: Was nicht erlaubt ist, wird gesperrt. Die Spieler können
   eine Sperre einvernehmlich übergehen; das wird protokolliert. Ausnahmen: ‚keine Kohärenz‘ und überdeckte Bases können nicht übergangen werden.

@@ -1,9 +1,11 @@
 # Datenblätter der Necrons (Glossar: Datenblatt, Modellart, Profil), Gliederung nach
 # technik/architektur/katalog.md K1 bis K6; nur die Werte, die Kriterien lesen (Anliegen 4800 F3 A).
-# Modellarten: Arbiter-old/data/wh40k_9e/necrons/units.yaml hat für beide keine model_groups,
-# also je eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group).
+# Modellarten: Arbiter-old/data/wh40k_9e/necrons/units.yaml hat für alle keine model_groups,
+# also je eine Modellart wie ArbiterMap/data/poc/units/<datei>:<zeile> (group), ohne Datei
+# dort eine mit dem Namen des Datenblatts (units.yaml:<zeile>, name_en).
 # bewegungsweite: Zoll; Quelle Arbiter-old/data/wh40k_9e/necrons/units.yaml:<zeile> (move).
-# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm).
+# durchmesser: mm der runden Base; Quelle ArbiterMap/data/poc/units/<datei>:<zeile> (base_mm),
+# ohne Datei dort die Antwort des Stakeholders im genannten Anliegen.
 
 Necron Warriors:            # units.yaml:148
   modellarten:
@@ -15,3 +17,8 @@ Overlord:                   # units.yaml:15
     Overlord:               # necrons_overlord.yaml:14
       bewegungsweite: 6     # units.yaml:28, Anliegen 4280 F4 A
       durchmesser: 32       # necrons_overlord.yaml:17, Stakeholder :16
+Canoptek Spyder:            # units.yaml:403
+  modellarten:
+    Canoptek Spyder:        # units.yaml:403
+      bewegungsweite: 6     # units.yaml:417
+      durchmesser: 60       # Anliegen 9400 F1 A

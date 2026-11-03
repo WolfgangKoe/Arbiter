@@ -94,11 +94,12 @@ def testBew11_5DerDienstNenntDieEinhüllendeDerEinheitMitExaktenRadien(
 def testBew11_5DieSeiteZeigtJedeEinhüllendeDurchIhreMaskeAusDenselbenGrenzkreisen(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, spielerZwei
 ):
+    zahlDerEinheitenDesGegners = len(spielerZwei.armee.einheiten)
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
-    expect(seite.locator(".karte g.grenze")).to_have_count(3)
+    expect(seite.locator(".karte g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
 
     grenzen, masken = kreiseDerGrenzenUndIhrerMasken(seite)
 

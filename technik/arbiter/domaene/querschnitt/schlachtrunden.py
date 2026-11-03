@@ -13,7 +13,7 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
 )
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.querschnitt.uebergehen import Protokoll
-from arbiter.domaene.sperre import Grund, Sperre
+from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
 
@@ -95,6 +95,7 @@ class Schlacht:
             )
             if gründe:
                 raise Sperre(*gründe)
+        self._bewegungsphase.angebotBeenden()
         nächste = _nächstePhase.get(self._phase)
         if nächste is not None:
             self._phase = nächste
@@ -119,33 +120,58 @@ class Schlacht:
             raise Sperre(*gründe)
         return neue
 
-    def modellLoslassen(
-        self, modell: Modell, stelle: Stelle, übergehen: frozenset[Grund] = frozenset()
-    ) -> None:
+    def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
         neue, gründe = self._stellenMitGründen(modell, stelle)
-        sperre = Sperre(*gründe, übergehbar=True) if gründe else None
-        if sperre and not (sperre.übergehbar and gründe <= übergehen):
-            raise sperre
+        if gründe:
+            raise Sperre(*gründe)
+        self._bewegungsphase.angebotBeenden()
+        if neue:
+            self._bewegungsphase.angebotNachDemZiehen(
+                self._ebeneDes(modell), modell, stelle, self._stellenDesGegners()
+            )
         self._stellen.update(neue)
-        if gründe and self._amZug is not None:
-            einheit = einheitVon(self._beideSpieler, modell)
-            self._protokoll.eintragen(einheit, self._amZug, frozenset(gründe))
 
-    def _stellenMitGründen(self, modell: Modell, stelle: Stelle) -> StellenMitGründen:
+    @property
+    def gemeinsamÜbergehenAngeboten(self) -> bool:
+        return self._bewegungsphase.übergehenAngeboten
+
+    def gemeinsamÜbergehen(self) -> None:
         spieler = self._amZug
-        if self._phase is not Phase.bewegungsphase or spieler is None:
-            return {}, set()
-        if modell not in spieler.armee.modelle:
-            return {}, set()
+        übergangen = self._bewegungsphase.übergangen(self._stellen, self._stellenDesGegners())
+        if übergangen is None or spieler is None:
+            return
+        if übergangen.gründe:
+            raise Sperre(*übergangen.gründe)
+        self._stellen.update(übergangen.stellen)
+        self._bewegungsphase.angebotBeenden()
+        einheit = einheitVon(self._beideSpieler, übergangen.gezogenes)
+        self._protokoll.eintragen(einheit, spieler, übergangen.angehalten)
+
+    def _ziehtDerSpielerAmZug(self, modell: Modell) -> bool:
+        spieler = self._amZug
+        return (
+            self._phase is Phase.bewegungsphase
+            and spieler is not None
+            and modell in spieler.armee.modelle
+        )
+
+    def _ebeneDes(self, modell: Modell) -> dict[Modell, Stelle]:
         einheit = einheitVon(self._beideSpieler, modell)
-        ebene = self._auswahl.ebene(einheit, modell, self._stellen)
-        gegner = {
+        return self._auswahl.ebene(einheit, modell, self._stellen)
+
+    def _stellenDesGegners(self) -> dict[Modell, Stelle]:
+        spieler = self._amZug
+        return {
             anderes: ort
             for anderes, ort in self._stellen.items()
-            if anderes not in spieler.armee.modelle
+            if spieler is None or anderes not in spieler.armee.modelle
         }
+
+    def _stellenMitGründen(self, modell: Modell, stelle: Stelle) -> StellenMitGründen:
+        if not self._ziehtDerSpielerAmZug(modell):
+            return {}, set()
         return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            ebene, modell, stelle, self._stellen, gegner
+            self._ebeneDes(modell), modell, stelle, self._stellen, self._stellenDesGegners()
         )
 
     def modellAnklicken(self, modell: Modell) -> None:
@@ -167,6 +193,7 @@ class Schlacht:
         self._auswahl.auswählen(einheit)
 
     def karteAnklicken(self, stelle: Stelle) -> None:
+        self._bewegungsphase.angebotBeenden()
         einheit = self._einheitMitGrenzen()
         if einheit is not None:
             ebene = self._auswahl.ebeneDerAuswahl(self._stellen)
@@ -208,10 +235,12 @@ class Schlacht:
         return self._bewegungsphase.vorrückwurf(einheit)
 
     def vorrücken(self) -> None:
+        self._bewegungsphase.angebotBeenden()
         if self.vorrückenAngeboten:
             self._bewegungsphase.vorrückenBeginnen(self._auswahl.einheit)
 
     def vorrückenZurücknehmen(self) -> None:
+        self._bewegungsphase.angebotBeenden()
         if not self.vorrückenZurücknehmenAngeboten:
             return
         einheit = self._auswahl.einheit

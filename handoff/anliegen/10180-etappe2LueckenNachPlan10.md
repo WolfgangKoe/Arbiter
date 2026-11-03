@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik an den Kriterien von [Etappe 2](../../domaene/etappen/02-bewegen.md). Nichts
@@ -55,4 +54,5 @@ zurück, und das *Protokoll* zeigt einen falschen *Grund*.
    ‚Nahkampfreichweite‘ *gemeinsam übergehen* an? A: ja (Ziel). B: erst mit QUE-5.1 in
    Etappe 7 (Anliegen 9940). Empfehlung: A, denn so verlangt es das Ziel.
 
-**Stellungnahme.** 1: BEW-24. 2: MIV-2; Daten: 10340. 3: abgelehnt, Zweck BEW-25, BEW-21.
+**Stellungnahme.** 1: BEW-24. 2: MIV-2, Daten mit 50 mm (10240). 3: abgelehnt, Grund im
+Zweck BEW-25, BEW-21.

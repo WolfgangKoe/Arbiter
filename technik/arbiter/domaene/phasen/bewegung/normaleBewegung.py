@@ -23,6 +23,8 @@ def gründeBeimZiehen(
 ) -> set[Grund]:
     gründe: set[Grund] = set()
     for modell, stelle in neue.items():
+        if stelle == vorige[modell]:
+            continue
         befunde = {
             **befundeDesSetzens(modell, stelle, fremde, eigene),
             Grund.überEineBase: _überEineBase(modell, vorige[modell], stelle, fremde),

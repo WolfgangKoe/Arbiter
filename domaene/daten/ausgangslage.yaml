@@ -4,7 +4,8 @@
 # Je Einheit Fraktion und Datenblatt aus katalog/<fraktion>/datenblaetter.yaml, je Modellart
 # die Zahl ihrer Modelle (technik/architektur/katalog.md K1).
 # Quelle der Zahlen: ArbiterMap/data/poc/units/<datei>:<zeile> (count); Aufteilung auf die
-# Modellarten: Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (count).
+# Modellarten: Arbiter-old/data/wh40k_9e/orks/units.yaml:<zeile> (count). Ohne Datei in
+# ArbiterMap: Arbiter-old/data/rosters/<datei>:<zeile> (models).
 
 Armee:
   - - fraktion: orks
@@ -16,6 +17,10 @@ Armee:
       datenblatt: Warboss
       modelle:
         Warboss: 1          # orks_warboss.yaml:16
+    - fraktion: orks
+      datenblatt: Weirdboy
+      modelle:
+        Weirdboy: 1         # orks.yaml:6, MIV-2.1
   - - fraktion: necrons
       datenblatt: Necron Warriors
       modelle:
@@ -24,3 +29,7 @@ Armee:
       datenblatt: Overlord
       modelle:
         Overlord: 1         # necrons_overlord.yaml:15
+    - fraktion: necrons
+      datenblatt: Canoptek Spyder
+      modelle:
+        Canoptek Spyder: 1  # necrons_test.yaml:17, MIV-3.1

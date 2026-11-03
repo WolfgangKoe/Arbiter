@@ -1,13 +1,26 @@
 from dataclasses import dataclass
 from fractions import Fraction
 
+import pytest
+
+from arbiter.domaene import messen
 from arbiter.domaene.phasen.aufstellen import Aufstellung
-from arbiter.domaene.spielobjekte import Stelle
+from arbiter.domaene.spielobjekte import Modell, Stelle
 from tests.akzeptanz.dienst import stelleImSpielstand
 from tests.akzeptanz.handgriffe import (
     erwarteteStelle,
+    modellZurEbeneMachen,
+    stelleInDerZoneDesSpielersAnDerReihe,
     stellenAllerModelle,
+    wegVon,
 )
+
+abstandBeimAnhalten = Fraction(1, 100)
+
+
+def stelleAn(aufstellung: Aufstellung, ort: tuple[Fraction | int, Fraction | int]) -> Stelle:
+    tiefe, länge = ort
+    return stelleInDerZoneDesSpielersAnDerReihe(aufstellung, tiefe, länge)
 
 
 def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]:
@@ -15,6 +28,35 @@ def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]
         stelleImSpielstand(stelle)
         for stelle in stellenAllerModelle(aufstellung).values()
         if stelle is not None
+    )
+
+
+def nichtAuswählen(aufstellung, einheit, modell): ...
+
+
+mitUndOhneEbene = pytest.mark.parametrize(
+    "ebeneLegen",
+    [nichtAuswählen, modellZurEbeneMachen],
+    ids=["nichtAusgewählt", "ebeneIstEinModell"],
+)
+
+
+def aufDerStrecke(stelle: Stelle, von: Stelle, nach: Stelle) -> bool:
+    wegInX, wegInY = wegVon(von, nach)
+    teilInX, teilInY = wegVon(von, stelle)
+    kollinear = wegInX * teilInY == wegInY * teilInX
+    skalarprodukt = wegInX * teilInX + wegInY * teilInY
+    return kollinear and 0 <= skalarprodukt <= wegInX**2 + wegInY**2
+
+
+def angehaltenVor(
+    modell: Modell, stelle: Stelle, angestoßenes: Modell, stelleDesAngestoßenen: Stelle
+) -> bool:
+    base, angestoßeneBase = modell.base, angestoßenes.base
+    return not messen.überdecken(
+        base, stelle, angestoßeneBase, stelleDesAngestoßenen
+    ) and messen.abstandHöchstens(
+        base, stelle, angestoßeneBase, stelleDesAngestoßenen, abstandBeimAnhalten
     )
 
 

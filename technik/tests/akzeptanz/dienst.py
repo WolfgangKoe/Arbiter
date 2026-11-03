@@ -139,6 +139,61 @@ def körperDerStelle(stelle: Stelle) -> dict[str, float]:
     return {"x": inX, "y": inY}
 
 
+def eingabenDesWeiterrückens(stelle: Stelle, zuvor: tuple[float, float]) -> dict[str, float]:
+    zuvorX, zuvorY = zuvor
+    return {**körperDerStelle(stelle), "zuvorX": zuvorX, "zuvorY": zuvorY}
+
+
+def eingabenNachDerAntwort(antwort, einheit: Einheit, modell: Modell, stelle: Stelle) -> dict:
+    spielstand = antwort.get_json()
+    nummer = einheit.modelle.index(modell) + 1
+    zuvor = stellenDerEinheitIm(spielstand, einheit.name)[nummer]
+    eingaben = eingabenDesWeiterrückens(stelle, zuvor)
+    if spielstand.get("angehaltenAufDemWeg") is True:
+        return {**eingaben, "angehaltenAufDemWeg": True}
+    return eingaben
+
+
+def _alsAbfrage(eingaben: dict) -> dict:
+    return {name: json.dumps(wert) if wert is True else wert for name, wert in eingaben.items()}
+
+
+def stelleBeimWeiterrückenAbfragen(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, eingaben: dict
+):
+    pfad = pfadDesModells(aufstellung, einheit, modell)
+    return dienst.get(f"{pfad}/stelleBeimLoslassen", query_string=_alsAbfrage(eingaben))
+
+
+def mitDenEingabenLoslassen(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, eingaben: dict
+):
+    pfad = pfadDesModells(aufstellung, einheit, modell)
+    return dienst.put(f"{pfad}/stelle", json=eingaben)
+
+
+def _wieWebLiest(zahl: float) -> Fraction:
+    return Fraction(str(zahl)).limit_denominator(10**6)
+
+
+def stelleWieWebSieLiest(zahlen: tuple[float, float]) -> Stelle:
+    zahlX, zahlY = zahlen
+    return Stelle(x=_wieWebLiest(zahlX), y=_wieWebLiest(zahlY))
+
+
+def gezeigteStellen(antwort, einheitenname: str) -> dict[int, Stelle]:
+    stellen = stellenDerEinheitIm(antwort.get_json(), einheitenname)
+    return {nummer: stelleWieWebSieLiest(zahlen) for nummer, zahlen in stellen.items()}
+
+
+def zuvorNachDerAbfrage(
+    dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, stelle: Stelle
+) -> tuple[float, float]:
+    antwort = stelleBeimLoslassenAbfragen(dienst, aufstellung, einheit, modell, stelle)
+    nummer = einheit.modelle.index(modell) + 1
+    return stellenDerEinheitIm(antwort.get_json(), einheit.name)[nummer]
+
+
 def modellLoslassen(
     dienst, aufstellung: Aufstellung, einheit: Einheit, modell: Modell, stelle: Stelle
 ):

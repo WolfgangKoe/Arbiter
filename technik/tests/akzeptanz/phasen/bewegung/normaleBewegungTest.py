@@ -133,7 +133,7 @@ def testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells(
     (modell,) = warboss.modelle
     ziel = versetzt(schlachtInDerBewegungsphase.stelle(modell), ausDerZoneHinaus)
 
-    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel)
+    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel).stellen
 
     assert stellen == {modell: ziel}
 
@@ -146,7 +146,7 @@ def testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModel
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     ziel = versetzt(davor[gezogenes], schrägOhneHindernis)
 
-    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(gezogenes, ziel)
+    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(gezogenes, ziel).stellen
 
     assert stellen == stellenVersetzt(davor, schrägOhneHindernis)
 
@@ -169,7 +169,7 @@ def testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegu
     davor = schlachtInDerBewegungsphase.stelle(modell)
     ziel = versetzt(davor, zuWeitNachOsten("Warboss", "Warboss"))
 
-    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel)
+    stellen = schlachtInDerBewegungsphase.stellenBeimLoslassen(modell, ziel).stellen
 
     (stelle,) = stellen.values()
     assert hältAnDerBewegungsweite(davor, stelle, bewegungsweite("Warboss", "Warboss"))

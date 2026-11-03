@@ -5,6 +5,8 @@ Begriff | englischer Regelbegriff | Code-Bezeichner | Definition
 Abstand | distance | abstand | Kürzeste waagrechte Entfernung zwischen den *Bases* zweier *Modelle*, in *Zoll* (`core_rules.txt:464`); ohne Gelände stehen alle *Modelle* auf einer Ebene (`domaene/ziel.md`). *Bases*, die sich berühren oder *überdecken*, haben den *Abstand* 0.
 am Zug | – | amZug | Zustand des einen *Spielers*, dessen Zug in der laufenden *Schlachtrunde* läuft; vor dem *ersten Zug* und nach der *Schlacht* ist es keiner (`core_rules.txt:639`).
 an der Reihe | – | anDerReihe | Zustand des einen *Spielers*, der als Nächster eine *Einheit* aufstellt; zeitweise ist es keiner.
+Angebot | – | Angebot | Was Arbiter nach BEW-8.3 bis zur nächsten Handlung zum *gemeinsam übergehen* bereithält: die *Modelle* der *Ebene*, das gezogene *Modell* und den Punkt des Loslassens (BEW-8.3, 8.4).
+Anteile | – | Anteile | Je Anhalten nach BEW-3.1, 6.1 und 6.2 der Anteil der geraden Strecke beim Ziehen, bis zu dem die gezogenen *Modelle* kämen; 1 ist die ganze Strecke, von denen unter 1 gilt der kleinste (BEW-6.3).
 Armee | army | Armee | Alle *Modelle* unter dem Befehl eines *Spielers*, in *Einheiten* gegliedert (`core_rules.txt:305`, `:321`, `:420`).
 Armeeliste | – | Armeeliste | Spalte neben der *Karte* mit den nicht *aufgestellten* *Einheiten* eines *Spielers*, in der er eine per Klick auswählt; kein Ziel zum Hineinziehen. Jeder *Spieler* hat eine (Anliegen 145 F1 A, 2220 F4 A, 2221 F1 A, Vorbild `Arbiter-old/src/uiLayout/armyList.py`).
 aufgestellt | deployed | aufgestellt | Zustand einer *Einheit*, für die *Aufstellen der Einheit beenden* gelungen ist (`core_rules.txt:2322`).
@@ -67,3 +69,4 @@ Vorrückwurf | Advance roll | vorrückwurf | Ein W6, den die *Spieler* für eine
 Zoll | inch | Zoll | Maßeinheit jeder Entfernung (`core_rules.txt:464`).
 zurücklegen | – | zurücklegen | Handlung, die alle *gesetzten* *Modelle* der *Einheit in Aufstellung* von der *Karte* nimmt, gleich welche *Ebene* sie hat; danach ist keines *gesetzt* (Anliegen 890 F1, 2062, 2220 F2).
 überdecken | – | überdecken | Zwei *Bases* überdecken sich, wenn sie mehr als Randpunkte gemeinsam haben; sich berühren ist kein Überdecken (Anliegen 09 F12 A, git).
+Übergangen | – | Übergangen | Ergebnis von *gemeinsam übergehen* nach BEW-8.4: das gezogene *Modell*, die neuen *Stellen* der gezogenen *Modelle*, die *Gründe*, die dort weiter sperren, und die *Gründe* des übergangenen Anhaltens für den *Eintrag* (BEW-8.5).

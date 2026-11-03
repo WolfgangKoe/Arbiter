@@ -3,7 +3,8 @@
 Abschnitt der *Bewegungsphase*, die anderen: [Architektur](../../../architektur.md#schichten);
 was alle Phasen teilen: [Querschnitt](../querschnitt.md).
 
-V10 in jeder *Phase* der *Schlacht*: `stellenBeimLoslassen(modell, stelle)` nennt jedes
+V10 in jeder *Phase* der *Schlacht*: `stellenBeimLoslassen` (Signatur:
+[Aufstellen · Ziehen](../aufstellen/ziehen.md)) nennt in `stellen` jedes
 *Modell*, das `modellLoslassen` dort *setzen* würde (BEW-1.7), mit Anhalten an der
 *Bewegungsweite* ([V16](handlungen.md)), ohne Hineinrücken, mit denselben Wächtern und
 *Gründen*: bei einer *Sperre* 409, die *Karte* zeigt weiter die letzte 200 dieses Zugs.

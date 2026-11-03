@@ -4,8 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach Anliegen 9420 steht das gestrichene BEW-2.7
@@ -21,4 +20,8 @@ ganze *Einheit* um weniger als den *Durchmesser* ihrer *Bases*.
 
 Wann: Technikphase, vor dem Item anhaltenAufDemWeg.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in
+[einheitAlsGanzesTest.py](../../technik/tests/akzeptanz/phasen/bewegung/einheitAlsGanzesTest.py):
+die ganze *Einheit* um einen Radius entlang ihrer Reihe, jedes *Modell* endet auf der vorigen
+*Stelle* des nächsten. Vor dem Item grün: `Bewegungsphase.stellenMitGründenNachDemZiehen`
+mit `normaleBewegung.gründeBeimZiehen` prüft nur gegen *Modelle* außerhalb der *Ebene*.

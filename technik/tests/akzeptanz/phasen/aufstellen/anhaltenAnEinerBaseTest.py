@@ -8,6 +8,7 @@ from playwright.sync_api import expect
 from tests.akzeptanz.anhalten import (
     freiesZiel,
     hineinrückenOhneBase,
+    mitUndOhneEbene,
     stellenAlsZahlen,
     stellenDesZugs,
 )
@@ -25,7 +26,6 @@ from tests.akzeptanz.handgriffe import (
     millionstel,
     modelleAnStellenSetzen,
     modelleSetzen,
-    modellZurEbeneMachen,
     radiusInZoll,
     stelleInDerZoneDesSpielersAnDerReihe,
     tiefeDerZone,
@@ -145,16 +145,6 @@ zügeFürDieAbfrage = pytest.mark.parametrize(
 )
 
 
-def nichtAuswählen(aufstellung, einheit, modell): ...
-
-
-mitUndOhneEbene = pytest.mark.parametrize(
-    "ebeneLegen",
-    [nichtAuswählen, modellZurEbeneMachen],
-    ids=["nichtAusgewählt", "ebeneIstEinModell"],
-)
-
-
 @zügeFürDieAbfrage
 @mitUndOhneEbene
 def testAuf26_5DieAbfrageNenntNurDasAlleinGezogeneModellUndSetztNichts(
@@ -168,7 +158,7 @@ def testAuf26_5DieAbfrageNenntNurDasAlleinGezogeneModellUndSetztNichts(
     modelleAnStellenSetzen(aufstellung, einheit, [davor, stelleImWeg])
     ebeneLegen(aufstellung, einheit, modell)
 
-    abfrage = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens)
+    abfrage = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens).stellen
 
     assert set(abfrage) == {modell}
     assert aufstellung.stelle(modell) == davor
@@ -187,7 +177,7 @@ def testAuf26_5BeimLoslassenStehtDasModellDortWoDieAbfrageEsZeigte(
     )
     modelleAnStellenSetzen(aufstellung, einheit, [davor, stelleImWeg])
     ebeneLegen(aufstellung, einheit, modell)
-    gezeigt = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens)
+    gezeigt = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens).stellen
 
     aufstellung.modellLoslassen(modell, stelleDesLoslassens)
 
@@ -204,7 +194,7 @@ def testAuf26_5DerDienstNenntDieStelleBeimLoslassenNurDesGezogenenModells(
         aufstellung, radiusInZoll(modell), zug
     )
     modelleAnStellenSetzen(aufstellung, boyz, [davor, stelleImWeg])
-    erwartet = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens)
+    erwartet = aufstellung.stellenBeimLoslassen(modell, stelleDesLoslassens).stellen
     spielstandDavor = spielstandVon(dienst)
 
     antwort = stelleBeimLoslassenAbfragen(dienst, aufstellung, boyz, modell, stelleDesLoslassens)

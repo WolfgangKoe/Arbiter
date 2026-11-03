@@ -425,3 +425,37 @@ def testEinAngenommenesWartendesAnliegenIstAbgehakt(tmp_path, gitRepo):
     wartendesAnliegen(tmp_path, 7004, "Technikphase", "angenommen")
     fortschrittSchreiben(tmp_path)
     assert "- [x] Architekt: Anliegen 7004 Wartet 7004\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineSchonStehendeZeileBleibtOffenWennDasAnliegenAufEineNummerWartet(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7005, "Technikphase")
+    fortschrittSchreiben(tmp_path)
+    wartendesAnliegen(tmp_path, 7005, "7001")
+    fortschrittSchreiben(tmp_path)
+    assert "- [ ] Testautor: Anliegen 7005 Wartet 7005\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineSchonStehendeZeileIstAbgehaktWennDasAnliegenAngenommenOhneWartenIst(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7006, "Technikphase")
+    fortschrittSchreiben(tmp_path)
+    schreiben(
+        tmp_path,
+        "handoff/anliegen/7006-wartet.md",
+        "# Wartet 7006\n\nForm: Kritik\nVon: Architekt\nAn: Testautor\nRunde: 1/3\n"
+        "Status: angenommen\n\n## Runde 1\n",
+    )
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Testautor: Anliegen 7006 Wartet 7006\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineZeileAusDemCommitDesZyklusKommtNachDemVerlustZurück(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7007, "Technikphase")
+    fortschrittSchreiben(tmp_path)
+    gitRepo.festhalten("Fortschritt")
+    wartendesAnliegen(tmp_path, 7007, "7001")
+    schreiben(tmp_path, "handoff/plan.md", plan.read_text(encoding="utf-8").replace("7007", "0"))
+    fortschrittSchreiben(tmp_path)
+    assert "- [ ] Testautor: Anliegen 7007 Wartet 7007\n" in plan.read_text(encoding="utf-8")

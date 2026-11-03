@@ -8,7 +8,7 @@ import pytest
 from playwright.sync_api import Route
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.anhalten import stellenAlsZahlen
+from tests.akzeptanz.anhalten import stelleAn, stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     kreiseDerKarte,
@@ -16,24 +16,34 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import (
     auswählen,
+    eingabenDesWeiterrückens,
     imUmfangDes,
     körperDerStelle,
     losgelassenDesVertrags,
+    mitDenEingabenLoslassen,
+    modellLoslassen,
     pfadDesGezogenenImBeispiel,
     sperreDesVertrags,
     spielstandDesVertrags,
+    stelleBeimLoslassenAbfragen,
     stelleBeimLoslassenDesVertrags,
+    stelleBeimWeiterrückenAbfragen,
     stelleDesLoslassensImBeispiel,
+    stelleImSpielstand,
+    stellenDerEinheitIm,
     stellenDesVertrags,
+    zuvorNachDerAbfrage,
 )
 from tests.akzeptanz.handgriffe import (
     breiteDesSpielfelds,
+    modelleAnStellenSetzen,
     modelleSetzen,
     stelleInDerZoneDesSpielersAnDerReihe,
 )
 from tests.akzeptanz.ziehen import (
     Abfragen,
     alleinUndAlsEbene,
+    alsEbeneZiehen,
     aufDieAntwortenWarten,
     bildaufbauAbwarten,
     halten,
@@ -133,3 +143,44 @@ def testAuf28_1DieSeiteSendetNebenDerKarteDenPunktDerLetztenStelleAuchNachEinerS
     )
     assert anfrage.post_data_json == punktDerLetztenStelle
     assert kreiseDerKarte(seite) == {(modell["x"], modell["y"]) for modell in modelle}
+
+
+def testAuf28_2NachDemAnhaltenSetztDerDienstDasModellWoDieZweiteAbfrageEsZeigte(
+    dienst, aufstellungNachDerZonenwahl, boyz
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    gezogenes, *_ = boyz.modelle
+    davor, stelleImWeg = stelleAn(aufstellung, (4, 20)), stelleAn(aufstellung, (6, 23))
+    modelleAnStellenSetzen(aufstellung, boyz, [davor, stelleImWeg])
+    zuvor = zuvorNachDerAbfrage(
+        dienst, aufstellung, boyz, gezogenes, stelleAn(aufstellung, (6, 20))
+    )
+    eingaben = eingabenDesWeiterrückens(stelleImWeg, zuvor)
+    abgefragt = stelleBeimWeiterrückenAbfragen(dienst, aufstellung, boyz, gezogenes, eingaben)
+
+    antwort = mitDenEingabenLoslassen(dienst, aufstellung, boyz, gezogenes, eingaben)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert stellenDerEinheitIm(antwort.get_json(), "Boyz") == {
+        **stellenDerEinheitIm(abgefragt.get_json(), "Boyz"),
+        2: stelleImSpielstand(stelleImWeg),
+    }
+
+
+def testAuf28_2NachDemVerschiebenSetztDerDienstDieGanzeEinheitWoDieAbfrageSieZeigte(
+    dienst, aufstellungNachDerZonenwahl, necronWarriors, warriorsVorDemOverlord
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    gesetzte, zielAmOverlord = warriorsVorDemOverlord
+    (gezogenes, _), *_ = gesetzte
+    alsEbeneZiehen(aufstellung, necronWarriors)
+    abgefragt = stelleBeimLoslassenAbfragen(
+        dienst, aufstellung, necronWarriors, gezogenes, zielAmOverlord
+    )
+
+    antwort = modellLoslassen(dienst, aufstellung, necronWarriors, gezogenes, zielAmOverlord)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert stellenDerEinheitIm(antwort.get_json(), "Necron Warriors") == stellenDerEinheitIm(
+        abgefragt.get_json(), "Necron Warriors"
+    )

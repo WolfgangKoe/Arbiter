@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Kritik: Randfälle abseits des Happy Path, Form von Hilfsfunktionen, keine
@@ -42,3 +41,12 @@ Mutationslauf einen Überlebenden; bleibt 4, sucht ein Leser zwei Raster. Je Pun
    lassen.
 
 **Stellungnahme.**
+1. Entfällt: Das Übergehen über `übergehen` und `Sperre.übergehbar` ist ausgebaut;
+   `Schlacht.modellLoslassen` kennt nur noch Gründe, das gemeinsame Übergehen läuft über
+   `Schlacht.gemeinsamÜbergehen` und `Bewegungsphase.übergangen`, das ‚keine Kohärenz‘ als
+   Grund weiter sperrt.
+2. Entfällt: Die Bedingung ist weg, `modellLoslassen` fragt nur `if gründe`.
+3. Entfällt: Das Angebot endet im Code bei jeder neuen Handlung (`angebotBeenden`).
+4. Angenommen, noch offen: `.spielbereich` und `.spalte` in
+   [komponenten.css](../../technik/frontend/komponenten.css) lege ich zusammen, sobald ein
+   Bildschirmtest die Form trägt; ohne Test ändere ich das Mockup-CSS nicht.
