@@ -13,7 +13,7 @@ bleibt mit *Einheitenebene* und *Modellebene* (F2 B). `technik/architektur/` sag
 und *Ebene*, auch in Verträgen.
 
 **Kosten.** Laut 7800 rund 18 Stellen *Karte* und 33 *Ebene*. Ohne diesen Schritt fehlt die
-Umbenennung in Review 10 ([11780](11780-umbenennungAus7800OhneSchritt.md)).
+Umbenennung in Review 10 (Anliegen 11780).
 
 **Gegenvorschlag.** Wann: nach [11820](11820-umbenennenGlossarUndAnforderungen.md) (Glossar),
 gleichzeitig mit [11821](11821-umbenennenTests.md) und [11822](11822-umbenennenCode.md); vor

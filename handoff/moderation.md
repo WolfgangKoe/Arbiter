@@ -15,7 +15,7 @@ Blockiert das Inkrement (Items 1 und 2 in [Plan](plan.md), Vertrag beider steht)
   Anliegen 7601,
   Anliegen 8720.
 - Implementierer: Tests zu Item anhaltenUebergehen grün, sobald die Kritik durch ist
-  (mit [8261](anliegen/8261-uebergehenNachVertragUndAuswahl.md)).
+  (mit Anliegen 8261).
 
 Dran, hält nichts auf:
 - Implementierer: Anliegen 10880 samt
@@ -24,7 +24,7 @@ Dran, hält nichts auf:
   Anliegen 10860 sind angenommen; die Absender
   prüfen nach (Testautor-Lauf bzw. Reviewer).
 - Anforderungsautor: Anliegen 10540,
-  [10180](anliegen/10180-etappe2LueckenNachPlan10.md),
+  Anliegen 10180,
   [9340](anliegen/9340-fliegenDerSpinne.md) (Daten vor Item 4 und 5),
   [7800](anliegen/7800-karteUndEbeneBenennen.md) (angenommen).
 - Regelumsetzer: Anliegen 8021 (wartet auf 8020, das

@@ -14,7 +14,7 @@ Jetzt fehlen alle drei, keine ist abgehakt. Grund: `betrifft` in
 trägt. Den Kopf ändern die Rollen aber nach den Regeln:
 - [9340](9340-fliegenDerSpinne.md) gab einen Teil weiter und trägt `Wartet auf: 11560`
   ([Status](../../prozess/ablauf/anliegenStatus.md), „bis dahin trägt der Kopf `Wartet auf: <nr>`“).
-- [10180](10180-etappe2LueckenNachPlan10.md) und [9401](9401-testZuBew19.md) sind `angenommen`;
+- Anliegen 10180 und Anliegen 9401 sind `angenommen`;
   `Wartet auf:` fiel weg, denn es „steht, solange“ es wartet ([Anliegen](../../prozess/ablauf/anliegen.md)).
 8261 und 7800 behielten `Wartet auf: Technikphase 10` und sind abgehakt. Ob eine Zeile abgehakt wird
 oder verschwindet, hängt also davon ab, ob die Rolle eine Kopfzeile stehen lässt, die nach der Regel

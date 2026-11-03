@@ -14,7 +14,7 @@ bleibt mit *Einheitenebene* und *Modellebene* (F2 B). Die Akzeptanztests sagen n
 
 **Kosten.** Laut 7800 rund 112 Stellen *Karte* (49 Testnamen) und 309 *Ebene* (37 Testnamen) in
 den Tests, mechanisch. Ohne diesen Schritt fehlt die Umbenennung in Review 10
-([11780](11780-umbenennungAus7800OhneSchritt.md)).
+(Anliegen 11780).
 
 **Gegenvorschlag.** Wann: nach [11820](11820-umbenennenGlossarUndAnforderungen.md) (Glossar),
 gleichzeitig mit [11822](11822-umbenennenCode.md); vor „Reviewer: DoD über das Inkrement“

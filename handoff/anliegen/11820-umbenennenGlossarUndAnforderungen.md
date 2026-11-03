@@ -14,7 +14,7 @@ Anforderungen sagen noch *Karte* und *Ebene*; sie sind damit veraltet.
 
 **Kosten.** Rund 64 Stellen *Karte* in 28 Dateien, 29 *Ebene* in 11, Glossar 12 Zeilen (Zahlen aus
 7800). Kennungen bleiben. Ohne diesen Schritt fehlt die Umbenennung in Review 10
-([11780](11780-umbenennungAus7800OhneSchritt.md)).
+(Anliegen 11780).
 
 **Gegenvorschlag.** Wann: nach „Planer: Item ruhigeKarte gelöscht“, vor „Reviewer: DoD über das
 Inkrement“ (7800 F3: am Ende der Technikphase, ohne laufende Arbeit zu unterbrechen). Zuerst dieses
