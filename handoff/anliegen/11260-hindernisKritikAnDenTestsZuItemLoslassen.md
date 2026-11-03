@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Drei neue Dienst-Tests vergleichen das Beispiel des Vertrags ganz statt nach T3 und werden rot, sobald Weirdboy oder Spinne in einer Armee stehen: testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag (losgelassen.json), testAuf16_7DerDienstNenntNachDemZurücklegenKeineStelleWieDasBeispielImVertrag (Spielstand gegen zurückgelegt.json) und testAuf16_7DerDienstSetztNachDemZurücklegenNichtsWieDasBeispielImVertrag (zurückgelegt.json). Vergleiche mit imUmfangDes aus dienst.py wie in einheitZuruecklegenTest.py. Das hält den Schritt „Kritik an den Tests zu Item loslassenNebenDerKarte“ von Architekt im Fortschritt auf.

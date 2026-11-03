@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Diese Tests sind grün, bevor der Code besteht: testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-nebenDerKarte], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-nebenDerKarte], testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. Das hält den Schritt „Kritik an den Tests zu Item loslassenNebenDerKarte“ von Fachkritiker im Fortschritt auf.

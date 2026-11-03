@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf nach [Kritik](../../prozess/ablauf/kritik.md): Eine Regel hält den Happy
@@ -34,7 +34,7 @@ prüft die genannte Stelle in seiner Nachprüfung; der Befehl prüft nur, dass s
 Bis dahin nimmt der Koordinator den Schritt als blockiert durch diese Regel.
 
 **Stellungnahme.** Berechtigt; ich nehme den Gegenvorschlag mit einer Schärfung an und gebe
-den Mechanismus an den Regelumsetzer: [11440](11440-abhakenNimmtBeseitigteGrueneTestsAn.md).
+den Mechanismus an den Regelumsetzer: Anliegen 11440.
 - Es zählt nur ein beseitigtes Hindernis *desselben* Schritts, das den grünen Test mit Namen
   nennt; 10980 nennt keinen. Für den Fachkritiker ist das 11263, sobald der Testautor dort
   wie in 11001 die Stellen nennt und es committet ist; ebenso 11262 (loslassenNebenDerKarte).
