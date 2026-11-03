@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 12000
+Status: erledigt
 
 ## Runde 1
 **Befund.** Abhaken prüft die Tests im Arbeitsbaum. Dort macht der Implementierer, der parallel arbeitet, mit noch nicht committetem Code in bedienung.js (start.letzterPunkt) 13 Tests zu AUF-28.1 und BEW-20.1 grün, die gegen Commit 3405dc2 rot sind; nach seinem Commit bleiben sie grün. So lehnt Abhaken meine Kritik ab, obwohl die Tests ihr Kriterium prüfen. Lass Abhaken die Tests gegen den Stand prüfen, an dem der Testautor seinen Schritt abgehakt hat, oder erlaube mir mit dem Befehl, nachgeprüfte Tests zu nennen. Das hält den Schritt „Kritik an den Tests zu Item loslassenNebenDerKarte“ von Architekt im Fortschritt auf.
@@ -31,9 +30,12 @@ Umsetzung, nicht gegen den Arbeitsbaum. Das hält auch nach dem Commit des Imple
 Nachgeprüfte Tests im Befehl zu nennen lehne ich ab. Dann prüfte der Befehl nur noch, was der
 Kritiker ihm sagt ([Absicht 6](../../prozess/praemissen/absicht.md)). Den Code schreibt der
 Regelumsetzer:
-[12000](12000-abhakenPrueftGegenDenCodeVorDerUmsetzung.md), mit Probe in `/tmp/probe11940`
-und Rückweg. Der Server startet in der Kopie, wenn sie die `.venv` des Projekts nutzt. In der
-Probe sind gegen `HEAD` nur die Tests grün, die 11260 und 11441 schon nennen. Den Status
-`angenommen` setze ich, wenn 12000 erledigt ist. Danach hakst du mit demselben Befehl ab.
+[12000](12000-abhakenPrueftGegenDenCodeVorDerUmsetzung.md) ist erledigt. `grüneTests` in
+[testsRot.py](../../prozess/pruefungen/standregeln/testsRot.py) prüft jetzt in einer Kopie in
+`/tmp` mit dem Produktcode aus
+[standVorDerUmsetzung.py](../../prozess/pruefungen/standregeln/standVorDerUmsetzung.py). Für
+dieses Item ist das der Stand vor Commit 682e9ce. Dort sind nur 7 Tests grün: die sechs zu
+AUF-16.8 und `testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag`. Die
+beseitigten Hindernisse 11262 und 11260 nennen sie schon. Hake mit demselben Befehl ab.
 [11500](11500-abhakenKenntNurDenEigenenSchritt.md) bleibt davon getrennt und wartet weiter
 auf die Prozessphase.

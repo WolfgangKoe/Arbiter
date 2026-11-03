@@ -8,7 +8,7 @@ import pytest
 from playwright.sync_api import Route
 
 from arbiter.domaene.spielobjekte import Stelle
-from tests.akzeptanz.anhalten import stelleAn, stellenAlsZahlen
+from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke, stelleAn, stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     kreiseDerKarte,
@@ -17,6 +17,7 @@ from tests.akzeptanz.bildschirm import (
 from tests.akzeptanz.dienst import (
     auswählen,
     eingabenDesWeiterrückens,
+    gezeigteStellen,
     imUmfangDes,
     körperDerStelle,
     losgelassenDesVertrags,
@@ -38,7 +39,9 @@ from tests.akzeptanz.handgriffe import (
     breiteDesSpielfelds,
     modelleAnStellenSetzen,
     modelleSetzen,
+    radiusInZoll,
     stelleInDerZoneDesSpielersAnDerReihe,
+    versetzt,
 )
 from tests.akzeptanz.ziehen import (
     Abfragen,
@@ -153,22 +156,24 @@ def testAuf28_2NachDemAnhaltenSetztDerDienstDasModellWoDieZweiteAbfrageEsZeigte(
     dienst, aufstellungNachDerZonenwahl, boyz
 ):
     aufstellung = aufstellungNachDerZonenwahl
-    gezogenes, *_ = boyz.modelle
+    gezogenes, angestoßenes, *_ = boyz.modelle
     davor, stelleImWeg = stelleAn(aufstellung, (4, 20)), stelleAn(aufstellung, (6, 23))
+    zuvorGezeigt = stelleAn(aufstellung, (6, 20))
     modelleAnStellenSetzen(aufstellung, boyz, [davor, stelleImWeg])
-    zuvor = zuvorNachDerAbfrage(
-        dienst, aufstellung, boyz, gezogenes, stelleAn(aufstellung, (6, 20))
-    )
+    zuvor = zuvorNachDerAbfrage(dienst, aufstellung, boyz, gezogenes, zuvorGezeigt)
     eingaben = eingabenDesWeiterrückens(stelleImWeg, zuvor)
     abgefragt = stelleBeimWeiterrückenAbfragen(dienst, aufstellung, boyz, gezogenes, eingaben)
 
     antwort = mitDenEingabenLoslassen(dienst, aufstellung, boyz, gezogenes, eingaben)
 
+    gesetzt = gezeigteStellen(antwort, "Boyz")[1]
     assert antwort.status_code == HTTPStatus.OK
     assert stellenDerEinheitIm(antwort.get_json(), "Boyz") == {
         **stellenDerEinheitIm(abgefragt.get_json(), "Boyz"),
         2: stelleImSpielstand(stelleImWeg),
     }
+    assert aufDerStrecke(gesetzt, zuvorGezeigt, stelleImWeg)
+    assert angehaltenVor(gezogenes, gesetzt, angestoßenes, stelleImWeg)
 
 
 def testAuf28_2DieSeiteSendetBeimLoslassenDieEingabenDerLetztenAbfrage(
@@ -194,6 +199,7 @@ def testAuf28_2NachDemVerschiebenSetztDerDienstDieGanzeEinheitWoDieAbfrageSieZei
     aufstellung = aufstellungNachDerZonenwahl
     gesetzte, zielAmOverlord = warriorsVorDemOverlord
     (gezogenes, _), *_ = gesetzte
+    umDenSenkrechtenTeil = (Fraction(0), radiusInZoll(gezogenes))
     alsEbeneZiehen(aufstellung, necronWarriors)
     abgefragt = stelleBeimLoslassenAbfragen(
         dienst, aufstellung, necronWarriors, gezogenes, zielAmOverlord
@@ -205,3 +211,7 @@ def testAuf28_2NachDemVerschiebenSetztDerDienstDieGanzeEinheitWoDieAbfrageSieZei
     assert stellenDerEinheitIm(antwort.get_json(), "Necron Warriors") == stellenDerEinheitIm(
         abgefragt.get_json(), "Necron Warriors"
     )
+    assert gezeigteStellen(antwort, "Necron Warriors") == {
+        nummer: versetzt(stelle, umDenSenkrechtenTeil)
+        for nummer, (_, stelle) in enumerate(gesetzte, start=1)
+    }
