@@ -125,7 +125,6 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Reviewer: Kritik am Code zu Item ruhigeKarte
 - [ ] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
-- [ ] Anforderungsautor: Anliegen 10180 Etappe 2: Zurücksetzen, Ork-Psioniker, Weiterziehen nach dem Übergehen
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [x] Anforderungsautor: Anliegen 7800 Karte und Ebene klarer benennen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal

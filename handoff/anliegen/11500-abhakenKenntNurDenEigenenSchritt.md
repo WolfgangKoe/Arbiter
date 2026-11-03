@@ -14,7 +14,7 @@ zählt einen grünen Test nur, wenn ein beseitigtes Hindernis *desselben Schritt
 (`abhakenTest.py`: „Hindernis des anderen Kritikers zählt nicht“). Beim Abhaken von „Kritik an
 den Tests zu Item loslassenNebenDerKarte“ entstand so
 [11441](11441-hindernisKritikAnDenTestsZuItemLoslassen.md) für sechs Tests zu AUF-16.8, deren
-Stelle der Testautor in [11262](11262-hindernisKritikAnDenTestsZuItemLoslassen.md) schon genannt
+Stelle der Testautor in Anliegen 11262 schon genannt
 hat und der Fachkritiker abgenommen hat. Die Tests eines Items haben zwei Kritiker; jeder grüne
 Test kostet so zwei Anliegen und zwei Antworten des Testautors mit derselben Stelle.
 
