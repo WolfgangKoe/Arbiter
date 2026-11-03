@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf (Hook, `glossarTest.py`), Item loslassenNebenDerKarte. Der Vertrag
