@@ -7,6 +7,7 @@ import pytest
 from playwright.sync_api import expect
 
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     knopfDerSeite,
@@ -22,6 +23,7 @@ from tests.akzeptanz.dienst import (
     auswählen,
     dienstFürSchlacht,
     gemeinsamÜbergehen,
+    gezeigteStellen,
     kennungenDerEinheiten,
     modellLoslassen,
     schlachtNachSchlüsselnDes,
@@ -298,20 +300,22 @@ def testBew8_4AnDerSpielfeldkanteHältArbiterDasModellAuchBeimÜbergehenAn(
     assert liegtAufDerGeradenVon(südlich, ziel, danach)
 
 
-def testBew8_4EineÜberdeckteBaseSperrtUndDasAngebotBleibt(
+def testBew8_4VorEinerFremdenBaseHältArbiterDasModellAuchBeimÜbergehenAufDerStreckeAn(
     schlachtInDerBewegungsphase, warboss, overlord
 ):
     boss = vorDenOverlord(schlachtInDerBewegungsphase, warboss, overlord, Fraction(7))
+    (modellDesAnderenSpielers,) = overlord.modelle
+    stelleDesOverlord = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
     ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), (Fraction(8), nichts))
     angehaltenLoslassen(schlachtInDerBewegungsphase, boss, ziel)
     angehalten = schlachtInDerBewegungsphase.stelle(boss)
 
-    gründe = sperrgründe(schlachtInDerBewegungsphase.gemeinsamÜbergehen)
+    schlachtInDerBewegungsphase.gemeinsamÜbergehen()
 
-    assert gründe == {Grund.baseÜberdeckt}
-    assert schlachtInDerBewegungsphase.stelle(boss) == angehalten
-    assert list(schlachtInDerBewegungsphase.protokoll) == []
-    assert schlachtInDerBewegungsphase.gemeinsamÜbergehenAngeboten is True
+    danach = schlachtInDerBewegungsphase.stelle(boss)
+    assert aufDerStrecke(danach, angehalten, ziel)
+    assert angehaltenVor(boss, danach, modellDesAnderenSpielers, stelleDesOverlord)
+    assert schlachtInDerBewegungsphase.gemeinsamÜbergehenAngeboten is False
 
 
 @pytest.mark.parametrize("ohneAngebot", ["vorDemLoslassen", "nachDemÜbergehen"])
@@ -387,18 +391,23 @@ def testBew8_4DerDienstÄndertBeimZweitenÜbergehenNichts(
     assert antwort.get_json() == davor
 
 
-def testBew8_4DerDienstAntwortetBeiEinerSperreMitDemGrundUndDemStandWieDavor(
+def testBew8_4DerDienstSetztDasModellBeimÜbergehenVorDerFremdenBaseAufDerStrecke(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, overlord
 ):
     boss = vorDenOverlord(schlachtInDerBewegungsphase, warboss, overlord, Fraction(7))
+    (modellDesAnderenSpielers,) = overlord.modelle
+    stelleDesOverlord = schlachtInDerBewegungsphase.stelle(modellDesAnderenSpielers)
     ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), (Fraction(8), nichts))
     modellLoslassen(dienstDerSchlacht, beendeteAufstellung, warboss, boss, ziel)
-    davor = spielstandVon(dienstDerSchlacht)
+    angehalten = schlachtInDerBewegungsphase.stelle(boss)
 
     antwort = gemeinsamÜbergehen(dienstDerSchlacht)
 
-    assert antwort.status_code == HTTPStatus.CONFLICT
-    assert antwort.get_json() == {"gründe": [Grund.baseÜberdeckt.value], "spielstand": davor}
+    assert antwort.status_code == HTTPStatus.OK
+    (gesetzt,) = gezeigteStellen(antwort, "Warboss").values()
+    assert aufDerStrecke(gesetzt, angehalten, ziel)
+    assert angehaltenVor(boss, gesetzt, modellDesAnderenSpielers, stelleDesOverlord)
+    assert antwort.get_json()["schlacht"]["gemeinsamÜbergehen"] == {"angeboten": False}
 
 
 def testBew8_4DieSeiteSetztNachDemKlickAufGemeinsamÜbergehenAmPunkt(

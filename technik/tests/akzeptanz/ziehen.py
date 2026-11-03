@@ -1,10 +1,12 @@
+import json
 from collections.abc import Callable
 from dataclasses import dataclass
 from fractions import Fraction
 from math import hypot
+from urllib.parse import parse_qs, urlparse
 
 import pytest
-from playwright.sync_api import Locator, Page, Request, Response
+from playwright.sync_api import Locator, Page, Request, Response, Route
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -281,6 +283,47 @@ def nebenDerKarteLoslassen(
     with aufDieHandlungWarten(seite):
         zeiger.loslassen(daneben)
     return gezeigt
+
+
+class WeitergereichteAbfragen:
+    def __init__(self, seite: Page) -> None:
+        self.eingaben: list[dict[str, str]] = []
+        self._antworten: list[dict | None] = []
+        seite.route("**/stelleBeimLoslassen*", self._weiterreichen)
+
+    def _weiterreichen(self, anfrage: Route) -> None:
+        abfrage = parse_qs(urlparse(anfrage.request.url).query)
+        self.eingaben.append({name: wert for name, (wert,) in abfrage.items()})
+        antwort = anfrage.fetch()
+        self._antworten.append(antwort.json() if antwort.ok else None)
+        anfrage.fulfill(response=antwort)
+
+    def letzte200VorJederAbfrage(self) -> list[dict | None]:
+        letzte: dict | None = None
+        vorJeder = []
+        for antwort in self._antworten:
+            vorJeder.append(letzte)
+            if antwort is not None:
+                letzte = antwort
+        return vorJeder
+
+
+def zuvorDerEingaben(eingaben: dict[str, str]) -> tuple[float, ...]:
+    return tuple(float(eingaben[name]) for name in ("zuvorX", "zuvorY") if name in eingaben)
+
+
+def alsKörper(eingaben: dict[str, str]) -> dict:
+    return {name: json.loads(wert) for name, wert in eingaben.items()}
+
+
+def überEinenPunktZiehenUndLoslassen(seite: Page, von: Stelle, über: Stelle, nach: Stelle) -> dict:
+    zeiger = halten(seite, von, über, "maus")
+    abfragen = Abfragen(seite)
+    zeiger.bewegen(punktAufDerKarte(seite, nach))
+    aufDieAntwortenWarten(seite, abfragen)
+    with aufDieHandlungWarten(seite) as antwort:
+        zeiger.loslassen(punktAufDerKarte(seite, nach))
+    return antwort.value.request.post_data_json
 
 
 einenZollJenseitsDerKante = -1

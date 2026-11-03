@@ -171,3 +171,44 @@ def testEinRoterTestVorDemCodeLässtDieKritikAbhaken(tmp_path, monkeypatch):
     assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
     text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
     assert "- [x] Fachkritiker: Kritik an den Tests zu Item stellen\n" in text
+
+
+def produktcodeSetzen(wurzel: Path, wert: str) -> None:
+    schreiben(wurzel, "technik/arbiter/wert.txt", wert)
+
+
+def akzeptanztestVomProduktAbhängig(wurzel: Path) -> None:
+    rumpf = 'assert Path("technik/arbiter/wert.txt").read_text(encoding="utf-8") == "ja"'
+    schreiben(wurzel, ".claude/agents/testautor.md", "---\nname: testautor\n---\n")
+    inhalt = f"from pathlib import Path\n\n\ndef testAuf1_1EinModell():\n    {rumpf}\n"
+    schreiben(wurzel, "technik/tests/akzeptanz/aufTest.py", inhalt)
+
+
+@pytest.mark.usefixtures("plan")
+def testUncommitteterProduktcodeDerEinenTestGrünMachtMeldetKeinHindernis(
+    tmp_path, gitRepo, monkeypatch
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestVomProduktAbhängig(tmp_path)
+    produktcodeSetzen(tmp_path, "nein")
+    gitRepo.festhalten("Stand vor der Umsetzung")
+    produktcodeSetzen(tmp_path, "ja")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == []
+
+
+@pytest.mark.usefixtures("plan")
+def testCommitteterProduktcodeMitHakenDesImplementierersZähltNichtMehr(
+    tmp_path, gitRepo, monkeypatch
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestVomProduktAbhängig(tmp_path)
+    produktcodeSetzen(tmp_path, "nein")
+    gitRepo.festhalten("Stand vor der Umsetzung")
+    produktcodeSetzen(tmp_path, "ja")
+    datei = tmp_path / "handoff/plan.md"
+    haken = "- [x] Implementierer: Tests zu Item stellen grün\n"
+    datei.write_text(datei.read_text(encoding="utf-8") + haken, encoding="utf-8")
+    gitRepo.festhalten("Umsetzung")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == []

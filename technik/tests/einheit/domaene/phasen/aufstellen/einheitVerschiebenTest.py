@@ -23,13 +23,6 @@ def testDieGruppeFolgtDemWegDesGezogenenUndDasGezogeneStehtAmZiel(zehnZoll):
     assert verschoben == {gezogenes: stelleAn(13, 6), zweites: stelleAn(13, 16)}
 
 
-def testEinNochNichtGesetztesModellBewegtDieGruppeNicht(zehnZoll):
-    gesetztes, neues = modellMit(zehnZoll), modellMit(zehnZoll)
-    gruppe = {gesetztes: stelleAn(10, 10)}
-
-    assert verschobeneStellen(gruppe, neues, stelleAn(13, 6)) == {neues: stelleAn(13, 6)}
-
-
 def testEineGruppeInDerZoneBleibtStehen(zehnZoll):
     modell = modellMit(zehnZoll)
 

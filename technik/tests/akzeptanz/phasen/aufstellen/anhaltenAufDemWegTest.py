@@ -16,10 +16,16 @@ from tests.akzeptanz.dienst import (
     gezeigteStellen,
     stelleBeimLoslassenAbfragen,
     stelleBeimWeiterrückenAbfragen,
+    stellenDerEinheitIm,
     zuvorNachDerAbfrage,
 )
 from tests.akzeptanz.handgriffe import modelleAnStellenSetzen, radiusInZoll, versetzt
-from tests.akzeptanz.ziehen import alsEbeneZiehen
+from tests.akzeptanz.ziehen import (
+    WeitergereichteAbfragen,
+    alsEbeneZiehen,
+    zuvorDerEingaben,
+    überEinenPunktZiehenUndLoslassen,
+)
 
 
 def testAuf29_1DerDienstHältDasModellAufDerStreckeVorDerFremdenBaseAn(
@@ -72,6 +78,25 @@ def testAuf29_1DerDienstHältAufDerStreckeAbDerZuvorGezeigtenStelleAn(
     assert antwort.status_code == HTTPStatus.OK
     assert aufDerStrecke(gezeigt, zuvorGezeigt, stelleDesAngestoßenen)
     assert angehaltenVor(gezogenes, gezeigt, angestoßenes, stelleDesAngestoßenen)
+
+
+def testAuf29_1DieSeiteSchicktJederAbfrageDieZuvorGezeigteStelleDesGezogenenModells(
+    bildschirm, aufstellungNachDerZonenwahl, boyz
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    davor, stelleDesAngestoßenen = stelleAn(aufstellung, (4, 20)), stelleAn(aufstellung, (4, 23))
+    daneben = stelleAn(aufstellung, (6, 23))
+    modelleAnStellenSetzen(aufstellung, boyz, [davor, stelleDesAngestoßenen])
+    seite = bildschirm.seiteZu(aufstellung)
+    abfragen = WeitergereichteAbfragen(seite)
+
+    überEinenPunktZiehenUndLoslassen(seite, davor, stelleDesAngestoßenen, daneben)
+
+    zuvorGezeigt = [
+        stellenDerEinheitIm(antwort, "Boyz")[1] if antwort else ()
+        for antwort in abfragen.letzte200VorJederAbfrage()
+    ]
+    assert [zuvorDerEingaben(eingaben) for eingaben in abfragen.eingaben] == zuvorGezeigt
 
 
 @pytest.mark.parametrize(

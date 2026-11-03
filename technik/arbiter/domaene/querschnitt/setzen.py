@@ -1,4 +1,5 @@
 from collections.abc import Collection, Mapping
+from dataclasses import dataclass
 from fractions import Fraction
 
 from arbiter.domaene import messen
@@ -6,6 +7,11 @@ from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 
 nahkampfreichweite = Fraction(1)
+
+
+@dataclass(frozen=True)
+class Gezeigt:
+    stellen: Mapping[Modell, Stelle]
 
 
 def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:

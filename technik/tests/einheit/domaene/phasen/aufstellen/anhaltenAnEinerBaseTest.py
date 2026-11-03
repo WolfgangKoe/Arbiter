@@ -15,11 +15,3 @@ def testEinGezogenesModellHältVorDerFremdenBaseAn(zehnZoll):
     neue = {gezogenes: stelleAn(20, 0)}
 
     assert angehalten(stellen, neue, gezogenes) == {gezogenes: stelleAn(15, 0)}
-
-
-def testEinNichtGesetztesGezogenesModellWirdNichtAngehaltenAuchAufEinerFremdenBase(zehnZoll):
-    gezogenes, ruhendes = modellMit(zehnZoll), modellMit(zehnZoll)
-    stellen = {ruhendes: stelleAn(20, 20)}
-    neue = {gezogenes: stelleAn(20, 20)}
-
-    assert angehalten(stellen, neue, gezogenes) == neue

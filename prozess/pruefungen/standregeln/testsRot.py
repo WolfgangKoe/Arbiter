@@ -7,6 +7,7 @@ from gemeinsam.pfade import itemsOrdner
 from kriterienregeln.kriterium import Kriterium, testKriterium
 from kriterienregeln.rueckverfolgung import umfasst
 from standregeln.fortschritt import kriterienZuordnungen
+from standregeln.standVorDerUmsetzung import mitKopie
 
 kritikAnDenTests = "Kritik an den Tests zu Item "
 bestanden = "PASSED "
@@ -45,9 +46,11 @@ def grüneTests(wurzel: Path, itemName: str) -> list[str]:
     if not kennungen:
         return []
     befehl = [sys.executable, "-m", "pytest", "-q", "--tb=no", "-p", "no:cacheprovider", "-rp"]
-    lauf = subprocess.run(
-        [*befehl, *kennungen], cwd=wurzel, capture_output=True, text=True, check=False
-    )
+    ordner, kopie = mitKopie(wurzel, itemName)
+    with ordner:
+        lauf = subprocess.run(
+            [*befehl, *kennungen], cwd=kopie, capture_output=True, text=True, check=False
+        )
     return [
         zeile.removeprefix(bestanden).split("::")[-1]
         for zeile in lauf.stdout.splitlines()

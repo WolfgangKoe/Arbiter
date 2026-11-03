@@ -7,11 +7,7 @@ from arbiter.domaene.spielobjekte import Modell, Stelle
 def angehalten(
     stellen: Mapping[Modell, Stelle], neue: Mapping[Modell, Stelle], gezogenes: Modell
 ) -> dict[Modell, Stelle]:
-    davor = stellen.get(gezogenes)
-    if davor is None:
-        return dict(neue)
-    ziel = neue[gezogenes]
-    weg = messen.wegZwischen(davor, ziel)
+    weg = messen.wegZwischen(stellen[gezogenes], neue[gezogenes])
     bewegte = [(modell.base, stellen[modell]) for modell in neue]
     ruhende = [(modell.base, stelle) for modell, stelle in stellen.items() if modell not in neue]
     anteil = messen.anteilBisZurBerührung(bewegte, ruhende, weg)

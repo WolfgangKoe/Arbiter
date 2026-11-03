@@ -16,9 +16,6 @@ def hineingerückt(stellen: Mapping[Modell, Stelle], zone: Grenzen) -> dict[Mode
 def verschobeneStellen(
     gruppe: Mapping[Modell, Stelle], gezogenes: Modell, ziel: Stelle
 ) -> dict[Modell, Stelle]:
-    davor = gruppe.get(gezogenes)
-    if davor is None:
-        return {gezogenes: ziel}
-    weg = messen.wegZwischen(davor, ziel)
+    weg = messen.wegZwischen(gruppe[gezogenes], ziel)
     verschobene = {modell: messen.verschoben(stelle, weg) for modell, stelle in gruppe.items()}
     return {**verschobene, gezogenes: ziel}

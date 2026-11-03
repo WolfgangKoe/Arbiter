@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [QUE-1.4](../../domaene/anforderungen/querschnitt/setzen.md) verlangt: nach

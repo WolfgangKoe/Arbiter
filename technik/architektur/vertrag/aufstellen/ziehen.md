@@ -8,15 +8,18 @@ Nach V10 (AUF-24.3, 26.5, 28.2, 29): `stellenBeimLoslassen(modell, stelle, weite
 `modellLoslassen(modell, stelle, weiter=None)` → `None` *setzen* würde (das gezogene oder jedes
 *gesetzte* der *Einheit*, [V3](auswahl.md)), ohne zu *setzen*, Wächter wie dort;
 `modellLoslassen` *setzt* genau diese (AUF-28.2). `Schlacht` hat beide gleich, ohne weiteren
-Parameter (übergangen wird nach [V18](../schlacht/uebergehen.md)). In
-`querschnitt/anhaltenAufDemWeg.py`, unveränderlich: `Weiterrücken(zuvor: Stelle | None,
+Parameter (übergangen wird nach [V18](../schlacht/uebergehen.md)). Unveränderlich, in
+`phasen/aufstellen/anhaltenAufDemWeg.py`: `Weiterrücken(zuvor: Stelle | None,
 angehaltenAufDemWeg: bool)` trägt die übrigen Eingaben von V10, `zuvor` `None` heißt die
-*Stelle* vor dem Ziehen; `Gezeigt(stellen: Mapping[Modell, Stelle], angehaltenAufDemWeg:
-bool)`. `weiter=None` gilt wie `Weiterrücken(None, False)`; `web/` übergibt `None`, wenn die
-Anfrage keine der Eingaben nennt. Warum `Gezeigt` keine Zuordnung ist: Es trägt zwei Aussagen,
-ein Untertyp von `Mapping` mit Zusatzfeld hielte den Vertrag von `Mapping` nicht (Es, L).
+*Stelle* vor dem Ziehen; in `querschnitt/setzen.py`: `Gezeigt(stellen: Mapping[Modell,
+Stelle], angehaltenAufDemWeg: bool)`. `weiter=None` gilt wie `Weiterrücken(None, False)`;
+`web/` übergibt `None`, wenn die Anfrage keine der Eingaben nennt. Warum `Gezeigt` keine
+Zuordnung ist: Es trägt zwei Aussagen, ein Untertyp von `Mapping` mit Zusatzfeld hielte den
+Vertrag von `Mapping` nicht (Es, L). Warum dort: Module spiegeln die Anforderungen
+([Domäne](../../domaene.md#grundschnitt-der-domäne)); `Gezeigt` nennt, was beide Phasen
+*setzen* würden (QUE-1), das Gleiten ist AUF-29, BEW-17 verweist darauf.
 
-**Gleiten** (AUF-29, in `querschnitt/anhaltenAufDemWeg.py`, auch für BEW-17): Alle
+**Gleiten** (AUF-29, in `phasen/aufstellen/anhaltenAufDemWeg.py`, auch für BEW-17): Alle
 *Modelle* der *Ebene* gehen um denselben Weg; zuvor gezeigt ist jedes um den des gezogenen
 von seiner *Stelle* vor dem Ziehen nach `zuvor` verschoben. Ziel ist die *Stelle* nach
 AUF-8.2, 21.1, 21.2 und 26.1 (Bewegung: [Ziehen](../bewegung/ziehen.md)). Hindernis ist jede

@@ -1,10 +1,11 @@
-from collections.abc import Collection, Mapping
+from collections.abc import Collection
 
 from arbiter.domaene.messen import radiusInZoll
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.bewegung.grenzkreise import Einhüllende
 from arbiter.domaene.querschnitt.schlachtrunden import Schlacht
+from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.querschnitt.uebergehen import Eintrag
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -84,18 +85,18 @@ def _eintrag(aufstellung: Aufstellung, eintrag: Eintrag) -> dict:
     }
 
 
-def stellenBeimLoslassen(aufstellung: Aufstellung, abfrage: Mapping[Modell, Stelle]) -> dict:
+def stellenBeimLoslassen(aufstellung: Aufstellung, gezeigt: Gezeigt) -> dict:
     return {
         "modelle": [
             {
                 "spieler": kennungen.spielernummer,
                 "einheit": kennungen.einheitennummer,
                 "nummer": kennungen.modellnummer,
-                "x": float(abfrage[kennungen.modell].x),
-                "y": float(abfrage[kennungen.modell].y),
+                "x": float(gezeigt.stellen[kennungen.modell].x),
+                "y": float(gezeigt.stellen[kennungen.modell].y),
             }
             for kennungen in modelleMitKennungen(aufstellung)
-            if kennungen.modell in abfrage
+            if kennungen.modell in gezeigt.stellen
         ]
     }
 

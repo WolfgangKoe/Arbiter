@@ -17,8 +17,8 @@ Außerhalb der *Bewegungsphase* ist die Antwort 200 mit leerem `modelle[]` (QUE-
 vor dem Ziehen. Einen Teil nach 29.2 nimmt es nur, wenn auf ihm ab zuvor die drei Anteile
 von V16 1 sind (17.1); auf der Strecke nach 29.1 gilt der kleinste aus ihr und den drei
 Anteilen dort (17.3, 6.3). Ist `angehaltenAufDemWeg` die Eingabe und *überdeckt* das Ziel
-nichts, hält es auf der Strecke von zuvor zum Ziel nach 6.2 an (17.4). Danach prüfen QUE-1
-und BEW-2.5 wie V15, fremd nach AUF-29.3, so sperrt QUE-1.2 bei der ganzen *Einheit* keines
+nichts, hält es auf der Strecke von zuvor zum Ziel nach 6.2 an (17.4). Danach prüft QUE-1
+wie V15, fremd nach AUF-29.3, so sperrt QUE-1.2 bei der ganzen *Einheit* keines
 ihrer *Modelle* (BEW-19). *Angehalten* nach BEW-3.1 oder 6.2 (für [V18](../schlacht/uebergehen.md))
 ist es, wenn deren Anteil auf der Strecke zum Ziel oder nach 17.3 und 17.4 der kleinste und
 kleiner 1 ist. Warum hier: V16 kennt nur die gerade Strecke, das Gleiten nur *Bases*; die

@@ -56,7 +56,10 @@ async function stelleBeimLoslassenAbfragen(punkt) {
   const zug = ziehenStart
   try {
     const modelle = await stellenBeimLoslassen(gezogen.dataset, punkt)
-    if (modelle && ziehenStart === zug) kreiseAnDieStellenSetzen(modelle)
+    if (modelle && ziehenStart === zug) {
+      zug.letzterPunkt = punkt
+      kreiseAnDieStellenSetzen(modelle)
+    }
   } finally {
     abfrageLäuft = false
     const nächster = wartenderPunkt
@@ -120,7 +123,7 @@ export function ziehenBeenden(ereignis) {
   gezogen = null
   if (!start.begonnen) return klicken(ereignis, start.ziel)
   if (!kreis) return
-  const stelle = stelleDesZugs(ereignis, start, kreis)
+  const stelle = stelleDesZugs(ereignis, start, kreis) ?? start.letzterPunkt
   if (stelle) return modellLoslassen(kreis.dataset, stelle)
   letztenSpielstandZeichnen()
 }

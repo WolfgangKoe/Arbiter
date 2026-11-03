@@ -1,10 +1,17 @@
 """QUE-1 · Setzen."""
 
 from fractions import Fraction
+from http import HTTPStatus
 
 import pytest
 
 from arbiter.domaene.sperre import Grund
+from tests.akzeptanz.dienst import (
+    eingabenDesWeiterrückens,
+    mitDenEingabenLoslassen,
+    spielstandVon,
+    stelleImSpielstand,
+)
 from tests.akzeptanz.handgriffe import gerade, schrägOhneWurzel, sperrgründe
 
 
@@ -137,3 +144,23 @@ def testQue1_3EinModellDesEigenenSpielersSperrtNichtInNahkampfreichweite(
     aufstellung.modellSetzen(zweitesModell, stelle)
 
     assert aufstellung.gesetzt(zweitesModell)
+
+
+def testQue1_4SperrtBaseÜberdecktNachDemAnhaltenBietetDerDienstGemeinsamÜbergehenNichtAn(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
+):
+    (boss,) = warboss.modelle
+    _, _, _, _, fünfter, _, siebter, *_ = boyz.modelle
+    zuvor = stelleImSpielstand(schlachtInDerBewegungsphase.stelle(fünfter))
+    eingaben = eingabenDesWeiterrückens(schlachtInDerBewegungsphase.stelle(siebter), zuvor)
+    davor = spielstandVon(dienstDerSchlacht)
+
+    antwort = mitDenEingabenLoslassen(
+        dienstDerSchlacht, beendeteAufstellung, warboss, boss, eingaben
+    )
+
+    assert antwort.status_code == HTTPStatus.CONFLICT
+    assert antwort.get_json() == {"gründe": [Grund.baseÜberdeckt.value], "spielstand": davor}
+    assert antwort.get_json()["spielstand"]["schlacht"]["gemeinsamÜbergehen"] == {
+        "angeboten": False
+    }

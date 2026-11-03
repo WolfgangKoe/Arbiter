@@ -25,7 +25,7 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   Durchmesser in ganzen mm, 1″ = 254/10 mm, Abstände als Quadrate verglichen; mit `float`
   überdecken sich zwei berührende Boyz. `web/` rundet jede Zahl einer Anfrage auf die nächste
   `Fraction` mit Nenner bis 10⁶ (`limit_denominator`). Warum: Die Seite schickt *Stellen* als
-  double zurück (V8); ungerundet überdeckte ein berührendes *Modell* (BEW-1.7, BEW-2.6).
+  double zurück (V8); ungerundet überdeckte ein berührendes *Modell* (BEW-1.7, QUE-1.2).
   Gerundet kommt eine mit Nenner bis 10⁶ exakt an (solche Brüche liegen ≥ 10⁻¹² auseinander,
   das double ≤ 10⁻¹⁴ daneben), eine aus dem Anhalten (S3) bis 1/(2·10⁶)″ daneben.
   Prüft: `Stelle` ohne `Fraction` wirft `TypeError` (`spielobjekteTest.py`), die Rundung

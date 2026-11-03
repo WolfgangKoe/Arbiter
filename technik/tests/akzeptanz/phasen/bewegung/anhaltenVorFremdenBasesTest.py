@@ -20,12 +20,18 @@ from tests.akzeptanz.dienst import (
 from tests.akzeptanz.handgriffe import versetzt, wegVon
 from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
+    außerhalbDerNahkampfreichweite,
     bewegungsweite,
     hältAnDerBewegungsweite,
     hältAnDerSpielfeldkante,
     hältVorDerNahkampfreichweite,
     jetzigeStellen,
     zurBewegungsphaseDesNächstenZugs,
+)
+from tests.akzeptanz.ziehen import (
+    WeitergereichteAbfragen,
+    alsKörper,
+    überEinenPunktZiehenUndLoslassen,
 )
 
 nichts = Fraction(0)
@@ -162,6 +168,59 @@ def testBew17_1HältArbiterAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStreck
     assert angehaltenVor(erster, gezeigt, boss, stelleDesWarboss)
 
 
+def testBew17_1HältDieNahkampfreichweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, necronWarriors
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    *_, neunter, letzter = necronWarriors.modelle
+    stelleDesNeunten = schlacht.stelle(neunter)
+    zuvorGezeigt = versetzt(stelleDesNeunten, (Fraction(-2), nichts))
+    ziel = versetzt(stelleDesNeunten, (Fraction(-1, 2), Fraction(1)))
+    endeDesSenkrechtenTeils = versetzt(zuvorGezeigt, (nichts, Fraction(1)))
+    stelleDesWarboss = versetzt(stelleDesNeunten, (Fraction(-4), Fraction(19, 10)))
+    assert not außerhalbDerNahkampfreichweite(
+        endeDesSenkrechtenTeils, letzter, stelleDesWarboss, boss
+    ), "Der senkrechte Teil führt nicht in die Nahkampfreichweite des Warboss"
+    warbossÜbergehenBisZumZugDerNecrons(schlacht, warboss, stelleDesWarboss)
+    zuvor = zuvorNachDerAbfrage(
+        dienstDerSchlacht, beendeteAufstellung, necronWarriors, letzter, zuvorGezeigt
+    )
+    eingaben = eingabenDesWeiterrückens(ziel, zuvor)
+
+    antwort = stelleBeimWeiterrückenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, necronWarriors, letzter, eingaben
+    )
+
+    (gezeigt,) = gezeigteStellen(antwort, "Necron Warriors").values()
+    assert antwort.status_code == HTTPStatus.OK
+    assert aufDerStrecke(gezeigt, zuvorGezeigt, ziel)
+    assert angehaltenVor(letzter, gezeigt, neunter, stelleDesNeunten)
+
+
+def testBew17_1AlleinGezogenHältDerDienstVorDemModellDerselbenEinheitAn(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
+):
+    schlacht = schlachtInDerBewegungsphase
+    *_, angestoßener, gezogener = boyz.modelle
+    stelleDesAngestoßenen = schlacht.stelle(angestoßener)
+    zuvorGezeigt = versetzt(stelleDesAngestoßenen, (Fraction(2), nichts))
+    ziel = versetzt(stelleDesAngestoßenen, (Fraction(1, 2), nichts))
+    zuvor = zuvorNachDerAbfrage(
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogener, zuvorGezeigt
+    )
+    eingaben = eingabenDesWeiterrückens(ziel, zuvor)
+
+    antwort = stelleBeimWeiterrückenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogener, eingaben
+    )
+
+    (gezeigt,) = gezeigteStellen(antwort, "Boyz").values()
+    assert antwort.status_code == HTTPStatus.OK
+    assert aufDerStrecke(gezeigt, zuvorGezeigt, ziel)
+    assert angehaltenVor(gezogener, gezeigt, angestoßener, stelleDesAngestoßenen)
+
+
 def testBew17_1IstDieGanzeEinheitEbeneHältDerDienstAlleIhreModelleGemeinsamAn(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
@@ -230,6 +289,23 @@ def testBew17_2IstDieGanzeEinheitEbeneSetztDerDienstJedesIhrerModelleWoDieAbfrag
     assert stellenDerEinheitIm(antwort.get_json(), "Boyz") == stellenDerEinheitIm(
         abgefragt.get_json(), "Boyz"
     )
+
+
+def testBew17_2DieSeiteSendetBeimLoslassenDieEingabenDerLetztenAbfrageMitAngehaltenAufDemWeg(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    (boss,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(boss)
+    amBoy = versetzt(davor, (Fraction(-5, 2), nichts))
+    danach = versetzt(davor, (Fraction(-1), Fraction(2)))
+    seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
+    abfragen = WeitergereichteAbfragen(seite)
+
+    körper = überEinenPunktZiehenUndLoslassen(seite, davor, amBoy, danach)
+
+    *_, letzteEingaben = abfragen.eingaben
+    assert körper == alsKörper(letzteEingaben)
+    assert körper.get("angehaltenAufDemWeg") is True
 
 
 def testBew17_3HältDieBewegungsweiteFrüherAnZeigtDerDienstDasModellAnIhr(
@@ -346,3 +422,25 @@ def testBew17_4OhneAnhaltenAufDemWegHältDerDienstNichtAbDerZuvorGezeigtenStelle
 
     assert antwort.status_code == HTTPStatus.OK
     assert gezeigteStellen(antwort, "Necron Warriors") == {10: ziel}
+
+
+def testBew17_4DieSeiteSchicktNachDemAnhaltenAufDemWegJederAbfrageAngehaltenAufDemWeg(
+    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    (boss,) = warboss.modelle
+    davor = schlachtInDerBewegungsphase.stelle(boss)
+    amBoy = versetzt(davor, (Fraction(-5, 2), nichts))
+    danach = versetzt(davor, (Fraction(-1), Fraction(2)))
+    seite = bildschirm.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
+    abfragen = WeitergereichteAbfragen(seite)
+
+    überEinenPunktZiehenUndLoslassen(seite, davor, amBoy, danach)
+
+    nannteEs = [
+        antwort is not None and antwort.get("angehaltenAufDemWeg") is True
+        for antwort in abfragen.letzte200VorJederAbfrage()
+    ]
+    assert any(nannteEs), "Keine Antwort nannte angehaltenAufDemWeg, der Warboss hielt nicht an"
+    assert [eingaben.get("angehaltenAufDemWeg") == "true" for eingaben in abfragen.eingaben] == (
+        nannteEs
+    )

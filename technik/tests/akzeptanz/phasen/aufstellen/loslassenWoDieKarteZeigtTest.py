@@ -42,8 +42,10 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.ziehen import (
     Abfragen,
+    WeitergereichteAbfragen,
     alleinUndAlsEbene,
     alsEbeneZiehen,
+    alsKörper,
     aufDieAntwortenWarten,
     bildaufbauAbwarten,
     halten,
@@ -53,6 +55,8 @@ from tests.akzeptanz.ziehen import (
     offeneAbfragenAbwarten,
     punktAufDerKarte,
     zieleNebenDerKarte,
+    zuvorDerEingaben,
+    überEinenPunktZiehenUndLoslassen,
 )
 
 gesperrteStelleImBeispiel = Stelle(x=Fraction(38), y=Fraction(28))
@@ -165,6 +169,23 @@ def testAuf28_2NachDemAnhaltenSetztDerDienstDasModellWoDieZweiteAbfrageEsZeigte(
         **stellenDerEinheitIm(abgefragt.get_json(), "Boyz"),
         2: stelleImSpielstand(stelleImWeg),
     }
+
+
+def testAuf28_2DieSeiteSendetBeimLoslassenDieEingabenDerLetztenAbfrage(
+    bildschirm, aufstellungNachDerZonenwahl, boyz
+):
+    aufstellung = aufstellungNachDerZonenwahl
+    davor, stelleDesAngestoßenen = stelleAn(aufstellung, (4, 20)), stelleAn(aufstellung, (4, 23))
+    daneben = stelleAn(aufstellung, (6, 23))
+    modelleAnStellenSetzen(aufstellung, boyz, [davor, stelleDesAngestoßenen])
+    seite = bildschirm.seiteZu(aufstellung)
+    abfragen = WeitergereichteAbfragen(seite)
+
+    körper = überEinenPunktZiehenUndLoslassen(seite, davor, stelleDesAngestoßenen, daneben)
+
+    *_, letzteEingaben = abfragen.eingaben
+    assert zuvorDerEingaben(letzteEingaben), "Die letzte Abfrage nennt keine zuvor gezeigte Stelle"
+    assert körper == alsKörper(letzteEingaben)
 
 
 def testAuf28_2NachDemVerschiebenSetztDerDienstDieGanzeEinheitWoDieAbfrageSieZeigte(

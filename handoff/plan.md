@@ -59,7 +59,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 ## Offene Anliegen
 - [9340](anliegen/9340-fliegenDerSpinne.md) wartet auf
   Anliegen 11560; es und 10180 fehlen im Fortschritt
-  ([11740](anliegen/11740-wartendeZeileVerschwindet.md)).
+  (Anliegen 11740).
 - Übrige: [Moderation](moderation.md).
 
 ## Fortschritt
@@ -73,11 +73,11 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testBew1_7DieStellenBeimLoslassenSindDieStellenDesEinenModells, testBew1_7DieStellenBeimLoslassenSindBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DieStellenBeimLoslassenÄndernNichtsAmSpielstand, testBew1_7DieStellenBeimLoslassenHaltenWeiterAlsDieBewegungsweiteAnDerBewegungsweiteAn, testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells, testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell, testBew1_7DerDienstNenntWeiterAlsDieBewegungsweiteDieStelleDesAnhaltensWieDasLoslassen, testBew1_7DerDienstVerändertBeimAbfragenNichtsAmSpielstand, testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[maus], testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre[finger], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[maus], testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung[finger], testBew8_3DieSeiteZeigtOhneAnhaltenKeinGemeinsamÜbergehen, testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[links], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[rechts], testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte[unten], testQue6_2NachDemStartIstKeineLeisteEingefahren[links], testQue6_2NachDemStartIstKeineLeisteEingefahren[rechts], testQue6_2NachDemStartIstKeineLeisteEingefahren[unten], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[links], testQue6_2NachDemStartZeigtJedeArmeelisteIhrenInhalt[rechts], testQue5_6DerDienstNenntNachDemLoslassenDasProtokollWieDavor. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11001); beseitigt: Commit „Tests zu Item anhaltenUebergehen: 10980 und 11001 beseitigt, Helfer zu 10560“
   Hindernis: Architekt → Testautor: Der Dienst-Test zu BEW-25.1 liest das Protokoll andersherum und prüft die Gründe des neuen Eintrags nicht (Anliegen 11380); beseitigt: Commit „Tests zu anhaltenUebergehen und loslassenNebenDerKarte nach der Kritik“
   Hindernis: Architekt → Organisationsentwickler: Abhaken nimmt die in 11001 genannten und von mir geprüften Stellen nicht an (wie beim Fachkritiker) (Anliegen 11360); beseitigt: Commit „Kritik an den Tests zu anhaltenUebergehen abgeschlossen, zu loslassenNebenDerKarte offen“
-- [ ] Implementierer: Tests zu Item anhaltenUebergehen grün
+- [x] Implementierer: Tests zu Item anhaltenUebergehen grün
 - [x] Architekt: Kritik am Code zu Item anhaltenUebergehen
 - [x] Reviewer: Kritik am Code zu Item anhaltenUebergehen
-- [ ] Fachkritiker: Item anhaltenUebergehen abgenommen
-- [ ] Planer: Item anhaltenUebergehen gelöscht
+- [x] Fachkritiker: Item anhaltenUebergehen abgenommen
+- [x] Planer: Item anhaltenUebergehen gelöscht
 - [x] Architekt: Vertrag zu Item loslassenNebenDerKarte, bei beiden Hälften
 - [x] Testautor: Tests zu Item loslassenNebenDerKarte
 - [x] Fachkritiker: Kritik an den Tests zu Item loslassenNebenDerKarte
@@ -85,16 +85,20 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Architekt: Kritik an den Tests zu Item loslassenNebenDerKarte
   Hindernis: Architekt → Testautor: Drei neue Dienst-Tests vergleichen das Beispiel des Vertrags ganz statt nach T3 und werden rot, sobald Weirdboy oder Spinne in einer Armee stehen: testAuf28_1DerDienstSetztAmPunktDerLetztenStelleWieDasBeispielImVertrag (losgelassen.json), testAuf16_7DerDienstNenntNachDemZurücklegenKeineStelleWieDasBeispielImVertrag (Spielstand gegen zurückgelegt.json) und testAuf16_7DerDienstSetztNachDemZurücklegenNichtsWieDasBeispielImVertrag (zurückgelegt.json). Vergleiche mit imUmfangDes aus dienst.py wie in einheitZuruecklegenTest.py. (Anliegen 11260); beseitigt: Commit „Tests zu anhaltenUebergehen und loslassenNebenDerKarte nach der Kritik“
   Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[maus-nebenDerKarte], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerEins], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-aufDerArmeelisteVonSpielerZwei], testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor[finger-nebenDerKarte]. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 11441); beseitigt: Commit „11441 erledigt, erledigte Anliegen der Kritik an den Tests gelöscht“
-- [ ] Implementierer: Tests zu Item loslassenNebenDerKarte grün
-- [ ] Architekt: Kritik am Code zu Item loslassenNebenDerKarte
+  Hindernis: Architekt → Organisationsentwickler: Abhaken prüft die Tests im Arbeitsbaum. Dort macht der Implementierer, der parallel arbeitet, mit noch nicht committetem Code in bedienung.js (start.letzterPunkt) 13 Tests zu AUF-28.1 und BEW-20.1 grün, die gegen Commit 3405dc2 rot sind; nach seinem Commit bleiben sie grün. So lehnt Abhaken meine Kritik ab, obwohl die Tests ihr Kriterium prüfen. Lass Abhaken die Tests gegen den Stand prüfen, an dem der Testautor seinen Schritt abgehakt hat, oder erlaube mir mit dem Befehl, nachgeprüfte Tests zu nennen. (Anliegen 11940)
+- [x] Implementierer: Tests zu Item loslassenNebenDerKarte grün
+- [x] Architekt: Kritik am Code zu Item loslassenNebenDerKarte
 - [ ] Reviewer: Kritik am Code zu Item loslassenNebenDerKarte
+  Hindernis: Reviewer → Implementierer: Zwei Zweige für ein nicht gesetztes gezogenes Modell (verschobeneStellen, angehalten) erreichen seit AUF-16.7 nur noch Unit-Tests; löschen samt ihrer Unit-Tests (Anliegen 12080)
 - [ ] Fachkritiker: Item loslassenNebenDerKarte abgenommen
 - [ ] Planer: Item loslassenNebenDerKarte gelöscht
 - [x] Architekt: Vertrag zu Item anhaltenAufDemWeg, bei beiden Hälften
-- [ ] Testautor: Tests zu Item anhaltenAufDemWeg
+- [x] Testautor: Tests zu Item anhaltenAufDemWeg
   Hindernis: Testautor → Anforderungsautor: Für QUE-1.4 fehlt ein Test: Weil Arbiter in der Bewegungsphase vor jeder fremden Base anhält, entsteht dort keine Sperre ‚Base überdeckt‘ mehr, die nicht übergangen werden darf; der Anforderungsautor entscheidet, ob das Kriterium bleibt. (Anliegen 11700); beseitigt: Commit „anhaltenUebergehen umgesetzt, Tests zu BEW-17, Anliegen beantwortet“
 - [ ] Fachkritiker: Kritik an den Tests zu Item anhaltenAufDemWeg
+  Hindernis: Fachkritiker → Testautor: Am Bildschirm prüft kein Test, dass die Seite zuvor und angehaltenAufDemWeg mitschickt (Vertrag verlangt page.route); BEW-17.1 fehlen der Fall 6.2 beim Teil nach 29.2 und das Anhalten vor einem Modell derselben Einheit (Anliegen 12020)
 - [ ] Architekt: Kritik an den Tests zu Item anhaltenAufDemWeg
+  Hindernis: Architekt → Testautor: Der Test zu QUE-1.4 prüft am Ende den Spielstand vor dem Loslassen statt der Antwort; dass Arbiter nach der Sperre ‚Base überdeckt‘ kein gemeinsames Übergehen anbietet, liest man so erst aus zwei Zeilen zusammen. (Anliegen 12040)
 - [ ] Implementierer: Tests zu Item anhaltenAufDemWeg grün
 - [ ] Architekt: Kritik am Code zu Item anhaltenAufDemWeg
 - [ ] Reviewer: Kritik am Code zu Item anhaltenAufDemWeg

@@ -1,4 +1,3 @@
-from collections.abc import Mapping
 from enum import Enum
 from itertools import pairwise
 
@@ -12,6 +11,7 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     grenzenDerNahkampfreichweite,
 )
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
+from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.querschnitt.uebergehen import Protokoll
 from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -114,11 +114,11 @@ class Schlacht:
     def inKohärenz(self, einheit: Einheit) -> bool:
         return einheitInKohärenz(einheit, self._stellen)
 
-    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Mapping[Modell, Stelle]:
+    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Gezeigt:
         neue, gründe = self._stellenMitGründen(modell, stelle)
         if gründe:
             raise Sperre(*gründe)
-        return neue
+        return Gezeigt(neue)
 
     def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
         neue, gründe = self._stellenMitGründen(modell, stelle)

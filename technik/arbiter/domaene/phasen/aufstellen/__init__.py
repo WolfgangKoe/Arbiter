@@ -18,6 +18,7 @@ from arbiter.domaene.phasen.aufstellen.reihenfolge import nächsterAnDerReihe, z
 from arbiter.domaene.phasen.aufstellen.setzenPerKlick import formationDerEinheit
 from arbiter.domaene.phasen.aufstellen.sperrenBeimSetzen import gründeGegenDieStelle
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
+from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.sperre import Grund, Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 
@@ -83,11 +84,13 @@ class Aufstellung:
             raise ValueError("Der Spieler ist unbekannt")
         return self._zonen.get(spieler)
 
-    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> dict[Modell, Stelle]:
+    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Gezeigt:
+        if not self.gesetzt(modell):
+            return Gezeigt({})
         einheit = self._wählbareEinheitVon(modell)
         verschoben = self._verschobeneStellen(einheit, modell, stelle)
         hinein = hineingerückt(verschoben, self._zoneAnDerReihe())
-        return angehalten(self._stellen, hinein, modell)
+        return Gezeigt(angehalten(self._stellen, hinein, modell))
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
         if gewinner not in self._beideSpieler:
@@ -111,8 +114,9 @@ class Aufstellung:
         self._einheitInAufstellung = einheit
 
     def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
-        stellen = self.stellenBeimLoslassen(modell, stelle)
-        self._loslassen(einheitVon(self._beideSpieler, modell), stellen)
+        gezeigt = self.stellenBeimLoslassen(modell, stelle)
+        if gezeigt.stellen:
+            self._loslassen(einheitVon(self._beideSpieler, modell), gezeigt.stellen)
 
     def karteAnklicken(self, stelle: Stelle) -> None:
         einheit = self._auswahl.einheit
