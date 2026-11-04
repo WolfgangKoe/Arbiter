@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund (hält auf: ein Test prüft sein Kriterium nicht).** BEW-24.1 und BEW-22.1 hängen an
