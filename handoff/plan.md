@@ -114,7 +114,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Reviewer → Anforderungsautor: Das Glossar nennt beim Grund den entfernten Code überEineBase und dessen Historie (Anliegen 12701); beseitigt: Commit „anhaltenAufDemWeg Teil 2: Bewegung hält auf dem Weg an, Kritik am Code“
   Hindernis: Reviewer → Implementierer: Nach dem Anhalten auf dem Weg kürzt die Bewegung ab zuvor statt nach V16 wie der Vertrag Ziehen (Anliegen 12961); beseitigt: Commit „Kritik am Code zu anhaltenAufDemWeg: Spielfeldkante, Kürzen nach V16“
   Hindernis: Reviewer → Testautor: Zwei Tests zu BEW-17 lassen an der Spielfeldkante gleiten, wo BEW-17.1 nicht greift; der Code folgt mit einer Regel ohne Kriterium (ziehtInFremdes, Anliegen 12903) (Anliegen 12902); beseitigt: Commit „Kritik am Code zu anhaltenAufDemWeg: Spielfeldkante, Kürzen nach V16“
-- [ ] Fachkritiker: Item anhaltenAufDemWeg abgenommen
+- [x] Fachkritiker: Item anhaltenAufDemWeg abgenommen
 - [ ] Planer: Item anhaltenAufDemWeg gelöscht
 - [ ] Architekt: Vertrag zu Item fliegen, bei beiden Hälften
 - [ ] Testautor: Tests zu Item fliegen
