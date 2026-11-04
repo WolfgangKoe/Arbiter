@@ -49,14 +49,17 @@ def aufDerStrecke(stelle: Stelle, von: Stelle, nach: Stelle) -> bool:
     return kollinear and 0 <= skalarprodukt <= wegInX**2 + wegInY**2
 
 
+def überdeckt(modell: Modell, stelle: Stelle, anderes: Modell, stelleDesAnderen: Stelle) -> bool:
+    return messen.überdecken(modell.base, stelle, anderes.base, stelleDesAnderen)
+
+
 def angehaltenVor(
     modell: Modell, stelle: Stelle, angestoßenes: Modell, stelleDesAngestoßenen: Stelle
 ) -> bool:
-    base, angestoßeneBase = modell.base, angestoßenes.base
-    return not messen.überdecken(
-        base, stelle, angestoßeneBase, stelleDesAngestoßenen
+    return not überdeckt(
+        modell, stelle, angestoßenes, stelleDesAngestoßenen
     ) and messen.abstandHöchstens(
-        base, stelle, angestoßeneBase, stelleDesAngestoßenen, abstandBeimAnhalten
+        modell.base, stelle, angestoßenes.base, stelleDesAngestoßenen, abstandBeimAnhalten
     )
 
 

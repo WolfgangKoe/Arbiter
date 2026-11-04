@@ -44,6 +44,17 @@ def _verschobenUm(stellen: Mapping[Modell, Stelle], weg: messen.Weg) -> dict[Mod
     return {modell: messen.verschoben(stelle, weg) for modell, stelle in stellen.items()}
 
 
+def _gekürztAnDerNahkampfreichweite(
+    zuvor: Mapping[Modell, Stelle],
+    halt: Mapping[Modell, Stelle],
+    gezogenes: Modell,
+    gegner: Mapping[Modell, Stelle],
+) -> tuple[dict[Modell, Stelle], bool]:
+    weg = messen.wegZwischen(zuvor[gezogenes], halt[gezogenes])
+    anteil = anteilBisZurNahkampfreichweite(zuvor, weg, gegner)
+    return _verschobenUm(zuvor, messen.teilDesWegs(weg, anteil)), anteil < 1
+
+
 class Bewegungsphase:
     def __init__(self, stellen: Mapping[Modell, Stelle], spielfeld: Spielfeld) -> None:
         self._spielfeld = spielfeld
@@ -162,19 +173,22 @@ class Bewegungsphase:
         weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
         zuvor = zuvorGezeigt(ebene, gezogenes, weiter)
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
-        start = zuvor if weiter.angehaltenAufDemWeg else ebene
+        start = ebene
         weg = messen.wegZwischen(start[gezogenes], ziel)
         anteile = self._anteile(start, gezogenes, weg, gegner)
         halt = _verschobenUm(start, messen.teilDesWegs(weg, min(anteile)))
+        hältAnDerGrenze = anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
+        if weiter.angehaltenAufDemWeg:
+            halt, nahkampfreichweiteHält = _gekürztAnDerNahkampfreichweite(
+                zuvor, halt, gezogenes, gegner
+            )
+            hältAnDerGrenze = hältAnDerGrenze or nahkampfreichweiteHält
         hältVorFremdem = überdecktFremde(zuvor, halt, fremde)
         ziehtInFremdes = not anteile.hältAnDerBewegungsweiteOderNahkampfreichweite and (
             überdecktFremde(zuvor, _verschobenUm(start, weg), fremde)
         )
         if not (hältVorFremdem or ziehtInFremdes):
-            return (
-                Gezeigt(halt, weiter.angehaltenAufDemWeg),
-                anteile.hältAnDerBewegungsweiteOderNahkampfreichweite,
-            )
+            return Gezeigt(halt, weiter.angehaltenAufDemWeg), hältAnDerGrenze
         wegAbZuvor = messen.wegZwischen(zuvor[gezogenes], ziel)
         geglitten = gleiten(
             zuvor,

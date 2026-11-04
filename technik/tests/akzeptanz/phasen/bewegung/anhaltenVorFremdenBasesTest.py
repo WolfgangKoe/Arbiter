@@ -5,7 +5,7 @@ from http import HTTPStatus
 
 import pytest
 
-from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke
+from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke, überdeckt
 from tests.akzeptanz.dienst import (
     eingabenDesWeiterrückens,
     eingabenNachDerAntwort,
@@ -23,6 +23,7 @@ from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
     außerhalbDerNahkampfreichweite,
     bewegungsweite,
+    ersteStelleAnDerSpielfeldkante,
     hältAnDerBewegungsweite,
     hältAnDerSpielfeldkante,
     hältVorDerNahkampfreichweite,
@@ -198,22 +199,14 @@ def testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben(
     assert gezeigteStellen(antwort, "Boyz") == {1: erwartet}
 
 
-@pytest.mark.parametrize(
-    "wegeVomWarboss",
-    [
-        ((Fraction(12, 5), nichts), (Fraction(1, 2), Fraction(6, 5))),
-        ((Fraction(3, 2), nichts), (Fraction(3, 4), Fraction(-3, 4))),
-    ],
-    ids=["senkrechterTeilÜberDieBewegungsweite", "senkrechterTeilÜberDieSpielfeldkante"],
-)
-def testBew17_1HältArbiterAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke(
-    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, spielerEins, wegeVomWarboss
+def testBew17_1HältDieBewegungsweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
-    boyz, warboss, *_ = spielerEins.armee.einheiten
     (boss,) = warboss.modelle
     erster, *_ = boyz.modelle
     stelleDesWarboss = schlachtInDerBewegungsphase.stelle(boss)
-    zuvorGezeigt, ziel = (versetzt(stelleDesWarboss, weg) for weg in wegeVomWarboss)
+    zuvorGezeigt = versetzt(stelleDesWarboss, (Fraction(12, 5), nichts))
+    ziel = versetzt(stelleDesWarboss, (Fraction(1, 2), Fraction(6, 5)))
     zuvor = zuvorNachDerAbfrage(dienstDerSchlacht, beendeteAufstellung, boyz, erster, zuvorGezeigt)
     eingaben = eingabenDesWeiterrückens(ziel, zuvor)
 
@@ -225,6 +218,30 @@ def testBew17_1HältArbiterAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStreck
     assert antwort.status_code == HTTPStatus.OK
     assert aufDerStrecke(gezeigt, zuvorGezeigt, ziel)
     assert angehaltenVor(erster, gezeigt, boss, stelleDesWarboss)
+
+
+def testBew17_1HältDieSpielfeldkanteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    _, zweiter, *_ = boyz.modelle
+    davor, stelleDesWarboss = schlacht.stelle(zweiter), schlacht.stelle(boss)
+    zuvorGezeigt = versetzt(stelleDesWarboss, (Fraction(3, 2), nichts))
+    ziel = versetzt(stelleDesWarboss, (Fraction(3, 4), Fraction(-3, 4)))
+    anDerKante = ersteStelleAnDerSpielfeldkante(davor, ziel, zweiter)
+    assert überdeckt(zweiter, anDerKante, boss, stelleDesWarboss), "17.1 greift nicht"
+    zuvor = zuvorNachDerAbfrage(dienstDerSchlacht, beendeteAufstellung, boyz, zweiter, zuvorGezeigt)
+    eingaben = eingabenDesWeiterrückens(ziel, zuvor)
+
+    antwort = stelleBeimWeiterrückenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, boyz, zweiter, eingaben
+    )
+
+    (gezeigt,) = gezeigteStellen(antwort, "Boyz").values()
+    assert antwort.status_code == HTTPStatus.OK
+    assert aufDerStrecke(gezeigt, zuvorGezeigt, ziel)
+    assert angehaltenVor(zweiter, gezeigt, boss, stelleDesWarboss)
 
 
 def testBew17_1HältDieNahkampfreichweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke(
@@ -390,22 +407,25 @@ def testBew17_3HältDieBewegungsweiteFrüherAnZeigtDerDienstDasModellAnIhr(
 def testBew17_3HältDieSpielfeldkanteFrüherAnZeigtDerDienstDasModellAnIhr(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
+    schlacht = schlachtInDerBewegungsphase
     (boss,) = warboss.modelle
-    erster, *_ = boyz.modelle
-    stelleDesWarboss = schlachtInDerBewegungsphase.stelle(boss)
+    _, zweiter, *_ = boyz.modelle
+    davor, stelleDesWarboss = schlacht.stelle(zweiter), schlacht.stelle(boss)
     zuvorGezeigt = versetzt(stelleDesWarboss, (Fraction(2), Fraction(1, 2)))
     ziel = versetzt(stelleDesWarboss, (Fraction(1), Fraction(-9, 10)))
-    zuvor = zuvorNachDerAbfrage(dienstDerSchlacht, beendeteAufstellung, boyz, erster, zuvorGezeigt)
+    anDerKante = ersteStelleAnDerSpielfeldkante(davor, ziel, zweiter)
+    assert überdeckt(zweiter, anDerKante, boss, stelleDesWarboss), "17.1 greift nicht"
+    zuvor = zuvorNachDerAbfrage(dienstDerSchlacht, beendeteAufstellung, boyz, zweiter, zuvorGezeigt)
     eingaben = eingabenDesWeiterrückens(ziel, zuvor)
 
     antwort = stelleBeimWeiterrückenAbfragen(
-        dienstDerSchlacht, beendeteAufstellung, boyz, erster, eingaben
+        dienstDerSchlacht, beendeteAufstellung, boyz, zweiter, eingaben
     )
 
     (gezeigt,) = gezeigteStellen(antwort, "Boyz").values()
     assert antwort.status_code == HTTPStatus.OK
     assert aufDerStrecke(gezeigt, zuvorGezeigt, ziel)
-    assert hältAnDerSpielfeldkante(gezeigt, erster)
+    assert hältAnDerSpielfeldkante(gezeigt, zweiter)
 
 
 def testBew17_3HältDieNahkampfreichweiteFrüherAnZeigtDerDienstDasModellVorIhr(

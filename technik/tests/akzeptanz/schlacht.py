@@ -8,11 +8,13 @@ from tests.akzeptanz.dienst import stelleImSpielstand
 from tests.akzeptanz.handgriffe import (
     breiteDesSpielfelds,
     eintragDerAusgangslage,
+    gestreckt,
     längeDerSpielfeldkante,
     modellartenImKatalog,
     radiusInZoll,
     stellenAllerModelle,
     versetzt,
+    wegVon,
     yamlAusDenDaten,
 )
 
@@ -238,6 +240,19 @@ def abständeZuDenSpielfeldkanten(stelle: Stelle, modell: Modell) -> tuple[Fract
 def hältAnDerSpielfeldkante(stelle: Stelle, modell: Modell) -> bool:
     nächsteKante = min(abständeZuDenSpielfeldkanten(stelle, modell))
     return 0 <= nächsteKante <= hundertstelZoll
+
+
+def ersteStelleAnDerSpielfeldkante(davor: Stelle, ziel: Stelle, modell: Modell) -> Stelle:
+    anteil = min(
+        abstandDavor / (abstandDavor - abstandAmZiel)
+        for abstandDavor, abstandAmZiel in zip(
+            abständeZuDenSpielfeldkanten(davor, modell),
+            abständeZuDenSpielfeldkanten(ziel, modell),
+            strict=True,
+        )
+        if abstandAmZiel < 0
+    )
+    return versetzt(davor, gestreckt(wegVon(davor, ziel), anteil))
 
 
 mitteDesSpielfelds = Stelle(
