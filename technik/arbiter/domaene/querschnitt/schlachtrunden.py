@@ -4,6 +4,7 @@ from itertools import pairwise
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Ausgangslage
 from arbiter.domaene.phasen import einheitVon, gegnerVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.bewegung import Bewegungsphase, StellenMitGründen
 from arbiter.domaene.phasen.bewegung.grenzkreise import (
@@ -114,22 +115,26 @@ class Schlacht:
     def inKohärenz(self, einheit: Einheit) -> bool:
         return einheitInKohärenz(einheit, self._stellen)
 
-    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Gezeigt:
-        neue, gründe = self._stellenMitGründen(modell, stelle)
+    def stellenBeimLoslassen(
+        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None = None
+    ) -> Gezeigt:
+        gezeigt, gründe = self._stellenMitGründen(modell, stelle, weiter)
         if gründe:
             raise Sperre(*gründe)
-        return Gezeigt(neue, angehaltenAufDemWeg=False)
+        return gezeigt
 
-    def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
-        neue, gründe = self._stellenMitGründen(modell, stelle)
+    def modellLoslassen(
+        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None = None
+    ) -> None:
+        gezeigt, gründe = self._stellenMitGründen(modell, stelle, weiter)
         if gründe:
             raise Sperre(*gründe)
         self._bewegungsphase.angebotBeenden()
-        if neue:
+        if gezeigt.stellen:
             self._bewegungsphase.angebotNachDemZiehen(
                 self._ebeneDes(modell), modell, stelle, self._stellenDesGegners()
             )
-        self._stellen.update(neue)
+        self._stellen.update(gezeigt.stellen)
 
     @property
     def gemeinsamÜbergehenAngeboten(self) -> bool:
@@ -167,11 +172,18 @@ class Schlacht:
             if spieler is None or anderes not in spieler.armee.modelle
         }
 
-    def _stellenMitGründen(self, modell: Modell, stelle: Stelle) -> StellenMitGründen:
+    def _stellenMitGründen(
+        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None
+    ) -> StellenMitGründen:
         if not self._ziehtDerSpielerAmZug(modell):
-            return {}, set()
+            return Gezeigt({}, angehaltenAufDemWeg=False), set()
         return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            self._ebeneDes(modell), modell, stelle, self._stellen, self._stellenDesGegners()
+            self._ebeneDes(modell),
+            modell,
+            stelle,
+            self._stellen,
+            self._stellenDesGegners(),
+            weiter,
         )
 
     def modellAnklicken(self, modell: Modell) -> None:
@@ -221,9 +233,7 @@ class Schlacht:
     @property
     def vorrückenZurücknehmenAngeboten(self) -> bool:
         einheit = self._einheitMitGrenzen()
-        return einheit is not None and self._bewegungsphase.vorrückenZurücknehmenAngeboten(
-            einheit
-        )
+        return einheit is not None and self._bewegungsphase.vorrückenZurücknehmenAngeboten(einheit)
 
     def wartetAufVorrückwurf(self, einheit: Einheit) -> bool:
         return self._bewegungsphase.wartetAufVorrückwurf(einheit)

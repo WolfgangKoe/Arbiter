@@ -131,17 +131,6 @@ def schritteDesWegs(weg: Weg) -> int:
     return ceil(_rasterJeZoll * (abs(wegInX) + abs(wegInY)))
 
 
-def streckeÜberdeckt(
-    bewegteBase: Base, von: Stelle, nach: Stelle, ruhendeBase: Base, ort: Stelle
-) -> bool:
-    weg = wegZwischen(von, nach)
-    if weg == (0, 0):
-        return überdecken(bewegteBase, von, ruhendeBase, ort)
-    anteil = min(max(_anteilDesNächstenPunkts(von, weg, ort), Fraction(0)), Fraction(1))
-    stelle = verschoben(von, teilDesWegs(weg, anteil))
-    return überdecken(bewegteBase, stelle, ruhendeBase, ort)
-
-
 def anteilVorDemErstenSchrittMit(trifftMonotonAb: Callable[[Fraction], bool], weg: Weg) -> Fraction:
     schritte = schritteDesWegs(weg)
     if schritte == 0 or not trifftMonotonAb(Fraction(1)):

@@ -10,7 +10,6 @@ class Grund(Enum):
     baseÜberdeckt = "Base überdeckt"
     bewegungsweite = "Bewegungsweite"
     nahkampfreichweite = "Nahkampfreichweite"
-    überEineBase = "über eine Base"
 
 
 class Sperre(Exception):

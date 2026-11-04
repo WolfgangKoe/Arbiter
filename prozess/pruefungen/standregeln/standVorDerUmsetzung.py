@@ -14,14 +14,32 @@ def git(wurzel: Path, *teile: str) -> str:
     return lauf.stdout if lauf.returncode == 0 else ""
 
 
+def commits(wurzel: Path, *auswahl: str) -> list[str]:
+    return git(wurzel, "log", "--reverse", "--format=%H", *auswahl).split()
+
+
+def ersterCommitMit(wurzel: Path, zeile: str) -> str:
+    for commit in commits(wurzel, "-S", zeile, "--", "handoff/plan.md"):
+        if zeile in git(wurzel, "show", f"{commit}:handoff/plan.md").splitlines():
+            return commit
+    return ""
+
+
+def ersteUmsetzung(wurzel: Path, item: str) -> str:
+    getestet = ersterCommitMit(wurzel, f"- [x] Testautor: Tests zu Item {item}")
+    grün = ersterCommitMit(wurzel, f"- [x] Implementierer: Tests zu Item {item} grün")
+    if not getestet:
+        return grün
+    for produkt in commits(wurzel, f"{getestet}..HEAD", "--", *produktordner):
+        if not grün or commits(wurzel, f"{produkt}..{grün}"):
+            return produkt
+        break
+    return grün
+
+
 def standVorDerUmsetzung(wurzel: Path, itemName: str) -> str:
-    zeile = f"- [x] Implementierer: Tests zu Item {itemName.removesuffix('.md')} grün"
-    if zeile not in git(wurzel, "show", "HEAD:handoff/plan.md"):
-        return "HEAD"
-    for commit in git(wurzel, "log", "--format=%H", "-S", zeile, "--", "handoff/plan.md").split():
-        if zeile in git(wurzel, "show", f"{commit}:handoff/plan.md"):
-            return f"{commit}^"
-    return "HEAD"
+    umsetzung = ersteUmsetzung(wurzel, itemName.removesuffix(".md"))
+    return f"{umsetzung}^" if umsetzung else "HEAD"
 
 
 def produktEinsetzen(wurzel: Path, kopie: Path, stand: str) -> None:

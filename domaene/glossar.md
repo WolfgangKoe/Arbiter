@@ -40,7 +40,7 @@ Gewinner | winner | gewinner | Der *Spieler*, der den *Roll-off* gewinnt (`core_
 gezeigt | – | Gezeigt | Was die *Karte* beim Ziehen zeigt, bevor jemand loslässt: je bewegt gezeigtes *Modell* die *Stelle*, an die Arbiter es beim Loslassen *setzen* würde, und ob AUF-29 es angehalten hat (AUF-24.3, 26.5, 28.1, 28.2, BEW-17.2, 20.1).
 Grenzkreis | – | Grenzkreis | Leicht gezeigter Kreis auf der *Karte*, der eine Grenze für die *Base* eines *Modells* zeigt; nur Anzeige, er hält nichts an und sperrt nichts (Anliegen 6410, Vorbild `ArbiterMap/docs/spec/interaction_map.md:532`).
 Griff | – | leistenGriff | Schaltfläche am Rand einer *Leiste*, mit der die *Spieler* sie ein- und ausfahren; jede *Leiste* hat einen (Anliegen 366 F1 A, Vorbild `ArbiterMap/docs/spec/design_system.md:87`).
-Grund | – | Grund (überEineBase) | Kurzer Name einer *Sperre* oder eines übergangenen Anhaltens, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz. ‚über eine Base‘ nennt Arbiter bis zum Item anhaltenAufDemWeg (`core_rules.txt:729`, Anliegen 8840).
+Grund | – | Grund (baseÜberdeckt) | Kurzer Name einer *Sperre* oder eines übergangenen Anhaltens, in Anforderungen in ‚…‘ hinter ihr; ihn prüft der Test, die *Spieler* lesen ihn als Satz.
 Karte | – | Karte | Abbild des *Spielfelds* mit seinen *Aufstellungszonen* und *gesetzten* *Modellen*, maßstäblich in *Zoll*; sie bildet den Spielstand ab, nicht den exakten Tisch (`domaene/ziel.md`).
 Kohärenz | unit coherency | kohärenz | Zustand einer *Einheit*, deren *Modelle* als eine Gruppe beisammenstehen (`core_rules.txt:434`); die 5″ senkrecht hält ohne Gelände jedes Paar ein (`domaene/ziel.md`).
 Kommandophase | Command phase | kommandophase | Erste *Phase* eines Zugs (`core_rules.txt:641`).

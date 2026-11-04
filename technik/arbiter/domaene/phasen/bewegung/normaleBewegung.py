@@ -1,18 +1,8 @@
 from collections.abc import Collection, Mapping
 
-from arbiter.domaene import messen
 from arbiter.domaene.querschnitt.setzen import befundeDesSetzens
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Stelle
-
-
-def _überEineBase(
-    modell: Modell, vorige: Stelle, neue: Stelle, fremde: Mapping[Modell, Stelle]
-) -> bool:
-    return any(
-        messen.streckeÜberdeckt(modell.base, vorige, neue, anderes.base, ort)
-        for anderes, ort in fremde.items()
-    )
 
 
 def gründeBeimZiehen(
@@ -25,9 +15,6 @@ def gründeBeimZiehen(
     for modell, stelle in neue.items():
         if stelle == vorige[modell]:
             continue
-        befunde = {
-            **befundeDesSetzens(modell, stelle, fremde, eigene),
-            Grund.überEineBase: _überEineBase(modell, vorige[modell], stelle, fremde),
-        }
+        befunde = befundeDesSetzens(modell, stelle, fremde, eigene)
         gründe |= {grund for grund, trifft in befunde.items() if trifft}
     return gründe

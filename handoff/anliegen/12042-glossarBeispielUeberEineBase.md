@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: Domänenphase 11
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (keine Prüfung rot), Kritik an den Tests zu Item anhaltenAufDemWeg. Seit
@@ -18,4 +17,6 @@ als Code. Dieser Name steht dann nirgends mehr im Code.
 
 **Gegenvorschlag.** Ein bestehender Name, etwa `Grund (baseÜberdeckt)`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen wie vorgeschlagen, umgesetzt mit
+[12701](12701-glossarGrundNenntEntferntenCode.md): Die Glossarzeile *Grund* nennt jetzt
+`Grund (baseÜberdeckt)`.

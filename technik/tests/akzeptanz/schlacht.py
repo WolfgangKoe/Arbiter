@@ -152,6 +152,23 @@ def zurBewegungsphaseDesNächstenZugs(schlacht) -> None:
     phaseBeendenBis(schlacht, Phase.bewegungsphase)
 
 
+def warbossÜbergehenBisZumZugDerNecrons(schlacht, warboss: Einheit, stelle: Stelle) -> None:
+    (boss,) = warboss.modelle
+    anhaltenUndÜbergehen(schlacht, boss, stelle)
+    assert schlacht.stelle(boss) == stelle, "Der Warboss steht nicht, wo der Test ihn braucht"
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+
+
+def warbossNebenDenBoyZiehen(
+    schlacht, warboss: Einheit, boy: Modell, weg: tuple[Fraction, Fraction]
+) -> Stelle:
+    (boss,) = warboss.modelle
+    ziel = versetzt(schlacht.stelle(boy), weg)
+    schlacht.modellLoslassen(boss, ziel)
+    assert schlacht.stelle(boss) == ziel, "Der Warboss steht nicht, wo der Test ihn braucht"
+    return ziel
+
+
 def summeDerRadien(modell: Modell, anderes: Modell) -> Fraction:
     return radiusInZoll(modell) + radiusInZoll(anderes)
 

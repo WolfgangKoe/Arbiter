@@ -1,6 +1,15 @@
 from collections.abc import Collection, Iterable, Mapping
+from fractions import Fraction
+from functools import partial
 
 from arbiter.domaene import messen
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import (
+    AnteilBisZumAnhalten,
+    Stellen,
+    Weiterrücken,
+    gleiten,
+    zuvorGezeigt,
+)
 from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
     anteilBisZurBewegungsweite,
 )
@@ -23,10 +32,11 @@ from arbiter.domaene.phasen.bewegung.uebergehenBeimZiehen import (
     Übergangen,
     gründeBeimÜbergehen,
 )
+from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle, einheitDes
 
-StellenMitGründen = tuple[dict[Modell, Stelle], set[Grund]]
+StellenMitGründen = tuple[Gezeigt, set[Grund]]
 
 
 class Bewegungsphase:
@@ -69,10 +79,12 @@ class Bewegungsphase:
         gezogenes = angebot.gezogenes
         weg = messen.wegZwischen(ebene[gezogenes], angebot.punkt)
         kurz = messen.teilDesWegs(weg, anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld))
-        neue = {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
-        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in neue}
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
+        anDerSpielfeldkante = partial(anteilBisZurSpielfeldkante, spielfeld=self._spielfeld)
+        neue = gleiten(ebene, kurz, fremde, anDerSpielfeldkante, angehaltenAufDemWeg=False).stellen
         eigene = stellen.keys() - gegner.keys()
-        anteile = self._anteile(ebene, gezogenes, kurz, gegner)
+        gegangen = messen.wegZwischen(ebene[gezogenes], neue[gezogenes])
+        anteile = self._anteile(ebene, gezogenes, gegangen, gegner)
         return Übergangen(
             neue,
             gründeBeimÜbergehen(neue, fremde, eigene),
@@ -122,21 +134,51 @@ class Bewegungsphase:
         einheit = einheitDes(gezogenes, self._vorrückwürfe)
         return self._vorrückwürfe[einheit] if einheit else 0
 
-    def stellenMitGründenNachDemZiehen(
+    def stellenMitGründenNachDemZiehen(  # noqa: PLR0913
         self,
         ebene: Mapping[Modell, Stelle],
         gezogenes: Modell,
         ziel: Stelle,
         stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
+        weiter: Weiterrücken | None = None,
     ) -> StellenMitGründen:
-        weg = messen.wegZwischen(ebene[gezogenes], ziel)
+        weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
+        zuvor = zuvorGezeigt(ebene, gezogenes, weiter)
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
+        geglitten = gleiten(
+            zuvor,
+            messen.wegZwischen(zuvor[gezogenes], ziel),
+            fremde,
+            self._anteilBisZumAnhalten(gezogenes, gegner),
+            angehaltenAufDemWeg=weiter.angehaltenAufDemWeg,
+        )
+        stellenNachV16 = self._anHöchstensBisZumAnhalten(ebene, gezogenes, ziel, gegner)
+        gezeigt = Gezeigt(
+            geglitten.stellen if geglitten.angehaltenAufDemWeg else stellenNachV16,
+            geglitten.angehaltenAufDemWeg,
+        )
         eigene = stellen.keys() - gegner.keys()
-        anteil = min(self._anteile(ebene, gezogenes, weg, gegner))
-        kurz = messen.teilDesWegs(weg, anteil)
-        neue = {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
-        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in neue}
-        return neue, gründeBeimZiehen(ebene, neue, fremde, eigene)
+        return gezeigt, gründeBeimZiehen(ebene, gezeigt.stellen, fremde, eigene)
+
+    def _anHöchstensBisZumAnhalten(
+        self,
+        ebene: Mapping[Modell, Stelle],
+        gezogenes: Modell,
+        ziel: Stelle,
+        gegner: Mapping[Modell, Stelle],
+    ) -> dict[Modell, Stelle]:
+        weg = messen.wegZwischen(ebene[gezogenes], ziel)
+        kurz = messen.teilDesWegs(weg, min(self._anteile(ebene, gezogenes, weg, gegner)))
+        return {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
+
+    def _anteilBisZumAnhalten(
+        self, gezogenes: Modell, gegner: Mapping[Modell, Stelle]
+    ) -> AnteilBisZumAnhalten:
+        def anteil(vorige: Stellen, weg: messen.Weg) -> Fraction:
+            return min(self._anteile(vorige, gezogenes, weg, gegner))
+
+        return anteil
 
     def gründeGegenDasBeenden(
         self, einheiten: Iterable[Einheit], stellen: Mapping[Modell, Stelle]

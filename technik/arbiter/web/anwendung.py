@@ -100,7 +100,6 @@ def _phaseDerAnfrage(körper: dict) -> Phase:
 
 
 class _SchlachtDerAnwendung:
-
     def __init__(self, aufstellung: Aufstellung, schlacht: Schlacht | None) -> None:
         self._aufstellung = aufstellung
         self._schlacht = schlacht
@@ -195,7 +194,7 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         if schlacht is None:
             aufstellung.modellLoslassen(modell, stelle, _weiterrückenDerAnfrage())
         else:
-            schlacht.modellLoslassen(modell, stelle)
+            schlacht.modellLoslassen(modell, stelle, _weiterrückenDerAnfrage())
         return spielstandLiefern()
 
     def modellAnklicken(spielernummer: int, einheitennummer: int, modellnummer: int):
@@ -206,10 +205,11 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
         stelle = _stelleDerAbfrage()
         schlacht = laufendeSchlacht()
+        weiter = _weiterrückenDerAbfrage()
         if schlacht is None:
-            abfrage = aufstellung.stellenBeimLoslassen(modell, stelle, _weiterrückenDerAbfrage())
+            abfrage = aufstellung.stellenBeimLoslassen(modell, stelle, weiter)
         else:
-            abfrage = schlacht.stellenBeimLoslassen(modell, stelle)
+            abfrage = schlacht.stellenBeimLoslassen(modell, stelle, weiter)
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
     def karteAnklicken():

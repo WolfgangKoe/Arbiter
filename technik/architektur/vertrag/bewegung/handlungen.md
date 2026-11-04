@@ -15,7 +15,7 @@ Am Bildschirm | Anfrage (V5) | `Schlacht`
   keine *Einheit in Bewegung*. Die *Distanz* ist die gerade Strecke von der *Stelle* zu
   Beginn der *Bewegungsphase* zur jetzigen, verglichen als Quadrat (S2, Anliegen 5400 F1 A).
   Jeder *Grund* aus QUE-1 wirft `Sperre` in der Reihenfolge von `Grund` (V6). Vor fremden
-  *Bases* hält es an ([Ziehen](ziehen.md)); `Grund.überEineBase` entfällt (BEW-17.1).
+  *Bases* hält es an ([Ziehen](ziehen.md)).
 - **V16** Anhalten an der *Bewegungsweite* (BEW-3.1): Stünde ein *Modell* der *Ebene* an der
   gezogenen *Stelle* weiter als seine *Bewegungsweite*, kürzt `modellLoslassen` den Zug auf
   der geraden Strecke von der vorigen zur gezogenen *Stelle*, für alle *Modelle* der *Ebene*

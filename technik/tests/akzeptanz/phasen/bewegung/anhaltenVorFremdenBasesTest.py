@@ -10,6 +10,7 @@ from tests.akzeptanz.dienst import (
     eingabenDesWeiterrückens,
     eingabenNachDerAntwort,
     gezeigteStellen,
+    körperDerStelle,
     mitDenEingabenLoslassen,
     modellLoslassen,
     stelleBeimLoslassenAbfragen,
@@ -17,7 +18,7 @@ from tests.akzeptanz.dienst import (
     stellenDerEinheitIm,
     zuvorNachDerAbfrage,
 )
-from tests.akzeptanz.handgriffe import versetzt, wegVon
+from tests.akzeptanz.handgriffe import gestreckt, versetzt, wegVon
 from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
     außerhalbDerNahkampfreichweite,
@@ -26,7 +27,8 @@ from tests.akzeptanz.schlacht import (
     hältAnDerSpielfeldkante,
     hältVorDerNahkampfreichweite,
     jetzigeStellen,
-    zurBewegungsphaseDesNächstenZugs,
+    warbossNebenDenBoyZiehen,
+    warbossÜbergehenBisZumZugDerNecrons,
 )
 from tests.akzeptanz.ziehen import (
     WeitergereichteAbfragen,
@@ -36,13 +38,14 @@ from tests.akzeptanz.ziehen import (
 
 nichts = Fraction(0)
 bewegungsweiteDesWarboss = bewegungsweite("Warboss", "Warboss")
-
-
-def warbossÜbergehenBisZumZugDerNecrons(schlacht, warboss, stelle) -> None:
-    (boss,) = warboss.modelle
-    anhaltenUndÜbergehen(schlacht, boss, stelle)
-    assert schlacht.stelle(boss) == stelle, "Der Warboss steht nicht, wo der Test ihn braucht"
-    zurBewegungsphaseDesNächstenZugs(schlacht)
+bewegungsweiteDesBoys = bewegungsweite("Boyz", "Ork Boy")
+anDerBewegungsweiteDesBoys = (bewegungsweiteDesBoys, nichts)
+knappHinterDerBewegungsweiteDesBoys = (Fraction(11, 2), nichts)
+hinterDerBaseAnDerBewegungsweite = (Fraction(8), nichts)
+flachSchräg = (Fraction(24, 25), Fraction(7, 25))
+schrägAnDieBewegungsweite = gestreckt(flachSchräg, bewegungsweiteDesBoys)
+schrägAufDieBaseHinterDerBewegungsweite = gestreckt(flachSchräg, Fraction(15, 2))
+nebenDemPunktHinterDerBewegungsweite = (Fraction(77, 10), Fraction(21, 10))
 
 
 def testBew17_1DerDienstHältDasModellAufDerStreckeVorDerFremdenBaseAn(
@@ -76,6 +79,62 @@ def testBew17_1AmFreienZielZeigtDerDienstDasZielAuchWennDerWegÜberEineBaseFühr
 
     assert antwort.status_code == HTTPStatus.OK
     assert gezeigteStellen(antwort, "Boyz") == {1: ziel}
+
+
+@pytest.mark.parametrize(
+    "abfrageDavor", [False, True], ids=["ohneAbfrageDavor", "nachEinerAbfrageDieVorIhrAnhielt"]
+)
+def testBew17_1StehtDerPunktHinterEinerBaseAnDerBewegungsweiteHältDerDienstDasModellVorIhrAn(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, spielerEins, abfrageDavor
+):
+    schlacht = schlachtInDerBewegungsphase
+    boyz, warboss, *_ = spielerEins.armee.einheiten
+    (boss,) = warboss.modelle
+    _, gezogener, *_ = boyz.modelle
+    davor = schlacht.stelle(gezogener)
+    stelleDesWarboss = warbossNebenDenBoyZiehen(
+        schlacht, warboss, gezogener, knappHinterDerBewegungsweiteDesBoys
+    )
+    punkt = versetzt(davor, hinterDerBaseAnDerBewegungsweite)
+    eingaben = körperDerStelle(punkt)
+    if abfrageDavor:
+        ersteAntwort = stelleBeimLoslassenAbfragen(
+            dienstDerSchlacht,
+            beendeteAufstellung,
+            boyz,
+            gezogener,
+            versetzt(davor, anDerBewegungsweiteDesBoys),
+        )
+        assert ersteAntwort.get_json().get("angehaltenAufDemWeg") is True, "Davor hielt nichts an"
+        eingaben = eingabenNachDerAntwort(ersteAntwort, boyz, gezogener, punkt)
+
+    antwort = stelleBeimWeiterrückenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogener, eingaben
+    )
+
+    assert antwort.status_code == HTTPStatus.OK
+    (gezeigt,) = gezeigteStellen(antwort, "Boyz").values()
+    assert aufDerStrecke(gezeigt, davor, punkt)
+    assert angehaltenVor(gezogener, gezeigt, boss, stelleDesWarboss)
+
+
+def testBew17_1EineBaseHinterDerBewegungsweiteLenktDasModellNichtAb(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    *_, gezogener = boyz.modelle
+    davor = schlacht.stelle(gezogener)
+    anhaltenUndÜbergehen(schlacht, boss, versetzt(davor, nebenDemPunktHinterDerBewegungsweite))
+    punkt = versetzt(davor, schrägAufDieBaseHinterDerBewegungsweite)
+
+    antwort = stelleBeimLoslassenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, boyz, gezogener, punkt
+    )
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert gezeigteStellen(antwort, "Boyz") == {10: versetzt(davor, schrägAnDieBewegungsweite)}
+    assert "angehaltenAufDemWeg" not in antwort.get_json()
 
 
 def testBew17_1DerDienstHältAufDerStreckeAbDerZuvorGezeigtenStelleAn(

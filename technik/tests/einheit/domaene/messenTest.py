@@ -5,7 +5,6 @@ from arbiter.domaene.messen import (
     anteilBisZurBerührungAufDemWeg,
     ganzIn,
     rückungInDieFläche,
-    streckeÜberdeckt,
     teilDesWegs,
     verschoben,
     wegZwischen,
@@ -204,13 +203,6 @@ def testDerWegBleibtLeerWennDieBaseSchonAnDerBaseSteht(zehnZoll):
     assert anteil == 0
 
 
-def testEineStreckeÜberdecktEineBaseAmWegAuchWennEndeUndAnfangFreiSind(zehnZoll):
-    hindernis = Stelle(x=Fraction(15), y=Fraction(0))
-    ende = Stelle(x=Fraction(30), y=Fraction(0))
-
-    assert streckeÜberdeckt(zehnZoll, ursprung, ende, zehnZoll, hindernis)
-
-
 def testDerSchrägeWegBisZurBerührungHältVorDerÜberdeckungAuchAußerhalbDesUrsprungs(zehnZoll):
     start = Stelle(x=Fraction(33), y=Fraction(34))
     ort = Stelle(x=Fraction(21), y=Fraction(20))
@@ -231,18 +223,3 @@ def testAufDemWegHältDerAnteilVorEinerBaseAnDieDasEndeSchonÜberquertHat(zehnZo
     )
 
     assert anteil == Fraction(1, 8)
-
-
-def testEineSchrägeStreckeÜberdecktDieBaseAmNächstenPunktAußerhalbDesUrsprungs(zehnZoll):
-    start = Stelle(x=Fraction(3), y=Fraction(4))
-    ende = Stelle(x=Fraction(33), y=Fraction(34))
-    ort = Stelle(x=Fraction(25), y=Fraction(12))
-
-    assert streckeÜberdeckt(zehnZoll, start, ende, zehnZoll, ort)
-
-
-def testEineStreckeNebenDerBaseÜberdecktSieNicht(zehnZoll):
-    hindernis = Stelle(x=Fraction(15), y=Fraction(10))
-    ende = Stelle(x=Fraction(30), y=Fraction(0))
-
-    assert not streckeÜberdeckt(zehnZoll, ursprung, ende, zehnZoll, hindernis)

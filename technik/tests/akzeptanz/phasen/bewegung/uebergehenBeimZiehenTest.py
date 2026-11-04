@@ -22,9 +22,11 @@ from tests.akzeptanz.dienst import (
     angehaltenDesVertrags,
     auswählen,
     dienstFürSchlacht,
+    eingabenNachDerAntwort,
     gemeinsamÜbergehen,
     gezeigteStellen,
     kennungenDerEinheiten,
+    mitDenEingabenLoslassen,
     modellLoslassen,
     schlachtNachSchlüsselnDes,
     spielstandVon,
@@ -42,6 +44,8 @@ from tests.akzeptanz.schlacht import (
     liegtAufDerGeradenVon,
     stellenAlsZahlen,
     stellenVersetzt,
+    warbossNebenDenBoyZiehen,
+    warbossÜbergehenBisZumZugDerNecrons,
     zehnZollNachOsten,
     zurBewegungsphaseDerNächstenSchlachtrunde,
 )
@@ -123,6 +127,49 @@ def testBew8_3HältDieSpielfeldkanteEinModellAnBietetArbiterGemeinsamÜbergehenN
     )
 
     assert schlachtInDerBewegungsphase.gemeinsamÜbergehenAngeboten is False
+
+
+def testBew8_3HältEineFremdeBaseVorDerBewegungsweiteAnBietetArbiterGemeinsamÜbergehenNichtAn(
+    schlachtInDerBewegungsphase, warboss, boyz
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    _, gezogener, *_ = boyz.modelle
+    davor = schlacht.stelle(gezogener)
+    stelleDesWarboss = warbossNebenDenBoyZiehen(
+        schlacht, warboss, gezogener, (Fraction(11, 2), nichts)
+    )
+    aufDemWarboss = versetzt(davor, (Fraction(13, 2), nichts))
+
+    schlacht.modellLoslassen(gezogener, aufDemWarboss)
+
+    assert angehaltenVor(gezogener, schlacht.stelle(gezogener), boss, stelleDesWarboss)
+    assert schlacht.gemeinsamÜbergehenAngeboten is False
+
+
+def testBew8_3HältNachDemAnhaltenAufDemWegDieNahkampfreichweiteBietetDerDienstGemeinsamÜbergehenAn(
+    dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, necronWarriors
+):
+    schlacht = schlachtInDerBewegungsphase
+    *_, letzter = necronWarriors.modelle
+    davor = schlacht.stelle(letzter)
+    amNeuntenVorbei = versetzt(davor, (Fraction(-6, 5), Fraction(-1)))
+    punkt = versetzt(davor, (Fraction(-6, 5), Fraction(4)))
+    stelleDesWarboss = versetzt(davor, (Fraction(-17, 5), Fraction(2)))
+    warbossÜbergehenBisZumZugDerNecrons(schlacht, warboss, stelleDesWarboss)
+    ersteAntwort = stelleBeimLoslassenAbfragen(
+        dienstDerSchlacht, beendeteAufstellung, necronWarriors, letzter, amNeuntenVorbei
+    )
+    assert ersteAntwort.get_json().get("angehaltenAufDemWeg") is True, "Davor hielt nichts an"
+    eingaben = eingabenNachDerAntwort(ersteAntwort, necronWarriors, letzter, punkt)
+
+    antwort = mitDenEingabenLoslassen(
+        dienstDerSchlacht, beendeteAufstellung, necronWarriors, letzter, eingaben
+    )
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert "gründe" not in antwort.get_json()
+    assert antwort.get_json()["schlacht"]["gemeinsamÜbergehen"] == {"angeboten": True}
 
 
 def testBew8_3ZuBeginnDerBewegungsphaseBietetArbiterGemeinsamÜbergehenNichtAn(

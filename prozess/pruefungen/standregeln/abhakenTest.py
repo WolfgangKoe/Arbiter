@@ -212,3 +212,20 @@ def testCommitteterProduktcodeMitHakenDesImplementierersZähltNichtMehr(
     gitRepo.festhalten("Umsetzung")
     assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
     assert anliegenNummern(tmp_path) == []
+
+
+@pytest.mark.usefixtures("plan")
+def testEinCommitteterTeilDerUmsetzungNachDenTestsMachtKeinenTestGrün(
+    tmp_path, gitRepo, monkeypatch
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestVomProduktAbhängig(tmp_path)
+    produktcodeSetzen(tmp_path, "nein")
+    datei = tmp_path / "handoff/plan.md"
+    haken = "- [x] Testautor: Tests zu Item stellen\n"
+    datei.write_text(datei.read_text(encoding="utf-8") + haken, encoding="utf-8")
+    gitRepo.festhalten("Tests zu stellen")
+    produktcodeSetzen(tmp_path, "ja")
+    gitRepo.festhalten("stellen Teil 1")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == []

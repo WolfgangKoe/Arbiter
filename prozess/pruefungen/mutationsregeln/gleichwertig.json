@@ -1,12 +1,5 @@
 [
  {
-  "datei": "technik/arbiter/domaene/messen.py",
-  "bereich": "streckeÜberdeckt",
-  "quelle": "return überdecken(bewegteBase, von, ruhendeBase, ort)",
-  "fehler": "Rückgabe wird None",
-  "grund": "Nur bei Weg 0, dann ist von die jetzige Stelle; keine Stelle überdeckt eine fremde Base (Aufstellung und Bewegung sperren das, Übergehen gibt es noch nicht), also False; der einzige Aufrufer (normaleBewegung) wertet in any nur die Wahrheit aus (Anliegen 6301)."
- },
- {
   "datei": "technik/arbiter/domaene/phasen/bewegung/beenden.py",
   "bereich": "gründeGegenDasBeenden",
   "quelle": "return set()",
