@@ -10,7 +10,7 @@ Wartet auf: Prozessphase
 ## Runde 1
 **Befund.** Wartet auf die Prozessphase: Das Abhaken von „Kritik an den Tests zu Item fliegen“
 meldete 15 Tests zu BEW-17.1 als „grün, bevor der Code besteht“ und legte dafür das Hindernis
-[13101](13101-hindernisKritikAnDenTestsZuItemFliegen.md) an. BEW-17.1 gehört nicht zum Item:
+Anliegen 13101 an. BEW-17.1 gehört nicht zum Item:
 [fliegen.md](../../domaene/items/fliegen.md) nennt es nur in der Zeile „Abhängigkeit“, der
 Umfang ist BEW-18 und MIV-3. `testkennungenDesItems` in
 `prozess/pruefungen/standregeln/testsRot.py` gibt den ganzen Text des Items an `umfasst`

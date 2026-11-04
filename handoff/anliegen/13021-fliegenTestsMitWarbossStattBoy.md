@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält den Happy Path nicht auf. Der [Vertrag Fliegen](../../technik/architektur/vertrag/bewegung/fliegen.md),

@@ -14,7 +14,7 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
 - **Ziehen** (V10, BEW-18.1): wie V16, ohne 17.1 bis 17.4 (`weiter` zählt nicht, Antwort
   `angehaltenAufDemWeg` falsch), 6.2 nach 18.3, ohne QUE-1.2 (nach BEW-19.1 ist dann jede
   *Base*, die sperren könnte, nach AUF-29.3 fremd; das löst 18.2 beim Loslassen). So zeigt
-  die *Karte* die Spinne über fremden *Bases* (8840, „nur darüber hinwegziehen“). Die Gleichheit von V10 und V5 (AUF-28.2, BEW-17.2,
+  die *Karte* die Spinne über fremden *Bases* (8840). Die Gleichheit von V10 und V5 (AUF-28.2, BEW-17.2,
   20.1) gilt nur, solange keine fremde *überdeckt* ist; sonst *setzt* V5 nach 18.2.
 - **18.3** in `phasen/bewegung/fliegen.py`: Ende ist der kleinere Anteil von 3.1 und 6.1
   (6.3). Ist dort keines in *Nahkampfreichweite*, ist der Anteil von 6.2 1; sonst das größte
@@ -38,14 +38,13 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
   Ziehen) begrenzt die Suche: Ränder weiter weg zählen nicht. Findet sie keinen, sperrt
   QUE-1.2 (V15, BEW-18.6). Kein *Grund*, 200; das Angebot nach V18 folgt 3.1 und 6.2
   (18.3) wie sonst, nicht dem Rücken.
-- **Übergehen** (V18 mit `fliegen`, BEW-18.5): ohne Gleiten, an den Punkt, an der
+- **Übergehen** (V18 mit `fliegen`, 18.7): ohne Gleiten, an den Punkt, an der
   *Spielfeldkante* angehalten (BEW-8.4 zeigt nach 18.1). *Überdeckt* dort eine eine fremde,
-  rückt Arbiter nach 18.2 (*Bewegungsweite* ab der gemerkten *Stelle* vor dem Ziehen), dann
-  QUE-1 ohne QUE-1.3 wie V18; findet sie keinen, sperrt QUE-1.2, das Angebot bleibt. Die
-  *Gründe* nach BEW-8.5 auf dem Weg von der *Stelle* davor zu der danach (V18), 6.2 nach
-  18.3; gerückt also keiner.
-- Aufbau: `fliegen.py` hält 18.2, 18.3 und das Rücken von 18.5; die Weiche in
-  `Bewegungsphase` ist ein `if` mit frühem `return` je Methode. Wächst `phasen/bewegung/__init__.py` (heute 10.248 Zeichen)
+  rückt Arbiter nach 18.2, `ränder` und `frei` ohne *Bewegungsweite*, dann QUE-1 ohne
+  QUE-1.3 wie V18; findet sie keinen, sperrt QUE-1.2, das Angebot bleibt. Die *Gründe* nach BEW-8.5 auf dem Weg von der
+  *Stelle* davor zu der danach (V18), 6.2 nach 18.3.
+- Aufbau: `fliegen.py` hält 18.2, 18.3 und das Rücken von 18.7; die Weiche in
+  `Bewegungsphase` ist ein `if` mit frühem `return` je Methode. Wächst `phasen/bewegung/__init__.py`
   über das Höchstmaß, geht das Gleiten aus `_gezeigt` nach
   `phasen/bewegung/anhaltenVorFremdenBases.py`.
 
@@ -66,8 +65,9 @@ nächste freie; an der *Bewegungsweite* auf einem Warrior: die *Distanz* höchst
 Boy verlöre auf dem Weg zur Spinne die *Kohärenz*. 18.3: durch die *Nahkampfreichweite* des
 Warboss gezogen, Ende außerhalb: *Stelle* am Punkt; Ende darin, der Weirdboy davor an der
 Strecke: nicht darin, `abstandHöchstens` 1+1/100″, außer der *Nahkampfreichweite* des
-Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an). 18.5: an der
-*Bewegungsweite* angehalten, Punkt auf einem Warrior, übergangen: *Stelle* wie bei 18.2, ein
-*Eintrag* mehr ohne *Grund*.
+Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an). 18.7: an der
+*Bewegungsweite* angehalten, Punkt dahinter auf einem Warrior, übergangen: *Stelle* wie bei
+18.2, doch *Distanz* über 6″, *Eintrag* mit ‚Bewegungsweite‘; in der *Nahkampfreichweite*
+des Warboss: außerhalb.
 Am Bildschirm: Kreis der Spinne beim Halten über der fremden *Base*, nach dem Loslassen an
 der *Stelle* des Spielstands; die Rechnung von 18.2 nur Unit-Tests zu `messen.py`.

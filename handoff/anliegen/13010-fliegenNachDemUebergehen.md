@@ -3,8 +3,8 @@
 Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: erledigt
 
 ## Runde 1
 **Befund.** Aus Anliegen [12985](12985-fliegenUngeregelteFaelle.md), Fall 3. Die Spinne hat
@@ -54,3 +54,33 @@ Empfehlung: A, die *Spieler* haben bestätigt, dass die Spinne am Tisch weiter s
 Annahme: BEW-18.5 bleibt nach B, Ihrer Antwort; bei A fasse ich es als neues Kriterium ohne 6″ und *Nahkampfreichweite*.
 Antwort: Nein
 Kommentar: Ich verstehe nicht, warum mir diese Frage gestellt wurde. Das war ja der Sinn von "übergehen", dass Bewegungsweite nicht beachtet wird. Die Nahkampfreichweite sollte durchausbeachtet werden, wenn die Phase dies erforderlich macht.
+Stellungnahme: Ihre Antwort auf F1 verlangte beim Schieben *Bewegungsweite* und *Nahkampfreichweite*, auch nach dem Übergehen; damit hätte Arbiter das Übergehen zurückgenommen. Das lag an F1: Sie sagte nicht klar, dass die Spinne schon übergangen war. Statt Ihre Antwort still anders zu lesen, habe ich nachgefragt (Ich 1). Umgesetzt in [BEW-18.7](../../domaene/anforderungen/phasen/bewegung/fliegen.md): nach dem Übergehen ohne 6″, mit *Nahkampfreichweite*; BEW-18.5 ist gestrichen. Offen bleibt ein Fall, Runde 2.
+
+## Runde 2
+**Befund.** „Wenn die Phase es erforderlich macht“: In der *Bewegungsphase* verlangt es der
+Regeltext immer, kein *Modell* darf in *Nahkampfreichweite* enden, auch mit *Fliegen*
+(`core_rules.txt:745`, `:884`); nach einem Angriff muss es darin enden, das kommt mit einer
+späteren Etappe (`core_rules.txt:1803`). Ungeklärt ist nur der Fall, in dem die *Spieler* gerade die
+*Nahkampfreichweite* übergangen haben: Arbiter hielt die Spinne 1″ vor dem Warboss an, am Tisch
+steht sie 0,5″ vor ihm, beide wählen *gemeinsam übergehen*. Liegt dieser Punkt zugleich auf der
+*Base* eines Necron Warriors, schiebt Arbiter sie an die nächste freie *Stelle*.
+
+**Kosten.** A: kein Kriterium mehr, BEW-18.8 entfällt. B: ein Kriterium (BEW-18.8), ein Test
+erwartet die Spinne dann in *Nahkampfreichweite* statt außerhalb.
+
+**Gegenvorschlag.**
+**F3 · Beachtet Arbiter beim Schieben die Nahkampfreichweite auch, wenn die Spieler sie eben übergangen haben?**
+A: Ja: Er schiebt die Spinne aus der *Nahkampfreichweite* des Warboss, also über 1″ von ihm weg; der *Eintrag* im *Protokoll* bleibt, ohne *Grund* ‚Nahkampfreichweite‘ (Regeltext, `core_rules.txt:884`).
+B: Nein: Er schiebt sie nur vom Warrior herunter, sie bleibt in *Nahkampfreichweite*; das *Protokoll* nennt ‚Nahkampfreichweite‘ (Anliegen 13010 F2: Was übergangen ist, beachtet Arbiter nicht).
+Empfehlung: B, wie Ihr „Nein“ zur *Bewegungsweite*: Mit A stünde die Spinne auf der *Karte* über 1″ vom Warboss, am Tisch 0,5″. Haben die *Spieler* nur die *Bewegungsweite* übergangen, beachtet Arbiter die *Nahkampfreichweite* in jedem Fall (BEW-18.7).
+Annahme: BEW-18.8 steht nach B; bei A lösche ich es.
+Antwort: Ja, wobei das eben auf die Phase bzw. die Bewegung ankommt. Die Endposition sollte idealerweise andere Regeln einhalten, selbst wenn Übergehen hier aus pragmatischen Gründen eine Spielregel übergeht. Das bedeutet eben nicht, dass andere Regeln aufgehoben werden müssen. In der Angriffsphase und beim Nachrücken in der Nahkampfphase, dürfen Modelle unter bestimmten Bedingungen die Nahkampfreichweite betreten..
+
+**Stellungnahme.** Nachgeprüft, umgesetzt nach A: BEW-18.8 ist gestrichen. Nach dem Übergehen
+schiebt Arbiter die Spinne in der *Bewegungsphase* an die nächste freie *Stelle* außer
+*Nahkampfreichweite*, auch wenn die *Spieler* gerade diese übergangen haben
+([BEW-18.7](../../domaene/anforderungen/phasen/bewegung/fliegen.md), gilt nur in der
+*Bewegungsphase* nach 18.1). Ihr Hinweis zu Angriff und Nachrücken gehört zu Etappe 3
+(Charge, Pile In, Consolidate): Dort enden *Modelle* nach dem Regeltext in
+*Nahkampfreichweite* (`core_rules.txt:1803`, `:1985`); die Anforderungen dafür schreibe ich
+mit Etappe 3, jetzt nichts.
