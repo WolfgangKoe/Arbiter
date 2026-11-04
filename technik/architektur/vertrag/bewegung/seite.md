@@ -8,5 +8,6 @@ was alle Phasen teilen: [Querschnitt](../querschnitt.md).
   *Schlacht* V19.
 - Zug (V8, [V10](ziehen.md)): Trägt das gezogene *Modell* `ausgewählt`, folgen alle mit
   `ausgewählt`; Loslassen im *Spielfeld* V5, daneben nach V10.
-- Knöpfe (V7): nur „Phase beenden“ ([Schlacht](../schlacht/seite.md)); auf 409 die
+- Knöpfe (V7): „Phase beenden“ ([Schlacht](../schlacht/seite.md)), davor die aus
+  [Übergehen](../schlacht/uebergehen.md) und [Grenzkreise](grenzkreise.md); auf 409 die
   `sperrmeldung` wie bei jeder Handlung.

@@ -56,5 +56,5 @@ Anforderungsautor fest.
   was MIV-1.5 liest: je *Modell* `modellart`, den Namen; die *Einheit* heißt wie ihr
   *Datenblatt*, ihre *Modelle* in der Folge von `modelle`; mit MIV-3.2 je *Einheit* `fliegen`
   (`bool`, Vorgabe `False`). Die *Fraktion* nicht (K3), der
-  Spielstand bleibt. Prüft: Einheitstests `tests/einheit/katalog/<modul>Test.py`, MIV-1.5 und MIV-3.2
-  je ein Akzeptanztest an `ausgangslageLaden()`; die Schnittstelle nur Text.
+  Spielstand bleibt. Prüft: Einheitstests `tests/einheit/katalog/<modul>Test.py`, MIV-1.5, MIV-2.1 und
+  MIV-3.2 je ein Akzeptanztest an `ausgangslageLaden()`; die Schnittstelle nur Text.

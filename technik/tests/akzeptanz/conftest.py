@@ -2,6 +2,7 @@ import os
 import select
 import subprocess
 import sys
+from fractions import Fraction
 from pathlib import Path
 from typing import NamedTuple
 
@@ -32,6 +33,9 @@ from tests.akzeptanz.handgriffe import (
 )
 from tests.akzeptanz.schlacht import (
     ZugÜberDieBewegungsweite,
+    anhaltenUndÜbergehen,
+    aufeinanderZuZiehen,
+    außerhalbDerNahkampfreichweite,
     zehnZollNachOsten,
     zehnZollNachWesten,
 )
@@ -354,3 +358,28 @@ def einheitAmZug(request, schlacht) -> EinheitAmZug:
     schlacht.ersterZugWählen(spieler)
     schlacht.phaseBeenden()
     return EinheitAmZug(schlacht, einheit, andereEinheit, andererSpieler)
+
+
+@pytest.fixture(params=["spielerEins", "spielerZwei"])
+def inDerNahkampfreichweite(request, schlacht) -> tuple[Schlacht, Einheit]:
+    spieler, einheit, gegner = (
+        request.getfixturevalue(name)
+        for name in {
+            "spielerEins": ("spielerEins", "warboss", "overlord"),
+            "spielerZwei": ("spielerZwei", "overlord", "warboss"),
+        }[request.param]
+    )
+    schlacht.ersterZugWählen(spieler)
+    schlacht.phaseBeenden()
+    (modell,) = einheit.modelle
+    (modellDesAnderenSpielers,) = gegner.modelle
+    aufeinanderZuZiehen(schlacht, modell, modellDesAnderenSpielers, Fraction(3))
+    richtung = 1 if schlacht.stelle(modellDesAnderenSpielers).x > schlacht.stelle(modell).x else -1
+    weg = (richtung * Fraction(5, 2), Fraction(0))
+    anhaltenUndÜbergehen(schlacht, modell, versetzt(schlacht.stelle(modell), weg))
+    stelleDesAnderen = schlacht.stelle(modellDesAnderenSpielers)
+    außerhalb = außerhalbDerNahkampfreichweite(
+        schlacht.stelle(modell), modell, stelleDesAnderen, modellDesAnderenSpielers
+    )
+    assert not außerhalb, "Das Modell steht nicht in Nahkampfreichweite"
+    return schlacht, einheit

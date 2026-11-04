@@ -24,6 +24,7 @@ from tests.akzeptanz.dienst import (
 )
 from tests.akzeptanz.handgriffe import stellenAllerModelle, versetzt
 from tests.akzeptanz.schlacht import (
+    letzteSchlachtrunde,
     phaseBeendenBis,
     phasenAußerDerBewegungsphase,
     phasenAußerDerBewegungsphaseIds,
@@ -189,6 +190,25 @@ def testQue10_2DerDienstÄndertNichtsBeimKörperEinerSchonBeendetenPhase(
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == spielstandDavor
     assert schlachtNachDerWahlDesErstenZugs.phase is Phase.bewegungsphase
+
+
+def testQue10_2VorDemErstenZugÄndertPhaseBeendenNichts(schlacht):
+    phase, runde = schlacht.phase, schlacht.schlachtrunde
+
+    schlacht.phaseBeenden()
+
+    assert (schlacht.phase, schlacht.schlachtrunde, schlacht.amZug) == (phase, runde, None)
+
+
+def testQue10_2NachDemEndeDerSchlachtÄndertPhaseBeendenNichts(schlacht, spielerMitDemErstenZug):
+    schlacht.ersterZugWählen(spielerMitDemErstenZug)
+    zügeBeenden(schlacht, 2 * letzteSchlachtrunde())
+    phase, runde = schlacht.phase, schlacht.schlachtrunde
+
+    schlacht.phaseBeenden()
+
+    assert (schlacht.phase, schlacht.schlachtrunde, schlacht.amZug) == (phase, runde, None)
+    assert schlacht.beendet
 
 
 def testQue10_3NachDerMoralphaseDesErstenSpielersIstDerAndereAmZug(

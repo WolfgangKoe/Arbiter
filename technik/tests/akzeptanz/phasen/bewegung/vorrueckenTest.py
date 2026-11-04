@@ -146,6 +146,31 @@ def testBew5_2OhneAngebotWartetNachVorrückenKeineEinheit(
     assert not schlachtInDerBewegungsphase.vorgerückt(necronWarriors)
 
 
+def testBew5_2InDerNahkampfreichweiteWartetNachVorrückenDieEinheitNicht(
+    inDerNahkampfreichweite,
+):
+    schlacht, einheit = inDerNahkampfreichweite
+    schlacht.auswählen(einheit)
+
+    schlacht.vorrücken()
+
+    assert not schlacht.wartetAufVorrückwurf(einheit)
+    assert not schlacht.vorgerückt(einheit)
+
+
+def testBew5_2DerDienstÄndertInDerNahkampfreichweiteBeimVorrückenNichts(
+    dienstDerSchlacht, inDerNahkampfreichweite
+):
+    schlacht, einheit = inDerNahkampfreichweite
+    schlacht.auswählen(einheit)
+    spielstandDavor = spielstandVon(dienstDerSchlacht)
+
+    antwort = vorrücken(dienstDerSchlacht)
+
+    assert antwort.status_code == HTTPStatus.OK
+    assert antwort.get_json() == spielstandDavor
+
+
 def testBew5_2DerDienstNenntNachVorrückenZurücknehmenStattVorrücken(
     dienstDerSchlacht, schlachtInDerBewegungsphase, boyz
 ):

@@ -126,7 +126,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Fachkritiker: Item fliegen abgenommen
 - [ ] Planer: Item fliegen gelöscht
 - [ ] Architekt: Vertrag zu Item zuruecksetzenUndLuecken, bei beiden Hälften
-- [ ] Testautor: Tests zu Item zuruecksetzenUndLuecken
+- [x] Testautor: Tests zu Item zuruecksetzenUndLuecken
 - [ ] Fachkritiker: Kritik an den Tests zu Item zuruecksetzenUndLuecken
 - [ ] Architekt: Kritik an den Tests zu Item zuruecksetzenUndLuecken
 - [ ] Implementierer: Tests zu Item zuruecksetzenUndLuecken grün

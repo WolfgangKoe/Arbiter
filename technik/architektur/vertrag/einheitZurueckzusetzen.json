@@ -1,0 +1,13 @@
+{
+  "schlacht": {
+    "ersterZug": 1,
+    "amZug": 1,
+    "schlachtrunde": 1,
+    "phase": "Bewegungsphase",
+    "beendet": false,
+    "protokoll": [],
+    "gemeinsamÜbergehen": {"angeboten": false},
+    "vorrücken": {"angeboten": true, "zurücknehmen": false},
+    "einheitZurücksetzen": {"angeboten": true}
+  }
+}

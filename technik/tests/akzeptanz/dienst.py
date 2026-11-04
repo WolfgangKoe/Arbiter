@@ -14,6 +14,7 @@ kennungenDerEinheiten = {
     "Warboss": (1, 2),
     "Necron Warriors": (2, 1),
     "Overlord": (2, 2),
+    "Canoptek Spyder": (2, 3),
 }
 
 
@@ -228,6 +229,14 @@ def vorrücken(dienst):
 
 def vorrückenZurücknehmen(dienst):
     return dienst.put("/api/vorrückenZurücknehmen")
+
+
+def einheitZurücksetzen(dienst):
+    return dienst.put("/api/einheitZurücksetzen")
+
+
+def einheitZurückzusetzenDesVertrags() -> dict:
+    return _beispielDesVertrags("einheitZurueckzusetzen.json")
 
 
 def aufstellenDerEinheitBeenden(dienst):
