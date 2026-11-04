@@ -56,5 +56,6 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
 - **M1** Die Baseform kennt in der Domäne nur `messen.py`; Phasen messen nur mit dessen
   Messungen: *überdecken*, *Abstand* höchstens, *ganz in* einer Fläche, der kürzeste Weg,
   der *Bases* gemeinsam *ganz in* eine Fläche rückt, der Anteil eines Wegs bis zur ersten
-  Berührung (S3). Prüft: nur Text; Auslöser: zweite
+  Berührung (S3) und vor der letzten, der kürzeste Weg in die freie Fläche zwischen Kreisen
+  ([Fliegen](vertrag/bewegung/fliegen.md)). Prüft: nur Text; Auslöser: zweite
   Baseform (Etappe 6), dann je Baseform ein Vertragstest.

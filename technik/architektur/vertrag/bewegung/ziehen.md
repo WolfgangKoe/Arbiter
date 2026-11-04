@@ -29,7 +29,7 @@ wie V15, fremd nach AUF-29.3, so sperrt QUE-1.2 bei der ganzen *Einheit* keines
 ihrer *Modelle* (BEW-19). *Angehalten* nach BEW-3.1 oder 6.2 (für [V18](../schlacht/uebergehen.md))
 ist es, wenn deren Anteil auf der Strecke zum Ziel oder nach 17.3 und 17.4 der kleinste und
 kleiner 1 ist. Warum hier: V16 kennt nur die gerade Strecke, das Gleiten nur *Bases*; die
-*Bewegungsphase* setzt beides zusammen (`phasen/bewegung/`).
+*Bewegungsphase* setzt beides zusammen (`phasen/bewegung/`). Mit *Fliegen*: [Fliegen](fliegen.md).
 
 *Neben der Karte* loslassen (BEW-20.1 statt AUF-16.8): Die Seite schickt V5 mit dem Punkt der
 letzten 200 (V10), die Domäne ändert sich nicht: Sie *setzt* dort, was V10 am selben Punkt
