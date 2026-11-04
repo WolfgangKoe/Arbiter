@@ -142,9 +142,7 @@ def streckeÜberdeckt(
     return überdecken(bewegteBase, stelle, ruhendeBase, ort)
 
 
-def anteilVorDemErstenSchrittMit(
-    trifftMonotonAb: Callable[[Fraction], bool], weg: Weg
-) -> Fraction:
+def anteilVorDemErstenSchrittMit(trifftMonotonAb: Callable[[Fraction], bool], weg: Weg) -> Fraction:
     schritte = schritteDesWegs(weg)
     if schritte == 0 or not trifftMonotonAb(Fraction(1)):
         return Fraction(1)
@@ -154,20 +152,6 @@ def anteilVorDemErstenSchrittMit(
 
     erster = ersterSchrittMit(trifftBeiSchritt, schritte + 1)
     return Fraction(max(erster - 1, 0), schritte)
-
-
-def anteilBisZurBerührung(
-    bewegte: BasenAnStellen,
-    hindernisse: BasenAnStellen,
-    weg: Weg,
-    berührt: Berührung = überdecken,
-) -> Fraction:
-    paare = [(bewegt, hindernis) for bewegt in bewegte for hindernis in hindernisse]
-    if not any(
-        _berührtAm(bewegt, hindernis, weg, Fraction(1), berührt) for bewegt, hindernis in paare
-    ):
-        return Fraction(1)
-    return anteilBisZurBerührungAufDemWeg(bewegte, hindernisse, weg, berührt)
 
 
 def anteilBisZurBerührungAufDemWeg(

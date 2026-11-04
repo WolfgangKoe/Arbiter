@@ -1,12 +1,18 @@
 from collections.abc import Mapping
 
+from arbiter.domaene import messen
 from arbiter.domaene.missionsvorbereitung.ausgangslage import (
     Aufstellungszone,
     Ausgangslage,
     Grenzen,
 )
 from arbiter.domaene.phasen import einheitVon
-from arbiter.domaene.phasen.aufstellen.anhaltenAnEinerBase import angehalten
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import (
+    Weiterrücken,
+    gleiten,
+    keinAnhaltenAufDemWeg,
+    zuvorGezeigt,
+)
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
 from arbiter.domaene.phasen.aufstellen.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.aufstellen.einheitInAufstellung import prüfenDassWählbar
@@ -84,13 +90,26 @@ class Aufstellung:
             raise ValueError("Der Spieler ist unbekannt")
         return self._zonen.get(spieler)
 
-    def stellenBeimLoslassen(self, modell: Modell, stelle: Stelle) -> Gezeigt:
+    def stellenBeimLoslassen(
+        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None = None
+    ) -> Gezeigt:
         if not self.gesetzt(modell):
-            return Gezeigt({})
+            return Gezeigt({}, angehaltenAufDemWeg=False)
+        weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
         einheit = self._wählbareEinheitVon(modell)
-        verschoben = self._verschobeneStellen(einheit, modell, stelle)
-        hinein = hineingerückt(verschoben, self._zoneAnDerReihe())
-        return Gezeigt(angehalten(self._stellen, hinein, modell))
+        ebene = self._auswahl.ebene(einheit, modell, self._stellen)
+        ziel = hineingerückt(verschobeneStellen(ebene, modell, stelle), self._zoneAnDerReihe())
+        zuvor = zuvorGezeigt(ebene, modell, weiter)
+        weg = messen.wegZwischen(zuvor[modell], ziel[modell])
+        fremde = {anderes: ort for anderes, ort in self._stellen.items() if anderes not in ebene}
+        geglitten = gleiten(
+            zuvor,
+            weg,
+            fremde,
+            keinAnhaltenAufDemWeg,
+            angehaltenAufDemWeg=weiter.angehaltenAufDemWeg,
+        )
+        return Gezeigt(geglitten.stellen, geglitten.angehaltenAufDemWeg)
 
     def gewinnerWählen(self, gewinner: Spieler) -> None:
         if gewinner not in self._beideSpieler:
@@ -113,8 +132,10 @@ class Aufstellung:
         self._stellen[modell] = stelle
         self._einheitInAufstellung = einheit
 
-    def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
-        gezeigt = self.stellenBeimLoslassen(modell, stelle)
+    def modellLoslassen(
+        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None = None
+    ) -> None:
+        gezeigt = self.stellenBeimLoslassen(modell, stelle, weiter)
         if gezeigt.stellen:
             self._loslassen(einheitVon(self._beideSpieler, modell), gezeigt.stellen)
 
@@ -169,12 +190,6 @@ class Aufstellung:
         spieler = self._anDerReihe
         assert spieler is not None
         return spieler
-
-    def _verschobeneStellen(
-        self, einheit: Einheit, modell: Modell, stelle: Stelle
-    ) -> dict[Modell, Stelle]:
-        ebene = self._auswahl.ebene(einheit, modell, self._stellen)
-        return verschobeneStellen(ebene, modell, stelle)
 
     def _loslassen(self, einheit: Einheit, neue: Mapping[Modell, Stelle]) -> None:
         anderswo = {modell: ort for modell, ort in self._stellen.items() if modell not in neue}

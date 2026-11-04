@@ -86,7 +86,9 @@ def _eintrag(aufstellung: Aufstellung, eintrag: Eintrag) -> dict:
 
 
 def stellenBeimLoslassen(aufstellung: Aufstellung, gezeigt: Gezeigt) -> dict:
+    angehalten = {"angehaltenAufDemWeg": True} if gezeigt.angehaltenAufDemWeg else {}
     return {
+        **angehalten,
         "modelle": [
             {
                 "spieler": kennungen.spielernummer,
@@ -97,7 +99,7 @@ def stellenBeimLoslassen(aufstellung: Aufstellung, gezeigt: Gezeigt) -> dict:
             }
             for kennungen in modelleMitKennungen(aufstellung)
             if kennungen.modell in gezeigt.stellen
-        ]
+        ],
     }
 
 

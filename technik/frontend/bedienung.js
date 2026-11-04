@@ -1,5 +1,6 @@
 import {
   auswahlSenden,
+  eingabenDerAbfrage,
   karteAnklicken,
   letztenSpielstandZeichnen,
   modellAnklickenSenden,
@@ -51,15 +52,28 @@ function kreiseAnDieStellenSetzen(modelle) {
   }
 }
 
+function stelleDesGezogenen(modelle, kennung) {
+  return modelle.find(({ spieler, einheit, nummer }) =>
+    spieler === Number(kennung.spieler) && einheit === Number(kennung.einheit) && nummer === Number(kennung.nummer))
+}
+
+function antwortMerken(zug, eingaben, antwort, kennung) {
+  zug.beantwortet = eingaben
+  if (!antwort.modelle) return
+  const gezeigt = stelleDesGezogenen(antwort.modelle, kennung)
+  zug.letzte200 = eingaben
+  zug.weiter = { zuvor: gezeigt && { x: gezeigt.x, y: gezeigt.y }, angehaltenAufDemWeg: antwort.angehaltenAufDemWeg }
+  kreiseAnDieStellenSetzen(antwort.modelle)
+}
+
 async function stelleBeimLoslassenAbfragen(punkt) {
   abfrageLäuft = true
   const zug = ziehenStart
   try {
-    const modelle = await stellenBeimLoslassen(gezogen.dataset, punkt)
-    if (modelle && ziehenStart === zug) {
-      zug.letzterPunkt = punkt
-      kreiseAnDieStellenSetzen(modelle)
-    }
+    const kennung = gezogen.dataset
+    const eingaben = eingabenDerAbfrage(punkt, zug.weiter)
+    const antwort = await stellenBeimLoslassen(kennung, eingaben)
+    if (antwort && ziehenStart === zug) antwortMerken(zug, eingaben, antwort, kennung)
   } finally {
     abfrageLäuft = false
     const nächster = wartenderPunkt
@@ -123,7 +137,14 @@ export function ziehenBeenden(ereignis) {
   gezogen = null
   if (!start.begonnen) return klicken(ereignis, start.ziel)
   if (!kreis) return
-  const stelle = stelleDesZugs(ereignis, start, kreis) ?? start.letzterPunkt
-  if (stelle) return modellLoslassen(kreis.dataset, stelle)
+  const eingaben = eingabenBeimLoslassen(start, stelleDesZugs(ereignis, start, kreis))
+  if (eingaben) return modellLoslassen(kreis.dataset, eingaben)
   letztenSpielstandZeichnen()
+}
+
+function eingabenBeimLoslassen(start, stelle) {
+  if (!stelle) return start.letzte200
+  const { beantwortet } = start
+  if (beantwortet?.x === stelle.x && beantwortet?.y === stelle.y) return beantwortet
+  return eingabenDerAbfrage(stelle, start.weiter)
 }

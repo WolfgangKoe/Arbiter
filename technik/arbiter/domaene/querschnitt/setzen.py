@@ -12,6 +12,7 @@ nahkampfreichweite = Fraction(1)
 @dataclass(frozen=True)
 class Gezeigt:
     stellen: Mapping[Modell, Stelle]
+    angehaltenAufDemWeg: bool
 
 
 def gesetzteModelle(einheit: Einheit, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:

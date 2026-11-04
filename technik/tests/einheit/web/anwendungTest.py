@@ -4,6 +4,7 @@ from http import HTTPStatus
 import pytest
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.spielobjekte import Stelle
 from arbiter.web.anwendung import anwendungFür
 from tests.akzeptanz.handgriffe import alleEinheitenAufstellen, aufstellungVon, spielerMit
@@ -115,12 +116,24 @@ def stellenAbfangen(aufstellung, monkeypatch, aufruf):
     stellen = []
     echte = getattr(aufstellung, aufruf)
 
-    def abfangen(modell, stelle):
+    def abfangen(modell, stelle, weiter):
         stellen.append(stelle)
-        return echte(modell, stelle)
+        return echte(modell, stelle, weiter)
 
     monkeypatch.setattr(aufstellung, aufruf, abfangen)
     return stellen
+
+
+def aufrufeAbfangen(aufstellung, monkeypatch, aufruf):
+    aufrufe = []
+    echte = getattr(aufstellung, aufruf)
+
+    def abfangen(modell, stelle, weiter):
+        aufrufe.append((stelle, weiter))
+        return echte(modell, stelle, weiter)
+
+    monkeypatch.setattr(aufstellung, aufruf, abfangen)
+    return aufrufe
 
 
 def testEineGleitkommazahlKommtImKörperAlsBruchMitKleinemNennerInDieDomäne(
@@ -154,6 +167,59 @@ def testEineKoordinateMitMehrNachkommastellenAlsDerNennerErlaubtWirdAufEinMillio
     dienst.put(pfadDesModells.format(1, 1, 1), json={"x": 0.0000009, "y": 1})
 
     assert stellen == [Stelle(x=Fraction(1, 1_000_000), y=Fraction(1))]
+
+
+def testOhneEingabenDesWeiterrückensÜbergibtDieAnwendungNone(aufstellung, monkeypatch):
+    aufrufe = aufrufeAbfangen(aufstellung, monkeypatch, "stellenBeimLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+
+    dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string={"x": 3, "y": 20})
+
+    assert [weiter for _, weiter in aufrufe] == [None]
+
+
+def testDieAbfrageGibtZuvorUndAngehaltenAufDemWegAnDieDomäneWeiter(aufstellung, monkeypatch):
+    aufrufe = aufrufeAbfangen(aufstellung, monkeypatch, "stellenBeimLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+    abfrage = {"x": 3, "y": 20, "zuvorX": 1.5, "zuvorY": 2, "angehaltenAufDemWeg": "true"}
+
+    dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string=abfrage)
+
+    zuvor = Stelle(x=Fraction(3, 2), y=Fraction(2))
+    assert [weiter for _, weiter in aufrufe] == [Weiterrücken(zuvor, angehaltenAufDemWeg=True)]
+
+
+def testDasLoslassenGibtZuvorUndAngehaltenAufDemWegAusDemKörperAnDieDomäneWeiter(
+    aufstellung, monkeypatch
+):
+    aufrufe = aufrufeAbfangen(aufstellung, monkeypatch, "modellLoslassen")
+    dienst = anwendungFür(aufstellung).test_client()
+    körper = {**eineStelle, "zuvorX": 1.5, "zuvorY": 2, "angehaltenAufDemWeg": True}
+
+    dienst.put(pfadDesModells.format(1, 1, 1), json=körper)
+
+    zuvor = Stelle(x=Fraction(3, 2), y=Fraction(2))
+    assert [weiter for _, weiter in aufrufe] == [Weiterrücken(zuvor, angehaltenAufDemWeg=True)]
+
+
+@pytest.mark.parametrize("angabe", [{"zuvorX": 1}, {"zuvorY": 1}, {"zuvorX": "a", "zuvorY": 1}])
+def testEineHalbeOderUnlesbareZuvorAngabeInDerAbfrageIstEineFehlerhafteAnfrage(
+    aufstellung, angabe
+):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string={"x": 3, "y": 20, **angabe})
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
+
+
+@pytest.mark.parametrize("angabe", [{"zuvorX": 1}, {"zuvorY": 1}, {"zuvorX": "1", "zuvorY": 1}])
+def testEineHalbeOderUnlesbareZuvorAngabeImKörperIstEineFehlerhafteAnfrage(aufstellung, angabe):
+    dienst = anwendungFür(aufstellung).test_client()
+
+    antwort = dienst.put(pfadDesModells.format(1, 1, 1), json={**eineStelle, **angabe})
+
+    assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
 def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):

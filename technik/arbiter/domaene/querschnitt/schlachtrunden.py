@@ -118,7 +118,7 @@ class Schlacht:
         neue, gründe = self._stellenMitGründen(modell, stelle)
         if gründe:
             raise Sperre(*gründe)
-        return Gezeigt(neue)
+        return Gezeigt(neue, angehaltenAufDemWeg=False)
 
     def modellLoslassen(self, modell: Modell, stelle: Stelle) -> None:
         neue, gründe = self._stellenMitGründen(modell, stelle)

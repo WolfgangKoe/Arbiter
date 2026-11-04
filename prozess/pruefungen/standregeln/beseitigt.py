@@ -16,9 +16,15 @@ def anliegenDatei(wurzel: Path, nummer: str) -> str | None:
     return gefunden[0] if gefunden else None
 
 
-def beseitigendeBetreffe(wurzel: Path, pfad: str) -> list[str]:
+def beseitigendeBetreffe(wurzel: Path, pfad: str, festgehalten: str) -> list[str]:
     betreffe = gitAusgabe(wurzel, "log", "--format=%s", "--", pfad).splitlines()
-    return betreffe if (wurzel / pfad).is_file() else betreffe[1:]
+    return betreffe if festgehalten else betreffe[1:]
+
+
+def istUnverändert(datei: Path, festgehalten: str) -> bool:
+    if not datei.is_file():
+        return not festgehalten
+    return datei.read_text(encoding="utf-8") == festgehalten
 
 
 def beseitigtDurch(wurzel: Path, nummer: str) -> str | None:
@@ -26,14 +32,14 @@ def beseitigtDurch(wurzel: Path, nummer: str) -> str | None:
     if pfad is None:
         return None
     festgehalten = gitAusgabe(wurzel, "show", f"HEAD:{pfad}")
-    datei = wurzel / pfad
-    if (datei.read_text(encoding="utf-8") if datei.is_file() else "") != festgehalten:
-        return None
     gelesen = kopfAusText(festgehalten, Path(pfad))
-    gelöscht = not festgehalten
-    if not gelöscht and (gelesen is None or gelesen.status not in behoben):
+    erledigt = gelesen is not None and gelesen.status in behoben
+    gelöschtVomHook = erledigt and not (wurzel / pfad).is_file()
+    if not (gelöschtVomHook or istUnverändert(wurzel / pfad, festgehalten)):
         return None
-    betreffe = beseitigendeBetreffe(wurzel, pfad)
+    if festgehalten and not erledigt:
+        return None
+    betreffe = beseitigendeBetreffe(wurzel, pfad, festgehalten)
     return betreffe[0] if betreffe else None
 
 

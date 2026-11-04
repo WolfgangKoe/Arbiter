@@ -173,5 +173,26 @@ def testEinGelöschtesErledigtesAnliegenBeseitigtMitDemCommitDavor(tmp_path, git
     assert "beseitigt: Commit „Pfad freigegeben“" in plan.read_text(encoding="utf-8")
 
 
+def testEineUncommittetGelöschteErledigteDateiBeseitigtMitDemCommitDerErledigung(
+    tmp_path, gitRepo, plan
+):
+    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
+    (datei,) = anliegenDateien(tmp_path)
+    statusSetzen(datei, "offen", "erledigt")
+    gitRepo.festhalten("Pfad freigegeben")
+    datei.unlink()
+    fortschrittSchreiben(tmp_path)
+    assert "beseitigt: Commit „Pfad freigegeben“" in plan.read_text(encoding="utf-8")
+
+
+def testEineUncommittetGelöschteOffeneDateiBeseitigtNichts(tmp_path, gitRepo, plan):
+    hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
+    (datei,) = anliegenDateien(tmp_path)
+    gitRepo.festhalten("Hindernis gemeldet")
+    datei.unlink()
+    fortschrittSchreiben(tmp_path)
+    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+
+
 def testDerDateinameIstAsciiUndCamelCase():
     assert dateiname(5, "Tests zu Item stellen grün") == "05-hindernisTestsZuItemStellenGruen.md"

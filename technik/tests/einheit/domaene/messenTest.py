@@ -2,7 +2,6 @@ from fractions import Fraction
 
 from arbiter.domaene.messen import (
     abstandHöchstens,
-    anteilBisZurBerührung,
     anteilBisZurBerührungAufDemWeg,
     ganzIn,
     rückungInDieFläche,
@@ -120,7 +119,7 @@ def testEineSchonÜberdeckendeBaseHältDenWegAmAnfangAnAuchWennSieSichEntfernt(z
     amEnde = Stelle(x=Fraction(25), y=Fraction(0))
     weg = (Fraction(20), Fraction(0))
 
-    anteil = anteilBisZurBerührung(
+    anteil = anteilBisZurBerührungAufDemWeg(
         [(zehnZoll, ursprung)], [(zehnZoll, überdeckt), (zehnZoll, amEnde)], weg
     )
 
@@ -131,7 +130,7 @@ def testDerWegBisZurBerührungEndetAufDemRasterHöchstensEinHundertstelVorIhr(ze
     ort = Stelle(x=Fraction(25), y=Fraction(0))
     weg = (Fraction(20), Fraction(0))
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], [(zehnZoll, ort)], weg)
+    anteil = anteilBisZurBerührungAufDemWeg([(zehnZoll, ursprung)], [(zehnZoll, ort)], weg)
 
     halt = verschoben(ursprung, teilDesWegs(weg, anteil))
     assert halt == Stelle(x=Fraction(15), y=Fraction(0))
@@ -142,7 +141,7 @@ def testDerWegBisZurBerührungEndetAufDemRasterHöchstensEinHundertstelVorIhr(ze
 def testDerWegHältAufDemHundertstelRasterUndNichtAufEinemFeineren(zehnZoll):
     ort = Stelle(x=Fraction(10995, 1000), y=Fraction(0))
 
-    anteil = anteilBisZurBerührung(
+    anteil = anteilBisZurBerührungAufDemWeg(
         [(zehnZoll, ursprung)], [(zehnZoll, ort)], (Fraction(2), Fraction(0))
     )
 
@@ -155,7 +154,7 @@ def testDerWegHältAuchBeiEinemBloßenStreifenAmEndeVorDerBerührung(zehnZoll):
     ruhend = [(zehnZoll, streifend)]
     weg = (Fraction(20), Fraction(0))
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, weg)
+    anteil = anteilBisZurBerührungAufDemWeg([(zehnZoll, ursprung)], ruhend, weg)
 
     halt = verschoben(ursprung, teilDesWegs(weg, anteil))
     assert not überdecken(zehnZoll, halt, zehnZoll, streifend)
@@ -168,7 +167,7 @@ def testDerWegHältVorDerBaseDieErUnterwegsNurStreiftWennErInEinerZweitenEndet(z
     ruhend = [(zehnZoll, gestreift), (zehnZoll, ende)]
     weg = (Fraction(40), Fraction(0))
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, weg)
+    anteil = anteilBisZurBerührungAufDemWeg([(zehnZoll, ursprung)], ruhend, weg)
 
     halt = verschoben(ursprung, teilDesWegs(weg, anteil))
     assert not überdecken(zehnZoll, halt, zehnZoll, gestreift)
@@ -178,7 +177,9 @@ def testDerWegHältVorDerBaseDieErUnterwegsNurStreiftWennErInEinerZweitenEndet(z
 def testEinWegDerLängeNullIstGanzAuchWennDieBaseSchonÜberdeckt(zehnZoll):
     ruhend = [(zehnZoll, Stelle(x=Fraction(5), y=Fraction(0)))]
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, (Fraction(0), Fraction(0)))
+    anteil = anteilBisZurBerührungAufDemWeg(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(0), Fraction(0))
+    )
 
     assert anteil == 1
 
@@ -186,23 +187,19 @@ def testEinWegDerLängeNullIstGanzAuchWennDieBaseSchonÜberdeckt(zehnZoll):
 def testEinWegUnterEinemRasterschrittInEineBerührteBaseBleibtLeer(zehnZoll):
     ruhend = [(zehnZoll, Stelle(x=Fraction(10), y=Fraction(0)))]
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, (Fraction(1, 200), Fraction(0)))
+    anteil = anteilBisZurBerührungAufDemWeg(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(1, 200), Fraction(0))
+    )
 
     assert anteil == 0
-
-
-def testDerWegIstGanzWennDasEndeFreiIstAuchWennErEineBaseKreuzt(zehnZoll):
-    ruhend = [(zehnZoll, Stelle(x=Fraction(15), y=Fraction(0)))]
-
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, (Fraction(40), Fraction(0)))
-
-    assert anteil == 1
 
 
 def testDerWegBleibtLeerWennDieBaseSchonAnDerBaseSteht(zehnZoll):
     ruhend = [(zehnZoll, Stelle(x=Fraction(10), y=Fraction(0)))]
 
-    anteil = anteilBisZurBerührung([(zehnZoll, ursprung)], ruhend, (Fraction(5), Fraction(0)))
+    anteil = anteilBisZurBerührungAufDemWeg(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(5), Fraction(0))
+    )
 
     assert anteil == 0
 
@@ -219,7 +216,7 @@ def testDerSchrägeWegBisZurBerührungHältVorDerÜberdeckungAuchAußerhalbDesUr
     ort = Stelle(x=Fraction(21), y=Fraction(20))
     weg = (Fraction(-10), Fraction(-10))
 
-    anteil = anteilBisZurBerührung([(zehnZoll, start)], [(zehnZoll, ort)], weg)
+    anteil = anteilBisZurBerührungAufDemWeg([(zehnZoll, start)], [(zehnZoll, ort)], weg)
 
     halt = verschoben(start, teilDesWegs(weg, anteil))
     assert not überdecken(zehnZoll, halt, zehnZoll, ort)

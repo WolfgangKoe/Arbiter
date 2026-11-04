@@ -87,8 +87,8 @@ export async function modellAnklickenSenden(modell) {
   await zeichneAntwort(await senden(`${modellPfad(modell)}/anklicken`, "PUT"))
 }
 
-export function modellLoslassen(modell, stelle) {
-  return handlungSenden(`${modellPfad(modell)}/stelle`, "PUT", stelle)
+export function modellLoslassen(modell, eingaben) {
+  return handlungSenden(`${modellPfad(modell)}/stelle`, "PUT", eingaben)
 }
 
 function aufstellenDerEinheitBeenden() {
@@ -120,7 +120,21 @@ export function karteAnklicken(stelle) {
   return handlungSenden("/api/karteAnklicken", "PUT", stelle)
 }
 
-export async function stellenBeimLoslassen(modell, punkt) {
-  const antwort = await fetch(`${modellPfad(modell)}/stelleBeimLoslassen?x=${punkt.x}&y=${punkt.y}`).catch(() => null)
-  return antwort?.ok ? (await antwort.json()).modelle : null
+export function eingabenDerAbfrage(punkt, weiter) {
+  const eingaben = { x: punkt.x, y: punkt.y }
+  if (weiter?.zuvor) {
+    eingaben.zuvorX = weiter.zuvor.x
+    eingaben.zuvorY = weiter.zuvor.y
+  }
+  if (weiter?.angehaltenAufDemWeg) eingaben.angehaltenAufDemWeg = true
+  return eingaben
+}
+
+export async function stellenBeimLoslassen(modell, eingaben) {
+  const abfrage = new URLSearchParams(eingaben)
+  const antwort = await fetch(`${modellPfad(modell)}/stelleBeimLoslassen?${abfrage}`).catch(() => null)
+  if (!antwort) return null
+  if (!antwort.ok) return { modelle: null }
+  const { modelle, angehaltenAufDemWeg } = await antwort.json()
+  return { modelle, angehaltenAufDemWeg: angehaltenAufDemWeg === true }
 }

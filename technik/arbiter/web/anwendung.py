@@ -8,6 +8,7 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, request, send_from_directory
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.querschnitt.schlachtrunden import Phase, Schlacht
 from arbiter.domaene.sperre import Sperre
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
@@ -58,6 +59,30 @@ def _jsonZahl(text: str | None) -> object:
 def _stelleDerAbfrage() -> Stelle:
     angaben = {name: _jsonZahl(request.args.get(name)) for name in ("x", "y")}
     return Stelle(x=_zahl(angaben, "x"), y=_zahl(angaben, "y"))
+
+
+def _weiterrücken(angaben: dict, *, angehalten: bool) -> Weiterrücken | None:
+    if not angaben and not angehalten:
+        return None
+    if not angaben:
+        return Weiterrücken(None, angehalten)
+    zuvor = Stelle(x=_zahl(angaben, "zuvorX"), y=_zahl(angaben, "zuvorY"))
+    return Weiterrücken(zuvor, angehalten)
+
+
+def _weiterrückenDerAbfrage() -> Weiterrücken | None:
+    namen = ("zuvorX", "zuvorY")
+    angaben = {name: _jsonZahl(request.args[name]) for name in namen if name in request.args}
+    return _weiterrücken(angaben, angehalten=request.args.get("angehaltenAufDemWeg") == "true")
+
+
+def _weiterrückenDerAnfrage() -> Weiterrücken | None:
+    körper = request.get_json(silent=True)
+    if not isinstance(körper, dict):
+        abort(HTTPStatus.BAD_REQUEST)
+    namen = ("zuvorX", "zuvorY")
+    angaben = {name: körper[name] for name in namen if name in körper}
+    return _weiterrücken(angaben, angehalten=körper.get("angehaltenAufDemWeg") is True)
 
 
 def _ganzeZahl(körper: dict, name: str) -> int:
@@ -168,7 +193,7 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         stelle = _stelleDerAnfrage()
         schlacht = laufendeSchlacht()
         if schlacht is None:
-            aufstellung.modellLoslassen(modell, stelle)
+            aufstellung.modellLoslassen(modell, stelle, _weiterrückenDerAnfrage())
         else:
             schlacht.modellLoslassen(modell, stelle)
         return spielstandLiefern()
@@ -179,7 +204,12 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
 
     def stelleBeimLoslassen(spielernummer: int, einheitennummer: int, modellnummer: int):
         modell = modellDerArmee(spielernummer, einheitennummer, modellnummer)
-        abfrage = spiel().stellenBeimLoslassen(modell, _stelleDerAbfrage())
+        stelle = _stelleDerAbfrage()
+        schlacht = laufendeSchlacht()
+        if schlacht is None:
+            abfrage = aufstellung.stellenBeimLoslassen(modell, stelle, _weiterrückenDerAbfrage())
+        else:
+            abfrage = schlacht.stellenBeimLoslassen(modell, stelle)
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
     def karteAnklicken():
