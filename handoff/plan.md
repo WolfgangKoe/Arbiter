@@ -109,7 +109,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testBew17_1EineBaseHinterDerBewegungsweiteLenktDasModellNichtAb. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 12704); beseitigt: Commit „12700 umgesetzt: Gleiten prüft am ungekürzten Ziel, Nachprüfungen“
 - [x] Implementierer: Tests zu Item anhaltenAufDemWeg grün
 - [x] Architekt: Kritik am Code zu Item anhaltenAufDemWeg
-- [ ] Reviewer: Kritik am Code zu Item anhaltenAufDemWeg
+- [x] Reviewer: Kritik am Code zu Item anhaltenAufDemWeg
   Hindernis: Reviewer → Implementierer: Beim schnellen Ziehen über die Bewegungsweite hinaus sperrt Arbiter mit ‚Base überdeckt‘ (nicht übergehbar), statt vor der Base anzuhalten; nach einem Halt vor einer Base bietet Arbiter gemeinsam übergehen an und protokolliert einen Eintrag ohne Grund (Anliegen 12700); beseitigt: Commit „12700 umgesetzt: Gleiten prüft am ungekürzten Ziel, Nachprüfungen“
   Hindernis: Reviewer → Anforderungsautor: Das Glossar nennt beim Grund den entfernten Code überEineBase und dessen Historie (Anliegen 12701); beseitigt: Commit „anhaltenAufDemWeg Teil 2: Bewegung hält auf dem Weg an, Kritik am Code“
   Hindernis: Reviewer → Implementierer: Nach dem Anhalten auf dem Weg kürzt die Bewegung ab zuvor statt nach V16 wie der Vertrag Ziehen (Anliegen 12961); beseitigt: Commit „Kritik am Code zu anhaltenAufDemWeg: Spielfeldkante, Kürzen nach V16“

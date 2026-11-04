@@ -30,7 +30,7 @@ def testEinZeigerAufEinerFremdenBaseÄndertNichtsAnDerFreienStelleAnDerSpielfeld
     boy, fremdes = modellMit(klein), modellMit(klein)
     vorher = Stelle(x=Fraction(30), y=Fraction(2))
     ebene = {boy: vorher}
-    stellen = {**ebene, fremdes: Stelle(x=Fraction(30), y=Fraction(-3))}
+    stellen = {**ebene, fremdes: Stelle(x=Fraction(31), y=Fraction(-3))}
     ziel = stellen[fremdes]
     phase = Bewegungsphase(ebene, spielfeld)
 
