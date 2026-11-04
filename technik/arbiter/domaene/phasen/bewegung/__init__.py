@@ -20,6 +20,7 @@ from arbiter.domaene.phasen.bewegung.anhaltenVorDerGrenze import (
     anteilBisZurSpielfeldkante,
 )
 from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
+from arbiter.domaene.phasen.bewegung.einheitZuruecksetzen import stehtNichtWieZuBeginn
 from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
     grenzeDerBewegung,
@@ -126,6 +127,13 @@ class Bewegungsphase:
 
     def vorrückenZurücknehmenAngeboten(self, einheit: Einheit) -> bool:
         return self.wartetAufVorrückwurf(einheit) or self.vorgerückt(einheit)
+
+    def einheitZurücksetzenAngeboten(
+        self, einheit: Einheit, stellen: Mapping[Modell, Stelle]
+    ) -> bool:
+        return not self.vorrückenZurücknehmenAngeboten(einheit) and stehtNichtWieZuBeginn(
+            einheit, stellen, self._stellenZuBeginn
+        )
 
     def vorrückenBeginnen(self, einheit: Einheit) -> None:
         if self.vorrückenAngeboten(einheit):

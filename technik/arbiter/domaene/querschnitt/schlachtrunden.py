@@ -11,6 +11,9 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
     grenzenDerNahkampfreichweite,
 )
+from arbiter.domaene.phasen.bewegung.keinVorrueckenAusDerNahkampfreichweite import (
+    einModellInNahkampfreichweite,
+)
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.querschnitt.uebergehen import Protokoll
@@ -233,12 +236,25 @@ class Schlacht:
     @property
     def vorrückenAngeboten(self) -> bool:
         einheit = self._einheitMitGrenzen()
-        return einheit is not None and self._bewegungsphase.vorrückenAngeboten(einheit)
+        return (
+            einheit is not None
+            and self._bewegungsphase.vorrückenAngeboten(einheit)
+            and not einModellInNahkampfreichweite(
+                einheit, self._stellen, self._stellenDesGegners()
+            )
+        )
 
     @property
     def vorrückenZurücknehmenAngeboten(self) -> bool:
         einheit = self._einheitMitGrenzen()
         return einheit is not None and self._bewegungsphase.vorrückenZurücknehmenAngeboten(einheit)
+
+    @property
+    def einheitZurücksetzenAngeboten(self) -> bool:
+        einheit = self._einheitMitGrenzen()
+        return einheit is not None and self._bewegungsphase.einheitZurücksetzenAngeboten(
+            einheit, self._stellen
+        )
 
     def wartetAufVorrückwurf(self, einheit: Einheit) -> bool:
         return self._bewegungsphase.wartetAufVorrückwurf(einheit)
@@ -261,6 +277,12 @@ class Schlacht:
         einheit = self._auswahl.einheit
         self._bewegungsphase.vorrückenZurücknehmen(einheit)
         self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(einheit))
+
+    def einheitZurücksetzen(self) -> None:
+        self._bewegungsphase.angebotBeenden()
+        if not self.einheitZurücksetzenAngeboten:
+            return
+        self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(self._auswahl.einheit))
 
     def _einheitMitGrenzen(self) -> Einheit | None:
         spieler = self._amZug

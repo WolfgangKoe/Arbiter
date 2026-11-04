@@ -53,6 +53,7 @@ def _schlacht(aufstellung: Aufstellung, schlacht: Schlacht) -> dict:
             "angeboten": schlacht.vorrückenAngeboten,
             "zurücknehmen": schlacht.vorrückenZurücknehmenAngeboten,
         },
+        "einheitZurücksetzen": {"angeboten": schlacht.einheitZurücksetzenAngeboten},
     }
 
 

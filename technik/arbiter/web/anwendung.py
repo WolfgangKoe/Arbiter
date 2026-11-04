@@ -224,6 +224,10 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
         schlachtOder404().vorrückenZurücknehmen()
         return spielstandLiefern()
 
+    def einheitZurücksetzen():
+        schlachtOder404().einheitZurücksetzen()
+        return spielstandLiefern()
+
     def gemeinsamÜbergehen():
         schlachtOder404().gemeinsamÜbergehen()
         return spielstandLiefern()
@@ -268,6 +272,9 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     anwendung.add_url_rule("/api/vorrücken", view_func=vorrücken, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/vorrückenZurücknehmen", view_func=vorrückenZurücknehmen, methods=["PUT"]
+    )
+    anwendung.add_url_rule(
+        "/api/einheitZurücksetzen", view_func=einheitZurücksetzen, methods=["PUT"]
     )
     anwendung.add_url_rule("/api/gemeinsamÜbergehen", view_func=gemeinsamÜbergehen, methods=["PUT"])
     anwendung.add_url_rule(
