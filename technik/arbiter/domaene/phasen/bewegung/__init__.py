@@ -9,6 +9,7 @@ from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import (
     Weiterrücken,
     gleiten,
     zuvorGezeigt,
+    überdecktFremde,
 )
 from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
     anteilBisZurBewegungsweite,
@@ -39,6 +40,10 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle, ein
 StellenMitGründen = tuple[Gezeigt, set[Grund]]
 
 
+def _verschobenUm(stellen: Mapping[Modell, Stelle], weg: messen.Weg) -> dict[Modell, Stelle]:
+    return {modell: messen.verschoben(stelle, weg) for modell, stelle in stellen.items()}
+
+
 class Bewegungsphase:
     def __init__(self, stellen: Mapping[Modell, Stelle], spielfeld: Spielfeld) -> None:
         self._spielfeld = spielfeld
@@ -54,20 +59,17 @@ class Bewegungsphase:
     def angebotBeenden(self) -> None:
         self._angebot = None
 
-    def angebotNachDemZiehen(
+    def angebotNachDemZiehen(  # noqa: PLR0913
         self,
         ebene: Mapping[Modell, Stelle],
         gezogenes: Modell,
         ziel: Stelle,
+        stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
+        weiter: Weiterrücken | None = None,
     ) -> None:
-        weg = messen.wegZwischen(ebene[gezogenes], ziel)
-        anteile = self._anteile(ebene, gezogenes, weg, gegner)
-        self._angebot = (
-            Angebot(frozenset(ebene), gezogenes, ziel)
-            if anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
-            else None
-        )
+        _, hältAnDerGrenze = self._gezeigt(ebene, gezogenes, ziel, stellen, gegner, weiter)
+        self._angebot = Angebot(frozenset(ebene), gezogenes, ziel) if hältAnDerGrenze else None
 
     def übergangen(
         self, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
@@ -143,34 +145,54 @@ class Bewegungsphase:
         gegner: Mapping[Modell, Stelle],
         weiter: Weiterrücken | None = None,
     ) -> StellenMitGründen:
-        weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
-        zuvor = zuvorGezeigt(ebene, gezogenes, weiter)
+        gezeigt, _ = self._gezeigt(ebene, gezogenes, ziel, stellen, gegner, weiter)
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
-        geglitten = gleiten(
-            zuvor,
-            messen.wegZwischen(zuvor[gezogenes], ziel),
-            fremde,
-            self._anteilBisZumAnhalten(gezogenes, gegner),
-            angehaltenAufDemWeg=weiter.angehaltenAufDemWeg,
-        )
-        stellenNachV16 = self._anHöchstensBisZumAnhalten(ebene, gezogenes, ziel, gegner)
-        gezeigt = Gezeigt(
-            geglitten.stellen if geglitten.angehaltenAufDemWeg else stellenNachV16,
-            geglitten.angehaltenAufDemWeg,
-        )
         eigene = stellen.keys() - gegner.keys()
         return gezeigt, gründeBeimZiehen(ebene, gezeigt.stellen, fremde, eigene)
 
-    def _anHöchstensBisZumAnhalten(
+    def _gezeigt(  # noqa: PLR0913
         self,
         ebene: Mapping[Modell, Stelle],
         gezogenes: Modell,
         ziel: Stelle,
+        stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
-    ) -> dict[Modell, Stelle]:
-        weg = messen.wegZwischen(ebene[gezogenes], ziel)
-        kurz = messen.teilDesWegs(weg, min(self._anteile(ebene, gezogenes, weg, gegner)))
-        return {modell: messen.verschoben(stelle, kurz) for modell, stelle in ebene.items()}
+        weiter: Weiterrücken | None,
+    ) -> tuple[Gezeigt, bool]:
+        weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
+        zuvor = zuvorGezeigt(ebene, gezogenes, weiter)
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
+        start = zuvor if weiter.angehaltenAufDemWeg else ebene
+        weg = messen.wegZwischen(start[gezogenes], ziel)
+        anteile = self._anteile(start, gezogenes, weg, gegner)
+        halt = _verschobenUm(start, messen.teilDesWegs(weg, min(anteile)))
+        hältVorFremdem = überdecktFremde(zuvor, halt, fremde)
+        ziehtInFremdes = not anteile.hältAnDerBewegungsweiteOderNahkampfreichweite and (
+            überdecktFremde(zuvor, _verschobenUm(start, weg), fremde)
+        )
+        if not (hältVorFremdem or ziehtInFremdes):
+            return (
+                Gezeigt(halt, weiter.angehaltenAufDemWeg),
+                anteile.hältAnDerBewegungsweiteOderNahkampfreichweite,
+            )
+        wegAbZuvor = messen.wegZwischen(zuvor[gezogenes], ziel)
+        geglitten = gleiten(
+            zuvor,
+            wegAbZuvor,
+            fremde,
+            self._anteilBisZumAnhalten(gezogenes, gegner),
+            angehaltenAufDemWeg=True,
+            geprüft=halt if hältVorFremdem else None,
+        )
+        anteileAbZuvor = self._anteile(zuvor, gezogenes, wegAbZuvor, gegner)
+        stelleDesAnteils = messen.verschoben(
+            zuvor[gezogenes], messen.teilDesWegs(wegAbZuvor, min(anteileAbZuvor))
+        )
+        hältAnDerGrenze = (
+            anteileAbZuvor.hältAnDerBewegungsweiteOderNahkampfreichweite
+            and geglitten.stellen[gezogenes] == stelleDesAnteils
+        )
+        return Gezeigt(geglitten.stellen, geglitten.angehaltenAufDemWeg), hältAnDerGrenze
 
     def _anteilBisZumAnhalten(
         self, gezogenes: Modell, gegner: Mapping[Modell, Stelle]

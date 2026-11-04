@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Fehler in `phasen/bewegung/__init__.py`, beide nachgestellt in
@@ -44,4 +44,16 @@ dem Ergebnis des Ziehens bestimmen: `stellenMitGründenNachDemZiehen` gibt mit, 
 `angebotNachDemZiehen` nimmt das, statt neu zu rechnen. Je Fall ein Einheitstest mit den
 Zahlen oben.
 
-**Stellungnahme.**
+**Stellungnahme.** Beide Punkte angenommen und umgesetzt, nach dem berichtigten
+[Ziehen](../../technik/architektur/vertrag/bewegung/ziehen.md) (12620), nicht mit dem Halt
+nach V16 als Ziel des Gleitens. `Bewegungsphase._gezeigt` in
+`technik/arbiter/domaene/phasen/bewegung/__init__.py`: Gegleitet wird nur, wenn die *Stellen*
+nach V16 (bei `angehaltenAufDemWeg` ab zuvor, 17.4) ein fremdes *Modell* *überdecken*; dann
+gleitet `gleiten` ab zuvor zum ungekürzten Punkt und prüft dabei den Halt (neuer Parameter
+`geprüft`, `überdecktFremde` in `aufstellen/anhaltenAufDemWeg.py`). Hält nichts an der
+*Bewegungsweite* oder *Nahkampfreichweite* an (nur die *Spielfeldkante*), gleitet es auch,
+wenn der ungekürzte Punkt überdeckt: so verlangen es die Tests zu 17.3 und 17.1 (Kante).
+Punkt 2: `angebotNachDemZiehen` nimmt dasselbe Ergebnis (neue Parameter `stellen`, `weiter`)
+und bietet *gemeinsam übergehen* nur, wenn die gezeigte *Stelle* die des kleinsten Anteils 3.1
+oder 6.2 ist. Einheitstests je Fall in `technik/tests/einheit/domaene/phasen/bewegungTest.py`.
+Tests in `technik/tests` und Ruff grün.

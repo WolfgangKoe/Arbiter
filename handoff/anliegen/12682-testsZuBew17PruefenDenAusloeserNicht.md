@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Die Abweichungen aus Anliegen 12700 (Reviewer an Implementierer) sind grün: Kein Test zu BEW-17.1 stellt eine

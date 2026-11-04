@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Architekt
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** [Ziehen](../../technik/architektur/vertrag/bewegung/ziehen.md) sagt, Ziel des

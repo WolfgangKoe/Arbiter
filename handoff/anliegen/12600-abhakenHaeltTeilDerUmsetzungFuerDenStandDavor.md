@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Abhaken von „Kritik an den Tests zu Item …“ nimmt den Produktcode aus HEAD, solange „Implementierer: Tests zu Item … grün“ fehlt ([standregeln](../../prozess/regeln/standregeln.md), Zeile Retro 9 P1, Anliegen 12000; `standregeln/standVorDerUmsetzung.py`). Committet der Implementierer einen Teil der Umsetzung, bevor beide Kritiker abgehakt haben, gelten dessen Tests als grün vor dem Code. So geschehen mit Commit 096dfed „anhaltenAufDemWeg Teil 1“: Abhaken meldete sieben Tests an den Testautor (Anliegen 12521), die mit dem Produktcode aus 4d8ca81 alle rot sind (in einer Kopie in /tmp geprüft). Dasselbe trifft die noch offene Kritik des Architekten und jedes weitere Item dieses Zyklus, das in Teilen umgesetzt wird. Nebenbei vergab Abhaken die Nummer 12521 außerhalb meines Bereichs 12600–12619 (wie 12082, Anliegen 12520).

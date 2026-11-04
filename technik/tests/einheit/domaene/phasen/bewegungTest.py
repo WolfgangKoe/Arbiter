@@ -55,6 +55,35 @@ def testDerVorrückwurfEinerEinheitGiltNichtFürDasModellEinerAnderenEinheit(zeh
     assert gezeigt.stellen == {normalesModell: stelleAn(int(bewegungsweiteDerTestmodelle), 0)}
 
 
+def testEinFremdesModellHinterDerBewegungsweiteLenktDasZiehenZumFreienZielNichtInDieBaseUm(
+    zehnZoll,
+):
+    modell = modellMit(zehnZoll)
+    fremdes = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0), fremdes: stelleAn(13, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+
+    gezeigt, gründe = bewegungsphase.stellenMitGründenNachDemZiehen(
+        {modell: stelleAn(0, 0)}, modell, stelleAn(25, 0), stellen, {}
+    )
+
+    assert gezeigt.stellen == {modell: stelleAn(3, 0)}
+    assert gründe == set()
+
+
+def testHältDasModellVorEinerBaseVorDerBewegungsweiteAnWirdDasÜbergehenNichtAngeboten(zehnZoll):
+    modell = modellMit(zehnZoll)
+    fremdes = modellMit(zehnZoll)
+    stellen = {modell: stelleAn(0, 0), fremdes: stelleAn(12, 0)}
+    bewegungsphase = Bewegungsphase(stellen, spielfeld)
+
+    bewegungsphase.angebotNachDemZiehen(
+        {modell: stelleAn(0, 0)}, modell, stelleAn(15, 0), stellen, {}
+    )
+
+    assert not bewegungsphase.übergehenAngeboten
+
+
 def testEineEinheitDieNichtVorrückteWirdVorrückenAngeboten():
     einheit = Einheit("Testeinheit", ())
     bewegungsphase = Bewegungsphase({}, spielfeld)
@@ -90,7 +119,7 @@ def testNachDemZiehenBisÜberDieBewegungsweiteHinausWirdDasÜbergehenAngeboten(z
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
 
     assert bewegungsphase.übergehenAngeboten
 
@@ -100,7 +129,7 @@ def testNachDemZiehenInnerhalbDerBewegungsweiteWirdKeinÜbergehenAngeboten(zehnZ
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(4, 0), {})
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(4, 0), stellen, {})
 
     assert not bewegungsphase.übergehenAngeboten
 
@@ -116,7 +145,7 @@ def testDasÜbergehenSetztDasModellAmPunktDesZiehensUndNenntDenGrundDesAnhaltens
     modell = modellMit(zehnZoll)
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
 
     übergangen = bewegungsphase.übergangen(stellen, {})
 
@@ -131,7 +160,7 @@ def testDasBeendenDesAngebotsNimmtDasÜbergehenZurück(zehnZoll):
     modell = modellMit(zehnZoll)
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), {})
+    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
 
     bewegungsphase.angebotBeenden()
 

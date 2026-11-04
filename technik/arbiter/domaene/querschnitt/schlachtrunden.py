@@ -132,7 +132,12 @@ class Schlacht:
         self._bewegungsphase.angebotBeenden()
         if gezeigt.stellen:
             self._bewegungsphase.angebotNachDemZiehen(
-                self._ebeneDes(modell), modell, stelle, self._stellenDesGegners()
+                self._ebeneDes(modell),
+                modell,
+                stelle,
+                self._stellen,
+                self._stellenDesGegners(),
+                weiter,
             )
         self._stellen.update(gezeigt.stellen)
 
