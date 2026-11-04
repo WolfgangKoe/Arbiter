@@ -34,20 +34,26 @@ def zuvorGezeigt(vor: Stellen, gezogenes: Modell, weiter: Weiterrücken) -> dict
     return _verschoben(vor, messen.wegZwischen(vor[gezogenes], weiter.zuvor))
 
 
-def gleiten(  # noqa: PLR0913
+def gleiten(
     zuvor: Stellen,
     weg: Weg,
     fremde: Stellen,
     anteilBisZumAnhalten: AnteilBisZumAnhalten,
     *,
     angehaltenAufDemWeg: bool,
-    geprüft: Stellen | None = None,
+) -> Geglitten:
+    hindernisse = _hindernisse(_basenAnStellen(zuvor), fremde)
+    if not _überdeckt(_verschoben(zuvor, weg), hindernisse):
+        anteil = anteilBisZumAnhalten(zuvor, weg) if angehaltenAufDemWeg else Fraction(1)
+        return Geglitten(_verschoben(zuvor, messen.teilDesWegs(weg, anteil)), angehaltenAufDemWeg)
+    return umFremdeGleiten(zuvor, weg, fremde, anteilBisZumAnhalten)
+
+
+def umFremdeGleiten(
+    zuvor: Stellen, weg: Weg, fremde: Stellen, anteilBisZumAnhalten: AnteilBisZumAnhalten
 ) -> Geglitten:
     bewegte = _basenAnStellen(zuvor)
     hindernisse = _hindernisse(bewegte, fremde)
-    if not _überdeckt(geprüft or _verschoben(zuvor, weg), hindernisse):
-        anteil = anteilBisZumAnhalten(zuvor, weg) if angehaltenAufDemWeg else Fraction(1)
-        return Geglitten(_verschoben(zuvor, messen.teilDesWegs(weg, anteil)), angehaltenAufDemWeg)
     wegInX, wegInY = weg
     for teil in ((wegInX, Fraction(0)), (Fraction(0), wegInY)):
         if _freierTeil(zuvor, teil, hindernisse, anteilBisZumAnhalten):

@@ -23,3 +23,19 @@ def testAngehaltenAufDemWegKürztDieBewegungsweiteAbDerStelleVorDemZiehen():
 
     stelle = gezeigt.stellen[modell]
     assert (round(float(stelle.x) - 10, 2), round(float(stelle.y) - 10, 2)) == (4.94, 0.74)
+
+
+def testEinZeigerAufEinerFremdenBaseÄndertNichtsAnDerFreienStelleAnDerSpielfeldkante():
+    klein = Base(durchmesser=25)
+    boy, fremdes = modellMit(klein), modellMit(klein)
+    vorher = Stelle(x=Fraction(30), y=Fraction(2))
+    ebene = {boy: vorher}
+    stellen = {**ebene, fremdes: Stelle(x=Fraction(30), y=Fraction(-3))}
+    ziel = stellen[fremdes]
+    phase = Bewegungsphase(ebene, spielfeld)
+
+    erwartet, _ = phase.stellenMitGründenNachDemZiehen(ebene, boy, ziel, ebene, {})
+    gezeigt, _ = phase.stellenMitGründenNachDemZiehen(ebene, boy, ziel, stellen, {})
+
+    assert gezeigt.stellen == erwartet.stellen
+    assert gezeigt.stellen[boy].y < vorher.y

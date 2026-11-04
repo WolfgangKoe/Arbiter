@@ -8,6 +8,7 @@ from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import (
     Stellen,
     Weiterrücken,
     gleiten,
+    umFremdeGleiten,
     zuvorGezeigt,
     überdecktFremde,
 )
@@ -183,20 +184,11 @@ class Bewegungsphase:
                 zuvor, halt, gezogenes, gegner
             )
             hältAnDerGrenze = hältAnDerGrenze or nahkampfreichweiteHält
-        hältVorFremdem = überdecktFremde(zuvor, halt, fremde)
-        ziehtInFremdes = not anteile.hältAnDerBewegungsweiteOderNahkampfreichweite and (
-            überdecktFremde(zuvor, _verschobenUm(start, weg), fremde)
-        )
-        if not (hältVorFremdem or ziehtInFremdes):
+        if not überdecktFremde(zuvor, halt, fremde):
             return Gezeigt(halt, weiter.angehaltenAufDemWeg), hältAnDerGrenze
         wegAbZuvor = messen.wegZwischen(zuvor[gezogenes], ziel)
-        geglitten = gleiten(
-            zuvor,
-            wegAbZuvor,
-            fremde,
-            self._anteilBisZumAnhalten(gezogenes, gegner),
-            angehaltenAufDemWeg=True,
-            geprüft=halt if hältVorFremdem else None,
+        geglitten = umFremdeGleiten(
+            zuvor, wegAbZuvor, fremde, self._anteilBisZumAnhalten(gezogenes, gegner)
         )
         anteileAbZuvor = self._anteile(zuvor, gezogenes, wegAbZuvor, gegner)
         stelleDesAnteils = messen.verschoben(

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code am Stand 90a2d9d. `Bewegungsphase._gezeigt` in
@@ -33,4 +33,9 @@ diese Funktion, die *Bewegungsphase* ruft sie direkt. Damit fällt auch das
 `# noqa: PLR0913` an `gleiten`. Ein Einheitstest: Boy an der Kante, Zeiger über die Kante
 auf eine fremde *Base*, die *Stelle* nach V16 frei: gezeigt wird die *Stelle* nach V16.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, wie vorgeschlagen umgesetzt: `ziehtInFremdes` ist gestrichen,
+`_gezeigt` gleitet nur bei `hältVorFremdem`. `geprüft` entfällt; `umFremdeGleiten` ist der Teil
+von `gleiten` nach der Prüfung (`technik/arbiter/domaene/phasen/aufstellen/anhaltenAufDemWeg.py`),
+die *Bewegungsphase* ruft sie direkt; das `# noqa: PLR0913` an `gleiten` entfällt. Einheitstest
+zur *Spielfeldkante*:
+`technik/tests/einheit/domaene/phasen/bewegung/bewegungsphaseTest.py`.
