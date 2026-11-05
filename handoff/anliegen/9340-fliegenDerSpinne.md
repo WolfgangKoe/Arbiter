@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: offen
-Wartet auf: 11840
+Status: angenommen
 
 ## Runde 1
 **Befund.** Die Canoptek-Spinne aus [Etappe 2](../../domaene/etappen/02-bewegen.md) hat FLY
@@ -24,7 +23,7 @@ Anliegen 9271 F2 A, bei F2 B `Etappe: 4`.
 
 Wann: Domänenphase 10, vor Plan 10.
 
-**Stellungnahme.** Teils umgesetzt, nur noch der Wert `fliegen` wartet.
+**Stellungnahme.** Angenommen und umgesetzt.
 - [BEW-18](../../domaene/anforderungen/phasen/bewegung/fliegen.md): `Etappe: 2` (9271 F2 A),
   BEW-18.3 zum Ziehen durch die *Nahkampfreichweite* (`core_rules.txt:884`, `:888`, 9400 F2);
   *Fliegen* im Glossar.
@@ -37,7 +36,6 @@ Wann: Domänenphase 10, vor Plan 10.
 - Geschrieben: die Spinne in `domaene/daten/ausgangslage.yaml` (`necrons_test.yaml:17`) und
   `formation.yaml`. An einer Kopie in `/tmp` sind mit ihr dieselben 37 Tests rot wie ohne sie
   (laufende Items), keiner mehr.
-- Wartet: der Wert `fliegen: true` beim *Datenblatt*, Form nach
-  [Katalog](../../technik/architektur/katalog.md) K3 und K4 (Anliegen 11560). Erst legt der
-  Implementierer die Zeile in `katalog/` an ([11840](11840-zeileFliegenVorDenTests.md)), dann
-  trage ich ihn ein.
+- Geschrieben: `fliegen: true` beim *Datenblatt* `Canoptek Spyder` (`units.yaml:410`, FLY),
+  Form nach [Katalog](../../technik/architektur/katalog.md) K3 und K4, nach 11840; der Start
+  liest ihn, nur die Spinne hat *Fliegen*.

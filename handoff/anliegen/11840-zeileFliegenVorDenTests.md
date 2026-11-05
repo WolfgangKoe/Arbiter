@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** MIV-3.2 verlangt *Fliegen* bei der Canoptek-Spinne

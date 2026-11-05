@@ -126,8 +126,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testMiv3_1DieArmeeDerNecronsHatEineEinheitCanoptekSpyderAusEinemModell, testBew17_1DerDienstHältDasModellAufDerStreckeVorDerFremdenBaseAn, testBew17_1AmFreienZielZeigtDerDienstDasZielAuchWennDerWegÜberEineBaseFührt, testBew17_1StehtDerPunktHinterEinerBaseAnDerBewegungsweiteHältDerDienstDasModellVorIhrAn[ohneAbfrageDavor], testBew17_1StehtDerPunktHinterEinerBaseAnDerBewegungsweiteHältDerDienstDasModellVorIhrAn[nachEinerAbfrageDieVorIhrAnhielt], testBew17_1EineBaseHinterDerBewegungsweiteLenktDasModellNichtAb, testBew17_1DerDienstHältAufDerStreckeAbDerZuvorGezeigtenStelleAn, testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[beideTeileFreiWaagrecht], testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[nurSenkrechtFrei], testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[nurWaagrechtFrei], testBew17_1HältDieBewegungsweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1HältDieSpielfeldkanteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1HältDieNahkampfreichweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1AlleinGezogenHältDerDienstVorDemModellDerselbenEinheitAn, testBew17_1IstDieGanzeEinheitEbeneHältDerDienstAlleIhreModelleGemeinsamAn. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 13101); beseitigt: Commit „Tests und Vertrag zu Item fliegen nach BEW-18.5“
   Hindernis: Architekt → Testautor: Der Test neben dem Warboss erwartet für die Spinne eine Stelle, die weiter liegt als die nächste freie; so würde auch falscher Code grün. (Anliegen 13100); beseitigt: Commit „Tests und Vertrag zu Item fliegen nach BEW-18.5“
 - [ ] Implementierer: Tests zu Item fliegen grün
-- [ ] Architekt: Kritik am Code zu Item fliegen
-- [ ] Reviewer: Kritik am Code zu Item fliegen
+- [x] Architekt: Kritik am Code zu Item fliegen
+- [x] Reviewer: Kritik am Code zu Item fliegen
 - [ ] Fachkritiker: Item fliegen abgenommen
 - [ ] Planer: Item fliegen gelöscht
 - [x] Architekt: Vertrag zu Item zuruecksetzenUndLuecken, bei beiden Hälften
@@ -143,7 +143,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Implementierer: Ob Vorrücken angeboten wird, entscheiden Bewegungsphase und Schlacht je zur Hälfte; am Bildschirm stimmt es, im Code sagen zwei gleichnamige Abfragen Verschiedenes. Die Bewegungsphase soll es ganz entscheiden, wie schon beim Zurücksetzen. (Anliegen 13260); beseitigt: Commit „Items zuruecksetzenUndLuecken und fliegen: Kritik abgeschlossen, 13260 und 13300 erledigt“
 - [x] Reviewer: Kritik am Code zu Item zuruecksetzenUndLuecken
 - [x] Fachkritiker: Item zuruecksetzenUndLuecken abgenommen
-- [ ] Planer: Item zuruecksetzenUndLuecken gelöscht
+- [x] Planer: Item zuruecksetzenUndLuecken gelöscht
 - [ ] Architekt: Vertrag zu Item ruhigeKarte, bei beiden Hälften
 - [ ] Testautor: Tests zu Item ruhigeKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item ruhigeKarte
@@ -187,7 +187,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Implementierer: Anliegen 8620 Ziehen verlangt mehr, als es braucht
 - [x] Testautor: Anliegen 8720 Auswahl in der Schlacht nur an Modellen prüfen, mit Vorbedingung
 - [x] Implementierer: Anliegen 8740 Vorrückwurf nur für die eigene Einheit geprüft
-- [ ] Anforderungsautor: Anliegen 9340 Fliegen der Canoptek-Spinne
+- [x] Anforderungsautor: Anliegen 9340 Fliegen der Canoptek-Spinne
 - [x] Testautor: Anliegen 9401 Test zu BEW-19
 - [x] Architekt: Anliegen 9890 V18 nach BEW-8.3 bis 8.5 nachziehen
 - [x] Architekt: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
