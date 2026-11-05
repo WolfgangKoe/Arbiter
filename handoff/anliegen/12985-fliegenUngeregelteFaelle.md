@@ -37,7 +37,7 @@ umformuliert statt neu nummeriert, weil noch kein Test sie prüft; gekürzt, die
 1.200 Zeichen.
 1. Angenommen: 18.1 zeigt, wo BEW-1.5 ohne 17.1, 18.2 und QUE-1.2 *setzen* würde.
 2. Angenommen als BEW-18.6 (Etappe 7): erreichbar erst nach AUF-27.1 (Anliegen 13020).
-3. Gefragt in [13010](13010-fliegenNachDemUebergehen.md): 18.2 gilt auch nach BEW-8.4,
+3. Gefragt in Anliegen 13010: 18.2 gilt auch nach BEW-8.4,
    nach F2 ohne BEW-3.1, nach F3 A immer mit 6.2, auch wenn 6.2 vor BEW-8.3 anhielt
    (BEW-18.7; 18.5 und 18.8 gestrichen). 13010 ist erledigt.
 4. Angenommen: 18.3 „am Ende der Strecke nach 6.3 ohne 6.2“.
