@@ -127,6 +127,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Testautor: Der Test neben dem Warboss erwartet für die Spinne eine Stelle, die weiter liegt als die nächste freie; so würde auch falscher Code grün. (Anliegen 13100); beseitigt: Commit „Tests und Vertrag zu Item fliegen nach BEW-18.5“
 - [ ] Implementierer: Tests zu Item fliegen grün
 - [x] Architekt: Kritik am Code zu Item fliegen
+  Hindernis: Architekt → Implementierer: Zwei Flieger rücken am Bildschirm richtig, aber kein Test fiele auf, wenn das Rücken wieder vom falschen Modell aus misst. (Anliegen 13840)
+  Hindernis: Architekt → Testautor: Fliegt die Spinne beim Übergehen durch die Nahkampfreichweite und endet dahinter, prüft kein Test, dass der Eintrag nur die Bewegungsweite nennt; die Testdatei ist zudem über ihrem Höchstmaß gewachsen. (Anliegen 13841)
 - [x] Reviewer: Kritik am Code zu Item fliegen
 - [ ] Fachkritiker: Item fliegen abgenommen
 - [ ] Planer: Item fliegen gelöscht
@@ -158,6 +160,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
 - [ ] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
 - [x] Planer: Anliegen 11824 Umbenennen nach 7800: Ziel
+- [ ] Implementierer: Anliegen 13861 Fliegen: Das Ende beim Übergehen ist immer die ganze Strecke
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen

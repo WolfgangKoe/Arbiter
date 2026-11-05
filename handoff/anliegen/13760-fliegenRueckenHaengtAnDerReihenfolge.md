@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit), Item fliegen, Abschnitt 2 (`git diff` auf

@@ -46,19 +46,18 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
   `Bewegungsphase` wählt aus `Gezogen.fliegen` einmal eine Art zu ziehen: *Stellen* nach
   V10, Anteil von 6.2 bis zu einem Ende, *Stellen* beim Loslassen und beim Übergehen, ob
   `baseÜberdeckt` beim Ziehen zählt. Die mit Gleiten (17.1 bis 17.4) steht in
-  `phasen/bewegung/anhaltenVorFremdenBases.py`, die mit 18.2, 18.3, 18.7 in `fliegen.py`;
-  so bleibt `__init__.py` dort unter dem Höchstmaß.
+  `phasen/bewegung/anhaltenVorFremdenBases.py`, die mit 18.2, 18.3, 18.7 in `fliegen.py`.
 
 Warum so (Versuch zu 10321): Die nächste *Stelle* liegt am Rand der freien Fläche, also auf
 einem Lotpunkt oder einer Ecke; Wurzeln nur in den Kandidaten, das Urteil exakt. 30 zufällige
-Lagen: höchstens 19 ms, nie weiter als ein Raster von 1/20″; in 36 sich berührenden Boyz
+Lagen: höchstens 19 ms; in 36 sich berührenden Boyz
 40 ms, drei Flieger 166 ms. Ohne Vorfilter Minuten; nur im Loslassen gerechnet, nicht in V10.
 
 Prüft wie im Querschnitt: MIV-3.1 und 3.2 an `ausgangslageLaden()` (K7). Am Dienst mit der
 Spinne, denn nur V10 ändert seine Antwort: 18.1 über einem Necron Warrior gehalten, V10 200,
 *Stelle* am Punkt, auch mit `zuvorX`, `zuvorY`, `angehaltenAufDemWeg`. An `Schlacht`, exakt
 (rational, Radien in mm): 18.1 ebenso; 18.2 knapp neben der Mitte eines einzelnen Warriors
-losgelassen (achsparallel versetzt): die *Stelle* frei und höchstens 1/100″ weiter als die
+losgelassen: die *Stelle* frei und höchstens 1/100″ weiter als die
 nächste freie; an der *Bewegungsweite* auf einem Warrior: die *Distanz* höchstens 6″; an der
 *Spielfeldkante*: *ganz in* dem *Spielfeld*; neben dem Warboss: nicht in *Nahkampfreichweite*;
 *Protokoll* unverändert. 18.3:
@@ -66,7 +65,8 @@ durch die *Nahkampfreichweite* des Warboss gezogen, Ende außerhalb: *Stelle* am
 darin, der Weirdboy davor an der Strecke: nicht darin, `abstandHöchstens` 1+1/100″, außer der
 *Nahkampfreichweite* des Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an).
 18.7, übergangen: an der *Bewegungsweite* angehalten, Punkt dahinter ohne fremde *Base*: dort, *Eintrag* mit
-‚Bewegungsweite‘, in der *Nahkampfreichweite* des Warboss auch deren *Grund*; auf einem Warrior hinter dessen Mitte: *Stelle* wie bei 18.2, doch *Distanz*
+‚Bewegungsweite‘, in der *Nahkampfreichweite* des Warboss auch deren *Grund*; dahinter durch sie hindurch, Punkt außerhalb: nur
+‚Bewegungsweite‘; Punkt in ihr und in 6″: nur deren *Grund*; auf einem Warrior hinter dessen Mitte: *Stelle* wie bei 18.2, doch *Distanz*
 über 6″, ‚Bewegungsweite‘; vor der Mitte: in 6″, kein *Grund*; Warboss dahinter: außerhalb
 seiner *Nahkampfreichweite*. Vor ihr angehalten (18.3), Punkt auf einem Warrior: außerhalb,
 kein *Grund*.
