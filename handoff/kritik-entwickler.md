@@ -27,3 +27,5 @@
 - **Ob Menschen den erzeugten Code künftig vollständig lesen müssen, bleibt offen.** Wenn Agentensysteme dauerhaft verfügbar und zuverlässig genug sind, könnte menschliche Lesbarkeit an Bedeutung verlieren. Die aktuellen Probleme mit schwer lesbarem Code machen diese Frage gerade erst empirisch interessant.
 - **Die nächste Untersuchungsfrage lautet nicht mehr primär „Kann KI brauchbare Software erzeugen?“** Interessanter ist nun: **Wie muss Kontext strukturiert werden, damit KI-Agenten zuverlässig, effizient und mit möglichst wenig unnötigem Kontext arbeiten?**
 - **Diese Hypothese lässt sich experimentell prüfen.** Varianten von `CLAUDE.md`, Skills, Subagenten, Codestil, Domänenmodell und Kontextumfang können gegeneinander getestet werden. Gemessen werden sollten nicht nur Tokens, sondern auch Erfolgsquote, Fehler, Korrekturschleifen und Zeit bis zu einer akzeptierten Lösung.
+
+## 4. In den Anforderungen statt "Zweck" "Nutzen" schreiben.
