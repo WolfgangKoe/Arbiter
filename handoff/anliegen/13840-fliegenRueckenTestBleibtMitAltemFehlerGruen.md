@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Ein Test prüft nicht, wofür er steht ([Kritik](../../prozess/ablauf/kritik.md)).
@@ -47,3 +47,9 @@ Lauf: `/tmp/arch13840proben/mutanten.py`, M4 und M5).
 `stellenMitGründenNachDemLoslassen` ein Test rot, mit dem Fehler in `übergangen` ein Fall rot.
 Die Lage im Übergehen weicht von der Vorlage ab (Abstand der Modelle 6″, Zug 6″), weil
 `modellMit` die Bewegungsweite 5″ hat und der falsche Weg sonst nicht die Länge 0 hätte.
+
+**Nachprüfung.** Bestätigt am Abzug von `c6d02fe` in `/tmp/arch13840proben/abzugC6d02fe`
+(Lauf: `/tmp/arch13840proben/nachpruefung.py`, `fliegenTest.py` und `bewegungsphaseTest.py`):
+ohne Mutant 45 grün. Fehler in `stellenMitGründenNachDemLoslassen`: genau der neue Test rot.
+Fehler in `übergangen`: in drei Läufen je genau ein Fall des parametrisierten Tests rot, sonst
+keiner. Die abweichende Lage im Übergehen trifft den Fehler also ebenso.

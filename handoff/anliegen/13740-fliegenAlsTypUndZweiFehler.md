@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code zu Item fliegen, Abschnitt 2 (ungemerkter Stand in
@@ -56,4 +56,4 @@ Alles zusammen ist ein Implementierer-Lauf.
 3. Beim Übergehen ist das Ende von 18.3 der Anteil von 6.1 auf dem gegangenen Weg, ohne 3.1.
    Einheitstest wie `probe.py`: erwartet {bewegungsweite, nahkampfreichweite}.
 
-**Stellungnahme.** 2, 3 umgesetzt; 1 aus.
+**Stellungnahme.** 1 bis 3 umgesetzt.

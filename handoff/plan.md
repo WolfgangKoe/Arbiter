@@ -125,10 +125,11 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Kritik an den Tests zu Item fliegen
   Hindernis: Architekt → Testautor: Diese Tests sind grün, bevor der Code besteht: testMiv3_1DieArmeeDerNecronsHatEineEinheitCanoptekSpyderAusEinemModell, testBew17_1DerDienstHältDasModellAufDerStreckeVorDerFremdenBaseAn, testBew17_1AmFreienZielZeigtDerDienstDasZielAuchWennDerWegÜberEineBaseFührt, testBew17_1StehtDerPunktHinterEinerBaseAnDerBewegungsweiteHältDerDienstDasModellVorIhrAn[ohneAbfrageDavor], testBew17_1StehtDerPunktHinterEinerBaseAnDerBewegungsweiteHältDerDienstDasModellVorIhrAn[nachEinerAbfrageDieVorIhrAnhielt], testBew17_1EineBaseHinterDerBewegungsweiteLenktDasModellNichtAb, testBew17_1DerDienstHältAufDerStreckeAbDerZuvorGezeigtenStelleAn, testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[beideTeileFreiWaagrecht], testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[nurSenkrechtFrei], testBew17_1DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben[nurWaagrechtFrei], testBew17_1HältDieBewegungsweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1HältDieSpielfeldkanteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1HältDieNahkampfreichweiteAufDemFreienTeilAnZeigtDerDienstDasModellAufDerStrecke, testBew17_1AlleinGezogenHältDerDienstVorDemModellDerselbenEinheitAn, testBew17_1IstDieGanzeEinheitEbeneHältDerDienstAlleIhreModelleGemeinsamAn. Mache sie rot oder nenne die Stelle, die das Kriterium schon erfüllt. (Anliegen 13101); beseitigt: Commit „Tests und Vertrag zu Item fliegen nach BEW-18.5“
   Hindernis: Architekt → Testautor: Der Test neben dem Warboss erwartet für die Spinne eine Stelle, die weiter liegt als die nächste freie; so würde auch falscher Code grün. (Anliegen 13100); beseitigt: Commit „Tests und Vertrag zu Item fliegen nach BEW-18.5“
-- [ ] Implementierer: Tests zu Item fliegen grün
+- [x] Implementierer: Tests zu Item fliegen grün
+  Hindernis: Implementierer → Anforderungsautor: Der Umbau von Fliegen als Typ (13740) macht zwei Prüfungen rot: Die Klassen Gleiten, Fliegen, Messung und ArtZuZiehen stehen nicht im Glossar, und zu technik/arbiter/domaene/phasen/bewegung/artZuZiehen.py gibt es keinen Spiegel in domaene/anforderungen. Ich darf beides nicht schreiben. (Anliegen 13920)
 - [x] Architekt: Kritik am Code zu Item fliegen
-  Hindernis: Architekt → Implementierer: Zwei Flieger rücken am Bildschirm richtig, aber kein Test fiele auf, wenn das Rücken wieder vom falschen Modell aus misst. (Anliegen 13840)
-  Hindernis: Architekt → Testautor: Fliegt die Spinne beim Übergehen durch die Nahkampfreichweite und endet dahinter, prüft kein Test, dass der Eintrag nur die Bewegungsweite nennt; die Testdatei ist zudem über ihrem Höchstmaß gewachsen. (Anliegen 13841)
+  Hindernis: Architekt → Implementierer: Zwei Flieger rücken am Bildschirm richtig, aber kein Test fiele auf, wenn das Rücken wieder vom falschen Modell aus misst. (Anliegen 13840); beseitigt: Commit „fliegen: Tests schließen die Lücken aus der Kritik an Abschnitt A“
+  Hindernis: Architekt → Testautor: Fliegt die Spinne beim Übergehen durch die Nahkampfreichweite und endet dahinter, prüft kein Test, dass der Eintrag nur die Bewegungsweite nennt; die Testdatei ist zudem über ihrem Höchstmaß gewachsen. (Anliegen 13841); beseitigt: Commit „fliegen: Tests schließen die Lücken aus der Kritik an Abschnitt A“
 - [x] Reviewer: Kritik am Code zu Item fliegen
 - [ ] Fachkritiker: Item fliegen abgenommen
 - [ ] Planer: Item fliegen gelöscht
@@ -146,7 +147,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Reviewer: Kritik am Code zu Item zuruecksetzenUndLuecken
 - [x] Fachkritiker: Item zuruecksetzenUndLuecken abgenommen
 - [x] Planer: Item zuruecksetzenUndLuecken gelöscht
-- [ ] Architekt: Vertrag zu Item ruhigeKarte, bei beiden Hälften
+- [x] Architekt: Vertrag zu Item ruhigeKarte, bei beiden Hälften
 - [ ] Testautor: Tests zu Item ruhigeKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item ruhigeKarte
 - [ ] Architekt: Kritik an den Tests zu Item ruhigeKarte
@@ -160,11 +161,11 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
 - [ ] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
 - [x] Planer: Anliegen 11824 Umbenennen nach 7800: Ziel
-- [ ] Implementierer: Anliegen 13861 Fliegen: Das Ende beim Übergehen ist immer die ganze Strecke
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
 - [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
+- [x] Implementierer: Anliegen 13861 Fliegen: Das Ende beim Übergehen ist immer die ganze Strecke
 - [x] Architekt: Anliegen 12620 Gleiten in der Bewegung weicht vom Vertrag ab
 - [x] Regelumsetzer: Anliegen 12621 Mutationsregel streckeÜberdeckt verweist auf entfernten Code
 - [x] Reviewer: Anliegen 8261 Übergehen nach Vertrag, Angebot nach Auswahlwechsel

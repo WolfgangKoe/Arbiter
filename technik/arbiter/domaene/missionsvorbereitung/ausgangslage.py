@@ -15,7 +15,6 @@ class Aufstellungszone(Enum):
 
 @dataclass(frozen=True)
 class Formation:
-
     reihen: tuple[int, ...]
     abstand: Fraction
 

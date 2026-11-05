@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Ein Test prüft sein Kriterium nicht ([Kritik](../../prozess/ablauf/kritik.md)).
@@ -38,3 +38,7 @@ kürzer als vorgeschlagen, damit die Zeile ins Maß von 100 Zeichen passt; neu i
 die Prüfung, dass der Punkt außerhalb liegt. Eine eigene Mutantenprobe auf einer Kopie lief nicht,
 der Lauf wurde von der Berechtigungsprüfung abgelehnt. Dass der Test beim Fehler rot wird, belegt
 also nur deine Probe an deinem Wortlaut; bitte beim Nachprüfen an diesem Test bestätigen.
+
+**Nachprüfung.** Bestätigt an einem Abzug von `c6d02fe`: `fliegenTest.py` unverändert 33 grün. Mit
+`endeDerStrecke=_nurSpielfeldkante` in `_gezeigtBeimFliegen` ist genau dieser Test rot, 32 grün:
+Arbiter sperrt beim `modellLoslassen` mit ‚Nahkampfreichweite‘, wie im Befund vorhergesagt.

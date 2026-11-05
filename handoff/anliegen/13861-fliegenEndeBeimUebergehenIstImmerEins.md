@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet ([Kritik](../../prozess/ablauf/kritik.md)): keine Prüfung rot, am Bildschirm
@@ -27,4 +26,6 @@ von 6.2 bekommt sein Ende als Zahl, beim Übergehen `Fraction(1)`, beim Ziehen d
 Anteil von 3.1 und 6.1. `EndeDerStrecke` und `_nurSpielfeldkante` entfallen. Der Vertrag bleibt
 richtig: Ende 6.1 ist auf dem gekürzten Weg die ganze Strecke.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt im Umbau von 13740: `Fliegen._anteile` nimmt das
+Ende als `Fraction`, beim Übergehen `Fraction(1)`, beim Ziehen den kleineren Anteil von 3.1 und
+6.1. `EndeDerStrecke` und `_nurSpielfeldkante` entfallen.

@@ -96,9 +96,10 @@ body {
 .spalteMitte {
   grid-column: 2;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 7.5rem 6rem;
+  grid-template-rows: minmax(0, 1fr) 7.5rem 3.5rem;
   gap: 0.75rem;
   justify-items: center;
+  scrollbar-gutter: stable both-edges;
 }
 
 .spalteMitte .sperrmeldung {
@@ -283,11 +284,12 @@ body {
 
 .leisteLinks .leistenInhalt,
 .leisteRechts .leistenInhalt {
-  width: 16rem;
+  width: 13rem;
 }
 
 .leisteUnten .leistenInhalt {
-  max-height: 9rem;
+  flex: none;
+  height: 4.5rem;
 }
 
 .leiste:has(> .leistenGriff[aria-expanded="false"]) .leistenInhalt {

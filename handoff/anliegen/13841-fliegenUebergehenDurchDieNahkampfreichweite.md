@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf ([Kritik](../../prozess/ablauf/kritik.md)), zwei Punkte zu
@@ -51,3 +51,11 @@ Umbau in Abschnitt B ([13740](13740-fliegenAlsTypUndZweiFehler.md), Punkt 1) ung
    13860) reichte das nicht, darum zog `orksÜbergehenBisZumZugDerNecrons` nach `schlacht.py`,
    neben `warbossÜbergehenBisZumZugDerNecrons`. Die Datei hat jetzt 29.256 Zeichen statt 29.366;
    das Kürzen bleibt bei 13842.
+
+**Nachprüfung.** Bestätigt am Abzug von `c6d02fe` in `/tmp/arch13840proben/abzugC6d02fe`
+(Lauf: `/tmp/arch13840proben/nachpruefung.py`, `fliegenTest.py` und `bewegungsphaseTest.py`):
+1. Ohne Mutant 45 grün. Mit 6.2 ohne 18.3 in `übergangen` (`endeDerStrecke=None`) ist genau
+   `testBew18_7HinterDerBewegungsweiteDurchDieNahkampfreichweiteNenntDerEintragNurDieBewegungsweite`
+   rot, an diesem Wortlaut, nicht nur an der Probe.
+2. Die Geometrie steht in `ruecken.py`, `orksÜbergehenBisZumZugDerNecrons` in `schlacht.py`.
+   `fliegenTest.py` hat 29.256 Zeichen am Commit, ist also nicht gewachsen.

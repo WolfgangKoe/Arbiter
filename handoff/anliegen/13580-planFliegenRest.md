@@ -37,7 +37,9 @@ Offen sind 3 bis 6 (Stand nach diesem Lauf; Tests in `fliegenTest.py` der Akzept
 6. ERLEDIGT bis auf Gesamtlauf und Abhaken: 13760 und 13740 (2, 3) behoben, `fliegenTest.py`
    der Akzeptanz und die Einheitstests der Bewegung grün; 13620, 13621 nachgeprüft und
    erledigt; 13840 angenommen und umgesetzt (zwei Einheitstests zum Rücken in
-   `bewegungsphaseTest.py`). OFFEN: 13740 Punkt 1 (Typ), 13861, Gesamtlauf, SonarLint,
-   Schritt abhaken.
+   `bewegungsphaseTest.py`); 13740 Punkt 1 (Typ `ArtZuZiehen`, `Gleiten`, `Fliegen`) und 13861
+   umgesetzt, SonarLint grün, `technik/tests` grün. 13920 nach dem Gegenvorschlag des
+   Anforderungsautors umgesetzt (kein `ArtZuZiehen`, `Messung`, `artZuZiehen.py`); glossarTest,
+   spiegelTest, Einheitstests, `fliegenTest.py`, Ruff grün. Schritt abgehakt.
 
 Wann: sofort, neuer Implementierer-Lauf.

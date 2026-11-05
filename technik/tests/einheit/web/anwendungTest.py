@@ -203,9 +203,7 @@ def testDasLoslassenGibtZuvorUndAngehaltenAufDemWegAusDemKörperAnDieDomäneWeit
 
 
 @pytest.mark.parametrize("angabe", [{"zuvorX": 1}, {"zuvorY": 1}, {"zuvorX": "a", "zuvorY": 1}])
-def testEineHalbeOderUnlesbareZuvorAngabeInDerAbfrageIstEineFehlerhafteAnfrage(
-    aufstellung, angabe
-):
+def testEineHalbeOderUnlesbareZuvorAngabeInDerAbfrageIstEineFehlerhafteAnfrage(aufstellung, angabe):
     dienst = anwendungFür(aufstellung).test_client()
 
     antwort = dienst.get(pfadDerAbfrage.format(1, 1, 1), query_string={"x": 3, "y": 20, **angabe})

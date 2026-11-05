@@ -5,13 +5,11 @@ from fractions import Fraction
 
 @dataclass(frozen=True)
 class Base:
-
     durchmesser: int
 
 
 @dataclass(frozen=True)
 class Stelle:
-
     x: Fraction
     y: Fraction
 

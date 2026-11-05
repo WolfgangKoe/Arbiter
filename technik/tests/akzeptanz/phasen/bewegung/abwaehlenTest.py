@@ -82,9 +82,7 @@ def testBew9_2NachDemAbwählenWartetDieEinheitWeiterAufIhrenVorrückwurf(abgewä
 
 
 @mitJedemWurf
-def testBew9_2NachDemAbwählenBeendetDerKlickAufEinenDerSechsDasWarten(
-    abgewähltBeimWarten, wurf
-):
+def testBew9_2NachDemAbwählenBeendetDerKlickAufEinenDerSechsDasWarten(abgewähltBeimWarten, wurf):
     schlacht, einheit = abgewähltBeimWarten
     schlacht.auswählen(einheit)
 

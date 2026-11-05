@@ -1,28 +1,79 @@
-from collections.abc import Mapping
-from dataclasses import dataclass, field
+from collections.abc import Collection
 from fractions import Fraction
 from functools import partial
 
 from arbiter.domaene import messen
 from arbiter.domaene.messen import Geradenrand, Kreisrand, Rand
-from arbiter.domaene.querschnitt.setzen import inNahkampfreichweite, nahkampfreichweite
+from arbiter.domaene.phasen.bewegung.normaleBewegung import (
+    AnteilAufDemWeg,
+    Gezogen,
+    Stellen,
+    Umgebung,
+    Weite,
+    gründeBeimZiehen,
+    verschobenUm,
+)
+from arbiter.domaene.phasen.bewegung.uebergehenBeimZiehen import Anteile
+from arbiter.domaene.querschnitt.setzen import (
+    Gezeigt,
+    inNahkampfreichweite,
+    nahkampfreichweite,
+)
+from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Modell, Spielfeld, Stelle
 
-type Stellen = Mapping[Modell, Stelle]
 
+class Fliegen:
+    def __init__(
+        self,
+        gezogen: Gezogen,
+        umgebung: Umgebung,
+        bewegungsweite: AnteilAufDemWeg,
+        spielfeldkante: AnteilAufDemWeg,
+    ) -> None:
+        self._gezogen = gezogen
+        self._umgebung = umgebung
+        self._bewegungsweite = bewegungsweite
+        self._spielfeldkante = spielfeldkante
 
-@dataclass(frozen=True)
-class Weite:
-    anfang: Stelle
-    zoll: Fraction
+    def gezeigt(self) -> tuple[Gezeigt, bool]:
+        ebene, gezogenes = self._gezogen.ebene, self._gezogen.gezogenes
+        weg = messen.wegZwischen(ebene[gezogenes], self._gezogen.ziel)
+        bewegungsweite = self._bewegungsweite(ebene, weg)
+        spielfeldkante = self._spielfeldkante(ebene, weg)
+        anteile = self._anteile(ebene, weg, min(bewegungsweite, spielfeldkante))
+        halt = verschobenUm(ebene, messen.teilDesWegs(weg, min(anteile)))
+        hält = anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
+        return Gezeigt(halt, angehaltenAufDemWeg=False), hält
 
+    def _anteile(self, ebene: Stellen, weg: messen.Weg, ende: Fraction) -> Anteile:
+        return Anteile(
+            self._bewegungsweite(ebene, weg),
+            self._spielfeldkante(ebene, weg),
+            anteilBisZurNahkampfreichweite(ebene, weg, self._umgebung.gegner, ende),
+        )
 
-@dataclass(frozen=True)
-class Umgebung:
-    fremde: Stellen
-    gegner: Stellen
-    spielfeld: Spielfeld
-    weiten: Mapping[Modell, Weite] = field(default_factory=dict)
+    def gründeBeimZiehen(self, gesetzt: Stellen, eigene: Collection[Modell]) -> set[Grund]:
+        gründe = gründeBeimZiehen(self._gezogen.ebene, gesetzt, self._umgebung.fremde, eigene)
+        return gründe - {Grund.baseÜberdeckt}
+
+    def nachDemLoslassen(self, gezeigt: Gezeigt) -> Gezeigt:
+        gezogenes = self._gezogen.gezogenes
+        zurück = messen.wegZwischen(gezeigt.stellen[gezogenes], self._gezogen.ebene[gezogenes])
+        gerückt = nachFremdenBasesGerückt(gezeigt.stellen, zurück, self._umgebung)
+        return Gezeigt(dict(gerückt), angehaltenAufDemWeg=False)
+
+    def übergangen(self, kurz: messen.Weg) -> Stellen:
+        ebene, gezogenes = self._gezogen.ebene, self._gezogen.gezogenes
+        gesetzt = verschobenUm(ebene, kurz)
+        zurück = messen.wegZwischen(gesetzt[gezogenes], ebene[gezogenes])
+        ohneWeiten = Umgebung(
+            self._umgebung.fremde, self._umgebung.gegner, self._umgebung.spielfeld, weiten={}
+        )
+        return nachFremdenBasesGerückt(gesetzt, zurück, ohneWeiten)
+
+    def anteileBeimÜbergehen(self, weg: messen.Weg) -> Anteile:
+        return self._anteile(self._gezogen.ebene, weg, Fraction(1))
 
 
 def anteilBisZurNahkampfreichweite(

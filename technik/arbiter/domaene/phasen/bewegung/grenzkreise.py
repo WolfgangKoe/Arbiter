@@ -61,9 +61,7 @@ def grenzenDerNahkampfreichweite(
 
 
 def enthält(kreise: Collection[Grenzkreis], stelle: Stelle) -> bool:
-    return any(
-        messen.abstandImQuadrat(kreis.stelle, stelle) <= kreis.radius**2 for kreis in kreise
-    )
+    return any(messen.abstandImQuadrat(kreis.stelle, stelle) <= kreis.radius**2 for kreis in kreise)
 
 
 def kleinsterWurfAn(
