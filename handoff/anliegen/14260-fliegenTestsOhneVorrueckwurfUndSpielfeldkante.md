@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf ([Kritik](../../prozess/ablauf/kritik.md)): Zwei Tests prüfen ihr Kriterium
@@ -49,4 +49,8 @@ Tests in einer Datei, ohne Produktcode: ein Testautor-Lauf.
 Beide Tests sind sofort grün. Beleg, dass sie prüfen: An einer Kopie mit den beiden Änderungen
 oben werden sie rot.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen, beide grün: `testBew18_2NachDemVorrücken…`,
+`testBew18_3EndetDieStreckeAnDerSpielfeldkante…`; dieser prüft enger: höchstens 1/100″ vor der
+*Nahkampfreichweite* (BEW-18.3). Beleg `/tmp/kopie14260`, je Fehler genau einer von 35 rot: Fehler 1
+an der nächsten freien *Stelle* (Spinne 6″ vom Anfang), Fehler 2 an der *Sperre*
+‚Nahkampfreichweite‘. ruff format `--check` ohne Änderung, SonarLint ohne Funde.

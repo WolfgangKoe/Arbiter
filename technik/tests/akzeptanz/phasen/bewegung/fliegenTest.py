@@ -21,7 +21,8 @@ from tests.akzeptanz.dienst import (
     stelleBeimWeiterrückenAbfragen,
     stelleImSpielstand,
 )
-from tests.akzeptanz.handgriffe import breiteDesSpielfelds, radiusInZoll, versetzt
+from tests.akzeptanz.grenzen import dreiAugen
+from tests.akzeptanz.handgriffe import breiteDesSpielfelds, gestreckt, radiusInZoll, versetzt
 from tests.akzeptanz.ruecken import (
     Kreis,
     frei,
@@ -37,11 +38,13 @@ from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
     außerhalbDerNahkampfreichweite,
     bewegungsweite,
+    ersteStelleAnDerSpielfeldkante,
     hältAnDerBewegungsweite,
     hältVorDerNahkampfreichweite,
     orksÜbergehenBisZumZugDerNecrons,
     summeDerRadien,
 )
+from tests.akzeptanz.vorruecken import vorgerücktMit
 from tests.akzeptanz.ziehen import halten, liegtEinPixelGenauAn, mitMausUndFinger, punktAufDerKarte
 
 nichts = Fraction(0)
@@ -50,6 +53,7 @@ knappNebenDerMitte = Fraction(1, 10)
 hinterDerMitte = -knappNebenDerMitte
 vorDerMitte = knappNebenDerMitte
 halbesZoll = Fraction(1, 2)
+flachZurKante = (Fraction(7, 25), Fraction(24, 25))
 
 
 def einheitMitDemNamen(spieler, name: str) -> Einheit:
@@ -300,6 +304,31 @@ def testBew18_2AnDerBewegungsweiteRücktArbiterDieSpinneNichtÜberSieHinaus(
     assert höchstensUmHundertstelWeiter(punkt, danach, zumSchnitt)
 
 
+def testBew18_2NachDemVorrückenRücktArbiterDieSpinneBisAnBewegungsweitePlusVorrückwurf(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, einheitDerSpinne, spinne, warrior
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    davor = schlacht.stelle(spinne)
+    weiteNachDemVorrücken = bewegungsweiteDerSpinne + dreiAugen
+    stelleDesWarriors = warriorÜbergehen(
+        schlacht, warrior, versetzt(davor, (-bewegungsweiteDerSpinne - 2, nichts))
+    )
+    vorgerücktMit(schlacht, einheitDerSpinne, dreiAugen)
+    punkt = versetzt(stelleDesWarriors, (-knappNebenDerMitte, nichts))
+    zumSchnitt = wegZumNächstenSchnitt(
+        punkt,
+        Kreis(davor, weiteNachDemVorrücken),
+        Kreis(stelleDesWarriors, summeDerRadien(spinne, warrior)),
+    )
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert frei(spinne, danach, warrior, stelleDesWarriors)
+    assert abstandImQuadrat(davor, danach) <= weiteNachDemVorrücken**2
+    assert höchstensUmHundertstelWeiter(punkt, danach, zumSchnitt)
+
+
 def testBew18_2AnDerBewegungsweiteAufDerFremdenBaseRücktArbiterDieSpinneVonDerGezeigtenStelle(
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior
 ):
@@ -457,6 +486,34 @@ def testBew18_3EndetDieBewegungsweiteInDerNahkampfreichweiteHältArbiterDieSpinn
     punkt = versetzt(davor, (-bewegungsweiteDerSpinne - radien - Fraction(2), nichts))
     assert außerhalbDerNahkampfreichweite(punkt, spinne, stelleDesWarboss, boss), (
         "Der Punkt liegt in der Nahkampfreichweite des Warboss"
+    )
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert aufDerStrecke(danach, davor, punkt)
+    assert hältVorDerNahkampfreichweite(danach, spinne, stelleDesWarboss, boss)
+
+
+def testBew18_3EndetDieStreckeAnDerSpielfeldkanteInDerNahkampfreichweiteHältArbiterDieSpinneDavor(
+    schlachtInDerBewegungsphase, spinne, warboss
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    davor = schlacht.stelle(spinne)
+    stelleDesWarboss = versetzt(davor, (Fraction(-23, 10), Fraction(11, 5)))
+    orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
+    nachDerBewegungsweite = versetzt(davor, gestreckt(flachZurKante, bewegungsweiteDerSpinne))
+    punkt = versetzt(davor, gestreckt(flachZurKante, bewegungsweiteDerSpinne + 2))
+    anDerKante = ersteStelleAnDerSpielfeldkante(davor, punkt, spinne)
+    assert außerhalbDerNahkampfreichweite(davor, spinne, stelleDesWarboss, boss), (
+        "Die Anfangsstelle liegt in der Nahkampfreichweite des Warboss"
+    )
+    assert außerhalbDerNahkampfreichweite(nachDerBewegungsweite, spinne, stelleDesWarboss, boss), (
+        "Der Punkt nach der Bewegungsweite liegt in der Nahkampfreichweite des Warboss"
+    )
+    assert not außerhalbDerNahkampfreichweite(anDerKante, spinne, stelleDesWarboss, boss), (
+        "Die letzte Stelle an der Spielfeldkante liegt außerhalb der Nahkampfreichweite des Warboss"
     )
 
     schlacht.modellLoslassen(spinne, punkt)
