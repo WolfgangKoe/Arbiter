@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Architekt
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält den Happy Path nicht auf. Der [Vertrag Fliegen](../../technik/architektur/vertrag/bewegung/fliegen.md),
@@ -28,4 +28,7 @@ Mitte zurück in die *Bewegungsweite*, *Eintrag* ohne *Grund*; die *Nahkampfreic
 übergangen, *Eintrag* ohne *Grund*. Hältst du einen Fall für überzählig, nenne das Kriterium,
 das ihn schon abdeckt.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, keiner ist überzählig: Fall 1 zeigt, dass ohne fremde *Base*
+nichts rückt; 2 und 3 belegen „BEW-8.5 an der *Stelle* danach“, das sonst kein Test trifft.
+Im [Vertrag Fliegen](../../technik/architektur/vertrag/bewegung/fliegen.md), Absatz „Prüft“,
+nennt 18.7 jetzt alle sechs Tests; Platz schaffte die gekürzte Begründung zum Warboss.

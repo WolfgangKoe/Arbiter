@@ -11,9 +11,6 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
     grenzenDerNahkampfreichweite,
 )
-from arbiter.domaene.phasen.bewegung.keinVorrueckenAusDerNahkampfreichweite import (
-    einModellInNahkampfreichweite,
-)
 from arbiter.domaene.querschnitt.kohaerenz import einheitInKohärenz
 from arbiter.domaene.querschnitt.setzen import Gezeigt
 from arbiter.domaene.querschnitt.uebergehen import Protokoll
@@ -236,12 +233,8 @@ class Schlacht:
     @property
     def vorrückenAngeboten(self) -> bool:
         einheit = self._einheitMitGrenzen()
-        return (
-            einheit is not None
-            and self._bewegungsphase.vorrückenAngeboten(einheit)
-            and not einModellInNahkampfreichweite(
-                einheit, self._stellen, self._stellenDesGegners()
-            )
+        return einheit is not None and self._bewegungsphase.vorrückenAngeboten(
+            einheit, self._stellen, self._stellenDesGegners()
         )
 
     @property
@@ -268,7 +261,9 @@ class Schlacht:
     def vorrücken(self) -> None:
         self._bewegungsphase.angebotBeenden()
         if self.vorrückenAngeboten:
-            self._bewegungsphase.vorrückenBeginnen(self._auswahl.einheit)
+            self._bewegungsphase.vorrückenBeginnen(
+                self._auswahl.einheit, self._stellen, self._stellenDesGegners()
+            )
 
     def vorrückenZurücknehmen(self) -> None:
         self._bewegungsphase.angebotBeenden()

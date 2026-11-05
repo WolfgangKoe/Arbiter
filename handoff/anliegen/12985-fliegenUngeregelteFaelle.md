@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Beim Vertrag [Fliegen](../../technik/architektur/vertrag/bewegung/fliegen.md)

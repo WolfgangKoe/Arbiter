@@ -45,7 +45,7 @@ def testDerVorrückwurfEinerEinheitGiltNichtFürDasModellEinerAnderenEinheit(zeh
     vorgerückt = Einheit("Vorgerückt", (vorgerücktesModell,))
     stellen = {vorgerücktesModell: stelleAn(0, 20), normalesModell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
-    bewegungsphase.vorrückenBeginnen(vorgerückt)
+    bewegungsphase.vorrückenBeginnen(vorgerückt, stellen, {})
     assert bewegungsphase.vorrückwurfNehmen(vorgerückt, vorgerückt.modelle, stelleAn(0, 32))
 
     gezeigt, _ = bewegungsphase.stellenMitGründenNachDemZiehen(
@@ -88,15 +88,26 @@ def testEineEinheitDieNichtVorrückteWirdVorrückenAngeboten():
     einheit = Einheit("Testeinheit", ())
     bewegungsphase = Bewegungsphase({}, spielfeld)
 
-    assert bewegungsphase.vorrückenAngeboten(einheit)
+    assert bewegungsphase.vorrückenAngeboten(einheit, {}, {})
     assert not bewegungsphase.vorrückenZurücknehmenAngeboten(einheit)
+
+
+def testEineEinheitMitEinemModellInNahkampfreichweiteWirdVorrückenNichtAngeboten(zehnZoll):
+    eigenes = modellMit(zehnZoll)
+    fremdes = modellMit(zehnZoll)
+    einheit = Einheit("Testeinheit", (eigenes,))
+    stellen = {eigenes: stelleAn(0, 0), fremdes: stelleAn(1, 0)}
+
+    assert not Bewegungsphase(stellen, spielfeld).vorrückenAngeboten(
+        einheit, stellen, {fremdes: stelleAn(1, 0)}
+    )
 
 
 def testNachDemBeginnWartetDieEinheitAufIhrenVorrückwurf():
     einheit = Einheit("Testeinheit", ())
     bewegungsphase = Bewegungsphase({}, spielfeld)
 
-    bewegungsphase.vorrückenBeginnen(einheit)
+    bewegungsphase.vorrückenBeginnen(einheit, {}, {})
 
     assert bewegungsphase.wartetAufVorrückwurf(einheit)
     assert not bewegungsphase.vorgerückt(einheit)
@@ -106,11 +117,11 @@ def testNachDemBeginnWartetDieEinheitAufIhrenVorrückwurf():
 def testDasZurücknehmenMachtDieWartendeEinheitWiederFrei():
     einheit = Einheit("Testeinheit", ())
     bewegungsphase = Bewegungsphase({}, spielfeld)
-    bewegungsphase.vorrückenBeginnen(einheit)
+    bewegungsphase.vorrückenBeginnen(einheit, {}, {})
 
     bewegungsphase.vorrückenZurücknehmen(einheit)
 
-    assert bewegungsphase.vorrückenAngeboten(einheit)
+    assert bewegungsphase.vorrückenAngeboten(einheit, {}, {})
     assert bewegungsphase.vorrückwurf(einheit) is None
 
 

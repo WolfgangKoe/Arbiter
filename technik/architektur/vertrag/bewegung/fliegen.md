@@ -61,13 +61,14 @@ Spinne, denn nur V10 ändert seine Antwort: 18.1 über einem Necron Warrior geha
 losgelassen (achsparallel versetzt): die *Stelle* frei und höchstens 1/100″ weiter als die
 nächste freie; an der *Bewegungsweite* auf einem Warrior: die *Distanz* höchstens 6″; an der
 *Spielfeldkante*: *ganz in* dem *Spielfeld*; neben dem Warboss: nicht in *Nahkampfreichweite*;
-*Protokoll* unverändert. Warum der Warboss: eine *Einheit* aus einem *Modell*; ein einzelner
-Boy verlöre auf dem Weg zur Spinne die *Kohärenz*. 18.3: durch die *Nahkampfreichweite* des
-Warboss gezogen, Ende außerhalb: *Stelle* am Punkt; Ende darin, der Weirdboy davor an der
-Strecke: nicht darin, `abstandHöchstens` 1+1/100″, außer der *Nahkampfreichweite* des
-Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an). 18.7: an der
-*Bewegungsweite* angehalten, Punkt dahinter auf einem Warrior, übergangen: *Stelle* wie bei
-18.2, doch *Distanz* über 6″, *Eintrag* mit ‚Bewegungsweite‘; in der *Nahkampfreichweite*
-des Warboss: außerhalb.
+*Protokoll* unverändert. Warboss statt Boy: Ein einzelner Boy verlöre die *Kohärenz*. 18.3:
+durch die *Nahkampfreichweite* des Warboss gezogen, Ende außerhalb: *Stelle* am Punkt; Ende
+darin, der Weirdboy davor an der Strecke: nicht darin, `abstandHöchstens` 1+1/100″, außer der
+*Nahkampfreichweite* des Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an).
+18.7, übergangen: an der *Bewegungsweite* angehalten, Punkt dahinter ohne fremde *Base*: dort, *Eintrag* mit
+‚Bewegungsweite‘; auf einem Warrior hinter dessen Mitte: *Stelle* wie bei 18.2, doch *Distanz*
+über 6″, ‚Bewegungsweite‘; vor der Mitte: in 6″, kein *Grund*; Warboss dahinter: außerhalb
+seiner *Nahkampfreichweite*. Vor ihr angehalten (18.3), Punkt auf einem Warrior: außerhalb,
+kein *Grund*.
 Am Bildschirm: Kreis der Spinne beim Halten über der fremden *Base*, nach dem Loslassen an
 der *Stelle* des Spielstands; die Rechnung von 18.2 nur Unit-Tests zu `messen.py`.

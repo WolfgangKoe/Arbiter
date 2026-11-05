@@ -29,9 +29,9 @@ die Seite zeichnet nur, was der Spielstand nennt (W2, O5).
     Beginn der *Bewegungsphase* (12.2). Beides sind Handlungen (D2).
   - BEW-22.1: Steht ein *Modell* der *Einheit* an seiner jetzigen *Stelle* (die Anforderung:
     „ist“) in *Nahkampfreichweite* eines des anderen *Spielers*
-    (`querschnitt/setzen.inNahkampfreichweite`), bietet `Schlacht` „Vorrücken“ nicht an,
-    auch nicht nach BEW-5.1; Regel in `phasen/bewegung/keinVorrueckenAusDerNahkampfreichweite.py`.
-    Zurücknehmen (12.1) bleibt.
+    (`querschnitt/setzen.inNahkampfreichweite`), bietet die `Bewegungsphase` „Vorrücken“
+    nicht an, auch nicht nach BEW-5.1; `Schlacht` reicht weiter. Regel in
+    `phasen/bewegung/keinVorrueckenAusDerNahkampfreichweite.py`. Zurücknehmen (12.1) bleibt.
   - BEW-9.2: V19 hebt nur die *Auswahl* auf; das Warten hält `Bewegungsphase` je *Einheit*,
     bis 5.3 oder 12.2 es beendet. Nichts Neues.
   - BEW-24: `einheitZurücksetzen()` und Abfrage `einheitZurücksetzenAngeboten` gelten der

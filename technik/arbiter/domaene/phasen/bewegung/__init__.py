@@ -28,6 +28,9 @@ from arbiter.domaene.phasen.bewegung.grenzkreise import (
     kleinsterWurfAn,
     möglicheWürfe,
 )
+from arbiter.domaene.phasen.bewegung.keinVorrueckenAusDerNahkampfreichweite import (
+    einModellInNahkampfreichweite,
+)
 from arbiter.domaene.phasen.bewegung.normaleBewegung import gründeBeimZiehen
 from arbiter.domaene.phasen.bewegung.uebergehenBeimZiehen import (
     Angebot,
@@ -122,8 +125,12 @@ class Bewegungsphase:
             anteilBisZurNahkampfreichweite(ebene, weg, gegner),
         )
 
-    def vorrückenAngeboten(self, einheit: Einheit) -> bool:
-        return not self.vorrückenZurücknehmenAngeboten(einheit)
+    def vorrückenAngeboten(
+        self, einheit: Einheit, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
+    ) -> bool:
+        return not self.vorrückenZurücknehmenAngeboten(
+            einheit
+        ) and not einModellInNahkampfreichweite(einheit, stellen, gegner)
 
     def vorrückenZurücknehmenAngeboten(self, einheit: Einheit) -> bool:
         return self.wartetAufVorrückwurf(einheit) or self.vorgerückt(einheit)
@@ -135,8 +142,10 @@ class Bewegungsphase:
             einheit, stellen, self._stellenZuBeginn
         )
 
-    def vorrückenBeginnen(self, einheit: Einheit) -> None:
-        if self.vorrückenAngeboten(einheit):
+    def vorrückenBeginnen(
+        self, einheit: Einheit, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
+    ) -> None:
+        if self.vorrückenAngeboten(einheit, stellen, gegner):
             self._wartendeEinheiten.add(einheit)
 
     def vorrückenZurücknehmen(self, einheit: Einheit) -> None:

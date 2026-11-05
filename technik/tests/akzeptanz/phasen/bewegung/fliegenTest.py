@@ -440,7 +440,8 @@ def testBew18_2DieKarteZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerStell
     (spinne,) = einheitDerSpinne.modelle
     davor = schlacht.stelle(spinne)
     stelleDesWarriors = warriorÜbergehen(schlacht, warrior, versetzt(davor, (Fraction(-3), nichts)))
-    punkt = versetzt(stelleDesWarriors, (Fraction(-1, 2), nichts))
+    punkt = versetzt(stelleDesWarriors, (-halbesZoll, nichts))
+    kürzesterWeg = summeDerRadien(spinne, warrior) - halbesZoll
     seite = seiteDerSchlachtMitEingabe(bildschirm, beendeteAufstellung, schlacht, eingabe)
     zeiger = halten(seite, davor, punkt, eingabe)
     beimHalten = [Stelle(x=Fraction(inX), y=Fraction(inY)) for inX, inY in kreiseDerKarte(seite)]
@@ -451,6 +452,7 @@ def testBew18_2DieKarteZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerStell
     assert any(liegtEinPixelGenauAn(seite, kreis, punkt) for kreis in beimHalten)
     danach = schlacht.stelle(spinne)
     assert frei(spinne, danach, warrior, stelleDesWarriors)
+    assert höchstensUmHundertstelWeiter(punkt, danach, kürzesterWeg)
     assert stelleImSpielstand(danach) in kreiseDerKarte(seite)
 
 
