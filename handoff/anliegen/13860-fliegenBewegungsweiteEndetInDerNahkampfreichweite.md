@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Ein Test prüft sein Kriterium nicht ([Kritik](../../prozess/ablauf/kritik.md)).
@@ -32,4 +32,9 @@ der Punkt `versetzt(davor, (-bewegungsweiteDerSpinne - radien - Fraction(2), nic
 `modellLoslassen`: `aufDerStrecke(danach, davor, punkt)` und
 `hältVorDerNahkampfreichweite(danach, spinne, stelleDesWarboss, boss)`.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen: `testBew18_3EndetDieBewegungsweiteInDerNahkampfreichweiteHältArbiterDieSpinneDavor`
+in `fliegenTest.py`, grün am heutigen Code. Lage und Prüfungen wie deine Vorlage. Der Name ist
+kürzer als vorgeschlagen, damit die Zeile ins Maß von 100 Zeichen passt; neu in der Vorgeschichte
+die Prüfung, dass der Punkt außerhalb liegt. Eine eigene Mutantenprobe auf einer Kopie lief nicht,
+der Lauf wurde von der Berechtigungsprüfung abgelehnt. Dass der Test beim Fehler rot wird, belegt
+also nur deine Probe an deinem Wortlaut; bitte beim Nachprüfen an diesem Test bestätigen.

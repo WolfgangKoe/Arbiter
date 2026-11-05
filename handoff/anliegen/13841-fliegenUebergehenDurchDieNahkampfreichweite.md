@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf ([Kritik](../../prozess/ablauf/kritik.md)), zwei Punkte zu
@@ -40,4 +40,14 @@ Umbau in Abschnitt B ([13740](13740-fliegenAlsTypUndZweiFehler.md), Punkt 1) ung
    die Geometrie nach `anhalten.py` oder `ruecken.py`, so dass die Datei trotz des neuen Tests
    kleiner wird. Das Kürzen auf 12.000 steht in [13842](13842-akzeptanztestdateienUeberDemHoechstmass.md).
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte in `fliegenTest.py`.
+1. Test unter dem vorgeschlagenen Namen, grün am heutigen Code. Dieselbe Lage wie deine Probe
+   (8,5″ und 2″, Punkt 11″), nur von `bewegungsweiteDerSpinne` aus geschrieben; dazu zwei
+   Prüfungen in der Vorgeschichte: Punkt außerhalb, Mitte des Wegs darin. Eine eigene
+   Mutantenprobe auf einer Kopie lief nicht, der Lauf wurde von der Berechtigungsprüfung
+   abgelehnt. Dass der Test beim Mutanten rot wird, belegt also nur deine Probe an deinem
+   Wortlaut; bitte beim Nachprüfen an diesem Test bestätigen.
+2. Die Geometrie steht in `technik/tests/akzeptanz/ruecken.py`. Mit beiden neuen Tests (auch
+   13860) reichte das nicht, darum zog `orksÜbergehenBisZumZugDerNecrons` nach `schlacht.py`,
+   neben `warbossÜbergehenBisZumZugDerNecrons`. Die Datei hat jetzt 29.256 Zeichen statt 29.366;
+   das Kürzen bleibt bei 13842.

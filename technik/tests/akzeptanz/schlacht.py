@@ -161,6 +161,13 @@ def warbossÜbergehenBisZumZugDerNecrons(schlacht, warboss: Einheit, stelle: Ste
     zurBewegungsphaseDesNächstenZugs(schlacht)
 
 
+def orksÜbergehenBisZumZugDerNecrons(schlacht, stellen: dict[Modell, Stelle]) -> None:
+    for modell, stelle in stellen.items():
+        anhaltenUndÜbergehen(schlacht, modell, stelle)
+        assert schlacht.stelle(modell) == stelle, f"{modell.modellart} steht nicht am Ort des Tests"
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+
+
 def warbossNebenDenBoyZiehen(
     schlacht, warboss: Einheit, boy: Modell, weg: tuple[Fraction, Fraction]
 ) -> Stelle:

@@ -1,5 +1,7 @@
 from fractions import Fraction
 
+import pytest
+
 from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.phasen.bewegung import Bewegungsphase, Gezogen
 from arbiter.domaene.sperre import Grund
@@ -7,6 +9,7 @@ from arbiter.domaene.spielobjekte import Base, Spielfeld, Stelle
 from tests.einheit.modelle import modellMit
 
 berührungsabstandImQuadrat = 100
+einZoll = Base(durchmesser=Fraction(254, 10))
 spielfeld = Spielfeld(seitenlängen=(Fraction(60), Fraction(44)))
 
 
@@ -106,6 +109,40 @@ def testEinFliegerRücktBeimLoslassenAuchDannAnDieFreieStelleWennEsNichtDasErste
     abstand = abstandsquadrat(gezeigt.stellen[zweiter], stellen[fremdes])
     assert berührungsabstandImQuadrat <= abstand <= (10 + Fraction(1, 100)) ** 2
     assert gründe == set()
+
+
+def testEinFliegerRücktBeimLoslassenVonDerStelleDesGezogenenZurückAuchWennEsNichtVorneSteht():
+    hinten, gezogenes, fremdes = modellMit(einZoll), modellMit(einZoll), modellMit(einZoll)
+    ebene = {hinten: stelleAn(20, 22), gezogenes: stelleAn(25, 22)}
+    ziel = stelleAn(30, 22)
+    stellen = {**ebene, fremdes: Stelle(x=ziel.x + Fraction(1, 2), y=ziel.y)}
+    gezogen = Gezogen(ebene, gezogenes, ziel, fliegen=True)
+
+    gezeigt, gründe = Bewegungsphase(ebene, spielfeld).stellenMitGründenNachDemLoslassen(
+        gezogen, stellen, {}
+    )
+
+    assert gezeigt.stellen[gezogenes] != ziel
+    assert gründe == set()
+
+
+@pytest.mark.parametrize("richtung", [1, -1])
+def testÜbergehenZweierFliegerRücktVonDerStelleDesGezogenenModellsZurückUnabhängigVonDerReihenfolge(
+    richtung,
+):
+    erster, zweiter, fremdes = modellMit(einZoll), modellMit(einZoll), modellMit(einZoll)
+    ebene = {erster: stelleAn(19, 22), zweiter: stelleAn(25, 22)}
+    gezogenes = zweiter if richtung == 1 else erster
+    ziel = Stelle(x=ebene[gezogenes].x + richtung * 6, y=ebene[gezogenes].y)
+    stellen = {**ebene, fremdes: Stelle(x=ziel.x + richtung * Fraction(1, 2), y=ziel.y)}
+    phase = Bewegungsphase(ebene, spielfeld)
+    phase.angebotNachDemZiehen(Gezogen(ebene, gezogenes, ziel, fliegen=True), stellen, {})
+
+    übergangen = phase.übergangen(stellen, {})
+
+    assert übergangen is not None
+    assert übergangen.stellen[gezogenes] != ziel
+    assert übergangen.gründe == set()
 
 
 def testOhneFliegenGiltBeimLoslassenDasZiehen(zehnZoll):

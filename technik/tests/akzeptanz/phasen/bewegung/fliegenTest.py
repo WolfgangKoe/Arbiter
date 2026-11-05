@@ -1,9 +1,7 @@
 """BEW-18 · Fliegen."""
 
-import math
 from fractions import Fraction
 from http import HTTPStatus
-from typing import NamedTuple
 
 import pytest
 
@@ -23,25 +21,26 @@ from tests.akzeptanz.dienst import (
     stelleBeimWeiterrückenAbfragen,
     stelleImSpielstand,
 )
-from tests.akzeptanz.handgriffe import (
-    breiteDesSpielfelds,
-    millionstel,
-    radiusInZoll,
-    versetzt,
-    wegVon,
+from tests.akzeptanz.handgriffe import breiteDesSpielfelds, radiusInZoll, versetzt
+from tests.akzeptanz.ruecken import (
+    Kreis,
+    frei,
+    ganzImSpielfeld,
+    höchstensUmHundertstelWeiter,
+    randDerNahkampfreichweite,
+    wegZumNächstenSchnitt,
+    wurzelAufgerundet,
 )
 from tests.akzeptanz.schlacht import (
     abstandImQuadrat,
-    abständeZuDenSpielfeldkanten,
     angehaltenLoslassen,
     anhaltenUndÜbergehen,
     außerhalbDerNahkampfreichweite,
     bewegungsweite,
-    hundertstelZoll,
     hältAnDerBewegungsweite,
     hältVorDerNahkampfreichweite,
+    orksÜbergehenBisZumZugDerNecrons,
     summeDerRadien,
-    zurBewegungsphaseDesNächstenZugs,
 )
 from tests.akzeptanz.ziehen import halten, liegtEinPixelGenauAn, mitMausUndFinger, punktAufDerKarte
 
@@ -91,64 +90,6 @@ def warriorÜbergehen(schlacht, warrior: Modell, stelle: Stelle) -> Stelle:
     anhaltenUndÜbergehen(schlacht, warrior, stelle)
     assert schlacht.stelle(warrior) == stelle, "Der Warrior steht nicht, wo der Test ihn braucht"
     return stelle
-
-
-def orksÜbergehenBisZumZugDerNecrons(schlacht, stellen: dict[Modell, Stelle]) -> None:
-    for modell, stelle in stellen.items():
-        anhaltenUndÜbergehen(schlacht, modell, stelle)
-        assert schlacht.stelle(modell) == stelle, f"{modell.modellart} steht nicht am Ort des Tests"
-    zurBewegungsphaseDesNächstenZugs(schlacht)
-
-
-def frei(spinne: Modell, stelle: Stelle, anderes: Modell, stelleDesAnderen: Stelle) -> bool:
-    return not überdeckt(spinne, stelle, anderes, stelleDesAnderen)
-
-
-def höchstensUmHundertstelWeiter(punkt: Stelle, stelle: Stelle, kürzesterWeg: Fraction) -> bool:
-    return abstandImQuadrat(punkt, stelle) <= (kürzesterWeg + hundertstelZoll) ** 2
-
-
-def wurzelAufgerundet(quadrat: Fraction) -> Fraction:
-    return Fraction(math.sqrt(quadrat)) + millionstel
-
-
-def ganzImSpielfeld(stelle: Stelle, modell: Modell) -> bool:
-    return all(abstand >= 0 for abstand in abständeZuDenSpielfeldkanten(stelle, modell))
-
-
-class Kreis(NamedTuple):
-    mitte: Stelle
-    radius: Fraction
-
-
-def schnittpunkte(kreis: Kreis, andererKreis: Kreis) -> tuple[Stelle, ...]:
-    abstandImQuadratDerMitten = abstandImQuadrat(kreis.mitte, andererKreis.mitte)
-    abstand = math.sqrt(abstandImQuadratDerMitten)
-    entlang = float(kreis.radius**2 - andererKreis.radius**2 + abstandImQuadratDerMitten) / (
-        2 * abstand
-    )
-    quer = math.sqrt(kreis.radius**2 - entlang**2)
-    wegInX, wegInY = (float(teil) / abstand for teil in wegVon(kreis.mitte, andererKreis.mitte))
-    return tuple(
-        versetzt(
-            kreis.mitte,
-            (
-                Fraction(entlang * wegInX - seite * quer * wegInY),
-                Fraction(entlang * wegInY + seite * quer * wegInX),
-            ),
-        )
-        for seite in (1, -1)
-    )
-
-
-def wegZumNächstenSchnitt(punkt: Stelle, kreis: Kreis, andererKreis: Kreis) -> Fraction:
-    return wurzelAufgerundet(
-        min(abstandImQuadrat(punkt, schnitt) for schnitt in schnittpunkte(kreis, andererKreis))
-    )
-
-
-def randDerNahkampfreichweite(modell: Modell, stelleDesAnderen: Stelle, anderes: Modell) -> Kreis:
-    return Kreis(stelleDesAnderen, summeDerRadien(modell, anderes) + 1)
 
 
 def stelleDesWarriorsHinterDerBewegungsweite(davor: Stelle) -> Stelle:
@@ -504,6 +445,27 @@ def testBew18_3EndetDieStreckeInDerNahkampfreichweiteHältArbiterDieSpinneAnIhre
     assert außerhalbDerNahkampfreichweite(danach, spinne, stelleDesWeirdboys, weirdboy)
 
 
+def testBew18_3EndetDieBewegungsweiteInDerNahkampfreichweiteHältArbiterDieSpinneDavor(
+    schlachtInDerBewegungsphase, spinne, warboss
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    davor = schlacht.stelle(spinne)
+    radien = summeDerRadien(spinne, boss)
+    stelleDesWarboss = versetzt(davor, (-bewegungsweiteDerSpinne, radien + halbesZoll))
+    orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
+    punkt = versetzt(davor, (-bewegungsweiteDerSpinne - radien - Fraction(2), nichts))
+    assert außerhalbDerNahkampfreichweite(punkt, spinne, stelleDesWarboss, boss), (
+        "Der Punkt liegt in der Nahkampfreichweite des Warboss"
+    )
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert aufDerStrecke(danach, davor, punkt)
+    assert hältVorDerNahkampfreichweite(danach, spinne, stelleDesWarboss, boss)
+
+
 def testBew18_3DurchDieNahkampfreichweiteGezogenZeigtDieKarteDieSpinneAmPunkt(
     schlachtInDerBewegungsphase, spinne, warboss
 ):
@@ -630,6 +592,31 @@ def testBew18_7InDerBewegungsweiteInDerNahkampfreichweiteNenntDerEintragNurDieNa
     assert älter == einträge
     assert neuer.einheit is einheitDerSpinne
     assert neuer.gründe == {Grund.nahkampfreichweite}
+
+
+def testBew18_7HinterDerBewegungsweiteDurchDieNahkampfreichweiteNenntDerEintragNurDieBewegungsweite(
+    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    davor = schlacht.stelle(spinne)
+    wegZurMitte = bewegungsweiteDerSpinne + Fraction(5, 2)
+    stelleDesWarboss = versetzt(davor, (-wegZurMitte, Fraction(2)))
+    orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
+    mitte = versetzt(davor, (-wegZurMitte, nichts))
+    punkt = versetzt(mitte, (Fraction(-5, 2), nichts))
+    assert außerhalbDerNahkampfreichweite(punkt, spinne, stelleDesWarboss, boss)
+    assert not außerhalbDerNahkampfreichweite(mitte, spinne, stelleDesWarboss, boss)
+    angehaltenLoslassen(schlacht, spinne, punkt)
+    einträge = list(schlacht.protokoll)
+
+    schlacht.gemeinsamÜbergehen()
+
+    assert schlacht.stelle(spinne) == punkt
+    *älter, neuer = schlacht.protokoll
+    assert älter == einträge
+    assert neuer.einheit is einheitDerSpinne
+    assert neuer.gründe == {Grund.bewegungsweite}
 
 
 def testBew18_7AufDerFremdenBaseRücktArbiterDieSpinneNachDemÜbergehenAuchÜberDieBewegungsweite(

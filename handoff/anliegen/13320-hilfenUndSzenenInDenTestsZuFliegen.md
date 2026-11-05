@@ -42,4 +42,4 @@ benannten Parametern. (3) Je Paar eine Hilfe für den Aufbau wie `warbossAufDieS
 (`jenseitsDerBewegungsweite`). (5) Die Eingaben je Fall als Parameter, ohne `if`. Mit 12041 in
 einem Gang.
 
-**Stellungnahme.**
+**Stellungnahme.** Punkt 1 vorgezogen ([13841](13841-fliegenUebergehenDurchDieNahkampfreichweite.md)); die Punkte 2 bis 5 bleiben offen.

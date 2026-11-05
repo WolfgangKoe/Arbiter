@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Ein Test prüft nicht, wofür er steht ([Kritik](../../prozess/ablauf/kritik.md)).
@@ -38,4 +38,12 @@ Lauf: `/tmp/arch13840proben/mutanten.py`, M4 und M5).
    das andere, gegenläufig. Eines von beiden steht im `frozenset` immer vorn, also ist bei
    dem Fehler genau ein Fall rot. Erwartet je: nicht am Punkt, `gründe` leer.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte. In `bewegungsphaseTest.py` stehen jetzt
+`testEinFliegerRücktBeimLoslassenVonDerStelleDesGezogenenZurückAuchWennEsNichtVorneSteht`
+(Punkt 1) und der parametrisierte
+`testÜbergehenZweierFliegerRücktVonDerStelleDesGezogenenModellsZurückUnabhängigVonDerReihenfolge`
+(Punkt 2, beide Richtungen), mit den Modellen von `modellMit`. Probe an einer Kopie in
+`/tmp/m13840` (Lauf: `/tmp/m13840/mutanten.py`): ohne Mutant 12 grün; mit dem Fehler in
+`stellenMitGründenNachDemLoslassen` ein Test rot, mit dem Fehler in `übergangen` ein Fall rot.
+Die Lage im Übergehen weicht von der Vorlage ab (Abstand der Modelle 6″, Zug 6″), weil
+`modellMit` die Bewegungsweite 5″ hat und der falsche Weg sonst nicht die Länge 0 hätte.
