@@ -28,6 +28,8 @@ kein Modul ohne Spiegel `formregeln/spiegel.py`; was wohin gehört der Reviewer.
   double zurück (V8); ungerundet überdeckte ein berührendes *Modell* (BEW-1.7, QUE-1.2).
   Gerundet kommt eine mit Nenner bis 10⁶ exakt an (solche Brüche liegen ≥ 10⁻¹² auseinander,
   das double ≤ 10⁻¹⁴ daneben), eine aus dem Anhalten (S3) bis 1/(2·10⁶)″ daneben.
+  Ausnahme: Die Kandidaten der Suche in die freie Fläche (M1) sind `float`, das Urteil
+  über sie exakt.
   Prüft: `Stelle` ohne `Fraction` wirft `TypeError` (`spielobjekteTest.py`), die Rundung
   `anwendungTest.py`, die Grenzfälle der Akzeptanztests.
 - **S3** Anhalten (AUF-29.1, [V10](vertrag/aufstellen/ziehen.md)): Die Berührung ist eine

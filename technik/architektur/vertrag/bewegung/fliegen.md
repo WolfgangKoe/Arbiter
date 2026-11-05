@@ -5,12 +5,11 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
 ([Übergehen](../schlacht/uebergehen.md)) für eine *Einheit* mit *Fliegen*.
 
 - Daten: `Einheit.fliegen: bool = False` (`spielobjekte.py`), gelesen nach
-  [Katalog](../../katalog.md) K3, K7; erst die Zeile (11840), dann der Wert (9340). Web und
+  [Katalog](../../katalog.md) K3, K7. Web und
   Seite unverändert: kein Schlüssel im Spielstand, die Seite zeichnet die Antworten (V6).
 - Eingabe: `Schlacht` gibt `einheit.fliegen` des gezogenen *Modells* an die
   `Bewegungsphase`, gebündelt mit Ebene, gezogenem *Modell*, Ziel und `weiter` in einem
-  unveränderlichen `Gezogen` (ersetzt die Parameter, die heute `# noqa: PLR0913` brauchen);
-  `Angebot` merkt sich `fliegen`.
+  unveränderlichen `Gezogen`; `Angebot` merkt sich `fliegen`.
 - **Ziehen** (V10, BEW-18.1): wie V16, ohne 17.1 bis 17.4 (`weiter` zählt nicht, Antwort
   `angehaltenAufDemWeg` falsch), 6.2 nach 18.3, ohne QUE-1.2 (nach BEW-19.1 ist dann jede
   *Base*, die sperren könnte, nach AUF-29.3 fremd; das löst 18.2 beim Loslassen). So zeigt
@@ -42,17 +41,18 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
   *Spielfeldkante* angehalten (BEW-8.4 zeigt nach 18.1). *Überdeckt* dort eine eine fremde,
   rückt Arbiter nach 18.2, `ränder` und `frei` ohne *Bewegungsweite*, dann QUE-1 ohne
   QUE-1.3 wie V18; findet sie keinen, sperrt QUE-1.2, das Angebot bleibt. Die *Gründe* nach BEW-8.5 auf dem Weg von der
-  *Stelle* davor zu der danach (V18), 6.2 nach 18.3.
-- Aufbau: `fliegen.py` hält 18.2, 18.3 und das Rücken von 18.7; die Weiche in
-  `Bewegungsphase` ist ein `if` mit frühem `return` je Methode. Wächst `phasen/bewegung/__init__.py`
-  über das Höchstmaß, geht das Gleiten aus `_gezeigt` nach
-  `phasen/bewegung/anhaltenVorFremdenBases.py`.
+  *Stelle* davor zu der danach (V18), 6.2 nach 18.3 mit Ende 6.1 (8.5: ohne 3.1).
+- Aufbau ([Es](../../../../prozess/praemissen/es.md), O): *Fliegen* ist ein Typ, kein Zweig.
+  `Bewegungsphase` wählt aus `Gezogen.fliegen` einmal eine Art zu ziehen: *Stellen* nach
+  V10, Anteil von 6.2 bis zu einem Ende, *Stellen* beim Loslassen und beim Übergehen, ob
+  `baseÜberdeckt` beim Ziehen zählt. Die mit Gleiten (17.1 bis 17.4) steht in
+  `phasen/bewegung/anhaltenVorFremdenBases.py`, die mit 18.2, 18.3, 18.7 in `fliegen.py`;
+  so bleibt `__init__.py` dort unter dem Höchstmaß.
 
-Warum so (Versuch zu 10321, `/tmp/arch12985`): Die nächste *Stelle* liegt am Rand der freien
-Fläche, also auf einem Lotpunkt oder einer Ecke; Wurzeln nur in den Kandidaten, das Urteil
-exakt. 30 zufällige Lagen (25 *Modelle*, Spinne 60 mm): höchstens 19 ms, nie weiter als die
-beste Stelle eines Rasters von 1/20″; mitten in 36 sich berührenden Boyz 40 ms, drei Flieger
-166 ms. Ohne Vorfilter dauerte dieselbe Lage Minuten; nur im Loslassen gerechnet, nicht in V10.
+Warum so (Versuch zu 10321): Die nächste *Stelle* liegt am Rand der freien Fläche, also auf
+einem Lotpunkt oder einer Ecke; Wurzeln nur in den Kandidaten, das Urteil exakt. 30 zufällige
+Lagen: höchstens 19 ms, nie weiter als ein Raster von 1/20″; in 36 sich berührenden Boyz
+40 ms, drei Flieger 166 ms. Ohne Vorfilter Minuten; nur im Loslassen gerechnet, nicht in V10.
 
 Prüft wie im Querschnitt: MIV-3.1 und 3.2 an `ausgangslageLaden()` (K7). Am Dienst mit der
 Spinne, denn nur V10 ändert seine Antwort: 18.1 über einem Necron Warrior gehalten, V10 200,
@@ -61,12 +61,12 @@ Spinne, denn nur V10 ändert seine Antwort: 18.1 über einem Necron Warrior geha
 losgelassen (achsparallel versetzt): die *Stelle* frei und höchstens 1/100″ weiter als die
 nächste freie; an der *Bewegungsweite* auf einem Warrior: die *Distanz* höchstens 6″; an der
 *Spielfeldkante*: *ganz in* dem *Spielfeld*; neben dem Warboss: nicht in *Nahkampfreichweite*;
-*Protokoll* unverändert. Warboss statt Boy: Ein einzelner Boy verlöre die *Kohärenz*. 18.3:
+*Protokoll* unverändert. 18.3:
 durch die *Nahkampfreichweite* des Warboss gezogen, Ende außerhalb: *Stelle* am Punkt; Ende
 darin, der Weirdboy davor an der Strecke: nicht darin, `abstandHöchstens` 1+1/100″, außer der
 *Nahkampfreichweite* des Weirdboys (ohne ihn hielte schon 6.2 an derselben *Stelle* an).
 18.7, übergangen: an der *Bewegungsweite* angehalten, Punkt dahinter ohne fremde *Base*: dort, *Eintrag* mit
-‚Bewegungsweite‘; auf einem Warrior hinter dessen Mitte: *Stelle* wie bei 18.2, doch *Distanz*
+‚Bewegungsweite‘, in der *Nahkampfreichweite* des Warboss auch deren *Grund*; auf einem Warrior hinter dessen Mitte: *Stelle* wie bei 18.2, doch *Distanz*
 über 6″, ‚Bewegungsweite‘; vor der Mitte: in 6″, kein *Grund*; Warboss dahinter: außerhalb
 seiner *Nahkampfreichweite*. Vor ihr angehalten (18.3), Punkt auf einem Warrior: außerhalb,
 kein *Grund*.

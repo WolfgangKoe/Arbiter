@@ -1,4 +1,5 @@
 from collections.abc import Collection, Iterable, Mapping
+from dataclasses import dataclass
 from fractions import Fraction
 from functools import partial
 
@@ -21,6 +22,14 @@ from arbiter.domaene.phasen.bewegung.anhaltenVorDerGrenze import (
 )
 from arbiter.domaene.phasen.bewegung.beenden import gründeGegenDasBeenden
 from arbiter.domaene.phasen.bewegung.einheitZuruecksetzen import stehtNichtWieZuBeginn
+from arbiter.domaene.phasen.bewegung.fliegen import (
+    Umgebung,
+    Weite,
+    nachFremdenBasesGerückt,
+)
+from arbiter.domaene.phasen.bewegung.fliegen import (
+    anteilBisZurNahkampfreichweite as anteilBisZurNahkampfreichweiteDesFliegers,
+)
 from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
     grenzeDerBewegung,
@@ -43,6 +52,15 @@ from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spielfeld, Stelle, einheitDes
 
 StellenMitGründen = tuple[Gezeigt, set[Grund]]
+
+
+@dataclass(frozen=True)
+class Gezogen:
+    ebene: Mapping[Modell, Stelle]
+    gezogenes: Modell
+    ziel: Stelle
+    weiter: Weiterrücken | None = None
+    fliegen: bool = False
 
 
 def _verschobenUm(stellen: Mapping[Modell, Stelle], weg: messen.Weg) -> dict[Modell, Stelle]:
@@ -75,17 +93,18 @@ class Bewegungsphase:
     def angebotBeenden(self) -> None:
         self._angebot = None
 
-    def angebotNachDemZiehen(  # noqa: PLR0913
+    def angebotNachDemZiehen(
         self,
-        ebene: Mapping[Modell, Stelle],
-        gezogenes: Modell,
-        ziel: Stelle,
+        gezogen: Gezogen,
         stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
-        weiter: Weiterrücken | None = None,
     ) -> None:
-        _, hältAnDerGrenze = self._gezeigt(ebene, gezogenes, ziel, stellen, gegner, weiter)
-        self._angebot = Angebot(frozenset(ebene), gezogenes, ziel) if hältAnDerGrenze else None
+        _, hältAnDerGrenze = self._gezeigt(gezogen, stellen, gegner)
+        self._angebot = (
+            Angebot(frozenset(gezogen.ebene), gezogen.gezogenes, gezogen.ziel, gezogen.fliegen)
+            if hältAnDerGrenze
+            else None
+        )
 
     def übergangen(
         self, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
@@ -98,11 +117,18 @@ class Bewegungsphase:
         weg = messen.wegZwischen(ebene[gezogenes], angebot.punkt)
         kurz = messen.teilDesWegs(weg, anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld))
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
-        anDerSpielfeldkante = partial(anteilBisZurSpielfeldkante, spielfeld=self._spielfeld)
-        neue = gleiten(ebene, kurz, fremde, anDerSpielfeldkante, angehaltenAufDemWeg=False).stellen
         eigene = stellen.keys() - gegner.keys()
+        if angebot.fliegen:
+            neue = self._nachFremdenBasesGerückt(
+                _verschobenUm(ebene, kurz), ebene[gezogenes], fremde, gegner, {}
+            )
+        else:
+            anDerSpielfeldkante = partial(anteilBisZurSpielfeldkante, spielfeld=self._spielfeld)
+            neue = gleiten(
+                ebene, kurz, fremde, anDerSpielfeldkante, angehaltenAufDemWeg=False
+            ).stellen
         gegangen = messen.wegZwischen(ebene[gezogenes], neue[gezogenes])
-        anteile = self._anteile(ebene, gezogenes, gegangen, gegner)
+        anteile = self._anteile(ebene, gezogenes, gegangen, gegner, fliegen=angebot.fliegen)
         return Übergangen(
             neue,
             gründeBeimÜbergehen(neue, fremde, eigene),
@@ -116,14 +142,32 @@ class Bewegungsphase:
         gezogenes: Modell,
         weg: messen.Weg,
         gegner: Mapping[Modell, Stelle],
+        *,
+        fliegen: bool = False,
     ) -> Anteile:
-        return Anteile(
-            anteilBisZurBewegungsweite(
-                ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
-            ),
-            anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld),
-            anteilBisZurNahkampfreichweite(ebene, weg, gegner),
+        bewegungsweite = anteilBisZurBewegungsweite(
+            ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
         )
+        spielfeldkante = anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld)
+        if fliegen:
+            nahkampfreichweite = anteilBisZurNahkampfreichweiteDesFliegers(
+                ebene, weg, gegner, min(bewegungsweite, spielfeldkante)
+            )
+        else:
+            nahkampfreichweite = anteilBisZurNahkampfreichweite(ebene, weg, gegner)
+        return Anteile(bewegungsweite, spielfeldkante, nahkampfreichweite)
+
+    def _nachFremdenBasesGerückt(
+        self,
+        gesetzt: Mapping[Modell, Stelle],
+        davor: Stelle,
+        fremde: Mapping[Modell, Stelle],
+        gegner: Mapping[Modell, Stelle],
+        weiten: Mapping[Modell, Weite],
+    ) -> Mapping[Modell, Stelle]:
+        zurück = messen.wegZwischen(next(iter(gesetzt.values())), davor)
+        umgebung = Umgebung(fremde, gegner, self._spielfeld, weiten)
+        return nachFremdenBasesGerückt(gesetzt, zurück, umgebung)
 
     def vorrückenAngeboten(
         self, einheit: Einheit, stellen: Mapping[Modell, Stelle], gegner: Mapping[Modell, Stelle]
@@ -165,30 +209,75 @@ class Bewegungsphase:
         einheit = einheitDes(gezogenes, self._vorrückwürfe)
         return self._vorrückwürfe[einheit] if einheit else 0
 
-    def stellenMitGründenNachDemZiehen(  # noqa: PLR0913
+    def stellenMitGründenNachDemZiehen(
         self,
-        ebene: Mapping[Modell, Stelle],
-        gezogenes: Modell,
-        ziel: Stelle,
+        gezogen: Gezogen,
         stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
-        weiter: Weiterrücken | None = None,
     ) -> StellenMitGründen:
-        gezeigt, _ = self._gezeigt(ebene, gezogenes, ziel, stellen, gegner, weiter)
-        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
-        eigene = stellen.keys() - gegner.keys()
-        return gezeigt, gründeBeimZiehen(ebene, gezeigt.stellen, fremde, eigene)
+        gezeigt, _ = self._gezeigt(gezogen, stellen, gegner)
+        return gezeigt, self._gründe(gezogen, gezeigt.stellen, stellen, gegner)
 
-    def _gezeigt(  # noqa: PLR0913
+    def stellenMitGründenNachDemLoslassen(
         self,
-        ebene: Mapping[Modell, Stelle],
-        gezogenes: Modell,
-        ziel: Stelle,
+        gezogen: Gezogen,
         stellen: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
-        weiter: Weiterrücken | None,
+    ) -> StellenMitGründen:
+        gezeigt, gründe = self.stellenMitGründenNachDemZiehen(gezogen, stellen, gegner)
+        if not gezogen.fliegen:
+            return gezeigt, gründe
+        ebene = gezogen.ebene
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
+        vorrückwurf = self._vorrückwurfDes(gezogen.gezogenes)
+        weiten = {
+            modell: Weite(
+                self._stellenZuBeginn[modell], Fraction(modell.bewegungsweite + vorrückwurf)
+            )
+            for modell in ebene
+        }
+        gerückt = self._nachFremdenBasesGerückt(
+            gezeigt.stellen, ebene[gezogen.gezogenes], fremde, gegner, weiten
+        )
+        gründeNachDemRücken = self._gründe(gezogen, gerückt, stellen, gegner, mitBaseÜberdeckt=True)
+        return Gezeigt(dict(gerückt), angehaltenAufDemWeg=False), gründeNachDemRücken
+
+    def _gründe(
+        self,
+        gezogen: Gezogen,
+        gesetzt: Mapping[Modell, Stelle],
+        stellen: Mapping[Modell, Stelle],
+        gegner: Mapping[Modell, Stelle],
+        *,
+        mitBaseÜberdeckt: bool = False,
+    ) -> set[Grund]:
+        fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in gezogen.ebene}
+        eigene = stellen.keys() - gegner.keys()
+        gründe = gründeBeimZiehen(gezogen.ebene, gesetzt, fremde, eigene)
+        if gezogen.fliegen and not mitBaseÜberdeckt:
+            return gründe - {Grund.baseÜberdeckt}
+        return gründe
+
+    def _gezeigtBeimFliegen(
+        self, gezogen: Gezogen, gegner: Mapping[Modell, Stelle]
     ) -> tuple[Gezeigt, bool]:
-        weiter = weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
+        ebene, gezogenes = gezogen.ebene, gezogen.gezogenes
+        weg = messen.wegZwischen(ebene[gezogenes], gezogen.ziel)
+        anteile = self._anteile(ebene, gezogenes, weg, gegner, fliegen=True)
+        halt = _verschobenUm(ebene, messen.teilDesWegs(weg, min(anteile)))
+        hält = anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
+        return Gezeigt(halt, angehaltenAufDemWeg=False), hält
+
+    def _gezeigt(
+        self,
+        gezogen: Gezogen,
+        stellen: Mapping[Modell, Stelle],
+        gegner: Mapping[Modell, Stelle],
+    ) -> tuple[Gezeigt, bool]:
+        if gezogen.fliegen:
+            return self._gezeigtBeimFliegen(gezogen, gegner)
+        ebene, gezogenes, ziel = gezogen.ebene, gezogen.gezogenes, gezogen.ziel
+        weiter = gezogen.weiter or Weiterrücken(None, angehaltenAufDemWeg=False)
         zuvor = zuvorGezeigt(ebene, gezogenes, weiter)
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
         start = ebene

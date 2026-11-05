@@ -1,12 +1,19 @@
 from fractions import Fraction
+from functools import partial
+from math import hypot
 
 from arbiter.domaene.messen import (
+    Geradenrand,
+    Kreisrand,
+    Weg,
     abstandHöchstens,
     anteilBisZurBerührungAufDemWeg,
+    anteilVorDerLetztenBerührung,
     ganzIn,
     rückungInDieFläche,
     teilDesWegs,
     verschoben,
+    wegInDieFreieFläche,
     wegZwischen,
     überdecken,
 )
@@ -223,3 +230,133 @@ def testAufDemWegHältDerAnteilVorEinerBaseAnDieDasEndeSchonÜberquertHat(zehnZo
     )
 
     assert anteil == Fraction(1, 8)
+
+
+def testDieLetzteBerührungLiegtVorDemHaltWennDasEndeNochDarinSteht(zehnZoll):
+    ruhend = [(zehnZoll, Stelle(x=Fraction(15), y=Fraction(0)))]
+
+    anteil = anteilVorDerLetztenBerührung(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(40), Fraction(0)), Fraction(1, 2)
+    )
+
+    assert anteil == Fraction(1, 8)
+
+
+def testStehtDasEndeNichtInDerBerührungIstDerAnteilEins(zehnZoll):
+    ruhend = [(zehnZoll, Stelle(x=Fraction(15), y=Fraction(0)))]
+
+    anteil = anteilVorDerLetztenBerührung(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(40), Fraction(0)), Fraction(1)
+    )
+
+    assert anteil == 1
+
+
+def testDieLetzteBerührungDerZweitenBaseRücktDenAnteilWeiterZurück(zehnZoll):
+    ruhend = [
+        (zehnZoll, Stelle(x=Fraction(15), y=Fraction(0))),
+        (zehnZoll, Stelle(x=Fraction(8), y=Fraction(0))),
+    ]
+
+    anteil = anteilVorDerLetztenBerührung(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(40), Fraction(0)), Fraction(1, 2)
+    )
+
+    assert anteil == 0
+
+
+def testEinWegDerLängeNullHatKeineLetzteBerührung(zehnZoll):
+    ruhend = [(zehnZoll, Stelle(x=Fraction(5), y=Fraction(0)))]
+
+    anteil = anteilVorDerLetztenBerührung(
+        [(zehnZoll, ursprung)], ruhend, (Fraction(0), Fraction(0)), Fraction(1)
+    )
+
+    assert anteil == 1
+
+
+def länge(weg: Weg) -> float:
+    wegInX, wegInY = weg
+    return hypot(float(wegInX), float(wegInY))
+
+
+def längeLiegtEinHundertstelÜber(mindestens: int, weg: Weg) -> bool:
+    return mindestens <= länge(weg) <= mindestens + 0.01
+
+
+def außerhalbVon(mitteInX: int, radius: int, weg: Weg) -> bool:
+    wegInX, wegInY = weg
+    return (wegInX - mitteInX) ** 2 + wegInY**2 >= radius**2
+
+
+def testDerNächsteFreiePunktLiegtAmLotpunktAufDemGemiedenenKreis():
+    meiden = Kreisrand(mitte=(1.0, 0.0), radius=10.0, darin=False)
+
+    weg = wegInDieFreieFläche([meiden], partial(außerhalbVon, 1, 10), (Fraction(10), Fraction(0)))
+
+    assert weg is not None
+    assert außerhalbVon(1, 10, weg)
+    assert längeLiegtEinHundertstelÜber(9, weg)
+
+
+def testLiegtDerUrsprungInDerMitteDesGemiedenenKreisesGenügtJedeRichtung():
+    meiden = Kreisrand(mitte=(0.0, 0.0), radius=5.0, darin=False)
+
+    weg = wegInDieFreieFläche([meiden], partial(außerhalbVon, 0, 5), (Fraction(6), Fraction(0)))
+
+    assert weg is not None
+    assert längeLiegtEinHundertstelÜber(5, weg)
+
+
+def testDerNächsteFreiePunktLiegtAmSchnittpunktVonKreisUndGerade():
+    meiden = Kreisrand(mitte=(0.0, 0.0), radius=5.0, darin=False)
+    oberhalb = Geradenrand(inX=False, wert=4.0, aufwärts=True)
+
+    def frei(weg: Weg) -> bool:
+        _, wegInY = weg
+        return außerhalbVon(0, 5, weg) and wegInY >= oberhalb.wert
+
+    weg = wegInDieFreieFläche([meiden, oberhalb], frei, (Fraction(9), Fraction(0)))
+
+    assert weg is not None
+    assert frei(weg)
+    assert längeLiegtEinHundertstelÜber(5, weg)
+
+
+def testDerSchnittpunktZweierGemiedenerKreiseWirdGefunden():
+    links = Kreisrand(mitte=(-3.0, 0.0), radius=5.0, darin=False)
+    rechts = Kreisrand(mitte=(3.0, 0.0), radius=5.0, darin=False)
+
+    def frei(weg: Weg) -> bool:
+        return außerhalbVon(-3, 5, weg) and außerhalbVon(3, 5, weg)
+
+    weg = wegInDieFreieFläche([links, rechts], frei, (Fraction(9), Fraction(0)))
+
+    assert weg is not None
+    assert frei(weg)
+    assert längeLiegtEinHundertstelÜber(4, weg)
+
+
+def testDerKreisDerBewegungsweiteBegrenztDieSucheNachInnen():
+    meiden = Kreisrand(mitte=(0.0, 0.0), radius=5.0, darin=False)
+    weite = Kreisrand(mitte=(0.0, 0.0), radius=4.0, darin=True)
+
+    def frei(weg: Weg) -> bool:
+        return außerhalbVon(0, 5, weg) and länge(weg) <= weite.radius
+
+    assert wegInDieFreieFläche([meiden, weite], frei, (Fraction(9), Fraction(0))) is None
+
+
+def testEinRandWeiterAlsDerWegZurückSchränktDieKandidatenNichtEin():
+    nah = Geradenrand(inX=True, wert=1.0, aufwärts=True)
+    fern = Kreisrand(mitte=(3.0, 0.0), radius=10.0, darin=False)
+
+    def frei(weg: Weg) -> bool:
+        wegInX, _ = weg
+        return wegInX >= nah.wert
+
+    weg = wegInDieFreieFläche([nah, fern], frei, (Fraction(2), Fraction(0)))
+
+    assert weg is not None
+    assert frei(weg)
+    assert längeLiegtEinHundertstelÜber(1, weg)

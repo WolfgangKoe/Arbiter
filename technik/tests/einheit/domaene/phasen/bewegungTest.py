@@ -1,6 +1,6 @@
 from fractions import Fraction
 
-from arbiter.domaene.phasen.bewegung import Bewegungsphase
+from arbiter.domaene.phasen.bewegung import Bewegungsphase, Gezogen
 from arbiter.domaene.sperre import Grund
 from arbiter.domaene.spielobjekte import Einheit, Spielfeld, Stelle
 from tests.einheit.modelle import bewegungsweiteDerTestmodelle, modellMit
@@ -20,7 +20,7 @@ def testDasZiehenGibtDieNeuenStellenDerEbeneZurück(zehnZoll):
     stellen = {modell: stelleAn(0, 0)}
 
     gezeigt, gründe = Bewegungsphase(stellen, spielfeld).stellenMitGründenNachDemZiehen(
-        stellen, modell, stelleAn(4, 0), stellen, {}
+        Gezogen(stellen, modell, stelleAn(4, 0)), stellen, {}
     )
 
     assert gezeigt.stellen == {modell: stelleAn(4, 0)}
@@ -33,7 +33,7 @@ def testDieBewegungsweiteZähltVomBeginnDerBewegungsphase(zehnZoll):
     jetzt = {modell: stelleAn(3, 0)}
 
     gezeigt, _ = Bewegungsphase(beginn, spielfeld).stellenMitGründenNachDemZiehen(
-        jetzt, modell, stelleAn(9, 0), jetzt, {}
+        Gezogen(jetzt, modell, stelleAn(9, 0)), jetzt, {}
     )
 
     assert gezeigt.stellen == {modell: stelleAn(int(bewegungsweiteDerTestmodelle), 0)}
@@ -49,7 +49,7 @@ def testDerVorrückwurfEinerEinheitGiltNichtFürDasModellEinerAnderenEinheit(zeh
     assert bewegungsphase.vorrückwurfNehmen(vorgerückt, vorgerückt.modelle, stelleAn(0, 32))
 
     gezeigt, _ = bewegungsphase.stellenMitGründenNachDemZiehen(
-        {normalesModell: stelleAn(0, 0)}, normalesModell, stelleAn(9, 0), stellen, {}
+        Gezogen({normalesModell: stelleAn(0, 0)}, normalesModell, stelleAn(9, 0)), stellen, {}
     )
 
     assert gezeigt.stellen == {normalesModell: stelleAn(int(bewegungsweiteDerTestmodelle), 0)}
@@ -64,7 +64,7 @@ def testEinFremdesModellHinterDerBewegungsweiteLenktDasZiehenZumFreienZielNichtI
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
     gezeigt, gründe = bewegungsphase.stellenMitGründenNachDemZiehen(
-        {modell: stelleAn(0, 0)}, modell, stelleAn(25, 0), stellen, {}
+        Gezogen({modell: stelleAn(0, 0)}, modell, stelleAn(25, 0)), stellen, {}
     )
 
     assert gezeigt.stellen == {modell: stelleAn(3, 0)}
@@ -78,7 +78,7 @@ def testHältDasModellVorEinerBaseVorDerBewegungsweiteAnWirdDasÜbergehenNichtAn
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
     bewegungsphase.angebotNachDemZiehen(
-        {modell: stelleAn(0, 0)}, modell, stelleAn(15, 0), stellen, {}
+        Gezogen({modell: stelleAn(0, 0)}, modell, stelleAn(15, 0)), stellen, {}
     )
 
     assert not bewegungsphase.übergehenAngeboten
@@ -130,7 +130,7 @@ def testNachDemZiehenBisÜberDieBewegungsweiteHinausWirdDasÜbergehenAngeboten(z
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
+    bewegungsphase.angebotNachDemZiehen(Gezogen(stellen, modell, stelleAn(9, 0)), stellen, {})
 
     assert bewegungsphase.übergehenAngeboten
 
@@ -140,7 +140,7 @@ def testNachDemZiehenInnerhalbDerBewegungsweiteWirdKeinÜbergehenAngeboten(zehnZ
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
 
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(4, 0), stellen, {})
+    bewegungsphase.angebotNachDemZiehen(Gezogen(stellen, modell, stelleAn(4, 0)), stellen, {})
 
     assert not bewegungsphase.übergehenAngeboten
 
@@ -156,7 +156,7 @@ def testDasÜbergehenSetztDasModellAmPunktDesZiehensUndNenntDenGrundDesAnhaltens
     modell = modellMit(zehnZoll)
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
+    bewegungsphase.angebotNachDemZiehen(Gezogen(stellen, modell, stelleAn(9, 0)), stellen, {})
 
     übergangen = bewegungsphase.übergangen(stellen, {})
 
@@ -171,7 +171,7 @@ def testDasBeendenDesAngebotsNimmtDasÜbergehenZurück(zehnZoll):
     modell = modellMit(zehnZoll)
     stellen = {modell: stelleAn(0, 0)}
     bewegungsphase = Bewegungsphase(stellen, spielfeld)
-    bewegungsphase.angebotNachDemZiehen(stellen, modell, stelleAn(9, 0), stellen, {})
+    bewegungsphase.angebotNachDemZiehen(Gezogen(stellen, modell, stelleAn(9, 0)), stellen, {})
 
     bewegungsphase.angebotBeenden()
 

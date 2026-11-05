@@ -13,6 +13,7 @@ class Angebot:
     ebene: frozenset[Modell]
     gezogenes: Modell
     punkt: Stelle
+    fliegen: bool = False
 
 
 @dataclass(frozen=True)

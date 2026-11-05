@@ -6,7 +6,7 @@ from arbiter.domaene.phasen import einheitVon, gegnerVon
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.phasen.aufstellen.auswahl import Auswahl
-from arbiter.domaene.phasen.bewegung import Bewegungsphase, StellenMitGründen
+from arbiter.domaene.phasen.bewegung import Bewegungsphase, Gezogen, StellenMitGründen
 from arbiter.domaene.phasen.bewegung.grenzkreise import (
     Einhüllende,
     grenzenDerNahkampfreichweite,
@@ -126,18 +126,13 @@ class Schlacht:
     def modellLoslassen(
         self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None = None
     ) -> None:
-        gezeigt, gründe = self._stellenMitGründen(modell, stelle, weiter)
+        gezeigt, gründe = self._stellenMitGründen(modell, stelle, weiter, losgelassen=True)
         if gründe:
             raise Sperre(*gründe)
         self._bewegungsphase.angebotBeenden()
         if gezeigt.stellen:
             self._bewegungsphase.angebotNachDemZiehen(
-                self._ebeneDes(modell),
-                modell,
-                stelle,
-                self._stellen,
-                self._stellenDesGegners(),
-                weiter,
+                self._gezogen(modell, stelle, weiter), self._stellen, self._stellenDesGegners()
             )
         self._stellen.update(gezeigt.stellen)
 
@@ -177,19 +172,27 @@ class Schlacht:
             if spieler is None or anderes not in spieler.armee.modelle
         }
 
+    def _gezogen(self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None) -> Gezogen:
+        einheit = einheitVon(self._beideSpieler, modell)
+        return Gezogen(self._ebeneDes(modell), modell, stelle, weiter, einheit.fliegen)
+
     def _stellenMitGründen(
-        self, modell: Modell, stelle: Stelle, weiter: Weiterrücken | None
+        self,
+        modell: Modell,
+        stelle: Stelle,
+        weiter: Weiterrücken | None,
+        *,
+        losgelassen: bool = False,
     ) -> StellenMitGründen:
         if not self._ziehtDerSpielerAmZug(modell):
             return Gezeigt({}, angehaltenAufDemWeg=False), set()
-        return self._bewegungsphase.stellenMitGründenNachDemZiehen(
-            self._ebeneDes(modell),
-            modell,
-            stelle,
-            self._stellen,
-            self._stellenDesGegners(),
-            weiter,
+        gezogen = self._gezogen(modell, stelle, weiter)
+        berechnen = (
+            self._bewegungsphase.stellenMitGründenNachDemLoslassen
+            if losgelassen
+            else self._bewegungsphase.stellenMitGründenNachDemZiehen
         )
+        return berechnen(gezogen, self._stellen, self._stellenDesGegners())
 
     def modellAnklicken(self, modell: Modell) -> None:
         self._auswahl.modellAnklicken(self._beideSpieler, modell, self._stellen)

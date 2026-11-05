@@ -25,7 +25,7 @@ Dran, hält nichts auf:
   prüfen nach (Testautor-Lauf bzw. Reviewer).
 - Anforderungsautor: Anliegen 10540,
   Anliegen 10180,
-  [9340](anliegen/9340-fliegenDerSpinne.md) (Daten vor Item 4 und 5),
+  Anliegen 9340 (Daten vor Item 4 und 5),
   [7800](anliegen/7800-karteUndEbeneBenennen.md) (angenommen).
 - Regelumsetzer: Anliegen 8021 (wartet auf 8020, das
   gelöscht ist: Wartet-Zeile prüfen), [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md),

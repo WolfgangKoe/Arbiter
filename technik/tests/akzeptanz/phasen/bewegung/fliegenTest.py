@@ -388,21 +388,32 @@ def testBew18_2AnDerSpielfeldkanteRücktArbiterDieSpinneGanzInDasSpielfeld(
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
     davor = schlacht.stelle(spinne)
     stelleDesWarriors = warriorÜbergehen(
-        schlacht, warrior, Stelle(x=Fraction(breiteDesSpielfelds - 1), y=davor.y - 3)
+        schlacht, warrior, Stelle(x=Fraction(breiteDesSpielfelds - 2), y=davor.y - 3)
     )
-    punkt = versetzt(stelleDesWarriors, (knappNebenDerMitte, -knappNebenDerMitte))
+    punkt = versetzt(stelleDesWarriors, (1 + knappNebenDerMitte, -knappNebenDerMitte))
+    (gezeigteStelle,) = schlacht.stellenBeimLoslassen(spinne, punkt).stellen.values()
+    assert überdeckt(spinne, gezeigteStelle, warrior, stelleDesWarriors), (
+        "Die Karte zeigt die Spinne an der Spielfeldkante nicht über dem Warrior"
+    )
+    assert gezeigteStelle.x > stelleDesWarriors.x, (
+        "Der Warrior drückt die Spinne nicht gegen die Spielfeldkante"
+    )
     anDerKante = breiteDesSpielfelds - radiusInZoll(spinne)
-    südlichAnDerKante = wurzelAufgerundet(
-        summeDerRadien(spinne, warrior) ** 2 - (anDerKante - stelleDesWarriors.x) ** 2
+    schnittAnDerKante = Stelle(
+        x=anDerKante,
+        y=stelleDesWarriors.y
+        + wurzelAufgerundet(
+            summeDerRadien(spinne, warrior) ** 2 - (anDerKante - stelleDesWarriors.x) ** 2
+        ),
     )
-    zurKante = (punkt.x - anDerKante) ** 2 + (südlichAnDerKante - knappNebenDerMitte) ** 2
+    zurKante = wurzelAufgerundet(abstandImQuadrat(gezeigteStelle, schnittAnDerKante))
 
     schlacht.modellLoslassen(spinne, punkt)
 
     danach = schlacht.stelle(spinne)
     assert frei(spinne, danach, warrior, stelleDesWarriors)
     assert ganzImSpielfeld(danach, spinne)
-    assert höchstensUmHundertstelWeiter(punkt, danach, wurzelAufgerundet(zurKante))
+    assert höchstensUmHundertstelWeiter(gezeigteStelle, danach, zurKante)
 
 
 def testBew18_2NebenEinemModellDesAnderenSpielersRücktArbiterDieSpinneNichtInDieNahkampfreichweite(

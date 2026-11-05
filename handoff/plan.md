@@ -57,7 +57,7 @@ etwa so teuer wie 1 und 2 zusammen: Der Architekt erprobt beide vor den Tests (1
 nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 
 ## Offene Anliegen
-- [9340](anliegen/9340-fliegenDerSpinne.md) wartet auf
+- Anliegen 9340 wartet auf
   Anliegen 11560; es und 10180 fehlen im Fortschritt
   (Anliegen 11740).
 - Übrige: [Moderation](moderation.md).
