@@ -36,6 +36,7 @@ class Modell:
 class Einheit:
     name: str
     modelle: tuple[Modell, ...]
+    fliegen: bool = False
 
 
 def einheitDes(modell: Modell, einheiten: Iterable[Einheit]) -> Einheit | None:

@@ -1,4 +1,5 @@
 from collections.abc import Callable, Mapping
+from types import MappingProxyType
 from typing import Any
 
 
@@ -9,11 +10,21 @@ def ganzeZahlÜberNull(zahl: object, was: str) -> int:
 
 
 def genauDieseSchlüsselLesen(
-    eintrag: object, zeilen: Mapping[str, Callable[[object], Any]], was: str
+    eintrag: object,
+    zeilen: Mapping[str, Callable[[object], Any]],
+    was: str,
+    freiwillig: Mapping[str, Callable[[object], Any]] = MappingProxyType({}),
 ) -> dict:
-    if not isinstance(eintrag, dict) or set(eintrag) != set(zeilen):
+    erlaubt = {**zeilen, **freiwillig}
+    if not isinstance(eintrag, dict) or not set(zeilen) <= set(eintrag) <= set(erlaubt):
         raise ValueError(f"{was} braucht genau die Schlüssel {sorted(zeilen)}")
-    return {schlüssel: lesen(eintrag[schlüssel]) for schlüssel, lesen in zeilen.items()}
+    return {schlüssel: erlaubt[schlüssel](wert) for schlüssel, wert in eintrag.items()}
+
+
+def wahrheitswertLesen(wert: object, was: str) -> bool:
+    if type(wert) is not bool:
+        raise ValueError(f"{was} muss true oder false sein: {wert!r}")
+    return wert
 
 
 def abbildungLesen(werte: object, lesen: Callable[[object], Any], was: str) -> dict:

@@ -38,9 +38,9 @@ _einheitzeilen = {"fraktion": _textLesen, "datenblatt": _textLesen, "modelle": _
 
 
 def _modellLesen(modellart: str, datenblatt: Datenblatt) -> Modell:
-    if modellart not in datenblatt:
+    if modellart not in datenblatt.modellarten:
         raise ValueError(f"Das Datenblatt kennt keine Modellart {modellart}")
-    werte = datenblatt[modellart]
+    werte = datenblatt.modellarten[modellart]
     return Modell(
         modellart=modellart,
         base=Base(durchmesser=werte.durchmesser),
@@ -54,13 +54,15 @@ def _einheitLesen(eintrag: object, datenblätterVon: DatenblätterVon) -> Einhei
     name = gelesen["datenblatt"]
     if name not in datenblätter:
         raise ValueError(f"Die Fraktion {gelesen['fraktion']} kennt kein Datenblatt {name}")
+    datenblatt = datenblätter[name]
     return Einheit(
         name=name,
         modelle=tuple(
-            _modellLesen(modellart, datenblätter[name])
+            _modellLesen(modellart, datenblatt)
             for modellart, anzahl in gelesen["modelle"].items()
             for _ in range(anzahl)
         ),
+        fliegen=datenblatt.fliegen,
     )
 
 

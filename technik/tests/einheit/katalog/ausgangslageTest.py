@@ -4,13 +4,14 @@ import pytest
 
 from arbiter.domaene.missionsvorbereitung.ausgangslage import Aufstellungszone
 from arbiter.katalog.ausgangslage import ausgangslageAus, ausgangslageLaden
-from arbiter.katalog.datenblaetter import Modellart
+from arbiter.katalog.datenblaetter import Datenblatt, Modellart
 
 modellart = Modellart(bewegungsweite=Fraction(5), durchmesser=32)
 datenblätter = {
     "orks": {
-        "Boyz": {"Ork Boy": modellart, "Boss Nob": modellart},
-        "Warboss": {"Warboss": modellart},
+        "Boyz": Datenblatt({"Ork Boy": modellart, "Boss Nob": modellart}),
+        "Warboss": Datenblatt({"Warboss": modellart}),
+        "Flieger": Datenblatt({"Flieger": modellart}, fliegen=True),
     }
 }
 einheit = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1}}
@@ -151,11 +152,21 @@ def testReihenMitAndererModellzahlAlsDieEinheitIstEinFehlerBeimLaden():
 
 def testEineEinheitMitVerschiedenenDurchmessernIstEinFehlerBeimLaden():
     breit = Modellart(bewegungsweite=Fraction(5), durchmesser=40)
-    gemischt = {"orks": {"Boyz": {"Ork Boy": modellart, "Boss Nob": breit}}}
+    gemischt = {"orks": {"Boyz": Datenblatt({"Ork Boy": modellart, "Boss Nob": breit})}}
     zwei = {"fraktion": "orks", "datenblatt": "Boyz", "modelle": {"Ork Boy": 1, "Boss Nob": 1}}
 
     with pytest.raises(ValueError):
         laden([[zwei], [zwei]], {"abstand": 1.5, "formation": {"Boyz": [2]}}, fraktionen=gemischt)
+
+
+def testDieEinheitÜbernimmtFliegenIhresDatenblatts():
+    flieger = {"fraktion": "orks", "datenblatt": "Flieger", "modelle": {"Flieger": 1}}
+    formation = {"abstand": 1.5, "formation": {"Boyz": [1], "Flieger": [1]}}
+
+    ausgangslage = laden([[einheit, flieger], [einheit]], formation)
+
+    boyz, fliegerEinheit = ausgangslage.ersterSpieler.armee.einheiten
+    assert (boyz.fliegen, fliegerEinheit.fliegen) == (False, True)
 
 
 @pytest.mark.parametrize("reihen", [[1, 0], [2, -1]], ids=["leereReihe", "negativeReihe"])

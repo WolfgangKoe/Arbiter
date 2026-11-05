@@ -16,7 +16,7 @@ regelt; beide abseits des Happy Path, darum wartend:
    *Spielfeldkante* früher an (6.1) und ist die Spinne dort in *Nahkampfreichweite*, der Punkt
    jenseits der Kante aber nicht, muss 6.2 davor anhalten. Code, der am Punkt misst, ließe
    sie in der *Nahkampfreichweite* stehen und bliebe grün; genau diesen Fall führte
-   [12985](12985-fliegenUngeregelteFaelle.md) F4 ein.
+   Anliegen 12985 F4 ein.
 2. BEW-18.2 rückt nur, wo BEW-3.1 nicht anhielte; nach BEW-5.3 ist das *Bewegungsweite* plus
    *Vorrückwurf*. Kein Test rückt eine *vorgerückte* Spinne über 6″ hinaus.
 

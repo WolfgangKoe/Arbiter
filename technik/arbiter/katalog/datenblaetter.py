@@ -7,6 +7,7 @@ from arbiter.katalog.eintragLesen import (
     abbildungLesen,
     ganzeZahlÜberNull,
     genauDieseSchlüsselLesen,
+    wahrheitswertLesen,
 )
 from arbiter.katalog.yamlLesen import yamlLesen
 
@@ -17,7 +18,10 @@ class Modellart:
     durchmesser: int
 
 
-type Datenblatt = Mapping[str, Modellart]
+@dataclass(frozen=True)
+class Datenblatt:
+    modellarten: Mapping[str, Modellart]
+    fliegen: bool = False
 
 
 def _durchmesserLesen(zahl: object) -> int:
@@ -38,14 +42,23 @@ def modellartLesen(werte: object) -> Modellart:
     return Modellart(**genauDieseSchlüsselLesen(werte, _modellartzeilen, "Eine Modellart"))
 
 
-def _modellartenLesen(modellarten: object) -> Datenblatt:
+def _modellartenLesen(modellarten: object) -> Mapping[str, Modellart]:
     return abbildungLesen(modellarten, modellartLesen, "Ein Datenblatt")
 
 
-def _datenblattLesen(datenblatt: object) -> Datenblatt:
-    return genauDieseSchlüsselLesen(
-        datenblatt, {"modellarten": _modellartenLesen}, "Ein Datenblatt"
-    )["modellarten"]
+def _fliegenLesen(wert: object) -> bool:
+    return wahrheitswertLesen(wert, "Fliegen")
+
+
+def datenblattLesen(datenblatt: object) -> Datenblatt:
+    return Datenblatt(
+        **genauDieseSchlüsselLesen(
+            datenblatt,
+            {"modellarten": _modellartenLesen},
+            "Ein Datenblatt",
+            freiwillig={"fliegen": _fliegenLesen},
+        )
+    )
 
 
 def datenblätterLesen(fraktion: str) -> Mapping[str, Datenblatt]:
@@ -56,4 +69,4 @@ def datenblätterLesen(fraktion: str) -> Mapping[str, Datenblatt]:
         datenblätter = yamlLesen("katalog", fraktion, "datenblaetter.yaml")
     except FileNotFoundError as fehler:
         raise keineDatenblätter from fehler
-    return abbildungLesen(datenblätter, _datenblattLesen, f"Die datenblaetter.yaml von {fraktion}")
+    return abbildungLesen(datenblätter, datenblattLesen, f"Die datenblaetter.yaml von {fraktion}")

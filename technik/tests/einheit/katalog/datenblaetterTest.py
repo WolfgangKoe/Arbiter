@@ -2,11 +2,11 @@ from fractions import Fraction
 
 import pytest
 
-from arbiter.katalog.datenblaetter import datenblätterLesen, modellartLesen
+from arbiter.katalog.datenblaetter import datenblattLesen, datenblätterLesen, modellartLesen
 
 
 def testDieDatenblätterDerOrksNennenJeModellartDieWerteDerModellart():
-    modellart = datenblätterLesen("orks")["Boyz"]["Boss Nob"]
+    modellart = datenblätterLesen("orks")["Boyz"].modellarten["Boss Nob"]
 
     assert (modellart.bewegungsweite, modellart.durchmesser) == (Fraction(5), 32)
 
@@ -24,3 +24,25 @@ def testEinWertKeineGanzeZahlÜberNullIstEinFehler(schlüssel, wert):
 
     with pytest.raises(ValueError):
         modellartLesen(werte)
+
+
+_modellarten = {"Boy": {"bewegungsweite": 5, "durchmesser": 32}}
+
+
+def testEinDatenblattOhneFliegenHatKeinFliegen():
+    assert datenblattLesen({"modellarten": _modellarten}).fliegen is False
+
+
+def testEinDatenblattMitFliegenTrueHatFliegen():
+    assert datenblattLesen({"modellarten": _modellarten, "fliegen": True}).fliegen is True
+
+
+@pytest.mark.parametrize("wert", ["true", 1, None], ids=str)
+def testEinFliegenKeinWahrheitswertIstEinFehler(wert):
+    with pytest.raises(ValueError):
+        datenblattLesen({"modellarten": _modellarten, "fliegen": wert})
+
+
+def testEinDatenblattMitUnbekanntemSchlüsselIstEinFehler():
+    with pytest.raises(ValueError):
+        datenblattLesen({"modellarten": _modellarten, "oc": 2})

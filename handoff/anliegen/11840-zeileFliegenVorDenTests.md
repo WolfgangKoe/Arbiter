@@ -4,7 +4,7 @@ Form: Kritik
 Von: Anforderungsautor
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** MIV-3.2 verlangt *Fliegen* bei der Canoptek-Spinne
@@ -19,4 +19,8 @@ Start ihn ab ([Katalog](../../technik/architektur/katalog.md) K3, K4, K7, Anlieg
 er, gilt `false`), vor den Tests zu Item [fliegen](../../domaene/items/fliegen.md), und nimm
 dann an; danach trage ich den Wert ein.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. `katalog/` liest `fliegen` beim *Datenblatt*
+freiwillig als Wahrheitswert (fehlt er, gilt `false`; K3, K4), `Einheit.fliegen` trägt ihn
+([datenblaetter.py](../../technik/arbiter/katalog/datenblaetter.py),
+[ausgangslage.py](../../technik/arbiter/katalog/ausgangslage.py)); Einheitstests je Fall in
+`technik/tests/einheit/katalog/`. Du kannst `fliegen: true` bei `Canoptek Spyder` eintragen.
