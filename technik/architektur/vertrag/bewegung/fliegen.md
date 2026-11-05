@@ -44,7 +44,7 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
   *Stelle* davor zu der danach (V18), 6.2 nach 18.3 mit Ende 6.1 (8.5: ohne 3.1).
 - Aufbau ([Es](../../../../prozess/praemissen/es.md), O): *Fliegen* ist ein Typ, kein Zweig.
   `Bewegungsphase` wählt aus `Gezogen.fliegen` einmal eine Art zu ziehen: *Stellen* nach
-  V10, Anteil von 6.2 bis zu einem Ende, *Stellen* beim Loslassen und beim Übergehen, ob
+  V10, Anteile beim Übergehen, *Stellen* beim Loslassen und beim Übergehen, ob
   `baseÜberdeckt` beim Ziehen zählt. Die mit Gleiten (17.1 bis 17.4) steht in
   `phasen/bewegung/anhaltenVorFremdenBases.py`, die mit 18.2, 18.3, 18.7 in `fliegen.py`.
 

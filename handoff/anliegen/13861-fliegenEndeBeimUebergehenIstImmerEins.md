@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet ([Kritik](../../prozess/ablauf/kritik.md)): keine Prüfung rot, am Bildschirm
