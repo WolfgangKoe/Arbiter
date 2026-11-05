@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Anforderungsautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** `formregeln/glossar.py` verlangt für jede Klasse unter `technik/arbiter/domaene/`

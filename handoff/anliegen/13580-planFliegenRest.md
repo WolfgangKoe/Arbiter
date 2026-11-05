@@ -34,8 +34,8 @@ Offen sind 3 bis 6 (Stand nach diesem Lauf; Tests in `fliegenTest.py` der Akzept
    `modellLoslassen` nutzt die Loslassen-Variante, `stellenBeimLoslassen` die Ziehen-Variante.
 5. ERLEDIGT: Aufrufe auf `Gezogen` umgestellt, Einheitstests zu `fliegen.py`; Anliegen 13660
    (Tests prüfen ihren Namen, Wege entpackt) angenommen. Kein Test zu BEW-18.6.
-6. OFFEN (Stand: Einheitstests grün; Gesamtlauf dauert über drei Minuten und SonarLint
-   fehlt, der Kontext reichte nicht): fliegenTest.py, canoptekSpinneTest.py, dann `python3 -m pytest technik/tests prozess/pruefungen`
-   und SonarLint; Schritt abhaken.
+6. ERLEDIGT bis auf Gesamtlauf und Abhaken: 13760 und 13740 (2, 3) behoben, `fliegenTest.py`
+   der Akzeptanz und die Einheitstests der Bewegung grün; 13620, 13621 nachgeprüft und
+   erledigt. OFFEN: 13740 Punkt 1 (Typ), Gesamtlauf, SonarLint, Schritt abhaken.
 
 Wann: sofort, neuer Implementierer-Lauf.

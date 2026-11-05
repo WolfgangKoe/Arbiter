@@ -587,6 +587,51 @@ def testBew18_7OhneFremdeBaseAmPunktNenntDerEintragDieBewegungsweite(
     assert neuer.gründe == {Grund.bewegungsweite}
 
 
+def inDerNahkampfreichweiteDesWarbossLoslassen(
+    schlacht, spinne: Modell, boss: Modell, wegNachWesten: Fraction
+) -> Stelle:
+    davor = schlacht.stelle(spinne)
+    punkt = versetzt(davor, (-wegNachWesten, nichts))
+    stelleDesWarboss = versetzt(punkt, (-summeDerRadien(spinne, boss) - halbesZoll, nichts))
+    orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
+    angehaltenLoslassen(schlacht, spinne, punkt)
+    return punkt
+
+
+def testBew18_7OhneFremdeBaseInDerNahkampfreichweiteNenntDerEintragBeideGründe(
+    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(schlacht, spinne, boss, Fraction(8))
+    einträge = list(schlacht.protokoll)
+
+    schlacht.gemeinsamÜbergehen()
+
+    assert schlacht.stelle(spinne) == punkt, "Die Spinne steht nicht in der Nahkampfreichweite"
+    *älter, neuer = schlacht.protokoll
+    assert älter == einträge
+    assert neuer.einheit is einheitDerSpinne
+    assert neuer.gründe == {Grund.bewegungsweite, Grund.nahkampfreichweite}
+
+
+def testBew18_7InDerBewegungsweiteInDerNahkampfreichweiteNenntDerEintragNurDieNahkampfreichweite(
+    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss
+):
+    schlacht = schlachtInDerBewegungsphase
+    (boss,) = warboss.modelle
+    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(schlacht, spinne, boss, Fraction(5))
+    einträge = list(schlacht.protokoll)
+
+    schlacht.gemeinsamÜbergehen()
+
+    assert schlacht.stelle(spinne) == punkt, "Die Spinne steht nicht in der Nahkampfreichweite"
+    *älter, neuer = schlacht.protokoll
+    assert älter == einträge
+    assert neuer.einheit is einheitDerSpinne
+    assert neuer.gründe == {Grund.nahkampfreichweite}
+
+
 def testBew18_7AufDerFremdenBaseRücktArbiterDieSpinneNachDemÜbergehenAuchÜberDieBewegungsweite(
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior
 ):

@@ -1,4 +1,4 @@
-from collections.abc import Collection, Iterable, Mapping
+from collections.abc import Callable, Collection, Iterable, Mapping
 from dataclasses import dataclass
 from fractions import Fraction
 from functools import partial
@@ -63,6 +63,13 @@ class Gezogen:
     fliegen: bool = False
 
 
+type EndeDerStrecke = Callable[[Fraction, Fraction], Fraction]
+
+
+def _nurSpielfeldkante(_bewegungsweite: Fraction, spielfeldkante: Fraction) -> Fraction:
+    return spielfeldkante
+
+
 def _verschobenUm(stellen: Mapping[Modell, Stelle], weg: messen.Weg) -> dict[Modell, Stelle]:
     return {modell: messen.verschoben(stelle, weg) for modell, stelle in stellen.items()}
 
@@ -119,16 +126,22 @@ class Bewegungsphase:
         fremde = {anderes: ort for anderes, ort in stellen.items() if anderes not in ebene}
         eigene = stellen.keys() - gegner.keys()
         if angebot.fliegen:
-            neue = self._nachFremdenBasesGerückt(
-                _verschobenUm(ebene, kurz), ebene[gezogenes], fremde, gegner, {}
-            )
+            gesetzt = _verschobenUm(ebene, kurz)
+            zurück = messen.wegZwischen(gesetzt[gezogenes], ebene[gezogenes])
+            neue = self._nachFremdenBasesGerückt(gesetzt, zurück, fremde, gegner, {})
         else:
             anDerSpielfeldkante = partial(anteilBisZurSpielfeldkante, spielfeld=self._spielfeld)
             neue = gleiten(
                 ebene, kurz, fremde, anDerSpielfeldkante, angehaltenAufDemWeg=False
             ).stellen
         gegangen = messen.wegZwischen(ebene[gezogenes], neue[gezogenes])
-        anteile = self._anteile(ebene, gezogenes, gegangen, gegner, fliegen=angebot.fliegen)
+        anteile = self._anteile(
+            ebene,
+            gezogenes,
+            gegangen,
+            gegner,
+            endeDerStrecke=_nurSpielfeldkante if angebot.fliegen else None,
+        )
         return Übergangen(
             neue,
             gründeBeimÜbergehen(neue, fremde, eigene),
@@ -143,15 +156,15 @@ class Bewegungsphase:
         weg: messen.Weg,
         gegner: Mapping[Modell, Stelle],
         *,
-        fliegen: bool = False,
+        endeDerStrecke: EndeDerStrecke | None = None,
     ) -> Anteile:
         bewegungsweite = anteilBisZurBewegungsweite(
             ebene, weg, self._stellenZuBeginn, self._vorrückwurfDes(gezogenes)
         )
         spielfeldkante = anteilBisZurSpielfeldkante(ebene, weg, self._spielfeld)
-        if fliegen:
+        if endeDerStrecke:
             nahkampfreichweite = anteilBisZurNahkampfreichweiteDesFliegers(
-                ebene, weg, gegner, min(bewegungsweite, spielfeldkante)
+                ebene, weg, gegner, endeDerStrecke(bewegungsweite, spielfeldkante)
             )
         else:
             nahkampfreichweite = anteilBisZurNahkampfreichweite(ebene, weg, gegner)
@@ -160,12 +173,11 @@ class Bewegungsphase:
     def _nachFremdenBasesGerückt(
         self,
         gesetzt: Mapping[Modell, Stelle],
-        davor: Stelle,
+        zurück: messen.Weg,
         fremde: Mapping[Modell, Stelle],
         gegner: Mapping[Modell, Stelle],
         weiten: Mapping[Modell, Weite],
     ) -> Mapping[Modell, Stelle]:
-        zurück = messen.wegZwischen(next(iter(gesetzt.values())), davor)
         umgebung = Umgebung(fremde, gegner, self._spielfeld, weiten)
         return nachFremdenBasesGerückt(gesetzt, zurück, umgebung)
 
@@ -236,9 +248,8 @@ class Bewegungsphase:
             )
             for modell in ebene
         }
-        gerückt = self._nachFremdenBasesGerückt(
-            gezeigt.stellen, ebene[gezogen.gezogenes], fremde, gegner, weiten
-        )
+        zurück = messen.wegZwischen(gezeigt.stellen[gezogen.gezogenes], ebene[gezogen.gezogenes])
+        gerückt = self._nachFremdenBasesGerückt(gezeigt.stellen, zurück, fremde, gegner, weiten)
         gründeNachDemRücken = self._gründe(gezogen, gerückt, stellen, gegner, mitBaseÜberdeckt=True)
         return Gezeigt(dict(gerückt), angehaltenAufDemWeg=False), gründeNachDemRücken
 
@@ -263,7 +274,7 @@ class Bewegungsphase:
     ) -> tuple[Gezeigt, bool]:
         ebene, gezogenes = gezogen.ebene, gezogen.gezogenes
         weg = messen.wegZwischen(ebene[gezogenes], gezogen.ziel)
-        anteile = self._anteile(ebene, gezogenes, weg, gegner, fliegen=True)
+        anteile = self._anteile(ebene, gezogenes, weg, gegner, endeDerStrecke=min)
         halt = _verschobenUm(ebene, messen.teilDesWegs(weg, min(anteile)))
         hält = anteile.hältAnDerBewegungsweiteOderNahkampfreichweite
         return Gezeigt(halt, angehaltenAufDemWeg=False), hält

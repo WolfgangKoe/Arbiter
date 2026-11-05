@@ -79,16 +79,33 @@ def testEinFliegerRücktBeimLoslassenAnDieNächsteFreieStelleOhneGrund(zehnZoll)
 
 def testEinFliegerFindetBeimLoslassenKeineStelleInDerBewegungsweiteUndWirdGesperrt(zehnZoll):
     flieger, fremdes = modellMit(zehnZoll), modellMit(zehnZoll)
-    ebene = {flieger: stelleAn(5, 10)}
-    stellen = {**ebene, fremdes: stelleAn(7, 10)}
-    gezogen = Gezogen(ebene, flieger, stelleAn(7, 10), fliegen=True)
+    zuBeginn = {flieger: stelleAn(12, 10)}
+    ebene = {flieger: stelleAn(8, 10)}
+    stellen = {**ebene, fremdes: stelleAn(13, 10)}
+    gezogen = Gezogen(ebene, flieger, stelleAn(17, 10), fliegen=True)
 
-    gezeigt, gründe = Bewegungsphase(ebene, spielfeld).stellenMitGründenNachDemLoslassen(
+    gezeigt, gründe = Bewegungsphase(zuBeginn, spielfeld).stellenMitGründenNachDemLoslassen(
         gezogen, stellen, {}
     )
 
-    assert gezeigt.stellen == {flieger: stelleAn(7, 10)}
+    assert gezeigt.stellen == {flieger: stelleAn(17, 10)}
     assert Grund.baseÜberdeckt in gründe
+
+
+def testEinFliegerRücktBeimLoslassenAuchDannAnDieFreieStelleWennEsNichtDasErsteModellDerEbeneIst(
+    zehnZoll,
+):
+    erster, zweiter, fremdes = modellMit(zehnZoll), modellMit(zehnZoll), modellMit(zehnZoll)
+    ebene = {erster: stelleAn(5, 10), zweiter: stelleAn(5, 22)}
+    stellen = {**ebene, fremdes: stelleAn(16, 22)}
+    gezogen = Gezogen(ebene, zweiter, stelleAn(10, 22), fliegen=True)
+    phase = Bewegungsphase(ebene, spielfeld)
+
+    gezeigt, gründe = phase.stellenMitGründenNachDemLoslassen(gezogen, stellen, {})
+
+    abstand = abstandsquadrat(gezeigt.stellen[zweiter], stellen[fremdes])
+    assert berührungsabstandImQuadrat <= abstand <= (10 + Fraction(1, 100)) ** 2
+    assert gründe == set()
 
 
 def testOhneFliegenGiltBeimLoslassenDasZiehen(zehnZoll):
@@ -119,3 +136,19 @@ def testÜbergehenEinesFliegersGleitetNichtUndRücktNachHintenDerFremdenBase(zeh
     assert übergangen.stellen[flieger].x > stelleAn(20, 10).x
     assert übergangen.gründe == set()
     assert übergangen.angehalten == {Grund.bewegungsweite}
+
+
+def testÜbergehenEinesFliegersNenntAuchDieNahkampfreichweiteWennDieStelleDarinLiegt(zehnZoll):
+    flieger, gegner = modellMit(zehnZoll), modellMit(zehnZoll)
+    ebene = {flieger: stelleAn(10, 10)}
+    stellen = {**ebene, gegner: stelleAn(31, 10)}
+    phase = Bewegungsphase(ebene, spielfeld)
+    phase.angebotNachDemZiehen(
+        Gezogen(ebene, flieger, stelleAn(20, 10), fliegen=True), stellen, {gegner: stellen[gegner]}
+    )
+
+    übergangen = phase.übergangen(stellen, {gegner: stellen[gegner]})
+
+    assert übergangen is not None
+    assert übergangen.stellen[flieger] == stelleAn(20, 10)
+    assert übergangen.angehalten == {Grund.bewegungsweite, Grund.nahkampfreichweite}

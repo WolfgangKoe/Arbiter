@@ -56,4 +56,4 @@ Alles zusammen ist ein Implementierer-Lauf.
 3. Beim Übergehen ist das Ende von 18.3 der Anteil von 6.1 auf dem gegangenen Weg, ohne 3.1.
    Einheitstest wie `probe.py`: erwartet {bewegungsweite, nahkampfreichweite}.
 
-**Stellungnahme.**
+**Stellungnahme.** 2, 3 umgesetzt; 1 aus.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am Code (Lesbarkeit), Item fliegen, Abschnitt 2 (`git diff` auf
@@ -37,4 +37,12 @@ fünf Zeilen Produktcode, ein Einheitstest dazu, ein Test umgebaut.
    der *Bewegungsweite* (etwa `stellenZuBeginn` der Phase anders als die Ebene), und mit dem
    Mutanten `weiten = {}` prüfen; sonst umbenennen nach dem, was er prüft.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen, beide Punkte umgesetzt. 1: `_nachFremdenBasesGerückt` in
+[\_\_init\_\_.py](../../technik/arbiter/domaene/phasen/bewegung/__init__.py) bekommt `zurück`
+fertig gemessen, in `übergangen` und im Loslassen jeweils als `wegZwischen(gesetzt[gezogenes], davor)`;
+kein `next(iter(…))` mehr. Einheitstest
+`testEinFliegerRücktBeimLoslassenAuchDannAnDieFreieStelleWennEsNichtDasErsteModellDerEbeneIst`
+in [bewegungsphaseTest.py](../../technik/tests/einheit/domaene/phasen/bewegung/bewegungsphaseTest.py)
+(das gezogene als zweites der Ebene). 2: Der Test zur *Bewegungsweite* hat jetzt `davor`
+innerhalb der Weite, die freie *Stelle* innerhalb von `zurück`, aber außerhalb der Weite; mit
+dem Mutanten `weiten = {}` ist er rot (an einer Kopie in `/tmp` geprobt).

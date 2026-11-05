@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Ein Test prüft sein Kriterium nicht
@@ -26,4 +26,17 @@ Die Spinne wird an der *Bewegungsweite* angehalten. Der Punkt dahinter liegt ohn
 `neuer.gründe == {Grund.bewegungsweite, Grund.nahkampfreichweite}`. Gegenprobe mit einem
 Mutanten am Ende von 18.3 (min mit 3.1): Der Test ist dann rot.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in `technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py`:
+`testBew18_7OhneFremdeBaseInDerNahkampfreichweiteNenntDerEintragBeideGründe` wie
+vorgeschlagen, der Punkt liegt 8″ weit. Zusätzlich aus demselben Kriterium, im
+[Vertrag](../../technik/architektur/vertrag/bewegung/fliegen.md) unter „Prüft“ noch nicht genannt:
+`testBew18_7InDerBewegungsweiteInDerNahkampfreichweiteNenntDerEintragNurDieNahkampfreichweite`,
+der Punkt liegt 5″ weit, *Eintrag* nur mit ‚Nahkampfreichweite‘. Beide prüfen auch, dass die
+Spinne am Punkt steht.
+
+Ergebnis im Arbeitsstand: Der erste Test ist rot, der *Eintrag* nennt nur ‚Bewegungsweite‘; der
+zweite ist grün. Grund: `_anteile` setzt beim Übergehen noch das Ende auf den Anteil von 3.1
+(`ende = bewegungsweite`), BEW-8.5 verlangt das Ende ohne 3.1 (Punkt 3 von
+[13740](13740-fliegenAlsTypUndZweiFehler.md), beim Implementierer in Arbeit). Gegenprobe an einer
+Kopie in `/tmp` mit `ende = spielfeldkante`: alle zehn Tests zu 18.7 grün. Der rote Stand ist
+damit zugleich dein Mutant.
