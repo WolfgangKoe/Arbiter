@@ -131,8 +131,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
   Hindernis: Architekt → Implementierer: Zwei Flieger rücken am Bildschirm richtig, aber kein Test fiele auf, wenn das Rücken wieder vom falschen Modell aus misst. (Anliegen 13840); beseitigt: Commit „fliegen: Tests schließen die Lücken aus der Kritik an Abschnitt A“
   Hindernis: Architekt → Testautor: Fliegt die Spinne beim Übergehen durch die Nahkampfreichweite und endet dahinter, prüft kein Test, dass der Eintrag nur die Bewegungsweite nennt; die Testdatei ist zudem über ihrem Höchstmaß gewachsen. (Anliegen 13841); beseitigt: Commit „fliegen: Tests schließen die Lücken aus der Kritik an Abschnitt A“
 - [x] Reviewer: Kritik am Code zu Item fliegen
-- [ ] Fachkritiker: Item fliegen abgenommen
-- [ ] Planer: Item fliegen gelöscht
+- [x] Fachkritiker: Item fliegen abgenommen
+- [x] Planer: Item fliegen gelöscht
 - [x] Architekt: Vertrag zu Item zuruecksetzenUndLuecken, bei beiden Hälften
 - [x] Testautor: Tests zu Item zuruecksetzenUndLuecken
 - [x] Fachkritiker: Kritik an den Tests zu Item zuruecksetzenUndLuecken
@@ -148,7 +148,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Fachkritiker: Item zuruecksetzenUndLuecken abgenommen
 - [x] Planer: Item zuruecksetzenUndLuecken gelöscht
 - [x] Architekt: Vertrag zu Item ruhigeKarte, bei beiden Hälften
-- [ ] Testautor: Tests zu Item ruhigeKarte
+- [x] Testautor: Tests zu Item ruhigeKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item ruhigeKarte
 - [ ] Architekt: Kritik an den Tests zu Item ruhigeKarte
 - [ ] Implementierer: Tests zu Item ruhigeKarte grün

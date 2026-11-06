@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from functools import partial
 from urllib.parse import unquote
 
-from playwright.sync_api import Browser, Locator, Page, Response, Route, expect
+from playwright.sync_api import Browser, Locator, Page, Response, Route, ViewportSize, expect
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.sperre import Grund
@@ -224,8 +224,9 @@ wartezeitInMillisekunden = 5000
 
 
 class Bildschirm:
-    def __init__(self, browser: Browser) -> None:
+    def __init__(self, browser: Browser, *, fenster: ViewportSize | None = None) -> None:
         self._browser = browser
+        self._fenster = fenster
         self._seiten: list[Page] = []
         self._server: list = []
 
@@ -249,7 +250,8 @@ class Bildschirm:
         return seite
 
     def _neueSeite(self, *, berührbar: bool) -> Page:
-        seite = self._browser.new_context(has_touch=berührbar).new_page()
+        kontext = self._browser.new_context(has_touch=berührbar, viewport=self._fenster)
+        seite = kontext.new_page()
         self._seiten.append(seite)
         seite.set_default_timeout(wartezeitInMillisekunden)
         return seite

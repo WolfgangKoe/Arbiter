@@ -231,6 +231,13 @@ def browser():
         chromium.close()
 
 
+@pytest.fixture(scope="session")
+def browserMitRollbalken(browser: Browser):
+    chromium = browser.browser_type.launch(ignore_default_args=["--hide-scrollbars"])
+    yield chromium
+    chromium.close()
+
+
 @pytest.fixture
 def bildschirm(browser: Browser):
     bildschirm = Bildschirm(browser)

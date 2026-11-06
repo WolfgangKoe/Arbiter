@@ -3,10 +3,11 @@
 from fractions import Fraction
 
 import pytest
+from playwright.sync_api import Browser
 
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.auswahl import auswählenMit
-from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
+from tests.akzeptanz.bildschirm import Bildschirm, seiteDerSchlachtMitEingabe
 from tests.akzeptanz.handgriffe import (
     nachDerWahlDerAufstellungszone,
     radiusInZoll,
@@ -32,6 +33,13 @@ abweichungUnterDerSchwelle = zugschwelleInPixeln - 1
 dreiZollNachOsten = (Fraction(3), Fraction(0))
 
 
+@pytest.fixture
+def bildschirmMitGroßemFenster(browser: Browser):
+    bildschirm = Bildschirm(browser, fenster={"width": 1920, "height": 1080})
+    yield bildschirm
+    bildschirm.beenden()
+
+
 def testAuf8_2EinGesetztesModellIstNachDemLoslassenAnDerStelleDesLoslassensGesetzt(
     aufstellung, ersterSpieler, zweiterSpieler
 ):
@@ -49,11 +57,13 @@ def testAuf8_2EinGesetztesModellIstNachDemLoslassenAnDerStelleDesLoslassensGeset
 
 @pytest.mark.parametrize("eingabe", ["maus", "finger"])
 def testAuf8_2EinModellWirdUmWenigerAlsSeinenRadiusGezogenUndAnDerStelleDesLoslassensGesetzt(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
+    bildschirmMitGroßemFenster, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
 ):
     [(modell, stelleDavor)] = boyzSetzen(1)
     ziel = Stelle(x=stelleDavor.x, y=stelleDavor.y + Fraction(1, 2))
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
+    seite = bildschirmMitGroßemFenster.seiteZu(
+        aufstellungNachDerZonenwahl, berührbar=eingabe == "finger"
+    )
     zugInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
     radiusInPixeln = float(radiusInZoll(modell)) / zollJePixel(seite)
     assert zugschwelleInPixeln < zugInPixeln < radiusInPixeln
@@ -84,10 +94,12 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
 
 @pytest.mark.parametrize("eingabe", ["maus", "finger"])
 def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
-    bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
+    bildschirmMitGroßemFenster, aufstellungNachDerZonenwahl, boyzSetzen, eingabe
 ):
     [(modell, stelleDavor)] = boyzSetzen(1)
-    seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
+    seite = bildschirmMitGroßemFenster.seiteZu(
+        aufstellungNachDerZonenwahl, berührbar=eingabe == "finger"
+    )
     griff = griffAbseitsDerMitte(seite, modell, punktAufDerKarte(seite, stelleDavor))
     wegInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
     ende = Bildpunkt(griff.links, griff.oben + wegInPixeln)
@@ -100,13 +112,13 @@ def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
 
 @mitMausUndFinger
 def testAuf8_7InDerBewegungsphaseFolgtEinModellDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
-    bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
+    bildschirmMitGroßemFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
     davor = schlachtInDerBewegungsphase.stelle(modell)
     erwartet = versetzt(davor, dreiZollNachOsten)
     seite = seiteDerSchlachtMitEingabe(
-        bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
+        bildschirmMitGroßemFenster, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
     mitte = punktAufDerKarte(seite, davor)
     punktDesErwarteten = punktAufDerKarte(seite, erwartet)

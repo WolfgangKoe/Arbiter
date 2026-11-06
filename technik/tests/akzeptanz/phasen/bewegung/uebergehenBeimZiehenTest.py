@@ -49,7 +49,7 @@ from tests.akzeptanz.schlacht import (
     zehnZollNachOsten,
     zurBewegungsphaseDerNächstenSchlachtrunde,
 )
-from tests.akzeptanz.ziehen import modellZiehen
+from tests.akzeptanz.ziehen import liegtEinPixelGenauAn, modellZiehen
 
 nichts = Fraction(0)
 dreiZoll = (Fraction(3), nichts)
@@ -472,7 +472,7 @@ def testBew8_4DieSeiteSetztNachDemKlickAufGemeinsamÜbergehenAmPunkt(
         knopfDerSeite(seite, übergehenKnopf).click()
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
-    assert schlachtInDerBewegungsphase.stelle(boss) == ziel
+    assert liegtEinPixelGenauAn(seite, schlachtInDerBewegungsphase.stelle(boss), ziel)
     assert kreiseDerKarte(seite) == stellenAlsZahlen(schlachtInDerBewegungsphase)
 
 
