@@ -40,9 +40,16 @@ from tests.akzeptanz.schlacht import (
     zurLetztenSchlachtrunde,
     zügeBeenden,
 )
-from tests.akzeptanz.ziehen import mitDerMausKlicken, modellZiehen, punktAufDerKarte
+from tests.akzeptanz.ziehen import (
+    Bildpunkt,
+    mitDerMausKlicken,
+    modellZiehen,
+    punktAufDerKarte,
+)
 
 _pixelgenauigkeit = 1e-4
+_rollweiteInPixeln = 500
+_nachDemRollenInMillisekunden = 200
 _ersterZugKnopf = "Erster Zug"
 _vorrückenKnopf = "Vorrücken"
 _einheitZurücksetzenKnopf = "Einheit zurücksetzen"
@@ -70,6 +77,26 @@ def aufDieStelleKlicken(seite: Page, stelle) -> None:
 def knopfKlicken(seite: Page, text: str) -> None:
     with aufDieHandlungWarten(seite):
         knopfDerSeite(seite, text).click()
+
+
+def mitteVon(rahmen: dict) -> Bildpunkt:
+    return Bildpunkt(
+        links=rahmen["x"] + rahmen["width"] / 2,
+        oben=rahmen["y"] + rahmen["height"] / 2,
+    )
+
+
+def mitDemMausradÜberDenKnöpfenRollen(seite: Page) -> None:
+    punkt = mitteVon(seite.locator(".spalteMitte .knopfGruppe").bounding_box())
+    seite.mouse.move(punkt.links, punkt.oben)
+    seite.mouse.wheel(0, _rollweiteInPixeln)
+    seite.wait_for_timeout(_nachDemRollenInMillisekunden)
+
+
+def knopfAnSeinemPlatzKlicken(seite: Page, text: str) -> None:
+    punkt = mitteVon(knopfDerSeite(seite, text).bounding_box())
+    with aufDieHandlungWarten(seite):
+        mitDerMausKlicken(seite, punkt)
 
 
 def knöpfeBeimAusgewähltenWarboss(seite: Page) -> None:
@@ -311,6 +338,24 @@ def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfe
     davor = abbildungDerKarte(seite)
 
     knopfKlicken(seite, übergehenKnopf)
+
+    expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
+    assert abbildungDerKarte(seite) == wieDavor(davor)
+
+
+def testQue7_1NachDemRollenBleibtDieKarteStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfenAufhört(
+    bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
+):
+    schlachtInDerBewegungsphase.auswählen(warboss)
+    (boss,) = warboss.modelle
+    ziel = versetzt(schlachtInDerBewegungsphase.stelle(boss), zehnZollNachOsten)
+    angehaltenLoslassen(schlachtInDerBewegungsphase, boss, ziel)
+    seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
+    knöpfeBeimAusgewähltenWarboss(seite)
+    mitDemMausradÜberDenKnöpfenRollen(seite)
+    davor = abbildungDerKarte(seite)
+
+    knopfAnSeinemPlatzKlicken(seite, übergehenKnopf)
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
     assert abbildungDerKarte(seite) == wieDavor(davor)

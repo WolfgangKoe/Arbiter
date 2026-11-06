@@ -150,7 +150,11 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Vertrag zu Item ruhigeKarte, bei beiden Hälften
 - [x] Testautor: Tests zu Item ruhigeKarte
 - [ ] Fachkritiker: Kritik an den Tests zu Item ruhigeKarte
+  Hindernis: Fachkritiker → Testautor: Rollt ein Spieler in einem schmalen Fenster die Knöpfe ins Bild und klickt „gemeinsam übergehen“, springt die Karte um 20 Pixel, und kein Test bemerkt das. (Anliegen 14460)
+  Hindernis: Fachkritiker → Ux: In Fenstern unter 1280 Pixeln Breite fasst die Knopfzeile nur eine von zwei Zeilen; darum muss man rollen, und danach springt die Karte. (Anliegen 14461)
 - [ ] Architekt: Kritik an den Tests zu Item ruhigeKarte
+  Hindernis: Architekt → Ux: Unter 1280 Pixeln springt die Karte um 20 Pixel zurück, wenn man zur zweiten Knopfzeile gerollt hat und dann klickt; das verletzt QUE-7.1. (Anliegen 14480)
+  Hindernis: Architekt → Testautor: Kein Test rollt vor dem Klick, darum würden die Tests trotz dieses Sprungs grün. (Anliegen 14481)
 - [ ] Implementierer: Tests zu Item ruhigeKarte grün
 - [ ] Architekt: Kritik am Code zu Item ruhigeKarte
 - [ ] Reviewer: Kritik am Code zu Item ruhigeKarte
@@ -161,6 +165,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [ ] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
 - [ ] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
 - [x] Planer: Anliegen 11824 Umbenennen nach 7800: Ziel
+- [ ] Testautor: Anliegen 14482 Tests zu ruhigeKarte: ungeprüfte Vorbedingungen, conftest über dem Höchstmaß
 - [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
