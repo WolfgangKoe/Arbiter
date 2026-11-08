@@ -69,7 +69,7 @@ Klick in einen Ring (BEW-14.1) | `PUT /api/spielfeldAnklicken` (V19) | `spielfel
   *Modellen*; ein Klick auf sie ist ein Klick auf das *Spielfeld* (V19).
 - Knöpfe (V7): „Vorrücken“, wenn `angeboten`, „Vorrücken zurücknehmen“, wenn
   `zurücknehmen`, dann „Einheit zurücksetzen“, wenn `einheitZurücksetzen.angeboten`, alle vor
-  „Phase beenden“ (Mockup [bew-24](../../../../domaene/mockups/bew-24.html)).
+  „Phase beenden“.
 
 Prüft wie im Querschnitt: `grenzen` am Dienst mit exakten Radien (B3) für Modell, *Einheit*,
 Gegner, Wurf; ein Klick zwischen Ring 3 und 4 macht 4, im Ring aus BEW-11 hebt er die

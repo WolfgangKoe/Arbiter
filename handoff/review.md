@@ -40,8 +40,8 @@ Bildschirmtests gegen den echten Server belegt (`technik/tests/akzeptanz/`, etwa
 4. **Erfüllt**, sobald dieses Review freigegeben ist: Der Fachkritiker hat alle sechs Items
    abgenommen (zuletzt Commit „ruhigeKarte: Item abgenommen“).
 
-Oberfläche: **nicht erfüllt.** Bildschirmtests grün, aber die Mockups zu BEW-8, BEW-24 und
-QUE-7 liegen noch ([15321](anliegen/15321-mockupsGebauterItemsLoeschen.md), an UX, drei `rm`).
+Oberfläche: **erfüllt.** Bildschirmtests grün; die Mockups zu BEW-8, BEW-24 und QUE-7 sind
+gelöscht, unter `domaene/mockups/` liegen nur die zu gewinnerUndZone (`auf-11-*`).
 Mutation: **nicht erfüllt.** Der gezielte Lauf über die seit „Freigabe Plan 10“ geänderten
 Zeilen läuft noch (`/tmp/mutation10.log`); bis jetzt 63 von 327 Mutanten überlebt, 81 %, Schwelle
 95 %. Am meisten in `fliegen.py` (12 von 60). Am Bildschirm ändert das nichts; jeder Überlebende
@@ -60,8 +60,7 @@ Zeigerbewegung doppelt, der Server nennt das Gerät zweimal. Dass das Ziehen die
 kein Ziehen.
 
 ## Empfehlung
-Gib Review 10 frei, sobald die drei Mockups gelöscht sind (15321) und die Mutation die
-Schwelle hält. Der Happy Path von Plan 10 ist gebaut, Schritte 1 bis 7; damit ist Etappe 2
+Gib Review 10 frei, sobald die Mutation die Schwelle hält. Der Happy Path von Plan 10 ist gebaut, Schritte 1 bis 7; damit ist Etappe 2
 erreicht. Die übrigen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
 
 ## Rundgang Prüfcode
@@ -92,7 +91,7 @@ Probleme:
   (Stand: 82 von 82 Kriterien der Etappe belegt). Am meisten fehlt die Partie nach der
   *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
 - **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt nach der Abnahme des
-  Fachkritikers nichts am Bildschirm; offen sind Mockups (15321) und Mutation. Null Zyklen.
+  Fachkritikers nichts am Bildschirm; offen ist die Mutation. Null Zyklen.
 - **Zyklusziel:** Plan 11 beginnt Etappe 3. Vorher müssen weg: die Aufräumarbeit an Gleiten,
   Fliegen und Übergehen aus den oben genannten Anliegen, die Umbenennungen nach 7800 (15260,
   15280, 15281, 15300, 15261) und die Lücken der Mutation; sonst wachsen sie mit jedem Item.

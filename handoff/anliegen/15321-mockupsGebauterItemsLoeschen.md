@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: UX
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** DoD über das Inkrement, Oberfläche ([DoD](../../prozess/ablauf/dod.md): „Mockup
@@ -22,4 +22,6 @@ um, die niemand mehr übernimmt.
 einzeln ([Ich 2](../../prozess/praemissen/ich.md)); 15261 gilt danach nur für
 `vorschlag.css` und `auf-11-*`.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt: `bew-8.html`, `bew-24.html` und `que-7.html` sind einzeln mit
+`rm` gelöscht. Unter `domaene/mockups/` liegen nur noch `auf-11-gewinner.html`,
+`auf-11-zone.html` und `vorschlag.css`.
