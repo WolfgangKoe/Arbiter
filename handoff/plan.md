@@ -160,7 +160,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Implementierer: Tests zu Item ruhigeKarte grün
 - [x] Architekt: Kritik am Code zu Item ruhigeKarte
 - [x] Reviewer: Kritik am Code zu Item ruhigeKarte
-- [ ] Fachkritiker: Item ruhigeKarte abgenommen
+- [x] Fachkritiker: Item ruhigeKarte abgenommen
 - [ ] Planer: Item ruhigeKarte gelöscht
 - [ ] Anforderungsautor: Anliegen 11820 Umbenennen nach 7800: Glossar und Anforderungen
 - [ ] Testautor: Anliegen 11821 Umbenennen nach 7800: Akzeptanztests
