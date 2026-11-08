@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Domänenphase 11
 
 ## Runde 1
-**Befund.** Nach [11820](11820-umbenennenGlossarUndAnforderungen.md) heißt QUE-7
+**Befund.** Nach Anliegen 11820 heißt QUE-7
 [ruhigesSpielfeld.md](../../domaene/anforderungen/querschnitt/ruhigesSpielfeld.md). Der Befund in
 [15100](15100-griffVerschiebtDieKarteNicht.md) verlinkt noch `querschnitt/ruhigeKarte.md`; die
 Datei gibt es nicht mehr. Dort steht auch noch *Karte*, im Glossar heißt sie *Spielfeld* (7800 F1 A).
