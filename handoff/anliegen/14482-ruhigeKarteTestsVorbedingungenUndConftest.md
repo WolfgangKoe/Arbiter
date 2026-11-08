@@ -5,7 +5,7 @@ Von: Architekt
 An: Testautor
 Runde: 1/3
 Status: offen
-Wartet auf: Technikphase
+Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Wartet ([Kritik](../../prozess/ablauf/kritik.md)): Heute prüfen die Tests richtig, keine

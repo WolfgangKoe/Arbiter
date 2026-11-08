@@ -102,6 +102,12 @@ body {
   scrollbar-gutter: stable both-edges;
 }
 
+@media (max-width: 1279px) {
+  .spalteMitte {
+    grid-template-rows: minmax(0, 1fr) 7.5rem 6rem;
+  }
+}
+
 .spalteMitte .sperrmeldung {
   grid-row: 2;
   align-self: start;

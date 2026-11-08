@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: [QUE-7.1](../../domaene/anforderungen/querschnitt/ruhigeKarte.md) gilt auch für den, der gerollt hat, kein Test prüft das. In [ruhigeKarteTest.py](../../technik/tests/akzeptanz/querschnitt/ruhigeKarteTest.py) bleibt die Spalte in jedem Fall ungerollt. Gemessen am Stand 4fd5bd9 mit den Maßen aus `vorschlag.css`, *Warboss* ausgewählt und angehalten, vier Knöpfe:

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: UX
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Der Sprung ist gemessen, er verletzt

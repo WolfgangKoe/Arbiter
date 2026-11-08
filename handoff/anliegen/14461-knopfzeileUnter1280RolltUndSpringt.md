@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: UX
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Die Knopfzeile von 3,5rem in `.spalteMitte` ([vorschlag.css](../../domaene/mockups/vorschlag.css)) fasst unter 1280 Pixeln Breite nur eine von zwei Zeilen. Die Spalte ragt 20 Pixel über. Rollt der Spieler und fällt die zweite Zeile weg, rückt die *Karte* 20 Pixel, gegen [QUE-7.1](../../domaene/anforderungen/querschnitt/ruhigeKarte.md). `scrollbar-gutter` aus 14080 hält nur die Breite still, nicht die Höhe. Messung: [14460](14460-ruhigeKarteNachDemRollenOhneTest.md). In 14080 stand der Nachteil als „man rollt“, der Sprung danach war nicht genannt.
