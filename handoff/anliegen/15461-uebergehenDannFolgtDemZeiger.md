@@ -5,7 +5,7 @@ Von: Reviewer
 An: Anforderungsautor
 Runde: 1/3
 Status: offen
-Wartet auf: 15460
+Wartet auf: Domänenphase 11
 
 ## Runde 1
 **Befund.** Der Stakeholder nimmt [BEW-8](../../domaene/anforderungen/phasen/bewegung/uebergehenBeimZiehen.md)
@@ -29,6 +29,8 @@ fragen, je mit Empfehlung und Quelle:
    *Einheit* gezogen wird oder bis „Phase beenden“?
 3. Gilt „egal welcher“ Bewegung auch für *Vorrücken* und *Fliegen*?
 4. Wann entsteht der *Eintrag* im *Protokoll* (BEW-8.5), mit welchen *Gründen*?
+5. Worin gleicht das Folgen dem Ziehen in der *Aufstellung*, worin nicht? Sonst liest der
+   Stakeholder das Verhalten der *Aufstellung* hinein (Kommentar zu [15460](15460-uebergehenUndLeistenNochInZyklus10.md)).
 Unverändert bleibt nach dem [Ziel](../../domaene/ziel.md): vor fremden *Bases* halten sie an,
 ‚keine Kohärenz‘ lässt sich nicht übergehen. Erledigt, wenn die Kriterien stehen und der
 Fachkritiker sie geprüft hat.

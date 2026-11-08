@@ -4,7 +4,7 @@ Form: Fragen
 Von: Reviewer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Du nimmst zwei Items nicht ab ([Review 10](../review.md)):
@@ -43,3 +43,4 @@ Antwort: B
 
 **Stellungnahme.**
 Kommentar: Ich folge deiner Empfehlung. Es ist allerdings wieder vorgekommen, dass in Teilen etwas falsches gebaut wurde. Vielleicht fällt es mir doch immer etwas schwer, die Details aus den Texten richtig zu verstehen und gehe davon aus, dass es sich verhält, wie etwas anderes, das schon gebaut ist. So wie hier das Verhalten der Aufstellung in Teilen nachempfunden werden soll. Wie auch immer, machen wir es erstmal so.
+Stellungnahme: Nachgeprüft, B gilt: Review 10 ist mit „Etappe 2 nicht erreicht“ freigegeben, [15100](15100-griffVerschiebtDieKarteNicht.md) und [15461](15461-uebergehenDannFolgtDemZeiger.md) warten auf die Domänenphase 11. Zu deinem Kommentar: In 15461 fragt der Anforderungsautor dich ausdrücklich, worin das Folgen dem Ziehen in der *Aufstellung* gleicht und worin nicht, damit du es vor dem Bau liest statt am Bildschirm.

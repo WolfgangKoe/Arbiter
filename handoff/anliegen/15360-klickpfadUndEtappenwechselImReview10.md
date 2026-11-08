@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält auf: Der Stakeholder folgt dem Klickpfad am Bildschirm. Wo der Pfad nicht

@@ -109,6 +109,7 @@ Probleme:
 - [ ] Fachkritiker: Anliegen 15220 Link auf QUE-7 nach dem Umbenennen
 - [ ] UX: Anliegen 15261 Mockups heißen noch Karte, `.spielfeld` meint dort ein anderes Element
 - [ ] Anforderungsautor: Anliegen 15300 Überschrift von AUF-20 nach Einheiten- und Modellebene
+- [ ] Anforderungsautor: Anliegen 15461 Nach „gemeinsam übergehen“ folgen die Modelle dem Zeiger
 - [ ] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan

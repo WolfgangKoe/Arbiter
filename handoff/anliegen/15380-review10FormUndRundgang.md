@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Kritik am [Review 10](../review.md), Commit „Review 10 geschrieben“, nach
@@ -56,3 +56,7 @@ Testautor mit Link; Empfehlung: Freigabe, sobald `mutationsregeln.mutation` 95 %
 Zahl trägst du dann nach.
 
 **Stellungnahme.** Im Review umgesetzt.
+
+**Nachprüfung.** 1, 3, 4 und 5 umgesetzt. 2 bis auf die Module der 16 Begründungen; dass
+der Rundgang nicht Zeile für Zeile ging, sagt das Review offen. Review 10 ist freigegeben,
+eine neue Runde erreicht den Stakeholder nicht mehr.
