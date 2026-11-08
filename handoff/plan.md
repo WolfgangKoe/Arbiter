@@ -205,8 +205,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
 - [x] Reviewer: DoD über das Inkrement
 - [x] Reviewer: Review geschrieben
-- [ ] Fachkritiker: Kritik am Review
-- [ ] Organisationsentwickler: Kritik am Review
+- [x] Fachkritiker: Kritik am Review
+- [x] Organisationsentwickler: Kritik am Review
 - [ ] Stakeholder: Freigabe Review 10
 
 ## Freigabe
