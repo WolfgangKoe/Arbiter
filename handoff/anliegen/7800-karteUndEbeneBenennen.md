@@ -4,8 +4,7 @@ Form: Fragen
 Von: Anforderungsautor
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: 11820
+Status: erledigt
 
 ## Runde 1
 **Befund.** Dein Auftrag: *Karte* meint auch armeeKarte und einheitenKarte, *Ebene* stört.
