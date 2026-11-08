@@ -24,9 +24,9 @@ Prüfcode 876 gegen 1.350 Zeilen Produktcode.
    Umbenennen der Tests brauchte vier Läufe. Jeder Commit hält alle an.
 
 Der gezielte Mutationslauf fängt 82 % ([15462](anliegen/15462-mutationZyklus10Ueberlebende.md),
-Testautor), der volle läuft noch. Keine Neuerung von Claude Code ersetzt Eigenes. Ohne Item:
-12993 (Absender ist Empfänger), aus 14500 ac, ai bis ak, am, au (Kosten der Kritik), an
-(Hook fing es), ap (kein `ruff format`), ar, at (Rechner, Limit).
+Testautor), der volle läuft noch. Keine Neuerung von Claude Code ersetzt Eigenes. Ohne Item
+aus 14500: ac, ai bis ak, am, au (Kosten der Kritik), an (Hook fing es), ap (kein
+`ruff format`), ar, at (Rechner, Limit).
 
 ## Prozess-Items
 Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
@@ -44,15 +44,15 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
   Nach jedem Lauf nennt der Hook, was frei ist, der Koordinator startet es. Jeder Auftrag
   passt in einen Lauf: Ein Item teilt er nach Kriterien, je Teil grüne Tests durch alle
   Schichten; das Review in Bildschirm und Rundgang. Je ein Commit läuft in einem eigenen
-  Arbeitsbaum, die Rollen arbeiten weiter. Am Klon mit dem echten Hook erprobt (15580): Er
-  prüft genau den Commit, auch Löschen und Umbenennen; ein überholter Commit scheitert.
+  Arbeitsbaum, die Rollen arbeiten weiter. Am Klon mit echtem Hook erprobt: Mit
+  `node_modules` als Link in `.git/info/exclude`, `CLAUDE_PROJECT_DIR` auf dem Arbeitsbaum
+  und je Pfad `cp` oder `git rm` prüft er genau den Commit samt Löschen und Umbenennen;
+  `update-ref` mit altem Wert lässt einen überholten scheitern.
 - P5 Etappe und Fortschritt (Regelumsetzer), 15361, 9801, 13150: Nach einer erreichten
   Etappe stehen Ausformulieren und Freigabe der nächsten im Fortschritt. Abgehakte Zeilen
   bleiben im Endstand, ein Kriterium einer späteren Etappe verlangt keinen Test.
-- P6 Dashboard lädt schneller (Regelumsetzer), 8860: Ursache messen und beheben, Messung
+- P6 Dashboard lädt schneller (Regelumsetzer), 8860: Ursache messen, beheben, Messung
   davor und danach im Anliegen.
-
-Ins [Backlog](../prozess/backlog.md): Umbenennen ganzer Testdateien, Freigabe ohne Moderation.
 
 ## Empfehlung
 Beantworte F1 in [14360](anliegen/14360-parallelArbeitenIstDieRegel.md), Empfehlung B, dann

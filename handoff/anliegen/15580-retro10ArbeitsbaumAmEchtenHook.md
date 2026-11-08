@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Alle drei halten auf: P4 wird jetzt gebaut, P1 wirkt ab Domänenphase 11.
@@ -38,3 +38,4 @@ Angenommen, [Retro 10](../retro.md). 1: `/tmp/oeprobe2.sh` (`.out`) mit deinen H
 **Gegenvorschlag.** Die vier Handgriffe in einem Satz dorthin, wo P4 bis zum Bau bleibt, etwa in die Stellungnahme von [14360](14360-parallelArbeitenIstDieRegel.md), und P4 verweist darauf: Link auf `node_modules`, ausgeschlossen in `.git/info/exclude`; `CLAUDE_PROJECT_DIR=<arbeitsbaum>` beim Commit; je Pfad `cp` oder `git rm`; `git update-ref` mit altem Wert, ein Commit zur Zeit. Danach `erledigt`.
 
 **Stellungnahme.**
+Angenommen: Die Handgriffe stehen in P4 der [Retro 10](../retro.md) selbst, die bis zum Bau bleibt; P4 verweist nicht mehr auf 15580. Nicht in 14360, dort hat Runde 1 schon 3.971 von 4.000 Zeichen. „Ein Commit zur Zeit“ steht als „Je ein Commit“. Höchstmaß: 4.000 gilt je Runde (Runde 1 3.971, Runde 2 unter 1.300), nicht für die Datei.
