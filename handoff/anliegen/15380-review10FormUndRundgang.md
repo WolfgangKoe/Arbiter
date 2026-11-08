@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Reviewer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Kritik am [Review 10](../review.md), Commit „Review 10 geschrieben“, nach
@@ -55,4 +55,4 @@ statt Kennung, jede Anliegennummer als Link. 5: Endzahlen aus dem Protokoll, Kri
 Testautor mit Link; Empfehlung: Freigabe, sobald `mutationsregeln.mutation` 95 % meldet, die
 Zahl trägst du dann nach.
 
-**Stellungnahme.**
+**Stellungnahme.** Im Review umgesetzt.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Reviewer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Hält auf: Der Stakeholder folgt dem Klickpfad am Bildschirm. Wo der Pfad nicht
@@ -58,4 +58,4 @@ Richtung, deren Etappe nicht ausformuliert ist.
    *Einheit* schon gezogen hat“ (8880). Bei reinem Aufräumen: „am Bildschirm nichts Neues“.
 Danach den Klickpfad am laufenden Arbiter durchgehen.
 
-**Stellungnahme.**
+**Stellungnahme.** Im Review, am Arbiter geprüft. 5: Etappe 2 nicht erreicht (15460).

@@ -6,96 +6,95 @@ dann `http://127.0.0.1:8040/` im Browser öffnen.
 ## Am Bildschirm prüfen
 Mit Maus oder Finger stellt ihr beide Armeen auf, wählt den ersten Zug, geht durch die Phasen
 und zieht in der *Bewegungsphase* eure *Einheiten*: Arbiter hält an *Bewegungsweite*,
-*Spielfeldkante*, *Nahkampfreichweite* und vor fremden *Bases* an, ihr könnt ein Anhalten
-gemeinsam übergehen und eine *Einheit* zurücksetzen; die Canoptek-Spinne fliegt.
-1. Start: Arbiter nennt `http://127.0.0.1:8040/`.
-2. Beim Aufstellen einen Boy neben dem *Spielfeld* loslassen: Er steht, wo das *Spielfeld* ihn
-   zuletzt zeigte.
-3. Beim Aufstellen einen Boy auf eine fremde *Base* zu ziehen: Er hält davor an und gleitet an
-   ihr entlang; Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr.
-4. Erster Zug, „Phase beenden“ bis zur *Bewegungsphase*. Die Boyz über ihre *Bewegungsweite*
-   ziehen und loslassen: Sie stehen an der *Bewegungsweite*, „gemeinsam übergehen“ erscheint.
-   Klick darauf: Sie stehen, wo ihr losgelassen habt; das *Protokoll* nennt ‚Bewegungsweite‘.
-5. Die Boyz noch einmal ziehen, auch zurück: Sie bleiben stehen, „gemeinsam übergehen“
-   erscheint wieder.
-6. „Einheit zurücksetzen“: Die Boyz stehen, wo die Phase begann.
-7. Die Boyz in *Nahkampfreichweite* eines Gegners ziehen und *auswählen*: Kein „Vorrücken“.
-8. Die Canoptek-Spinne über fremde *Bases* ziehen und auf einer loslassen: Sie rückt an die
-   nächste freie *Stelle*.
-9. Eine *Leiste* ein- und ausfahren: Kein *Modell* auf dem *Spielfeld* verschiebt sich.
+*Spielfeldkante*, *Nahkampfreichweite* und vor fremden *Bases* an; ein Anhalten an
+*Bewegungsweite* oder *Nahkampfreichweite* könnt ihr gemeinsam übergehen, eine *Einheit*
+zurücksetzen; die Canoptek-Spinne fliegt.
+1. Start: Arbiter nennt `http://127.0.0.1:8040/`. Vor dem *ersten Zug* gibt es kein „Phase beenden“.
+2. Beim Aufstellen die Boyz neben das *Spielfeld* ziehen und loslassen: Sie stehen, wo das
+   *Spielfeld* sie zuletzt zeigte. Auch der Weirdboy lässt sich aufstellen.
+3. Beim Aufstellen den Warboss auf die Boyz ziehen: Er hält vor ihren *Bases* an und gleitet
+   entlang; Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr.
+4. „Erster Zug“ bei Spieler 1, „Phase beenden“ bis zur *Bewegungsphase*. Einen Boy anklicken
+   (die Boyz sind *ausgewählt*), dann die Boyz weit Richtung Necrons ziehen und loslassen: Sie
+   stehen an der *Bewegungsweite*, „gemeinsam übergehen“ erscheint.
+5. Die Boyz noch einmal ziehen: Sie halten wieder an. Mit „Einheit zurücksetzen“ stehen sie,
+   wo die Phase begann.
+6. Die Boyz bis in *Nahkampfreichweite* der Necron Warriors ziehen, loslassen, „gemeinsam
+   übergehen“: Sie stehen, wo ihr losgelassen habt; das *Protokoll* nennt ‚Bewegungsweite‘
+   und ‚Nahkampfreichweite‘. Ausgewählt bietet Arbiter kein „Vorrücken“.
+7. „Phase beenden“ bis zur *Bewegungsphase* von Spieler 2. Die Canoptek-Spinne über fremde
+   *Bases* ziehen und auf einer loslassen: Sie rückt an die nächste freie *Stelle*.
+8. Die linke *Leiste* einfahren: Das *Spielfeld* rückt zur Seite. So verlangt es heute
+   QUE-7.1; du willst es anders ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)).
 
-Den Klickpfad bin ich nicht am laufenden Arbiter durchgegangen; jeder Schritt ist durch die
-Bildschirmtests gegen den echten Server belegt (`technik/tests/akzeptanz/`, etwa
-[uebergehenBeimZiehenTest](../technik/tests/akzeptanz/phasen/bewegung/uebergehenBeimZiehenTest.py),
-[anhaltenVorFremdenBasesTest](../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorFremdenBasesTest.py),
-[fliegenTest](../technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py)). Bitte sieh ihn dir an.
+Schritte 1 bis 6 und 8 bin ich am laufenden Arbiter durchgegangen (per Skript im Browser,
+Bildschirmfotos angesehen). Schritt 7 zeigt nur der Bildschirmtest
+[fliegenTest](../technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py); die Spinne kam am
+Bildschirm nicht bis zu fremden *Bases*.
 
 ## DoD
-1. **Erfüllt.** `technik/tests` und `prozess/pruefungen` auf Stand 4edbbbd: 2688 grün, darin
-   die Prüfung `abdeckung` (95 % für `technik/arbiter` und `technik/frontend/`). Danach hat sich
-   nur Anliegen 7800 geändert (Commit „7800 erledigt: Nachprüfung des Anforderungsautors“).
-2. **Erfüllt.** Prüfungen grün (siehe 1); SonarLint auf Stand 525be63: keine Funde. Kein TODO
-   und kein `noqa` im Produkt.
+1. **Erfüllt.** Alle Tests und Prüfungen grün auf Commit „Mockups gebauter Items gelöscht …“
+   (Lauf vor Commit „Review 10 geschrieben“), darin `abdeckung` (95 % für `technik/arbiter`
+   und `technik/frontend/`).
+2. **Erfüllt.** Prüfungen grün; SonarLint ohne Funde. Kein TODO und kein `noqa` im Produkt.
 3. **Erfüllt.** Alle sechs Items von Plan 10 gelöscht, die Kriterien beschreiben das Gebaute.
-4. **Erfüllt**, sobald dieses Review freigegeben ist: Der Fachkritiker hat alle sechs Items
-   abgenommen (zuletzt Commit „ruhigeKarte: Item abgenommen“).
+4. **Nicht erfüllt.** Der Fachkritiker hat alle sechs Items abgenommen, du nimmst zwei nicht
+   ab: ruhiges *Spielfeld* und *gemeinsam übergehen* ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)).
 
-Oberfläche: **erfüllt.** Bildschirmtests grün; die Mockups zu BEW-8, BEW-24 und QUE-7 sind
-gelöscht, unter `domaene/mockups/` liegen nur die zu gewinnerUndZone (`auf-11-*`).
-Mutation: **nicht erfüllt.** Der gezielte Lauf über die seit „Freigabe Plan 10“ geänderten
-Zeilen läuft noch (`/tmp/mutation10.log`); bis jetzt 63 von 327 Mutanten überlebt, 81 %, Schwelle
-95 %. Am meisten in `fliegen.py` (12 von 60). Am Bildschirm ändert das nichts; jeder Überlebende
-wird ein Test oder eine Begründung als gleichwertig, dafür ein Auftrag an den Testautor, sobald
-der Lauf fertig ist.
+Oberfläche: **erfüllt.** Bildschirmtests grün, die Mockups zu BEW-8, BEW-24 und QUE-7 gelöscht.
+Mutation: **nicht erfüllt.** 374 Mutanten, 82 % gefangen, Schwelle 95 %; am meisten
+überleben in `messen.py` (38 von 132), dann `fliegen.py` (12 von 60). Kritik an den
+Testautor: [15462](anliegen/15462-mutationZyklus10Ueberlebende.md).
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 10“:
-nichts hält auf. Was die Kritik am Code schon fand, wartet auf Technikphase 11 (Gleiten und
-Fliegen: 12681, 12702, 12904, 12962, 13640, 13661, 13761, 14240, 14261; Übergehen: 11860, 11880;
-Katalog: 10720, 13540; Umbenennen: 15260, 15280, 15281). Neu:
-[15320](anliegen/15320-fliegenRechnetAnteileZweimal.md): *Fliegen* rechnet zwei Anteile je
-Zeigerbewegung doppelt, der Server nennt das Gerät zweimal. Dass das Ziehen die zuvor gezeigte
-*Stelle* vom Browser mitschickt, hat der Architekt so entschieden
-([Vertrag Ziehen](../technik/architektur/vertrag/querschnitt/ziehen.md)): Die Domäne merkt sich
-kein Ziehen.
+nichts hält auf. Neu: [15320](anliegen/15320-fliegenRechnetAnteileZweimal.md), *Fliegen*
+rechnet zwei Anteile je Zeigerbewegung doppelt. Was die Kritik am Code schon fand, wartet auf
+Technikphase 11, Liste in der [Moderation](moderation.md).
 
 ## Empfehlung
-Gib Review 10 frei, sobald die Mutation die Schwelle hält. Der Happy Path von Plan 10 ist gebaut, Schritte 1 bis 7; damit ist Etappe 2
-erreicht. Die übrigen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
+Gib Review 10 frei, wenn `mutationsregeln.mutation` 95 % meldet; die Zahl trage ich nach.
+Etappe 2 ist nicht erreicht. Leisten und Übergehen: Empfehlung B in
+[15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md), als Plan 11.
 
 ## Rundgang Prüfcode
-Seit „Freigabe Review 9“ 45 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
+Seit Commit „Freigabe Review 9“ 45 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
 [.claude/settings.json](../.claude/settings.json), 1.602 Zeilen neu, 178 fort. Neu oder
 wesentlich geändert:
 - Abdeckung des Frontends in den Bildschirmtests ([frontendMessung.py](../prozess/pruefungen/formregeln/frontendMessung.py),
   [frontendZeilen.py](../prozess/pruefungen/formregeln/frontendZeilen.py), [abdeckung.py](../prozess/pruefungen/formregeln/abdeckung.py)).
-- Hindernisse im Fortschritt: [testsRot.py](../prozess/pruefungen/standregeln/testsRot.py),
-  [standVorDerUmsetzung.py](../prozess/pruefungen/standregeln/standVorDerUmsetzung.py),
-  [wartendeSchritte.py](../prozess/pruefungen/standregeln/wartendeSchritte.py),
-  [abhaken.py](../prozess/pruefungen/standregeln/abhaken.py), [beseitigt.py](../prozess/pruefungen/standregeln/beseitigt.py).
-- Mutation: Ergebnis je Modul, gleichwertige Mutanten an ihren Bereich gebunden
-  ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py),
-  [gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json), 158 Zeilen).
-- Dashboard und Schreibgrenze ([dashboardSeiten.py](../prozess/pruefungen/rollenregeln/dashboardSeiten.py),
-  [bashSchreiben.py](../prozess/pruefungen/rollenregeln/bashSchreiben.py)).
+- Hindernisse im Fortschritt ([abhaken.py](../prozess/pruefungen/standregeln/abhaken.py),
+  [testsRot.py](../prozess/pruefungen/standregeln/testsRot.py), [wartendeSchritte.py](../prozess/pruefungen/standregeln/wartendeSchritte.py)).
+- Mutation: gleichwertige Mutanten an ihren Bereich gebunden; in
+  [gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json) 16 neue
+  Begründungen, nach denen ein Überlebender nicht zählt (Anliegen 15380).
+- Beim Commit: [.pre-commit-config.yaml](../.pre-commit-config.yaml), Zeile 6, lässt die
+  Prüfungen `vollstaendig` aus ([pyproject.toml](../pyproject.toml), Zeile 17); sie laufen nur
+  im Lauf über alles.
+- [anliegen.py](../prozess/pruefungen/anliegenregeln/anliegen.py): Zeilen `A:` und
+  `Empfehlung:` unter einer Frage (Anliegen 9250);
+  [architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py), Zeile 152.
 
 Probleme:
-1. Die Hindernisse machen den Plan 52.207 Zeichen lang, weil `abhaken.py` jeden grünen
-   Testnamen in den Satz schreibt (Anliegen 15301, wartet auf die Prozessphase).
-2. Den Prüfcode habe ich in diesem Zyklus nicht Zeile für Zeile gelesen, nur Umfang und Zweck;
-   die Durchsicht der Dateien oben steht noch aus. Empfehlung: ich hole sie in der Nachkorrektur
-   nach, bevor du kommentierst.
+1. Die Hindernisse machen den Plan über 50.000 Zeichen lang ([15301](anliegen/15301-hindernisseBlaehenDenPlan.md)).
+2. Ein Commit prüft `vollstaendig` nicht mehr; was nur sie fängt, merkt erst der Lauf über alles.
+3. Die Dateien habe ich nach Zweck und Fundstelle gesichtet, nicht Zeile für Zeile; weitere
+   Probleme kann ich nicht ausschließen.
 
 ## Nächstes Vorgehen
-- **Produktziel:** Etappe 1 erreicht (Commit „Freigabe Etappe 1“), Etappe 2 mit diesem Zyklus
-  (Stand: 82 von 82 Kriterien der Etappe belegt). Am meisten fehlt die Partie nach der
-  *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
-- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt nach der Abnahme des
-  Fachkritikers nichts am Bildschirm; offen ist die Mutation. Null Zyklen.
-- **Zyklusziel:** Plan 11 beginnt Etappe 3. Vorher müssen weg: die Aufräumarbeit an Gleiten,
-  Fliegen und Übergehen aus den oben genannten Anliegen, die Umbenennungen nach 7800 (15260,
-  15280, 15281, 15300, 15261) und die Lücken der Mutation; sonst wachsen sie mit jedem Item.
-  Was danach am Bildschirm neu ist, schneidet der Planer aus Etappe 3.
+- **Produktziel:** Etappe 1 erreicht (Commit „Freigabe Etappe 1“). Am meisten fehlt die Partie
+  nach der *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
+- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlen am Bildschirm die
+  *Leisten* über dem *Spielfeld* und das freie Ziehen nach *gemeinsam übergehen*
+  ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)), dazu die Mutation. Ein Zyklus.
+- **Zyklusziel:** Nach Plan 11 fahrt ihr eine *Leiste* ein und aus, und das *Spielfeld*
+  bleibt stehen; nach „gemeinsam übergehen“ zieht ihr die *Einheit* oder einzelne *Modelle*
+  frei, sie folgen dem Zeiger. Noch nicht: Arbiter zeigt nicht, welche *Einheit* schon
+  gezogen hat ([Etappe 3](../domaene/etappen/03-angriffUndFallBack.md)). Vorher müssen weg:
+  die Lücken der Mutation ([15462](anliegen/15462-mutationZyklus10Ueberlebende.md)), das
+  Aufräumen an Gleiten, Fliegen und Übergehen und die Umbenennungen nach 7800 (wartende
+  Anliegen der Technikphase 11, [Moderation](moderation.md)). Etappe 3 formuliert der Planer
+  erst aus, wenn Etappe 2 erreicht ist ([15361](anliegen/15361-etappenschritteNachErreichterEtappe.md)).
 
 ## Fortschritt
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel
