@@ -16,7 +16,7 @@ Prüfcode 876 gegen 1.350 Zeilen Produktcode.
 ## Was nicht geklappt hat
 1. Zwei Items sind gebaut, wie Plan und Kriterium es sagen, du meintest es anders: Beim
    *Griff* rückt das *Spielfeld* (QUE-7.1 nimmt ihn aus), nach „gemeinsam übergehen“ folgen
-   die *Modelle* nicht dem Zeiger. Darum fehlt Etappe 2; du schreibst „wieder“ ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)).
+   die *Modelle* nicht dem Zeiger. Darum fehlt Etappe 2; du schreibst „wieder“ (Anliegen 15460).
 2. Die Prüfung „grün vor dem Code“ legte 16 Anliegen an, nur zwei machten einen Test rot; je
    Kritiker ein Doppel, Nummern außerhalb des Bereichs.
 3. Läufe zu groß: Implementierer und Testautor brachen an der Tokengrenze ab, der Reviewer

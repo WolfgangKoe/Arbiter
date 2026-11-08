@@ -25,7 +25,7 @@ zurücksetzen; die Canoptek-Spinne fliegt.
 7. „Phase beenden“ bis zur *Bewegungsphase* von Spieler 2. Die Canoptek-Spinne über fremde
    *Bases* ziehen und auf einer loslassen: Sie rückt an die nächste freie *Stelle*.
 8. Die linke *Leiste* einfahren: Das *Spielfeld* rückt zur Seite. So verlangt es heute
-   QUE-7.1; du willst es anders ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)).
+   QUE-7.1; du willst es anders (Anliegen 15460).
 
 Schritte 1 bis 6 und 8 bin ich am laufenden Arbiter durchgegangen (per Skript im Browser,
 Bildschirmfotos angesehen). Schritt 7 zeigt nur der Bildschirmtest
@@ -39,7 +39,7 @@ Bildschirm nicht bis zu fremden *Bases*.
 2. **Erfüllt.** Prüfungen grün; SonarLint ohne Funde. Kein TODO und kein `noqa` im Produkt.
 3. **Erfüllt.** Alle sechs Items von Plan 10 gelöscht, die Kriterien beschreiben das Gebaute.
 4. **Nicht erfüllt.** Der Fachkritiker hat alle sechs Items abgenommen, du nimmst zwei nicht
-   ab: ruhiges *Spielfeld* und *gemeinsam übergehen* ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)).
+   ab: ruhiges *Spielfeld* und *gemeinsam übergehen* (Anliegen 15460).
 
 Oberfläche: **erfüllt.** Bildschirmtests grün, die Mockups zu BEW-8, BEW-24 und QUE-7 gelöscht.
 Mutation: **nicht erfüllt.** 374 Mutanten, 82 % gefangen, Schwelle 95 %; am meisten
@@ -55,7 +55,7 @@ Technikphase 11, Liste in der [Moderation](moderation.md).
 ## Empfehlung
 Gib Review 10 frei, wenn `mutationsregeln.mutation` 95 % meldet; die Zahl trage ich nach.
 Etappe 2 ist nicht erreicht. Leisten und Übergehen: Empfehlung B in
-[15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md), als Plan 11.
+Anliegen 15460, als Plan 11.
 
 ## Rundgang Prüfcode
 Seit Commit „Freigabe Review 9“ 45 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
@@ -86,7 +86,7 @@ Probleme:
   nach der *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
 - **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlen am Bildschirm die
   *Leisten* über dem *Spielfeld* und das freie Ziehen nach *gemeinsam übergehen*
-  ([15460](anliegen/15460-uebergehenUndLeistenNochInZyklus10.md)), dazu die Mutation. Ein Zyklus.
+  (Anliegen 15460), dazu die Mutation. Ein Zyklus.
 - **Zyklusziel:** Nach Plan 11 fahrt ihr eine *Leiste* ein und aus, und das *Spielfeld*
   bleibt stehen; nach „gemeinsam übergehen“ zieht ihr die *Einheit* oder einzelne *Modelle*
   frei, sie folgen dem Zeiger. Noch nicht: Arbiter zeigt nicht, welche *Einheit* schon

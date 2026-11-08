@@ -19,7 +19,7 @@ Entwurf aus der Neuordnung (684791f): ohne `Zweck:`, ohne `Erreicht, wenn:`
 ([Domäne](../../domaene/CLAUDE.md), Zeile 6), ohne „Freigabe Etappe 3“. Domänenphase 1 bis 3
 liefen dann nie. Der Anforderungsautor schriebe die Happy Paths zu Plan 11 gegen ein Ziel,
 das der Stakeholder nicht freigegeben hat. Für Review 10 steht der Befund in
-[15360](15360-klickpfadUndEtappenwechselImReview10.md), Punkt 5. Hier geht es um den
+Anliegen 15360, Punkt 5. Hier geht es um den
 Mechanismus.
 
 Wartend, weil das Review nicht davon abhängt. Die Prozessphase 10 liegt vor der

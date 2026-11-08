@@ -19,7 +19,7 @@ Heute *setzt* BEW-8.4 die *Modelle* an den Punkt des Loslassens; ein weiteres Zi
 wieder an *Bewegungsweite* und *Nahkampfreichweite* an (am laufenden Arbiter nachgesehen).
 
 **Kosten.** Ein bis drei neue Kriterien in BEW-8, BEW-8.4 entfällt oder wird neu gefasst (Kennungen
-sind fest). Danach Vertrag, Tests, Code (Reihenfolge in [15460](15460-uebergehenUndLeistenNochInZyklus10.md)).
+sind fest). Danach Vertrag, Tests, Code (Reihenfolge in Anliegen 15460).
 
 **Gegenvorschlag.** Neue Kriterien nach dem Kommentar. Offen und für den Stakeholder zu
 fragen, je mit Empfehlung und Quelle:
@@ -30,7 +30,7 @@ fragen, je mit Empfehlung und Quelle:
 3. Gilt „egal welcher“ Bewegung auch für *Vorrücken* und *Fliegen*?
 4. Wann entsteht der *Eintrag* im *Protokoll* (BEW-8.5), mit welchen *Gründen*?
 5. Worin gleicht das Folgen dem Ziehen in der *Aufstellung*, worin nicht? Sonst liest der
-   Stakeholder das Verhalten der *Aufstellung* hinein (Kommentar zu [15460](15460-uebergehenUndLeistenNochInZyklus10.md)).
+   Stakeholder das Verhalten der *Aufstellung* hinein (Kommentar zu Anliegen 15460).
 Unverändert bleibt nach dem [Ziel](../../domaene/ziel.md): vor fremden *Bases* halten sie an,
 ‚keine Kohärenz‘ lässt sich nicht übergehen. Erledigt, wenn die Kriterien stehen und der
 Fachkritiker sie geprüft hat.
