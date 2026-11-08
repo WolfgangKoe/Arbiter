@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Technikphase 11
 
 ## Runde 1
-**Befund.** Kritik am Umbenennen nach [7800](7800-karteUndEbeneBenennen.md) (Commit 1523136),
+**Befund.** Kritik am Umbenennen nach Anliegen 7800 (Commit 1523136),
 Schnittstelle und Lesbarkeit der Akzeptanztests. Nichts hält auf: ruff, Benennung, Glossar,
 Kommentare und Importvertrag sind grün; Fachbegriffe folgen dem [Glossar](../../domaene/glossar.md).
 1. Sechs Testnamen tragen `# noqa: E501`, die ersten `noqa` unter `technik/` überhaupt

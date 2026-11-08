@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Technikphase 11
 
 ## Runde 1
-**Befund.** Kritik am Code zum Umbenennen nach [7800](7800-karteUndEbeneBenennen.md) (Commit
+**Befund.** Kritik am Code zum Umbenennen nach Anliegen 7800 (Commit
 1523136), Lesbarkeit ([Es](../../prozess/praemissen/es.md), [Wir 2](../../prozess/praemissen/wir.md)).
 Produktcode und Frontend folgen dem [Glossar](../../domaene/glossar.md): `hatEinheitenebene`,
 `istModellebene`, `einheitenebeneWählen`, `.spielfeld`; ruff, Benennung, Glossar, Kommentare,

@@ -26,7 +26,7 @@ Dran, hält nichts auf:
 - Anforderungsautor: Anliegen 10540,
   Anliegen 10180,
   Anliegen 9340 (Daten vor Item 4 und 5),
-  [7800](anliegen/7800-karteUndEbeneBenennen.md) (angenommen).
+  Anliegen 7800 (angenommen).
 - Regelumsetzer: Anliegen 8021 (wartet auf 8020, das
   gelöscht ist: Wartet-Zeile prüfen), [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md),
   [9801](anliegen/9801-wartendeZeileNachDemLoeschen.md) in der Prozessphase.

@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Technikphase 11
 
 ## Runde 1
-**Befund.** Kritik zum Umbenennen nach [7800](7800-karteUndEbeneBenennen.md) (Commit 1523136),
+**Befund.** Kritik zum Umbenennen nach Anliegen 7800 (Commit 1523136),
 Ergänzung zu [15260](15260-testnamenUeberHundertZeichen.md) Punkt 2, der die ids in
 `vorruecken.py` und `ziehen.py` behandelt. Dieselbe Paarung steht noch an drei Stellen, je
 neben einer schon umbenannten Hilfe:

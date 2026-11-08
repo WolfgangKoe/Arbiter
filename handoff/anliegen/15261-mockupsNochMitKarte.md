@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Domänenphase 11
 
 ## Runde 1
-**Befund.** Kritik am Umbenennen nach [7800](7800-karteUndEbeneBenennen.md) (Commit 1523136),
+**Befund.** Kritik am Umbenennen nach Anliegen 7800 (Commit 1523136),
 Architektur des Frontends. Code und Vertrag folgen 7800, die Mockups nicht:
 [vorschlag.css](../../domaene/mockups/vorschlag.css) und fünf Mockups (`auf-11-zone.html`,
 `auf-11-gewinner.html`, `bew-8.html`, `bew-24.html`, `que-7.html`) haben noch
