@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Architekt
 Runde: 1/3
-Status: offen
-Wartet auf: 14900
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält den Happy Path nicht auf. `vertrag/querschnitt.md`
