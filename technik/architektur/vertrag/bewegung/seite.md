@@ -1,7 +1,7 @@
 # Vertrag: Bewegung · Seite
 
 Abschnitt der *Bewegungsphase*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 - Klick (V8) auf ein *Modell*: [V14](auswahl.md), auch in der *Aufstellung*
   ([Aufstellen](../aufstellen/seite.md)). Im *Spielfeld* außerhalb eines *Modells*: in der

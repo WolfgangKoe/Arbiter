@@ -1,7 +1,7 @@
 # Vertrag: Schlacht · Seite
 
 Abschnitt der *Schlacht*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 - Kopfzeile (QUE-10.1): Die `kopfzeileSpieler` des *Spielers* `amZug` trägt
   `amZug` und `kopfzeileAmZug` „Schlachtrunde <n> · <phase>“. `beendet` (QUE-10.4):

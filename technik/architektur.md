@@ -22,8 +22,8 @@ Unter `technik/` | Aufgabe | Regeln
 
 Ein Ordner entsteht mit dem ersten Item, das ihn braucht. Den Vertrag zwischen `web/` und
 `frontend/`, Pfade und JSON, hält je Phase eine Datei oder ein Ordner mit je Abschnitt einer
-Datei: [Querschnitt](architektur/vertrag/querschnitt.md) für alle Phasen (V1, V4 bis V8),
-[Aufstellen](architektur/vertrag/aufstellen/) (V2, V3, V10),
+Datei: [Querschnitt](architektur/vertrag/querschnitt/) für alle Phasen (V1, V4 bis V8, V10),
+[Aufstellen](architektur/vertrag/aufstellen/) (V2, V3),
 [Schlacht](architektur/vertrag/schlacht/) und [Bewegung](architektur/vertrag/bewegung/)
 (V11 bis V21). Höchstmaße: [Kennzahlen](../prozess/kennzahlen.md#höchstmaße).
 

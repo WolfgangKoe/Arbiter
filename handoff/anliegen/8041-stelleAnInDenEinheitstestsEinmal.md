@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -21,4 +21,9 @@ steht `stelleAn(inX, inY)` zum vierten Mal gleich im Text, daneben in
 [modelle.py](../../technik/tests/einheit/modelle.py) (oder einer eigenen Hilfsdatei der
 Einheitstests), die vier Tests importieren es.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen. `stelleAn` steht jetzt einmal in
+[modelle.py](../../technik/tests/einheit/modelle.py); sechs Tests importieren es
+(`anhaltenAufDemWegTest`, `einheitVerschiebenTest`, `fliegenTest`, `anhaltenVorDerGrenzeTest`,
+`anhaltenAnDerBewegungsweiteTest`, `uebergehenBeimZiehenTest`). Nicht gleich ist die Hilfe in
+`bewegungsphaseTest.py` und `bewegungTest.py`: sie setzt die Stelle um 10 ins Innere des
+Spielfelds. Sie bleibt dort, ein Name für beide Bedeutungen wäre irreführend.

@@ -49,8 +49,8 @@
     (`kopfzeile.js`, `armeeKarte.js`, `sperrmeldung.js`, `knopfGruppe.js`, `karte.js`,
     `protokoll.js`, `grenze.js`). Es füllt seine Vorlage und kennt keine Regel, nur Formen,
     *Abstände* und Art; Komponenten importieren nur Komponenten. Das Klonen einer Vorlage,
-    auch einer im `<svg>` (O1), und die Farbe des Spielers stehen einmal in
-    `komponenten/vorlage.js`.
+    auch einer im `<svg>` (O1), die Fläche eines Rechtecks und die Farbe des Spielers stehen
+    einmal in `komponenten/vorlage.js`.
 
   Warum: Zeichnen liest sich ohne Server, Bedienung ohne Vorlagen, eine Komponente ohne die
   Seite. Prüft: Verhalten die Bildschirmtests; Richtung nur Text, Kritik am Code.

@@ -161,16 +161,17 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Architekt: Kritik am Code zu Item ruhigeKarte
 - [x] Reviewer: Kritik am Code zu Item ruhigeKarte
 - [x] Fachkritiker: Item ruhigeKarte abgenommen
-- [ ] Planer: Item ruhigeKarte gelöscht
+- [x] Planer: Item ruhigeKarte gelöscht
 - [ ] Anforderungsautor: Anliegen 11820 Umbenennen nach 7800: Glossar und Anforderungen
 - [ ] Testautor: Anliegen 11821 Umbenennen nach 7800: Akzeptanztests
 - [ ] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
 - [ ] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
 - [x] Planer: Anliegen 11824 Umbenennen nach 7800: Ziel
-- [ ] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
-- [ ] Implementierer: Anliegen 8041 stelleAn in den Einheitstests einmal
-- [ ] Implementierer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
-- [ ] Testautor: Anliegen 8971 Mutationslücken in messen und im Katalog
+- [x] Reviewer: Anliegen 14920 Mutationslücken in messen und im Katalog
+- [x] Reviewer: Anliegen 8041 stelleAn in den Einheitstests einmal
+- [x] Reviewer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen
+- [x] Reviewer: Anliegen 8971 Mutationslücken in messen und im Katalog
+- [x] Testautor: Anliegen 7151 MIV-1.5: Armeen ohne Reihenfolge einmal vergleichen
 - [ ] Testautor: Anliegen 14482 Tests zu ruhigeKarte: ungeprüfte Vorbedingungen, conftest über dem Höchstmaß
 - [x] Implementierer: Anliegen 13861 Fliegen: Das Ende beim Übergehen ist immer die ganze Strecke
 - [x] Architekt: Anliegen 12620 Gleiten in der Bewegung weicht vom Vertrag ab

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Technikphase 10
 
 ## Runde 1
@@ -57,4 +57,6 @@ zwei Tests, fünf Fälle.
 
 **Gegenvorschlag.** Die Tests und Fälle aus 1 bis 6; Produktcode ändert sich dafür nicht.
 
-**Stellungnahme.**
+**Stellungnahme.** Falscher Empfänger: Unit-Tests gehören dem Implementierer
+([Testautor](../../.claude/agents/testautor.md)). Empfehlung: `erledigt`, 1 bis 6 unverändert
+neu an ihn.

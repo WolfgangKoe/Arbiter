@@ -11,7 +11,7 @@ def testDieDatenblätterDerOrksNennenJeModellartDieWerteDerModellart():
     assert (modellart.bewegungsweite, modellart.durchmesser) == (Fraction(5), 32)
 
 
-@pytest.mark.parametrize("fraktion", ["elfen", "../orks", ""])
+@pytest.mark.parametrize("fraktion", ["elfen", "../orks", "./orks", ""])
 def testEineFraktionOhneOrdnerIstEinFehler(fraktion):
     with pytest.raises(ValueError):
         datenblätterLesen(fraktion)

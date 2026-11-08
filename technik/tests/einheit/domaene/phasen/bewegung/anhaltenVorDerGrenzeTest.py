@@ -4,15 +4,11 @@ from arbiter.domaene.phasen.bewegung.anhaltenVorDerGrenze import (
     anteilBisZurNahkampfreichweite,
     anteilBisZurSpielfeldkante,
 )
-from arbiter.domaene.spielobjekte import Spielfeld, Stelle
-from tests.einheit.modelle import modellMit
+from arbiter.domaene.spielobjekte import Spielfeld
+from tests.einheit.modelle import modellMit, stelleAn
 
 grenze = 11
 spielfeld = Spielfeld(seitenlängen=(Fraction(60), Fraction(44)))
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
 
 
 def testEinWegImSpielfeldBleibtUnverkürzt(zehnZoll):

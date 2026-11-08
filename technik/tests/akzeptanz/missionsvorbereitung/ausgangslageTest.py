@@ -11,48 +11,16 @@ def modelleDerArmeen(ausgangslage):
     return [modell for einheit in einheitenDerArmeen(ausgangslage) for modell in einheit.modelle]
 
 
+def spielerDer(ausgangslage):
+    return (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
+
+
 def einheitenDerArmeen(ausgangslage):
-    return [
-        einheit
-        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
-        for einheit in spieler.armee.einheiten
-    ]
+    return [einheit for spieler in spielerDer(ausgangslage) for einheit in spieler.armee.einheiten]
 
 
 def armeenAusDenDaten() -> list[list[dict]]:
     return yamlAusDenDaten("ausgangslage.yaml")["Armee"]
-
-
-def einheitenAusDenDaten(*schlüssel: str) -> list:
-    return sorted(
-        sorted(
-            (
-                eintrag["datenblatt"],
-                sorted(
-                    (modellart, *(profil[name] for name in schlüssel))
-                    for modellart, profil in profileDerModelle(eintrag)
-                ),
-            )
-            for eintrag in armee
-        )
-        for armee in armeenAusDenDaten()
-    )
-
-
-def einheitenDerAusgangslage(ausgangslage, *merkmale) -> list:
-    return sorted(
-        sorted(
-            (
-                einheit.name,
-                sorted(
-                    (modell.modellart, *(merkmal(modell) for merkmal in merkmale))
-                    for modell in einheit.modelle
-                ),
-            )
-            for einheit in spieler.armee.einheiten
-        )
-        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
-    )
 
 
 def bewegungsweiteDes(modell):
@@ -61,6 +29,54 @@ def bewegungsweiteDes(modell):
 
 def durchmesserDes(modell):
     return modell.base.durchmesser
+
+
+merkmalZumSchlüssel = {"bewegungsweite": bewegungsweiteDes, "durchmesser": durchmesserDes}
+
+
+def ohneReihenfolge(wert):
+    if isinstance(wert, list):
+        return sorted(ohneReihenfolge(element) for element in wert)
+    if isinstance(wert, tuple):
+        return tuple(ohneReihenfolge(element) for element in wert)
+    return wert
+
+
+def namenJeArmee(armeen: list) -> list[list[str]]:
+    return [[name for name, _ in armee] for armee in armeen]
+
+
+def einheitenAusDenDaten(*schlüssel: str) -> list:
+    return [
+        [
+            (
+                eintrag["datenblatt"],
+                [
+                    (modellart, *(profil[name] for name in schlüssel))
+                    for modellart, profil in profileDerModelle(eintrag)
+                ],
+            )
+            for eintrag in armee
+        ]
+        for armee in armeenAusDenDaten()
+    ]
+
+
+def einheitenDerAusgangslage(ausgangslage, *schlüssel: str) -> list:
+    merkmale = [merkmalZumSchlüssel[name] for name in schlüssel]
+    return [
+        [
+            (
+                einheit.name,
+                [
+                    (modell.modellart, *(merkmal(modell) for merkmal in merkmale))
+                    for modell in einheit.modelle
+                ],
+            )
+            for einheit in spieler.armee.einheiten
+        ]
+        for spieler in spielerDer(ausgangslage)
+    ]
 
 
 def testMiv1_1EineBaseAnDerTiefeDerZoneLiegtGanzInDerZone(
@@ -133,33 +149,34 @@ def testMiv1_4DasSpielfeldHatDieSeitenlängenAusOnlyWar(ausgangslage):
 
 
 def testMiv1_5DieAusgangslageHatDieZweiArmeenMitIhrenEinheiten(ausgangslage):
-    datenblätterJeArmee = sorted(
-        sorted(eintrag["datenblatt"] for eintrag in armee) for armee in armeenAusDenDaten()
-    )
-    namenJeArmee = sorted(
-        sorted(einheit.name for einheit in spieler.armee.einheiten)
-        for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler)
-    )
+    datenblätterJeArmee = ohneReihenfolge(namenJeArmee(einheitenAusDenDaten()))
 
-    assert namenJeArmee == datenblätterJeArmee
+    einheitennamenJeArmee = ohneReihenfolge(namenJeArmee(einheitenDerAusgangslage(ausgangslage)))
+
+    assert einheitennamenJeArmee == datenblätterJeArmee
 
 
 def testMiv1_5JedeEinheitHatJeModellartSoVieleModelleWieDortSteht(ausgangslage):
-    erwartet = einheitenAusDenDaten()
-    modellartenJeEinheit = einheitenDerAusgangslage(ausgangslage)
+    erwartet = ohneReihenfolge(einheitenAusDenDaten())
+
+    modellartenJeEinheit = ohneReihenfolge(einheitenDerAusgangslage(ausgangslage))
 
     assert modellartenJeEinheit == erwartet
 
 
 def testMiv1_5JedesModellHatDieBewegungsweiteSeinerModellartImDatenblatt(ausgangslage):
-    erwartet = einheitenAusDenDaten("bewegungsweite")
-    bewegungsweitenJeEinheit = einheitenDerAusgangslage(ausgangslage, bewegungsweiteDes)
+    erwartet = ohneReihenfolge(einheitenAusDenDaten("bewegungsweite"))
+
+    bewegungsweitenJeEinheit = ohneReihenfolge(
+        einheitenDerAusgangslage(ausgangslage, "bewegungsweite")
+    )
 
     assert bewegungsweitenJeEinheit == erwartet
 
 
 def testMiv1_5JedesModellHatEineBaseMitDemDurchmesserSeinerModellart(ausgangslage):
-    erwartet = einheitenAusDenDaten("durchmesser")
-    durchmesserJeEinheit = einheitenDerAusgangslage(ausgangslage, durchmesserDes)
+    erwartet = ohneReihenfolge(einheitenAusDenDaten("durchmesser"))
+
+    durchmesserJeEinheit = ohneReihenfolge(einheitenDerAusgangslage(ausgangslage, "durchmesser"))
 
     assert durchmesserJeEinheit == erwartet

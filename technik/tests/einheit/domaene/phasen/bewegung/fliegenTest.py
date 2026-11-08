@@ -9,7 +9,7 @@ from arbiter.domaene.phasen.bewegung.fliegen import (
     nachFremdenBasesGerückt,
 )
 from arbiter.domaene.spielobjekte import Spielfeld, Stelle
-from tests.einheit.modelle import modellMit
+from tests.einheit.modelle import modellMit, stelleAn
 
 breite, länge = Fraction(60), Fraction(44)
 spielfeld = Spielfeld(seitenlängen=(breite, länge))
@@ -19,10 +19,6 @@ fremderOrt = Stelle(x=Fraction(10), y=Fraction(10))
 übersFremdeOrt = Stelle(x=Fraction(11), y=Fraction(10))
 weglänge = 30
 kürzesterRückwegAnDerKante = 91**0.5
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
 
 
 def abstand(erste: Stelle, zweite: Stelle) -> float:

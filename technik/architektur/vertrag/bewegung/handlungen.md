@@ -2,7 +2,7 @@
 
 Abschnitt der *Bewegungsphase* der *Schlacht* (BEW-1 bis BEW-4, Anliegen 5180 F5 bis F7),
 die anderen: [Architektur](../../../architektur.md#schichten); Tür und Übergang:
-[Schlacht](../schlacht/tuer.md), was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+[Schlacht](../schlacht/tuer.md), was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 Am Bildschirm | Anfrage (V5) | `Schlacht`
 ---|---|---

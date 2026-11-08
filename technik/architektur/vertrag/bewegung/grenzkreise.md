@@ -1,7 +1,7 @@
 # Vertrag: Grenzkreise, Vorrücken und Zurücksetzen
 
 Abschnitt der *Bewegungsphase*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md). Die Domäne rechnet jede Grenze und entscheidet jeden Klick,
+was alle Phasen teilen: [Querschnitt](../querschnitt/). Die Domäne rechnet jede Grenze und entscheidet jeden Klick,
 die Seite zeichnet nur, was der Spielstand nennt (W2, O5).
 
 ## Domäne
@@ -64,7 +64,7 @@ Klick in einen Ring (BEW-14.1) | `PUT /api/karteAnklicken` (V19) | `karteAnklick
 
 ## Seite
 - Je Eintrag zeichnet `frontend/komponenten/grenze.js` (O5) eine `grenzeMaske` und
-  eine `g.grenze spieler<n>`, dazu `nahkampfreichweite`, `wählbar`; die Kennung der Maske aus `spieler`, `einheit`, `wurf`. Ein Kreis
+  eine `g.grenze spieler<n>`, dazu `nahkampfreichweite`, `wählbar`; die Kennung der Maske aus der Stelle des Eintrags in der Liste. Ein Kreis
   ist die *Einhüllende* seines Eintrags, gerechnet wird nicht. Grenzen liegen unter den
   *Modellen*; ein Klick auf sie ist ein Klick auf die *Karte* (V19).
 - Knöpfe (V7): „Vorrücken“, wenn `angeboten`, „Vorrücken zurücknehmen“, wenn

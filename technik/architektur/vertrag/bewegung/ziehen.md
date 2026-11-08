@@ -1,7 +1,7 @@
 # Vertrag: Bewegung · Ziehen
 
 Abschnitt der *Bewegungsphase*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 V10 in jeder *Phase* der *Schlacht*: `stellenBeimLoslassen` (Signatur:
 [Aufstellen · Ziehen](../aufstellen/ziehen.md)) nennt in `stellen` jedes

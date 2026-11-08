@@ -1,7 +1,7 @@
 # Vertrag: Schlacht · Spielstand
 
 Abschnitt der *Schlacht*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 Schlüssel `schlacht` (V1), nur bei beendeter *Aufstellung*, sonst fehlt er; so gelten die
 Beispiele der *Aufstellung* unverändert:

@@ -3,9 +3,8 @@
 Form: Kritik
 Von: Reviewer
 An: Implementierer
-Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Runde: 2/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wartet (Namen und Ablage von Hilfsfunktionen, keine Prüfung rot), Stand
@@ -37,4 +36,37 @@ drei Dateien.
 3. `flächeSetzen` nach [vorlage.js](../../technik/frontend/komponenten/vorlage.js) und in
    `grenze` für Maske und Rechteck aufrufen.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle drei Punkte angenommen und umgesetzt: `_ausgewählteEinheitAmZug` mit
+einmaliger Abfrage in `vorrücken` und `vorrückenZurücknehmen`; Maskenkennung `grenze-${nummer}`
+aus der Stelle in der Liste, Vorlage neutral; `flächeSetzen` jetzt in `vorlage.js`.
+
+## Runde 2
+**Befund.** Hält auf: eine Prüfung ist rot. Nachgeprüft am uncommitteten Stand; Punkte 2 und
+3 sind erledigt, Punkt 1 halb.
+1. `ruff check` meldet E501 in
+   [schlachtrunden.py, Zeile 270](../../technik/arbiter/domaene/querschnitt/schlachtrunden.py#L270)
+   (101 Zeichen), `ruff format --check` will dieselbe Zeile umbrechen.
+2. `vorrücken` prüft die Bedingung weiter ein zweites Mal, jetzt ausgeschrieben statt über die
+   Eigenschaft: `self._bewegungsphase.vorrückenAngeboten(…)` steht in der Eigenschaft
+   `vorrückenAngeboten` und in `vorrücken`, und `Bewegungsphase.vorrückenBeginnen` prüft sie
+   selbst noch einmal ([bewegung/\_\_init\_\_.py, Zeile 145](../../technik/arbiter/domaene/phasen/bewegung/__init__.py#L145)).
+   `_stellenDesGegners()` läuft dabei zweimal.
+3. `einheitZurücksetzen` hat das Muster aus Runde 1 noch: Prüfung über die Eigenschaft
+   `einheitZurücksetzenAngeboten`, dann `self._auswahl.einheit` (`Einheit | None`)
+   weitergereicht.
+
+**Kosten.** Am Bildschirm nichts. Rot hält den Commit auf; dieselbe Bedingung an drei
+Stellen. Umbau etwa 8 Zeilen in einer Datei.
+
+**Gegenvorschlag.**
+1. und 2. `vorrücken` holt die *Einheit* und ruft ohne eigene Prüfung
+   `vorrückenBeginnen(einheit, self._stellen, self._stellenDesGegners())`, nur wenn
+   `einheit is not None`; die Prüfung bleibt in `Bewegungsphase.vorrückenBeginnen`.
+3. `einheitZurücksetzen` wie `vorrückenZurücknehmen`: `einheit = self._ausgewählteEinheitAmZug()`,
+   Rückkehr bei `None` oder `not self._bewegungsphase.einheitZurücksetzenAngeboten(einheit,
+   self._stellen)`, dann `stellenZuBeginnDer(einheit)`.
+
+**Stellungnahme.** Alle drei Punkte angenommen und umgesetzt: Zeile 270 entfällt; `vorrücken`
+prüft nicht mehr selbst, die Prüfung bleibt in `Bewegungsphase.vorrückenBeginnen`, und
+`_stellenDesGegners()` läuft einmal; `einheitZurücksetzen` holt die *Einheit* wie
+`vorrückenZurücknehmen` und reicht keine `Einheit | None` weiter.

@@ -6,12 +6,7 @@ from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import (
     keinAnhaltenAufDemWeg,
     zuvorGezeigt,
 )
-from arbiter.domaene.spielobjekte import Stelle
-from tests.einheit.modelle import modellMit
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
+from tests.einheit.modelle import modellMit, stelleAn
 
 
 def wegVon(inX: int, inY: int) -> tuple[Fraction, Fraction]:

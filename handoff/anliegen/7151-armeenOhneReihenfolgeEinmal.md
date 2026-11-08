@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wartet (Ablage von Hilfsfunktionen, keine Prüfung rot). In
@@ -28,4 +27,10 @@ nichts.
 Schlüssel und Merkmal stehen in einer Tabelle (`{"bewegungsweite": bewegungsweiteDes, …}`),
 der Test nennt nur den Schlüssel.
 
-**Stellungnahme.**
+**Stellungnahme.** Angenommen und umgesetzt. `ohneReihenfolge` sortiert jede Liste auf jeder
+Ebene und lässt Tupel in ihrer Ordnung; `einheitenAusDenDaten` und `einheitenDerAusgangslage`
+liefern nur noch Listen je *Armee* von (*Name*, Werte je *Modell*). Der erste Test vergleicht
+die *Namen* über `namenJeArmee`, erst danach ohne Reihenfolge, damit ein falscher Wert an einem
+*Modell* ihn nicht rot macht. Schlüssel und Merkmal stehen in `merkmalZumSchlüssel`, die Tests
+nennen nur den Schlüssel; das Paar der *Spieler* steht einmal in `spielerDer`. Verhalten
+unverändert, 15 Tests grün.

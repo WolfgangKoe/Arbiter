@@ -2,7 +2,7 @@
 
 Abschnitt der *Schlacht* nach der *Aufstellung* (QUE-9, QUE-10), die anderen:
 [Architektur](../../../architektur.md#schichten); was alle Phasen teilen:
-[Querschnitt](../querschnitt.md).
+[Querschnitt](../querschnitt/).
 
 - **V11** Die Tür der Domäne nach der *Aufstellung* ist `Schlacht(aufstellung)` in
   `arbiter/domaene/querschnitt/schlachtrunden.py`, mit `Phase` (Wert: Name aus dem Glossar,

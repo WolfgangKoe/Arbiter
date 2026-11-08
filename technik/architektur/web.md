@@ -21,7 +21,7 @@
   liest die Domäne nur über ihre Abfragen (D3). Prüft: Akzeptanztests zu QUE-2 und AUF-4; die
   Importe `formregeln/importvertrag.py`; der Rest nur Text; Auslöser: zweite Route.
 - **W3** Eine Anfrage je Handlung. Eine Sperre wird HTTP 409 mit der Liste ihrer Gründe
-  (`Sperre.gründe`, Text aus `Grund`) und dem Spielstand ([V6](vertrag/querschnitt.md)). JSON
+  (`Sperre.gründe`, Text aus `Grund`) und dem Spielstand ([V6](vertrag/querschnitt/anfragen.md)). JSON
   tragen nur 200 und 409; jede andere Antwort, etwa 400 und 404, schreibt Flask als HTML,
   darum holt die Seite auf sie den Spielstand neu (V1). CSRF: V4. Prüft: die Dienst-Tests zu
   AUF-12.6 und 12.7, zu AUF-10.3 gegen `sperre.json`.

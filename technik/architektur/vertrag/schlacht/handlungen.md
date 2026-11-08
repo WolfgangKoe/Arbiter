@@ -1,7 +1,7 @@
 # Vertrag: Schlacht · Handlungen
 
 Abschnitt der *Schlacht*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 Am Bildschirm | Anfrage (V5) | `Schlacht`
 ---|---|---

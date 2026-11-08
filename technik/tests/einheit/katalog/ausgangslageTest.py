@@ -113,6 +113,13 @@ def testEinFehlerhafterEintragEinerEinheitIstEinFehlerBeimLaden(kaputt):
         laden([[kaputt], [einheit]])
 
 
+def testEinNameDerKeinTextIstIstEinFehlerBeimLaden():
+    kaputt = {"fraktion": 5, "datenblatt": "Boyz", "modelle": {"Ork Boy": 1}}
+
+    with pytest.raises(ValueError, match="Ein Name muss Text sein"):
+        laden([[kaputt], [einheit]])
+
+
 def testEineSpielfeldkanteAußerhalbDerZweitenSeitenlängeIstEinFehlerBeimLaden():
     onlyWar = onlyWarMitKante(44)
 

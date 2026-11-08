@@ -1,7 +1,7 @@
 # Vertrag: Aufstellen · Seite
 
 Abschnitt der *Aufstellung*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 - Knöpfe (V7): „Aufstellen der Einheit beenden“ immer, denn AUF-12.7 nennt den *Grund*
   nach AUF-7.4; davor „Einheit zurücklegen“, wenn `einheitInAufstellung` nicht `null` ist

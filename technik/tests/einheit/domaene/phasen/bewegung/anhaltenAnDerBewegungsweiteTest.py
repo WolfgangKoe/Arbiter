@@ -3,12 +3,7 @@ from fractions import Fraction
 from arbiter.domaene.phasen.bewegung.anhaltenAnDerBewegungsweite import (
     anteilBisZurBewegungsweite,
 )
-from arbiter.domaene.spielobjekte import Stelle
-from tests.einheit.modelle import bewegungsweiteDerTestmodelle, modellMit
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
+from tests.einheit.modelle import bewegungsweiteDerTestmodelle, modellMit, stelleAn
 
 
 def testEinWegBisZurBewegungsweiteBleibtUnverkürzt(zehnZoll):

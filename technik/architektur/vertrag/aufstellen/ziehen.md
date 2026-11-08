@@ -1,7 +1,7 @@
 # Vertrag: Aufstellen · Ziehen
 
 Abschnitt der *Aufstellung*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 Nach V10 (AUF-24.3, 26.5, 28.2, 29): `stellenBeimLoslassen(modell, stelle, weiter=None)` →
 `Gezeigt` nennt in `stellen` (*Modell* → *Stelle*) jedes *Modell*, das

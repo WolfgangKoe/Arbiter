@@ -4,7 +4,7 @@ Form: Fragen
 Von: Fachkritiker
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Damit die *Karte* stehen bleibt, hält Arbiter unter ihr immer Platz für *Gründe*, Knöpfe und *Protokoll* frei. Sie wird dadurch auch dann kleiner, wenn dort nichts steht. 14040 nannte 309 Pixel „so hoch wie vorher“; das war das Mockup. Im Gebauten ist sie heute höher:
@@ -28,6 +28,6 @@ A: Maße bleiben, kurze Züge in kleinen Fenstern gehen nur über „weiter und 
 B: UX sucht der *Karte* mehr Platz, etwa eine niedrigere Zeile für *Gründe*; Zug und Kreis werden etwas größer, viele *Gründe* rollen dann, ein Anliegen an UX, Tests bleiben (neu).
 C: Ein Zug beginnt schon nach 2 Pixeln; der halbe *Zoll* geht auch bei 1280×720, aber ein unruhiger Klick zählt schneller als Zug, das weicht von ArbiterMap ab, kleiner Umbau mit neuen Tests (neu).
 Empfehlung: A, das Ziehen bleibt möglich, und du urteilst am gebauten Bildschirm; B oder C kosten erst, wenn du es dort wirklich störend findest.
-Antwort: .
+Antwort: Die Karte soll eigentlich im minimalen Zoom vollständig in das Fenster passen. So wie es jetzt ist, ist die Karte kleiner als das, wie wenn noch weiter hinausgezoomt werden könnte. Das Zoomen ist nicht Teil dieser Etappe, daher wäre die Kartengröße okay. ABER, wenn die Seitenleisten rechts, links und unten nacheinander eingezogen werden, verschiebt sich die Karte immer noch. Meine Erwartung wäre, dass gerade das nicht mehr geschieht.
 
 **Stellungnahme.**

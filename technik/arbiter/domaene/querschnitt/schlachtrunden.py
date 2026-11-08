@@ -214,7 +214,7 @@ class Schlacht:
 
     def karteAnklicken(self, stelle: Stelle) -> None:
         self._bewegungsphase.angebotBeenden()
-        einheit = self._einheitMitGrenzen()
+        einheit = self._ausgewählteEinheitAmZug()
         if einheit is not None:
             ebene = self._auswahl.ebeneDerAuswahl(self._stellen)
             if self._bewegungsphase.vorrückwurfNehmen(einheit, ebene, stelle):
@@ -223,7 +223,7 @@ class Schlacht:
 
     @property
     def grenzen(self) -> tuple[Einhüllende, ...]:
-        einheit = self._einheitMitGrenzen()
+        einheit = self._ausgewählteEinheitAmZug()
         if einheit is None:
             return ()
         ebene = self._auswahl.ebeneDerAuswahl(self._stellen)
@@ -235,19 +235,19 @@ class Schlacht:
 
     @property
     def vorrückenAngeboten(self) -> bool:
-        einheit = self._einheitMitGrenzen()
+        einheit = self._ausgewählteEinheitAmZug()
         return einheit is not None and self._bewegungsphase.vorrückenAngeboten(
             einheit, self._stellen, self._stellenDesGegners()
         )
 
     @property
     def vorrückenZurücknehmenAngeboten(self) -> bool:
-        einheit = self._einheitMitGrenzen()
+        einheit = self._ausgewählteEinheitAmZug()
         return einheit is not None and self._bewegungsphase.vorrückenZurücknehmenAngeboten(einheit)
 
     @property
     def einheitZurücksetzenAngeboten(self) -> bool:
-        einheit = self._einheitMitGrenzen()
+        einheit = self._ausgewählteEinheitAmZug()
         return einheit is not None and self._bewegungsphase.einheitZurücksetzenAngeboten(
             einheit, self._stellen
         )
@@ -263,26 +263,29 @@ class Schlacht:
 
     def vorrücken(self) -> None:
         self._bewegungsphase.angebotBeenden()
-        if self.vorrückenAngeboten:
-            self._bewegungsphase.vorrückenBeginnen(
-                self._auswahl.einheit, self._stellen, self._stellenDesGegners()
-            )
+        einheit = self._ausgewählteEinheitAmZug()
+        if einheit is None:
+            return
+        self._bewegungsphase.vorrückenBeginnen(einheit, self._stellen, self._stellenDesGegners())
 
     def vorrückenZurücknehmen(self) -> None:
         self._bewegungsphase.angebotBeenden()
-        if not self.vorrückenZurücknehmenAngeboten:
+        einheit = self._ausgewählteEinheitAmZug()
+        if einheit is None or not self._bewegungsphase.vorrückenZurücknehmenAngeboten(einheit):
             return
-        einheit = self._auswahl.einheit
         self._bewegungsphase.vorrückenZurücknehmen(einheit)
         self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(einheit))
 
     def einheitZurücksetzen(self) -> None:
         self._bewegungsphase.angebotBeenden()
-        if not self.einheitZurücksetzenAngeboten:
+        einheit = self._ausgewählteEinheitAmZug()
+        if einheit is None or not self._bewegungsphase.einheitZurücksetzenAngeboten(
+            einheit, self._stellen
+        ):
             return
-        self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(self._auswahl.einheit))
+        self._stellen.update(self._bewegungsphase.stellenZuBeginnDer(einheit))
 
-    def _einheitMitGrenzen(self) -> Einheit | None:
+    def _ausgewählteEinheitAmZug(self) -> Einheit | None:
         spieler = self._amZug
         einheit = self._auswahl.einheit
         if self._phase is not Phase.bewegungsphase or spieler is None or einheit is None:

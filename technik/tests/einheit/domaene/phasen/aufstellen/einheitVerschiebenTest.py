@@ -4,14 +4,9 @@ from arbiter.domaene.phasen.aufstellen.einheitVerschieben import (
     hineingerückt,
     verschobeneStellen,
 )
-from arbiter.domaene.spielobjekte import Stelle
-from tests.einheit.modelle import modellMit
+from tests.einheit.modelle import modellMit, stelleAn
 
 zone = (Fraction(0), Fraction(44))
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
 
 
 def testDieGruppeFolgtDemWegDesGezogenenUndDasGezogeneStehtAmZiel(zehnZoll):

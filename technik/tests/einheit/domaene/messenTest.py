@@ -8,6 +8,7 @@ from arbiter.domaene.messen import (
     Weg,
     abstandHöchstens,
     anteilBisZurBerührungAufDemWeg,
+    anteilVorDemErstenSchrittMit,
     anteilVorDerLetztenBerührung,
     ganzIn,
     rückungInDieFläche,
@@ -230,6 +231,25 @@ def testAufDemWegHältDerAnteilVorEinerBaseAnDieDasEndeSchonÜberquertHat(zehnZo
     )
 
     assert anteil == Fraction(1, 8)
+
+
+def testEineBaseAbseitsDesWegsBerührtNieUndDerAnteilIstEins(zehnZoll):
+    abseits = [(zehnZoll, Stelle(x=Fraction(15), y=Fraction(50)))]
+
+    anteil = anteilBisZurBerührungAufDemWeg(
+        [(zehnZoll, ursprung)], abseits, (Fraction(40), Fraction(0))
+    )
+
+    assert anteil == 1
+
+
+def testEinWegVonEinemRasterschrittDerSchonTrifftHatDenAnteilNull():
+    def trifftÜberNull(anteil: Fraction) -> bool:
+        return anteil > 0
+
+    anteil = anteilVorDemErstenSchrittMit(trifftÜberNull, (Fraction(1, 100), Fraction(0)))
+
+    assert anteil == 0
 
 
 def testDieLetzteBerührungLiegtVorDemHaltWennDasEndeNochDarinSteht(zehnZoll):

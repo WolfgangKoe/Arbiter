@@ -2,7 +2,7 @@
 
 Abschnitt der *Bewegungsphase*, dazu der Klick auf ein *Modell* (AUF-20.6, 25) schon in der
 *Aufstellung*; die anderen: [Architektur](../../../architektur.md#schichten); was alle Phasen
-teilen: [Querschnitt](../querschnitt.md).
+teilen: [Querschnitt](../querschnitt/).
 
 - **V14** `PUT …/modelle/<m>/anklicken` (`…` wie V5) → `modellAnklicken(modell)`, 200 mit
   dem Spielstand, in der *Aufstellung* an `Aufstellung`, danach an `Schlacht`

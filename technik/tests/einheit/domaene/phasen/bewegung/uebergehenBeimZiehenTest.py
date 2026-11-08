@@ -4,16 +4,11 @@ import pytest
 
 from arbiter.domaene.phasen.bewegung.uebergehenBeimZiehen import Anteile, gründeBeimÜbergehen
 from arbiter.domaene.sperre import Grund
-from arbiter.domaene.spielobjekte import Stelle
-from tests.einheit.modelle import modellMit
+from tests.einheit.modelle import modellMit, stelleAn
 
 ganz = Fraction(1)
 halb = Fraction(1, 2)
 viertel = Fraction(1, 4)
-
-
-def stelleAn(inX: int, inY: int) -> Stelle:
-    return Stelle(x=Fraction(inX), y=Fraction(inY))
 
 
 def testKeinAnhaltenFrüherAlsDasEndeDesWegsBietetKeinÜbergehenAn():

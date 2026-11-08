@@ -1,7 +1,7 @@
 # Vertrag: Aufstellen · Auswahl
 
 Abschnitt der *Aufstellung*, die anderen: [Architektur](../../../architektur.md#schichten);
-was alle Phasen teilen: [Querschnitt](../querschnitt.md).
+was alle Phasen teilen: [Querschnitt](../querschnitt/).
 
 - Spielstand (V1): `ausgewählt` an der *Einheit* nach AUF-5.12, am *Modell* nach AUF-5.7 und
   25.4; `ebene: true` nur am *Modell*, das die *Ebene* ist (AUF-25.1), sonst fehlt der
