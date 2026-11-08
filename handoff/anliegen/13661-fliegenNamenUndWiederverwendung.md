@@ -23,7 +23,7 @@ Wartet nach [Kritik](../../prozess/ablauf/kritik.md): Namen und Ablage, keine Pr
    Kandidat bis zu 65-mal; Kandidaten an derselben Stelle (Berührpunkt zweier Kreise:
    zwei Schnittpunkte und ein Lotpunkt) prüft `wegInDieFreieFläche` mehrfach.
 4. [fliegenTest.py](../../technik/tests/einheit/domaene/phasen/bewegung/fliegenTest.py)
-   bringt die achte gleiche `stelleAn`; dazu [8041](8041-stelleAnInDenEinheitstestsEinmal.md).
+   bringt die achte gleiche `stelleAn`; dazu Anliegen 8041.
 
 **Kosten.** Am Bildschirm nichts. 1 kostet jeden Leser der Geometrie Zeit; 2 ändert sich
 an zwei Stellen, wenn sich das Raster ändert; 3 nur Laufzeit im Loslassen, findet

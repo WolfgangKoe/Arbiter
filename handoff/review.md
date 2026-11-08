@@ -62,7 +62,7 @@ Mutanten, die Schwelle ist 95 %; der volle 96 % von 628
 (Anliegen 8970). Am Bildschirm ändert das
 nichts. Von den 21 Überlebenden sind zwölf gleichwertig, Begründung trägt der
 Organisationsentwickler ein (Anliegen 8973);
-danach 98 %. Acht Tests fehlen, Technikphase 10 ([8971](anliegen/8971-mutationslueckenMessenUndKatalog.md)),
+danach 98 %. Acht Tests fehlen, Technikphase 10 (Anliegen 8971),
 und ein Kriterium, Domänenphase 10 (Anliegen 8972).
 
 ## Code
