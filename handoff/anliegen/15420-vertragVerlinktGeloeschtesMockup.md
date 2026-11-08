@@ -7,7 +7,7 @@ Runde: 1/3
 Status: angenommen
 
 ## Runde 1
-**Befund.** Nachprüfung von [15321](15321-mockupsGebauterItemsLoeschen.md): Das Mockup
+**Befund.** Nachprüfung von Anliegen 15321: Das Mockup
 `domaene/mockups/bew-24.html` ist gelöscht, weil BEW-24 gebaut ist. Der
 [Vertrag Grenzkreise](../../technik/architektur/vertrag/bewegung/grenzkreise.md), Abschnitt
 Knöpfe (V7), verweist noch darauf: „alle vor ‚Phase beenden‘ (Mockup [bew-24](…))“. Der Link
