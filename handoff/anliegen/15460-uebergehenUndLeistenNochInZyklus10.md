@@ -4,7 +4,7 @@ Form: Fragen
 Von: Reviewer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Du nimmst zwei Items nicht ab ([Review 10](../review.md)):
@@ -39,6 +39,7 @@ Annahme: Ich schreibe Review 10 mit B: Etappe 2 ist nicht erreicht, beide Themen
 A: Noch in Technikphase 10. Der Planer hängt Plan 10 zwei Items an, du gibst sie frei, dann die Kette oben; danach schreibe ich Review 10 neu, mit Etappe 2 erreicht. Für einen Plan, der in der Technikphase wächst, haben Fortschritt und Stand keinen Weg; nicht erprobt (Kommentar zu Review 10).
 B: Als Plan 11, im Ablauf: Du gibst Review 10 frei mit „Etappe 2 nicht erreicht“; nach der Prozessphase 10 schreibt der Anforderungsautor 15100 und 15461 in der Domänenphase 11, Plan 11 enthält beide Items und schließt Etappe 2 ab (Technikphase).
 Empfehlung: B, gleicher Aufwand, alle Prüfungen und die Kritik am Plan laufen wie immer; A ist nur um die Prozessphase 10 früher am Bildschirm und verlangt eine Ausnahme vom Ablauf.
-Antwort: .
+Antwort: B
 
 **Stellungnahme.**
+Kommentar: Ich folge deiner Empfehlung. Es ist allerdings wieder vorgekommen, dass in Teilen etwas falsches gebaut wurde. Vielleicht fällt es mir doch immer etwas schwer, die Details aus den Texten richtig zu verstehen und gehe davon aus, dass es sich verhält, wie etwas anderes, das schon gebaut ist. So wie hier das Verhalten der Aufstellung in Teilen nachempfunden werden soll. Wie auch immer, machen wir es erstmal so.

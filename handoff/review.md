@@ -115,5 +115,5 @@ Probleme:
 - [ ] Stakeholder: Freigabe Plan 11
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
