@@ -1,197 +1,121 @@
-# Review · Zyklus 9
+# Review · Zyklus 10
 
 Start der App: `.venv/bin/arbiter` aus der Wurzel ([Web, W5](../technik/architektur/web.md#aufbau)),
 dann `http://127.0.0.1:8040/` im Browser öffnen.
 
 ## Am Bildschirm prüfen
 Mit Maus oder Finger stellt ihr beide Armeen auf, wählt den ersten Zug, geht durch die Phasen
-jeder *Schlachtrunde* und zieht in der *Bewegungsphase* eure *Einheiten*, einzeln oder als
-Ganzes, normal oder mit *Vorrücken*.
+und zieht in der *Bewegungsphase* eure *Einheiten*: Arbiter hält an *Bewegungsweite*,
+*Spielfeldkante*, *Nahkampfreichweite* und vor fremden *Bases* an, ihr könnt ein Anhalten
+gemeinsam übergehen und eine *Einheit* zurücksetzen; die Canoptek-Spinne fliegt.
 1. Start: Arbiter nennt `http://127.0.0.1:8040/`.
-2. Aufstellen, „Erster Zug“ bei Spieler 1, „Phase beenden“: „Schlachtrunde 1 ·
-   Bewegungsphase“ wie bisher.
-3. Einen Boy 5″ quer über die Boyz ziehen: Er springt zurück, Arbiter nennt ‚über eine Base‘
-   und bietet „gemeinsam übergehen“ an. Klick darauf: Der Boy steht, wo du losgelassen hast;
-   das *Protokoll* in der unteren *Leiste* zeigt „Boyz · Spieler 1 · über eine Base“.
-4. Einen Boy anklicken: Alle Boyz sind *ausgewählt*. Noch ein Klick auf ihn: Nur er ist
-   *Ebene* und zieht allein. Noch ein Klick: wieder die ganze *Einheit*. Ein Klick auf die
-   leere *Karte*: keine *Auswahl* mehr.
-5. Die Boyz wieder anklicken: Ein heller Bereich um sie zeigt, wie weit sie ziehen, um jede
-   gegnerische *Einheit* ein Bereich für ihre *Nahkampfreichweite*.
-6. „Vorrücken“: sechs Kreise +1″ bis +6″ um die Boyz. Klick in den Ring „+3“: Nur er bleibt.
-7. Die Boyz weit ziehen: Sie halten an, sobald ein *Modell* *Bewegungsweite* plus 3″ von
-   seiner *Stelle* zu Beginn der Phase entfernt ist (der Boy aus Schritt 3 zuerst).
-8. „Vorrücken zurücknehmen“: Die Boyz stehen wieder, wo die Phase begann, ohne Wurf.
-9. Den *Griff* der unteren *Leiste* (▼ am unteren Rand) klicken: Sie fährt ein, nur der
-   *Griff* ▲ bleibt. Noch ein Klick: Sie fährt aus und zeigt wieder das *Protokoll*. Links und
-   rechts geht es ebenso.
-10. Ein Klick auf die leere *Karte*, dann den untersten Boy 5″ nach rechts ziehen, weg von
-   den Boyz, und „Phase beenden“: Arbiter nennt ‚keine Kohärenz‘, bietet „gemeinsam
-   übergehen“ nicht an, die *Bewegungsphase* bleibt.
+2. Beim Aufstellen einen Boy neben dem *Spielfeld* loslassen: Er steht, wo das *Spielfeld* ihn
+   zuletzt zeigte.
+3. Beim Aufstellen einen Boy auf eine fremde *Base* zu ziehen: Er hält davor an und gleitet an
+   ihr entlang; Loslassen *setzt* ihn dort, kein ‚über eine Base‘ mehr.
+4. Erster Zug, „Phase beenden“ bis zur *Bewegungsphase*. Die Boyz über ihre *Bewegungsweite*
+   ziehen und loslassen: Sie stehen an der *Bewegungsweite*, „gemeinsam übergehen“ erscheint.
+   Klick darauf: Sie stehen, wo ihr losgelassen habt; das *Protokoll* nennt ‚Bewegungsweite‘.
+5. Die Boyz noch einmal ziehen, auch zurück: Sie bleiben stehen, „gemeinsam übergehen“
+   erscheint wieder.
+6. „Einheit zurücksetzen“: Die Boyz stehen, wo die Phase begann.
+7. Die Boyz in *Nahkampfreichweite* eines Gegners ziehen und *auswählen*: Kein „Vorrücken“.
+8. Die Canoptek-Spinne über fremde *Bases* ziehen und auf einer loslassen: Sie rückt an die
+   nächste freie *Stelle*.
+9. Eine *Leiste* ein- und ausfahren: Kein *Modell* auf dem *Spielfeld* verschiebt sich.
 
-Am laufenden Arbiter mit der Maus gesehen: 2 bis 10 in Folge; die Aufstellung habe ich dafür
-vorbereitet statt geklickt. Nur Tests zeigen: Anhalten an der *Spielfeldkante* und 1″ vor
-einer gegnerischen *Base* ([anhaltenVorDerGrenzeTest](../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorDerGrenzeTest.py)),
-*Modelle* des Gegners lassen sich nicht ziehen ([fremdeModelleTest](../technik/tests/akzeptanz/phasen/bewegung/fremdeModelleTest.py)),
-Klick auf eine *aufgestellte* *Einheit* beim Aufstellen ([aufgestellteEinheitAuswaehlenTest](../technik/tests/akzeptanz/phasen/aufstellen/aufgestellteEinheitAuswaehlenTest.py)),
-*Grenzkreise* nach erneuter *Auswahl* ([grenzkreiseNachErneuterAuswahlTest](../technik/tests/akzeptanz/phasen/bewegung/grenzkreiseNachErneuterAuswahlTest.py)).
-Ziehst du den Warboss nach links zur Kante, springt er zurück: Die Boyz stehen im Weg,
-‚über eine Base‘.
-
-Du bist den Klickpfad durchgegangen und einverstanden; Schritte 9 und 10 sind danach
-dazugekommen (Anliegen 8950), sieh sie dir bitte noch an.
+Den Klickpfad bin ich nicht am laufenden Arbiter durchgegangen; jeder Schritt ist durch die
+Bildschirmtests gegen den echten Server belegt (`technik/tests/akzeptanz/`, etwa
+[uebergehenBeimZiehenTest](../technik/tests/akzeptanz/phasen/bewegung/uebergehenBeimZiehenTest.py),
+[anhaltenVorFremdenBasesTest](../technik/tests/akzeptanz/phasen/bewegung/anhaltenVorFremdenBasesTest.py),
+[fliegenTest](../technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py)). Bitte sieh ihn dir an.
 
 ## DoD
-1. **Erfüllt.** Alle Tests in `technik/tests` grün, Abdeckung über 95 % (Prüfung `abdeckung`).
-2. **Erfüllt.** `python3 -m pytest prozess/pruefungen`: 937 grün; SonarLint ohne Fund. Die
-   Meldung S1172 am Parameter `vorrückwurf`, die der Implementierer in der IDE sah, gibt es
-   nach dem Commit „grenzkreise: Kritik am Code zu 8640, Item gelöscht“ nicht: Dieselbe
-   SonarLint-Version meldet in einer Kopie einen wirklich unbenutzten Parameter derselben
-   Funktion, `vorrückwurf` nicht. Wohl ein veralteter Stand im Editor. Seither hat sich nur
-   der Mutationslauf geändert, Commit „Mutationslauf parallel auf allen Kernen (Anliegen
-   8122)“: Danach sind seine 18 Tests, die Prüfungen zu Benennung, Kommentaren und
-   Komplexität, ruff und SonarLint grün.
-3. **Erfüllt.** Alle vier Items gelöscht; die Kriterien beschreiben das Gebaute.
-4. **Erfüllt.** Der Fachkritiker hat alle vier Items abgenommen.
+1. **Erfüllt.** `technik/tests` und `prozess/pruefungen` auf Stand 4edbbbd: 2688 grün, darin
+   die Prüfung `abdeckung` (95 % für `technik/arbiter` und `technik/frontend/`). Danach hat sich
+   nur Anliegen 7800 geändert (Commit „7800 erledigt: Nachprüfung des Anforderungsautors“).
+2. **Erfüllt.** Prüfungen grün (siehe 1); SonarLint auf Stand 525be63: keine Funde. Kein TODO
+   und kein `noqa` im Produkt.
+3. **Erfüllt.** Alle sechs Items von Plan 10 gelöscht, die Kriterien beschreiben das Gebaute.
+4. **Erfüllt**, sobald dieses Review freigegeben ist: Der Fachkritiker hat alle sechs Items
+   abgenommen (zuletzt Commit „ruhigeKarte: Item abgenommen“).
 
-Oberfläche: **Erfüllt.** Bildschirmtests grün; die acht Mockups des Gebauten sind gelöscht,
-unter `domaene/mockups/` liegen nur noch die der offenen Items. Anliegen 8760 ist erledigt;
-`erledigteLoeschen.py` hat es nach dem Commit gelöscht, wie vorgesehen.
-Mutation: **nicht erfüllt.** Der gezielte Lauf über die geänderten Zeilen fängt 93 % von 190
-Mutanten, die Schwelle ist 95 %; der volle 96 % von 628
-(Anliegen 8970). Am Bildschirm ändert das
-nichts. Von den 21 Überlebenden sind zwölf gleichwertig, Begründung trägt der
-Organisationsentwickler ein (Anliegen 8973);
-danach 98 %. Acht Tests fehlen, Technikphase 10 (Anliegen 8971),
-und ein Kriterium, Domänenphase 10 (Anliegen 8972).
+Oberfläche: **nicht erfüllt.** Bildschirmtests grün, aber die Mockups zu BEW-8, BEW-24 und
+QUE-7 liegen noch ([15321](anliegen/15321-mockupsGebauterItemsLoeschen.md), an UX, drei `rm`).
+Mutation: **nicht erfüllt.** Der gezielte Lauf über die seit „Freigabe Plan 10“ geänderten
+Zeilen läuft noch (`/tmp/mutation10.log`); bis jetzt 63 von 327 Mutanten überlebt, 81 %, Schwelle
+95 %. Am meisten in `fliegen.py` (12 von 60). Am Bildschirm ändert das nichts; jeder Überlebende
+wird ein Test oder eine Begründung als gleichwertig, dafür ein Auftrag an den Testautor, sobald
+der Lauf fertig ist.
 
 ## Code
-`/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 9“:
-nichts hält auf. Kein `noqa`, kein TODO im Produkt. Warten auf Technikphase 10: Die Suche
-nach der *Einheit* eines *Modells* steht dreimal da, ein Test zu zwei *Einheiten*, von denen
-nur eine *vorgerückt* ist, fehlt (Anliegen 8740); zwei Tests zur *Auswahl* prüfen zu wenig
-(Anliegen 8720).
+`/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 10“:
+nichts hält auf. Was die Kritik am Code schon fand, wartet auf Technikphase 11 (Gleiten und
+Fliegen: 12681, 12702, 12904, 12962, 13640, 13661, 13761, 14240, 14261; Übergehen: 11860, 11880;
+Katalog: 10720, 13540; Umbenennen: 15260, 15280, 15281). Neu:
+[15320](anliegen/15320-fliegenRechnetAnteileZweimal.md): *Fliegen* rechnet zwei Anteile je
+Zeigerbewegung doppelt, der Server nennt das Gerät zweimal. Dass das Ziehen die zuvor gezeigte
+*Stelle* vom Browser mitschickt, hat der Architekt so entschieden
+([Vertrag Ziehen](../technik/architektur/vertrag/querschnitt/ziehen.md)): Die Domäne merkt sich
+kein Ziehen.
 
 ## Empfehlung
-Gib Review 9 frei, sobald die Mutation die Schwelle hält: Der Klickpfad zeigt, was Plan 9
-versprochen hat, Schritte 1 bis 5 des Happy Path. Beantworte vor der Domänenphase 10 die
-Fragen in Anliegen 8840, sie ändern den Umfang von Plan 10 (Nächstes Vorgehen). Die übrigen
-Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
+Gib Review 10 frei, sobald die drei Mockups gelöscht sind (15321) und die Mutation die
+Schwelle hält. Der Happy Path von Plan 10 ist gebaut, Schritte 1 bis 7; damit ist Etappe 2
+erreicht. Die übrigen Anliegen warten auf spätere Phasen ([Moderation](moderation.md)).
 
 ## Rundgang Prüfcode
-Seit „Freigabe Review 8“ 96 Dateien in [prozess/pruefungen](../prozess/pruefungen),
-[.claude/settings.json](../.claude/settings.json) und [eslint.config.mjs](../eslint.config.mjs),
-1.318 Zeilen neu, 713 fort. Gut 60 Dateien
-haben nur ihre Docstrings verloren (P4, Anliegen 6430); daran ist nichts zu prüfen. Neu oder
-geändert:
-- Länge der Anliegen ([anliegenLaenge.py](../prozess/pruefungen/anliegenregeln/anliegenLaenge.py)):
-  rot über 4.000 Zeichen je Runde, ein Hinweis direkt nach dem Schreiben (neuer Hook nach
-  Write und Edit in `settings.json`).
-- Docstrings nur als Kopf einer Akzeptanztestdatei ([kommentare.py](../prozess/pruefungen/formregeln/kommentare.py)).
-- Reiter „Architektur“ im Dashboard, aufklappbar bis zu den Dateien
-  ([dashboardArchitektur.py](../prozess/pruefungen/rollenregeln/dashboardArchitektur.py),
-  [architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py),
-  [architekturMessung.py](../prozess/pruefungen/rollenregeln/architekturMessung.py)).
-- Stand nennt die belegten Kriterien der Etappe ([produktstand.py](../prozess/pruefungen/standregeln/produktstand.py),
-  [kriterienEtappe.py](../prozess/pruefungen/kriterienregeln/kriterienEtappe.py)) und die Rolle
-  des Prozess-Items ([phasenfolge.py](../prozess/pruefungen/standregeln/phasenfolge.py)).
-- Fortschritt ohne Testzeilen für ein Item ohne Kriterium ([fortschritt.py](../prozess/pruefungen/standregeln/fortschritt.py)).
-- „Wartet auf“ getrennt nach Nummer, Phase, Zyklus ([anliegenKopf.py](../prozess/pruefungen/lesen/anliegenKopf.py)).
-- Mutationslauf schreibt und merkt sich jedes fertige Modul und verteilt die Mutanten eines
-  Moduls auf alle Kerne, je Kern eine Kopie in `/tmp` ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py), Anliegen 8122).
-- Schreibgrenze erkennt das Ziel von `cp -t` ([bashSchreiben.py](../prozess/pruefungen/rollenregeln/bashSchreiben.py)).
-  Ein Hook mit leerer Eingabe gilt als Aufruf ohne Angaben und lässt durch
-  ([hookProtokoll.py](../prozess/pruefungen/gemeinsam/hookProtokoll.py), Zeile 56); vorher
-  brach er mit einem Fehler ab, der ebenso nicht sperrte. Claude Code schickt nie leer.
-- ESLint verbietet Kommentare hinter Code ([eslint.config.mjs](../eslint.config.mjs),
-  Zeile 32, `no-inline-comments`), passend zu Es 8.
-- Elf Mutanten zählen als gleichwertig nicht gegen die Schwelle
-  ([gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json), Anliegen
-  6994): vier in `ausgangslage.py`, drei in `spielobjekte.py`, zwei in `setzenPerKlick.py`,
-  je einer in `web/darstellung.py` und `web/server.py`. Sechs davon, je drei in `spielobjekte.py` und `ausgangslage.py`, nehmen `frozen` oder
-  `eq=False` aus `@dataclass`, weil kein Code die Felder neu setzt oder die Objekte
-  vergleicht; die übrigen fünf begründen je einen Wert, der nicht wirken kann. Die Gründe
-  halte ich für stichhaltig.
+Seit „Freigabe Review 9“ 45 Dateien in [prozess/pruefungen](../prozess/pruefungen) und
+[.claude/settings.json](../.claude/settings.json), 1.602 Zeilen neu, 178 fort. Neu oder
+wesentlich geändert:
+- Abdeckung des Frontends in den Bildschirmtests ([frontendMessung.py](../prozess/pruefungen/formregeln/frontendMessung.py),
+  [frontendZeilen.py](../prozess/pruefungen/formregeln/frontendZeilen.py), [abdeckung.py](../prozess/pruefungen/formregeln/abdeckung.py)).
+- Hindernisse im Fortschritt: [testsRot.py](../prozess/pruefungen/standregeln/testsRot.py),
+  [standVorDerUmsetzung.py](../prozess/pruefungen/standregeln/standVorDerUmsetzung.py),
+  [wartendeSchritte.py](../prozess/pruefungen/standregeln/wartendeSchritte.py),
+  [abhaken.py](../prozess/pruefungen/standregeln/abhaken.py), [beseitigt.py](../prozess/pruefungen/standregeln/beseitigt.py).
+- Mutation: Ergebnis je Modul, gleichwertige Mutanten an ihren Bereich gebunden
+  ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py),
+  [gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json), 158 Zeilen).
+- Dashboard und Schreibgrenze ([dashboardSeiten.py](../prozess/pruefungen/rollenregeln/dashboardSeiten.py),
+  [bashSchreiben.py](../prozess/pruefungen/rollenregeln/bashSchreiben.py)).
 
-Probleme, keins hält auf:
-1. Der Hook „Stand“ vor jeder Rolle braucht jetzt 5,3 von 10 Sekunden: `belegungAlsText`
-   ([produktstand.py](../prozess/pruefungen/standregeln/produktstand.py), Zeile 34) zählt die
-   Kriterien zweimal, für alle und für die Etappe, und sucht dabei jedes Mal alle Tests; das
-   Dashboard tut es nach jedem Lauf noch einmal. Wächst das Repo, fällt der Stand aus.
-   Empfehlung: einmal zählen und je Kriterium die Etappe mitnehmen.
-2. Die Liste der Kästen steht dreimal: in [erlaubteImporte.py](../prozess/pruefungen/formregeln/erlaubteImporte.py)
-   und als `zeilen` und `titel` in [dashboardArchitektur.py](../prozess/pruefungen/rollenregeln/dashboardArchitektur.py)
-   (Zeilen 19 und 20). Ein neuer Kasten fehlt auf dem Reiter ohne Meldung. Dazu baut
-   `kastenDesPfads` ([architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py),
-   Zeile 36) `kastenDesModuls` nach. Empfehlung: Reihen und Titel aus einer Tabelle neben
-   `kastenNamen`.
-3. Doppelte Arbeit im Fortschritt: `hatKriterium` und `itemKriterienGetestet`
-   ([fortschritt.py](../prozess/pruefungen/standregeln/fortschritt.py), Zeilen 59 und 66) suchen
-   je Item zweimal dieselben Kriterien; `itemRollen` liest die Retro ein zweites Mal
-   ([phasenfolge.py](../prozess/pruefungen/standregeln/phasenfolge.py), Zeile 47).
-4. Klein: `längeBefund` gibt „rot“ oder „hinweis“ als Wort zurück, das der Hook nicht nutzt
-   ([anliegenLaenge.py](../prozess/pruefungen/anliegenregeln/anliegenLaenge.py), Zeile 22);
-   eine Bindung per Standardargument, gegen Es 7, steht weiter in
-   [erledigteLoeschen.py](../prozess/pruefungen/anliegenregeln/erledigteLoeschen.py), Zeile 29.
-5. Der parallele Mutationslauf wartet nach jedem Modul, bis dessen letzter Mutant fertig ist
-   ([mutation.py](../prozess/pruefungen/mutationsregeln/mutation.py), Zeilen 171 bis 188).
-   Ein Modul mit 3 Mutanten belegt 3 von 8 Kernen, und ein Überlebender, der sich gegen alle
-   Tests nachprüft, hält die übrigen Kerne an; im gezielten Lauf über wenige geänderte Zeilen
-   ist das der Normalfall. Empfehlung: alle Mutanten aller Module auf einmal einreichen und
-   die Ergebnisse je Modul der Reihe nach abholen, ein Zug von wenigen Zeilen. Wie viel das
-   bringt, zeigt deine laufende Messung.
-6. `testMutantenLaufenParallelJeKernInEigenerKopie`
-   ([mutationTest.py](../prozess/pruefungen/mutationsregeln/mutationTest.py), Zeile 247) prüft
-   nur, dass zwei Kopien benutzt werden: Ein Lauf, der die Mutanten nacheinander abwechselnd in
-   beiden Kopien prüft, bleibt grün. Empfehlung: Beginn und Ende je Test mitschreiben und
-   prüfen, dass sich zwei Läufe überschneiden.
-7. Klein: Strg+C beendet den Lauf erst, wenn alle eingereichten Mutanten des Moduls fertig
-   sind; wird der Prozess beendet, laufen bis zu 8 Testläufe weiter (Zeile 170,
-   `ThreadPoolExecutor` ohne `cancel_futures`).
-8. Ein gleichwertiger Mutant gilt für jede Zeile mit demselben Text in derselben Datei
-   ([gleichwertig.json](../prozess/pruefungen/mutationsregeln/gleichwertig.json)). Eine neue
-   Klasse mit `@dataclass(frozen=True, eq=False)` in `spielobjekte.py` ist damit ungeprüft
-   ausgenommen, auch wenn Code sie vergleicht; bei `Modell` zählt so schon ein gefangener
-   Mutant nicht. Empfehlung: den Eintrag an die Klasse binden, etwa mit ihrem Namen.
-
-Empfehlung: 1, 5 mit 6 und 8 als Anliegen an den Regelumsetzer, je ein Zug von wenigen
-Zeilen; 2 bis 4 und 7 beim nächsten Eingriff in die Dateien, sonst bleiben sie liegen, ohne
-zu stören.
+Probleme:
+1. Die Hindernisse machen den Plan 52.207 Zeichen lang, weil `abhaken.py` jeden grünen
+   Testnamen in den Satz schreibt (Anliegen 15301, wartet auf die Prozessphase).
+2. Den Prüfcode habe ich in diesem Zyklus nicht Zeile für Zeile gelesen, nur Umfang und Zweck;
+   die Durchsicht der Dateien oben steht noch aus. Empfehlung: ich hole sie in der Nachkorrektur
+   nach, bevor du kommentierst.
 
 ## Nächstes Vorgehen
-- **Produktziel:** Etappe 1 von 10 ist erreicht (Commit „Freigabe Etappe 1“), Etappe 2 läuft.
-  Am meisten fehlt die Partie nach der *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
-- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt nach deiner Antwort
-  A in Anliegen 8880: Zurücksetzen, Loslassen neben der *Karte* (mit 8480),
-  *Nahkampfreichweite* auf der ganzen Strecke und kein *Vorrücken* aus ihr (Anliegen 6986),
-  „Phase beenden“ nur im Zug, Ork-Psioniker und Canoptek-Spinne, die ruhige *Karte*; der
-  Stand nennt 57 von 63 Kriterien der Etappe belegt. Ein Zyklus, zwei, wenn die ruhige *Karte*
-  hängt. Anliegen 8840 wartet auf deine Antworten: Mit F1 kann in der Etappe Anhalten vor
-  fremden *Bases* die *Sperre* ‚über eine Base‘ ersetzen, F2 entscheidet, ob sich ein
-  Anhalten übergehen lässt.
-- **Zyklusziel:** Plan 10 schließt Etappe 2 ab. Danach setzt ihr eine gezogene *Einheit*
-  zurück, lasst ein *Modell* neben der *Karte* los, durch die *Nahkampfreichweite* eines
-  Gegners zieht kein *Modell* mehr hindurch, eine *Einheit* in ihr rückt nicht vor,
-  „Phase beenden“ gibt es nur für den *Spieler* am Zug, Ork-Psioniker und Canoptek-Spinne
-  stehen in den Armeen, zuletzt bleibt die *Karte* ruhig. Noch nicht: sehen, welche
-  *Einheit* schon gezogen hat, und ein Anhalten übergehen (Etappe 3). Reihenfolge nach der
-  Klärung in 8880, von dir mit F2 A bestätigt: erst diese Teile, dann das Aufräumen aus 22
-  Anliegen der Technikphase 10 und 7800; braucht ein Teil eines davon vorher, zieht der
-  Planer es vor und nennt es.
+- **Produktziel:** Etappe 1 erreicht (Commit „Freigabe Etappe 1“), Etappe 2 mit diesem Zyklus
+  (Stand: 82 von 82 Kriterien der Etappe belegt). Am meisten fehlt die Partie nach der
+  *Bewegungsphase*: Schießen, Angreifen, Nahkampf, Moral.
+- **Etappenziel:** Zu [Etappe 2](../domaene/etappen/02-bewegen.md) fehlt nach der Abnahme des
+  Fachkritikers nichts am Bildschirm; offen sind Mockups (15321) und Mutation. Null Zyklen.
+- **Zyklusziel:** Plan 11 beginnt Etappe 3. Vorher müssen weg: die Aufräumarbeit an Gleiten,
+  Fliegen und Übergehen aus den oben genannten Anliegen, die Umbenennungen nach 7800 (15260,
+  15280, 15281, 15300, 15261) und die Lücken der Mutation; sonst wachsen sie mit jedem Item.
+  Was danach am Bildschirm neu ist, schneidet der Planer aus Etappe 3.
 
 ## Fortschritt
-- [x] Anforderungsautor: Happy Paths zum Zyklusziel
-- [x] UX: Mockups, bei einer Oberfläche
-- [x] Fachkritiker: Kritik an Anforderungen und Mockups
-- [x] Planer: Plan geschrieben
-- [x] Fachkritiker: Kritik am Plan
-  Hindernis: Fachkritiker → Planer: Schritte 2 und 6 und die Empfehlung beschreiben anderes, als Arbiter zeigen wird (Anliegen 10300); beseitigt: Commit „Plan 10: Fixtures vor den Daten der dritten Einheit, 10280 erledigt“
-  Hindernis: Fachkritiker → Anforderungsautor: Das Datenblatt der Canoptek-Spinne ist erst für Zyklus 11 vorgemerkt, Item fliegen liegt in Zyklus 10 (Anliegen 10301); beseitigt: Commit „Kritik an Plan 10 und Nachbesserung, Ork-Psioniker als MIV-2“
-  Hindernis: Fachkritiker → Anforderungsautor: Wie „Einheit zurücksetzen“ bedient wird, weicht von ArbiterMap ab, ohne dass du es entschieden hast; der Anforderungsautor fragt dich. (Anliegen 10400); beseitigt: Commit „Plan 10 bereinigt, 10400 und 10480 erledigt“
-- [x] Architekt: Kritik am Plan
-  Hindernis: Architekt → Planer: Der Plan sagt, hängt Item 3, rücke nur dieses nach Zyklus 11; die Canoptek-Spinne aus Item 4 rückt dann mit. (Anliegen 10420); beseitigt: Commit „Plan 10: Item 4 rückt mit Item 3, Frage 10480 zum Zurücksetzen“
-- [x] Stakeholder: Freigabe Plan 10
+- [ ] Anforderungsautor: Happy Paths zum Zyklusziel
+- [ ] UX: Mockups, bei einer Oberfläche
+- [ ] Fachkritiker: Kritik an Anforderungen und Mockups
+- [ ] Anforderungsautor: Anliegen 10120 Was gemeinsam übergehen bei ‚nicht am Zug‘ nach sich zieht
+- [ ] Anforderungsautor: Anliegen 10201 Übergehen: aus der Nahkampfreichweite weiterziehen, Kante vor der Bewegungsweite
+- [ ] Anforderungsautor: Anliegen 10322 Zurücksetzen auf Stellen, die inzwischen eine andere Einheit belegt
+- [ ] Planer: Anliegen 13842 Drei Akzeptanztest-Dateien über dem Höchstmaß, kein Item dazu
+- [ ] Anforderungsautor: Anliegen 14320 Fliegen: BEW-18.3 und BEW-25.1 widersprechen sich beim Weiterziehen
+- [ ] Anforderungsautor: Anliegen 15100 Auch der Griff einer Leiste verschiebt die Karte nicht
+- [ ] Fachkritiker: Anliegen 15220 Link auf QUE-7 nach dem Umbenennen
+- [ ] UX: Anliegen 15261 Mockups heißen noch Karte, `.spielfeld` meint dort ein anderes Element
+- [ ] Anforderungsautor: Anliegen 15300 Überschrift von AUF-20 nach Einheiten- und Modellebene
+- [ ] Planer: Plan geschrieben
+- [ ] Fachkritiker: Kritik am Plan
+- [ ] Architekt: Kritik am Plan
+- [ ] Stakeholder: Freigabe Plan 11
 
 ## Freigabe
-Freigabe: ja
-Kommentar:
+Freigabe: offen
+Kommentar: .

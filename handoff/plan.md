@@ -203,8 +203,8 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Testautor: Anliegen 9401 Test zu BEW-19
 - [x] Architekt: Anliegen 9890 V18 nach BEW-8.3 bis 8.5 nachziehen
 - [x] Architekt: Anliegen 10880 Modell anklicken ohne doppelte Einheit, Meldung ohne Bedienelement
-- [ ] Reviewer: DoD über das Inkrement
-- [ ] Reviewer: Review geschrieben
+- [x] Reviewer: DoD über das Inkrement
+- [x] Reviewer: Review geschrieben
 - [ ] Fachkritiker: Kritik am Review
 - [ ] Organisationsentwickler: Kritik am Review
 - [ ] Stakeholder: Freigabe Review 10
