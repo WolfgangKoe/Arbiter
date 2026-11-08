@@ -11,7 +11,7 @@ Domäne kennt keine Technik, Adapter stecken an den Ports von `anwendung/`.
 
 Unter `technik/` | Aufgabe | Regeln
 ---|---|---
-`frontend/` | Frontend: Seite, Stil, Komponenten; spricht nur über HTTP mit `web/` | [Frontend](architektur/frontend.md): O1 bis O5
+`frontend/` | Frontend: Seite, Stil, Komponenten; spricht nur über HTTP mit `web/` | [Frontend](architektur/frontend.md): O1 bis O6
 `arbiter/` | Backend, das Python-Paket mit den Ordnern darunter | A1, A2, A4 (unten)
 `arbiter/web/`, `__main__.py` | Flask: Anfrage → Befehl, Spielstand → JSON, *Sperre* → 409; der Start | [Web](architektur/web.md): W1 bis W5
 `arbiter/anwendung/` | je Handlung ein Dienst; Ports, Befehle, Spielstand | [Anwendung](architektur/anwendung.md)

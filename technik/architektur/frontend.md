@@ -54,3 +54,9 @@
 
   Warum: Zeichnen liest sich ohne Server, Bedienung ohne Vorlagen, eine Komponente ohne die
   Seite. Prüft: Verhalten die Bildschirmtests; Richtung nur Text, Kritik am Code.
+- **O6** Was neben der Karte erscheint, hat festen Platz (QUE-7): `.spalteMitte` hält unter
+  der Karte je eine Zeile fester Höhe für `sperrmeldung` und `knopfGruppe`, die Kopfzeile
+  Platz für „an der Reihe“, die untere Leiste eine feste Höhe; die Maße stehen in
+  `vorschlag.css` (O3). Braucht ein neuer Knopf (O5) oder *Grund* mehr Platz, ändert er die
+  Maße dort über DoR 5, nicht nur in `komponenten.css`. Prüft: die Bildschirmtests zu QUE-7
+  in vier Fenstergrößen; die Maße nur Text.
