@@ -16,7 +16,7 @@ Status: offen
    - `git update-ref refs/heads/dev "$neu"` ohne alten Wert überschreibt einen Commit, der inzwischen auf `dev` kam.
    Gut daran: Neue, nicht vorgemerkte Dateien der Nachbarn sieht der Hook im Arbeitsbaum nicht mehr; das behebt (aa) aus [14500](14500-punkteFuerDieProzessphase.md).
 2. P4, „Ein Item teilt er vorher“: Nach (ah) ist ein Teil nur committbar, wenn sein neuer Code schon aufgerufen wird; die Abdeckung (95 %) beim Implementierer verlangt es. Ein Schnitt nach Schichten (erst Domäne, dann Web) erfüllt das nicht, und P4 sagt nicht, wonach geteilt wird.
-3. P1, ziehbares Mockup: Mockups sind nach [UX](../../.claude/agents/ux.md) statisches, einbaufähiges HTML. Ziehen braucht Skript; die Technik baut es nicht ein, sondern neu (`technik/frontend/bedienung.js`). ESLint prüft es nicht (nur `technik/frontend/`), kein Test. So kann das Mockup eine Geste zeigen, die anders gebaut wird: der Fehler, den P1 verhindern soll. Den *Griff* behandelt [15560](15560-griffWarKeinMissverstaendnis.md), hier kein Doppel.
+3. P1, ziehbares Mockup: Mockups sind nach [UX](../../.claude/agents/ux.md) statisches, einbaufähiges HTML. Ziehen braucht Skript; die Technik baut es nicht ein, sondern neu (`technik/frontend/bedienung.js`). ESLint prüft es nicht (nur `technik/frontend/`), kein Test. So kann das Mockup eine Geste zeigen, die anders gebaut wird: der Fehler, den P1 verhindern soll. Den *Griff* behandelt Anliegen 15560, hier kein Doppel.
 
 **Kosten.** Ohne 1 ist nach P4 jeder Commit rot oder, schlimmer, grün am falschen Stand; der Rückweg kostet einen Lauf. 2 kostet einen Satz. 3: Das Skript kostet den UX-Lauf mehr (Retro, Empfehlung) und wird weggeworfen.
 
