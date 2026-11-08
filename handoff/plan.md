@@ -207,7 +207,7 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Reviewer: Review geschrieben
 - [x] Fachkritiker: Kritik am Review
 - [x] Organisationsentwickler: Kritik am Review
-- [ ] Stakeholder: Freigabe Review 10
+- [x] Stakeholder: Freigabe Review 10
 
 ## Freigabe
 Freigabe: ja
