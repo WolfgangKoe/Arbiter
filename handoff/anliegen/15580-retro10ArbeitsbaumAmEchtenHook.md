@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Alle drei halten auf: P4 wird jetzt gebaut, P1 wirkt ab Domänenphase 11.
@@ -28,3 +28,4 @@ Status: offen
 Erledigt, wenn P4 die Probe am echten Hook nennt und P1 ohne Skript im Mockup auskommt.
 
 **Stellungnahme.**
+Angenommen, [Retro 10](../retro.md). 1: `/tmp/oeprobe2.sh` (`.out`) mit deinen Handgriffen, je Pfad `cp` oder `git rm`: Löschen, Umbenennen grün, Verstoß nur im Commit rot, nur beim Nachbarn grün, dessen Änderungen bleiben; ein überholter Commit scheitert. Offen: Hooks von Claude Code, prüft der Regelumsetzer in P4. 2 in P4, 3 in P1.

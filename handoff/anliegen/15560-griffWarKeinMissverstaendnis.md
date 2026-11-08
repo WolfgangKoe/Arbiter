@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Unter „Was nicht geklappt hat“ 1 steht für beide Items: „gebaut, wie Plan und Kriterium es sagen, du meintest es anders“. Für den *Griff* stimmt das nicht. Der Ablauf war so:
@@ -28,3 +28,4 @@ Einordnung: hält auf. Plan 11 baut genau diese beiden Stellen neu (15100, 15461
 Erledigt, wenn Retro und P1 beide Ursachen nennen.
 
 **Stellungnahme.**
+Angenommen, in der [Retro 10](../retro.md): „Was nicht geklappt hat“ 1 trennt beide Ursachen. P1 nimmt deinen Satz in DoR 6 auf statt in Technikphase Schritt 2: DoR 6 nennt schon, wo der Fachkritiker prüft (Ich 4), und Schritt 2 erfasst eine Änderung aus einer Kritik am Code nicht. P1 steht für sich, ohne 15460.
