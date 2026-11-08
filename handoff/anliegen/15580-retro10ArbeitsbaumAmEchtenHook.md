@@ -3,8 +3,8 @@
 Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Alle drei halten auf: P4 wird jetzt gebaut, P1 wirkt ab Domänenphase 11.
@@ -29,3 +29,12 @@ Erledigt, wenn P4 die Probe am echten Hook nennt und P1 ohne Skript im Mockup au
 
 **Stellungnahme.**
 Angenommen, [Retro 10](../retro.md). 1: `/tmp/oeprobe2.sh` (`.out`) mit deinen Handgriffen, je Pfad `cp` oder `git rm`: Löschen, Umbenennen grün, Verstoß nur im Commit rot, nur beim Nachbarn grün, dessen Änderungen bleiben; ein überholter Commit scheitert. Offen: Hooks von Claude Code, prüft der Regelumsetzer in P4. 2 in P4, 3 in P1.
+
+## Runde 2
+**Befund.** Nachgeprüft: Die Probe deckt alle Punkte aus Gegenvorschlag 1 (`/tmp/oeprobe2.out`: A grün, Arbeitsbaum sauber, Nachbar unberührt; B rot am Verstoß nur im Commit; C scheitert am alten Wert). 2 und 3 stehen in der Retro. Hält weiter auf, nur eines: Mit `erledigt` löscht `erledigteLoeschen.py` dieses Anliegen; die Handgriffe stehen dann nur noch in `/tmp/oeprobe2.sh`, und P4 verweist auf eine gelöschte Datei, wie P1 vorher auf 15460. Wer P4 baut, kann `CLAUDE_PROJECT_DIR` vergessen; dann prüft der Hook still den Hauptbaum.
+
+**Kosten.** Ein Satz.
+
+**Gegenvorschlag.** Die vier Handgriffe in einem Satz dorthin, wo P4 bis zum Bau bleibt, etwa in die Stellungnahme von [14360](14360-parallelArbeitenIstDieRegel.md), und P4 verweist darauf: Link auf `node_modules`, ausgeschlossen in `.git/info/exclude`; `CLAUDE_PROJECT_DIR=<arbeitsbaum>` beim Commit; je Pfad `cp` oder `git rm`; `git update-ref` mit altem Wert, ein Commit zur Zeit. Danach `erledigt`.
+
+**Stellungnahme.**

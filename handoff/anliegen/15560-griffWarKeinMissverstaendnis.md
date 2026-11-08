@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Unter „Was nicht geklappt hat“ 1 steht für beide Items: „gebaut, wie Plan und Kriterium es sagen, du meintest es anders“. Für den *Griff* stimmt das nicht. Der Ablauf war so:
