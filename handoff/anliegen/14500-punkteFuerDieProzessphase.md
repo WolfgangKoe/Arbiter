@@ -28,8 +28,11 @@ Wartet auf: Prozessphase
 - (ap) Prozessphase, ruff format: prozess/ablauf/werkzeuge.md führt es als „nicht verwendet“ (Anliegen 1581), der Hook verlangt es aber und ließ den Commit scheitern.
 - (aq) Der Haken „Item gelöscht“ wird über einen Fakt gesetzt; der Abhak-Befehl des Planers endete danach mit Exit 1 „Offen: keiner“.
 - (ar) Der Ruhemodus unterbricht Läufe ohne Meldung; der Koordinator erkennt das nicht von selbst.
+- (as) Das Abhaken vergab 14501 und 14502 außerhalb der Bereiche, wieder ein Doppel für denselben Befund (zu (ab), (ad)).
+- (at) Das Wochenlimit beendete den Fachkritiker mitten im Lauf; seine Arbeit lag uncommittet im Arbeitsbaum.
+- (au) Architekt und Fachkritiker fanden denselben Sprung unabhängig (14480/14461, 14481/14460), wieder doppelte Kosten (zu (aj)).
 
-**(a) bis (z) fehlen.** Ihr Wortlaut steht in keinem Anliegen und nicht im git log. 12520 nennt nur „(p) und (q) aus dem Startprompt“ und schließt sie ausdrücklich aus; 12900 nennt keinen. Oben verweisen (aa) auf (z) und (ab) auf (w) und (y). Gesucht in `handoff/`, `prozess/`, `.claude/`, deren git-Verlauf und den Commit-Texten; die Treffer sind andere Aufzählungen (etwa 278 (a) und 114 Teil A (a)). Nicht durchsucht: die Chat-Verläufe außerhalb des Repositorys. Nachtragen kann den Wortlaut nur, wer den früheren Startprompt hat; hier ist nichts ergänzt.
+**(a) bis (z) fehlen.** Ihr Wortlaut steht in keinem Anliegen und nicht im git log; 12520 schließt „(p) und (q) aus dem Startprompt“ aus, 12900 nennt keinen. Gesucht in `handoff/`, `prozess/`, `.claude/`, deren git-Verlauf und Commit-Texten, nicht in Chat-Verläufen außerhalb des Repositorys. Nachtragen kann ihn nur, wer den früheren Startprompt hat.
 
 **Kosten.** Ohne diese Datei wären die Punkte (aa) bis (ar) mit dem Chat verloren. (a) bis (z) kann die Prozessphase nur auswerten, wenn der Wortlaut nachgetragen wird.
 
