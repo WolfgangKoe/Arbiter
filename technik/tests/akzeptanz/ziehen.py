@@ -10,7 +10,7 @@ from playwright.sync_api import Locator, Page, Request, Response, Route
 
 from arbiter.domaene.phasen.aufstellen import Aufstellung
 from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
-from tests.akzeptanz.bildschirm import armeelisteVon, aufDieHandlungWarten, kreiseDerKarte
+from tests.akzeptanz.bildschirm import armeelisteVon, aufDieHandlungWarten, kreiseDesSpielfelds
 from tests.akzeptanz.handgriffe import radiusInZoll, stelleInDerZoneVon
 from tests.akzeptanz.schlacht import hundertstelZoll
 
@@ -27,24 +27,24 @@ def mitteVon(element: Locator) -> Bildpunkt:
     return Bildpunkt(rahmen["x"] + rahmen["width"] / 2, rahmen["y"] + rahmen["height"] / 2)
 
 
-_punktAufDerKarteLesen = """(karte, ort) => {
-    const punkt = karte.createSVGPoint()
+_punktAufDemSpielfeldLesen = """(spielfeld, ort) => {
+    const punkt = spielfeld.createSVGPoint()
     punkt.x = ort[0]
     punkt.y = ort[1]
-    const bild = punkt.matrixTransform(karte.getScreenCTM())
+    const bild = punkt.matrixTransform(spielfeld.getScreenCTM())
     return [bild.x, bild.y]
 }"""
 
 
-def punktAufDerKarte(seite: Page, stelle: Stelle) -> Bildpunkt:
-    links, oben = seite.locator("svg.karte").evaluate(
-        _punktAufDerKarteLesen, [float(stelle.x), float(stelle.y)]
+def punktAufDemSpielfeld(seite: Page, stelle: Stelle) -> Bildpunkt:
+    links, oben = seite.locator("svg.spielfeld").evaluate(
+        _punktAufDemSpielfeldLesen, [float(stelle.x), float(stelle.y)]
     )
     return Bildpunkt(links, oben)
 
 
 def zollJePixel(seite: Page) -> float:
-    return seite.locator("svg.karte").evaluate("karte => 1 / karte.getScreenCTM().a")
+    return seite.locator("svg.spielfeld").evaluate("spielfeld => 1 / spielfeld.getScreenCTM().a")
 
 
 def liegtEinPixelGenauAn(seite: Page, ist: Stelle, soll: Stelle) -> bool:
@@ -139,7 +139,7 @@ eingaben = {"maus": mitDerMausZiehen, "finger": mitDemFingerZiehen}
 
 def modellZiehen(seite: Page, von: Stelle, nach: Stelle, eingabe: str = "maus") -> Response:
     return modellAmPunktZiehen(
-        seite, punktAufDerKarte(seite, von), punktAufDerKarte(seite, nach), eingabe
+        seite, punktAufDemSpielfeld(seite, von), punktAufDemSpielfeld(seite, nach), eingabe
     )
 
 
@@ -244,8 +244,8 @@ def offeneAbfragenAbwarten(seite: Page, abfragen: Abfragen) -> None:
 def halten(seite: Page, von: Stelle, nach: Stelle, eingabe: str) -> Maus | Finger:
     zeiger = zeigerArten[eingabe](seite)
     abfragen = Abfragen(seite)
-    zeiger.drücken(punktAufDerKarte(seite, von))
-    zeiger.bewegen(punktAufDerKarte(seite, nach))
+    zeiger.drücken(punktAufDemSpielfeld(seite, von))
+    zeiger.bewegen(punktAufDemSpielfeld(seite, nach))
     aufDieAntwortenWarten(seite, abfragen)
     return zeiger
 
@@ -254,32 +254,32 @@ def haltenUndLosslassen(
     seite: Page, von: Stelle, nach: Stelle, eingabe: str
 ) -> frozenset[tuple[float, float]]:
     zeiger = halten(seite, von, nach, eingabe)
-    gezeigt = kreiseDerKarte(seite)
+    gezeigt = kreiseDesSpielfelds(seite)
     with aufDieHandlungWarten(seite):
-        zeiger.loslassen(punktAufDerKarte(seite, nach))
+        zeiger.loslassen(punktAufDemSpielfeld(seite, nach))
     return gezeigt
 
 
 def alleinZiehen(spiel, einheit: Einheit) -> None: ...
 
 
-def alsEbeneZiehen(spiel, einheit: Einheit) -> None:
+def mitEinheitenebeneZiehen(spiel, einheit: Einheit) -> None:
     spiel.auswählen(einheit)
 
 
-alleinUndAlsEbene = pytest.mark.parametrize(
-    "ebeneLegen", [alleinZiehen, alsEbeneZiehen], ids=["einModell", "ganzeEinheitAlsEbene"]
+alleinUndMitEinheitenebene = pytest.mark.parametrize(
+    "ebeneLegen", [alleinZiehen, mitEinheitenebeneZiehen], ids=["einModell", "einheitenebene"]
 )
 
 
-def nebenDerKarteLoslassen(
-    seite: Page, von: Stelle, aufDerKarte: Stelle, daneben: Bildpunkt, eingabe: str
+def nebenDemSpielfeldLoslassen(
+    seite: Page, von: Stelle, aufDemSpielfeld: Stelle, daneben: Bildpunkt, eingabe: str
 ) -> frozenset[tuple[float, float]]:
-    zeiger = halten(seite, von, aufDerKarte, eingabe)
+    zeiger = halten(seite, von, aufDemSpielfeld, eingabe)
     abfragen = Abfragen(seite)
     zeiger.bewegen(daneben)
     offeneAbfragenAbwarten(seite, abfragen)
-    gezeigt = kreiseDerKarte(seite)
+    gezeigt = kreiseDesSpielfelds(seite)
     with aufDieHandlungWarten(seite):
         zeiger.loslassen(daneben)
     return gezeigt
@@ -319,10 +319,10 @@ def alsKörper(eingaben: dict[str, str]) -> dict:
 def überEinenPunktZiehenUndLoslassen(seite: Page, von: Stelle, über: Stelle, nach: Stelle) -> dict:
     zeiger = halten(seite, von, über, "maus")
     abfragen = Abfragen(seite)
-    zeiger.bewegen(punktAufDerKarte(seite, nach))
+    zeiger.bewegen(punktAufDemSpielfeld(seite, nach))
     aufDieAntwortenWarten(seite, abfragen)
     with aufDieHandlungWarten(seite) as antwort:
-        zeiger.loslassen(punktAufDerKarte(seite, nach))
+        zeiger.loslassen(punktAufDemSpielfeld(seite, nach))
     return antwort.value.request.post_data_json
 
 
@@ -344,13 +344,13 @@ def aufDerArmeelisteVonSpielerZwei(
 
 def jenseitsDerKante(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> Bildpunkt:
     jenseits = stelleInDerZoneVon(aufstellung, spieler, einenZollJenseitsDerKante, längeDesHaltens)
-    return punktAufDerKarte(seite, jenseits)
+    return punktAufDemSpielfeld(seite, jenseits)
 
 
-zieleNebenDerKarte = pytest.mark.parametrize(
+zieleNebenDemSpielfeld = pytest.mark.parametrize(
     "ziel",
     [aufDerArmeelisteVonSpielerEins, aufDerArmeelisteVonSpielerZwei, jenseitsDerKante],
-    ids=["aufDerArmeelisteVonSpielerEins", "aufDerArmeelisteVonSpielerZwei", "nebenDerKarte"],
+    ids=["aufDerArmeelisteVonSpielerEins", "aufDerArmeelisteVonSpielerZwei", "nebenDemSpielfeld"],
 )
 
 

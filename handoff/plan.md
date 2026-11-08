@@ -10,7 +10,7 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
    hingezogen habt; das *Protokoll* nennt ‚Bewegungsweite‘, ‚Nahkampfreichweite‘ oder beide.
    Zieht ihr sie danach noch einmal, bleiben sie stehen, auch zurück, und Arbiter bietet
    wieder „gemeinsam übergehen“ an; zum Ausgangspunkt: „Einheit zurücksetzen“ (Schritt 6). (Item 1)
-3. Lasst ihr ein *Modell* neben der *Karte* los, steht es, wo die *Karte* es zuletzt zeigte,
+3. Lasst ihr ein *Modell* neben dem *Spielfeld* los, steht es, wo das *Spielfeld* es zuletzt zeigte,
    beim Aufstellen für die *Einheit in Aufstellung*. (Item 2)
 4. Zieht ihr einen Boy auf eine fremde *Base* zu, hält Arbiter davor an und gleitet entlang,
    auch beim Aufstellen, in der *Bewegungsphase* nie über *Bewegungsweite*, Kante oder
@@ -20,7 +20,7 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
 6. Bis zum Ende der *Bewegungsphase* setzt „Einheit zurücksetzen“ jede gezogene zurück. Aus
    *Nahkampfreichweite* bietet Arbiter kein *Vorrücken* an, „Phase beenden“ nur vom *ersten Zug*
    bis zum Ende der *Schlacht*. Der Weirdboy steht in der *Armee* der Orks. (Item 5)
-7. Erscheint oder verschwindet etwas neben der *Karte*, bleibt jede *Stelle*, wo sie war. (Item 6)
+7. Erscheint oder verschwindet etwas neben dem *Spielfeld*, bleibt jede *Stelle*, wo sie war. (Item 6)
 
 ## Items
 1. [Anhalten übergehen](../domaene/items/anhaltenUebergehen.md): Schritt 2; BEW-8.3, BEW-8.4
@@ -35,7 +35,7 @@ Zyklusziel aus [Review 9](review.md), 9440 und 10160: sechs Items, Etappe 2 ende
 6. [Ruhige Karte](../domaene/items/ruhigeKarte.md): Schritt 7; QUE-7.1.
 
 Reihenfolge: Item 1 zuerst, sonst macht Item 3 Tests rot (9320, 9440). Item 2 vor 3,
-sonst spränge zurück, wer vor einer *Base* anhält und neben der *Karte* loslässt (8840).
+sonst spränge zurück, wer vor einer *Base* anhält und neben dem *Spielfeld* loslässt (8840).
 Item 4 nach 3: *Fliegen* ersetzt dessen Anhalten (BEW-17.1). Item 6 zuletzt (2361 F2, 8880).
 Vor Item 4 und 5, neben Item 1: Fixtures für eine dritte *Einheit*, sonst brechen Tests ab
 (10380), dann Daten zu MIV-3 und MIV-2.
@@ -162,11 +162,11 @@ nicht, fragt dich ein Anliegen vor dem Vertrag (Ausweg 8840 F4 B).
 - [x] Reviewer: Kritik am Code zu Item ruhigeKarte
 - [x] Fachkritiker: Item ruhigeKarte abgenommen
 - [x] Planer: Item ruhigeKarte gelöscht
-- [ ] Anforderungsautor: Anliegen 11820 Umbenennen nach 7800: Glossar und Anforderungen
-- [ ] Testautor: Anliegen 11821 Umbenennen nach 7800: Akzeptanztests
-- [ ] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
-- [ ] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
+- [x] Testautor: Anliegen 11821 Umbenennen nach 7800: Akzeptanztests
+- [x] Implementierer: Anliegen 11822 Umbenennen nach 7800: Code und Frontend
 - [x] Planer: Anliegen 11824 Umbenennen nach 7800: Ziel
+- [x] Anforderungsautor: Anliegen 11820 Umbenennen nach 7800: Glossar und Anforderungen
+- [x] Architekt: Anliegen 11823 Umbenennen nach 7800: Architektur
 - [x] Reviewer: Anliegen 14920 Mutationslücken in messen und im Katalog
 - [x] Reviewer: Anliegen 8041 stelleAn in den Einheitstests einmal
 - [x] Reviewer: Anliegen 8641 Namen und Wiederverwendung bei Grenzkreisen

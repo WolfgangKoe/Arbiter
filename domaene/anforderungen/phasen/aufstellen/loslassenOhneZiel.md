@@ -1,8 +1,8 @@
 ### AUF-16 · Loslassen ohne Ziel
 
 Etappe: 2
-Zweck: Ein *Modell*, das [AUF-28](loslassenWoDieKarteZeigt.md) beim Loslassen nicht *setzt*, springt ohne Ziel still zurück.
+Zweck: Ein *Modell*, das [AUF-28](loslassenWoDasSpielfeldZeigt.md) beim Loslassen nicht *setzt*, springt ohne Ziel still zurück.
 Am Bildschirm: ziehen und loslassen.
 
-- AUF-16.7 **Wenn** jemand ein nicht *gesetztes* *Modell* loslässt, das eine zweite, nicht neu geladene Seite noch auf der *Karte* zeigt (QUE-3.2), **dann** steht jedes *Modell* danach, wo es vor dem Ziehen war, und Arbiter nennt keinen *Grund* (Anliegen 923, 930 F1).
-- AUF-16.8 **Gegeben** ein *gesetztes* *Modell* einer *aufgestellten* *Einheit*, **wenn** jemand es neben der *Karte* loslässt, auch auf einer *Armeeliste*, **dann** steht jedes *Modell* danach, wo es vor dem Ziehen war, und Arbiter nennt keinen *Grund* (Anliegen 380 F1 A, 801, 961, 2220 F4 A).
+- AUF-16.7 **Wenn** jemand ein nicht *gesetztes* *Modell* loslässt, das eine zweite, nicht neu geladene Seite noch auf dem *Spielfeld* zeigt (QUE-3.2), **dann** steht jedes *Modell* danach, wo es vor dem Ziehen war, und Arbiter nennt keinen *Grund* (Anliegen 923, 930 F1).
+- AUF-16.8 **Gegeben** ein *gesetztes* *Modell* einer *aufgestellten* *Einheit*, **wenn** jemand es neben dem *Spielfeld* loslässt, auch auf einer *Armeeliste*, **dann** steht jedes *Modell* danach, wo es vor dem Ziehen war, und Arbiter nennt keinen *Grund* (Anliegen 380 F1 A, 801, 961, 2220 F4 A).

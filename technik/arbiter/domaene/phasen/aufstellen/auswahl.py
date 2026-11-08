@@ -8,7 +8,7 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Spieler, Stelle
 class Auswahl:
     def __init__(self) -> None:
         self._einheit: Einheit | None = None
-        self._modellAlsEbene: Modell | None = None
+        self._modellebene: Modell | None = None
 
     @property
     def einheit(self) -> Einheit | None:
@@ -18,7 +18,7 @@ class Auswahl:
         if einheit is self._einheit:
             return
         self._einheit = einheit
-        self._modellAlsEbene = None
+        self._modellebene = None
 
     def abwählen(self, einheit: Einheit) -> None:
         if self._einheit is einheit:
@@ -26,30 +26,30 @@ class Auswahl:
 
     def auswahlAufheben(self) -> None:
         self._einheit = None
-        self._modellAlsEbene = None
+        self._modellebene = None
 
     def ausgewählt(self, einheit: Einheit) -> bool:
         return einheit is self._einheit
 
-    def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
-        return self.ausgewählt(einheit) and self._modellAlsEbene is None
+    def hatEinheitenebene(self, einheit: Einheit) -> bool:
+        return self.ausgewählt(einheit) and self._modellebene is None
 
     def ebene(
         self, einheit: Einheit, gezogenes: Modell, stellen: Mapping[Modell, Stelle]
     ) -> dict[Modell, Stelle]:
-        if self.ganzeEinheitIstEbene(einheit):
+        if self.hatEinheitenebene(einheit):
             return gesetzteModelle(einheit, stellen)
         return {gezogenes: stellen[gezogenes]} if gezogenes in stellen else {}
 
     def ebeneDerAuswahl(self, stellen: Mapping[Modell, Stelle]) -> dict[Modell, Stelle]:
         if self._einheit is None:
             return {}
-        if self._modellAlsEbene is None:
+        if self._modellebene is None:
             return gesetzteModelle(self._einheit, stellen)
-        return self.ebene(self._einheit, self._modellAlsEbene, stellen)
+        return self.ebene(self._einheit, self._modellebene, stellen)
 
-    def modellIstEbene(self, modell: Modell) -> bool:
-        return self._modellAlsEbene is modell
+    def istModellebene(self, modell: Modell) -> bool:
+        return self._modellebene is modell
 
     def modellAnklicken(
         self,
@@ -63,12 +63,12 @@ class Auswahl:
         if not self.ausgewählt(einheit):
             self.auswählen(einheit)
             return
-        self._modellAlsEbene = None if self.modellIstEbene(modell) else modell
+        self._modellebene = None if self.istModellebene(modell) else modell
 
-    def ganzeEinheitAlsEbene(self, einheit: Einheit) -> None:
+    def einheitenebeneWählen(self, einheit: Einheit) -> None:
         if self.ausgewählt(einheit):
-            self._modellAlsEbene = None
+            self._modellebene = None
 
     def modellAusgewählt(self, modell: Modell) -> bool:
         gehörtDazu = self._einheit is not None and modell in self._einheit.modelle
-        return gehörtDazu and self._modellAlsEbene in (None, modell)
+        return gehörtDazu and self._modellebene in (None, modell)

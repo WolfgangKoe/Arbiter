@@ -4,7 +4,7 @@ Form: Fragen
 Von: Fachkritiker
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Damit die *Karte* stehen bleibt, hält Arbiter unter ihr immer Platz für *Gründe*, Knöpfe und *Protokoll* frei. Sie wird dadurch auch dann kleiner, wenn dort nichts steht. 14040 nannte 309 Pixel „so hoch wie vorher“; das war das Mockup. Im Gebauten ist sie heute höher:

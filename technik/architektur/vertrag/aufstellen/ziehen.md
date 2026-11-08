@@ -36,7 +36,7 @@ diese *Base* einen Schritt lang nicht. Beispiel
 [stelleBeimLoslassen.json](../stelleBeimLoslassen.json): Stand von V1, `x=35&y=28` für
 *Modell* 1, AUF-21.2 rückt den Block hinein.
 
-*Neben der Karte* loslassen (V10, Seite): AUF-28.1 mit dem Punkt der letzten 200; ein
+Neben dem *Spielfeld* loslassen (V10, Seite): AUF-28.1 mit dem Punkt der letzten 200; ein
 *Modell* einer *aufgestellten* *Einheit* bekommt in V10 nur 409, also keine Anfrage und
 keine `sperrmeldung` (AUF-16.8). Ist das gezogene *Modell* nicht *gesetzt* (eine zweite Seite
 zeigt es noch, AUF-16.7), geben vor jedem Wächter `stellenBeimLoslassen` `Gezeigt({}, False)`
@@ -44,7 +44,7 @@ zeigt es noch, AUF-16.7), geben vor jedem Wächter `stellenBeimLoslassen` `Gezei
 Warum vor den Wächtern: Kein *Grund* nach AUF-16.7, auch wenn inzwischen eine andere
 *Einheit in Aufstellung* ist. Beispiele: [losgelassen.json](../losgelassen.json), V5 200:
 Stand von `stelleBeimLoslassen.json`, dann `PUT …/modelle/1/stelle` mit `{"x": 35, "y": 28}`,
-also neben der *Karte* nach dieser 200 losgelassen.
+also neben dem *Spielfeld* nach dieser 200 losgelassen.
 [keineStelleBeimLoslassen.json](../keineStelleBeimLoslassen.json), V10 200: Stand von
 `zurueckgelegt.json`, dann dieselbe Abfrage wie `stelleBeimLoslassen.json`; V5 danach an
 jedem Punkt 200 gleich `zurueckgelegt.json`. Eine 409 in V10 liefert die Seite wie
@@ -62,5 +62,5 @@ danach eine 409 kam; die Kreise stehen wie `losgelassen.json`. Am Dienst: die An
 gleich den Beispielen. Am echten Server: über die *Spielfeldkante* auf eine *Armeeliste* und daneben
 loslassen, die *Stellen* gleich den zuletzt gelesenen `cx`, `cy` (B3). AUF-16.8: keine
 Anfrage nach V5, Kreise wie vor dem Ziehen, keine `sperrmeldung`. AUF-16.7: mit einer Seite
-von vor `PUT /api/zurücklegen`, auf und neben der *Karte* losgelassen, danach kein *Modell*
-der *Einheit* auf der *Karte* (die Seite zeichnet die Antwort, V6) und keine `sperrmeldung`.
+von vor `PUT /api/zurücklegen`, auf und neben dem *Spielfeld* losgelassen, danach kein *Modell*
+der *Einheit* auf dem *Spielfeld* (die Seite zeichnet die Antwort, V6) und keine `sperrmeldung`.

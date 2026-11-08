@@ -121,8 +121,8 @@ function phaseBeenden() {
   return handlungSenden("/api/phaseBeenden", "PUT", { schlachtrunde, spieler: amZug, phase })
 }
 
-export function karteAnklicken(stelle) {
-  return handlungSenden("/api/karteAnklicken", "PUT", stelle)
+export function spielfeldAnklicken(stelle) {
+  return handlungSenden("/api/spielfeldAnklicken", "PUT", stelle)
 }
 
 export function eingabenDerAbfrage(punkt, weiter) {

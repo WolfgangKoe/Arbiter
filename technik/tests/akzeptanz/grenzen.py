@@ -25,7 +25,7 @@ class EinheitAmZug(NamedTuple):
     andererSpieler: Spieler
 
 
-class GrenzeDerKarte(NamedTuple):
+class GrenzeAufDemSpielfeld(NamedTuple):
     kreise: frozenset[tuple]
     wurf: int | None = None
     wählbar: bool = False
@@ -45,32 +45,34 @@ def kreiseDerNahkampfreichweite(stellen: Mapping[Modell, Stelle]) -> frozenset[t
     return frozenset((stelle, radiusInZoll(modell) + 1) for modell, stelle in stellen.items())
 
 
-def grenzeDerBewegung(stellen: Mapping[Modell, Stelle]) -> GrenzeDerKarte:
-    return GrenzeDerKarte(kreiseDerBewegung(stellen))
+def grenzeDerBewegung(stellen: Mapping[Modell, Stelle]) -> GrenzeAufDemSpielfeld:
+    return GrenzeAufDemSpielfeld(kreiseDerBewegung(stellen))
 
 
-def grenzeDesWurfs(stellen: Mapping[Modell, Stelle], wurf: int, *, wählbar: bool) -> GrenzeDerKarte:
-    return GrenzeDerKarte(kreiseDerBewegung(stellen, wurf), wurf=wurf, wählbar=wählbar)
+def grenzeDesWurfs(
+    stellen: Mapping[Modell, Stelle], wurf: int, *, wählbar: bool
+) -> GrenzeAufDemSpielfeld:
+    return GrenzeAufDemSpielfeld(kreiseDerBewegung(stellen, wurf), wurf=wurf, wählbar=wählbar)
 
 
-def grenzenVorDemVorrückwurf(stellen: Mapping[Modell, Stelle]) -> frozenset[GrenzeDerKarte]:
+def grenzenVorDemVorrückwurf(stellen: Mapping[Modell, Stelle]) -> frozenset[GrenzeAufDemSpielfeld]:
     sechs = (grenzeDesWurfs(stellen, wurf, wählbar=True) for wurf in würfe)
     return frozenset((grenzeDerBewegung(stellen), *sechs))
 
 
 def grenzenNachDemVorrückwurf(
     stellen: Mapping[Modell, Stelle], wurf: int
-) -> frozenset[GrenzeDerKarte]:
+) -> frozenset[GrenzeAufDemSpielfeld]:
     return frozenset((grenzeDerBewegung(stellen), grenzeDesWurfs(stellen, wurf, wählbar=False)))
 
 
-def grenzeDerNahkampfreichweite(stellen: Mapping[Modell, Stelle]) -> GrenzeDerKarte:
-    return GrenzeDerKarte(kreiseDerNahkampfreichweite(stellen), nahkampfreichweite=True)
+def grenzeDerNahkampfreichweite(stellen: Mapping[Modell, Stelle]) -> GrenzeAufDemSpielfeld:
+    return GrenzeAufDemSpielfeld(kreiseDerNahkampfreichweite(stellen), nahkampfreichweite=True)
 
 
-def grenzenDerEinheit(schlacht, einheit: Einheit) -> frozenset[GrenzeDerKarte]:
+def grenzenDerEinheit(schlacht, einheit: Einheit) -> frozenset[GrenzeAufDemSpielfeld]:
     return frozenset(
-        GrenzeDerKarte(
+        GrenzeAufDemSpielfeld(
             frozenset((kreis.stelle, kreis.radius) for kreis in grenze.kreise),
             grenze.wurf,
             grenze.wählbar,
@@ -81,7 +83,9 @@ def grenzenDerEinheit(schlacht, einheit: Einheit) -> frozenset[GrenzeDerKarte]:
     )
 
 
-def grenzenDerEinheitenDes(schlacht, spieler: Spieler) -> dict[Einheit, frozenset[GrenzeDerKarte]]:
+def grenzenDerEinheitenDes(
+    schlacht, spieler: Spieler
+) -> dict[Einheit, frozenset[GrenzeAufDemSpielfeld]]:
     return {einheit: grenzenDerEinheit(schlacht, einheit) for einheit in spieler.armee.einheiten}
 
 

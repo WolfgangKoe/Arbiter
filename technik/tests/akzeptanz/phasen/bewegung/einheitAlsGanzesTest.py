@@ -6,7 +6,7 @@ from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
 from tests.akzeptanz.schlacht import jetzigeStellen, stellenVersetzt
 
 
-def testBew19_1IstDieGanzeEinheitEbeneSperrtKeinModellDasModellDerselbenEinheitAnDerVorigenStelle(
+def testBew19_1BeiDerEinheitenebeneSperrtKeinModellDasModellDerselbenEinheitAnDerVorigenStelle(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)

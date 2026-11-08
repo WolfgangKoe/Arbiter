@@ -200,11 +200,11 @@ class Schlacht:
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)
 
-    def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
-        return self._auswahl.ganzeEinheitIstEbene(einheit)
+    def hatEinheitenebene(self, einheit: Einheit) -> bool:
+        return self._auswahl.hatEinheitenebene(einheit)
 
-    def modellIstEbene(self, modell: Modell) -> bool:
-        return self._auswahl.modellIstEbene(modell)
+    def istModellebene(self, modell: Modell) -> bool:
+        return self._auswahl.istModellebene(modell)
 
     def modellAusgewählt(self, modell: Modell) -> bool:
         return self._auswahl.modellAusgewählt(modell)
@@ -212,7 +212,7 @@ class Schlacht:
     def auswählen(self, einheit: Einheit) -> None:
         self._auswahl.auswählen(einheit)
 
-    def karteAnklicken(self, stelle: Stelle) -> None:
+    def spielfeldAnklicken(self, stelle: Stelle) -> None:
         self._bewegungsphase.angebotBeenden()
         einheit = self._ausgewählteEinheitAmZug()
         if einheit is not None:

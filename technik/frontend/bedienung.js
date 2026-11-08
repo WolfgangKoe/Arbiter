@@ -1,10 +1,10 @@
 import {
   auswahlSenden,
   eingabenDerAbfrage,
-  karteAnklicken,
   letztenSpielstandZeichnen,
   modellAnklickenSenden,
   modellLoslassen,
+  spielfeldAnklicken,
   stellenBeimLoslassen,
 } from "./anfragen.js"
 
@@ -14,23 +14,23 @@ let ziehenStart = null
 let abfrageLäuft = false
 let wartenderPunkt = null
 
-function punktAufDerKarte(ereignis) {
-  const zeichnung = document.querySelector(".karte")
+function punktAufDemSpielfeld(ereignis) {
+  const zeichnung = document.querySelector(".spielfeld")
   return new DOMPoint(ereignis.clientX, ereignis.clientY).matrixTransform(zeichnung.getScreenCTM().inverse())
 }
 
 function imSpielfeld(punkt) {
-  const { width, height } = document.querySelector(".karte .spielfeld").getBBox()
+  const { width, height } = document.querySelector(".spielfeld .spielfläche").getBBox()
   return punkt.x >= 0 && punkt.x <= width && punkt.y >= 0 && punkt.y <= height
 }
 
-function stelleAufDerKarte(ereignis) {
-  const punkt = punktAufDerKarte(ereignis)
+function stelleAufDemSpielfeld(ereignis) {
+  const punkt = punktAufDemSpielfeld(ereignis)
   return imSpielfeld(punkt) ? { x: punkt.x, y: punkt.y } : null
 }
 
 function stelleDesZugs(ereignis, start, gezogenerKreis) {
-  const punkt = stelleAufDerKarte(ereignis)
+  const punkt = stelleAufDemSpielfeld(ereignis)
   if (!punkt) return null
   const vorigeStelle = start.kreise.find(({ kreis }) => kreis === gezogenerKreis)
   const { greifpunkt } = start
@@ -46,7 +46,7 @@ function ziehenZurücknehmen(start) {
 
 function kreiseAnDieStellenSetzen(modelle) {
   for (const { spieler, einheit, nummer, x, y } of modelle) {
-    const kreis = document.querySelector(`.karte .modell[data-spieler="${spieler}"][data-einheit="${einheit}"][data-nummer="${nummer}"]`)
+    const kreis = document.querySelector(`.spielfeld .modell[data-spieler="${spieler}"][data-einheit="${einheit}"][data-nummer="${nummer}"]`)
     kreis.setAttribute("cx", x)
     kreis.setAttribute("cy", y)
   }
@@ -85,21 +85,21 @@ async function stelleBeimLoslassenAbfragen(punkt) {
 function klicken(ereignis, ziel) {
   const einheitenKarte = ziel.closest(".einheitenKarte")
   if (einheitenKarte) return auswahlSenden(einheitenKarte.dataset, einheitenKarte.classList.contains("ausgewählt"))
-  const modell = ziel.closest(".karte .modell")
+  const modell = ziel.closest(".spielfeld .modell")
   if (modell) return modellAnklickenSenden(modell.dataset)
-  if (!ziel.closest(".karte")) return
-  const stelle = stelleAufDerKarte(ereignis)
-  if (stelle) return karteAnklicken(stelle)
+  if (!ziel.closest(".spielfeld")) return
+  const stelle = stelleAufDemSpielfeld(ereignis)
+  if (stelle) return spielfeldAnklicken(stelle)
 }
 
 export function ziehenBeginnen(ereignis) {
   if (!ereignis.isPrimary || ereignis.button !== 0) return
-  gezogen = ereignis.target.closest(".karte .modell")
+  gezogen = ereignis.target.closest(".spielfeld .modell")
   ziehenStart = { pointerId: ereignis.pointerId, ziel: ereignis.target, x: ereignis.clientX, y: ereignis.clientY, begonnen: false }
   if (!gezogen) return
-  const mitgezogene = gezogen.classList.contains("ausgewählt") ? document.querySelectorAll(".karte .modell.ausgewählt") : [gezogen]
+  const mitgezogene = gezogen.classList.contains("ausgewählt") ? document.querySelectorAll(".spielfeld .modell.ausgewählt") : [gezogen]
   ziehenStart.kreise = [...mitgezogene].map(kreis => ({ kreis, x: Number(kreis.getAttribute("cx")), y: Number(kreis.getAttribute("cy")) }))
-  ziehenStart.greifpunkt = punktAufDerKarte(ereignis)
+  ziehenStart.greifpunkt = punktAufDemSpielfeld(ereignis)
   gezogen.setPointerCapture(ereignis.pointerId)
   ereignis.preventDefault()
 }

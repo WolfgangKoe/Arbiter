@@ -17,7 +17,7 @@ from tests.akzeptanz.vorruecken import mitJederEbene, vorgerücktMit, wartetAufD
 
 
 @mitJederEbene
-def testBew13_1WartetDieEinheitZeigtDieKarteSechsWeitereEinhüllendeUmEinBisSechsZollGrößer(
+def testBew13_1WartetDieEinheitZeigtDasSpielfeldSechsWeitereEinhüllendeUmEinBisSechsZollGrößer(
     einheitAmZug, ebene
 ):
     schlacht, einheit, _, _ = einheitAmZug
@@ -45,8 +45,8 @@ def testBew13_1DieSeiteZeigtSechsWählbareEinhüllendeUndDieAusBew11(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
 
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(7)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(6)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(7)
 
 
 def testBew13_1DieSeiteZeigtJedeDerSiebenEinhüllendenDurchIhreEigeneMaske(
@@ -56,7 +56,7 @@ def testBew13_1DieSeiteZeigtJedeDerSiebenEinhüllendenDurchIhreEigeneMaske(
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(7)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(7)
 
     grenzen, masken = kreiseDerGrenzenUndIhrerMasken(seite)
 
@@ -65,7 +65,7 @@ def testBew13_1DieSeiteZeigtJedeDerSiebenEinhüllendenDurchIhreEigeneMaske(
 
 @mitJederEbene
 @mitJedemWurf
-def testBew13_2IstDieEinheitVorgerücktZeigtDieKarteVonDenSechsNurDieIhresWurfs(
+def testBew13_2IstDieEinheitVorgerücktZeigtDasSpielfeldVonDenSechsNurDieIhresWurfs(
     einheitAmZug, ebene, wurf
 ):
     schlacht, einheit, _, _ = einheitAmZug
@@ -105,5 +105,5 @@ def testBew13_2DieSeiteZeigtKeineWählbareEinhüllendeMehr(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
 
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(2)
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(0)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(2)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(0)

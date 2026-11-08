@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach [7800](7800-karteUndEbeneBenennen.md) heißt *Karte* *Spielfeld* (F1 A), *Ebene*
@@ -21,4 +20,14 @@ Frontend, dazu Einheitstests; mechanisch. Ohne diesen Schritt fehlt die Umbenenn
 gleichzeitig mit [11821](11821-umbenennenTests.md); vor „Reviewer: DoD über das Inkrement“
 (7800 F3).
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt in Domäne, Web, Frontend und Einheitstests nach den Namen aus
+[11823](11823-umbenennenArchitektur.md): `spielfeldAnklicken` (Route `/api/spielfeldAnklicken`),
+`.spielfeld` und `komponenten/spielfeld.js`, Schlüssel `modellebene`, `hatEinheitenebene`,
+`istModellebene`, `einheitenebeneWählen`. Obertyp: nein, wie 11823; das Glossar verlangt
+`Einheitenebene` und `Modellebene` als Bezeichner, nicht als Klassen, und `Auswahl` hält sie als
+Feld `_modellebene` (kein Modell: Einheitenebene). Glossarprüfung grün, Einheitstests grün.
+Neu für die Zeichnung: die Fläche im SVG hieß `.spielfeld` und stieße an das neue
+`.spielfeld` der Zeichnung; sie heißt jetzt `.spielfläche` (`bedienung.js`, CSS, Mockup).
+Der Testautor (11821) wählt `.spielfeld .spielfläche` statt `.karte .spielfeld`
+(`bildschirm.py:113`). Die Akzeptanztests (`.karte`, `ebene`, `karteAnklicken`) bleiben rot,
+bis 11821 sie umbenennt.

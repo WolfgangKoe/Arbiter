@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
-Wartet auf: Technikphase 10
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nach deiner Antwort F1 A in [7800](7800-karteUndEbeneBenennen.md) heißt *Karte*

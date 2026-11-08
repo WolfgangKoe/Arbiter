@@ -23,15 +23,15 @@ from tests.akzeptanz.schlacht import (
 from tests.akzeptanz.vorruecken import (
     ebenen,
     ganzeEinheitAuswählen,
-    letztesModellZurEbeneMachen,
     mitJederEbene,
+    modellebeneDesLetztenWählen,
 )
-from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
+from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDemSpielfeld
 
 
-def testBew11_1UmEinModellAlsEbeneZeigtDieKarteSeinenGrenzkreis(einheitAmZug):
+def testBew11_1UmDasModellDerModellebeneZeigtDasSpielfeldSeinenGrenzkreis(einheitAmZug):
     schlacht, einheit, _, _ = einheitAmZug
-    stellen = letztesModellZurEbeneMachen(schlacht, einheit)
+    stellen = modellebeneDesLetztenWählen(schlacht, einheit)
 
     assert grenzenDerEinheit(schlacht, einheit) == {grenzeDerBewegung(stellen)}
 
@@ -40,7 +40,7 @@ def testBew11_1NachDemZiehenBleibtDerGrenzkreisAnDerStelleZuBeginnDerBewegungsph
     einheitAmZug,
 ):
     schlacht, einheit, _, _ = einheitAmZug
-    stellen = letztesModellZurEbeneMachen(schlacht, einheit)
+    stellen = modellebeneDesLetztenWählen(schlacht, einheit)
     ((modell, stelle),) = stellen.items()
     schlacht.modellLoslassen(modell, zweiZollEntlangDerReihe(stelle))
 
@@ -51,7 +51,7 @@ def testBew11_1NachDemZiehenBleibtDerGrenzkreisAnDerStelleZuBeginnDerBewegungsph
 def testBew11_1DerDienstNenntDenGrenzkreisDesModellsMitExaktemRadius(
     dienstDerSchlacht, schlachtInDerBewegungsphase, boyz
 ):
-    stellen = letztesModellZurEbeneMachen(schlachtInDerBewegungsphase, boyz)
+    stellen = modellebeneDesLetztenWählen(schlachtInDerBewegungsphase, boyz)
 
     spielstand = spielstandVon(dienstDerSchlacht)
     assert grenzenDerEinheitIm(spielstand, "Boyz") == grenzenImSpielstand(
@@ -59,7 +59,7 @@ def testBew11_1DerDienstNenntDenGrenzkreisDesModellsMitExaktemRadius(
     )
 
 
-def testBew11_5UmDieGanzeEinheitAlsEbeneZeigtDieKarteDieEinhüllendeIhrerGrenzkreise(
+def testBew11_5BeiDerEinheitenebeneZeigtDasSpielfeldDieEinhüllendeIhrerGrenzkreise(
     einheitAmZug,
 ):
     schlacht, einheit, _, _ = einheitAmZug
@@ -99,7 +99,7 @@ def testBew11_5DieSeiteZeigtJedeEinhüllendeDurchIhreMaskeAusDenselbenGrenzkreis
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
-    expect(seite.locator(".karte g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
+    expect(seite.locator(".spielfeld g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
 
     grenzen, masken = kreiseDerGrenzenUndIhrerMasken(seite)
 
@@ -110,7 +110,7 @@ def testBew11_5DieSeiteZeigtJedeEinhüllendeDurchIhreMaskeAusDenselbenGrenzkreis
 
 
 @mitJederEbene
-def testBew11_3UmJedeEinheitDesAnderenSpielersZeigtDieKarteIhreNahkampfreichweite(
+def testBew11_3UmJedeEinheitDesAnderenSpielersZeigtDasSpielfeldIhreNahkampfreichweite(
     einheitAmZug, ebene
 ):
     schlacht, einheit, _, andererSpieler = einheitAmZug
@@ -148,19 +148,19 @@ def testBew11_3DieSeiteZeigtJeEinheitDesAnderenSpielersDieNahkampfreichweite(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
 
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
-    expect(seite.locator(".karte g.grenze.spieler1.nahkampfreichweite")).to_have_count(0)
-    expect(seite.locator(".karte g.grenze.spieler2.nahkampfreichweite")).to_have_count(
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(1)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.nahkampfreichweite")).to_have_count(0)
+    expect(seite.locator(".spielfeld g.grenze.spieler2.nahkampfreichweite")).to_have_count(
         zahlDerEinheitenDesGegners
     )
-    expect(seite.locator(".karte g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
+    expect(seite.locator(".spielfeld g.grenze")).to_have_count(1 + zahlDerEinheitenDesGegners)
 
 
-def testBew11_4OhneAuswahlZeigtDieKarteKeinenGrenzkreis(schlachtInDerBewegungsphase):
+def testBew11_4OhneAuswahlZeigtDasSpielfeldKeinenGrenzkreis(schlachtInDerBewegungsphase):
     assert tuple(schlachtInDerBewegungsphase.grenzen) == ()
 
 
-def testBew11_4UmEineAusgewählteEinheitDesAnderenSpielersZeigtDieKarteKeinenGrenzkreis(
+def testBew11_4UmEineAusgewählteEinheitDesAnderenSpielersZeigtDasSpielfeldKeinenGrenzkreis(
     schlachtInDerBewegungsphase, necronWarriors
 ):
     schlachtInDerBewegungsphase.auswählen(necronWarriors)
@@ -169,7 +169,7 @@ def testBew11_4UmEineAusgewählteEinheitDesAnderenSpielersZeigtDieKarteKeinenGre
 
 
 @pytest.mark.parametrize("phase", phasenAußerDerBewegungsphase, ids=phasenAußerDerBewegungsphaseIds)
-def testBew11_4AußerhalbDerBewegungsphaseZeigtDieKarteKeinenGrenzkreis(
+def testBew11_4AußerhalbDerBewegungsphaseZeigtDasSpielfeldKeinenGrenzkreis(
     schlachtNachDerWahlDesErstenZugs, boyz, phase: Phase
 ):
     phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, phase)
@@ -178,9 +178,9 @@ def testBew11_4AußerhalbDerBewegungsphaseZeigtDieKarteKeinenGrenzkreis(
     assert tuple(schlachtNachDerWahlDesErstenZugs.grenzen) == ()
 
 
-def testBew11_4NachDemAbwählenZeigtDieKarteKeinenGrenzkreis(schlachtInDerBewegungsphase, boyz):
+def testBew11_4NachDemAbwählenZeigtDasSpielfeldKeinenGrenzkreis(schlachtInDerBewegungsphase, boyz):
     ganzeEinheitAuswählen(schlachtInDerBewegungsphase, boyz)
-    schlachtInDerBewegungsphase.karteAnklicken(mitteDesSpielfelds)
+    schlachtInDerBewegungsphase.spielfeldAnklicken(mitteDesSpielfelds)
 
     assert tuple(schlachtInDerBewegungsphase.grenzen) == ()
 
@@ -198,8 +198,8 @@ def testBew11_4DieSeiteZeigtOhneAuswahlKeinenGrenzkreis(
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(1)
 
-    mitDerMausKlicken(seite, punktAufDerKarte(seite, mitteDesSpielfelds))
+    mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, mitteDesSpielfelds))
 
-    expect(seite.locator(".karte g.grenze")).to_have_count(0)
+    expect(seite.locator(".spielfeld g.grenze")).to_have_count(0)

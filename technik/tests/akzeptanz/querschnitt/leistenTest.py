@@ -8,24 +8,24 @@ from tests.akzeptanz.handgriffe import versetzt
 from tests.akzeptanz.schlacht import anhaltenUndÜbergehen, zehnZollNachOsten
 
 
-def linksDerKarte(leiste: dict, karte: dict) -> bool:
-    return leiste["x"] + leiste["width"] <= karte["x"]
+def linksDesSpielfelds(leiste: dict, spielfeld: dict) -> bool:
+    return leiste["x"] + leiste["width"] <= spielfeld["x"]
 
 
-def rechtsDerKarte(leiste: dict, karte: dict) -> bool:
-    return leiste["x"] >= karte["x"] + karte["width"]
+def rechtsDesSpielfelds(leiste: dict, spielfeld: dict) -> bool:
+    return leiste["x"] >= spielfeld["x"] + spielfeld["width"]
 
 
-def unterDerKarte(leiste: dict, karte: dict) -> bool:
-    return leiste["y"] >= karte["y"] + karte["height"]
+def unterDemSpielfeld(leiste: dict, spielfeld: dict) -> bool:
+    return leiste["y"] >= spielfeld["y"] + spielfeld["height"]
 
 
 lageJeLeiste = pytest.mark.parametrize(
     ("leistenname", "lage"),
     [
-        ("Armeeliste Spieler 1", linksDerKarte),
-        ("Armeeliste Spieler 2", rechtsDerKarte),
-        ("Protokoll", unterDerKarte),
+        ("Armeeliste Spieler 1", linksDesSpielfelds),
+        ("Armeeliste Spieler 2", rechtsDesSpielfelds),
+        ("Protokoll", unterDemSpielfeld),
     ],
     ids=["links", "rechts", "unten"],
 )
@@ -83,15 +83,15 @@ def seiteZumTippen(bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase,
 
 
 @lageJeLeiste
-def testQue6_1JedeLeisteStehtAnIhrerSeiteDerKarte(
+def testQue6_1JedeLeisteStehtAnIhrerSeiteDesSpielfelds(
     bildschirm, aufstellungNachDerZonenwahl, leistenname, lage
 ):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
     leiste = leisteVon(seite, leistenname).bounding_box()
-    karte = seite.locator("svg.karte").bounding_box()
+    spielfeld = seite.locator("svg.spielfeld").bounding_box()
 
-    assert lage(leiste, karte)
+    assert lage(leiste, spielfeld)
 
 
 @jedeLeiste

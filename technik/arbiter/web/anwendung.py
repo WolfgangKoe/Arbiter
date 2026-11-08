@@ -212,8 +212,8 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
             abfrage = schlacht.stellenBeimLoslassen(modell, stelle, weiter)
         return jsonify(stellenBeimLoslassen(aufstellung, abfrage))
 
-    def karteAnklicken():
-        spiel().karteAnklicken(_stelleDerAnfrage())
+    def spielfeldAnklicken():
+        spiel().spielfeldAnklicken(_stelleDerAnfrage())
         return spielstandLiefern()
 
     def vorrücken():
@@ -268,7 +268,7 @@ def anwendungFür(aufstellung: Aufstellung, schlacht: Schlacht | None = None) ->
     anwendung.add_url_rule(pfadDerAbfrage, view_func=stelleBeimLoslassen)
     pfadDesAnklickens = f"{pfadDerEinheit}/modelle/<int:modellnummer>/anklicken"
     anwendung.add_url_rule(pfadDesAnklickens, view_func=modellAnklicken, methods=["PUT"])
-    anwendung.add_url_rule("/api/karteAnklicken", view_func=karteAnklicken, methods=["PUT"])
+    anwendung.add_url_rule("/api/spielfeldAnklicken", view_func=spielfeldAnklicken, methods=["PUT"])
     anwendung.add_url_rule("/api/vorrücken", view_func=vorrücken, methods=["PUT"])
     anwendung.add_url_rule(
         "/api/vorrückenZurücknehmen", view_func=vorrückenZurücknehmen, methods=["PUT"]

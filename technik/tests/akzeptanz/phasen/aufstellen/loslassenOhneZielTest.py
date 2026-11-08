@@ -7,7 +7,7 @@ import pytest
 
 from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.bildschirm import (
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteMitEingabe,
     sperrmeldungenDerSeite,
 )
@@ -34,10 +34,10 @@ from tests.akzeptanz.ziehen import (
     haltenUndLosslassen,
     längeDesHaltens,
     mitMausUndFinger,
-    nebenDerKarteLoslassen,
-    punktAufDerKarte,
+    nebenDemSpielfeldLoslassen,
+    punktAufDemSpielfeld,
     ziehenOhneAnfrage,
-    zieleNebenDerKarte,
+    zieleNebenDemSpielfeld,
 )
 
 
@@ -128,24 +128,24 @@ def testAuf16_7DerDienstSetztNachDemZurücklegenNichtsWieDasBeispielImVertrag(
     assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
 
 
-def aufDerKarteLoslassen(seite, aufstellung, davor, eingabe):
+def aufDemSpielfeldLoslassen(seite, aufstellung, davor, eingabe):
     ziel = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
     return haltenUndLosslassen(seite, davor, ziel, eingabe)
 
 
 def überDieKanteLoslassen(seite, aufstellung, davor, eingabe):
-    aufDerKarte = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
+    aufDemSpielfeld = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
     jenseits = stelleInDerZoneDesSpielersAnDerReihe(
         aufstellung, einenZollJenseitsDerKante, längeDesHaltens
     )
-    daneben = punktAufDerKarte(seite, jenseits)
-    return nebenDerKarteLoslassen(seite, davor, aufDerKarte, daneben, eingabe)
+    daneben = punktAufDemSpielfeld(seite, jenseits)
+    return nebenDemSpielfeldLoslassen(seite, davor, aufDemSpielfeld, daneben, eingabe)
 
 
 @pytest.mark.parametrize(
     "loslassen",
-    [aufDerKarteLoslassen, überDieKanteLoslassen],
-    ids=["aufDerKarte", "nebenDerKarte"],
+    [aufDemSpielfeldLoslassen, überDieKanteLoslassen],
+    ids=["aufDemSpielfeld", "nebenDemSpielfeld"],
 )
 @mitMausUndFinger
 def testAuf16_7EineSeiteVonVorDemZurücklegenZeigtNachDemLoslassenKeinModellUndKeinenGrund(
@@ -159,7 +159,7 @@ def testAuf16_7EineSeiteVonVorDemZurücklegenZeigtNachDemLoslassenKeinModellUndK
     loslassen(seite, aufstellung, davor, eingabe)
 
     bildaufbauAbwarten(seite)
-    assert kreiseDerKarte(seite) == frozenset()
+    assert kreiseDesSpielfelds(seite) == frozenset()
     assert set(stellenAllerModelle(aufstellung).values()) == {None}
     assert sperrmeldungenDerSeite(seite) == []
 
@@ -170,22 +170,22 @@ def aufgestellteBoyz(aufstellungNachDerZonenwahl, spielerEins, boyz):
     return aufstellungNachDerZonenwahl, spielerEins, boyz
 
 
-@zieleNebenDerKarte
+@zieleNebenDemSpielfeld
 @mitMausUndFinger
-def testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDerKarteLosgelassenWieDavor(
+def testAuf16_8EinModellEinerAufgestelltenEinheitStehtNebenDemSpielfeldLosgelassenWieDavor(
     bildschirm, aufgestellteBoyz, ziel, eingabe
 ):
     aufstellung, spielerEins, boyz = aufgestellteBoyz
     erstesModell, *_ = boyz.modelle
     stellenDavor = stellenAllerModelle(aufstellung)
     seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
-    kreiseDavor = kreiseDerKarte(seite)
-    von = punktAufDerKarte(seite, aufstellung.stelle(erstesModell))
+    kreiseDavor = kreiseDesSpielfelds(seite)
+    von = punktAufDemSpielfeld(seite, aufstellung.stelle(erstesModell))
     daneben = ziel(seite, aufstellung, spielerEins)
 
     anfragen = ziehenOhneAnfrage(seite, von, daneben, eingabe)
 
     assert anfragen == []
-    assert kreiseDerKarte(seite) == kreiseDavor
+    assert kreiseDesSpielfelds(seite) == kreiseDavor
     assert stellenAllerModelle(aufstellung) == stellenDavor
     assert sperrmeldungenDerSeite(seite) == []

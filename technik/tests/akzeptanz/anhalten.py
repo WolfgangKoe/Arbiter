@@ -9,7 +9,7 @@ from arbiter.domaene.spielobjekte import Modell, Stelle
 from tests.akzeptanz.dienst import stelleImSpielstand
 from tests.akzeptanz.handgriffe import (
     erwarteteStelle,
-    modellZurEbeneMachen,
+    modellebeneWählen,
     stelleInDerZoneDesSpielersAnDerReihe,
     stellenAllerModelle,
     wegVon,
@@ -34,10 +34,10 @@ def stellenAlsZahlen(aufstellung: Aufstellung) -> frozenset[tuple[float, float]]
 def nichtAuswählen(aufstellung, einheit, modell): ...
 
 
-mitUndOhneEbene = pytest.mark.parametrize(
+nichtAusgewähltOderMitModellebene = pytest.mark.parametrize(
     "ebeneLegen",
-    [nichtAuswählen, modellZurEbeneMachen],
-    ids=["nichtAusgewählt", "ebeneIstEinModell"],
+    [nichtAuswählen, modellebeneWählen],
+    ids=["nichtAusgewählt", "modellebene"],
 )
 
 

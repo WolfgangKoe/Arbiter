@@ -26,7 +26,7 @@ from tests.akzeptanz.vorruecken import (
     vorgerücktMit,
     wartetAufDenVorrückwurf,
 )
-from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
+from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDemSpielfeld
 
 vorrückenKnopf = "Vorrücken"
 zweiZoll = Fraction(2)
@@ -118,7 +118,7 @@ def testBew5_1DieSeiteZeigtOhneAuswahlKeinenKnopfVorrücken(
     )
     expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(1)
 
-    mitDerMausKlicken(seite, punktAufDerKarte(seite, mitteDesSpielfelds))
+    mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, mitteDesSpielfelds))
 
     expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(0)
 
@@ -196,7 +196,7 @@ def testBew5_2AmBildschirmZeigtDerKlickAufVorrückenDieSechsWählbarenEinhüllen
 
     knopfDerSeite(seite, vorrückenKnopf).click()
 
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(6)
     expect(knopfDerSeite(seite, vorrückenKnopf)).to_have_count(0)
     assert schlachtInDerBewegungsphase.wartetAufVorrückwurf(boyz)
 
@@ -209,7 +209,7 @@ def testBew5_3DerKlickAufEinenDerSechsIstIhrVorrückwurfUndSieIstVorgerückt(
     schlacht, einheit, _, _ = einheitAmZug
     wartetAufDenVorrückwurf(schlacht, einheit, ebene)
 
-    schlacht.karteAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
+    schlacht.spielfeldAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
 
     assert schlacht.vorrückwurf(einheit) == wurf
     assert schlacht.vorgerückt(einheit)

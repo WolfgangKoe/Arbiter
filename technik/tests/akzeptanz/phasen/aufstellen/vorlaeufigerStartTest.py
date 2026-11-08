@@ -16,7 +16,7 @@ def zoneNebenDerArmeeliste(seite, spielername: str) -> Element:
     mitteDerArmeelisteDesSpielers = mitteDerArmeeliste(seite, spielername)
     abstandUndZone = [
         (abs(zone.mitteInPixeln - mitteDerArmeelisteDesSpielers), index, zone)
-        for index, zone in enumerate(elementeDerSeite(seite, ".karte .aufstellungszone"))
+        for index, zone in enumerate(elementeDerSeite(seite, ".spielfeld .aufstellungszone"))
     ]
     _, _, nächste = min(abstandUndZone)
     return nächste

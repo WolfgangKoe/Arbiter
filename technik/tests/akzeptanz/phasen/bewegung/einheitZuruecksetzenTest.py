@@ -10,7 +10,7 @@ from arbiter.domaene.querschnitt.schlachtrunden import Phase
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     knopfDerSeite,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteDerSchlachtMitEingabe,
 )
 from tests.akzeptanz.dienst import (
@@ -37,8 +37,8 @@ from tests.akzeptanz.schlacht import (
 from tests.akzeptanz.vorruecken import (
     ebenen,
     ganzeEinheitAuswählen,
-    letztesModellZurEbeneMachen,
     mitJederEbene,
+    modellebeneDesLetztenWählen,
     vorgerücktMit,
 )
 
@@ -63,7 +63,7 @@ def ganzeEinheitZiehen(schlacht, einheit):
 
 def nurDasLetzteModellZiehen(schlacht, einheit):
     stellen = jetzigeStellen(schlacht, einheit)
-    letztesModellZurEbeneMachen(schlacht, einheit)
+    modellebeneDesLetztenWählen(schlacht, einheit)
     *_, letztes = einheit.modelle
     ziel = zweiZollEntlangDerReihe(stellen[letztes])
     schlacht.modellLoslassen(letztes, ziel)
@@ -87,7 +87,7 @@ def testBew24_1IstEinModellDerAusgewähltenEinheitGezogenBietetArbiterZurückset
 ):
     schlacht, einheit, _, _ = einheitAmZug
     ganzeEinheitZiehen(schlacht, einheit)
-    schlacht.karteAnklicken(mitteDesSpielfelds)
+    schlacht.spielfeldAnklicken(mitteDesSpielfelds)
     ebenen[ebene](schlacht, einheit)
 
     assert schlacht.einheitZurücksetzenAngeboten is True
@@ -156,7 +156,7 @@ def testBew24_1IstEineAndereEinheitAusgewähltBietetArbiterZurücksetzenNichtAn(
 def testBew24_1OhneAuswahlBietetArbiterZurücksetzenNichtAn(einheitAmZug):
     schlacht, einheit, _, _ = einheitAmZug
     ganzeEinheitZiehen(schlacht, einheit)
-    schlacht.karteAnklicken(mitteDesSpielfelds)
+    schlacht.spielfeldAnklicken(mitteDesSpielfelds)
 
     assert schlacht.einheitZurücksetzenAngeboten is False
 
@@ -366,4 +366,4 @@ def testBew24_2AmBildschirmSetztDerKnopfDieEinheitAnIhreStellenZuBeginn(
         knopfDerSeite(seite, zurücksetzenKnopf).click()
 
     expect(knopfDerSeite(seite, zurücksetzenKnopf)).to_have_count(0)
-    assert kreiseDerKarte(seite) == zuBeginn
+    assert kreiseDesSpielfelds(seite) == zuBeginn

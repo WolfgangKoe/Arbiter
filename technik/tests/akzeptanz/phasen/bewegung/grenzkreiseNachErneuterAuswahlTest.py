@@ -7,8 +7,8 @@ from tests.akzeptanz.schlacht import mitteDesSpielfelds
 from tests.akzeptanz.vorruecken import ganzeEinheitAuswählen
 
 
-def aufDieLeereKarteKlicken(schlacht, _andereEinheit) -> None:
-    schlacht.karteAnklicken(mitteDesSpielfelds)
+def aufDasSpielfeldKlickenWoKeinModellSteht(schlacht, _andereEinheit) -> None:
+    schlacht.spielfeldAnklicken(mitteDesSpielfelds)
 
 
 def einModellDerAnderenAnklicken(schlacht, andereEinheit) -> None:
@@ -17,13 +17,13 @@ def einModellDerAnderenAnklicken(schlacht, andereEinheit) -> None:
 
 
 abwahlen = {
-    "leereKarte": aufDieLeereKarteKlicken,
+    "spielfeldWoKeinModellSteht": aufDasSpielfeldKlickenWoKeinModellSteht,
     "modellDerAnderenEinheit": einModellDerAnderenAnklicken,
 }
 
 
 @pytest.mark.parametrize("abwahl", list(abwahlen), ids=list(abwahlen))
-def testBew15_1NachErneuterAuswahlZeigtDieKarteDieEinhüllendeUmDieStellenZuBeginnDerPhase(
+def testBew15_1NachErneuterAuswahlZeigtDasSpielfeldDieEinhüllendeUmDieStellenZuBeginnDerPhase(
     einheitAmZug, abwahl
 ):
     schlacht, einheit, andereEinheit, _ = einheitAmZug

@@ -70,7 +70,7 @@ def testAuf5_4DerDienstMachtEineAusgewählteEinheitNichtAusgewählt(dienst, einh
     assert ausgewählteEinheitenIm(spielstandVon(dienst)) == frozenset()
 
 
-def testAuf5_7DieKarteKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
+def testAuf5_7DasSpielfeldKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
     bildschirm, aufstellungNachDerZonenwahl, boyz
 ):
     gesetzte = modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -81,7 +81,7 @@ def testAuf5_7DieKarteKennzeichnetJedesGesetzteModellDerAusgewähltenEinheit(
     assert ausgewählteModelle(seite) == stellenDerModelle(gesetzte)
 
 
-def testAuf5_7DieKarteKennzeichnetNurDieGesetztenModelleDerAusgewähltenEinheit(
+def testAuf5_7DasSpielfeldKennzeichnetNurDieGesetztenModelleDerAusgewähltenEinheit(
     bildschirm, aufstellungNachDerZonenwahl, boyz, necronWarriors
 ):
     einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
@@ -91,10 +91,10 @@ def testAuf5_7DieKarteKennzeichnetNurDieGesetztenModelleDerAusgewähltenEinheit(
     klickenUndWarten(seite, "Spieler 2", "Necron Warriors")
 
     assert ausgewählteModelle(seite) == stellenDerModelle(gesetzteDerNecrons)
-    assert len(elementeDerSeite(seite, ".karte .modell")) == len(boyz.modelle) + 2
+    assert len(elementeDerSeite(seite, ".spielfeld .modell")) == len(boyz.modelle) + 2
 
 
-def testAuf5_7DieKarteKennzeichnetKeinModellEinerNichtAusgewähltenEinheit(
+def testAuf5_7DasSpielfeldKennzeichnetKeinModellEinerNichtAusgewähltenEinheit(
     bildschirm, aufstellungNachDerZonenwahl, boyz
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -103,10 +103,10 @@ def testAuf5_7DieKarteKennzeichnetKeinModellEinerNichtAusgewähltenEinheit(
     klickenUndWarten(seite, "Spieler 1", "Warboss")
 
     assert ausgewählteModelle(seite) == frozenset()
-    assert len(elementeDerSeite(seite, ".karte .modell")) == anzahlGesetzterModelle
+    assert len(elementeDerSeite(seite, ".spielfeld .modell")) == anzahlGesetzterModelle
 
 
-def testAuf5_7DieKarteKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
+def testAuf5_7DasSpielfeldKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
     bildschirm, aufstellungNachDerZonenwahl, boyz
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -118,7 +118,7 @@ def testAuf5_7DieKarteKennzeichnetNachAbwahlDerEinheitKeinModellMehr(
     assert ausgewählteModelle(seite) == frozenset()
 
 
-def testAuf5_7DieKarteZeichnetDenKreisEinesModellsDerAusgewähltenEinheitAndersAlsDieAnderen(
+def testAuf5_7DasSpielfeldZeichnetDenKreisEinesModellsDerAusgewähltenEinheitAndersAlsDieAnderen(
     bildschirm, aufstellungNachDerZonenwahl, boyz, necronWarriors
 ):
     einheitAufstellen(aufstellungNachDerZonenwahl, boyz)
@@ -127,12 +127,12 @@ def testAuf5_7DieKarteZeichnetDenKreisEinesModellsDerAusgewähltenEinheitAndersA
 
     klickenUndWarten(seite, "Spieler 2", "Necron Warriors")
 
-    ausgewähltesModell = seite.locator(".karte .modell.ausgewählt").first
-    nichtAusgewähltesModell = seite.locator(".karte .modell:not(.ausgewählt)").first
+    ausgewähltesModell = seite.locator(".spielfeld .modell.ausgewählt").first
+    nichtAusgewähltesModell = seite.locator(".spielfeld .modell:not(.ausgewählt)").first
     assert strichVon(ausgewähltesModell) != strichVon(nichtAusgewähltesModell)
 
 
-def testAuf5_7DieKarteKennzeichnetImBeispielDesVertragsJedesGesetzteModellDerAusgewähltenEinheit(
+def testAuf5_7DasSpielfeldKennzeichnetImBeispielDesVertragsJedesGesetzteModellDerAusgewähltenEinheit(  # noqa: E501
     bildschirm, ausgangsaufstellung
 ):
     spielstand = spielstandDesVertrags()
@@ -223,7 +223,7 @@ def testAuf5_8EinKlickAufEineEinheitOhneGesetztesModellMachtSieNichtZurEinheitIn
     assert gesetzteModelle == []
     assert aufstellung.einheitInAufstellung is None
     assert aufstellung.anDerReihe is spielerEins
-    assert elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".spielfeld .modell") == ()
 
 
 def testAuf5_8EinKlickAufEineAndereEinheitLässtDieEinheitInAufstellungUndIhreModelle(
@@ -254,7 +254,7 @@ def testAuf5_8EinKlickAufDieArmeelisteDesSpielersNichtAnDerReiheLässtSeineModel
     ]
     assert gesetzteModelle == []
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is None
-    assert elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".spielfeld .modell") == ()
 
 
 @pytest.fixture(
@@ -308,7 +308,7 @@ def testAuf5_10WirdEineAusgewählteEinheitAufgestelltIstSieNichtMehrAusgewählt(
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
     assert ausgewählteModelle(seite) == frozenset()
-    assert len(elementeDerSeite(seite, ".karte .modell")) == len(boyz.modelle)
+    assert len(elementeDerSeite(seite, ".spielfeld .modell")) == len(boyz.modelle)
 
 
 def testAuf5_10DerSpielstandKenntEineAufgestellteEinheitNichtMehrAlsAusgewählt(

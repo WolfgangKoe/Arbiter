@@ -9,17 +9,17 @@ function modellKreis(modell) {
   kreis.setAttribute("cy", modell.y)
   kreis.setAttribute("r", modell.radius)
   kreis.classList.toggle("ausgewählt", modell.ausgewählt)
-  if (modell.ebene) kreis.dataset.ebene = "ja"
+  if (modell.modellebene) kreis.dataset.modellebene = "ja"
   Object.assign(kreis.dataset, { spieler: modell.spieler, einheit: modell.einheit, nummer: modell.nummer })
   return kreis
 }
 
-export function karte(spielstand, gründe, knöpfe) {
+export function spielfeld(spielstand, gründe, knöpfe) {
   const { breite, länge } = spielstand.spielfeld
-  const mitte = ausVorlage("karte")
-  const zeichnung = mitte.querySelector(".karte")
+  const mitte = ausVorlage("spielfeld")
+  const zeichnung = mitte.querySelector(".spielfeld")
   zeichnung.setAttribute("viewBox", `0 0 ${breite} ${länge}`)
-  flächeSetzen(zeichnung.querySelector(".spielfeld"), { x: 0, y: 0, breite, länge })
+  flächeSetzen(zeichnung.querySelector(".spielfläche"), { x: 0, y: 0, breite, länge })
   for (const zone of spielstand.zonen) {
     const fläche = mitSpieler(ausSvgVorlage("aufstellungszone"), zone.spieler)
     flächeSetzen(fläche, zone)

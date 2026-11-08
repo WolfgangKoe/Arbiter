@@ -186,7 +186,7 @@ def testEinKlickMitEinerFormationAufEinerFremdenBaseSperrtUndSetztKeinModell():
     aufstellung.auswählen(eigene)
 
     with pytest.raises(Sperre) as sperre:
-        aufstellung.karteAnklicken(ort)
+        aufstellung.spielfeldAnklicken(ort)
 
     assert Grund.baseÜberdeckt in sperre.value.gründe
     assert not aufstellung.gesetzt(eigenes)

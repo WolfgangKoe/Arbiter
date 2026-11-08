@@ -219,8 +219,8 @@ def stellenDerAbfrage(
     }
 
 
-def karteAnklicken(dienst, stelle: Stelle):
-    return dienst.put("/api/karteAnklicken", json=körperDerStelle(stelle))
+def spielfeldAnklicken(dienst, stelle: Stelle):
+    return dienst.put("/api/spielfeldAnklicken", json=körperDerStelle(stelle))
 
 
 def vorrücken(dienst):
@@ -260,8 +260,8 @@ def abwählen(dienst, einheitenname: str):
     return dienst.delete(pfadDerAuswahl(einheitenname))
 
 
-def ebeneDesVertrags() -> dict:
-    return _beispielDesVertrags("ebene.json")
+def modellebeneDesVertrags() -> dict:
+    return _beispielDesVertrags("modellebene.json")
 
 
 def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple[float, float]]:
@@ -273,9 +273,9 @@ def stellenDerEinheitIm(spielstand: dict, einheitenname: str) -> dict[int, tuple
     }
 
 
-def ebenenIm(spielstand: dict) -> frozenset[tuple[float, float]]:
+def modellebenenIm(spielstand: dict) -> frozenset[tuple[float, float]]:
     return frozenset(
-        (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell.get("ebene")
+        (modell["x"], modell["y"]) for modell in spielstand["modelle"] if modell.get("modellebene")
     )
 
 

@@ -7,7 +7,7 @@
   "modelle": [
     {"x": 36.0, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 1, "ausgewählt": false},
     {"x": 37.4, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 2, "ausgewählt": false},
-    {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 3, "ausgewählt": true, "ebene": true}
+    {"x": 38.8, "y": 28.0, "radius": 0.6299212598425197, "spieler": 2, "einheit": 1, "nummer": 3, "ausgewählt": true, "modellebene": true}
   ],
   "einheitInAufstellung": {"spieler": 2, "einheit": 1},
   "spieler": [

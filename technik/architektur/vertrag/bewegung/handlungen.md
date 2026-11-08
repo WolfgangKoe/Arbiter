@@ -6,7 +6,7 @@ die anderen: [Architektur](../../../architektur.md#schichten); Tür und Übergan
 
 Am Bildschirm | Anfrage (V5) | `Schlacht`
 ---|---|---
-*Modell* auf der *Karte* loslassen (BEW-1.5, BEW-3, BEW-17, QUE-10.5) | `PUT …/modelle/<m>/stelle`, `{"x": 39.5, "y": 30}` | `modellLoslassen`
+*Modell* auf dem *Spielfeld* loslassen (BEW-1.5, BEW-3, BEW-17, QUE-10.5) | `PUT …/modelle/<m>/stelle`, `{"x": 39.5, "y": 30}` | `modellLoslassen`
 „Phase beenden“ in der *Bewegungsphase* (BEW-4) | `PUT /api/phaseBeenden` ([V13](../schlacht/handlungen.md)) | `phaseBeenden`
 
 - **V15** In der Domäne: Ob der Block oder ein *Modell* geht, entscheidet die *Ebene*

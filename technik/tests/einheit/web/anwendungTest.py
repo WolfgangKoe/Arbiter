@@ -89,7 +89,7 @@ def testEineStelleMitUnendlicherOderUnbestimmterZahlIstEineFehlerhafteAnfrage(au
     dienst = anwendungFür(aufstellung).test_client()
 
     antwort = dienst.put(
-        "/api/karteAnklicken", data=f'{{"x": {zahl}, "y": 2}}', content_type="application/json"
+        "/api/spielfeldAnklicken", data=f'{{"x": {zahl}, "y": 2}}', content_type="application/json"
     )
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
@@ -220,10 +220,10 @@ def testEineHalbeOderUnlesbareZuvorAngabeImKörperIstEineFehlerhafteAnfrage(aufs
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 
 
-def testEinKlickAufDieKarteOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):
+def testEinKlickAufDasSpielfeldOhneZahlenFürXUndYIstEineFehlerhafteAnfrage(aufstellung):
     dienst = anwendungFür(aufstellung).test_client()
 
-    antwort = dienst.put("/api/karteAnklicken", json={"y": 2})
+    antwort = dienst.put("/api/spielfeldAnklicken", json={"y": 2})
 
     assert antwort.status_code == HTTPStatus.BAD_REQUEST
 

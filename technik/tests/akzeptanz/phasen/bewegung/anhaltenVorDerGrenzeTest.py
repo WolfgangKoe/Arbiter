@@ -102,7 +102,7 @@ def testBew6_1ZiehtEinModellÜberDieSpielfeldkanteHältArbiterEsDavorAn(zugÜber
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
-def testBew6_1IstDieGanzeEinheitEbeneHältDerBlockAnSobaldEinesDieKanteErreicht(
+def testBew6_1BeiDerEinheitenebeneHältDerBlockAnSobaldEinesDieKanteErreicht(
     schlachtInDerBewegungsphase, boyz
 ):
     erstes, gezogenes, davor = blockSüdlichDerNordkante(schlachtInDerBewegungsphase, boyz)
@@ -151,7 +151,7 @@ def testBew6_2ZiehtEinModellInDieNahkampfreichweiteDesAnderenSpielersHältArbite
     assert liegtAufDerGeradenVon(davor, ziel, danach)
 
 
-def testBew6_2IstDieGanzeEinheitEbeneHältDerBlockAnBevorEinesInDerNahkampfreichweiteIst(
+def testBew6_2BeiDerEinheitenebeneHältDerBlockAnBevorEinesInDerNahkampfreichweiteIst(
     schlachtInDerBewegungsphase, boyz, overlord
 ):
     (modellDesAnderenSpielers,) = overlord.modelle
@@ -336,7 +336,7 @@ def testBew6_4DerDienstNenntAnDerKanteDieStelleDesAnhaltensWieDasLoslassen(
 
 
 @mitMausUndFinger
-def testBew6_4DieKarteZeigtBeimHaltenDenBlockDortWoErAnDerKanteAnhält(
+def testBew6_4DasSpielfeldZeigtBeimHaltenDenBlockDortWoErAnDerKanteAnhält(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, eingabe
 ):
     erstes, gezogenes, davor = blockSüdlichDerNordkante(schlachtInDerBewegungsphase, boyz)

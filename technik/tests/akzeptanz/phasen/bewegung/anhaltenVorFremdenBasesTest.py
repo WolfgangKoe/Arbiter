@@ -297,7 +297,7 @@ def testBew17_1AlleinGezogenHältDerDienstVorDemModellDerselbenEinheitAn(
     assert angehaltenVor(gezogener, gezeigt, angestoßener, stelleDesAngestoßenen)
 
 
-def testBew17_1IstDieGanzeEinheitEbeneHältDerDienstAlleIhreModelleGemeinsamAn(
+def testBew17_1BeiDerEinheitenebeneHältDerDienstAlleIhreModelleGemeinsamAn(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
     schlacht = schlachtInDerBewegungsphase
@@ -347,7 +347,7 @@ def testBew17_2NachDemAnhaltenSetztDerDienstDasModellWoDieZweiteAbfrageEsZeigte(
     )
 
 
-def testBew17_2IstDieGanzeEinheitEbeneSetztDerDienstJedesIhrerModelleWoDieAbfrageSieZeigte(
+def testBew17_2BeiDerEinheitenebeneSetztDerDienstJedesIhrerModelleWoDieAbfrageSieZeigte(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     schlacht = schlachtInDerBewegungsphase

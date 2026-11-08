@@ -211,14 +211,14 @@ def testAuf4_4NachAufstellenDerEinheitZeigtArbiterDenAnderenSpielerAnDerReihe(
     assert gewinnerwahl.nameDesGewinners in markierte.text_content()
 
 
-def testAuf4_6NachDerWahlZeigtDieKarteJedeZoneInDerFarbeDerModelleIhresSpielers(
+def testAuf4_6NachDerWahlZeigtDasSpielfeldJedeZoneInDerFarbeDerModelleIhresSpielers(
     bildschirm, gewählteAufstellung, ausgangslage
 ):
     einheitenAufstellen(gewählteAufstellung, 2)
 
     seite = bildschirm.seiteZu(gewählteAufstellung)
 
-    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".spielfeld .aufstellungszone")
     farbeJeZone = {zone.zahl("x"): zone.fill for zone in zonen}
     for spieler in (ausgangslage.ersterSpieler, ausgangslage.zweiterSpieler):
         zone = gewählteAufstellung.aufstellungszone(spieler)
@@ -227,7 +227,7 @@ def testAuf4_6NachDerWahlZeigtDieKarteJedeZoneInDerFarbeDerModelleIhresSpielers(
         assert farbeJeZone[float(zoneBeginnt)] == farbeDerModelle
 
 
-def testAuf4_6VorDerWahlZeigtDieKarteKeineZoneInDerFarbeEinesSpielers(
+def testAuf4_6VorDerWahlZeigtDasSpielfeldKeineZoneInDerFarbeEinesSpielers(
     bildschirm,
     aufstellungVorDerZonenwahl,
     aufstellungMitModellenBeiderSpieler,
@@ -241,7 +241,7 @@ def testAuf4_6VorDerWahlZeigtDieKarteKeineZoneInDerFarbeEinesSpielers(
 
     seite = bildschirm.seiteZu(aufstellungVorDerZonenwahl)
 
-    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".spielfeld .aufstellungszone")
     farbenDerZonen = {zone.fill for zone in zonen}
     assert len(zonen) == len(Aufstellungszone)
     assert farbenDerZonen.isdisjoint(farbenDerModelle)

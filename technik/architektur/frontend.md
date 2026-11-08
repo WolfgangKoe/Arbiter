@@ -7,11 +7,11 @@
   `style=` und kein Skript im HTML; kein Framework, kein Build-Schritt, kein Tailwind. Die
   Seite holt den Spielstand per `fetch` und zeichnet ihn in einem Schritt. Das Markup steht
   in `<template>` der Seite; die Komponenten (O5) klonen und füllen es, kein Modul erzeugt
-  Elemente. Die Vorlage eines Elements der Karte steht in einem `<svg>` im `<template>`, sonst
+  Elemente. Die Vorlage eines Elements des Spielfelds steht in einem `<svg>` im `<template>`, sonst
   verliert es den SVG-Namensraum. Prüft: eslint und stylelint über `.js` und `.css`
   (`frontendregeln/frontend.py`), „keine Elemente“ mit `no-restricted-properties` und
   `no-restricted-syntax`; das `<svg>` die Bildschirmtests zu QUE-2; sonst nur Text.
-- **O2** Die Karte ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
+- **O2** Das *Spielfeld* ist ein SVG in Zoll: `viewBox` aus den Seitenlängen, `cx`, `cy`, `r` aus
   Stelle und Base, `r` aus `radiusInZoll` (`messen.py`); eine zweite Baseform ändert O2 mit
   (M1). Der Browser skaliert, gleich in x und y. Prüft: Akzeptanztests zu QUE-2.
 - **O3** Das Design-System gehört der Technik: die Komponentenseite
@@ -30,7 +30,7 @@
   ausfahren“ (`ArbiterMap/frontend/templates/map.html:122`); ein Screenreader unterscheidet
   gleichartige Bereiche nur am Namen (SonarLint Web:S5255). Ein- und Ausfahren ist Zustand
   der Seite: `leisten.js` kennt nur Griff und Leiste, ohne `fetch` und Domäne; das Zeichnen
-  füllt nur den Inhalt. Eine ausgefahrene Leiste nimmt der Karte Platz, statt eine
+  füllt nur den Inhalt. Eine ausgefahrene Leiste nimmt dem *Spielfeld* Platz, statt eine
   *Aufstellungszone* zu verdecken (O2). Prüft: Bildschirmtests zu den Kriterien der Leisten,
   über Rolle und Namen (`get_by_role`).
 - **O5** Die Seite sind JavaScript-Module mit je einer Aufgabe, Importe nur in Pfeilrichtung:
@@ -46,7 +46,7 @@
   - `zeichnen.js`: setzt aus Spielstand, `gründe` und Knöpfen die Komponenten zur Seite
     zusammen, ohne `fetch` und Zustand.
   - `komponenten/`: je Komponente ein Modul, benannt nach der Klasse ihrer Vorlage
-    (`kopfzeile.js`, `armeeKarte.js`, `sperrmeldung.js`, `knopfGruppe.js`, `karte.js`,
+    (`kopfzeile.js`, `armeeKarte.js`, `sperrmeldung.js`, `knopfGruppe.js`, `spielfeld.js`,
     `protokoll.js`, `grenze.js`). Es füllt seine Vorlage und kennt keine Regel, nur Formen,
     *Abstände* und Art; Komponenten importieren nur Komponenten. Das Klonen einer Vorlage,
     auch einer im `<svg>` (O1), die Fläche eines Rechtecks und die Farbe des Spielers stehen
@@ -54,8 +54,8 @@
 
   Warum: Zeichnen liest sich ohne Server, Bedienung ohne Vorlagen, eine Komponente ohne die
   Seite. Prüft: Verhalten die Bildschirmtests; Richtung nur Text, Kritik am Code.
-- **O6** Was neben der Karte erscheint, hat festen Platz (QUE-7): `.spalteMitte` hält unter
-  der Karte je eine Zeile fester Höhe für `sperrmeldung` und `knopfGruppe`, die Kopfzeile
+- **O6** Was neben dem *Spielfeld* erscheint, hat festen Platz (QUE-7): `.spalteMitte` hält
+  unter dem *Spielfeld* je eine Zeile fester Höhe für `sperrmeldung` und `knopfGruppe`, die Kopfzeile
   Platz für „an der Reihe“, die untere Leiste eine feste Höhe; die Maße stehen in
   `vorschlag.css` (O3). Braucht ein neuer Knopf (O5) oder *Grund* mehr Platz, ändert er die
   Maße dort über DoR 5, nicht nur in `komponenten.css`. Prüft: die Bildschirmtests zu QUE-7

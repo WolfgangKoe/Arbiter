@@ -2,7 +2,7 @@ import pytest
 
 from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from tests.akzeptanz.grenzen import stelleNurImGrenzkreisDesWurfs
-from tests.akzeptanz.handgriffe import modellZurEbeneMachen
+from tests.akzeptanz.handgriffe import modellebeneWählen
 from tests.akzeptanz.schlacht import jetzigeStellen
 
 
@@ -11,13 +11,13 @@ def ganzeEinheitAuswählen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
     return jetzigeStellen(schlacht, einheit)
 
 
-def letztesModellZurEbeneMachen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
+def modellebeneDesLetztenWählen(schlacht, einheit: Einheit) -> dict[Modell, Stelle]:
     *_, letztes = einheit.modelle
-    modellZurEbeneMachen(schlacht, einheit, letztes)
+    modellebeneWählen(schlacht, einheit, letztes)
     return {letztes: schlacht.stelle(letztes)}
 
 
-ebenen = {"ganzeEinheit": ganzeEinheitAuswählen, "einModell": letztesModellZurEbeneMachen}
+ebenen = {"ganzeEinheit": ganzeEinheitAuswählen, "einModell": modellebeneDesLetztenWählen}
 mitJederEbene = pytest.mark.parametrize("ebene", list(ebenen), ids=list(ebenen))
 
 
@@ -31,5 +31,5 @@ def vorgerücktMit(
     schlacht, einheit: Einheit, wurf: int, ebene: str = "ganzeEinheit"
 ) -> dict[Modell, Stelle]:
     stellen = wartetAufDenVorrückwurf(schlacht, einheit, ebene)
-    schlacht.karteAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
+    schlacht.spielfeldAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
     return stellen

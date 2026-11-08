@@ -8,7 +8,7 @@ import pytest
 from tests.akzeptanz.anhalten import (
     angehaltenVor,
     aufDerStrecke,
-    mitUndOhneEbene,
+    nichtAusgewähltOderMitModellebene,
     stelleAn,
 )
 from tests.akzeptanz.dienst import (
@@ -22,7 +22,7 @@ from tests.akzeptanz.dienst import (
 from tests.akzeptanz.handgriffe import modelleAnStellenSetzen, radiusInZoll, versetzt
 from tests.akzeptanz.ziehen import (
     WeitergereichteAbfragen,
-    alsEbeneZiehen,
+    mitEinheitenebeneZiehen,
     zuvorDerEingaben,
     überEinenPunktZiehenUndLoslassen,
 )
@@ -138,14 +138,14 @@ def testAuf29_2DerDienstZeigtDasModellUmDenFreienTeilDesWegesVerschoben(
     assert gezeigteStellen(antwort, "Boyz") == {1: stelleAn(aufstellung, gezeigtAn)}
 
 
-def testAuf29_3IstDieGanzeEinheitEbeneZeigtDerDienstAlleAmEigenenModellVorbeiVerschoben(
+def testAuf29_3BeiDerEinheitenebeneZeigtDerDienstAlleAmEigenenModellVorbeiVerschoben(
     dienst, aufstellungNachDerZonenwahl, necronWarriors, warriorsVorDemOverlord
 ):
     aufstellung = aufstellungNachDerZonenwahl
     gesetzte, zielAmOverlord = warriorsVorDemOverlord
     (gezogenes, _), *_ = gesetzte
     umDenSenkrechtenTeil = (Fraction(0), radiusInZoll(gezogenes))
-    alsEbeneZiehen(aufstellung, necronWarriors)
+    mitEinheitenebeneZiehen(aufstellung, necronWarriors)
 
     antwort = stelleBeimLoslassenAbfragen(
         dienst, aufstellung, necronWarriors, gezogenes, zielAmOverlord
@@ -158,7 +158,7 @@ def testAuf29_3IstDieGanzeEinheitEbeneZeigtDerDienstAlleAmEigenenModellVorbeiVer
     }
 
 
-@mitUndOhneEbene
+@nichtAusgewähltOderMitModellebene
 def testAuf29_3AlleinGezogenHältDerDienstVorDemModellDerselbenEinheitAn(
     dienst, aufstellungNachDerZonenwahl, necronWarriors, warriorsVorDemOverlord, ebeneLegen
 ):

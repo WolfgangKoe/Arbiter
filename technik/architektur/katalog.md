@@ -12,12 +12,12 @@
   und `modelle`: je Modellart die Zahl ihrer *Modelle*, ganz und über 0. Eine Fraktion ohne
   Ordner, ein Datenblatt, das sie nicht kennt, eine Modellart, die es nicht nennt, lehnt der
   Start ab. Prüft: Einheitstests je Fall.
-- **K2** Die Ebenen sind fest: Fraktion (Ordner), Art (Datei), Datenblatt, Modellart, Wert.
+- **K2** Die Stufen sind fest: Fraktion (Ordner), Art (Datei), Datenblatt, Modellart, Wert.
   Das Profil (`core_rules.txt:561`) und der *Durchmesser* stehen bei der Modellart, auch wenn
   alle gleich sind; was für die ganze *Einheit* gilt, beim Datenblatt. Ergänzt wird nur um
   einen Schlüssel, eine Datei je Art oder einen Fraktionsordner, nie durch Umgliedern.
   Prüft: nur Text, Urteil des Reviewers.
-- **K3** `katalog/` führt je Ebene und für den Eintrag der Ausgangslage (K1) eine Tabelle
+- **K3** `katalog/` führt je Stufe und für den Eintrag der Ausgangslage (K1) eine Tabelle
   Schlüssel → Prüfung des Werts; der Schlüssel ist der Bezeichner aus dem Glossar. Ein
   unbekannter Schlüssel ist ein Fehler (so kommt kein `oc` hinein), ein fehlender auch: Wer
   einen Schlüssel einführt, trägt ihn in jedes Datenblatt ein. Die Zeile kommt vor den

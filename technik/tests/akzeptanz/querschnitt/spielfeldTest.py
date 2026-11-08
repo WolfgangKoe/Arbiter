@@ -1,4 +1,4 @@
-"""QUE-2 · Karte."""
+"""QUE-2 · Spielfeld."""
 
 from urllib.parse import urlparse
 
@@ -24,20 +24,20 @@ def testQue2_1DerBefehlNenntInDerErstenZeileEineAdresseNurFürDasEigeneGerät(ad
     assert adresse.port is not None
 
 
-def testQue2_1UnterDerAdresseÖffnetDerBrowserDieKarteMitDemSpielfeld(adresseDesBefehls, bildschirm):
+def testQue2_1UnterDerAdresseÖffnetDerBrowserDasSpielfeld(adresseDesBefehls, bildschirm):
     seite = bildschirm.seiteBei(adresseDesBefehls)
 
-    assert seite.locator(".karte .spielfeld").count() == 1
+    assert seite.locator(".spielfeld .spielfläche").count() == 1
 
 
-def testQue2_2DieKarteZeigtDasSpielfeldAlsRechteckMitDenSeitenlängenDerAusgangslage(
+def testQue2_2ArbiterZeigtDasSpielfeldAlsRechteckMitDenSeitenlängenDerAusgangslage(
     bildschirm, ausgangsaufstellung, ausgangslage
 ):
     breite, länge = ausgangslage.spielfeld.seitenlängen
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
+    (spielfeld,) = elementeDerSeite(seite, ".spielfeld .spielfläche")
     assert spielfeld.art == "rect"
     assert spielfeld.zahl("x") == 0
     assert spielfeld.zahl("y") == 0
@@ -45,7 +45,7 @@ def testQue2_2DieKarteZeigtDasSpielfeldAlsRechteckMitDenSeitenlängenDerAusgangs
     assert spielfeld.zahl("height") == float(länge)
 
 
-def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
+def testQue2_3DasSpielfeldZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
     bildschirm, ausgangsaufstellung, ausgangslage
 ):
     breite, länge = ausgangslage.spielfeld.seitenlängen
@@ -54,7 +54,7 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
 
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
+    zonen = elementeDerSeite(seite, ".spielfeld .aufstellungszone")
     gezeigt = sorted(
         (zone.zahl("x"), zone.zahl("y"), zone.zahl("width"), zone.zahl("height")) for zone in zonen
     )
@@ -64,20 +64,23 @@ def testQue2_3DieKarteZeigtJedeAufstellungszoneAlsFlächeAnIhrerSpielfeldkante(
     ]
 
 
-def testQue2_5EinZollIstInBeidenAchsenDerKarteGleichLang(bildschirm, ausgangsaufstellung, fenster):
+def testQue2_5EinZollIstInBeidenAchsenDesSpielfeldsGleichLang(
+    bildschirm, ausgangsaufstellung, fenster
+):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
     seite.set_viewport_size(fenster)
 
-    matrix = seite.locator(".karte").evaluate(
-        "karte => { const m = karte.getScreenCTM(); return {a: m.a, b: m.b, c: m.c, d: m.d} }"
+    matrix = seite.locator(".spielfeld").evaluate(
+        "spielfeld => { const m = spielfeld.getScreenCTM(); "
+        "return {a: m.a, b: m.b, c: m.c, d: m.d} }"
     )
     assert matrix["a"] == matrix["d"]
     assert matrix["b"] == 0
     assert matrix["c"] == 0
 
 
-def testQue2_5DieSeitenlängenDesSpielfeldsHabenAufDerKarteDenselbenMaßstab(
+def testQue2_5DieSeitenlängenDesSpielfeldsHabenDenselbenMaßstab(
     bildschirm, ausgangsaufstellung, ausgangslage, fenster
 ):
     breite, länge = ausgangslage.spielfeld.seitenlängen
@@ -85,14 +88,14 @@ def testQue2_5DieSeitenlängenDesSpielfeldsHabenAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
+    (spielfeld,) = elementeDerSeite(seite, ".spielfeld .spielfläche")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     assert spielfeld.höheInPixeln / float(länge) == pytest.approx(
         pixelJeZoll, rel=_pixelgenauigkeit
     )
 
 
-def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
+def testQue2_5DieTiefeDerAufstellungszonenHatAufDemSpielfeldDenselbenMaßstab(
     bildschirm, ausgangsaufstellung, ausgangslage, fenster
 ):
     breite, _ = ausgangslage.spielfeld.seitenlängen
@@ -101,14 +104,14 @@ def testQue2_5DieTiefeDerAufstellungszonenHatAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
-    zonen = elementeDerSeite(seite, ".karte .aufstellungszone")
+    (spielfeld,) = elementeDerSeite(seite, ".spielfeld .spielfläche")
+    zonen = elementeDerSeite(seite, ".spielfeld .aufstellungszone")
     zone = next(zone for zone in zonen if zone.zahl("x") == 0)
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     assert zone.breiteInPixeln / float(tiefe) == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
 
 
-def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
+def testQue2_5DerDurchmesserDerBaseHatAufDemSpielfeldDenselbenMaßstab(
     bildschirm, einGesetztesModell, ausgangslage, fenster
 ):
     aufstellung, modell = einGesetztesModell
@@ -117,14 +120,14 @@ def testQue2_5DerDurchmesserDerBaseHatAufDerKarteDenselbenMaßstab(
 
     seite.set_viewport_size(fenster)
 
-    (spielfeld,) = elementeDerSeite(seite, ".karte .spielfeld")
-    (kreis,) = elementeDerSeite(seite, ".karte .modell")
+    (spielfeld,) = elementeDerSeite(seite, ".spielfeld .spielfläche")
+    (kreis,) = elementeDerSeite(seite, ".spielfeld .modell")
     pixelJeZoll = spielfeld.breiteInPixeln / float(breite)
     durchmesser = float(2 * radiusInZoll(modell))
     assert kreis.breiteInPixeln / durchmesser == pytest.approx(pixelJeZoll, rel=_pixelgenauigkeit)
 
 
-def testQue2_6DieModelleEinesSpielersHabenAufDerKarteEineFarbe(
+def testQue2_6DieModelleEinesSpielersHabenAufDemSpielfeldEineFarbe(
     bildschirm, aufstellungMitModellenBeiderSpieler, spielerEins, spielerZwei
 ):
     seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
@@ -136,7 +139,7 @@ def testQue2_6DieModelleEinesSpielersHabenAufDerKarteEineFarbe(
     assert len(farbenZwei) == 1
 
 
-def testQue2_6DieModelleDerZweiSpielerHabenAufDerKarteVerschiedeneFarben(
+def testQue2_6DieModelleDerZweiSpielerHabenAufDemSpielfeldVerschiedeneFarben(
     bildschirm, aufstellungMitModellenBeiderSpieler, spielerEins, spielerZwei
 ):
     seite = bildschirm.seiteZu(aufstellungMitModellenBeiderSpieler)
@@ -147,13 +150,13 @@ def testQue2_6DieModelleDerZweiSpielerHabenAufDerKarteVerschiedeneFarben(
     assert farbenEins.isdisjoint(farbenZwei)
 
 
-def testQue2_7OhneGesetztesModellZeigtDieKarteKeinenKreis(bildschirm, ausgangsaufstellung):
+def testQue2_7OhneGesetztesModellZeigtDasSpielfeldKeinenKreis(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    assert elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".spielfeld .modell") == ()
 
 
-def testQue2_7DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
+def testQue2_7DasSpielfeldZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAnSeinerStelle(
     bildschirm, aufstellungMitModellenBeiderSpieler, ausgangslage
 ):
     einheitenAufstellen(aufstellungMitModellenBeiderSpieler, 1)
@@ -175,13 +178,13 @@ def testQue2_7DieKarteZeigtJedesGesetzteModellAlsKreisMitDurchmesserSeinerBaseAn
 
     seite = bildschirm.seiteZu(aufstellung)
 
-    kreise = elementeDerSeite(seite, ".karte .modell")
+    kreise = elementeDerSeite(seite, ".spielfeld .modell")
     gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
     assert len(gezeigt) == len(gesetzte)
     assert gezeigt == erwartet
 
 
-def testQue2_7DieKarteZeigtKeinNichtGesetztesModell(
+def testQue2_7DasSpielfeldZeigtKeinNichtGesetztesModell(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen
 ):
     gesetzte = boyzSetzen(anzahlGesetzterModelle)
@@ -192,7 +195,7 @@ def testQue2_7DieKarteZeigtKeinNichtGesetztesModell(
 
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
-    kreise = elementeDerSeite(seite, ".karte .modell")
+    kreise = elementeDerSeite(seite, ".spielfeld .modell")
     gezeigt = sorted((kreis.zahl("cx"), kreis.zahl("cy"), kreis.zahl("r")) for kreis in kreise)
     assert gezeigt == erwartet
     assert len(gezeigt) == anzahlGesetzterModelle

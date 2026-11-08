@@ -65,7 +65,7 @@ def testBew25_1ÜberDerBewegungsweiteHältArbiterInJedeRichtungAnDerVorigenStell
     assert schlachtInDerBewegungsphase.stelle(boss) == ziel
 
 
-def testBew25_1IstDieGanzeEinheitEbeneHältDerBlockAnWennEinesÜberDerBewegungsweiteSteht(
+def testBew25_1BeiDerEinheitenebeneHältDerBlockAnWennEinesÜberDerBewegungsweiteSteht(
     schlachtInDerBewegungsphase, boyz
 ):
     erster, *_, letzter = boyz.modelle
@@ -108,7 +108,7 @@ def nachDemÜbergehenVorgerücktMit(schlacht, warboss, wurf: int):
     schlacht.auswählen(warboss)
     schlacht.vorrücken()
     imKreisDesWurfs = bewegungsweite("Warboss", "Warboss") + radiusInZoll(boss) + wurf - halberZoll
-    schlacht.karteAnklicken(versetzt(start, (nichts, imKreisDesWurfs)))
+    schlacht.spielfeldAnklicken(versetzt(start, (nichts, imKreisDesWurfs)))
     return boss, ziel
 
 

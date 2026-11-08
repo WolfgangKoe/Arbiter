@@ -23,7 +23,7 @@ from tests.akzeptanz.ziehen import (
     mitMausUndFinger,
     modellAmPunktZiehen,
     modellZiehen,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
     ziehenOhneAnfrage,
     zollJePixel,
     zugschwelleInPixeln,
@@ -81,7 +81,7 @@ def testAuf8_2EinModellBleibtBeiWenigerAlsDerZugschwelleAbweichungAnSeinerStelle
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl, berührbar=eingabe == "finger")
     auswählenMit[eingabe](seite, "Spieler 1", "Boyz")
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
-    start = punktAufDerKarte(seite, stelleDavor)
+    start = punktAufDemSpielfeld(seite, stelleDavor)
     ziel = Bildpunkt(
         start.links + abweichungUnterDerSchwelle, start.oben + abweichungUnterDerSchwelle
     )
@@ -100,7 +100,7 @@ def testAuf8_7EinModellFolgtDemWegDesZeigersUndNichtDemPunktUnterDemZeiger(
     seite = bildschirmMitGroßemFenster.seiteZu(
         aufstellungNachDerZonenwahl, berührbar=eingabe == "finger"
     )
-    griff = griffAbseitsDerMitte(seite, modell, punktAufDerKarte(seite, stelleDavor))
+    griff = griffAbseitsDerMitte(seite, modell, punktAufDemSpielfeld(seite, stelleDavor))
     wegInPixeln = float(Fraction(1, 2)) / zollJePixel(seite)
     ende = Bildpunkt(griff.links, griff.oben + wegInPixeln)
     erwartet = Stelle(x=stelleDavor.x, y=stelleDavor.y + Fraction(1, 2))
@@ -120,8 +120,8 @@ def testAuf8_7InDerBewegungsphaseFolgtEinModellDemWegDesZeigersUndNichtDemPunktU
     seite = seiteDerSchlachtMitEingabe(
         bildschirmMitGroßemFenster, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
-    mitte = punktAufDerKarte(seite, davor)
-    punktDesErwarteten = punktAufDerKarte(seite, erwartet)
+    mitte = punktAufDemSpielfeld(seite, davor)
+    punktDesErwarteten = punktAufDemSpielfeld(seite, erwartet)
     griff = griffAbseitsDerMitte(seite, modell, mitte)
     ende = Bildpunkt(
         griff.links + punktDesErwarteten.links - mitte.links,

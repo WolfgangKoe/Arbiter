@@ -11,7 +11,7 @@ from arbiter.domaene.spielobjekte import Einheit, Modell, Stelle
 from tests.akzeptanz.anhalten import aufDerStrecke, überdeckt
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteDerSchlachtMitEingabe,
 )
 from tests.akzeptanz.dienst import (
@@ -45,7 +45,12 @@ from tests.akzeptanz.schlacht import (
     summeDerRadien,
 )
 from tests.akzeptanz.vorruecken import vorgerücktMit
-from tests.akzeptanz.ziehen import halten, liegtEinPixelGenauAn, mitMausUndFinger, punktAufDerKarte
+from tests.akzeptanz.ziehen import (
+    halten,
+    liegtEinPixelGenauAn,
+    mitMausUndFinger,
+    punktAufDemSpielfeld,
+)
 
 nichts = Fraction(0)
 bewegungsweiteDerSpinne = bewegungsweite("Canoptek Spyder", "Canoptek Spyder")
@@ -144,7 +149,7 @@ def aufDemWarriorInDerNahkampfreichweiteLoslassen(
     return punkt, stelleDesWarriors, stelleDesWarboss
 
 
-def testBew18_1DieKarteZeigtDieSpinneÜberDerFremdenBaseAmPunkt(
+def testBew18_1DasSpielfeldZeigtDieSpinneÜberDerFremdenBaseAmPunkt(
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
@@ -160,7 +165,7 @@ def testBew18_1DieKarteZeigtDieSpinneÜberDerFremdenBaseAmPunkt(
 @pytest.mark.parametrize(
     "angehaltenAufDemWeg", [False, True], ids=["ohneAnhaltenAufDemWeg", "nachAnhaltenAufDemWeg"]
 )
-def testBew18_1AuchAbDerZuvorGezeigtenStelleZeigtDieKarteDieSpinneÜberDerFremdenBaseAmPunkt(
+def testBew18_1AuchAbDerZuvorGezeigtenStelleZeigtDasSpielfeldDieSpinneÜberDerFremdenBaseAmPunkt(
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior, angehaltenAufDemWeg
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
@@ -174,7 +179,7 @@ def testBew18_1AuchAbDerZuvorGezeigtenStelleZeigtDieKarteDieSpinneÜberDerFremde
     assert gezeigt.angehaltenAufDemWeg is False
 
 
-def testBew18_1AnDerBewegungsweiteZeigtDieKarteDieSpinneAuchÜberDerFremdenBase(
+def testBew18_1AnDerBewegungsweiteZeigtDasSpielfeldDieSpinneAuchÜberDerFremdenBase(
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
@@ -236,7 +241,7 @@ def warbossAufDieStreckeÜbergehen(schlacht, spinne: Modell, boss: Modell) -> St
     return punkt
 
 
-def testBew18_1DieKarteZeigtDieSpinneÜberDieBaseDesWarbossHinwegAmPunkt(
+def testBew18_1DasSpielfeldZeigtDieSpinneÜberDieBaseDesWarbossHinwegAmPunkt(
     schlachtInDerBewegungsphase, spinne, warboss
 ):
     schlacht = schlachtInDerBewegungsphase
@@ -340,7 +345,7 @@ def testBew18_2AnDerBewegungsweiteAufDerFremdenBaseRücktArbiterDieSpinneVonDerG
     punkt = versetzt(davor, (Fraction(-8), nichts))
     (gezeigteStelle,) = schlacht.stellenBeimLoslassen(spinne, punkt).stellen.values()
     assert überdeckt(spinne, gezeigteStelle, warrior, stelleDesWarriors), (
-        "Die Karte zeigt die Spinne an der Bewegungsweite nicht über dem Warrior"
+        "Das Spielfeld zeigt die Spinne an der Bewegungsweite nicht über dem Warrior"
     )
     kürzesterWeg = summeDerRadien(spinne, warrior) - (gezeigteStelle.x - stelleDesWarriors.x)
 
@@ -363,7 +368,7 @@ def testBew18_2AnDerSpielfeldkanteRücktArbiterDieSpinneGanzInDasSpielfeld(
     punkt = versetzt(stelleDesWarriors, (1 + knappNebenDerMitte, -knappNebenDerMitte))
     (gezeigteStelle,) = schlacht.stellenBeimLoslassen(spinne, punkt).stellen.values()
     assert überdeckt(spinne, gezeigteStelle, warrior, stelleDesWarriors), (
-        "Die Karte zeigt die Spinne an der Spielfeldkante nicht über dem Warrior"
+        "Das Spielfeld zeigt die Spinne an der Spielfeldkante nicht über dem Warrior"
     )
     assert gezeigteStelle.x > stelleDesWarriors.x, (
         "Der Warrior drückt die Spinne nicht gegen die Spielfeldkante"
@@ -413,7 +418,7 @@ def testBew18_2NebenEinemModellDesAnderenSpielersRücktArbiterDieSpinneNichtInDi
 
 
 @mitMausUndFinger
-def testBew18_2DieKarteZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerStelle(
+def testBew18_2DasSpielfeldZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerStelle(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphaseDesZweitenSpielers, eingabe
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
@@ -425,16 +430,18 @@ def testBew18_2DieKarteZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerStell
     kürzesterWeg = summeDerRadien(spinne, warrior) - halbesZoll
     seite = seiteDerSchlachtMitEingabe(bildschirm, beendeteAufstellung, schlacht, eingabe)
     zeiger = halten(seite, davor, punkt, eingabe)
-    beimHalten = [Stelle(x=Fraction(inX), y=Fraction(inY)) for inX, inY in kreiseDerKarte(seite)]
+    beimHalten = [
+        Stelle(x=Fraction(inX), y=Fraction(inY)) for inX, inY in kreiseDesSpielfelds(seite)
+    ]
 
     with aufDieHandlungWarten(seite):
-        zeiger.loslassen(punktAufDerKarte(seite, punkt))
+        zeiger.loslassen(punktAufDemSpielfeld(seite, punkt))
 
     assert any(liegtEinPixelGenauAn(seite, kreis, punkt) for kreis in beimHalten)
     danach = schlacht.stelle(spinne)
     assert frei(spinne, danach, warrior, stelleDesWarriors)
     assert höchstensUmHundertstelWeiter(punkt, danach, kürzesterWeg)
-    assert stelleImSpielstand(danach) in kreiseDerKarte(seite)
+    assert stelleImSpielstand(danach) in kreiseDesSpielfelds(seite)
 
 
 def testBew18_3DurchDieNahkampfreichweiteGezogenHältArbiterDieSpinneNichtAn(
@@ -523,7 +530,7 @@ def testBew18_3EndetDieStreckeAnDerSpielfeldkanteInDerNahkampfreichweiteHältArb
     assert hältVorDerNahkampfreichweite(danach, spinne, stelleDesWarboss, boss)
 
 
-def testBew18_3DurchDieNahkampfreichweiteGezogenZeigtDieKarteDieSpinneAmPunkt(
+def testBew18_3DurchDieNahkampfreichweiteGezogenZeigtDasSpielfeldDieSpinneAmPunkt(
     schlachtInDerBewegungsphase, spinne, warboss
 ):
     schlacht = schlachtInDerBewegungsphase
@@ -538,7 +545,7 @@ def testBew18_3DurchDieNahkampfreichweiteGezogenZeigtDieKarteDieSpinneAmPunkt(
     assert gezeigt.stellen == {spinne: punkt}
 
 
-def testBew18_3EndetDieStreckeInDerNahkampfreichweiteZeigtDieKarteDieSpinneDavor(
+def testBew18_3EndetDieStreckeInDerNahkampfreichweiteZeigtDasSpielfeldDieSpinneDavor(
     schlachtInDerBewegungsphase, spinne, warboss, weirdboy
 ):
     schlacht = schlachtInDerBewegungsphase

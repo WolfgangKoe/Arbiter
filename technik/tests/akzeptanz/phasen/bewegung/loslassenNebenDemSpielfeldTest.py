@@ -1,4 +1,4 @@
-"""BEW-20 · Loslassen neben der Karte."""
+"""BEW-20 · Loslassen neben dem Spielfeld."""
 
 from fractions import Fraction
 
@@ -9,10 +9,10 @@ from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe, sperrmeldunge
 from tests.akzeptanz.handgriffe import breiteDesSpielfelds, radiusInZoll
 from tests.akzeptanz.schlacht import hältAnDerSpielfeldkante, stellenAlsZahlen
 from tests.akzeptanz.ziehen import (
-    alleinUndAlsEbene,
+    alleinUndMitEinheitenebene,
     mitMausUndFinger,
-    nebenDerKarteLoslassen,
-    punktAufDerKarte,
+    nebenDemSpielfeldLoslassen,
+    punktAufDemSpielfeld,
 )
 
 einZoll = Fraction(1)
@@ -35,9 +35,9 @@ def boyzInDerBewegungsphase(schlachtInDerBewegungsphase, boyz):
     return schlachtInDerBewegungsphase, boyz
 
 
-@alleinUndAlsEbene
+@alleinUndMitEinheitenebene
 @mitMausUndFinger
-def testBew20_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte(
+def testBew20_1NebenDemSpielfeldLosgelassenStehtJedesModellWoDasSpielfeldEsZuletztZeigte(
     bildschirm, beendeteAufstellung, boyzInDerBewegungsphase, ebeneLegen, eingabe
 ):
     schlacht, boyz = boyzInDerBewegungsphase
@@ -47,9 +47,9 @@ def testBew20_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte
     überDerKante, jenseits = anDerWestkante(davor, radiusInZoll(modell))
     stellenDavor = stellenAlsZahlen(schlacht)
     seite = seiteDerSchlachtMitEingabe(bildschirm, beendeteAufstellung, schlacht, eingabe)
-    daneben = punktAufDerKarte(seite, jenseits)
+    daneben = punktAufDemSpielfeld(seite, jenseits)
 
-    gezeigt = nebenDerKarteLoslassen(seite, davor, überDerKante, daneben, eingabe)
+    gezeigt = nebenDemSpielfeldLoslassen(seite, davor, überDerKante, daneben, eingabe)
 
     assert gezeigt != stellenDavor
     assert stellenAlsZahlen(schlacht) == gezeigt
@@ -78,7 +78,7 @@ def zugOhneBewegung(request, schlachtNachDerWahlDesErstenZugs, boyz, necronWarri
 
 
 @mitMausUndFinger
-def testBew20_1OhneBewegungStehtNebenDerKarteLosgelassenJedesModellWieDavorOhneGrund(
+def testBew20_1OhneBewegungStehtNebenDemSpielfeldLosgelassenJedesModellWieDavorOhneGrund(
     bildschirm, beendeteAufstellung, zugOhneBewegung, eingabe
 ):
     schlacht, modell, kante = zugOhneBewegung
@@ -86,9 +86,9 @@ def testBew20_1OhneBewegungStehtNebenDerKarteLosgelassenJedesModellWieDavorOhneG
     überDerKante, jenseits = kante(davor, radiusInZoll(modell))
     stellenDavor = stellenAlsZahlen(schlacht)
     seite = seiteDerSchlachtMitEingabe(bildschirm, beendeteAufstellung, schlacht, eingabe)
-    daneben = punktAufDerKarte(seite, jenseits)
+    daneben = punktAufDemSpielfeld(seite, jenseits)
 
-    nebenDerKarteLoslassen(seite, davor, überDerKante, daneben, eingabe)
+    nebenDemSpielfeldLoslassen(seite, davor, überDerKante, daneben, eingabe)
 
     assert stellenAlsZahlen(schlacht) == stellenDavor
     assert sperrmeldungenDerSeite(seite) == []

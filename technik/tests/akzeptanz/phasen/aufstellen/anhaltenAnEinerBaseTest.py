@@ -8,7 +8,7 @@ from playwright.sync_api import expect
 from tests.akzeptanz.anhalten import (
     freiesZiel,
     hineinrückenOhneBase,
-    mitUndOhneEbene,
+    nichtAusgewähltOderMitModellebene,
     stellenAlsZahlen,
     stellenDesZugs,
 )
@@ -121,7 +121,7 @@ def testAuf26_1DerDienstRücktDasModellHineinOhneGrund(
 
 
 @mitMausUndFinger
-def testAuf26_1DieSeiteRücktDasModellInnerhalbDerKarteHineinOhneGrund(
+def testAuf26_1DieSeiteRücktDasModellInnerhalbDesSpielfeldsHineinOhneGrund(
     bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
 ):
     aufstellung = aufstellungNachDerZonenwahl
@@ -136,7 +136,7 @@ def testAuf26_1DieSeiteRücktDasModellInnerhalbDerKarteHineinOhneGrund(
 
     assert aufstellung.gesetzt(modell)
     assert liegtEinPixelGenauAn(seite, aufstellung.stelle(modell), stelleNachDemRücken)
-    expect(seite.locator(".karte .modell")).to_have_count(1)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(1)
     assert sperrmeldungenDerSeite(seite) == []
 
 
@@ -146,7 +146,7 @@ zügeFürDieAbfrage = pytest.mark.parametrize(
 
 
 @zügeFürDieAbfrage
-@mitUndOhneEbene
+@nichtAusgewähltOderMitModellebene
 def testAuf26_5DieAbfrageNenntNurDasAlleinGezogeneModellUndSetztNichts(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, zug, ebeneLegen
 ):
@@ -166,7 +166,7 @@ def testAuf26_5DieAbfrageNenntNurDasAlleinGezogeneModellUndSetztNichts(
 
 
 @zügeFürDieAbfrage
-@mitUndOhneEbene
+@nichtAusgewähltOderMitModellebene
 def testAuf26_5BeimLoslassenStehtDasModellDortWoDieAbfrageEsZeigte(
     aufstellung, ersteEinheitDesSpielersAnDerReihe, zug, ebeneLegen
 ):
@@ -207,7 +207,7 @@ def testAuf26_5DerDienstNenntDieStelleBeimLoslassenNurDesGezogenenModells(
 
 
 @mitMausUndFinger
-def testAuf26_5DieKarteZeigtBeimHaltenDasModellDortWoEsBeimLoslassenStehtNichtUnterDemZeiger(
+def testAuf26_5DasSpielfeldZeigtBeimHaltenDasModellDortWoEsBeimLoslassenStehtNichtUnterDemZeiger(
     bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
 ):
     aufstellung = aufstellungNachDerZonenwahl

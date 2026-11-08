@@ -1,7 +1,7 @@
 ### BEW-5 · Vorrücken
 
 Etappe: 2
-Zweck: Statt der *Normalen Bewegung* kann eine *Einheit* *vorrücken*: Die *Spieler* würfeln am Tisch, ein Klick auf der *Karte* nimmt den *Vorrückwurf* entgegen (`core_rules.txt:754`, `domaene/ziel.md`, Anliegen 6998 F1, 7000).
+Zweck: Statt der *Normalen Bewegung* kann eine *Einheit* *vorrücken*: Die *Spieler* würfeln am Tisch, ein Klick auf dem *Spielfeld* nimmt den *Vorrückwurf* entgegen (`core_rules.txt:754`, `domaene/ziel.md`, Anliegen 6998 F1, 7000).
 Am Bildschirm: eine *Einheit* *auswählen*, „Vorrücken“ klicken, den Kreis des Wurfs ([BEW-13](grenzkreiseBeimVorruecken.md)) anklicken, ziehen wie in [BEW-1](normaleBewegung.md).
 
 - BEW-5.1 **Gegeben** die *Bewegungsphase* und eine *ausgewählte* *Einheit* des *Spielers* *am Zug*, die weder *vorgerückt* ist noch auf ihren *Vorrückwurf* wartet, **dann** bietet Arbiter „Vorrücken“ an, sonst nicht (`core_rules.txt:754`, Anliegen 7000).

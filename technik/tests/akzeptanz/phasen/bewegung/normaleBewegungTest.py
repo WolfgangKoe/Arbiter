@@ -4,7 +4,7 @@ from fractions import Fraction
 from http import HTTPStatus
 
 from tests.akzeptanz.bildschirm import (
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteDerSchlachtMitEingabe,
     sperrmeldungenDerSeite,
 )
@@ -65,7 +65,7 @@ def testBew1_5LässtJemandDasModellAnSeinerStelleLosBleibtEsOhneSperreDort(
     assert schlachtInDerBewegungsphase.stelle(modell) == davor
 
 
-def testBew1_5IstDieGanzeEinheitEbeneRücktJedesModellUmDieselbeStreckeVor(
+def testBew1_5BeiDerEinheitenebeneRücktJedesModellUmDieselbeStreckeVor(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -193,7 +193,7 @@ def testBew1_7DerDienstNenntBeiDerGanzenEinheitDieStellenJedesModells(
     assert len(antwort.get_json()["modelle"]) == len(boyz.modelle)
 
 
-def testBew1_7DerDienstNenntOhneEbeneEinheitNurDasGezogeneModell(
+def testBew1_7DerDienstNenntOhneEinheitenebeneNurDasGezogeneModell(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (modell,) = warboss.modelle
@@ -259,7 +259,7 @@ def testBew1_7DerDienstNenntNachDemÜbergehenBeimWeiterziehenDieVorigeStelleWieD
 
 
 @mitMausUndFinger
-def testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre(
+def testBew1_7DasSpielfeldZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenStehtOhneSperre(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, eingabe
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -277,7 +277,7 @@ def testBew1_7DieKarteZeigtBeimHaltenJedesModellDerEinheitDortWoEsBeimLoslassenS
 
 
 @mitMausUndFinger
-def testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre(
+def testBew1_7DasSpielfeldZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenStehtOhneSperre(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
@@ -294,7 +294,7 @@ def testBew1_7DieKarteZeigtBeimHaltenNurDasGezogeneModellDortWoEsBeimLoslassenSt
 
 
 @mitMausUndFinger
-def testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung(
+def testBew1_7DasSpielfeldZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweiteOhneSperrmeldung(  # noqa: E501
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, eingabe
 ):
     (modell,) = warboss.modelle
@@ -303,11 +303,11 @@ def testBew1_7DieKarteZeigtWeiterAlsDieBewegungsweiteDasModellAnDerBewegungsweit
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
-    kreiseDavor = kreiseDerKarte(seite)
+    kreiseDavor = kreiseDesSpielfelds(seite)
 
     halten(seite, davor, zuWeit, eingabe)
 
-    (gezeigt,) = kreiseDerKarte(seite) - kreiseDavor
+    (gezeigt,) = kreiseDesSpielfelds(seite) - kreiseDavor
     assert hältAnDerBewegungsweiteAufEinenPixelGenau(
         seite, davor, gezeigt, bewegungsweite("Warboss", "Warboss")
     )

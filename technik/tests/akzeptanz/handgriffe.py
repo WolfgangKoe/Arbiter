@@ -266,8 +266,8 @@ def reihenDerFormation(einheitenname: str) -> list[int]:
     return yamlAusDenDaten("formation.yaml")["formation"][einheitenname]
 
 
-def modellZurEbeneMachen(spiel, einheit: Einheit, modell: Modell) -> None:
+def modellebeneWählen(spiel, einheit: Einheit, modell: Modell) -> None:
     spiel.auswählen(einheit)
     spiel.modellAnklicken(modell)
-    if not spiel.modellIstEbene(modell):
-        raise AssertionError("Der Klick machte das Modell nicht zur Ebene")
+    if not spiel.istModellebene(modell):
+        raise AssertionError("Der Klick machte die Modellebene des Modells nicht zur Ebene")

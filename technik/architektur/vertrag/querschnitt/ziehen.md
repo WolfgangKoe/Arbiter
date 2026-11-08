@@ -4,11 +4,11 @@ Was alle Phasen beim Ziehen teilen; Anfragen, Antworten und Prüfung:
 [Anfragen](anfragen.md), die anderen: [Architektur](../../../architektur.md#schichten).
 
 - **V8** Pointer Events am Dokument, ein Weg für Maus und Finger (QUE-3.4,
-  `touch-action: none` an `.karte`). Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr
+  `touch-action: none` an `.spielfeld`). Ein Zug beginnt erst, wenn der Zeiger in x oder y mehr
   als 4 px (`zugschwelle`, wie `dragStartThresholdPx` in ArbiterMap) vom Startpunkt abweicht.
   Ohne Zug ist es ein Klick; was er bedeutet, nennt die Datei der Phase. Den Punkt in Zoll
-  rechnet die Seite mit `getScreenCTM().inverse()` der `.karte`.
-  Gezogen wird nur ein `.karte .modell`; Punkt des Zugs: seine vorige *Stelle* plus Weg des
+  rechnet die Seite mit `getScreenCTM().inverse()` des `.spielfeld`.
+  Gezogen wird nur ein `.spielfeld .modell`; Punkt des Zugs: seine vorige *Stelle* plus Weg des
   Zeigers seit dem Greifen (AUF-8.7), ein Weg nur in x lässt y exakt. Ein Zug wählt nie aus.
   Beim Druck auf ein gezogenes Element verhindert die Seite Markieren und das eigene Ziehen
   des Browsers (`preventDefault` auf `pointerdown` und `dragstart`, `user-select: none` an
@@ -31,7 +31,7 @@ Was alle Phasen beim Ziehen teilen; Anfragen, Antworten und Prüfung:
   Beim Loslassen schickt sie V5 mit den Eingaben als Körper (`angehaltenAufDemWeg` als
   JSON-Wahrheitswert): im *Spielfeld* die der zuletzt beantworteten Abfrage dieses Zugs,
   wenn deren Punkt der Punkt des Zugs ist, sonst die der nächsten Abfrage zu ihm. Neben dem
-  *Spielfeld* (*neben der Karte*, auch auf einer *Armeeliste*) die der letzten vor dem
+  *Spielfeld* (auch auf einer *Armeeliste*) die der letzten vor dem
   Loslassen beantworteten 200 dieses Zugs, auch mit leerem `modelle[]`; ohne sie keine
   Anfrage: Sie zeichnet den letzten Stand. Warum die Eingaben: Mit ihnen *setzt* die
   Handlung genau die gezeigten *Stellen* (AUF-28, BEW-17.2), ein zweites Mal am selben

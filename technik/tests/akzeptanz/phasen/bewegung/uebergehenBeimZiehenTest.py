@@ -11,7 +11,7 @@ from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
     knopfDerSeite,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     protokollDerSeite,
     protokollEinträge,
     seiteDerSchlachtMitEingabe,
@@ -301,7 +301,7 @@ def testBew8_4GemeinsamÜbergehenSetztDasModellAnDenPunktDesLoslassens(
     assert schlachtInDerBewegungsphase.gemeinsamÜbergehenAngeboten is False
 
 
-def testBew8_4IstDieGanzeEinheitEbeneRücktJedesModellUmDenWegZumPunkt(
+def testBew8_4BeiDerEinheitenebeneRücktJedesModellUmDenWegZumPunkt(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
@@ -473,7 +473,7 @@ def testBew8_4DieSeiteSetztNachDemKlickAufGemeinsamÜbergehenAmPunkt(
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
     assert liegtEinPixelGenauAn(seite, schlachtInDerBewegungsphase.stelle(boss), ziel)
-    assert kreiseDerKarte(seite) == stellenAlsZahlen(schlachtInDerBewegungsphase)
+    assert kreiseDesSpielfelds(seite) == stellenAlsZahlen(schlachtInDerBewegungsphase)
 
 
 @vorDemOverlord

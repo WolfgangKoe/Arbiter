@@ -9,24 +9,24 @@ from tests.akzeptanz.auswahl import ausgewählteModelle
 from tests.akzeptanz.bildschirm import seiteDerSchlachtMitEingabe
 from tests.akzeptanz.dienst import (
     ausgewählteModelleIm,
-    ebenenIm,
     modellAnklicken,
+    modellebenenIm,
     stelleImSpielstand,
 )
-from tests.akzeptanz.handgriffe import modellZurEbeneMachen, versetzt
+from tests.akzeptanz.handgriffe import modellebeneWählen, versetzt
 from tests.akzeptanz.schlacht import jetzigeStellen, stellenDerEinheitAlsZahlen
 from tests.akzeptanz.ziehen import (
     klickenMit,
     liegtEinPixelGenauAn,
     mitMausUndFinger,
     modellZiehen,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
 )
 
 dreiZollNachOsten = (Fraction(3), Fraction(0))
 
 
-def testBew7_1EinKlickAufEinModellDerAusgewähltenEinheitMachtEsZuIhrerEbene(
+def testBew7_1EinKlickAufEinModellDerAusgewähltenEinheitMachtSeineModellebeneZuIhrerEbene(
     schlachtInDerBewegungsphase, einheitJederSeite
 ):
     angeklickt, *_ = einheitJederSeite.modelle
@@ -34,24 +34,24 @@ def testBew7_1EinKlickAufEinModellDerAusgewähltenEinheitMachtEsZuIhrerEbene(
 
     schlachtInDerBewegungsphase.modellAnklicken(angeklickt)
 
-    assert schlachtInDerBewegungsphase.modellIstEbene(angeklickt)
-    assert not schlachtInDerBewegungsphase.ganzeEinheitIstEbene(einheitJederSeite)
+    assert schlachtInDerBewegungsphase.istModellebene(angeklickt)
+    assert not schlachtInDerBewegungsphase.hatEinheitenebene(einheitJederSeite)
 
 
-def testBew7_1IstEinAnderesModellDieEbeneWirdDasAngeklickteZurEbene(
+def testBew7_1MitDerModellebeneEinesAnderenModellsWirdDieDesAngeklicktenZurEbene(
     schlachtNachDerWahlDesErstenZugs, boyz
 ):
     erstes, zweites, *_ = boyz.modelle
-    modellZurEbeneMachen(schlachtNachDerWahlDesErstenZugs, boyz, erstes)
+    modellebeneWählen(schlachtNachDerWahlDesErstenZugs, boyz, erstes)
 
     schlachtNachDerWahlDesErstenZugs.modellAnklicken(zweites)
 
-    assert schlachtNachDerWahlDesErstenZugs.modellIstEbene(zweites)
-    assert not schlachtNachDerWahlDesErstenZugs.modellIstEbene(erstes)
+    assert schlachtNachDerWahlDesErstenZugs.istModellebene(zweites)
+    assert not schlachtNachDerWahlDesErstenZugs.istModellebene(erstes)
     assert schlachtNachDerWahlDesErstenZugs.ausgewählt(boyz)
 
 
-def testBew7_1DerDienstNenntNachDemZweitenKlickDasModellAlsEbene(
+def testBew7_1DerDienstNenntNachDemZweitenKlickDieModellebeneDesModells(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, einheitJederSeite
 ):
     angeklickt, *_ = einheitJederSeite.modelle
@@ -61,42 +61,44 @@ def testBew7_1DerDienstNenntNachDemZweitenKlickDasModellAlsEbene(
 
     stelle = stelleImSpielstand(schlachtInDerBewegungsphase.stelle(angeklickt))
     assert antwort.status_code == HTTPStatus.OK
-    assert ebenenIm(antwort.get_json()) == {stelle}
+    assert modellebenenIm(antwort.get_json()) == {stelle}
 
 
-def testBew7_2EinKlickAufDasModellDerEbeneMachtDieGanzeEinheitZurEbene(
+def testBew7_2EinKlickAufDasModellDerModellebeneMachtDieEinheitenebeneZurEbene(
     schlachtInDerBewegungsphase, einheitJederSeite
 ):
     angeklickt, *_ = einheitJederSeite.modelle
-    modellZurEbeneMachen(schlachtInDerBewegungsphase, einheitJederSeite, angeklickt)
-    assert schlachtInDerBewegungsphase.modellIstEbene(angeklickt)
+    modellebeneWählen(schlachtInDerBewegungsphase, einheitJederSeite, angeklickt)
+    assert schlachtInDerBewegungsphase.istModellebene(angeklickt)
 
     schlachtInDerBewegungsphase.modellAnklicken(angeklickt)
 
     assert schlachtInDerBewegungsphase.ausgewählt(einheitJederSeite)
-    assert schlachtInDerBewegungsphase.ganzeEinheitIstEbene(einheitJederSeite)
+    assert schlachtInDerBewegungsphase.hatEinheitenebene(einheitJederSeite)
 
 
-def testBew7_2DerDienstNenntNachDemDrittenKlickKeineEbeneUndAlleModelleAusgewählt(
+def testBew7_2DerDienstNenntNachDemDrittenKlickKeineModellebeneUndAlleModelleAusgewählt(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     angeklickt, *_ = boyz.modelle
-    modellZurEbeneMachen(schlachtInDerBewegungsphase, boyz, angeklickt)
-    assert schlachtInDerBewegungsphase.modellIstEbene(angeklickt)
+    modellebeneWählen(schlachtInDerBewegungsphase, boyz, angeklickt)
+    assert schlachtInDerBewegungsphase.istModellebene(angeklickt)
 
     antwort = modellAnklicken(dienstDerSchlacht, beendeteAufstellung, boyz, angeklickt)
 
     spielstand = antwort.get_json()
     assert antwort.status_code == HTTPStatus.OK
-    assert ebenenIm(spielstand) == frozenset()
+    assert modellebenenIm(spielstand) == frozenset()
     assert ausgewählteModelleIm(spielstand) == stellenDerEinheitAlsZahlen(
         schlachtInDerBewegungsphase, boyz
     )
 
 
-def testBew7_3IstEinModellDieEbeneSetztDasLoslassenNurDieses(schlachtInDerBewegungsphase, boyz):
+def testBew7_3MitDerModellebeneEinesModellsSetztDasLoslassenNurDieses(
+    schlachtInDerBewegungsphase, boyz
+):
     *_, gezogenes = boyz.modelle
-    modellZurEbeneMachen(schlachtInDerBewegungsphase, boyz, gezogenes)
+    modellebeneWählen(schlachtInDerBewegungsphase, boyz, gezogenes)
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     ziel = versetzt(davor[gezogenes], dreiZollNachOsten)
 
@@ -107,11 +109,11 @@ def testBew7_3IstEinModellDieEbeneSetztDasLoslassenNurDieses(schlachtInDerBewegu
 
 
 @mitMausUndFinger
-def testBew7_3DieSeiteZiehtBeiEinemModellAlsEbeneNurDieses(
+def testBew7_3DieSeiteZiehtBeiEinerModellebeneNurDieses(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, eingabe
 ):
     *übrige, gezogenes = boyz.modelle
-    modellZurEbeneMachen(schlachtInDerBewegungsphase, boyz, gezogenes)
+    modellebeneWählen(schlachtInDerBewegungsphase, boyz, gezogenes)
     davor = jetzigeStellen(schlachtInDerBewegungsphase, boyz)
     ziel = versetzt(davor[gezogenes], dreiZollNachOsten)
     seite = seiteDerSchlachtMitEingabe(
@@ -127,7 +129,9 @@ def testBew7_3DieSeiteZiehtBeiEinemModellAlsEbeneNurDieses(
     }
 
 
-def testBew7_4IstEinModellDieEbeneIstNurDiesesAusgewählt(schlachtInDerBewegungsphase, boyz):
+def testBew7_4MitDerModellebeneEinesModellsIstNurDiesesAusgewählt(
+    schlachtInDerBewegungsphase, boyz
+):
     angeklickt, *andere = boyz.modelle
     schlachtInDerBewegungsphase.auswählen(boyz)
 
@@ -139,7 +143,7 @@ def testBew7_4IstEinModellDieEbeneIstNurDiesesAusgewählt(schlachtInDerBewegungs
     ] == []
 
 
-def testBew7_4DerDienstKennzeichnetNurDasModellDerEbene(
+def testBew7_4DerDienstKennzeichnetNurDasModellDerModellebene(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, necronWarriors
 ):
     angeklickt, *_ = necronWarriors.modelle
@@ -149,11 +153,11 @@ def testBew7_4DerDienstKennzeichnetNurDasModellDerEbene(
 
     stelle = stelleImSpielstand(schlachtInDerBewegungsphase.stelle(angeklickt))
     assert ausgewählteModelleIm(antwort.get_json()) == {stelle}
-    assert ebenenIm(antwort.get_json()) == {stelle}
+    assert modellebenenIm(antwort.get_json()) == {stelle}
 
 
 @mitMausUndFinger
-def testBew7_4DieKarteKennzeichnetNachDemKlickNurDasAngeklickteModell(
+def testBew7_4DasSpielfeldKennzeichnetNachDemKlickNurDasAngeklickteModell(
     bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, eingabe
 ):
     *_, angeklickt = boyz.modelle
@@ -163,7 +167,7 @@ def testBew7_4DieKarteKennzeichnetNachDemKlickNurDasAngeklickteModell(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
 
-    klickenMit[eingabe](seite, punktAufDerKarte(seite, stelle))
+    klickenMit[eingabe](seite, punktAufDemSpielfeld(seite, stelle))
 
-    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(1)
+    expect(seite.locator(".spielfeld .modell.ausgewählt")).to_have_count(1)
     assert ausgewählteModelle(seite) == {stelleImSpielstand(stelle)}

@@ -4,7 +4,7 @@ Zweck: Ein *Spieler* zeigt per Klick, welche *Einheiten* er meint, ohne Handlung
 Am Bildschirm: auf eine *Einheit* in einer *Armeeliste* klicken.
 
 - AUF-5.4 **Wenn** jemand eine *ausgewählte* *Einheit* in der *Armeeliste* anklickt, **dann** ist sie es nicht mehr.
-- AUF-5.7 **Gegeben** eine *ausgewählte* *Einheit*, **dann** kennzeichnet die *Karte* jedes ihrer *gesetzten* *Modelle*.
+- AUF-5.7 **Gegeben** eine *ausgewählte* *Einheit*, **dann** kennzeichnet das *Spielfeld* jedes ihrer *gesetzten* *Modelle*.
 - AUF-5.8 **Wenn** AUF-5.4 oder 5.11 greift, **dann** bleiben *an der Reihe*, *Einheit in Aufstellung* und *Modelle* gleich.
 - AUF-5.9 **Wenn** Arbiter startet (QUE-2.1), **dann** ist keine *Einheit* *ausgewählt*.
 - AUF-5.10 **Wenn** eine *ausgewählte* *Einheit* *aufgestellt* wird, **dann** ist sie nicht mehr *ausgewählt*.

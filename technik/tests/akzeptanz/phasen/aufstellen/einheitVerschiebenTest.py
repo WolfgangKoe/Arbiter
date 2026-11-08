@@ -175,7 +175,7 @@ def testAuf21_2DerDienstRücktDenBlockAufKürzestemWegHinein(
 
 
 @mitMausUndFinger
-def testAuf21_2DieSeiteRücktDenBlockBeimLoslassenInnerhalbDerKarteInDieZoneHinein(
+def testAuf21_2DieSeiteRücktDenBlockBeimLoslassenInnerhalbDesSpielfeldsInDieZoneHinein(
     bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
 ):
     aufstellung = aufstellungNachDerZonenwahl

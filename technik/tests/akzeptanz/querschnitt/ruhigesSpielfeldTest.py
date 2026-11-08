@@ -1,4 +1,4 @@
-"""QUE-7 · Ruhige Karte."""
+"""QUE-7 · Ruhiges Spielfeld."""
 
 from fractions import Fraction
 
@@ -44,7 +44,7 @@ from tests.akzeptanz.ziehen import (
     Bildpunkt,
     mitDerMausKlicken,
     modellZiehen,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
 )
 
 _pixelgenauigkeit = 1e-4
@@ -55,14 +55,14 @@ _vorrückenKnopf = "Vorrücken"
 _einheitZurücksetzenKnopf = "Einheit zurücksetzen"
 mitteDesSpielfelds = Stelle(x=Fraction(22), y=Fraction(30))
 
-_abbildungLesen = """karte => {
-    const matrix = karte.getScreenCTM()
+_abbildungLesen = """spielfeld => {
+    const matrix = spielfeld.getScreenCTM()
     return [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]
 }"""
 
 
-def abbildungDerKarte(seite: Page) -> list[float]:
-    return seite.locator("svg.karte").evaluate(_abbildungLesen)
+def abbildungDesSpielfelds(seite: Page) -> list[float]:
+    return seite.locator("svg.spielfeld").evaluate(_abbildungLesen)
 
 
 def wieDavor(abbildung: list[float]):
@@ -71,7 +71,7 @@ def wieDavor(abbildung: list[float]):
 
 def aufDieStelleKlicken(seite: Page, stelle) -> None:
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
 
 
 def knopfKlicken(seite: Page, text: str) -> None:
@@ -147,58 +147,58 @@ def moralphaseAmEndeDerSchlacht(schlachtNachDerWahlDesErstenZugs):
     return schlachtNachDerWahlDesErstenZugs
 
 
-def testQue7_1DieKarteBleibtStehenWennEinGrundZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennEinGrundZuSehenBeginnt(
     bildschirmJeFenster, aufstellungNachDerZonenwahl, gesperrteStelle
 ):
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     aufDieStelleKlicken(seite, gesperrteStelle)
 
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinGrundAufhörtZuSehenZuSein(
+def testQue7_1DasSpielfeldBleibtStehenWennEinGrundAufhörtZuSehenZuSein(
     bildschirmJeFenster, aufstellungNachDerZonenwahl, gesperrteStelle
 ):
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
     aufDieStelleKlicken(seite, gesperrteStelle)
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
     klickenUndWarten(seite, "Spieler 1", "Boyz")
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     aufDieStelleKlicken(seite, gesperrteStelle)
 
     sperrmeldungWarten(seite, set())
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinheitZurücklegenZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennEinheitZurücklegenZuSehenBeginnt(
     bildschirmJeFenster, aufstellungNachDerZonenwahl, spielerEins, boyz
 ):
     aufstellungNachDerZonenwahl.auswählen(boyz)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     aufDieStelleKlicken(seite, stelle)
 
     expect(knopfDerSeite(seite, zurücklegenKnopf)).to_be_visible()
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinheitZurücklegenAufhörtZuSehenZuSein(
+def testQue7_1DasSpielfeldBleibtStehenWennEinheitZurücklegenAufhörtZuSehenZuSein(
     bildschirmJeFenster, einGesetztesModell
 ):
     aufstellung, _ = einGesetztesModell
     seite = bildschirmJeFenster.seiteZu(aufstellung)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, zurücklegenKnopf)
 
     expect(knopfDerSeite(seite, zurücklegenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
 @pytest.mark.parametrize(
@@ -206,21 +206,21 @@ def testQue7_1DieKarteBleibtStehenWennEinheitZurücklegenAufhörtZuSehenZuSein(
     [(0, "Spieler 2"), (1, "Spieler 1")],
     ids=["vonSpielerEinsZuSpielerZwei", "vonSpielerZweiZuSpielerEins"],
 )
-def testQue7_1DieKarteBleibtStehenWennEinAndererSpielerAnDerReiheIst(
+def testQue7_1DasSpielfeldBleibtStehenWennEinAndererSpielerAnDerReiheIst(
     bildschirmJeFenster, aufstellungNachDerZonenwahl, aufgestellteEinheiten, spielerDanach
 ):
     einheitenAufstellen(aufstellungNachDerZonenwahl, aufgestellteEinheiten)
     einheitDesSpielersAnDerReiheSetzen(aufstellungNachDerZonenwahl)
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, beendenKnopf)
 
     expect(spielerAnDerReihe(seite)).to_contain_text(spielerDanach)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennKeinSpielerAnDerReiheIstUndAufstellenDerEinheitBeendenAufhört(
+def testQue7_1DasSpielfeldBleibtStehenWennKeinSpielerAnDerReiheIstUndAufstellenDerEinheitBeendenAufhört(  # noqa: E501
     bildschirmJeFenster, aufstellungNachDerZonenwahl, ausgangslage
 ):
     letzteEinheit = 1
@@ -233,100 +233,100 @@ def testQue7_1DieKarteBleibtStehenWennKeinSpielerAnDerReiheIstUndAufstellenDerEi
     einheitDesSpielersAnDerReiheSetzen(aufstellungNachDerZonenwahl)
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
     expect(spielerAnDerReihe(seite)).to_have_count(1)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, beendenKnopf)
 
     expect(spielerAnDerReihe(seite)).to_have_count(0)
     expect(knopfDerSeite(seite, beendenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
 @pytest.mark.parametrize("spielername", ["Spieler 1", "Spieler 2"], ids=["eins", "zwei"])
-def testQue7_1DieKarteBleibtStehenWennErsterZugAufhörtUndPhaseBeendenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennErsterZugAufhörtUndPhaseBeendenBeginnt(
     bildschirmJeFenster, beendeteAufstellung, schlacht, spielername
 ):
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlacht)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     with aufDieHandlungWarten(seite):
         knopfDerArmeeliste(seite, spielername, _ersterZugKnopf).click()
 
     expect(knopfDerSeite(seite, phaseBeendenKnopf)).to_be_visible()
     expect(kopfzeileVon(seite, spielername)).to_have_class(amZugGekennzeichnet)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEineEinheitAusgewähltWird(
+def testQue7_1DasSpielfeldBleibtStehenWennEineEinheitAusgewähltWird(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
     (boss,) = warboss.modelle
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
-    mitDerMausKlicken(seite, punktAufDerKarte(seite, schlachtInDerBewegungsphase.stelle(boss)))
+    mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, schlachtInDerBewegungsphase.stelle(boss)))
 
-    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(1)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    expect(seite.locator(".spielfeld .modell.ausgewählt")).to_have_count(1)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEineEinheitNichtMehrAusgewähltIst(
+def testQue7_1DasSpielfeldBleibtStehenWennEineEinheitNichtMehrAusgewähltIst(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
-    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(boyz.modelle))
-    davor = abbildungDerKarte(seite)
+    expect(seite.locator(".spielfeld .modell.ausgewählt")).to_have_count(len(boyz.modelle))
+    davor = abbildungDesSpielfelds(seite)
 
-    mitDerMausKlicken(seite, punktAufDerKarte(seite, mitteDesSpielfelds))
+    mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, mitteDesSpielfelds))
 
-    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    expect(seite.locator(".spielfeld .modell.ausgewählt")).to_have_count(0)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennGemeinsamÜbergehenZuSehenBeginnt(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     (boss,) = warboss.modelle
     stelle = schlachtInDerBewegungsphase.stelle(boss)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     modellZiehen(seite, stelle, versetzt(stelle, zehnZollNachOsten))
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_be_visible()
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenAufhörtUndDerEintragZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennGemeinsamÜbergehenAufhörtUndDerEintragZuSehenBeginnt(
     bildschirmJeFenster, beendeteAufstellung, warbossAngehalten
 ):
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, warbossAngehalten)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, übergehenKnopf)
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
     expect(protokollEinträge(seite)).to_have_count(1)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenDieKnöpfeZumUmbruchBringt(
+def testQue7_1DasSpielfeldBleibtStehenWennGemeinsamÜbergehenDieKnöpfeZumUmbruchBringt(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     schlachtInDerBewegungsphase.auswählen(warboss)
     (boss,) = warboss.modelle
     stelle = schlachtInDerBewegungsphase.stelle(boss)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     modellZiehen(seite, stelle, versetzt(stelle, zehnZollNachOsten))
 
     knöpfeBeimAusgewähltenWarboss(seite)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfenAufhört(
+def testQue7_1DasSpielfeldBleibtStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfenAufhört(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     schlachtInDerBewegungsphase.auswählen(warboss)
@@ -335,15 +335,15 @@ def testQue7_1DieKarteBleibtStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfe
     angehaltenLoslassen(schlachtInDerBewegungsphase, boss, ziel)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
     knöpfeBeimAusgewähltenWarboss(seite)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, übergehenKnopf)
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1NachDemRollenBleibtDieKarteStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfenAufhört(
+def testQue7_1NachDemRollenBleibtDasSpielfeldStehenWennGemeinsamÜbergehenNebenDenÜbrigenKnöpfenAufhört(  # noqa: E501
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss
 ):
     schlachtInDerBewegungsphase.auswählen(warboss)
@@ -353,15 +353,15 @@ def testQue7_1NachDemRollenBleibtDieKarteStehenWennGemeinsamÜbergehenNebenDenÜ
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
     knöpfeBeimAusgewähltenWarboss(seite)
     mitDemMausradÜberDenKnöpfenRollen(seite)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfAnSeinemPlatzKlicken(seite, übergehenKnopf)
 
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinWeitererEintragZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennEinWeitererEintragZuSehenBeginnt(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, warboss, boyz
 ):
     warbossUndDanachEinenBoyÜbergehen(schlachtInDerBewegungsphase, warboss, boyz)
@@ -370,15 +370,15 @@ def testQue7_1DieKarteBleibtStehenWennEinWeitererEintragZuSehenBeginnt(
     angehaltenLoslassen(schlachtInDerBewegungsphase, weitererBoy, ziel)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
     expect(protokollEinträge(seite)).to_have_count(2)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, übergehenKnopf)
 
     expect(protokollEinträge(seite)).to_have_count(3)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinGrundBeginntUndGemeinsamÜbergehenAufhört(
+def testQue7_1DasSpielfeldBleibtStehenWennEinGrundBeginntUndGemeinsamÜbergehenAufhört(
     bildschirmJeFenster, beendeteAufstellung, schlachtInDerBewegungsphase, boyz, warboss
 ):
     einModellAusDerKohärenzZiehen(schlachtInDerBewegungsphase, boyz)
@@ -387,41 +387,41 @@ def testQue7_1DieKarteBleibtStehenWennEinGrundBeginntUndGemeinsamÜbergehenAufh�
     angehaltenLoslassen(schlachtInDerBewegungsphase, boss, ziel)
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, schlachtInDerBewegungsphase)
     expect(knopfDerSeite(seite, übergehenKnopf)).to_be_visible()
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, phaseBeendenKnopf)
 
     sperrmeldungWarten(seite, {Grund.keineKohärenz})
     expect(knopfDerSeite(seite, übergehenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennEinAndererSpielerAmZugIst(
+def testQue7_1DasSpielfeldBleibtStehenWennEinAndererSpielerAmZugIst(
     bildschirmJeFenster, beendeteAufstellung, schlachtNachDerWahlDesErstenZugs
 ):
     phaseBeendenBis(schlachtNachDerWahlDesErstenZugs, Phase.moralphase)
     seite = bildschirmJeFenster.seiteZuSchlacht(
         beendeteAufstellung, schlachtNachDerWahlDesErstenZugs
     )
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, phaseBeendenKnopf)
 
     expect(kopfzeileVon(seite, "Spieler 2")).to_have_class(amZugGekennzeichnet)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
-def testQue7_1DieKarteBleibtStehenWennPhaseBeendenAufhörtUndSchlachtBeendetBeginnt(
+def testQue7_1DasSpielfeldBleibtStehenWennPhaseBeendenAufhörtUndSchlachtBeendetBeginnt(
     bildschirmJeFenster, beendeteAufstellung, moralphaseAmEndeDerSchlacht
 ):
     seite = bildschirmJeFenster.seiteZuSchlacht(beendeteAufstellung, moralphaseAmEndeDerSchlacht)
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     knopfKlicken(seite, phaseBeendenKnopf)
 
     expect(seite.locator(".kopfzeileSchlachtBeendet")).to_have_count(1)
     expect(knopfDerSeite(seite, phaseBeendenKnopf)).to_have_count(0)
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)
 
 
 @pytest.mark.parametrize(
@@ -429,14 +429,14 @@ def testQue7_1DieKarteBleibtStehenWennPhaseBeendenAufhörtUndSchlachtBeendetBegi
     ["Armeeliste Spieler 1", "Armeeliste Spieler 2", "Protokoll"],
     ids=["links", "rechts", "unten"],
 )
-def testQue7_1DieKarteBleibtBeiEingefahrenerLeisteStehenWennEinGrundZuSehenBeginnt(
+def testQue7_1DasSpielfeldBleibtBeiEingefahrenerLeisteStehenWennEinGrundZuSehenBeginnt(
     bildschirmJeFenster, aufstellungNachDerZonenwahl, gesperrteStelle, leistenname
 ):
     seite = bildschirmJeFenster.seiteZu(aufstellungNachDerZonenwahl)
     griffVon(seite, leistenname).click()
-    davor = abbildungDerKarte(seite)
+    davor = abbildungDesSpielfelds(seite)
 
     aufDieStelleKlicken(seite, gesperrteStelle)
 
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
-    assert abbildungDerKarte(seite) == wieDavor(davor)
+    assert abbildungDesSpielfelds(seite) == wieDavor(davor)

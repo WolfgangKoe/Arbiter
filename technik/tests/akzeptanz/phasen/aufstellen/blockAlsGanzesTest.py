@@ -10,7 +10,7 @@ from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.anhalten import stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteMitEingabe,
     sperrmeldungenDerSeite,
 )
@@ -45,7 +45,7 @@ from tests.akzeptanz.ziehen import (
     liegtEinPixelGenauAn,
     mitMausUndFinger,
     modellZiehen,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
     zollJePixel,
 )
 
@@ -146,7 +146,7 @@ def testAuf24_2DieSeiteNenntKeinenGrundWennDerBlockAufSeineVorigenStellenRückt(
 
     assert aufstellungNachDerZonenwahl.gesetzt(gezogenes)
     assert liegtEinPixelGenauAn(seite, aufstellungNachDerZonenwahl.stelle(gezogenes), ziel)
-    expect(seite.locator(".karte .modell")).to_have_count(2)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(2)
     assert sperrmeldungenDerSeite(seite) == []
 
 
@@ -253,7 +253,7 @@ def testAuf24_3DerDienstNenntJedesGesetzteModellDerEinheitUndVerändertNichts(
 
 
 @pytest.mark.parametrize("eingabe", ["maus", "finger"])
-def testAuf24_3DieKarteZeigtBeimHaltenJedesModellDortWoEsBeimLoslassenStehtOhneSperre(
+def testAuf24_3DasSpielfeldZeigtBeimHaltenJedesModellDortWoEsBeimLoslassenStehtOhneSperre(
     bildschirm, aufstellungNachDerZonenwahl, boyz, eingabe
 ):
     aufstellung = aufstellungNachDerZonenwahl
@@ -289,7 +289,7 @@ def testAuf24_3DieSeiteSetztBeimHaltenDieKreiseAnDieStellenDerAntwortImBeispiel(
     halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
 
     modelle = stelleBeimLoslassenDesVertrags()["modelle"]
-    assert kreiseDerKarte(seite) == {(modell["x"], modell["y"]) for modell in modelle}
+    assert kreiseDesSpielfelds(seite) == {(modell["x"], modell["y"]) for modell in modelle}
 
 
 def testAuf24_3DieSeiteSendetBeimLoslassenDenPunktDesZeigersNichtDenGezeigten(
@@ -297,7 +297,7 @@ def testAuf24_3DieSeiteSendetBeimLoslassenDenPunktDesZeigersNichtDenGezeigten(
 ):
     seite = seiteMitDerAbfrageDesVertrags(bildschirm, ausgangsaufstellung)
     gehaltenes, _, _ = stellenDesVertrags(2)
-    zielPunkt = punktAufDerKarte(seite, stelleDesLoslassensImBeispiel)
+    zielPunkt = punktAufDemSpielfeld(seite, stelleDesLoslassensImBeispiel)
     zeiger = halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
 
     with aufDieHandlungWarten(seite) as antwort:

@@ -1,7 +1,7 @@
 ### MIV-1 · Ausgangslage
 
 Zweck: Womit die *Aufstellung* nach der *Missionsvorbereitung* beginnt. Werte in [ausgangslage.yaml](../../daten/ausgangslage.yaml), [onlyWar.yaml](../../daten/onlyWar.yaml), [katalog](../../daten/katalog/), Entscheidungen des Stakeholders (Anliegen 09 F1 A, F10 B, git).
-Am Bildschirm: Arbiter starten ([QUE-2.1](../querschnitt/karte.md)) und hinsehen.
+Am Bildschirm: Arbiter starten ([QUE-2.1](../querschnitt/spielfeld.md)) und hinsehen.
 
 - MIV-1.1 **Gegeben** die *Ausgangslage*, **dann** ist jede der zwei *Aufstellungszonen* das Band des *Spielfelds* mit der *Tiefe* aus `onlyWar.yaml` an einer langen *Spielfeldkante*, die eine an der gegenüberliegenden der anderen.
 - MIV-1.2 **Gegeben** die *Ausgangslage*, **dann** ist kein *Modell* *gesetzt* und keine *Einheit* *aufgestellt*.

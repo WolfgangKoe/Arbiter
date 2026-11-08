@@ -14,9 +14,9 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import (
     auswählen,
-    ebenenIm,
     imUmfangDes,
     modellAnklicken,
+    modellebenenIm,
     spielstandDesVertrags,
     spielstandVon,
     zurückgelegtDesVertrags,
@@ -24,8 +24,8 @@ from tests.akzeptanz.dienst import (
 )
 from tests.akzeptanz.handgriffe import (
     einheitAufstellen,
+    modellebeneWählen,
     modelleSetzen,
-    modellZurEbeneMachen,
     stellenAllerModelle,
 )
 
@@ -42,13 +42,13 @@ def ausgewählt(aufstellung, einheit, _modell):
 
 mitJederEbene = pytest.mark.parametrize(
     "ebeneLegen",
-    [ohneAuswahl, ausgewählt, modellZurEbeneMachen],
+    [ohneAuswahl, ausgewählt, modellebeneWählen],
     ids=["nichtAusgewählt", "ganzeEinheit", "einModell"],
 )
 
 mitAusgewählterEinheit = pytest.mark.parametrize(
     "ebeneLegen",
-    [ausgewählt, modellZurEbeneMachen],
+    [ausgewählt, modellebeneWählen],
     ids=["ganzeEinheit", "einModell"],
 )
 
@@ -79,7 +79,7 @@ def boyzMitEbene(aufstellungNachDerZonenwahl, boyz, boyzSetzen, ebeneLegen):
 
 
 @mitJederEbene
-def testAuf23_1ZurücklegenNimmtAlleGesetztenModelleDerEinheitInAufstellungVonDerKarte(
+def testAuf23_1ZurücklegenNimmtAlleGesetztenModelleDerEinheitInAufstellungVomSpielfeld(
     aufstellungNachDerZonenwahl, spielerEins, boyzMitEbene
 ):
     aufstellungNachDerZonenwahl.zurücklegen()
@@ -90,7 +90,7 @@ def testAuf23_1ZurücklegenNimmtAlleGesetztenModelleDerEinheitInAufstellungVonDe
 
 
 @mitJederEbene
-def testAuf23_1DerDienstNimmtAlleGesetztenModelleDerEinheitInAufstellungVonDerKarte(
+def testAuf23_1DerDienstNimmtAlleGesetztenModelleDerEinheitInAufstellungVomSpielfeld(
     dienst, aufstellungNachDerZonenwahl, spielerEins, boyzMitEbene
 ):
     antwort = zurücklegen(dienst)
@@ -103,7 +103,7 @@ def testAuf23_1DerDienstNimmtAlleGesetztenModelleDerEinheitInAufstellungVonDerKa
     assert aufstellungNachDerZonenwahl.anDerReihe is spielerEins
 
 
-def testAuf23_1ZurücklegenLässtDieAufgestelltenEinheitenAufDerKarte(
+def testAuf23_1ZurücklegenLässtDieAufgestelltenEinheitenAufDemSpielfeld(
     aufstellungMitModellenBeiderSpieler, spielerEins, warboss
 ):
     aufstellung = aufstellungMitModellenBeiderSpieler
@@ -117,7 +117,7 @@ def testAuf23_1ZurücklegenLässtDieAufgestelltenEinheitenAufDerKarte(
     assert aufstellung.anDerReihe is spielerEins
 
 
-def testAuf23_1DerDienstLässtDieAufgestelltenEinheitenAufDerKarte(
+def testAuf23_1DerDienstLässtDieAufgestelltenEinheitenAufDemSpielfeld(
     dienst, aufstellungMitModellenBeiderSpieler, warboss
 ):
     modelleDavor = spielstandVon(dienst)["modelle"]
@@ -140,7 +140,7 @@ def testAuf23_1DerDienstZeigtNachDemZurücklegenDasBeispielImVertrag(dienstDesBe
 
 
 @mitJederEbene
-def testAuf23_1EinKlickAufEinheitZurücklegenNimmtDieEinheitInAufstellungVonDerKarte(
+def testAuf23_1EinKlickAufEinheitZurücklegenNimmtDieEinheitInAufstellungVomSpielfeld(
     bildschirm, aufstellungNachDerZonenwahl, spielerEins, boyzMitEbene
 ):
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
@@ -149,12 +149,12 @@ def testAuf23_1EinKlickAufEinheitZurücklegenNimmtDieEinheitInAufstellungVonDerK
     with aufDieHandlungWarten(seite):
         knopf.click()
 
-    expect(seite.locator(".karte .modell")).to_have_count(0)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(0)
     assert not any(aufstellungNachDerZonenwahl.gesetzt(modell) for modell in boyzMitEbene.modelle)
     assert aufstellungNachDerZonenwahl.anDerReihe is spielerEins
 
 
-def testAuf23_1EinKlickAufEinheitZurücklegenLässtDieAufgestelltenEinheitenAufDerKarte(
+def testAuf23_1EinKlickAufEinheitZurücklegenLässtDieAufgestelltenEinheitenAufDemSpielfeld(
     bildschirm, aufstellungMitModellenBeiderSpieler, warboss
 ):
     aufstellung = aufstellungMitModellenBeiderSpieler
@@ -166,10 +166,10 @@ def testAuf23_1EinKlickAufEinheitZurücklegenLässtDieAufgestelltenEinheitenAufD
     with aufDieHandlungWarten(seite):
         knopf.click()
 
-    expect(seite.locator(".karte .modell")).to_have_count(anzahlAufgestellter)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(anzahlAufgestellter)
 
 
-def testAuf23_1DieSeiteLeertDieKarteMitDerAntwortImBeispiel(bildschirm, ausgangsaufstellung):
+def testAuf23_1DieSeiteLeertDasSpielfeldMitDerAntwortImBeispiel(bildschirm, ausgangsaufstellung):
     antworten = {zurücklegenAdresse: zurückgelegtDesVertrags()}
     seite = bildschirm.seiteMitSpielstand(ausgangsaufstellung, spielstandDesVertrags(), antworten)
     knopf = knopfDerSeite(seite, zurücklegenKnopf)
@@ -177,36 +177,38 @@ def testAuf23_1DieSeiteLeertDieKarteMitDerAntwortImBeispiel(bildschirm, ausgangs
     with aufDieHandlungWarten(seite):
         knopf.click()
 
-    expect(seite.locator(".karte .modell")).to_have_count(0)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(0)
 
 
 @mitAusgewählterEinheit
-def testAuf23_3EineAusgewählteEinheitBleibtNachDemZurücklegenAusgewähltMitDerGanzenEinheitAlsEbene(
+def testAuf23_3EineAusgewählteEinheitBleibtNachDemZurücklegenAusgewähltMitDerEinheitenebene(
     aufstellungNachDerZonenwahl, boyzMitEbene
 ):
     aufstellungNachDerZonenwahl.zurücklegen()
 
     assert aufstellungNachDerZonenwahl.ausgewählt(boyzMitEbene)
-    assert aufstellungNachDerZonenwahl.ganzeEinheitIstEbene(boyzMitEbene)
+    assert aufstellungNachDerZonenwahl.hatEinheitenebene(boyzMitEbene)
     assert not any(
-        aufstellungNachDerZonenwahl.modellIstEbene(modell) for modell in boyzMitEbene.modelle
+        aufstellungNachDerZonenwahl.istModellebene(modell) for modell in boyzMitEbene.modelle
     )
 
 
-def testAuf23_3MitEinemModellAlsEbeneLässtDerDienstDieEinheitMitDerGanzenEinheitAlsEbeneAusgewählt(
+def testAuf23_3MitEinerModellebeneLässtDerDienstDieEinheitMitDerEinheitenebeneAusgewählt(
     dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors
 ):
     auswählen(dienstDesBeispiels, "Necron Warriors")
     _, _, drittes, *_ = necronWarriors.modelle
-    mitEbene = modellAnklicken(dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes)
+    mitModellebene = modellAnklicken(
+        dienstDesBeispiels, aufstellungDesBeispiels, necronWarriors, drittes
+    )
 
     antwort = zurücklegen(dienstDesBeispiels)
 
-    assert len(ebenenIm(mitEbene.get_json())) == 1
+    assert len(modellebenenIm(mitModellebene.get_json())) == 1
     assert antwort.status_code == HTTPStatus.OK
     beispiel = zurückgelegtDesVertrags()
     assert imUmfangDes(beispiel, antwort.get_json()) == beispiel
-    assert aufstellungDesBeispiels.ganzeEinheitIstEbene(necronWarriors)
+    assert aufstellungDesBeispiels.hatEinheitenebene(necronWarriors)
 
 
 def testAuf23_3DieSeiteZeigtDieEinheitMitDerAntwortImBeispielAusgewählt(
@@ -219,7 +221,7 @@ def testAuf23_3DieSeiteZeigtDieEinheitMitDerAntwortImBeispielAusgewählt(
     with aufDieHandlungWarten(seite):
         knopf.click()
 
-    expect(seite.locator(".karte .modell")).to_have_count(0)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(0)
     assert ausgewählteEinheiten(seite) == {"Necron Warriors"}
 
 
@@ -234,7 +236,7 @@ def testAuf23_3DieSeiteZeigtDieEinheitNachDemZurücklegenAusgewählt(
     with aufDieHandlungWarten(seite):
         knopf.click()
 
-    expect(seite.locator(".karte .modell")).to_have_count(0)
+    expect(seite.locator(".spielfeld .modell")).to_have_count(0)
     assert ausgewählteEinheiten(seite) == {"Boyz"}
 
 

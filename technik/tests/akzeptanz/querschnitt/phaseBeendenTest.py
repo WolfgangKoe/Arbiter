@@ -39,7 +39,7 @@ def testQue11_1VorDemErstenZugZeigtDieSeiteKeinPhaseBeenden(
 def testQue11_1InDerAufstellungZeigtDieSeiteKeinPhaseBeenden(bildschirm, ausgangsaufstellung):
     seite = bildschirm.seiteZu(ausgangsaufstellung)
 
-    expect(seite.locator(".karte")).to_have_count(1)
+    expect(seite.locator(".spielfeld")).to_have_count(1)
     expect(knopfDerSeite(seite, phaseBeendenKnopf)).to_have_count(0)
 
 

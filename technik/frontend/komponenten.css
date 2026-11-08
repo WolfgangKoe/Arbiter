@@ -163,7 +163,7 @@ body {
   font-size: 0.75rem;
 }
 
-.karte {
+.spielfeld {
   width: 100%;
   max-width: 34rem;
   height: 100%;
@@ -172,7 +172,7 @@ body {
   border: 1px solid var(--rand);
 }
 
-.spielfeld {
+.spielfläche {
   fill: var(--hintergrund);
 }
 

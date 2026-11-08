@@ -12,7 +12,7 @@ def ausgewählteEinheiten(seite: Page) -> frozenset[str]:
 
 
 def ausgewählteModelle(seite: Page) -> frozenset[tuple[float, float]]:
-    kreise = elementeDerSeite(seite, ".karte .modell.ausgewählt")
+    kreise = elementeDerSeite(seite, ".spielfeld .modell.ausgewählt")
     return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
 
 

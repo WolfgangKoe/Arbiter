@@ -8,12 +8,12 @@ Abschnitt der *Bewegungsphase* (BEW-18, MIV-3), die anderen: [Architektur](../..
   [Katalog](../../katalog.md) K3, K7. Web und
   Seite unverändert: kein Schlüssel im Spielstand, die Seite zeichnet die Antworten (V6).
 - Eingabe: `Schlacht` gibt `einheit.fliegen` des gezogenen *Modells* an die
-  `Bewegungsphase`, gebündelt mit Ebene, gezogenem *Modell*, Ziel und `weiter` in einem
+  `Bewegungsphase`, gebündelt mit *Ebene*, gezogenem *Modell*, Ziel und `weiter` in einem
   unveränderlichen `Gezogen`; `Angebot` merkt sich `fliegen`.
 - **Ziehen** (V10, BEW-18.1): wie V16, ohne 17.1 bis 17.4 (`weiter` zählt nicht, Antwort
   `angehaltenAufDemWeg` falsch), 6.2 nach 18.3, ohne QUE-1.2 (nach BEW-19.1 ist dann jede
   *Base*, die sperren könnte, nach AUF-29.3 fremd; das löst 18.2 beim Loslassen). So zeigt
-  die *Karte* die Spinne über fremden *Bases* (8840). Die Gleichheit von V10 und V5 (AUF-28.2, BEW-17.2,
+  das *Spielfeld* die Spinne über fremden *Bases* (8840). Die Gleichheit von V10 und V5 (AUF-28.2, BEW-17.2,
   20.1) gilt nur, solange keine fremde *überdeckt* ist; sonst *setzt* V5 nach 18.2.
 - **18.3** in `phasen/bewegung/fliegen.py`: Ende ist der kleinere Anteil von 3.1 und 6.1
   (6.3). Ist dort keines in *Nahkampfreichweite*, ist der Anteil von 6.2 1; sonst das größte

@@ -9,12 +9,12 @@ from tests.akzeptanz.auswahl import ausgewählteModelle
 from tests.akzeptanz.bildschirm import seiteMitEingabe
 from tests.akzeptanz.dienst import (
     ausgewählteModelleIm,
-    ebenenIm,
     modellAnklicken,
+    modellebenenIm,
     stelleImSpielstand,
 )
 from tests.akzeptanz.handgriffe import einheitenAufstellen, modelleSetzen, stellenAllerModelle
-from tests.akzeptanz.ziehen import klickenMit, mitMausUndFinger, punktAufDerKarte
+from tests.akzeptanz.ziehen import klickenMit, mitMausUndFinger, punktAufDemSpielfeld
 
 
 @pytest.fixture
@@ -32,7 +32,7 @@ def aufgestellteEinheit(request):
 @pytest.mark.parametrize(
     "warbossAusgewählt", [False, True], ids=["ohneAuswahl", "warbossAusgewählt"]
 )
-def testAuf30_1EinKlickWähltDieAufgestellteEinheitMitDerGanzenEinheitAlsEbene(
+def testAuf30_1EinKlickWähltDieAufgestellteEinheitMitDerEinheitenebene(
     aufstellungMitDemWarbossInAufstellung, aufgestellteEinheit, warboss, warbossAusgewählt
 ):
     aufstellung = aufstellungMitDemWarbossInAufstellung
@@ -43,7 +43,7 @@ def testAuf30_1EinKlickWähltDieAufgestellteEinheitMitDerGanzenEinheitAlsEbene(
     aufstellung.modellAnklicken(angeklickt)
 
     assert aufstellung.ausgewählt(aufgestellteEinheit)
-    assert aufstellung.ganzeEinheitIstEbene(aufgestellteEinheit)
+    assert aufstellung.hatEinheitenebene(aufgestellteEinheit)
     assert not aufstellung.ausgewählt(warboss)
 
 
@@ -61,7 +61,7 @@ def testAuf30_1EinKlickLässtSpielerAnDerReiheEinheitInAufstellungUndModelleGlei
     assert stellenAllerModelle(aufstellung) == davor
 
 
-def testAuf30_1DerDienstWähltDieAufgestellteEinheitMitDerGanzenEinheitAlsEbene(
+def testAuf30_1DerDienstWähltDieAufgestellteEinheitMitDerEinheitenebene(
     dienst, aufstellungMitDemWarbossInAufstellung, boyz
 ):
     aufstellung = aufstellungMitDemWarbossInAufstellung
@@ -74,7 +74,7 @@ def testAuf30_1DerDienstWähltDieAufgestellteEinheitMitDerGanzenEinheitAlsEbene(
     assert ausgewählteModelleIm(spielstand) == {
         stelleImSpielstand(aufstellung.stelle(modell)) for modell in boyz.modelle
     }
-    assert ebenenIm(spielstand) == frozenset()
+    assert modellebenenIm(spielstand) == frozenset()
 
 
 @mitMausUndFinger
@@ -85,9 +85,9 @@ def testAuf30_1DieSeiteKennzeichnetNachDemKlickDieAufgestellteEinheit(
     angeklickt, *_ = boyz.modelle
     seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
 
-    klickenMit[eingabe](seite, punktAufDerKarte(seite, aufstellung.stelle(angeklickt)))
+    klickenMit[eingabe](seite, punktAufDemSpielfeld(seite, aufstellung.stelle(angeklickt)))
 
-    expect(seite.locator(".karte .modell.ausgewählt")).to_have_count(len(boyz.modelle))
+    expect(seite.locator(".spielfeld .modell.ausgewählt")).to_have_count(len(boyz.modelle))
     assert ausgewählteModelle(seite) == {
         stelleImSpielstand(aufstellung.stelle(modell)) for modell in boyz.modelle
     }

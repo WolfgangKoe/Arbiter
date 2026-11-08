@@ -9,7 +9,7 @@
   `Bewegungsphase`). Die *Schlacht* (`querschnitt/schlachtrunden.py`) führt Zug,
   *Schlachtrunde* und *Phase* und reicht weiter, was eine *Phase* tut.
 - Eine Anforderung mit eigenen Regeln der Domäne wird ein gleichnamiges Modul
-  (`phasen/aufstellen/auswahl.md` → `auswahl.py`); Anzeige und Bedienung (`karte.md`) liegen
+  (`phasen/aufstellen/auswahl.md` → `auswahl.py`); Anzeige und Bedienung (QUE-2) liegen
   in `web/` und `frontend/`.
 - Ohne Anforderung nur die Werkzeuge `sperre.py` (`Sperre`, `Grund`) und `messen.py` (M1).
 

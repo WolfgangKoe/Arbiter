@@ -14,14 +14,14 @@ from tests.akzeptanz.bildschirm import (
     knopfDerSeite,
     sperrmeldungWarten,
 )
-from tests.akzeptanz.dienst import karteAnklicken, spielstandVon
+from tests.akzeptanz.dienst import spielfeldAnklicken, spielstandVon
 from tests.akzeptanz.handgriffe import (
     modelleSetzen,
     sperrgründe,
     stelleInDerZoneVon,
     stellenAllerModelle,
 )
-from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDerKarte
+from tests.akzeptanz.ziehen import mitDerMausKlicken, punktAufDemSpielfeld
 
 
 @dataclass(frozen=True)
@@ -45,12 +45,12 @@ def sperrfall(request, aufstellungNachDerZonenwahl, spielerEins, boyz) -> Sperrf
     return Sperrfall(stelle, grund)
 
 
-def testAuf19_4EinKlickAufDieKarteSperrtWieDasLoslassenUndSetztKeinModell(
+def testAuf19_4EinKlickAufDasSpielfeldSperrtWieDasLoslassenUndSetztKeinModell(
     aufstellungNachDerZonenwahl, sperrfall
 ):
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
 
-    gründe = sperrgründe(aufstellungNachDerZonenwahl.karteAnklicken, sperrfall.stelle)
+    gründe = sperrgründe(aufstellungNachDerZonenwahl.spielfeldAnklicken, sperrfall.stelle)
 
     assert gründe == {sperrfall.grund}
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
@@ -59,21 +59,21 @@ def testAuf19_4EinKlickAufDieKarteSperrtWieDasLoslassenUndSetztKeinModell(
 def testAuf19_4DerDienstAntwortetAufDenKlickMitDemGrundUndDemStandWieDavor(dienst, sperrfall):
     davor = spielstandVon(dienst)
 
-    antwort = karteAnklicken(dienst, sperrfall.stelle)
+    antwort = spielfeldAnklicken(dienst, sperrfall.stelle)
 
     assert antwort.status_code == HTTPStatus.CONFLICT
     assert antwort.get_json()["gründe"] == [sperrfall.grund.value]
     assert antwort.get_json()["spielstand"] == davor
 
 
-def testAuf19_4DieSeiteNenntNachDemKlickAufDieKarteDenGrundUndBietetGemeinsamÜbergehenNichtAn(
+def testAuf19_4DieSeiteNenntNachDemKlickAufDasSpielfeldDenGrundUndBietetGemeinsamÜbergehenNichtAn(
     bildschirm, aufstellungNachDerZonenwahl, sperrfall
 ):
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
 
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, sperrfall.stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, sperrfall.stelle))
 
     genannt = sperrmeldungWarten(seite, {sperrfall.grund})
     assert genannt == gründeAlsText({sperrfall.grund})
@@ -88,7 +88,7 @@ def testAuf19_4DieSeiteNenntDenGrundNochNachDemAuswählen(
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
 
     klickenUndWarten(seite, "Spieler 1", "Boyz")
@@ -103,11 +103,11 @@ def testAuf19_4DieSeiteNenntDenGrundNichtMehrNachDerNächstenHandlung(
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, 4, 30)
     seite = bildschirm.seiteZu(aufstellungNachDerZonenwahl)
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
     sperrmeldungWarten(seite, {Grund.nichtWählbar})
     klickenUndWarten(seite, "Spieler 1", "Boyz")
 
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
 
     assert sperrmeldungWarten(seite, set()) == frozenset()

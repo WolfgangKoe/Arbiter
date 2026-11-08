@@ -1,4 +1,4 @@
-"""AUF-28 · Loslassen, wo die Karte zeigt."""
+"""AUF-28 · Loslassen, wo das Spielfeld zeigt."""
 
 from fractions import Fraction
 from http import HTTPStatus
@@ -11,7 +11,7 @@ from arbiter.domaene.spielobjekte import Stelle
 from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke, stelleAn, stellenAlsZahlen
 from tests.akzeptanz.bildschirm import (
     aufDieHandlungWarten,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     seiteMitEingabe,
 )
 from tests.akzeptanz.dienst import (
@@ -46,24 +46,24 @@ from tests.akzeptanz.handgriffe import (
 from tests.akzeptanz.ziehen import (
     Abfragen,
     WeitergereichteAbfragen,
-    alleinUndAlsEbene,
-    alsEbeneZiehen,
+    alleinUndMitEinheitenebene,
     alsKörper,
     aufDieAntwortenWarten,
     bildaufbauAbwarten,
     halten,
     längeDesHaltens,
+    mitEinheitenebeneZiehen,
     mitMausUndFinger,
-    nebenDerKarteLoslassen,
+    nebenDemSpielfeldLoslassen,
     offeneAbfragenAbwarten,
-    punktAufDerKarte,
-    zieleNebenDerKarte,
+    punktAufDemSpielfeld,
+    zieleNebenDemSpielfeld,
     zuvorDerEingaben,
     überEinenPunktZiehenUndLoslassen,
 )
 
 gesperrteStelleImBeispiel = Stelle(x=Fraction(38), y=Fraction(28))
-stelleNebenDerKarteImBeispiel = Stelle(x=Fraction(breiteDesSpielfelds + 2), y=Fraction(28))
+stelleNebenDemSpielfeldImBeispiel = Stelle(x=Fraction(breiteDesSpielfelds + 2), y=Fraction(28))
 
 
 @pytest.fixture
@@ -72,20 +72,20 @@ def dreiGesetzteBoyz(aufstellungNachDerZonenwahl, spielerEins, boyz):
     return aufstellungNachDerZonenwahl, spielerEins, boyz, davor
 
 
-@zieleNebenDerKarte
-@alleinUndAlsEbene
+@zieleNebenDemSpielfeld
+@alleinUndMitEinheitenebene
 @mitMausUndFinger
-def testAuf28_1NebenDerKarteLosgelassenStehtJedesModellWoDieKarteEsZuletztZeigte(
+def testAuf28_1NebenDemSpielfeldLosgelassenStehtJedesModellWoDasSpielfeldEsZuletztZeigte(
     bildschirm, dreiGesetzteBoyz, ziel, ebeneLegen, eingabe
 ):
     aufstellung, spielerEins, boyz, davor = dreiGesetzteBoyz
     ebeneLegen(aufstellung, boyz)
     stellenDavor = stellenAlsZahlen(aufstellung)
     seite = seiteMitEingabe(bildschirm, aufstellung, eingabe)
-    aufDerKarte = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
+    aufDemSpielfeld = stelleInDerZoneDesSpielersAnDerReihe(aufstellung, 4, längeDesHaltens)
     daneben = ziel(seite, aufstellung, spielerEins)
 
-    gezeigt = nebenDerKarteLoslassen(seite, davor, aufDerKarte, daneben, eingabe)
+    gezeigt = nebenDemSpielfeldLoslassen(seite, davor, aufDemSpielfeld, daneben, eingabe)
 
     assert gezeigt != stellenDavor
     assert stellenAlsZahlen(aufstellung) == gezeigt
@@ -117,7 +117,7 @@ class AbfrageMitSperre:
         anfrage.fulfill(json=stelleBeimLoslassenDesVertrags())
 
 
-def testAuf28_1DieSeiteSendetNebenDerKarteDenPunktDerLetztenStelleAuchNachEinerSperre(
+def testAuf28_1DieSeiteSendetNebenDemSpielfeldDenPunktDerLetztenStelleAuchNachEinerSperre(
     bildschirm, ausgangsaufstellung
 ):
     abfrage = AbfrageMitSperre()
@@ -131,9 +131,9 @@ def testAuf28_1DieSeiteSendetNebenDerKarteDenPunktDerLetztenStelleAuchNachEinerS
     zeiger = halten(seite, gehaltenes, stelleDesLoslassensImBeispiel, "maus")
     abfrage.gesperrt = True
     gesperrte = Abfragen(seite)
-    zeiger.bewegen(punktAufDerKarte(seite, gesperrteStelleImBeispiel))
+    zeiger.bewegen(punktAufDemSpielfeld(seite, gesperrteStelleImBeispiel))
     aufDieAntwortenWarten(seite, gesperrte)
-    daneben = punktAufDerKarte(seite, stelleNebenDerKarteImBeispiel)
+    daneben = punktAufDemSpielfeld(seite, stelleNebenDemSpielfeldImBeispiel)
     zeiger.bewegen(daneben)
     offeneAbfragenAbwarten(seite, gesperrte)
 
@@ -149,7 +149,7 @@ def testAuf28_1DieSeiteSendetNebenDerKarteDenPunktDerLetztenStelleAuchNachEinerS
         f"{pfadDesGezogenenImBeispiel}/stelle",
     )
     assert anfrage.post_data_json == punktDerLetztenStelle
-    assert kreiseDerKarte(seite) == {(modell["x"], modell["y"]) for modell in modelle}
+    assert kreiseDesSpielfelds(seite) == {(modell["x"], modell["y"]) for modell in modelle}
 
 
 def testAuf28_2NachDemAnhaltenSetztDerDienstDasModellWoDieZweiteAbfrageEsZeigte(
@@ -200,7 +200,7 @@ def testAuf28_2NachDemVerschiebenSetztDerDienstDieGanzeEinheitWoDieAbfrageSieZei
     gesetzte, zielAmOverlord = warriorsVorDemOverlord
     (gezogenes, _), *_ = gesetzte
     umDenSenkrechtenTeil = (Fraction(0), radiusInZoll(gezogenes))
-    alsEbeneZiehen(aufstellung, necronWarriors)
+    mitEinheitenebeneZiehen(aufstellung, necronWarriors)
     abgefragt = stelleBeimLoslassenAbfragen(
         dienst, aufstellung, necronWarriors, gezogenes, zielAmOverlord
     )

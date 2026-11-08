@@ -11,7 +11,7 @@ die Seite zeichnet nur, was der Spielstand nennt (W2, O5).
   rechnet je Eintrag eine `Einhüllende(einheit, kreise, wurf, wählbar, nahkampfreichweite)`
   aus `Grenzkreis(stelle, radius)` in *Zoll*, Radius `messen.radiusInZoll` plus *Abstand*
   (M1); bei einem *Modell* ist sie sein *Grenzkreis*. `Schlacht` gibt weiter: `vorrücken()`,
-  `vorrückenZurücknehmen()`, `karteAnklicken(stelle)` (V19), Abfrage `grenzen` mit diesen
+  `vorrückenZurücknehmen()`, `spielfeldAnklicken(stelle)` (V19), Abfrage `grenzen` mit diesen
   Einträgen, Felder wie V21.
   - BEW-11: um die *ausgewählte* *Einheit* des *Spielers* *am Zug* in der
     *Bewegungsphase* je *Modell* der *Ebene* ein Kreis um seine *Stelle* zu Beginn der
@@ -19,7 +19,7 @@ die Seite zeichnet nur, was der Spielstand nennt (W2, O5).
     *Spielers* einer um jedes *gesetzte* *Modell*, *Abstand* 1″. Sonst keine (11.4).
   - BEW-13: wartet sie, dazu sechs mit *Abstand* plus 1″ bis 6″, `wählbar`; ist sie
     *vorgerückt*, nur der ihres Wurfs, nicht `wählbar`.
-  - BEW-14, 5.3: `karteAnklicken(stelle)` setzt, während sie wartet, den kleinsten Wurf,
+  - BEW-14, 5.3: `spielfeldAnklicken(stelle)` setzt, während sie wartet, den kleinsten Wurf,
     dessen Kreise die *Stelle* enthalten, wenn die aus BEW-11 sie nicht enthalten; sonst
     BEW-9.1. Enthalten: Quadrat des Abstands zum Mittelpunkt höchstens Quadrat des Radius
     (S2). Danach hält V16 an *Bewegungsweite* plus Wurf.
@@ -50,7 +50,7 @@ Am Bildschirm | Anfrage (V5) | `Schlacht`
 „Vorrücken“ (BEW-5.2) | `PUT /api/vorrücken` | `vorrücken`
 „Vorrücken zurücknehmen“ (BEW-12.2) | `PUT /api/vorrückenZurücknehmen` | `vorrückenZurücknehmen`
 „Einheit zurücksetzen“ (BEW-24.2) | `PUT /api/einheitZurücksetzen`, ohne Körper | `einheitZurücksetzen`
-Klick in einen Ring (BEW-14.1) | `PUT /api/karteAnklicken` (V19) | `karteAnklicken`
+Klick in einen Ring (BEW-14.1) | `PUT /api/spielfeldAnklicken` (V19) | `spielfeldAnklicken`
 
 - **V21** Vor dem Ende der *Aufstellung* 404 wie V12. Spielstand: `schlacht.grenzen`, je
   *Grenzkreis* oder *Einhüllende* ein Eintrag `{"spieler": 1, "einheit": 1, "kreise": [{"x": 7.5,
@@ -66,7 +66,7 @@ Klick in einen Ring (BEW-14.1) | `PUT /api/karteAnklicken` (V19) | `karteAnklick
 - Je Eintrag zeichnet `frontend/komponenten/grenze.js` (O5) eine `grenzeMaske` und
   eine `g.grenze spieler<n>`, dazu `nahkampfreichweite`, `wählbar`; die Kennung der Maske aus der Nummer des Eintrags in der Liste. Ein Kreis
   ist die *Einhüllende* seines Eintrags, gerechnet wird nicht. Grenzen liegen unter den
-  *Modellen*; ein Klick auf sie ist ein Klick auf die *Karte* (V19).
+  *Modellen*; ein Klick auf sie ist ein Klick auf das *Spielfeld* (V19).
 - Knöpfe (V7): „Vorrücken“, wenn `angeboten`, „Vorrücken zurücknehmen“, wenn
   `zurücknehmen`, dann „Einheit zurücksetzen“, wenn `einheitZurücksetzen.angeboten`, alle vor
   „Phase beenden“ (Mockup [bew-24](../../../../domaene/mockups/bew-24.html)).

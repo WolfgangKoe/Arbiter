@@ -13,7 +13,7 @@ from tests.akzeptanz.auswahl import (
 from tests.akzeptanz.bildschirm import (
     armeelisteVon,
     inhaltDerSeite,
-    kreiseDerKarte,
+    kreiseDesSpielfelds,
     neuLaden,
     seiteMitEingabe,
 )
@@ -29,15 +29,15 @@ from tests.akzeptanz.ziehen import (
     liegtEinPixelGenauAn,
     mitteVon,
     modellZiehen,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
     ziehenOhneAnfrage,
 )
 
 mitMausUndFinger = pytest.mark.parametrize("eingabe", ["maus", "finger"])
 
 
-def kreisAufDerKarte(seite):
-    return seite.locator(".karte .modell").first
+def kreisAufDemSpielfeld(seite):
+    return seite.locator(".spielfeld .modell").first
 
 
 @pytest.fixture
@@ -73,7 +73,7 @@ def testQue3_1EinTippenAufEineAusgewählteEinheitMachtSieNichtAusgewähltWieEinK
     assert ausgewählteEinheiten(mitFinger) == ausgewählteEinheiten(mitMaus) == frozenset()
 
 
-def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
+def testQue3_1EinTippenAufDasSpielfeldLöstDasselbeAusWieEinKlick(
     bildschirm, aufstellungNachDerZonenwahl, aufstellungZumTippen, boyz
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -83,17 +83,17 @@ def testQue3_1EinTippenAufDieKarteLöstDasselbeAusWieEinKlick(
     klickenUndWarten(mitMaus, "Spieler 1", "Boyz")
     tippenUndWarten(mitFinger, "Spieler 1", "Boyz")
 
-    kreisAufDerKarte(mitMaus).click()
-    kreisAufDerKarte(mitFinger).tap()
-    expect(kreisAufDerKarte(mitMaus)).to_have_attribute("data-ebene", "ja")
-    expect(kreisAufDerKarte(mitFinger)).to_have_attribute("data-ebene", "ja")
+    kreisAufDemSpielfeld(mitMaus).click()
+    kreisAufDemSpielfeld(mitFinger).tap()
+    expect(kreisAufDemSpielfeld(mitMaus)).to_have_attribute("data-modellebene", "ja")
+    expect(kreisAufDemSpielfeld(mitFinger)).to_have_attribute("data-modellebene", "ja")
 
     assert inhaltDerSeite(mitFinger) == inhaltDerSeite(mitMaus)
     assert ausgewählteModelle(mitFinger) == ausgewählteModelle(mitMaus)
 
 
 @pytest.mark.parametrize("erneut", ["neuLaden", "adresseErneutÖffnen"])
-def testQue3_2ÖffnetEinSpielerDieAdresseErneutZeigenKarteUndArmeelistenDasselbeWieDavor(
+def testQue3_2ÖffnetEinSpielerDieAdresseErneutZeigenSpielfeldUndArmeelistenDasselbeWieDavor(
     bildschirm, aufstellungNachDerZonenwahl, boyz, erneut
 ):
     modelleSetzen(aufstellungNachDerZonenwahl, boyz, anzahlGesetzterModelle)
@@ -123,7 +123,7 @@ def testQue3_2DerDienstLiefertAufJedeWeitereAnfrageDenselbenSpielstandWieDavor(
     assert spielstandVon(dienst) == davor
 
 
-def testQue3_3NachDemNeustartZeigenKarteUndArmeelistenDieAusgangslageStattDesStandsDavor(
+def testQue3_3NachDemNeustartZeigenSpielfeldUndArmeelistenDieAusgangslageStattDesStandsDavor(
     befehl, bildschirm
 ):
     adresseDavor = befehl.starten()
@@ -142,7 +142,7 @@ def testQue3_3NachDemNeustartZeigenKarteUndArmeelistenDieAusgangslageStattDesSta
 
 
 @mitMausUndFinger
-def testQue3_4EinModellAufDieKarteZiehenUndLoslassenSetztEsAnDieStelleDesLoslassens(
+def testQue3_4EinModellAufDasSpielfeldZiehenUndLoslassenSetztEsAnDieStelleDesLoslassens(
     bildschirm, aufstellungNachDerZonenwahl, boyzSetzen, spielerEins, eingabe
 ):
     _, (zweitesModell, stelleDavor) = boyzSetzen(2)
@@ -163,10 +163,12 @@ def testQue3_4EinModellAufDieArmeelisteZiehenUndLoslassenSendetNichtsUndLässtJe
     stellenDavor = [aufstellungNachDerZonenwahl.stelle(modell) for modell in boyz.modelle]
     stelleDavor = stellenDavor[-1]
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
-    start = punktAufDerKarte(seite, stelleDavor)
+    start = punktAufDemSpielfeld(seite, stelleDavor)
     mitteDerArmeeliste = mitteVon(armeelisteVon(seite, "Spieler 1"))
 
     anfragen = ziehenOhneAnfrage(seite, start, mitteDerArmeeliste, eingabe)
 
     assert anfragen == []
-    assert kreiseDerKarte(seite) == {(float(stelle.x), float(stelle.y)) for stelle in stellenDavor}
+    assert kreiseDesSpielfelds(seite) == {
+        (float(stelle.x), float(stelle.y)) for stelle in stellenDavor
+    }

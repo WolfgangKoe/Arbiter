@@ -32,7 +32,7 @@ def einheitenUndModelle(spieler):
 def testOhneAuswahlGibtEsKeineEbeneUndKeinModellIstAusgewählt(auswahl, spieler):
     ersteEinheit, _, erstesModell, _ = einheitenUndModelle(spieler)
 
-    assert not auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert not auswahl.hatEinheitenebene(ersteEinheit)
     assert not auswahl.modellAusgewählt(erstesModell)
 
 
@@ -41,7 +41,7 @@ def testEineAusgewählteEinheitIstSelbstDieEbeneUndAlleModelleSindAusgewählt(au
 
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert auswahl.hatEinheitenebene(ersteEinheit)
     assert auswahl.modellAusgewählt(erstesModell)
     assert auswahl.modellAusgewählt(zweitesModell)
 
@@ -52,36 +52,36 @@ def testDieEbeneEinesModellsMachtNurDiesesModellAusgewählt(auswahl, spieler):
 
     anklicken(auswahl, spieler, erstesModell)
 
-    assert auswahl.modellIstEbene(erstesModell)
+    assert auswahl.istModellebene(erstesModell)
     assert auswahl.modellAusgewählt(erstesModell)
     assert not auswahl.modellAusgewählt(zweitesModell)
 
 
-def testNurDieAusgewählteEinheitOhneModellAlsEbeneIstGanzDieEbene(auswahl, spieler):
+def testNurDieAusgewählteEinheitOhneModellebeneHatDieEinheitenebene(auswahl, spieler):
     ersteEinheit, zweiteEinheit, erstesModell, _ = einheitenUndModelle(spieler)
-    ohneAuswahl = auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    ohneAuswahl = auswahl.hatEinheitenebene(ersteEinheit)
     auswahl.auswählen(ersteEinheit)
-    ganz = auswahl.ganzeEinheitIstEbene(ersteEinheit)
-    anderer = auswahl.ganzeEinheitIstEbene(zweiteEinheit)
+    ganz = auswahl.hatEinheitenebene(ersteEinheit)
+    anderer = auswahl.hatEinheitenebene(zweiteEinheit)
 
     anklicken(auswahl, spieler, erstesModell)
 
     assert not ohneAuswahl
     assert ganz
     assert not anderer
-    assert not auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert not auswahl.hatEinheitenebene(ersteEinheit)
 
 
 def testNurDasGewählteModellIstEbene(auswahl, spieler):
     ersteEinheit, _, erstesModell, zweitesModell = einheitenUndModelle(spieler)
     auswahl.auswählen(ersteEinheit)
-    ohneEbene = auswahl.modellIstEbene(erstesModell)
+    ohneEbene = auswahl.istModellebene(erstesModell)
 
     anklicken(auswahl, spieler, erstesModell)
 
     assert not ohneEbene
-    assert auswahl.modellIstEbene(erstesModell)
-    assert not auswahl.modellIstEbene(zweitesModell)
+    assert auswahl.istModellebene(erstesModell)
+    assert not auswahl.istModellebene(zweitesModell)
 
 
 def testDasEbeneModellErneutAnklickenKehrtZurEinheitZurück(auswahl, spieler):
@@ -91,7 +91,7 @@ def testDasEbeneModellErneutAnklickenKehrtZurEinheitZurück(auswahl, spieler):
 
     anklicken(auswahl, spieler, erstesModell)
 
-    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert auswahl.hatEinheitenebene(ersteEinheit)
 
 
 def testEinAnderesModellAnklickenWechseltDieEbene(auswahl, spieler):
@@ -101,8 +101,8 @@ def testEinAnderesModellAnklickenWechseltDieEbene(auswahl, spieler):
 
     anklicken(auswahl, spieler, zweitesModell)
 
-    assert auswahl.modellIstEbene(zweitesModell)
-    assert not auswahl.modellIstEbene(erstesModell)
+    assert auswahl.istModellebene(zweitesModell)
+    assert not auswahl.istModellebene(erstesModell)
 
 
 def testEinModellEinerNichtAusgewähltenEinheitAnklickenWähltDieEinheitAus(auswahl, spieler):
@@ -111,7 +111,7 @@ def testEinModellEinerNichtAusgewähltenEinheitAnklickenWähltDieEinheitAus(ausw
 
     anklicken(auswahl, spieler, erstesModell)
 
-    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert auswahl.hatEinheitenebene(ersteEinheit)
     assert not auswahl.ausgewählt(zweiteEinheit)
 
 
@@ -123,7 +123,7 @@ def testEineNeueAuswahlSetztDieEbeneZurück(auswahl, spieler):
     auswahl.auswählen(zweiteEinheit)
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert auswahl.hatEinheitenebene(ersteEinheit)
 
 
 def testDieselbeEinheitErneutAuswählenBehältDieEbene(auswahl, spieler):
@@ -133,7 +133,7 @@ def testDieselbeEinheitErneutAuswählenBehältDieEbene(auswahl, spieler):
 
     auswahl.auswählen(ersteEinheit)
 
-    assert auswahl.modellIstEbene(erstesModell)
+    assert auswahl.istModellebene(erstesModell)
 
 
 def testEinUngesetztesModellAnklickenÄndertNichts(auswahl, spieler):
@@ -142,7 +142,7 @@ def testEinUngesetztesModellAnklickenÄndertNichts(auswahl, spieler):
 
     anklicken(auswahl, spieler, erstesModell, gesetzt=())
 
-    assert auswahl.ganzeEinheitIstEbene(ersteEinheit)
+    assert auswahl.hatEinheitenebene(ersteEinheit)
 
 
 def testEinModellKeinesSpielersAnklickenWirftEinenFehler(auswahl, spieler):

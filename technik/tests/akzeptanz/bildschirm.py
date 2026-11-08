@@ -51,7 +51,7 @@ def elementeDerSeite(seite: Page, auswahl: str) -> tuple[Element, ...]:
 def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> frozenset[str]:
     farbeJeStelle = {
         (kreis.zahl("cx"), kreis.zahl("cy")): kreis.fill
-        for kreis in elementeDerSeite(seite, ".karte .modell")
+        for kreis in elementeDerSeite(seite, ".spielfeld .modell")
     }
     return frozenset(
         farbeJeStelle[float(stelle.x), float(stelle.y)]
@@ -60,8 +60,8 @@ def modellfarben(seite: Page, aufstellung: Aufstellung, spieler: Spieler) -> fro
     )
 
 
-def kreiseDerKarte(seite: Page) -> frozenset[tuple[float, float]]:
-    kreise = elementeDerSeite(seite, ".karte .modell")
+def kreiseDesSpielfelds(seite: Page) -> frozenset[tuple[float, float]]:
+    kreise = elementeDerSeite(seite, ".spielfeld .modell")
     return frozenset((kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise)
 
 
@@ -76,7 +76,7 @@ _kreiseDerGrenzenUndMasken = """gruppen => gruppen.map(gruppe => {
 
 
 def kreiseDerGrenzenUndIhrerMasken(seite: Page) -> tuple[list, list]:
-    paare = seite.locator(".karte g.grenze").evaluate_all(_kreiseDerGrenzenUndMasken)
+    paare = seite.locator(".spielfeld g.grenze").evaluate_all(_kreiseDerGrenzenUndMasken)
     return [gruppe for gruppe, _ in paare], [maske for _, maske in paare]
 
 
@@ -110,7 +110,7 @@ def neuLaden(seite: Page) -> None:
 
 
 def _aufDasSpielfeldWarten(seite: Page) -> None:
-    seite.wait_for_selector(".karte .spielfeld")
+    seite.wait_for_selector(".spielfeld .spielfläche")
 
 
 def armeelisteVon(seite: Page, spielername: str) -> Locator:

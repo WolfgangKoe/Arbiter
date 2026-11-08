@@ -58,7 +58,7 @@ def testBew12_1IstEineAndereEinheitAusgewähltBietetArbiterZurücknehmenNichtAn(
 def testBew12_1OhneAuswahlBietetArbiterZurücknehmenNichtAn(einheitAmZug):
     schlacht, einheit, _, _ = einheitAmZug
     vorgerücktMit(schlacht, einheit, dreiAugen)
-    schlacht.karteAnklicken(mitteDesSpielfelds)
+    schlacht.spielfeldAnklicken(mitteDesSpielfelds)
 
     assert not schlacht.vorrückenZurücknehmenAngeboten
 
@@ -169,10 +169,10 @@ def testBew12_2AmBildschirmNimmtDerKnopfDieEinhüllendeDesWurfsZurück(
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, "maus"
     )
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(2)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(2)
 
     knopfDerSeite(seite, zurücknehmenKnopf).click()
 
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(1)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(1)
     expect(knopfDerSeite(seite, zurücknehmenKnopf)).to_have_count(0)
     assert not schlachtInDerBewegungsphase.vorgerückt(boyz)

@@ -140,8 +140,8 @@ def _modell(quelle: Aufstellung | Schlacht, modell: Modell, stelle: Stelle) -> d
         "radius": float(radiusInZoll(modell.base)),
         "ausgewählt": quelle.modellAusgewählt(modell),
     }
-    if quelle.modellIstEbene(modell):
-        beschreibung["ebene"] = True
+    if quelle.istModellebene(modell):
+        beschreibung["modellebene"] = True
     return beschreibung
 
 

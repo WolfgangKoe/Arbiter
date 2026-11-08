@@ -10,7 +10,7 @@ from tests.akzeptanz.dienst import (
     ausgewählteModelleIm,
     grenzenDerEinheitIm,
     grenzenImSpielstand,
-    karteAnklicken,
+    spielfeldAnklicken,
 )
 from tests.akzeptanz.grenzen import (
     außerhalbDerSechsGrenzkreise,
@@ -27,7 +27,7 @@ from tests.akzeptanz.ziehen import (
     aufDasAnklickenWarten,
     klickenMit,
     mitMausUndFinger,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
 )
 
 
@@ -37,7 +37,7 @@ def testBew14_1EinKlickNurImGrenzkreisEinesWurfsIstDerKlickAufIhn(einheitAmZug, 
     schlacht, einheit, _, _ = einheitAmZug
     wartetAufDenVorrückwurf(schlacht, einheit, ebene)
 
-    schlacht.karteAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
+    schlacht.spielfeldAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, wurf))
 
     assert schlacht.vorrückwurf(einheit) == wurf
 
@@ -50,7 +50,7 @@ def testBew14_1EinKlickAufDenGrenzkreisEinesWurfsGiltAlsInnerhalbSeinerFläche(
     schlacht, einheit, _, _ = einheitAmZug
     wartetAufDenVorrückwurf(schlacht, einheit, ebene)
 
-    schlacht.karteAnklicken(stelleAufDemGrenzkreisDesWurfs(schlacht, einheit, wurf))
+    schlacht.spielfeldAnklicken(stelleAufDemGrenzkreisDesWurfs(schlacht, einheit, wurf))
 
     assert schlacht.vorrückwurf(einheit) == wurf
 
@@ -67,7 +67,9 @@ def testBew14_1EinKlickAnJederAnderenStelleHebtDieAuswahlAufStattZuWählen(
     schlacht, einheit, _, _ = einheitAmZug
     wartetAufDenVorrückwurf(schlacht, einheit, ebene)
 
-    schlacht.karteAnklicken(stelleNurImGrenzkreisDesWurfs(schlacht, einheit, mehrAlsDieBewegung))
+    schlacht.spielfeldAnklicken(
+        stelleNurImGrenzkreisDesWurfs(schlacht, einheit, mehrAlsDieBewegung)
+    )
 
     assert not schlacht.ausgewählt(einheit)
     assert not schlacht.vorgerückt(einheit)
@@ -93,7 +95,7 @@ def testBew14_1DerDienstNimmtDenKlickNurImGrenzkreisFürVierAlsWurfVier(
     stellen = wartetAufDenVorrückwurf(schlachtInDerBewegungsphase, boyz, "ganzeEinheit")
     stelle = stelleNurImGrenzkreisDesWurfs(schlachtInDerBewegungsphase, boyz, vierAugen)
 
-    antwort = karteAnklicken(dienstDerSchlacht, stelle)
+    antwort = spielfeldAnklicken(dienstDerSchlacht, stelle)
 
     spielstand = antwort.get_json()
     assert antwort.status_code == HTTPStatus.OK
@@ -114,7 +116,7 @@ def testBew14_1DerDienstHebtNachDemKlickInDenGrenzkreisAusBew11DieAuswahlAuf(
         schlachtInDerBewegungsphase, boyz, innerhalbDesGrenzkreisesOhneWurf
     )
 
-    antwort = karteAnklicken(dienstDerSchlacht, stelle)
+    antwort = spielfeldAnklicken(dienstDerSchlacht, stelle)
 
     assert antwort.status_code == HTTPStatus.OK
     assert ausgewählteModelleIm(antwort.get_json()) == frozenset()
@@ -129,12 +131,12 @@ def testBew14_1AmBildschirmWähltEinKlickNurImGrenzkreisFürVierDenWurfVier(
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(6)
 
-    klickenMit[eingabe](seite, punktAufDerKarte(seite, stelle))
+    klickenMit[eingabe](seite, punktAufDemSpielfeld(seite, stelle))
 
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(0)
-    expect(seite.locator(".karte g.grenze.spieler1")).to_have_count(2)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(0)
+    expect(seite.locator(".spielfeld g.grenze.spieler1")).to_have_count(2)
     assert schlachtInDerBewegungsphase.vorrückwurf(boyz) == vierAugen
 
 
@@ -148,11 +150,11 @@ def testBew14_1AmBildschirmWähltEinKlickAufEinModellImGrenzkreisEinesWurfsKeine
     seite = seiteDerSchlachtMitEingabe(
         bildschirm, beendeteAufstellung, schlachtInDerBewegungsphase, eingabe
     )
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(6)
 
     with aufDasAnklickenWarten(seite):
-        klickenMit[eingabe](seite, punktAufDerKarte(seite, stelle))
+        klickenMit[eingabe](seite, punktAufDemSpielfeld(seite, stelle))
 
-    expect(seite.locator(".karte g.grenze.spieler1.wählbar")).to_have_count(6)
+    expect(seite.locator(".spielfeld g.grenze.spieler1.wählbar")).to_have_count(6)
     assert schlachtInDerBewegungsphase.vorrückwurf(boyz) is None
     assert schlachtInDerBewegungsphase.wartetAufVorrückwurf(boyz)

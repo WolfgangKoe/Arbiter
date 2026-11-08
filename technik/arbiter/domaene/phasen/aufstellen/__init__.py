@@ -76,11 +76,11 @@ class Aufstellung:
     def ausgewählt(self, einheit: Einheit) -> bool:
         return self._auswahl.ausgewählt(einheit)
 
-    def ganzeEinheitIstEbene(self, einheit: Einheit) -> bool:
-        return self._auswahl.ganzeEinheitIstEbene(einheit)
+    def hatEinheitenebene(self, einheit: Einheit) -> bool:
+        return self._auswahl.hatEinheitenebene(einheit)
 
-    def modellIstEbene(self, modell: Modell) -> bool:
-        return self._auswahl.modellIstEbene(modell)
+    def istModellebene(self, modell: Modell) -> bool:
+        return self._auswahl.istModellebene(modell)
 
     def modellAusgewählt(self, modell: Modell) -> bool:
         return self._auswahl.modellAusgewählt(modell)
@@ -139,7 +139,7 @@ class Aufstellung:
         if gezeigt.stellen:
             self._loslassen(einheitVon(self._beideSpieler, modell), gezeigt.stellen)
 
-    def karteAnklicken(self, stelle: Stelle) -> None:
+    def spielfeldAnklicken(self, stelle: Stelle) -> None:
         einheit = self._auswahl.einheit
         if einheit is None:
             return
@@ -170,7 +170,7 @@ class Aufstellung:
         for modell in einheit.modelle:
             self._stellen.pop(modell, None)
         self._einheitInAufstellung = None
-        self._auswahl.ganzeEinheitAlsEbene(einheit)
+        self._auswahl.einheitenebeneWählen(einheit)
 
     def auswählen(self, einheit: Einheit) -> None:
         self._prüfenDassZurAufstellung(einheit)

@@ -54,6 +54,6 @@
   ersten ([W5](web.md#aufbau)).
 - **B5** Ziehen: mit der Maus über `page.mouse` (drücken, `move` mit `steps`, loslassen), mit
   dem Finger über CDP `Input.dispatchTouchEvent` in einem Kontext mit `has_touch` (Anliegen
-  372). Den Punkt rechnet der Test aus Zoll über `getScreenCTM()` der `.karte`; die *Stelle*
+  372). Den Punkt rechnet der Test aus Zoll über `getScreenCTM()` des `.spielfeld`; die *Stelle*
   danach gilt auf einen Pixel genau (`1 / a` Zoll), denn der Zeiger kennt nur Pixel. Exakt
   prüfen die Domänentests (S2).

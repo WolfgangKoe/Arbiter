@@ -19,8 +19,8 @@ from tests.akzeptanz.bildschirm import (
 )
 from tests.akzeptanz.dienst import (
     auswählen,
-    karteAnklicken,
     kennungenDerEinheiten,
+    spielfeldAnklicken,
     spielstandVon,
     stelleImSpielstand,
 )
@@ -39,7 +39,7 @@ from tests.akzeptanz.ziehen import (
     mitDerMausKlicken,
     mitMausUndFinger,
     mitteVon,
-    punktAufDerKarte,
+    punktAufDemSpielfeld,
     ziehenOhneAnfrage,
     zollJePixel,
 )
@@ -86,13 +86,13 @@ def reihenNachX(stellen: list[Stelle]) -> list[list[Stelle]]:
     ]
 
 
-def testAuf18_1KeineAusgewählteEinheitLässtDenKlickAufDieKarteOhneFolge(
+def testAuf18_1KeineAusgewählteEinheitLässtDenKlickAufDasSpielfeldOhneFolge(
     aufstellungNachDerZonenwahl, spielerEins
 ):
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(stelle)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(stelle)
 
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
     assert aufstellungNachDerZonenwahl.einheitInAufstellung is None
@@ -105,7 +105,7 @@ def testAuf18_1DerKlickGiltDerAusgewähltenEinheitNichtDerAnderen(
     aufstellungNachDerZonenwahl.auswählen(warboss)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(stelle)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(stelle)
 
     assert gesetzteStellen(aufstellungNachDerZonenwahl, warboss)
     assert not gesetzteStellen(aufstellungNachDerZonenwahl, boyz)
@@ -117,7 +117,7 @@ def testAuf18_1DerDienstLässtDenKlickOhneAusgewählteEinheitOhneFolge(
     davor = spielstandVon(dienst)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    antwort = karteAnklicken(dienst, stelle)
+    antwort = spielfeldAnklicken(dienst, stelle)
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == davor
@@ -130,7 +130,7 @@ def testAuf18_1DerDienstSetztNurDieAusgewählteEinheit(
     auswählen(dienst, "Warboss")
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    antwort = karteAnklicken(dienst, stelle)
+    antwort = spielfeldAnklicken(dienst, stelle)
 
     spielstand = antwort.get_json()
     assert antwort.status_code == HTTPStatus.OK
@@ -139,13 +139,13 @@ def testAuf18_1DerDienstSetztNurDieAusgewählteEinheit(
 
 
 @mitMausUndFinger
-def testAuf18_1EinKlickAufDieKarteSendetDenPunktInZollAnDenDienst(
+def testAuf18_1EinKlickAufDasSpielfeldSendetDenPunktInZollAnDenDienst(
     bildschirm, aufstellungNachDerZonenwahl, spielerEins, eingabe
 ):
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
     klickenUndWarten(seite, "Spieler 1", "Boyz")
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
-    punkt = punktAufDerKarte(seite, stelle)
+    punkt = punktAufDemSpielfeld(seite, stelle)
 
     with aufDieHandlungWarten(seite) as antwort:
         klickenMit[eingabe](seite, punkt)
@@ -153,13 +153,13 @@ def testAuf18_1EinKlickAufDieKarteSendetDenPunktInZollAnDenDienst(
     anfrage = antwort.value.request
     gesendet = anfrage.post_data_json
     toleranz = zollJePixel(seite)
-    assert (anfrage.method, urlparse(anfrage.url).path) == ("PUT", "/api/karteAnklicken")
+    assert (anfrage.method, urlparse(anfrage.url).path) == ("PUT", "/api/spielfeldAnklicken")
     inX, inY = stelleImSpielstand(stelle)
     assert abs(gesendet["x"] - inX) <= toleranz
     assert abs(gesendet["y"] - inY) <= toleranz
 
 
-def testAuf18_1EinKlickAufDieKarteOhneAusgewählteEinheitGehtAnDenDienstUndÄndertNichts(
+def testAuf18_1EinKlickAufDasSpielfeldOhneAusgewählteEinheitGehtAnDenDienstUndÄndertNichts(
     bildschirm, aufstellungNachDerZonenwahl, spielerEins
 ):
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
@@ -167,11 +167,11 @@ def testAuf18_1EinKlickAufDieKarteOhneAusgewählteEinheitGehtAnDenDienstUndÄnde
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
     with aufDieHandlungWarten(seite) as antwort:
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
 
     assert antwort.value.status == HTTPStatus.OK
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
-    assert elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".spielfeld .modell") == ()
 
 
 def testAuf18_1WelcherEinheitDerKlickGiltEntscheidetDieDomäneNichtDieSeite(
@@ -182,7 +182,7 @@ def testAuf18_1WelcherEinheitDerKlickGiltEntscheidetDieDomäneNichtDieSeite(
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
     with aufDieHandlungWarten(seite) as antwort:
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, stelle))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, stelle))
 
     assert antwort.value.status == HTTPStatus.OK
     assert gesetzteStellen(aufstellungNachDerZonenwahl, boyz)
@@ -196,7 +196,7 @@ def testAuf18_1EinKlickAufEinModellSetztDieAusgewählteEinheitNicht(
     seite = seiteMitEingabe(bildschirm, aufstellungNachDerZonenwahl, eingabe)
     klickenUndWarten(seite, "Spieler 1", "Warboss")
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
-    modell = mitteVon(seite.locator(".karte .modell").first)
+    modell = mitteVon(seite.locator(".spielfeld .modell").first)
 
     klickenMit[eingabe](seite, modell)
     seite.wait_for_load_state("networkidle")
@@ -226,14 +226,14 @@ def testAuf18_1EinZugAufDemSpielfeldSetztDieAusgewählteEinheitNicht(
     klickenUndWarten(seite, "Spieler 1", "Boyz")
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
-    start = punktAufDerKarte(seite, stelle)
+    start = punktAufDemSpielfeld(seite, stelle)
     ziel = Bildpunkt(start.links, start.oben + weiteDesZugsInPixeln)
 
     anfragen = ziehenOhneAnfrage(seite, start, ziel)
 
     assert anfragen == []
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
-    assert elementeDerSeite(seite, ".karte .modell") == ()
+    assert elementeDerSeite(seite, ".spielfeld .modell") == ()
     assert ausgewählteEinheiten(seite) == {"Boyz"}
 
 
@@ -243,7 +243,7 @@ def testAuf18_2EineEinheitOhneGesetztesModellStehtNachDemKlickMittigAlsFormation
     aufstellungNachDerZonenwahl.auswählen(boyz)
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     stellen = gesetzteStellen(aufstellungNachDerZonenwahl, boyz)
     xWerte = [stelle.x for stelle in stellen]
@@ -260,7 +260,7 @@ def testAuf18_2DieReihenDerFormationLiegenParallelZurSpielfeldkanteDerZone(
     aufstellungNachDerZonenwahl.auswählen(boyz)
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
     assert [len(reihe) for reihe in reihen] == reihenDerFormation("Boyz")
@@ -272,7 +272,7 @@ def testAuf18_2JedeReiheDerFormationLiegtEntlangDerSpielfeldkanteMittigAmKlick(
     aufstellungNachDerZonenwahl.auswählen(boyz)
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
     mitten = [(reihe[0].y + reihe[-1].y) / 2 for reihe in reihen]
@@ -286,7 +286,7 @@ def testAuf18_2BenachbarteBasesEinerReiheHabenDenAbstandEinsKommaFünfZoll(
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
     modell, *_ = boyz.modelle
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
     paare = [
@@ -313,7 +313,7 @@ def testAuf18_2SchrägBenachbarteBasesHabenMindestensEinsKommaFünfZollBeiReihen
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
     modell, *_ = boyz.modelle
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     reihen = reihenNachX(gesetzteStellen(aufstellungNachDerZonenwahl, boyz))
     paareJeNachbarreihen = [
@@ -351,7 +351,7 @@ def testAuf18_2EineEinheitAusEinemModellStehtAmKlick(
     aufstellungNachDerZonenwahl.auswählen(warboss)
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     assert gesetzteStellen(aufstellungNachDerZonenwahl, warboss) == [klick]
 
@@ -362,7 +362,7 @@ def testAuf18_2DerDienstSetztDieFormationMittigAnDenKlickUndAntwortetMitDemSpiel
     auswählen(dienst, "Boyz")
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
-    antwort = karteAnklicken(dienst, klick)
+    antwort = spielfeldAnklicken(dienst, klick)
 
     modelle = modelleDerEinheitIm(antwort.get_json(), "Boyz")
     mitteX, mitteY = mitteDer([(modell["x"], modell["y"]) for modell in modelle])
@@ -381,10 +381,10 @@ def testAuf18_2DieSeiteZeigtDieFormationMittigAmKlick(
     klick = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 30)
 
     with aufDieHandlungWarten(seite):
-        mitDerMausKlicken(seite, punktAufDerKarte(seite, klick))
+        mitDerMausKlicken(seite, punktAufDemSpielfeld(seite, klick))
 
-    expect(seite.locator(".karte .modell")).to_have_count(len(boyz.modelle))
-    kreise = elementeDerSeite(seite, ".karte .modell")
+    expect(seite.locator(".spielfeld .modell")).to_have_count(len(boyz.modelle))
+    kreise = elementeDerSeite(seite, ".spielfeld .modell")
     mitteX, mitteY = mitteDer([(kreis.zahl("cx"), kreis.zahl("cy")) for kreis in kreise])
     assert abs(mitteX - float(klick.x)) <= zollJePixel(seite)
     assert abs(mitteY - float(klick.y)) <= zollJePixel(seite)
@@ -412,7 +412,7 @@ def testAuf18_3RagtDieFormationAusDerZoneRücktSieAufKürzestemWegHinein(
     erstesModell, *_ = boyz.modelle
     radius = radiusInZoll(erstesModell)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(klick)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(klick)
 
     stellen = gesetzteStellen(aufstellungNachDerZonenwahl, boyz)
     ränder = [
@@ -440,7 +440,7 @@ def testAuf18_5HatDieEinheitNurGesetzteModelleÄndertDerKlickNichtsUndNenntKeine
     davor = stellenAllerModelle(aufstellungNachDerZonenwahl)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 50)
 
-    aufstellungNachDerZonenwahl.karteAnklicken(stelle)
+    aufstellungNachDerZonenwahl.spielfeldAnklicken(stelle)
 
     assert stellenAllerModelle(aufstellungNachDerZonenwahl) == davor
 
@@ -453,7 +453,7 @@ def testAuf18_5DerDienstÄndertBeiNurGesetztenModellenNichtsUndNenntKeinenGrund(
     davor = spielstandVon(dienst)
     stelle = stelleInDerZoneVon(aufstellungNachDerZonenwahl, spielerEins, mitteDerZone, 50)
 
-    antwort = karteAnklicken(dienst, stelle)
+    antwort = spielfeldAnklicken(dienst, stelle)
 
     assert antwort.status_code == HTTPStatus.OK
     assert antwort.get_json() == davor

@@ -146,7 +146,7 @@ def testBew3_1DieDistanzBeginntMitJederBewegungsphaseNeu(schlachtInDerBewegungsp
     assert schlachtInDerBewegungsphase.stelle(modell) == zweitesZiel
 
 
-def testBew3_1IstDieGanzeEinheitEbeneHältDerBlockAnDerBewegungsweiteAn(
+def testBew3_1BeiDerEinheitenebeneHältDerBlockAnDerBewegungsweiteAn(
     schlachtInDerBewegungsphase, boyz
 ):
     schlachtInDerBewegungsphase.auswählen(boyz)
