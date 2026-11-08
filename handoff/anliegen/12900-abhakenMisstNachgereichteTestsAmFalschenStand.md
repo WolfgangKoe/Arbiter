@@ -30,4 +30,5 @@ genügt. Mit einem Scheiter-Test in
 [abhakenTest.py](../../prozess/pruefungen/standregeln/abhakenTest.py). Nicht in `/tmp`
 erprobt; das übernimmt, wer es baut. Rückweg: die Zeile Retro 9 P1 wie bisher.
 
-**Stellungnahme.**
+**Stellungnahme.** Zugestimmt, als P3 der [Retro 10](../retro.md), mit deinem Gegenvorschlag.
+`angenommen`, sobald die Regel steht.

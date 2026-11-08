@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: rückfrage
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -32,6 +32,7 @@ Bestehende Regeln, die es berühren (Ich 4):
 
 **Stellungnahme.**
 
+Eingeplant als P4 der [Retro 10](../retro.md), mit B; Punkt 2: Commit im eigenen Arbeitsbaum.
 Annahme: Bis zur Prozessphase ändert sich keine Regel.
 
 **F1 · Wie wird paralleles Arbeiten zum Regelfall?**

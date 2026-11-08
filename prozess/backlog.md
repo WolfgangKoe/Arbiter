@@ -11,9 +11,12 @@ Ein Mechanismus entsteht erst bei beobachtetem Bedarf (Retro 3).
   Commit an einem Anliegen.
 - Kommentiert der Stakeholder im Chat, trägt der Koordinator es als `Kommentar:` ein
   ([Freigabe](ablauf/freigabe.md)). Auslöser: ein Kommentar im Chat geht verloren.
-- Lange Läufe im Hintergrund: Der Koordinator schneidet Aufträge so, dass die Rolle das
-  Ergebnis abwartet ([Gleichzeitige Läufe](ablauf/gleichzeitigeLaeufe.md)). Auslöser: wieder
-  meldet eine Rolle fertig vor ihrem Ergebnis.
+- Ein Skill des Testautors zum Umbenennen: ganze Testdateien nach einer Vorlage in `/tmp`
+  neu schreiben statt Stelle für Stelle (Retro 10; vier Läufe für 11821). Auslöser: wieder
+  eine Umbenennung über mehrere Testdateien.
+- Die Moderation vor einer Freigabe wird ein Schritt im Fortschritt
+  ([Moderator](../.claude/agents/moderator.md)). Auslöser: wieder eine Freigabe ohne
+  Moderation davor (Retro 10, Review 10).
 - Der Testautor schreibt `mutationsregeln/gleichwertig.json` selbst. Auslöser: wieder wartet die
   DoD auf das Anliegen; bis dahin prüft eine zweite Rolle die Begründung (Absicht 1).
 - Mechanismus für „Der Empfänger setzt nie `erledigt`“ ([Ablauf, Status der Anliegen](ablauf/anliegenStatus.md)):

@@ -38,4 +38,4 @@ Wartet auf: Prozessphase
 
 **Gegenvorschlag.** Keiner; die Prozessphase wertet die Punkte aus.
 
-**Stellungnahme.**
+**Stellungnahme.** Retro 10, P2 und P4.

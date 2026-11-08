@@ -27,4 +27,5 @@ Ohne Änderung wächst es mit jedem Item.
 nennt die Anzahl der grünen Tests („23 Tests sind grün, bevor der Code besteht“), die Namen
 stehen nur im Anliegen; ein beseitigtes Hindernis kürzt das Skript auf seine Nummer.
 
-**Stellungnahme.**
+**Stellungnahme.** Zugestimmt, mit 12520 als P2 der [Retro 10](../retro.md): Die Zeile nennt
+nur Nummer und Titel, Testnamen stehen im Anliegen. `angenommen`, sobald die Regel steht.

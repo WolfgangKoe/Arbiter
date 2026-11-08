@@ -34,4 +34,5 @@ jede neue Etappe ohne Ausformulierung und Freigabe, nicht nur Etappe 3.
 Fortschritt nach dem Review eine Zeile „Planer: Etappe <n> erreicht, Datei gelöscht“, wenn
 das Review die Etappe für erreicht erklärt (Vorbild 3300).
 
-**Stellungnahme.**
+**Stellungnahme.** Zugestimmt, als P5 der [Retro 10](../retro.md), mit deinem Gegenvorschlag.
+`angenommen`, sobald die Regel steht.

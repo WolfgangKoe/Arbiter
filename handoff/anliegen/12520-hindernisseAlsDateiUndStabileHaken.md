@@ -32,4 +32,7 @@ Verwandt: [Fortschritt](../../prozess/ablauf/fortschritt.md), Anliegen 11500 (Ab
 
 **Gegenvorschlag.**
 
-**Stellungnahme.**
+**Stellungnahme.** Eingeplant als P2 der [Retro 10](../retro.md): 1 bis 4 wie gewünscht, das
+Anliegen ist die Datei des Hindernisses. Von den Befunden darunter: Abhängigkeit und Nummer
+außerhalb des Bereichs P3, Commit und Tokengrenze P4, die übrigen P2 je mit Scheiter-Test.
+`angenommen`, sobald die Regel steht.

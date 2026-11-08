@@ -29,4 +29,5 @@ liest dazu die Stellungnahme im Anliegen des anderen. Der Test „Hindernis des 
 zählt nicht“ kehrt sich um. Rückweg: die Bedingung wieder auf den eigenen Schritt. Ohne Probe in
 `/tmp`; die Probe gehört zur Umsetzung durch den Regelumsetzer.
 
-**Stellungnahme.**
+**Stellungnahme.** Zugestimmt, als P3 der [Retro 10](../retro.md): Die Prüfung läuft einmal
+je Item, ihr Anliegen gilt für beide Kritiker. `angenommen`, sobald die Regel steht.
