@@ -4,7 +4,7 @@ Form: Fragen
 Von: Fachkritiker
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Damit die *Karte* stehen bleibt, hält Arbiter unter ihr immer Platz für *Gründe*, Knöpfe und *Protokoll* frei. Sie wird dadurch auch dann kleiner, wenn dort nichts steht. 14040 nannte 309 Pixel „so hoch wie vorher“; das war das Mockup. Im Gebauten ist sie heute höher:
@@ -44,6 +44,6 @@ Annahme: Ich prüfe mit A weiter; 15100 nennt beide Wege, der Anforderungsautor 
 A: Die *Leisten* liegen über der *Karte* wie in ArbiterMap; die *Karte* hat das Fenster für sich und kann größer werden; eine offene *Leiste* verdeckt den Rand des *Spielfelds* hinter ihr, in einem schmalen Fenster auch eine *Aufstellungszone*, dann fahrt ihr sie ein, ohne dass sich etwas verschiebt (ArbiterMap, `ArbiterMap/frontend/templates/map.html:118`).
 B: Die *Karte* behält Größe und Platz wie heute, als wären alle *Leisten* offen; eine *eingefahrene* *Leiste* lässt ihren Platz leer, Einfahren gewinnt der *Karte* nichts (Architektur O4).
 Empfehlung: A, so kennst du es aus ArbiterMap, Einfahren schafft wirklich Platz, und es passt zu deinem Ziel, dass die *Karte* das Fenster füllt; B ist billiger, wenn dir die Größe von heute genügt.
-Antwort: .
+Antwort: A
 
 **Stellungnahme.**
