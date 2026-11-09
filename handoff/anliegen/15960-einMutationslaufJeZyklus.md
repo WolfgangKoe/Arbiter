@@ -44,4 +44,4 @@ B: In jedem Zyklus der volle über alle Module, auch `web/` (DoD, Anliegen 8961)
 C: Wie bisher, gezielt je Item und der volle mit Neustart (Mutationsregeln, DoD)
 Empfehlung: A, die Schwelle von 95 % gilt den geänderten Zeilen; der volle prüft auch
 Unverändertes und dauert länger, er lohnt sich nur zum Abschluss einer Etappe.
-Antwort: .
+Antwort: Ich bin mir nicht sicher, ob ich es richtig verstanden habe. Aber ich wünsche es mir folgendermaßen. Pro Zyklus läuft ein gezielter Mutationstest. Gezielt im Blick auf die Tests, die neu hinzugekommen sind, dabei parallel und im Hintergrund, sobald die Review freigegeben ist. Es soll kein weiterer Mutationstest laufen. Wird eine Etappe nach oder durch Freigabe eines Reviews abgeschlossen, soll ein kompletter Mutationstests im Hintergrund laufen. Parallelisiert und in Abschnitten wie schon einmal besprochen, damit wir den Fortschritt dieses Test verfolgen können. Die Findings aus jedem Test sollen gesammelt und für die nächste Domänenphase bereit sein.
