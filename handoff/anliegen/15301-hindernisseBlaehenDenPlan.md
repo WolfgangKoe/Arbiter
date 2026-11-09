@@ -4,8 +4,7 @@ Form: Kritik
 Von: Planer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** [plan.md](../plan.md) hat 52.207 Zeichen. Davon sind 3.967 der Plan selbst,
@@ -36,3 +35,10 @@ Anliegen, das Abhaken liest sie dort. Ein beseitigtes Hindernis bleibt als abgeh
 dieser Länge stehen, statt auf die Nummer gekürzt zu werden. Regel:
 [Standregeln](../../prozess/regeln/standregeln.md), Zeile Anliegen 490 Teil 2; Ablauf:
 [Fortschritt](../../prozess/ablauf/fortschritt.md).
+
+**Nachprüfung.** Behoben: `hindernis.py` schreibt nur `  - [ ] Hindernis <nr> <Titel>`, die
+grünen Tests stehen nur im Anliegen (`abhaken.py`), P2 ist in der [Retro 10](../retro.md)
+abgehakt, die Tests dazu sind grün. 45 Hindernisse kosten damit rund 3.000 statt 40.846
+Zeichen. Dass ein beseitigtes als kurze abgehakte Zeile stehen bleibt, statt gekürzt zu
+werden, trage ich mit: Sie zeigt den Stand, keine Historie. Plan 10 behält seine langen
+Zeilen, bis ich Plan 11 schreibe; ein Rest bleibt nicht.
