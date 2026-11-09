@@ -1,9 +1,9 @@
 # Anliegen
 
 Anliegen ist der Oberbegriff: eine Datei je Diskussion, `handoff/anliegen/<nr>-<kurz>.md`,
-höchstens 4.000 Zeichen je Runde, Hinweis ab 100 darunter; jede Zeile `Antwort:` zählt als
-`Antwort: .` (Anliegen 161, 6760). Mechanismus: `anliegenregeln/anliegenLaenge.py`
-([Anliegenregeln](../regeln/anliegenregeln.md)).
+höchstens 4.000 Zeichen je Runde, Hinweis ab 100 darunter; jede Zeile des Stakeholders
+(`Antwort:`, `Kommentar:`) zählt als `Antwort: .` oder `Kommentar: .` (Anliegen 161, 6760,
+15980). Mechanismus: `anliegenregeln/anliegenLaenge.py` ([Anliegenregeln](../regeln/anliegenregeln.md)).
 Erste Zeile `# <Titel>`, ab der dritten der Kopf, ein Feld je Zeile (Anliegen 1670):
 ```
 Form: Kritik

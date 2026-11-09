@@ -4,8 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders: „Meine Kommentare und Zusätze sollten nicht unter die
@@ -26,4 +25,5 @@ Zeilen 4 und 5.
 Probe in `/tmp`: Prüfungen und Tests grün, 15900 besteht; Rückweg: die zwei Änderungen in
 `anliegenLaenge.py` und seinem Test zurücknehmen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt nach Freigabe Retro 10: [Anliegen](../../prozess/ablauf/anliegen.md)
+nennt jetzt jede Zeile des Stakeholders (`Antwort:`, `Kommentar:`), wie vorgeschlagen.

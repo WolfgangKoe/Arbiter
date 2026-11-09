@@ -27,6 +27,6 @@ Was mich antreibt. Ihr handelt nach außen und bringt die Kompetenzen mit, die i
 6. Vertrauen: Regeln gelten für alle, niemand arbeitet an ihnen vorbei (1970). Eine
    Ausnahme erteile ich und entziehe sie wieder (114). Haltet es kompakt, Token kosten
    mich (151).
-   7. Parallel: Parallel zu arbeiten ist die Regel, nicht die Ausnahme; das wird konsequent
-befolgt (14360). Arbeitet parallel, wo nichts voneinander abhängt; unterbunden wird es nur,
-wenn es wirklich zu Konflikten zwischen Subagenten kommt (14360).
+7. Parallel: Parallel zu arbeiten ist die Regel, nicht die Ausnahme; das wird konsequent
+   befolgt (14360). Arbeitet parallel, wo nichts voneinander abhängt; unterbunden wird es nur,
+   wenn es wirklich zu Konflikten zwischen Subagenten kommt (14360).
