@@ -13,7 +13,18 @@ beim Reviewer bei der DoD. Alles prüft der Regelumsetzer, bevor er fertig melde
 (Anliegen 600, 1950). Mechanismus: `.pre-commit-config.yaml`, Hooks je Pfad, ohne
 Produkttests und Abdeckung (Anliegen 601, 1950, [Formregeln](../regeln/formregeln.md)); sonst nur Text.
 
-Der Koordinator committet nur, wenn keine Rolle läuft: Der Hook legt beim Commit alle übrigen
-Änderungen beiseite und setzt die Pfade des Commits für seine Dauer zurück, laufende Rollen
-sähen alte Stände, Geschriebenes ginge verloren. pre-commit kann das Beiseitelegen nicht
-abschalten (Anliegen 2460). Mechanismus: nur Text.
+Jeder Commit läuft in einem eigenen Arbeitsbaum, die Rollen arbeiten weiter (Anliegen 11100,
+14360). Im gemeinsamen legt der Hook alle übrigen Änderungen beiseite: Laufende Rollen sähen
+alte Stände, Geschriebenes ginge verloren; pre-commit kann das nicht abschalten (Anliegen
+2460). Ein Befehl mit Betreff und Pfaden (auch gelöschten, ohne Pfad leer für eine Freigabe):
+1. legt mit `git worktree add --detach` unter `/tmp` einen Arbeitsbaum auf `dev` an und
+   verlinkt darin `node_modules`,
+2. übernimmt die Pfade aus dem gemeinsamen Arbeitsbaum und committet dort samt Hook,
+3. setzt `dev` mit `git update-ref refs/heads/dev <neu> <alt>`, nur wenn `dev` noch auf dem
+   alten Commit steht, gleicht im gemeinsamen den Index der Pfade an (`git reset -q --
+   <Pfade>`) und entfernt den Arbeitsbaum.
+Scheitert der Hook oder bewegte sich `dev`, bleibt der gemeinsame Arbeitsbaum unberührt; der
+Befehl nennt den Grund und endet mit 1. Ein `git commit` daneben sperrt die Schreibgrenze.
+Mechanismus: nur Text, bis [P4](../../handoff/retro.md) den Befehl in `prozess/pruefungen/`
+und die Sperre in `rollenregeln/schreibgrenze.py` baut; erprobt an einem Klon mit echtem
+Hook und an einer Kopie in `/tmp` (Rückweg: Commit `P4:` zurücknehmen).

@@ -5,6 +5,12 @@ jede Rolle; der Stand zeigt sie. Die Zahl der Rollenläufe ist weder Budget noch
 Mechanismus: `standregeln/belegung.py`; der Stand nennt keine Rollenläufe (`standregeln/standTest.py`).
 - Ab 120.000 Token meldet ein Hook; die Rolle beginnt nichts Neues und schließt ab, der
   Koordinator empfiehlt einen neuen Chat.
+- Jeder Auftrag passt in einen Lauf unter 120.000 Token. Der Koordinator teilt ein Item, das
+  dafür zu groß ist, nach Kriterien: je Teil die Tests, dann der Code, bis sie durch alle
+  Schichten grün sind; so wird jeder neue Code schon aufgerufen und lässt sich je Teil
+  committen. Das Review schreibt der Reviewer in zwei Läufen, „Am Bildschirm prüfen“ und
+  „Rundgang Prüfcode“ ([Technikphase](technikphase.md) 6). Mechanismus: nur Text, die
+  Meldung ab 120.000 Token zeigt den zu großen Auftrag.
 - Ab 150.000 Token sperrt ein Hook alles außer Schreiben im eigenen Pfad und der
   Schlussantwort. Beim Koordinator entscheidet der Stakeholder: freigeben (höhere Grenze in
   `.git/arbiter/belegungsgrenze.txt`), kürzen oder neuer Chat.

@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -32,8 +32,8 @@ Bestehende Regeln, die es berühren (Ich 4):
 
 **Stellungnahme.**
 
-[P4](../retro.md) mit B; Commit im eigenen Arbeitsbaum, am Klon erprobt (Link auf
-`node_modules`, `update-ref` mit altem Wert); Quelle Absicht 7. `angenommen`, wenn die Regel steht.
+[P4](../retro.md): Stand nennt „Frei“
+([Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md)), Commit im eigenen Arbeitsbaum.
 
 **F1 · Wie wird paralleles Arbeiten zum Regelfall?**
 A: Fester Schritt des Koordinators: Nach jedem Lauf prüft er alle offenen Items und Anliegen gegen die drei Bedingungen und startet, was frei ist; was liegen bleibt, begründet er mit der Bedingung. Nur Text (Anliegen 730)
@@ -41,3 +41,4 @@ B: Wie A, dazu nennt ihm der Hinweis nach jedem Rollenlauf, was nach `Wartet auf
 C: Nur den Wortlaut der Regel schärfen, kein neuer Schritt (Absicht 2)
 Empfehlung: B, denn die Regel steht schon zweimal als Text und griff trotzdem nicht; A allein bliebe wieder Text. Vorläufig und noch nicht an einer Kopie erprobt (Ich 5); Rückweg: Commit zurücknehmen.
 Antwort: Wir nehmen B und zusätzlich machen wir die Aussagen aus Absicht 2 zu einem eigenen Punkt in dieser Prämisse
+Kommentar: Sag mir Bescheid, sobald dies umgesetzt ist. Dann setze ich es auf "erledigt".
