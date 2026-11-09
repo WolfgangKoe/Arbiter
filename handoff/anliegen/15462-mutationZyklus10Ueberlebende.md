@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der gezielte Lauf über die seit Commit „Freigabe Plan 10“ geänderten Zeilen der
@@ -49,3 +49,16 @@ Tests sagen kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Erl
   `0 wird 1`, 251, 253, 254).
 - Gleichwertig, mit Grund an den Regelumsetzer in 15680: alle übrigen außer
   `schlachtrunden.py` 149, dort auch die Lücke im Plan (BEW-18.6, Etappe 7).
+
+**Klärung.** Nachgeprüft, erledigt. In einer Kopie fängt der neue Test zu BEW-10.1 den
+Mutanten `schlachtrunden.py` 188, für beide *Spieler* am Zug; ohne ihn bleibt
+`fremdeModelleTest.py` grün. Der Test folgt aus BEW-10.1 und dem Glossar (*gezeigt*: die
+*Stelle*, an die Arbiter beim Loslassen *setzen* würde), er sagt nichts außerhalb der
+Vorbedingung zu. Abweichend vom Gegenvorschlag schließe ich ohne neuen Lauf ab: Der
+Stakeholder will einen Mutationslauf je Zyklus. Der Lauf dieses Zyklus (`/tmp/mutation10b.log`)
+ist der Ausgangsstand, gefangen ist seitdem einzeln in Kopien geprüft. Rechnung: 374 Mutanten,
+davon 38 gleichwertig und nicht gezählt, bleiben 336; nach den Stellungnahmen überlebt nur
+noch `schlachtrunden.py` 149, also rund 99,7 %. Die Schwelle von 95 % hielte auch bei 16
+Überlebenden. Belegen muss die 95 % der Lauf im nächsten Zyklus; liegt er darunter, stelle ich
+ein neues Anliegen. Mein gezielter Lauf ist abgebrochen (`/tmp/mutation10c.log`). Ob die DoD
+den Lauf in jedem Zyklus verlangt, regelt der Organisationsentwickler.

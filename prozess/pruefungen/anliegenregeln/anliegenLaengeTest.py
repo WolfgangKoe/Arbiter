@@ -58,6 +58,17 @@ def testEineAntwortZeileZähltAlsAntwortPunkt():
     assert länge("a\nAntwort: Bitte ausführlich\nAntwort:\n") == len("a\nAntwort: .\nAntwort: .\n")
 
 
+def testEineKommentarZeileDesStakeholdersZähltAlsKommentarPunkt():
+    assert länge("a\nKommentar: Bitte ausführlich\n") == len("a\nKommentar: .\n")
+
+
+def testEinLangerKommentarMachtDasAnliegenNichtRot(tmp_path):
+    datei = anliegenMitLänge(tmp_path, 1, 500)
+    lang = datei.read_text(encoding="utf-8") + "\nKommentar: " + "x" * grenze(1) + "\n"
+    datei.write_text(lang, encoding="utf-8")
+    assert längeBefund(datei) is None
+
+
 def testDerHookMeldetDenHinweisNachWriteAufEinAnliegen(tmp_path):
     datei = anliegenMitLänge(tmp_path, 1, 3950)
     eingabe = HookEingabe.aus({"tool_input": {"file_path": str(datei)}})

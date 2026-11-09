@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Deine Antwort auf F1 in [14360](14360-parallelArbeitenIstDieRegel.md): „Wir
@@ -40,3 +40,7 @@ Dann setzt du hier `angenommen`; ich prüfe nach, verweise in P4 auf den Punkt u
 
 **Stellungnahme.**
 Kommentar: Ich habe es als Punkt 7 eingefügt und Punkt 2 um den einen Satz reduziert. Du kannst das Format gerne anpassen.
+Stellungnahme: Nachgeprüft: Punkt 7 und Punkt 2 stehen wie vorgeschlagen, die Absicht hat
+2.339 Zeichen. P4 der [Retro 10](../retro.md) verweist auf Absicht 7. Zum Format: „7.“ steht
+eingerückt, die Folgezeilen nicht; im Dashboard erscheint der Punkt darum unter Punkt 6. Der
+Koordinator entscheidet, ob ich das mit deinem Angebot angleiche. Geschlossen.

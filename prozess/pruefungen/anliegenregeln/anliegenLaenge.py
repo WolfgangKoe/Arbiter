@@ -8,11 +8,11 @@ from lesen.anliegenKopf import Status, kopfLesen
 
 zeichenJeRunde = 4000
 hinweisAbstand = 100
-antwortZeile = re.compile(r"^Antwort:.*$", re.MULTILINE)
+zeileDesStakeholders = re.compile(r"^(Antwort|Kommentar):.*$", re.MULTILINE)
 
 
 def länge(text: str) -> int:
-    return len(antwortZeile.sub("Antwort: .", text))
+    return len(zeileDesStakeholders.sub(r"\1: .", text))
 
 
 def grenze(runde: int) -> int:

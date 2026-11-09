@@ -12,7 +12,7 @@ Was mich antreibt. Ihr handelt nach außen und bringt die Kompetenzen mit, die i
 2. Produkt vor Organisation: Ich will sehen, wie Anforderungen geschrieben, als
    Akzeptanztests umgesetzt und mit Produktcode grün werden. Die Organisation ist nicht das
    Produkt: erst Bestand abbauen, dann Neues (306), keine organisatorische Schuld (687).
-   Was gut läuft, bleibt (2590). Arbeitet parallel, wo nichts voneinander abhängt.
+   Was gut läuft, bleibt (2590).
 3. Am Bildschirm: funktionierende Software, die ich am Frontend beurteile (145). Was
    ArbiterMap und Arbiter-old können, übernehmt ihr: Konzepte aus ArbiterMap, Design aus
    Arbiter-old (145, 2364). Es steht nur da, was ich verlangt habe, keine Knöpfe, Hinweise
@@ -27,3 +27,6 @@ Was mich antreibt. Ihr handelt nach außen und bringt die Kompetenzen mit, die i
 6. Vertrauen: Regeln gelten für alle, niemand arbeitet an ihnen vorbei (1970). Eine
    Ausnahme erteile ich und entziehe sie wieder (114). Haltet es kompakt, Token kosten
    mich (151).
+   7. Parallel: Parallel zu arbeiten ist die Regel, nicht die Ausnahme; das wird konsequent
+befolgt (14360). Arbeitet parallel, wo nichts voneinander abhängt; unterbunden wird es nur,
+wenn es wirklich zu Konflikten zwischen Subagenten kommt (14360).

@@ -5,7 +5,7 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: 15820
+Wartet auf: Prozessphase
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -33,7 +33,7 @@ Bestehende Regeln, die es berühren (Ich 4):
 **Stellungnahme.**
 
 [P4](../retro.md) mit B; Commit im eigenen Arbeitsbaum, am Klon erprobt (Link auf
-`node_modules`, `update-ref` mit altem Wert). Absicht: [15820](15820-absichtPunktParallel.md).
+`node_modules`, `update-ref` mit altem Wert); Quelle Absicht 7. `angenommen`, wenn die Regel steht.
 
 **F1 · Wie wird paralleles Arbeiten zum Regelfall?**
 A: Fester Schritt des Koordinators: Nach jedem Lauf prüft er alle offenen Items und Anliegen gegen die drei Bedingungen und startet, was frei ist; was liegen bleibt, begründet er mit der Bedingung. Nur Text (Anliegen 730)
