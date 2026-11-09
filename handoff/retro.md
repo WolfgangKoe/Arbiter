@@ -11,7 +11,8 @@ zurücksetzen“, Loslassen neben dem *Spielfeld*, der Weirdboy.
 
 ## Was geklappt hat
 Alle neun Items der Retro 9 umgesetzt. Kennzahlen unter der Schwelle: Prozesslast 24 von 202,
-Prüfcode 876 gegen 1.350 Zeilen Produktcode.
+Prüfcode 876 gegen 1.350 Zeilen Produktcode. Dir gefiel, dass die Technikphase ausgedehnter
+war; das bleibt (Absicht 2, 2590).
 
 ## Was nicht geklappt hat
 1. Zwei Items sind nicht, wie du sie meintest; darum fehlt Etappe 2. Nach „gemeinsam
@@ -40,14 +41,12 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
 - P3 Grüne Tests einmal je Item (Regelumsetzer), 11500, 12900, 13102, 13420: Die Prüfung
   läuft einmal je Item, mit einem Anliegen für beide Kritiker; sie zählt nur den Umfang und
   misst einen nachgereichten Test am Stand seines Commits.
-- P4 Parallel als Regel (Organisationsentwickler, dann Regelumsetzer), 14360, 11100, 14500:
-  Nach jedem Lauf nennt der Hook, was frei ist, der Koordinator startet es. Jeder Auftrag
-  passt in einen Lauf: Ein Item teilt er nach Kriterien, je Teil grüne Tests durch alle
-  Schichten; das Review in Bildschirm und Rundgang. Je ein Commit läuft in einem eigenen
-  Arbeitsbaum, die Rollen arbeiten weiter. Am Klon mit echtem Hook erprobt: Mit
-  `node_modules` als Link in `.git/info/exclude`, `CLAUDE_PROJECT_DIR` auf dem Arbeitsbaum
-  und je Pfad `cp` oder `git rm` prüft er genau den Commit samt Löschen und Umbenennen;
-  `update-ref` mit altem Wert lässt einen überholten scheitern.
+- P4 Parallel als Regel (Organisationsentwickler, dann Regelumsetzer), 14360 F1 B, 11100,
+  14500: Nach jedem Lauf nennt der Hook, was nach `Wartet auf` frei ist, der Koordinator
+  startet es oder nennt den Grund; Quelle ist dein neuer Punkt der Absicht (15820). Jeder
+  Auftrag passt in einen Lauf: Ein Item teilt er nach Kriterien, je Teil grüne Tests durch
+  alle Schichten; das Review in Bildschirm und Rundgang. Je ein Commit läuft in einem eigenen
+  Arbeitsbaum, die Rollen arbeiten weiter; am Klon mit echtem Hook erprobt (14360).
 - P5 Etappe und Fortschritt (Regelumsetzer), 15361, 9801, 13150: Nach einer erreichten
   Etappe stehen Ausformulieren und Freigabe der nächsten im Fortschritt. Abgehakte Zeilen
   bleiben im Endstand, ein Kriterium einer späteren Etappe verlangt keinen Test.
@@ -55,16 +54,16 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
   davor und danach im Anliegen.
 
 ## Empfehlung
-Beantworte F1 in [14360](anliegen/14360-parallelArbeitenIstDieRegel.md), Empfehlung B, dann
-gib frei.
+Gib frei. Daneben [15820](anliegen/15820-absichtPunktParallel.md) F1, Empfehlung A: Den
+Punkt trägst du selbst in die Absicht ein, wie dort beschrieben.
 Folgen: sieben Läufe zu je unter 120.000 Token. Regelumsetzer nacheinander: P3, P2, P4, P5,
 P6; ich daneben P1, P4. P1 wirkt ab Domänenphase 11; je in der Technikphase geänderter
 Anforderung ein kurzer Lauf des Fachkritikers.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
-- [ ] Fachkritiker: Kritik an der Retro
-- [ ] Architekt: Kritik an der Retro
+- [x] Fachkritiker: Kritik an der Retro
+- [x] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
 - [ ] Stakeholder: Freigabe Retro 10
 - [ ] Organisationsentwickler: P1
