@@ -59,3 +59,13 @@ Kommentar: Ja.
 **Gegenvorschlag.**
 
 **Stellungnahme.**
+Messung davor (Regelumsetzer P6, Server-Funktion `lesen`, 67 Anliegen, ein Aufruf):
+`/` 14,7 s, `/tokens` 4,9 s, `/architektur` 0,14 s, `/anliegen/8860` 0,01 s.
+Ursache: fast die ganze Zeit sind `git log`-Aufrufe (je rund 20 ms), auf `/` 693, auf `/tokens` 230.
+Für jedes Anliegen mit `Wartet auf` ruft `wartet`
+([anliegenDran.py](../../prozess/pruefungen/anliegenregeln/anliegenDran.py)) die `lage`
+([phasenfolge.py](../../prozess/pruefungen/standregeln/phasenfolge.py)); diese ruft `freigabeCommit`
+bis zu dreimal, jedes liest mit `freigaben` das ganze Git-Log neu
+([gitAufruf.py](../../prozess/pruefungen/gemeinsam/gitAufruf.py)). Die Seitenaufteilung ändert daran nichts.
+Behebung (offen): das Git-Log je Abfrage nur einmal lesen. Das liegt in `gitAufruf.py`, einem Import der
+Hooks; wegen des gleichzeitigen Laufs P2 nicht umgesetzt.
