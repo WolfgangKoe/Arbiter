@@ -9,7 +9,7 @@ Nichts blockiert das Inkrement.
 - Koordinator: [11100](anliegen/11100-teilCommitScheitertBeiLaufenderRolle.md) (in P4),
   [13580](anliegen/13580-planFliegenRest.md) (Plan für den Rest von fliegen).
 - Testautor: 14482 (Plan-Item, zuerst).
-- Reviewer: Nachprüfung [15462](anliegen/15462-mutationZyklus10Ueberlebende.md) (`angenommen`).
+- Reviewer: Nachprüfung Anliegen 15462 (`angenommen`).
 - Regelumsetzer, Prozessphase nach der Retro: P2, P3, P5, P6 mit 12520, 15301, 11500, 12900,
   13102, 13420, 15361, 9801, 13150, dazu
   [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) Runde 2.

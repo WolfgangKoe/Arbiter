@@ -44,7 +44,7 @@ Bildschirm nicht bis zu fremden *Bases*.
 Oberfläche: **erfüllt.** Bildschirmtests grün, die Mockups zu BEW-8, BEW-24 und QUE-7 gelöscht.
 Mutation: **nicht erfüllt.** 374 Mutanten, 82 % gefangen, Schwelle 95 %; am meisten
 überleben in `messen.py` (38 von 132), dann `fliegen.py` (12 von 60). Kritik an den
-Testautor: [15462](anliegen/15462-mutationZyklus10Ueberlebende.md).
+Testautor: Anliegen 15462.
 
 ## Code
 `/code-review`, Wiederverwendung, Vereinfachung, Effizienz, Flughöhe seit „Freigabe Plan 10“:
@@ -91,7 +91,7 @@ Probleme:
   bleibt stehen; nach „gemeinsam übergehen“ zieht ihr die *Einheit* oder einzelne *Modelle*
   frei, sie folgen dem Zeiger. Noch nicht: Arbiter zeigt nicht, welche *Einheit* schon
   gezogen hat ([Etappe 3](../domaene/etappen/03-angriffUndFallBack.md)). Vorher müssen weg:
-  die Lücken der Mutation ([15462](anliegen/15462-mutationZyklus10Ueberlebende.md)), das
+  die Lücken der Mutation (Anliegen 15462), das
   Aufräumen an Gleiten, Fliegen und Übergehen und die Umbenennungen nach 7800 (wartende
   Anliegen der Technikphase 11, [Moderation](moderation.md)). Etappe 3 formuliert der Planer
   erst aus, wenn Etappe 2 erreicht ist ([15361](anliegen/15361-etappenschritteNachErreichterEtappe.md)).
