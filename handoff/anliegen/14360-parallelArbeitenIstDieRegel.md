@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: rückfrage
+Status: offen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -40,4 +40,4 @@ A: Fester Schritt des Koordinators: Nach jedem Lauf prüft er alle offenen Items
 B: Wie A, dazu nennt ihm der Hinweis nach jedem Rollenlauf, was nach `Wartet auf` frei ist. Die Reihenfolge im Plan und getrennte Dateien bleiben sein Urteil (neu; Grund: Absicht 2, die Regel als Text greift nicht)
 C: Nur den Wortlaut der Regel schärfen, kein neuer Schritt (Absicht 2)
 Empfehlung: B, denn die Regel steht schon zweimal als Text und griff trotzdem nicht; A allein bliebe wieder Text. Vorläufig und noch nicht an einer Kopie erprobt (Ich 5); Rückweg: Commit zurücknehmen.
-Antwort: .
+Antwort: Wir nehmen B und zusätzlich machen wir die Aussagen aus Absicht 2 zu einem eigenen Punkt in dieser Prämisse
