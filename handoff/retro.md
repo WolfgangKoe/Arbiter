@@ -64,8 +64,8 @@ Anforderung ein kurzer Lauf des Fachkritikers.
 - [x] Fachkritiker: Kritik an der Retro
 - [x] Architekt: Kritik an der Retro
 - [x] Organisationsentwickler: Nachkorrektur
-- [ ] Stakeholder: Freigabe Retro 10
-- [ ] Organisationsentwickler: P1
+- [x] Stakeholder: Freigabe Retro 10
+- [x] Organisationsentwickler: P1
 - [ ] Regelumsetzer: P2
 - [ ] Regelumsetzer: P3
 - [ ] Organisationsentwickler: P4

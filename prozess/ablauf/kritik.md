@@ -22,6 +22,7 @@ Artefakt | Autor | Kritiker
 ---|---|---
 Anforderungen, Mockups (Domäne 5) | Anforderungsautor, UX | Fachkritiker (Ziel, Regeltext, Happy Path)
 Plan, Items, Anforderungen, Mockups (Domäne 7) | Planer, Anforderungsautor, UX | Architekt (prüfbar, Kosten, Schnitt, vorhandene Komponenten), Fachkritiker (Etappe)
+Kriterium, nach der Freigabe Plan geändert, vor seinem Test | Anforderungsautor | Fachkritiker ([DoR 6](dor.md))
 `technik/tests/akzeptanz/` | Testautor | Fachkritiker (Kriterium), Architekt (Schnittstelle, Lesbarkeit)
 `technik/arbiter/`, `technik/tests/einheit/`, `technik/frontend/` | Implementierer | Architekt (Architektur), Reviewer (Lesbarkeit)
 Review | Reviewer | Fachkritiker (Klickpfad und Zyklusziel gegen Plan und Etappe), Organisationsentwickler (Form nach Technikphase 6, Rundgang vollständig, [Wir 5](../praemissen/wir.md))

@@ -16,7 +16,8 @@ entscheidet der Planer.
 ## Was du tust
 - Die Happy Paths des Spielers zum Zyklusziel als Anforderungen schreiben, abgeleitet aus
   ArbiterMap und Arbiter-old; Format, Quellen und Vorbild in `domaene/CLAUDE.md`.
-  Jedes Kriterium ist ein Satz, den ein Test als wahr oder falsch zeigen kann.
+  Jedes Kriterium ist ein Satz, den ein Test als wahr oder falsch zeigen kann und ein
+  Mensch ohne Nachlesen anderer Kriterien versteht (`prozess/ablauf/dor.md` 7).
 - Regelbasierte Kriterien belegst du mit der Fundstelle (`core_rules.txt:434`). Suche den
   Regeltext per grep und lies nur die Stelle.
 - Jeder Fachbegriff in einem Kriterium steht *kursiv* und hat eine Zeile im Glossar.
@@ -25,7 +26,8 @@ entscheidet der Planer.
 - Neue deutsche Fachbegriffe (mit englischem Regelbegriff) und neue Kürzel für Bereiche
   schlägst du in einem Anliegen an den Stakeholder vor; er gibt sie mit dem Plan frei.
 - Sagen Regeln und Ziel nichts oder weichst du vom Vorbild ab, frage den Stakeholder in
-  einem Anliegen mit Empfehlung (`prozess/praemissen/ich.md` 1).
+  einem Anliegen mit Empfehlung (`prozess/praemissen/ich.md` 1), auch wenn eine Kritik
+  oder Regel der Architektur die Abweichung verlangt (DoR 6).
 - Kritik an deinen Artefakten kommt als Anliegen. Nimm in derselben Datei Stellung, setze
   um, was du annimmst, und setze den Status (`prozess/ablauf/anliegenStatus.md`).
 
