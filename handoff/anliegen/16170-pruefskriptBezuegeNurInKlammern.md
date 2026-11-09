@@ -4,12 +4,12 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Stakeholder verlangt Kriterien, die ein Mensch ohne Nachlesen anderer versteht;
 Bezüge auf andere Kriterien nur in Klammern zur Orientierung (Kommentar in
-[16100](16100-sperreNachDemUebergehenBisEtappe7.md)). Die Regel steht als
+Anliegen 16100). Die Regel steht als
 [DoR 7](../../prozess/ablauf/dor.md), Mechanismus bis zum Prüfskript nur Text. Er hat
 entschieden: ein Prüfskript, das beim Schreiben mitläuft, von dir als nächstes Item vor P2
 gebaut, mit Probe am Bestand. Bestehende Regeln (Ich 4): DoR 1 und 2 und das Format in
@@ -40,4 +40,13 @@ Probe am Bestand: rote Kriterien und Dateien, je Etappe, in deiner Stellungnahme
 Probe nach 1. (`/tmp/oe16170/probe.py`): 86 von 176 Kriterien in 44 Dateien.
 Danach Zeile in [Regeln](../../prozess/regeln/); ich ersetze in DoR 7 „nur Text“.
 
-**Stellungnahme.**
+**Stellungnahme (Regelumsetzer).**
+Umgesetzt wie vorgeschlagen: `kriterienregeln/bezuege.py` mit Hook `PostToolUse` auf
+Write und Edit (`.claude/settings.json`), Test `kriterienregeln/bezuegeTest.py`, Zeile in
+[Regeln](../../prozess/regeln/kriterienregeln.md). Kein Commit-Hook; den Bestand listet
+`python3 prozess/pruefungen/gemeinsam/lauf.py kriterienregeln.bezuege domaene/anforderungen`.
+Probe am Bestand: 86 von 176 Kriterien in 44 Dateien rot, wie deine grobe Probe; Regel 2
+(Satzteil ohne Wort) findet darüber hinaus nichts. 13 der Funde sind Kurzformen (`29.1`).
+Liste mit Datei, Zeile, Kennung und Grund: `/tmp/bezuege16170.txt` (Etappe über den Ordner
+der Datei ablesbar). Keine Aufteilung je Etappe: Die Kriterien tragen keine Etappe, sie
+folgt aus dem Plan.

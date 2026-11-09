@@ -9,7 +9,7 @@ Wartet auf: Domänenphase 11
 
 ## Runde 1
 **Befund.** Der Stakeholder verstand BEW-18.7 auch nach fünf anderen Kriterien nicht (Kommentar
-in [16100](16100-sperreNachDemUebergehenBisEtappe7.md)). Die Regel steht als
+in Anliegen 16100). Die Regel steht als
 [DoR 7](../../prozess/ablauf/dor.md): Ein Mensch versteht jedes Kriterium ohne Nachlesen,
 Bezüge nur in Klammern. Er hat entschieden: Der Bestand wird als erstes Item der
 Domänenphase 11 umgeschrieben, Etappe 2 zuerst. Meine grobe Probe: 86 von 176 Kriterien in

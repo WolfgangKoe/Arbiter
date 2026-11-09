@@ -27,8 +27,9 @@
    und **dann** sind Sätze. Ein Bezug auf ein anderes Kriterium steht nur in Klammern zur
    Orientierung, nie statt eines Satzes oder Satzteils: „**Gegeben** die *Sperre* ‚Base
    überdeckt‘ (QUE-1.2)“, nicht „**Gegeben** eine *Sperre* nach QUE-1.2“ (Anliegen 16100).
-   Mechanismus: bis zum Prüfskript beim Schreiben (Anliegen 16170) nur Text; ob der Satz
-   ohne Nachlesen verständlich ist, Urteil des Fachkritikers in [Schritt 5](domaenenphase.md).
+   Mechanismus: `kriterienregeln/bezuege.py` beim Schreiben
+   ([Kriterienregeln](../regeln/kriterienregeln.md)); ob der Satz ohne Nachlesen verständlich
+   ist, Urteil des Fachkritikers in [Schritt 5](domaenenphase.md).
 
 Mechanismus für 1 bis 6: nur Text. Fachliche Vollständigkeit ist Urteil
 ([Domänenphase](domaenenphase.md), Schritte 5, 7) und zeigt sich spätestens an den roten Tests.
