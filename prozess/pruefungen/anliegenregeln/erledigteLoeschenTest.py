@@ -26,6 +26,14 @@ def testErledigtesAnliegenWirdGelöscht(tmp_path, gitRepo):
     assert offen.exists()
 
 
+def testWährendEinCommitDenIndexSperrtLöschtDerHookNichts(tmp_path, gitRepo):
+    erledigt = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf.replace("offen", "erledigt"))
+    gitRepo.festhalten("Probe")
+    (tmp_path / ".git" / "index.lock").write_text("", encoding="utf-8")
+    assert erledigteLöschen(tmp_path) == []
+    assert erledigt.exists()
+
+
 def testOhneErledigteBleibtAllesStehen(tmp_path):
     datei = anliegenAnlegen(tmp_path, "12-probe.md", guterKopf)
     assert erledigteLöschen(tmp_path) == []

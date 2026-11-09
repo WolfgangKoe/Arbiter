@@ -2,7 +2,7 @@ import re
 import sys
 from pathlib import Path
 
-from gemeinsam.gitAufruf import gitAusgabe
+from gemeinsam.gitAufruf import gitAusgabe, indexGesperrt
 from gemeinsam.pfade import anliegenOrdner, handoffOrdner, istNurLesbar, projektordner
 from lesen.anliegenKopf import Status, anliegenDateien, kopfLesen
 
@@ -38,6 +38,8 @@ def linksErsetzen(wurzel: Path, gelöscht: dict[Path, str]) -> list[str]:
 
 
 def erledigteLöschen(wurzel: Path) -> list[str]:
+    if indexGesperrt(wurzel):
+        return []
     gelöscht: dict[Path, str] = {}
     bekannt = set(
         gitAusgabe(

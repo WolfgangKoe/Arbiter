@@ -16,6 +16,11 @@ def gitAusgabe(wurzel: Path, *argumente: str) -> str:
     ).stdout
 
 
+def indexGesperrt(wurzel: Path) -> bool:
+    sperre = gitAusgabe(wurzel, "rev-parse", "--git-path", "index.lock").strip()
+    return bool(sperre) and (wurzel / sperre).exists()
+
+
 def freigaben(wurzel: Path) -> list[Freigabe]:
     gefunden = []
     for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():

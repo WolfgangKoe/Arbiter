@@ -41,6 +41,14 @@ def testDieTechnikphaseSchreibtDenAbschnittVorDieFreigabeUndLässtDenRestStehen(
     assert "- [ ] Stakeholder: Freigabe Review 1\n" in rest
 
 
+def testWährendEinCommitDenIndexSperrtSchreibtDerHookNichts(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    vorher = plan.read_text(encoding="utf-8")
+    (tmp_path / ".git" / "index.lock").write_text("", encoding="utf-8")
+    assert fortschrittSchreiben(tmp_path) is None
+    assert plan.read_text(encoding="utf-8") == vorher
+
+
 def testEinFaktHaktSelbstAb(tmp_path, gitRepo):
     plan = planMitItem(tmp_path, gitRepo)
     fortschrittSchreiben(tmp_path)

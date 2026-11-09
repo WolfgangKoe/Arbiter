@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from typing import NamedTuple
 
-from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe
+from gemeinsam.gitAufruf import betreffeSeit, freigabeCommit, gitAusgabe, indexGesperrt
 from gemeinsam.pfade import anforderungsOrdner, handoffOrdner, itemsOrdner, projektordner
 from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import Zuordnung, anforderungUmfasst, umfasst, zuordnungen
@@ -252,6 +252,8 @@ def abschnittSchreiben(
 
 
 def fortschrittSchreiben(wurzel: Path) -> str | None:
+    if indexGesperrt(wurzel):
+        return None
     aktuell = lage(wurzel)
     neu = aktuell.phase == Phase.domänenphase and neuGefasst(wurzel, aktuell.zyklus)
     ziele = [zielUndZeilen(wurzel, phase) for phase in (aktuell, vorherigeLage(aktuell))]
