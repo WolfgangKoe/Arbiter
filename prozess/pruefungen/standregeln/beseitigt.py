@@ -5,7 +5,7 @@ from gemeinsam.gitAufruf import gitAusgabe
 from gemeinsam.pfade import anliegenOrdner
 from lesen.anliegenKopf import Status, anliegenDateien, kopfAusText, nummerAusDatei
 
-hindernisMuster = re.compile(r"^ {2}Hindernis: .*\(Anliegen (\d+)\)$")
+hindernisMuster = re.compile(r"^ {2}- \[([ x])\] Hindernis (\d+) .*$")
 behoben = (Status.angenommen, Status.erledigt)
 
 
@@ -28,6 +28,11 @@ def anliegenText(wurzel: Path, nummer: str) -> str:
         if text:
             return text
     return ""
+
+
+def anliegenTitel(wurzel: Path, nummer: str) -> str:
+    erste = anliegenText(wurzel, nummer).partition("\n")[0]
+    return erste.removeprefix("# ").removeprefix("Hindernis: ").strip()
 
 
 def beseitigendeBetreffe(wurzel: Path, pfad: str, festgehalten: str) -> list[str]:
@@ -66,15 +71,15 @@ def verwaisteFallenLassen(wurzel: Path, zusatz: list[str]) -> list[str]:
     behalten = []
     for zeile in zusatz:
         treffer = hindernisMuster.match(zeile)
-        if treffer is None or anliegenBesteht(wurzel, treffer[1]):
+        if treffer is None or anliegenBesteht(wurzel, treffer[2]):
             behalten.append(zeile)
     return behalten
 
 
-def beseitigtErgänzen(wurzel: Path, zusatz: list[str]) -> list[str]:
+def beseitigteAbhaken(wurzel: Path, zusatz: list[str]) -> list[str]:
     ergebnis = []
     for zeile in zusatz:
         treffer = hindernisMuster.match(zeile)
-        betreff = beseitigtDurch(wurzel, treffer[1]) if treffer else None
-        ergebnis.append(f"{zeile}; beseitigt: Commit „{betreff}“" if betreff else zeile)
+        beseitigt = treffer and treffer[1] == " " and beseitigtDurch(wurzel, treffer[2])
+        ergebnis.append(zeile.replace("[ ]", "[x]", 1) if beseitigt else zeile)
     return ergebnis

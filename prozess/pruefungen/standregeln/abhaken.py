@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.pfade import projektordner
-from standregeln.beseitigt import anliegenText
+from standregeln.beseitigt import anliegenText, hindernisMuster
 from standregeln.fortschritt import (
     Zeile,
     abschnittBauen,
@@ -20,9 +20,6 @@ from standregeln.testsRot import grüneTests, itemDesSchritts
 
 aufrufteileRolleUndSchritt = 2
 testnamenMuster = re.compile(r"\btest\w+(?:\[[^\]\s]*\])?")
-anliegenMuster = re.compile(r"\(Anliegen (\d+)\)")
-hindernisBeginn = "  Hindernis:"
-beseitigtMarke = "; beseitigt:"
 
 
 class Grün(NamedTuple):
@@ -72,33 +69,24 @@ def genannteTests(zeilen: list[str]) -> set[str]:
     return {name for zeile in zeilen for name in testnamenMuster.findall(zeile)}
 
 
-def zuTestsGemeldet(zusatz: list[str], grün: list[str]) -> tuple[list[str], int | None]:
-    hindernisse = [zeile for zeile in zusatz if zeile.startswith(hindernisBeginn)]
-    beseitigte = [zeile for zeile in hindernisse if beseitigtMarke in zeile]
-    offene = [zeile for zeile in hindernisse if beseitigtMarke not in zeile]
+def zuTestsGemeldet(
+    wurzel: Path, hindernisse: list[re.Match], grün: list[str]
+) -> tuple[list[str], int | None]:
+    beseitigte = [anliegenText(wurzel, treffer[2]) for treffer in hindernisse if treffer[1] == "x"]
     übrige = [name for name in grün if name not in genannteTests(beseitigte)]
-    for zeile in offene:
-        nummer = anliegenMuster.search(zeile)
-        if übrige and nummer and set(übrige) <= genannteTests([zeile]):
-            return übrige, int(nummer[1])
+    for treffer in hindernisse:
+        offen = übrige and treffer[1] == " "
+        if offen and set(übrige) <= genannteTests([anliegenText(wurzel, treffer[2])]):
+            return übrige, int(treffer[2])
     return übrige, None
 
 
-def hindernisseDesItems(
-    wurzel: Path, zeilen: list[Zeile], bisher: dict, schritt: str
-) -> list[str]:
+def hindernisseDesItems(zeilen: list[Zeile], bisher: dict, schritt: str) -> list[re.Match]:
     gesammelt = []
     for zeile in zeilen:
         if zeile.fakt is None and zeile.schritt == schritt:
             gesammelt += bisher.get(zeile.schlüssel, (False, []))[1]
-    return [mitAnliegentext(wurzel, eintrag) for eintrag in gesammelt]
-
-
-def mitAnliegentext(wurzel: Path, eintrag: str) -> str:
-    nummer = anliegenMuster.search(eintrag)
-    if not eintrag.startswith(hindernisBeginn) or beseitigtMarke not in eintrag or not nummer:
-        return eintrag
-    return eintrag + "\n" + anliegenText(wurzel, nummer[1])
+    return [treffer for eintrag in gesammelt if (treffer := hindernisMuster.match(eintrag))]
 
 
 def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> Grün:
@@ -113,8 +101,8 @@ def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> Grün:
         if not itemName or not passt(zeile, rolle, schritt):
             continue
         grün = grüneTests(wurzel, itemName)
-        gemeldet = hindernisseDesItems(wurzel, zeilen, bisher, zeile.schritt)
-        übrige, bestehendes = zuTestsGemeldet(gemeldet, grün)
+        gemeldet = hindernisseDesItems(zeilen, bisher, zeile.schritt)
+        übrige, bestehendes = zuTestsGemeldet(wurzel, gemeldet, grün)
         if übrige and bestehendes is None:
             nummer = nächsteNummer(wurzel)
             text = (

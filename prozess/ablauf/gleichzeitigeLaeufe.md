@@ -12,7 +12,7 @@ Gleichzeitig ist die Regel ([Absicht 7](../praemissen/absicht.md)): Was danach d
 der Koordinator gleichzeitig (Anliegen 730). Nach jedem Rollenlauf nennt ihm der Stand unter
 „Frei“, was nicht wartet: die Anliegen, die dran sind, und die offenen Zeilen des
 [Fortschritts](fortschritt.md), deren Vorgänger in dessen Tabelle abgehakt ist, je Item und
-Prozess-Item für sich, ohne offenes `Hindernis:`. Was davon nicht schon läuft, startet er
+Prozess-Item für sich, ohne offenes Hindernis. Was davon nicht schon läuft, startet er
 oder nennt dem Stakeholder je den Grund: Bedingung 1 bis 3 oder die Reihenfolge des Plans
 (Anliegen 14360). Mechanismus: nur Text, bis [P4](../../handoff/retro.md)
 `standregeln/stand.py` (PostToolUse auf Agent) darum erweitert, samt dem Satz „Starte, was

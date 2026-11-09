@@ -4,7 +4,7 @@ Form: Auftrag
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: erledigt
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -36,3 +36,14 @@ Verwandt: [Fortschritt](../../prozess/ablauf/fortschritt.md), Anliegen 11500 (Ab
 Anliegen ist die Datei des Hindernisses. Von den Befunden darunter: Abhängigkeit und Nummer
 außerhalb des Bereichs P3, Commit und Tokengrenze P4, die übrigen P2 je mit Scheiter-Test.
 `angenommen`, sobald die Regel steht.
+
+Umgesetzt mit P2 der [Retro 10](../retro.md), `erledigt` folgt dessen Haken: 1 und 2: Unter
+dem Schritt steht nur `- [ ] Hindernis <nr> <Titel>`, der Text steht im Anliegen. 3: Der Haken
+wird `[x]`, sobald das Anliegen angenommen oder erledigt und committet ist. 4: Ein gesetzter
+Haken eines Hindernisses bleibt; Haken der Schritte bleiben beim Neuschreiben (Anliegen 982). Regel:
+[Standregeln](../../prozess/regeln/standregeln.md), Zeile Anliegen 490 Teil 2; Ablauf:
+[Fortschritt](../../prozess/ablauf/fortschritt.md). Von den Befunden darunter: 12440 steht in
+derselben Regel, Abhängigkeit und Nummer in P3, Commit und Tokengrenze in P4. Die verlorene
+Statusänderung an 11920 und der Haken des Planers ohne offenen Schritt haben keinen eigenen
+Mechanismus bekommen; tritt eins davon wieder auf, kommt es in die nächste Retro.
+Kommentar: Schauen wir mal, ob das funktioniert.

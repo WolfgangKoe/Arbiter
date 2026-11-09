@@ -89,11 +89,11 @@ def testEineZeileMitNochFehlendemFaktIstGesperrtUndDerServerSetztSieNicht(tmp_pa
 
 def testEinHindernisStehtUnterDerZeileMitLinkAufDasAnliegen(tmp_path, plan):
     text = plan.read_text(encoding="utf-8").replace(
-        f"- [ ] {zeile}\n", f"- [ ] {zeile}\n  Hindernis: Fehlt <b> (Anliegen 77)\n"
+        f"- [ ] {zeile}\n", f"- [ ] {zeile}\n  - [ ] Hindernis 77 Fehlt <b>\n"
     )
     plan.write_text(text, encoding="utf-8")
     seite = startseite(tmp_path)
-    assert '<a href="/anliegen/77">Anliegen 77</a>' in seite
+    assert '<a href="/anliegen/77">Hindernis 77</a>' in seite
     assert "Fehlt &lt;b&gt;" in seite
 
 

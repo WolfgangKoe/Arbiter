@@ -101,9 +101,7 @@ def testHakenUndHindernisBleibenBeimNeuschreibenStehen(tmp_path, gitRepo):
     fortschrittSchreiben(tmp_path)
     text = plan.read_text(encoding="utf-8")
     zeile = "Implementierer: Tests zu Item stellen grün\n"
-    text = text.replace(
-        f"- [ ] {zeile}", f"- [x] {zeile}  Hindernis: Pfad gesperrt (Anliegen 560)\n"
-    )
+    text = text.replace(f"- [ ] {zeile}", f"- [x] {zeile}  - [ ] Hindernis 560 Pfad gesperrt\n")
     plan.write_text(text, encoding="utf-8")
     assert fortschrittSchreiben(tmp_path) is None
     assert plan.read_text(encoding="utf-8") == text
@@ -114,13 +112,13 @@ def testEinHindernisOhneAnliegenFälltWegEinesMitUncommittetemBleibt(tmp_path, g
     schreiben(tmp_path, "handoff/anliegen/561-da.md", "# Da\n")
     fortschrittSchreiben(tmp_path)
     zeile = "- [ ] Implementierer: Tests zu Item stellen grün\n"
-    hindernisse = "  Hindernis: A → B: weg (Anliegen 560)\n  Hindernis: A → B: da (Anliegen 561)\n"
+    hindernisse = "  - [ ] Hindernis 560 weg\n  - [ ] Hindernis 561 da\n"
     text = plan.read_text(encoding="utf-8").replace(zeile, zeile + hindernisse)
     plan.write_text(text, encoding="utf-8")
     fortschrittSchreiben(tmp_path)
     ergebnis = plan.read_text(encoding="utf-8")
-    assert "(Anliegen 560)" not in ergebnis
-    assert "(Anliegen 561)" in ergebnis
+    assert "Hindernis 560" not in ergebnis
+    assert "Hindernis 561" in ergebnis
 
 
 def testEinZweiterLaufÄndertNichts(tmp_path, gitRepo):

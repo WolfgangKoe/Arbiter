@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -29,3 +29,10 @@ stehen nur im Anliegen; ein beseitigtes Hindernis kürzt das Skript auf seine Nu
 
 **Stellungnahme.** Zugestimmt, mit 12520 als P2 der [Retro 10](../retro.md): Die Zeile nennt
 nur Nummer und Titel, Testnamen stehen im Anliegen. `angenommen`, sobald die Regel steht.
+
+Umgesetzt mit P2 der [Retro 10](../retro.md), `erledigt` folgt dessen Haken: Die Zeile ist
+`- [ ] Hindernis <nr> <Titel>`, ohne Testnamen und ohne Anzahl; die Namen stehen nur im
+Anliegen, das Abhaken liest sie dort. Ein beseitigtes Hindernis bleibt als abgehakte Zeile
+dieser Länge stehen, statt auf die Nummer gekürzt zu werden. Regel:
+[Standregeln](../../prozess/regeln/standregeln.md), Zeile Anliegen 490 Teil 2; Ablauf:
+[Fortschritt](../../prozess/ablauf/fortschritt.md).

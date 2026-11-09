@@ -90,19 +90,20 @@ def testEinGrünerTestVorDemCodeMeldetDemTestautorEinHindernis(tmp_path, monkeyp
     assert "schon grün" in capsys.readouterr().err
     text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
     assert "- [ ] Fachkritiker: Kritik an den Tests zu Item stellen\n" in text
-    assert "  Hindernis: Fachkritiker → Testautor:" in text
-    assert "testAuf1_1EinModell" in text
+    assert "  - [ ] Hindernis 1 Kritik an den Tests zu Item stellen\n" in text
+    assert "testAuf1_1EinModell" not in text
+    (anliegen,) = (tmp_path / "handoff/anliegen").glob("*.md")
+    assert "testAuf1_1EinModell" in anliegen.read_text(encoding="utf-8")
 
 
 def hindernisEintragen(
     wurzel: Path, rolle: str, tests: str, nummer: int, *, beseitigt: bool
 ) -> None:
     fortschrittSchreiben(wurzel)
-    schreiben(wurzel, f"handoff/anliegen/{nummer}-hindernis.md", "# Hindernis\n")
+    schreiben(wurzel, f"handoff/anliegen/{nummer}-hindernis.md", f"# Hindernis\nGrün: {tests}.\n")
     datei = wurzel / "handoff/plan.md"
     zeile = f"- [ ] {rolle}: Kritik an den Tests zu Item stellen\n"
-    eintrag = f"  Hindernis: {rolle} → Testautor: Grün: {tests}. (Anliegen {nummer})"
-    eintrag += "; beseitigt: Commit „Tests“\n" if beseitigt else "\n"
+    eintrag = f"  - [{'x' if beseitigt else ' '}] Hindernis {nummer} Tests grün\n"
     text = datei.read_text(encoding="utf-8")
     datei.write_text(text.replace(zeile, zeile + eintrag), encoding="utf-8")
 
@@ -112,9 +113,7 @@ def anliegenNummern(wurzel: Path) -> list[str]:
 
 
 @pytest.mark.usefixtures("plan")
-def testEinGrünerTestImBeseitigtenHindernisDesSchrittsLässtDieKritikAbhaken(
-    tmp_path, monkeypatch
-):
+def testEinGrünerTestImBeseitigtenHindernisDesSchrittsLässtDieKritikAbhaken(tmp_path, monkeypatch):
     monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
     akzeptanztestAnlegen(tmp_path, "assert True")
     hindernisEintragen(tmp_path, "Fachkritiker", "testAuf1_1EinModell", 5, beseitigt=True)
@@ -136,9 +135,7 @@ def testEinGrünerTestImBeseitigtenHindernisDesAnderenKritikersLässtAuchAbhaken
 
 
 @pytest.mark.usefixtures("plan")
-def testEinGrünerTestNurImAnliegenDesBeseitigtenHindernisGenanntLässtAbhaken(
-    tmp_path, monkeypatch
-):
+def testEinGrünerTestNurImAnliegenDesBeseitigtenHindernisGenanntLässtAbhaken(tmp_path, monkeypatch):
     monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
     akzeptanztestAnlegen(tmp_path, "assert True")
     hindernisEintragen(tmp_path, "Architekt", "zusammengefasst", 5, beseitigt=True)

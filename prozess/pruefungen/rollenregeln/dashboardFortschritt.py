@@ -9,7 +9,7 @@ from standregeln.phasenfolge import lage
 from standregeln.zeilenZug import abgehaktWert, hakenArt, kommentarArt
 
 fortschrittPfad = "/fortschritt"
-anliegenNummer = re.compile(r"Anliegen (\d+)")
+anliegenNummer = re.compile(r"(Anliegen|Hindernis) (\d+)")
 keinAbschnitt = "<p>In dieser Phase gibt es keinen Fortschritt.</p>"
 
 fortschrittStil = """
@@ -31,7 +31,7 @@ ul.fortschritt .vermerk{flex-basis:100%;margin-left:22px;color:var(--text-muted)
 
 def vermerkHtml(zeile: str) -> str:
     maskiert = html.escape(zeile.strip())
-    verlinkt = anliegenNummer.sub(r'<a href="/anliegen/\1">Anliegen \1</a>', maskiert)
+    verlinkt = anliegenNummer.sub(r'<a href="/anliegen/\2">\1 \2</a>', maskiert)
     return f'<div class="vermerk">{verlinkt}</div>'
 
 

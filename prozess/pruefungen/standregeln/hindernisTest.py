@@ -47,7 +47,7 @@ def testEinHindernisLegtAnliegenUndZeileAn(tmp_path, plan):
     nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     assert nummer == 1
     zeile = "- [ ] Implementierer: Tests zu Item stellen grün\n"
-    erwartet = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 1)\n"
+    erwartet = "  - [ ] Hindernis 1 Tests zu Item stellen grün\n"
     assert zeile + erwartet in plan.read_text(encoding="utf-8")
     (datei,) = anliegenDateien(tmp_path)
     gelesen = kopfLesen(datei)
@@ -63,7 +63,7 @@ def testEinHindernisAnDenStakeholderIstEineFrageMitAntwort(tmp_path, plan):
     assert kopfLesen(datei).typ == "Fragen"
     assert "**F1 · " in datei.read_text(encoding="utf-8")
     assert "Antwort: .\n" in datei.read_text(encoding="utf-8")
-    assert plan.read_text(encoding="utf-8").count("Hindernis:") == 1
+    assert plan.read_text(encoding="utf-8").count("] Hindernis ") == 1
 
 
 @pytest.mark.usefixtures("plan")
@@ -91,7 +91,7 @@ def testEinVorhandenesAnliegenWirdGenanntStattEinNeuesAnzulegen(tmp_path, plan):
     schreiben(tmp_path, "handoff/anliegen/77-kritik.md", "x\n")
     nummer = hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, vorhandene)
     assert nummer == vorhandene
-    erwartet = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 77)\n"
+    erwartet = "  - [ ] Hindernis 77 x\n"
     assert erwartet in plan.read_text(encoding="utf-8")
     assert len(anliegenDateien(tmp_path)) == 1
     assert hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, 78) is None
@@ -109,26 +109,24 @@ def testEineFremdeOderUnbekannteZeileMeldetNichts(tmp_path, plan):
     assert melden(rolle="Implementierer", schritt="grün", beseitiger="Niemand") is None
     assert melden(rolle="Implementierer", schritt="gibtEsNicht", beseitiger="Planer") is None
     assert anliegenDateien(tmp_path) == []
-    assert "Hindernis:" not in plan.read_text(encoding="utf-8")
+    assert "] Hindernis " not in plan.read_text(encoding="utf-8")
 
 
 def testDasHindernisBleibtBeimNeuschreibenUndBekommtDenBeseitigendenCommit(tmp_path, gitRepo, plan):
     hindernisMelden(tmp_path, "Implementierer", "grün", "Planer", hindernis, bereich)
     gitRepo.festhalten("Hindernis gemeldet")
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis" not in plan.read_text(encoding="utf-8")
     (datei,) = anliegenDateien(tmp_path)
     datei.write_text(
         datei.read_text(encoding="utf-8").replace("Status: offen", "Status: angenommen"),
         encoding="utf-8",
     )
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis" not in plan.read_text(encoding="utf-8")
     gitRepo.festhalten("Pfad freigegeben")
     fortschrittSchreiben(tmp_path)
-    vermerk = f"  Hindernis: Implementierer → Planer: {hindernis} (Anliegen 1)"
-    zeile = f"{vermerk}; beseitigt: Commit „Pfad freigegeben“\n"
-    assert zeile in plan.read_text(encoding="utf-8")
+    assert "  - [x] Hindernis 1 Tests zu Item stellen grün\n" in plan.read_text(encoding="utf-8")
     assert fortschrittSchreiben(tmp_path) is None
 
 
@@ -148,14 +146,14 @@ def testEineNeueRundeLässtDasHindernisOffenBisIhrCommitDenStatusTrägt(tmp_path
     datei.write_text(datei.read_text(encoding="utf-8") + "\n## Runde 2\n**Befund.** Neu.\n")
     hindernisMelden(tmp_path, "Fachkritiker", "abgenommen", "Planer", hindernis, 1)
     fortschrittSchreiben(tmp_path)
-    assert plan.read_text(encoding="utf-8").count("Hindernis:") == zweiHindernisse
-    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    assert plan.read_text(encoding="utf-8").count("] Hindernis ") == zweiHindernisse
+    assert "[x] Hindernis" not in plan.read_text(encoding="utf-8")
     statusSetzen(datei, "offen", "angenommen")
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis" not in plan.read_text(encoding="utf-8")
     gitRepo.festhalten("Runde 2 nachgebessert")
     fortschrittSchreiben(tmp_path)
-    beseitigende = plan.read_text(encoding="utf-8").count("Commit „Runde 2 nachgebessert“")
+    beseitigende = plan.read_text(encoding="utf-8").count("[x] Hindernis")
     assert beseitigende == zweiHindernisse
 
 
@@ -170,7 +168,7 @@ def testEinGelöschtesErledigtesAnliegenBeseitigtMitDemCommitDavor(tmp_path, git
     datei.unlink()
     gitRepo.festhalten("Anliegen gelöscht")
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt: Commit „Pfad freigegeben“" in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis 1" in plan.read_text(encoding="utf-8")
 
 
 def testEineUncommittetGelöschteErledigteDateiBeseitigtMitDemCommitDerErledigung(
@@ -182,7 +180,7 @@ def testEineUncommittetGelöschteErledigteDateiBeseitigtMitDemCommitDerErledigun
     gitRepo.festhalten("Pfad freigegeben")
     datei.unlink()
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt: Commit „Pfad freigegeben“" in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis 1" in plan.read_text(encoding="utf-8")
 
 
 def testEineUncommittetGelöschteOffeneDateiBeseitigtNichts(tmp_path, gitRepo, plan):
@@ -191,7 +189,7 @@ def testEineUncommittetGelöschteOffeneDateiBeseitigtNichts(tmp_path, gitRepo, p
     gitRepo.festhalten("Hindernis gemeldet")
     datei.unlink()
     fortschrittSchreiben(tmp_path)
-    assert "beseitigt" not in plan.read_text(encoding="utf-8")
+    assert "[x] Hindernis" not in plan.read_text(encoding="utf-8")
 
 
 def testDerDateinameIstAsciiUndCamelCase():

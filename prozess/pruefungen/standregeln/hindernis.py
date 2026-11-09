@@ -12,6 +12,7 @@ from lesen.anliegenKopf import (
     nummerAusDatei,
     stakeholder,
 )
+from standregeln.beseitigt import anliegenTitel
 from standregeln.fortschritt import (
     Zeile,
     abschnittBauen,
@@ -106,8 +107,8 @@ def eigeneZeile(wurzel: Path, rolle: str, schritt: str) -> tuple[Path, list[Zeil
     return (datei, zeilen, treffer[0]) if len(treffer) == 1 else None
 
 
-def hindernisZeile(zeile: Zeile, beseitiger: str, text: str, nummer: int) -> str:
-    return f"  Hindernis: {zeile.rolle} → {beseitiger}: {einzeiler(text)} (Anliegen {nummer})"
+def hindernisZeile(wurzel: Path, nummer: int) -> str:
+    return f"  - [ ] Hindernis {nummer} {anliegenTitel(wurzel, str(nummer))}"
 
 
 def anliegenVorhanden(wurzel: Path, nummer: int) -> bool:
@@ -134,7 +135,7 @@ def hindernisMelden(  # noqa: PLR0913
     inhalt = datei.read_text(encoding="utf-8")
     bisher = bisherigeZeilen(inhalt)
     abgehakt, zusatz = bisher.get(zeile.schlüssel, (False, []))
-    zusatz.append(hindernisZeile(zeile, name, text, nummer))
+    zusatz.append(hindernisZeile(wurzel, nummer))
     bisher[zeile.schlüssel] = (abgehakt, zusatz)
     datei.write_text(abschnittEinsetzen(inhalt, abschnittBauen(zeilen, bisher)), encoding="utf-8")
     return nummer

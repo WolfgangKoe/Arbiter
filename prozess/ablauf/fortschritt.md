@@ -13,20 +13,21 @@ Höchstmaß. Ihn schreibt nur das Skript, der Autor lässt ihn beim Ändern steh
 liest ihn für ihre Arbeit: Ihre offenen Schritte nennt ihr der Hook beim Start.
 
 Eine Zeile je Schritt nach der Tabelle, `- [ ] <Rolle>: <Schritt>`, abgehakt `- [x]`.
-Darunter eingerückt, was ihn aufhält, `Hindernis: <Rolle> → <Beseitiger>: <Satz> (Anliegen <nr>)`
-(den Satz schreibt die Rolle für den Stakeholder, [Wir 5](../praemissen/wir.md)), angenommen
-gefolgt von `; beseitigt: Commit „<Betreff>“`, und ein Kommentar des Stakeholders
+Darunter eingerückt, was ihn aufhält, `  - [ ] Hindernis <nr> <Titel>` mit dem Titel des
+Anliegens; den Befund darin schreibt die Rolle für den Stakeholder ([Wir 5](../praemissen/wir.md)).
+Der Haken wird `[x]`, sobald das Anliegen angenommen oder erledigt und committet ist, und
+bleibt (Anliegen 12520, 15301). Ein Kommentar des Stakeholders steht als
 `Kommentar: <Text> (Anliegen <nr>)`.
 - Fakt: Ein Hook hakt nach jedem Rollenlauf ab, was die Tabelle als Fakt nennt.
 - Befehl: Die Rolle hakt ihren Schritt am Ende ihres Laufs ab. Ein Kritiker hakt erst ab,
-  wenn unter seinem Schritt kein `Hindernis:` ohne `beseitigt` mehr steht und keiner seiner
+  wenn unter seinem Schritt kein Hindernis mehr offen ist und keiner seiner
   Befunde mehr aufhält ([Kritik](kritik.md)):
   `python3 prozess/pruefungen/gemeinsam/lauf.py standregeln.abhaken <Rolle> <Schritt>`; ein
   schon gesetzter Haken wird als solcher gemeldet. Hält sie etwas auf, meldet sie es mit
   `… standregeln.hindernis <Rolle> <Schritt> <Rolle, die es beseitigen kann> <Text> <Ziel>`.
   Ziel ist der Nummernbereich des Auftrags (`3940-3959`), dann legt das Skript das Anliegen an
   (Kritik, an den Stakeholder Fragen), oder die Nummer des Anliegens, das schon als Kritik
-  besteht; es schreibt die Zeile `Hindernis:`. Der Start nennt beide Befehle (Anliegen 2460).
+  besteht; es schreibt die Zeile des Hindernisses. Der Start nennt beide Befehle (Anliegen 2460).
 - Dashboard: Der Fortschritt der laufenden Phase steht als kompakte Liste neben dem
   Anliegenboard. Der Stakeholder hakt eine Zeile, die kein Fakt abhakt, mit einem Klick ab;
   ein gesetzter Haken bleibt, alle Haken sehen gleich aus und heben sich deutlich vom leeren
