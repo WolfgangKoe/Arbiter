@@ -6,6 +6,7 @@ from http import HTTPStatus
 import pytest
 from playwright.sync_api import expect
 
+from arbiter.domaene.phasen.aufstellen.anhaltenAufDemWeg import Weiterrücken
 from arbiter.domaene.sperre import Grund
 from tests.akzeptanz.anhalten import angehaltenVor, aufDerStrecke
 from tests.akzeptanz.bildschirm import (
@@ -170,6 +171,24 @@ def testBew8_3HältNachDemAnhaltenAufDemWegDieNahkampfreichweiteBietetDerDienstG
     assert antwort.status_code == HTTPStatus.OK
     assert "gründe" not in antwort.get_json()
     assert antwort.get_json()["schlacht"]["gemeinsamÜbergehen"] == {"angeboten": True}
+
+
+def testBew8_3NachDemAnhaltenAufDemWegOhneAnhaltenBietetArbiterGemeinsamÜbergehenNichtAn(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, necronWarriors
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    *_, letzter = necronWarriors.modelle
+    davor = schlacht.stelle(letzter)
+    amNeuntenVorbei = versetzt(davor, (Fraction(-6, 5), Fraction(-1)))
+    punkt = versetzt(davor, (Fraction(-6, 5), Fraction(4)))
+    gezeigt = schlacht.stellenBeimLoslassen(letzter, amNeuntenVorbei)
+    assert gezeigt.angehaltenAufDemWeg is True, "Davor hielt nichts an"
+    weiter = Weiterrücken(gezeigt.stellen[letzter], angehaltenAufDemWeg=True)
+
+    schlacht.modellLoslassen(letzter, punkt, weiter)
+
+    assert schlacht.stelle(letzter) == punkt
+    assert schlacht.gemeinsamÜbergehenAngeboten is False
 
 
 def testBew8_3ZuBeginnDerBewegungsphaseBietetArbiterGemeinsamÜbergehenNichtAn(

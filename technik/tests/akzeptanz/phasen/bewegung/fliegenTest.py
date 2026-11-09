@@ -614,22 +614,37 @@ def testBew18_7OhneFremdeBaseAmPunktNenntDerEintragDieBewegungsweite(
 
 
 def inDerNahkampfreichweiteDesWarbossLoslassen(
-    schlacht, spinne: Modell, boss: Modell, wegNachWesten: Fraction
+    schlacht,
+    spinne: Modell,
+    boss: Modell,
+    wegNachWesten: Fraction,
+    zumWarboss: tuple[Fraction, Fraction],
 ) -> Stelle:
     davor = schlacht.stelle(spinne)
     punkt = versetzt(davor, (-wegNachWesten, nichts))
-    stelleDesWarboss = versetzt(punkt, (-summeDerRadien(spinne, boss) - halbesZoll, nichts))
+    abstand = summeDerRadien(spinne, boss) + halbesZoll
+    stelleDesWarboss = versetzt(punkt, gestreckt(zumWarboss, abstand))
     orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
     angehaltenLoslassen(schlacht, spinne, punkt)
     return punkt
 
 
+wieDerWarbossZumPunktSteht = pytest.mark.parametrize(
+    "zumWarboss",
+    [(Fraction(-1), nichts), (nichts, Fraction(1))],
+    ids=["hinterDemPunkt", "nebenDemPunkt"],
+)
+
+
+@wieDerWarbossZumPunktSteht
 def testBew18_7OhneFremdeBaseInDerNahkampfreichweiteNenntDerEintragBeideGründe(
-    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss
+    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss, zumWarboss
 ):
     schlacht = schlachtInDerBewegungsphase
     (boss,) = warboss.modelle
-    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(schlacht, spinne, boss, Fraction(8))
+    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(
+        schlacht, spinne, boss, Fraction(8), zumWarboss
+    )
     einträge = list(schlacht.protokoll)
 
     schlacht.gemeinsamÜbergehen()
@@ -641,12 +656,15 @@ def testBew18_7OhneFremdeBaseInDerNahkampfreichweiteNenntDerEintragBeideGründe(
     assert neuer.gründe == {Grund.bewegungsweite, Grund.nahkampfreichweite}
 
 
+@wieDerWarbossZumPunktSteht
 def testBew18_7InDerBewegungsweiteInDerNahkampfreichweiteNenntDerEintragNurDieNahkampfreichweite(
-    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss
+    schlachtInDerBewegungsphase, einheitDerSpinne, spinne, warboss, zumWarboss
 ):
     schlacht = schlachtInDerBewegungsphase
     (boss,) = warboss.modelle
-    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(schlacht, spinne, boss, Fraction(5))
+    punkt = inDerNahkampfreichweiteDesWarbossLoslassen(
+        schlacht, spinne, boss, Fraction(5), zumWarboss
+    )
     einträge = list(schlacht.protokoll)
 
     schlacht.gemeinsamÜbergehen()

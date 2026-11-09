@@ -6,8 +6,9 @@ from http import HTTPStatus
 import pytest
 
 from arbiter.domaene.sperre import Grund
+from arbiter.domaene.spielobjekte import Modell
 from tests.akzeptanz.dienst import gemeinsamÜbergehen, modellLoslassen, spielstandVon
-from tests.akzeptanz.handgriffe import radiusInZoll, versetzt
+from tests.akzeptanz.handgriffe import gestreckt, radiusInZoll, versetzt
 from tests.akzeptanz.schlacht import (
     anhaltenUndÜbergehen,
     aufeinanderZuZiehen,
@@ -20,7 +21,17 @@ nichts = Fraction(0)
 halberZoll = Fraction(1, 2)
 zweiZollNachOsten = (Fraction(2), nichts)
 zweiZollNachWesten = (Fraction(-2), nichts)
+einZollNachOsten = (Fraction(1), nichts)
 einZollNachSüden = (nichts, Fraction(1))
+
+
+@pytest.fixture
+def spinne(spielerZwei) -> Modell:
+    (einheit,) = (
+        einheit for einheit in spielerZwei.armee.einheiten if einheit.name == "Canoptek Spyder"
+    )
+    (modell,) = einheit.modelle
+    return modell
 
 
 def übergangenVorDemOverlord(schlacht, warboss, overlord, abstand: Fraction, weg: Fraction):
@@ -63,6 +74,24 @@ def testBew25_1ÜberDerBewegungsweiteHältArbiterInJedeRichtungAnDerVorigenStell
     schlachtInDerBewegungsphase.modellLoslassen(boss, versetzt(ziel, weg))
 
     assert schlachtInDerBewegungsphase.stelle(boss) == ziel
+
+
+@pytest.mark.parametrize(
+    "zurück", [einZollNachOsten, einZollNachSüden], ids=["einZollNachOsten", "einZollNachSüden"]
+)
+def testBew25_1EinenZollZurückInDieBewegungsweiteHältArbiterAnDerVorigenStelleAn(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, zurück
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    überDieBewegungsweite = -(bewegungsweite("Canoptek Spyder", "Canoptek Spyder") + halberZoll)
+    vorige = versetzt(schlacht.stelle(spinne), gestreckt(zurück, überDieBewegungsweite))
+    anhaltenUndÜbergehen(schlacht, spinne, vorige)
+    assert schlacht.stelle(spinne) == vorige, "Die Spinne steht nicht, wo der Test sie braucht"
+
+    schlacht.modellLoslassen(spinne, versetzt(vorige, zurück))
+
+    assert schlacht.stelle(spinne) == vorige
+    assert schlacht.gemeinsamÜbergehenAngeboten is True
 
 
 def testBew25_1BeiDerEinheitenebeneHältDerBlockAnWennEinesÜberDerBewegungsweiteSteht(
