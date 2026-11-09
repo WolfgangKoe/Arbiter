@@ -31,7 +31,7 @@ falsche *Stelle*.
 Tests sagen kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Erledigt, wenn
 `.venv/bin/python prozess/pruefungen/gemeinsam/lauf.py mutationsregeln.mutation` 95 % meldet.
 
-**Stellungnahme.** Umgesetzt; [15680](15680-gleichwertigeMutantenZyklus10.md) ist erledigt
+**Stellungnahme.** Umgesetzt; Anliegen 15680 ist erledigt
 (38 Einträge in `gleichwertig.json`). Mutanten einzeln in einer Kopie geprüft, kein voller Lauf.
 - `schlachtrunden.py` 188 (`False wird True`) ist nicht gleichwertig: Zieht jemand ein *Modell*
   des anderen *Spielers*, zeigt das *Spielfeld* nach BEW-10.1 keines bewegt, also hat AUF-29
