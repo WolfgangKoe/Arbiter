@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Domänenphase
 
 ## Runde 1
-**Befund.** Der Stakeholder schreibt in [15900](15900-bewegenAlsOberklasse.md) (Kommentar
+**Befund.** Der Stakeholder schreibt in Anliegen 15900 (Kommentar
 unter Runde 2): „Ziehe für die Domänenphase in Erwägung, den Ordner ‚Querschnitt‘
 umzubenennen … Fachlich ist es aber schwer lesbar … Der Code muss lesbar sein!“
 Der Name gehört dir: `technik/arbiter/domaene/` spiegelt `domaene/anforderungen/`

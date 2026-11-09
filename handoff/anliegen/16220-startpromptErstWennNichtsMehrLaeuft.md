@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Aus Zyklus 10, weitergegeben vom Koordinator (dein Wortlaut liegt mir nicht vor,

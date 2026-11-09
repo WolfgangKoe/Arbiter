@@ -6,8 +6,8 @@ Nichts blockiert das Inkrement.
 
 ## Dran
 - Stakeholder: nur die Freigabe Retro 10; aus den Anliegen nichts.
-- Koordinator: [11100](anliegen/11100-teilCommitScheitertBeiLaufenderRolle.md) (in P4),
-  [13580](anliegen/13580-planFliegenRest.md) (Plan für den Rest von fliegen).
+- Koordinator: Anliegen 11100 (in P4),
+  Anliegen 13580 (Plan für den Rest von fliegen).
 - Testautor: 14482 (Plan-Item, zuerst).
 - Reviewer: Nachprüfung Anliegen 15462 (`angenommen`).
 - Regelumsetzer, Prozessphase nach der Retro: P2, P3, P5, P6 mit 12520, 15301, 11500, 12900,

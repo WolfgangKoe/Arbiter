@@ -13,7 +13,7 @@ in Anliegen 16100). Die Regel steht als
 [DoR 7](../../prozess/ablauf/dor.md): Ein Mensch versteht jedes Kriterium ohne Nachlesen,
 Bezüge nur in Klammern. Er hat entschieden: Der Bestand wird als erstes Item der
 Domänenphase 11 umgeschrieben, Etappe 2 zuerst. Meine grobe Probe: 86 von 176 Kriterien in
-44 Dateien; die genaue Zahl je Etappe nennt das Prüfskript ([16170](16170-pruefskriptBezuegeNurInKlammern.md)).
+44 Dateien; die genaue Zahl je Etappe nennt das Prüfskript (Anliegen 16170).
 
 **Kosten.** Der Anforderungsautor schreibt rund 86 Kriterien um, in mehreren Läufen; der
 Fachkritiker liest je Anforderungsdatei ein Mal. Kein Produktcode, kein Test ändert sich.

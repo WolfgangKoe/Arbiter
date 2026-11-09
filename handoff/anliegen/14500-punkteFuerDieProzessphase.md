@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase
 
 ## Runde 1
-**Befund.** Diese Punkte standen nur im Startprompt des Koordinators. Hier stehen sie in seinem Wortlaut, zusätzlich zu (a) bis (z), [12520](12520-hindernisseAlsDateiUndStabileHaken.md) und [12900](12900-abhakenMisstNachgereichteTestsAmFalschenStand.md). Nichts daran ist entschieden.
+**Befund.** Diese Punkte standen nur im Startprompt des Koordinators. Hier stehen sie in seinem Wortlaut, zusätzlich zu (a) bis (z), Anliegen 12520 und Anliegen 12900. Nichts daran ist entschieden.
 
 - (aa) Der Hook legt nicht vorgemerkte Änderungen beiseite, neue Dateien aber nicht; Teilcommits prüfen so einen gemischten Stand (zu (z)).
 - (ab) Das Abhaken legte 13151 außerhalb des Bereichs des Fachkritikers an, als Doppel zu 13052 (zu (w), (y)).

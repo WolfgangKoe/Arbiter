@@ -68,13 +68,13 @@ P6; ich daneben P1, P4, P7, P8. P1 wirkt ab Domänenphase 11, P7 ab `Freigabe Re
 - [x] Organisationsentwickler: Nachkorrektur
 - [x] Stakeholder: Freigabe Retro 10
 - [x] Organisationsentwickler: P1
-- [ ] Regelumsetzer: P2
+- [x] Regelumsetzer: P2
 - [x] Regelumsetzer: P3
 - [x] Organisationsentwickler: P4
 - [ ] Regelumsetzer: P5
-- [ ] Regelumsetzer: P6
-- [ ] Organisationsentwickler: P7
-- [ ] Organisationsentwickler: P8
+- [x] Regelumsetzer: P6
+- [x] Organisationsentwickler: P7
+- [x] Organisationsentwickler: P8
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
