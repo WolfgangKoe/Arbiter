@@ -7,6 +7,7 @@ from kriterienregeln.rueckverfolgung import wartendeAlsText
 from lesen.anliegenKopf import anliegenDateien
 from standregeln.anliegenText import dranAlsText, nachprüfungenAlsText, wartendeAnliegenAlsText
 from standregeln.belegung import belegungAusTranskript, punkte, warnschwelle
+from standregeln.frei import freiAlsText
 from standregeln.phasenfolge import lage
 from standregeln.produktstand import produktstandAlsText
 
@@ -29,6 +30,7 @@ def stand(wurzel: Path, transkript: Path | None = None) -> str:
         belegungsText(transkript),
         f"{len(anliegenDateien(wurzel))} offene Anliegen",
         dranAlsText(wurzel),
+        freiAlsText(wurzel),
         wartendeAnliegenAlsText(wurzel),
         nachprüfungenAlsText(wurzel),
         wartendeAlsText(wurzel),

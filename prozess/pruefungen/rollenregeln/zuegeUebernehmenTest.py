@@ -193,6 +193,15 @@ def hook(ereignis, rolle=None, befehl=""):
             id="verketteter Commit einer Rolle",
         ),
         pytest.param(hook("PreToolUse", None, "echo git commit"), False, id="nur erwähnt"),
+        pytest.param(
+            hook(
+                "PreToolUse",
+                None,
+                'python3 prozess/pruefungen/gemeinsam/lauf.py gemeinsam.commitImArbeitsbaum "x" a',
+            ),
+            True,
+            id="Commit im eigenen Arbeitsbaum",
+        ),
     ],
 )
 def testDieÜbernahmeLöstNurBeiRollenstartUndCommitAus(eingabe, löst):

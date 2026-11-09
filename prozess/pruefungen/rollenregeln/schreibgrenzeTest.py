@@ -334,6 +334,26 @@ def testEineRolleMeldetEinHindernisNurFürEigeneZeilen(wurzel):
     assert "eigene Zeilen" in antwort["hookSpecificOutput"]["permissionDecisionReason"]
 
 
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        "git commit -m x",
+        "git add a && git commit -m x",
+        'python3 prozess/pruefungen/gemeinsam/lauf.py gemeinsam.commitImArbeitsbaum "x" a',
+    ],
+)
+def testEineRolleCommittetNichtUndErfährtDenBefehlDesKoordinators(wurzel, befehl):
+    urteil = entscheide(bash(befehl), wurzel)
+    gründe = str(urteil)
+    assert "committet nicht" in gründe
+    assert "gemeinsam.commitImArbeitsbaum" in gründe
+
+
+def testDerKoordinatorDarfDenBefehlFürDenEigenenArbeitsbaumAusführen(wurzel):
+    befehl = 'python3 prozess/pruefungen/gemeinsam/lauf.py gemeinsam.commitImArbeitsbaum "x" a'
+    assert entscheide(bash(befehl, rolle="koordinator"), wurzel) is None
+
+
 def testBashGiltNichtFürDenKoordinator(wurzel):
     assert entscheide(bash("git commit -m x", rolle=None), wurzel) is None
 

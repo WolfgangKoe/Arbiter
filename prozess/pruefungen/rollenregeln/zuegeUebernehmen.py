@@ -3,6 +3,7 @@ import re
 from collections.abc import Callable
 from pathlib import Path
 
+from gemeinsam.commitImArbeitsbaum import befehlsmodul
 from gemeinsam.hookProtokoll import HookEingabe, eingabeLesen
 from gemeinsam.pfade import anliegenOrdner, projektordner
 from lesen.anliegenKopf import (
@@ -189,7 +190,10 @@ def löstAus(eingabe: HookEingabe) -> bool:
         eingabe.ereignis == "PreToolUse"
         and eingabe.werkzeug == "Bash"
         and not eingabe.rolle
-        and any(teil.strip().startswith(commitBefehl) for teil in befehlsTrenner.split(befehl))
+        and (
+            befehlsmodul in befehl
+            or any(teil.strip().startswith(commitBefehl) for teil in befehlsTrenner.split(befehl))
+        )
     )
 
 

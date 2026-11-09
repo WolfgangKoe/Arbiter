@@ -1,6 +1,7 @@
 import shlex
 from pathlib import Path
 
+from gemeinsam.commitImArbeitsbaum import befehlsmodul
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
 from gemeinsam.pfade import projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
@@ -32,9 +33,21 @@ def abhakenFürAndere(befehl: str, rolle: str | None) -> bool:
     return not genannt or genannt[0].casefold() != (rolle or "").casefold()
 
 
+commitBefehl = f'python3 prozess/pruefungen/gemeinsam/lauf.py {befehlsmodul} "<Nachricht>" <Pfade>'
+
+
+def committetRolle(befehl: str) -> bool:
+    return befehlsmodul in befehl or "git commit" in befehl
+
+
 def vorBash(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     if eingabe.rolle == koordinator:
         return None
+    if committetRolle(str(eingabe.angaben.get("command") or "")):
+        return verweigerung(
+            f"Schreibgrenze: {eingabe.rolle} committet nicht. Der Koordinator committet in einem "
+            f"eigenen Arbeitsbaum, du arbeitest weiter: `{commitBefehl}`. {weg}"
+        )
     if abhakenFürAndere(str(eingabe.angaben.get("command") or ""), eingabe.rolle):
         return verweigerung(
             f"Schreibgrenze: {eingabe.rolle} hakt und meldet nur eigene Zeilen: "
