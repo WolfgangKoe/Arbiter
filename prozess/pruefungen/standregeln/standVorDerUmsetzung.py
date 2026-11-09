@@ -42,6 +42,23 @@ def standVorDerUmsetzung(wurzel: Path, itemName: str) -> str:
     return f"{umsetzung}^" if umsetzung else "HEAD"
 
 
+def standJeTest(wurzel: Path, itemName: str, kennungen: list[str]) -> dict[str, list[str]]:
+    umsetzung = ersteUmsetzung(wurzel, itemName.removesuffix(".md"))
+    nachgereicht = set(commits(wurzel, f"{umsetzung}..HEAD")) if umsetzung else set()
+    vorher = f"{umsetzung}^" if umsetzung else "HEAD"
+    gruppen: dict[str, list[str]] = {}
+    for kennung in kennungen:
+        pfad, _, name = kennung.partition("::")
+        hinzugefügt = commits(wurzel, "-S", f"def {name}", "--", pfad)
+        stand = vorher
+        if umsetzung and not hinzugefügt:
+            stand = "HEAD"
+        elif hinzugefügt and hinzugefügt[0] in nachgereicht:
+            stand = hinzugefügt[0]
+        gruppen.setdefault(stand, []).append(kennung)
+    return gruppen
+
+
 def produktEinsetzen(wurzel: Path, kopie: Path, stand: str) -> None:
     for ordner in produktordner:
         shutil.rmtree(kopie / ordner, ignore_errors=True)
@@ -58,11 +75,11 @@ def produktEinsetzen(wurzel: Path, kopie: Path, stand: str) -> None:
     subprocess.run(["tar", "-x", "-C", str(kopie)], input=archiv, check=True)
 
 
-def mitKopie(wurzel: Path, itemName: str) -> tuple[tempfile.TemporaryDirectory, Path]:
+def mitKopie(wurzel: Path, stand: str) -> tuple[tempfile.TemporaryDirectory, Path]:
     ordner = tempfile.TemporaryDirectory(prefix="vorDerUmsetzung")
     kopie = Path(ordner.name) / "kopie"
     shutil.copytree(
         wurzel, kopie, ignore=shutil.ignore_patterns(*nichtKopiert), symlinks=True
     )
-    produktEinsetzen(wurzel, kopie, standVorDerUmsetzung(wurzel, itemName))
+    produktEinsetzen(wurzel, kopie, stand)
     return ordner, kopie

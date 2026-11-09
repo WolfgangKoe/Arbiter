@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -27,4 +27,8 @@ mit.
 Warum: Der Umfang nennt die Kriterien, die das Item umsetzt; eine Abhängigkeit ist schon
 umgesetzt, ihre Tests sind darum grün.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als P3 der [Retro 10](../retro.md): `umfangDes` in
+`testsRot.py` gibt nur den Absatz „Umfang:“ weiter, auch an die Zuordnung der Anforderungen;
+[Regel](../../prozess/regeln/standregeln.md), Fall in `abhakenTest.py`. Ob
+`rueckverfolgung.py` an anderen Stellen dasselbe braucht, ist hier nicht geprüft: Dort
+zählen den Umfang die Items des Plans, nicht Abhaken.

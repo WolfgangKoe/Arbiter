@@ -16,6 +16,20 @@ def anliegenDatei(wurzel: Path, nummer: str) -> str | None:
     return gefunden[0] if gefunden else None
 
 
+def anliegenText(wurzel: Path, nummer: str) -> str:
+    for datei in anliegenDateien(wurzel):
+        if nummerAusDatei(datei) == int(nummer):
+            return datei.read_text(encoding="utf-8")
+    pfad = anliegenDatei(wurzel, nummer)
+    if pfad is None:
+        return ""
+    for commit in gitAusgabe(wurzel, "log", "--format=%H", "--", pfad).split():
+        text = gitAusgabe(wurzel, "show", f"{commit}:{pfad}")
+        if text:
+            return text
+    return ""
+
+
 def beseitigendeBetreffe(wurzel: Path, pfad: str, festgehalten: str) -> list[str]:
     betreffe = gitAusgabe(wurzel, "log", "--format=%s", "--", pfad).splitlines()
     return betreffe if festgehalten else betreffe[1:]

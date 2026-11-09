@@ -21,7 +21,7 @@ def schreiben(wurzel: Path, pfad: str, text: str) -> Path:
 @pytest.fixture
 def plan(tmp_path, gitRepo):
     datei = schreiben(tmp_path, "handoff/plan.md", planText)
-    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nAUF-1.1\n")
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nUmfang: AUF-1.1\n")
     anforderung = "### AUF-1 Stellen\n\n- AUF-1.1 Ein Modell.\n"
     schreiben(tmp_path, "domaene/anforderungen/auf.md", anforderung)
     gitRepo.festhalten("Freigabe Plan 1")
@@ -125,15 +125,63 @@ def testEinGrünerTestImBeseitigtenHindernisDesSchrittsLässtDieKritikAbhaken(
 
 
 @pytest.mark.usefixtures("plan")
-def testEinGrünerTestNurImHindernisDesAnderenKritikersMeldetEinNeues(
-    tmp_path, monkeypatch, capsys
+def testEinGrünerTestImBeseitigtenHindernisDesAnderenKritikersLässtAuchAbhaken(
+    tmp_path, monkeypatch
 ):
     monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
     akzeptanztestAnlegen(tmp_path, "assert True")
     hindernisEintragen(tmp_path, "Architekt", "testAuf1_1EinModell", 5, beseitigt=True)
-    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
-    assert "schon grün" in capsys.readouterr().err
-    assert anliegenNummern(tmp_path) == ["06", "5"]
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == ["5"]
+
+
+@pytest.mark.usefixtures("plan")
+def testEinGrünerTestNurImAnliegenDesBeseitigtenHindernisGenanntLässtAbhaken(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    hindernisEintragen(tmp_path, "Architekt", "zusammengefasst", 5, beseitigt=True)
+    anliegen = tmp_path / "handoff/anliegen/5-hindernis.md"
+    anliegen.write_text("Stelle für testAuf1_1EinModell\n", encoding="utf-8")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == ["5"]
+
+
+@pytest.mark.usefixtures("plan")
+def testEinTestZuEinerKennungNurInDerAbhängigkeitZähltNicht(tmp_path, monkeypatch):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert True")
+    item = "# Stellen\n\nUmfang: AUF-2.1\n\nAbhängigkeit: AUF-1.1\n"
+    schreiben(tmp_path, "domaene/items/stellen.md", item)
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert anliegenNummern(tmp_path) == []
+
+
+@pytest.mark.usefixtures("plan")
+def testEinNachDerUmsetzungNachgereichterTestWirdAmStandSeinesCommitsGemessen(
+    tmp_path, gitRepo, monkeypatch, capsys
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestVomProduktAbhängig(tmp_path)
+    produktcodeSetzen(tmp_path, "nein")
+    datei = tmp_path / "handoff/plan.md"
+    haken = "- [x] Testautor: Tests zu Item stellen\n"
+    datei.write_text(datei.read_text(encoding="utf-8") + haken, encoding="utf-8")
+    gitRepo.festhalten("Tests zu stellen")
+    produktcodeSetzen(tmp_path, "kaputt")
+    gitRepo.festhalten("stellen Umsetzung")
+    testdatei = tmp_path / "technik/tests/akzeptanz/aufTest.py"
+    nachgereicht = (
+        "\n\ndef testAuf1_1NochEinModell():\n"
+        '    assert Path("technik/arbiter/wert.txt").read_text(encoding="utf-8") != "kaputt"\n'
+    )
+    testdatei.write_text(testdatei.read_text(encoding="utf-8") + nachgereicht, encoding="utf-8")
+    gitRepo.festhalten("Nachgereichter Test")
+    produktcodeSetzen(tmp_path, "ja")
+    gitRepo.festhalten("Behoben")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert "schon grün" not in capsys.readouterr().err
 
 
 @pytest.mark.usefixtures("plan")

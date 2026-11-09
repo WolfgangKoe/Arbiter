@@ -4,7 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -26,4 +26,6 @@ Testautor oder der Kritiker von Hand schließt.
 Tests als gemeldet, die das Anliegen eines beseitigten Hindernisses unter demselben Schritt
 nennt (Text aus git wie in `standregeln/beseitigt.py`), nicht nur die Zeile im Fortschritt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als P3 der [Retro 10](../retro.md) mit deinem Gegenvorschlag:
+`mitAnliegentext` in `abhaken.py` hängt dem beseitigten Hindernis den Text seines Anliegens
+an (Ordner, sonst git); [Regel](../../prozess/regeln/standregeln.md), Fall in `abhakenTest.py`.

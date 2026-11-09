@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.pfade import projektordner
+from standregeln.beseitigt import anliegenText
 from standregeln.fortschritt import (
     Zeile,
     abschnittBauen,
@@ -83,6 +84,23 @@ def zuTestsGemeldet(zusatz: list[str], grün: list[str]) -> tuple[list[str], int
     return übrige, None
 
 
+def hindernisseDesItems(
+    wurzel: Path, zeilen: list[Zeile], bisher: dict, schritt: str
+) -> list[str]:
+    gesammelt = []
+    for zeile in zeilen:
+        if zeile.fakt is None and zeile.schritt == schritt:
+            gesammelt += bisher.get(zeile.schlüssel, (False, []))[1]
+    return [mitAnliegentext(wurzel, eintrag) for eintrag in gesammelt]
+
+
+def mitAnliegentext(wurzel: Path, eintrag: str) -> str:
+    nummer = anliegenMuster.search(eintrag)
+    if not eintrag.startswith(hindernisBeginn) or beseitigtMarke not in eintrag or not nummer:
+        return eintrag
+    return eintrag + "\n" + anliegenText(wurzel, nummer[1])
+
+
 def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> Grün:
     fortschrittSchreiben(wurzel)
     ziel = zielUndZeilen(wurzel, lage(wurzel))
@@ -95,7 +113,8 @@ def grünVorDemCode(wurzel: Path, rolle: str, schritt: str) -> Grün:
         if not itemName or not passt(zeile, rolle, schritt):
             continue
         grün = grüneTests(wurzel, itemName)
-        übrige, bestehendes = zuTestsGemeldet(bisher.get(zeile.schlüssel, (False, []))[1], grün)
+        gemeldet = hindernisseDesItems(wurzel, zeilen, bisher, zeile.schritt)
+        übrige, bestehendes = zuTestsGemeldet(gemeldet, grün)
         if übrige and bestehendes is None:
             nummer = nächsteNummer(wurzel)
             text = (
