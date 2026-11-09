@@ -110,6 +110,11 @@ Probleme:
 - [ ] UX: Anliegen 15261 Mockups heißen noch Karte, `.spielfeld` meint dort ein anderes Element
 - [ ] Anforderungsautor: Anliegen 15300 Überschrift von AUF-20 nach Einheiten- und Modellebene
 - [ ] Anforderungsautor: Anliegen 15461 Nach „gemeinsam übergehen“ folgen die Modelle dem Zeiger
+- [ ] Anforderungsautor: Anliegen 16080 Ziehen, Herumführen und was ein Umweg kostet
+- [ ] Anforderungsautor: Anliegen 16101 Fliegen: „gemeinsam übergehen“ bleibt nach der Sperre angeboten
+- [ ] Anforderungsautor: Anliegen 16150 Eine Base ist nie überdeckt, auch nicht nach dem Übergehen
+- [ ] Planer: Anliegen 16171 Item für Plan 11: Kriterien ohne Nachlesen verständlich
+- [ ] Anforderungsautor: Anliegen 16241 Der Ordner querschnitt ist schwer lesbar
 - [ ] Planer: Plan geschrieben
 - [ ] Fachkritiker: Kritik am Plan
 - [ ] Architekt: Kritik am Plan
