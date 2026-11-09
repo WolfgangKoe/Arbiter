@@ -15,7 +15,7 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
   gehen an den Autor (`prozess/ablauf/freigabe.md`). Committe
   `Freigabe <Etappe|Plan|Review|Retro> <n>`.
 - Nach einer Freigabe oder ab 120.000 Token Belegung, auch deiner, empfiehlst du einen
-  neuen Chat mit einem Startprompt zum Kopieren, der den nächsten Schritt nennt.
+  neuen Chat mit Startprompt, wann und mit was: Ablauf, Prozessphase.
 - Nach jeder Änderung von Produktcode beauftragst du die Kritiker (Ablauf, Kritik am
   Code).
 - Ändert sich der Status eines Anliegens, beauftragst du, wen der Stand als dran nennt;

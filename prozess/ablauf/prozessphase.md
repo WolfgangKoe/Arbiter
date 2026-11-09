@@ -1,6 +1,7 @@
 # Prozessphase
 
-Auslöser: `Freigabe Review <n>`. Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
+Auslöser: `Freigabe Review <n>`; mit ihr startet der Koordinator den
+[Mutationslauf](dod.md#mutationslauf). Prozessregeln (`prozess/` außer dem Backlog), Prämissen und
 Rollen (`.claude/`, CLAUDE.md) ändern sich nur in dieser Phase und erst nach `Freigabe Retro
 <n>`; davor beschreibt die Retro die Änderung. Das gilt, bis jedes Prozess-Item seinen Commit
 hat (5), auch wenn Plan n+1 schon liegt (Anliegen 9800). Ausnahme: Seine Zeilen in `prozess/regeln/`
@@ -14,9 +15,7 @@ in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Standregeln]
    Höchstens zwei Prozess-Items aus Befunden, die das Produkt aufgehalten haben, dazu die
    Aufträge des Stakeholders (Anliegen 630, 730, 1671); jedes Anliegen, das auf diese
    Prozessphase wartet, nennt ein Prozess-Item mit seiner Nummer (Anliegen 7380); jedes Item in Worten beschrieben: was
-   danach anders geschieht. Die Lücken des vollen Mutationslaufs ([DoD](dod.md)) schreibt
-   der [Reviewer](../../.claude/agents/reviewer.md) als Anliegen: ein fehlendes Kriterium in die Domänenphase, sonst in die Technikphase
-   (Anliegen 1671, F2). Dazu: Neuerungen von Claude Code, die einen eigenen
+   danach anders geschieht. Dazu: Neuerungen von Claude Code, die einen eigenen
    Mechanismus ersetzen; wiederholte Entscheidungen des Stakeholders als Vorschlag für eine
    Prämisse; eine wiederholt verletzte Prämisse ohne Mechanismus als Prozess-Item. Ist eine
    Etappe erreicht, legt er `doku/` an oder pflegt es: für Menschen, keine CLAUDE.md verweist
@@ -43,6 +42,9 @@ in `rollenregeln/schreibgrenze.py` (Write und Edit, samt Ausnahme; [Standregeln]
 6. Der Zyklus endet nach Schritt 5; dann pusht der
    [Koordinator](../../.claude/agents/koordinator.md) nach `dev`. Mechanismus: nur Text.
 
-Nach jeder Freigabe empfiehlt der Koordinator einen neuen Chat mit Startprompt
-([Koordinator](../../.claude/agents/koordinator.md)); den Stand bringt der Hook mit.
-Mechanismus: nur Text.
+Nach einer Freigabe und ab 120.000 Token Belegung, auch seiner ([Budget](budget.md)),
+startet der Koordinator nichts Neues. Läuft keine Rolle mehr und nennt der Stand
+„0 uncommittete Dateien“, gibt er einmal einen Startprompt zum Kopieren für einen neuen Chat:
+den nächsten Schritt, was frei ist, das Log eines Befehls, der im Hintergrund weiterläuft.
+Was der neue Chat sonst wissen muss, steht vorher in einem Anliegen. Nachgereicht wird
+nichts; was danach kommt, bringt der Hook mit dem Stand (Anliegen 16220). Mechanismus: nur Text.

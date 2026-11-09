@@ -4,7 +4,7 @@ Gemessen wird nur die Belegung des Kontextfensters je Lauf, gleich für den Koor
 jede Rolle; der Stand zeigt sie. Die Zahl der Rollenläufe ist weder Budget noch Kennzahl.
 Mechanismus: `standregeln/belegung.py`; der Stand nennt keine Rollenläufe (`standregeln/standTest.py`).
 - Ab 120.000 Token meldet ein Hook; die Rolle beginnt nichts Neues und schließt ab, der
-  Koordinator empfiehlt einen neuen Chat.
+  Koordinator empfiehlt einen neuen Chat ([Prozessphase](prozessphase.md), Startprompt).
 - Jeder Auftrag passt in einen Lauf unter 120.000 Token. Der Koordinator teilt ein Item, das
   dafür zu groß ist, nach Kriterien: je Teil die Tests, dann der Code, bis sie durch alle
   Schichten grün sind; so wird jeder neue Code schon aufgerufen und lässt sich je Teil

@@ -52,12 +52,14 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
   bleiben im Endstand, ein Kriterium einer späteren Etappe verlangt keinen Test.
 - P6 Dashboard lädt schneller (Regelumsetzer), 8860: Ursache messen, beheben, Messung
   davor und danach im Anliegen.
+- P7 Ein Mutationslauf (Organisationsentwickler), 15960: nach `Freigabe Review`, gezielt,
+  bei erreichter Etappe voll; Überlebende für die Domänenphase.
+- P8 Startprompt einmal (Organisationsentwickler), 16220: wenn nichts mehr läuft.
 
 ## Empfehlung
 Gib frei.
-Folgen: sieben Läufe zu je unter 120.000 Token. Regelumsetzer nacheinander: P3, P2, P4, P5,
-P6; ich daneben P1, P4. P1 wirkt ab Domänenphase 11; je in der Technikphase geänderter
-Anforderung ein kurzer Lauf des Fachkritikers.
+Folgen: neun Läufe zu je unter 120.000 Token. Regelumsetzer nacheinander: P3, P2, P4, P5,
+P6; ich daneben P1, P4, P7, P8. P1 wirkt ab Domänenphase 11, P7 ab `Freigabe Review 11`.
 
 ## Fortschritt
 - [x] Organisationsentwickler: Retro geschrieben
@@ -67,10 +69,12 @@ Anforderung ein kurzer Lauf des Fachkritikers.
 - [x] Stakeholder: Freigabe Retro 10
 - [x] Organisationsentwickler: P1
 - [ ] Regelumsetzer: P2
-- [ ] Regelumsetzer: P3
-- [ ] Organisationsentwickler: P4
+- [x] Regelumsetzer: P3
+- [x] Organisationsentwickler: P4
 - [ ] Regelumsetzer: P5
 - [ ] Regelumsetzer: P6
+- [ ] Organisationsentwickler: P7
+- [ ] Organisationsentwickler: P8
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe

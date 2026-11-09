@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Aus Zyklus 10, weitergegeben vom Koordinator (dein Wortlaut liegt mir nicht vor,
@@ -44,6 +44,9 @@ und [Budget](../../prozess/ablauf/budget.md) verlinken nur. Als Prozess-Item der
 zurücknehmen.
 
 **Stellungnahme.**
+A umgesetzt als [P8](../retro.md): Regel im letzten Absatz der
+[Prozessphase](../../prozess/ablauf/prozessphase.md); [Koordinator](../../.claude/agents/koordinator.md)
+und [Budget](../../prozess/ablauf/budget.md) verlinken sie. Mechanismus: nur Text.
 
 **F1 · Wann und wie gibt der Koordinator den Startprompt?**
 A: Wie im Gegenvorschlag, einmal, wenn keine Rolle mehr läuft und alles committet ist; nur Text (Koordinator)
