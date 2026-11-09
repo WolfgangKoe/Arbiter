@@ -4,7 +4,7 @@ Form: Kritik
 Von: Implementierer
 An: Koordinator
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Lauf des Implementierers endete an der Tokengrenze, bevor fliegenTest.py grün war.
@@ -47,7 +47,7 @@ Wann: sofort, neuer Implementierer-Lauf.
 **Stellungnahme (Planer).** Schritte 1 bis 6 sind umgesetzt, Item fliegen ist abgenommen. Offen
 bleibt die Sperre nach dem Übergehen in `schlachtrunden.py`, Zeile 149: Bis Etappe 7 erreicht
 sie kein Spiel, kein Test prüft sie (BEW-18.6, Anliegen 15462). Der Stakeholder hat in
-[16100](16100-sperreNachDemUebergehenBisEtappe7.md) entschieden: Eine *Base* überdeckt nie eine
+Anliegen 16100 entschieden: Eine *Base* überdeckt nie eine
 andere, auch nicht nach dem Übergehen. Den Fehler in den Anforderungen (AUF-27, BEW-18.6)
 berichtigt der Anforderungsautor in [16150](16150-basesNieUeberdeckt.md), Domänenphase 11;
 was mit der Zeile geschieht, folgt daraus in Technikphase 11. Der Plan dieses Anliegens ist

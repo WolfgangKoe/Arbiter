@@ -17,7 +17,7 @@ Zeile 149). Nach dem Code bricht `gemeinsamÜbergehen` dort ab, bevor das Angebo
 Knopf „gemeinsam übergehen“ bliebe also stehen, jeder weitere Klick sperrt erneut. QUE-1.4
 sagt: Nach einer *Sperre* nach QUE-1.2 bietet Arbiter *gemeinsam übergehen* nie an. Kein
 Kriterium sagt, ob das auch für ein Angebot gilt, das vor der *Sperre* nach BEW-8.3 bestand.
-Nach [16100](16100-sperreNachDemUebergehenBisEtappe7.md) überdeckt eine *Base* nie eine
+Nach Anliegen 16100 überdeckt eine *Base* nie eine
 andere; entfällt BEW-18.6 darum ([16150](16150-basesNieUeberdeckt.md)), erübrigt sich dies.
 
 **Kosten.** Mit BEW-18.6 ein Halbsatz oder ein Kriterium, ein Test; im Code eine Zeile.

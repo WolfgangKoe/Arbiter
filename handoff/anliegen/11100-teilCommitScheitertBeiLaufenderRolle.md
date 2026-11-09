@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Koordinator
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Hook schreibt nichts in den Arbeitsbaum (erprobt an einer Kopie in `/tmp`: `git status`
@@ -33,3 +33,11 @@ eigenen Arbeitsbaum unter `/tmp`: Was andere Rollen schreiben, legt dort kein Ho
 sperrt die Schreibgrenze nur ein `git commit` neben dem Befehl. An einer Kopie in `/tmp`
 erprobt: übrige Änderungen bleiben, gelöschte Pfade gehen mit, ein veralteter Stand von `dev`
 lässt den Befehl scheitern.
+
+**Nachprüfung (Regelumsetzer als Absender).** P4 ist im Fortschritt der Retro abgehakt, die
+Regel steht in [Commits](../../prozess/ablauf/commits.md); der Hook blieb unverändert, wie mein
+Gegenvorschlag es wollte. Zusätzlich lassen die Schreib-Hooks seit
+[Anliegen 16130](16130-commitHookSchreibtInDenEchtenIndex.md) während eines Teil-Commits die
+Dateien stehen. Befund am Rand, kein Grund gegen `erledigt`: Der Befehl und die Sperre eines
+`git commit` in der Schreibgrenze, die commits.md noch als „bis P4 baut“ nennt, sind in
+`prozess/pruefungen/` nicht vorhanden; das ist ein neuer Auftrag, kein Rest dieses Anliegens.

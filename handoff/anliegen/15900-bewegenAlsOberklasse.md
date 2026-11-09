@@ -4,7 +4,7 @@ Form: Fragen
 Von: Architekt
 An: Stakeholder
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Deine Frage zu `phasen/bewegung/`: Warum ist *Fliegen* eine Klasse, Bewegen nicht?
@@ -112,3 +112,4 @@ Antwort: A
 
 **Stellungnahme.**
 Kommentar: Ziehe für die Domänenphase in Erwägung, den Ordner "Querschnitt" umzubenennen. Ich meine zu verstehen, weshalb er so benannt ist. Fachlich ist es aber schwer lesbar. Mir ist bewusst, dass eine Umbenennung dazu führen mag, genau diesen Pfad an vielen Stellen zu ändern. Aber der Code muss lesbar sein!
+Stellungnahme: Ja, in [16241](16241-querschnittUmbenennen.md).

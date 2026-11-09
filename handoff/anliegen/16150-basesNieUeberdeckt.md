@@ -9,7 +9,7 @@ Wartet auf: Domänenphase 11
 
 ## Runde 1
 **Befund.** Hält den Happy Path nicht auf, betrifft Etappe 7. Der Stakeholder hat in
-[16100](16100-sperreNachDemUebergehenBisEtappe7.md) entschieden: Eine *Base* darf nie eine
+Anliegen 16100 entschieden: Eine *Base* darf nie eine
 andere *überdecken*, auch nicht, nachdem die *Spieler* *gemeinsam übergehen* gewählt haben;
 die Anforderungen enthalten hier einen Fehler.
 

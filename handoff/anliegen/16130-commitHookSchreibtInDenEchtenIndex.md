@@ -4,7 +4,7 @@ Form: Kritik
 Von: Koordinator
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Bei `git commit -- <Dateien>` setzt git `GIT_INDEX_FILE` auf den echten

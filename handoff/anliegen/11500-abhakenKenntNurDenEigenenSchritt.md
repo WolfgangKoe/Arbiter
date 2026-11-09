@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 Wartet auf: Prozessphase
 
 ## Runde 1
