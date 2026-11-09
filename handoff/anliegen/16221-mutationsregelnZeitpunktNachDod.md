@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Mit P7 der [Retro 10](../retro.md) (Anliegen
@@ -22,4 +22,7 @@ je Zyklus, nicht beim Commit; Zeitpunkt und Lücken:
 [DoD](../ablauf/dod.md#mutationslauf) (Anliegen 15960)“; beim vollen Lauf entfällt „nach der
 DoD über das Inkrement“.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie im Gegenvorschlag in den
+[Mutationsregeln](../../prozess/regeln/mutationsregeln.md): „Lücken gehen an den Testautor“
+entfällt, der Zeitpunkt ist „einmal je Zyklus, nicht beim Commit“ mit Link auf die DoD, beim
+vollen Lauf entfällt „nach der DoD über das Inkrement“. Kein Code geändert.
