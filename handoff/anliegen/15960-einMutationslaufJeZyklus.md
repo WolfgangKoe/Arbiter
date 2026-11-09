@@ -5,7 +5,7 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: offen
-Wartet auf: Prozessphase
+Wartet auf: 16221
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -37,6 +37,21 @@ zum Abschluss. Was im Zyklus nicht gefangen ist, steht im nächsten Lauf wieder 
 `mutation.py` bleibt, wie es ist. Rückweg: Commit `P<k>:` zurücknehmen.
 
 **Stellungnahme.**
+Umgesetzt als [P7](../retro.md) in der [DoD, Mutationslauf](../../prozess/ablauf/dod.md#mutationslauf);
+die Zeile der Mutationsregeln passt der Regelumsetzer an ([16221](16221-mutationsregelnZeitpunktNachDod.md)),
+danach `angenommen`:
+- Je Zyklus ein Lauf, im Hintergrund nach `Freigabe Review`, neben der Prozessphase. Kein
+  weiterer, auch kein Neustart, wenn sich `technik/` ändert.
+- Gezielt: Das Werkzeug ändert die seit `Freigabe Plan` geänderten Zeilen und lässt je Mutant
+  die Tests laufen, die seine Zeile ausführen, also auch die neuen. So lese ich „im Blick auf
+  die neuen Tests“: Ein Mutant steckt im Code, nicht im Test; sonst sag es mit `Kommentar:`.
+- Ist mit `Freigabe Review` die Etappe erreicht, läuft statt des gezielten der volle. Beide
+  verteilen sich auf alle Kerne und zeigen je fertigem Modul eine Zeile im Protokoll
+  (Anliegen 6960, gibt es schon).
+- Folge: Die 95 % halten das Review nicht mehr auf, sie werden ein Befund.
+- Die Überlebenden schreibt der Reviewer nach dem Lauf gesammelt als Anliegen, bereit vor der
+  nächsten Domänenphase: fehlt ein Kriterium, für die Domänenphase, sonst für die
+  Technikphase, wie bisher beim vollen Lauf (Anliegen 1671).
 
 **F1 · Welcher Lauf ist der eine je Zyklus?**
 A: Der gezielte über die geänderten Zeilen; im Zyklus, dessen Plan die Etappe abschließen soll, an seiner Stelle der volle (DoD, Anliegen 8961)

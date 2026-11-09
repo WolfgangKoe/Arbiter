@@ -27,26 +27,27 @@ uncommitteten Dateien vom Projekt aus mit `cp --parents <Datei> /tmp/<Name>`. Ih
 nennt den Stand: `Stand <Commit> und <n> eigene Dateien` auf dem Abzug, sonst
 `Stand <Commit> und Arbeitsbaum` (Anliegen 8022). Mechanismus: nur Text.
 
-Bei einer Oberfläche gelten auch Bildschirmtest grün, Mockup gelöscht. Dazu die
-Mutationsschwelle: mindestens 95 % gefangene Mutanten in den geänderten Zeilen der
-Domänenmodule. Je Mutant laufen nur die Tests, die seine Zeile ausführen (Zeilen auf
-Modulebene, Tests in einem eigenen Prozess: alle); ein Ergebnis gilt, solange `technik/`,
-`pyproject.toml` und `domaene/daten` gleich sind (Merkzettel `.git/arbiter/mutation.json`).
-Unter 95 % wird jeder Überlebende angegangen, nicht nur bis zur Schwelle: ein Test, der ihn
-fängt, oder, ist er gleichwertig, eine Begründung in `mutationsregeln/gleichwertig.json`, dann
-zählt er nicht (Anliegen 1740). Code ändert sich dafür nur, wenn er lesbarer wird; ein Test
-sagt kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Mechanismus:
-`mutationsregeln/mutation.py` (Befehle: [Mutationsregeln](../regeln/mutationsregeln.md));
-„jeder Überlebende“ und Lesbarkeit: nur Text.
+Bei einer Oberfläche gelten auch Bildschirmtest grün, Mockup gelöscht.
 
-Den vollen Lauf (`--voll`) über alle Module, auch `web/`, startet der Koordinator nur im
-Zyklus, dessen Plan die Etappe abschließen soll, im Hintergrund, sobald die DoD über das
-Inkrement grün ist ([Technikphase](technikphase.md) 4); ändert sich `technik/` danach,
-startet er ihn neu; erreicht der Zyklus die Etappe nicht, läuft er im nächsten wieder
-(Anliegen 8961). Der Lauf hält nichts auf (Anliegen 6960, F1); seine Lücken:
-[Prozessphase](prozessphase.md) 1. Mechanismus: nur Text.
+## Mutationslauf
+Er gehört nicht zur DoD und hält nichts auf (Anliegen 6960, F1; 15960). Einmal je Zyklus
+startet ihn der Koordinator im Hintergrund nach `Freigabe Review`, neben der Prozessphase:
+gezielt über die seit `Freigabe Plan` geänderten Zeilen der Domänenmodule, je Mutant mit den
+Tests, die seine Zeile ausführen. Ist mit der Freigabe die Etappe erreicht, läuft an seiner
+Stelle der volle (`--voll`, alle Module, auch `web/`; Anliegen 8961). Kein weiterer Lauf,
+kein Neustart, wenn sich `technik/` ändert. Mechanismus: nur Text; Befehle, Kerne und
+Merkzettel: [Mutationsregeln](../regeln/mutationsregeln.md).
 Je fertigem Modul zeigt er seinen Stand im Protokoll, ein unterbrochener Lauf setzt dort fort
-(6960, F2 und F4). Mechanismus: `mutationsregeln/mutation.py`
-([Mutationsregeln](../regeln/mutationsregeln.md)).
+(6960, F2 und F4). Mechanismus: `mutationsregeln/mutation.py`.
+Schwelle: 95 % gefangene Mutanten. Darunter wird jeder Überlebende angegangen, nicht nur bis
+zur Schwelle: ein Test, der ihn fängt, oder, ist er gleichwertig, eine Begründung in
+`mutationsregeln/gleichwertig.json`, dann zählt er nicht (Anliegen 1740). Code ändert sich
+dafür nur, wenn er lesbarer wird; ein Test sagt kein Verhalten außerhalb einer Vorbedingung
+zu (Anliegen 1751). Mechanismus: `mutationsregeln/mutation.py`; „jeder Überlebende“ und
+Lesbarkeit: nur Text.
+Endet der Lauf, schreibt der [Reviewer](../../.claude/agents/reviewer.md) die Überlebenden
+gesammelt als Anliegen, bereit vor der nächsten Domänenphase: fehlt ein Kriterium, an den
+Anforderungsautor mit `Wartet auf: Domänenphase`, sonst an den Testautor mit
+`Wartet auf: Technikphase` (Anliegen 1671, F2; 15960). Mechanismus: nur Text.
 
 Schwellen der Werkzeuge: [Werkzeuge](werkzeuge.md).
