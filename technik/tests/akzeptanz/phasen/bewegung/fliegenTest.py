@@ -2,6 +2,7 @@
 
 from fractions import Fraction
 from http import HTTPStatus
+from typing import NamedTuple
 
 import pytest
 
@@ -22,7 +23,13 @@ from tests.akzeptanz.dienst import (
     stelleImSpielstand,
 )
 from tests.akzeptanz.grenzen import dreiAugen
-from tests.akzeptanz.handgriffe import breiteDesSpielfelds, gestreckt, radiusInZoll, versetzt
+from tests.akzeptanz.handgriffe import (
+    breiteDesSpielfelds,
+    gestreckt,
+    längeDerSpielfeldkante,
+    radiusInZoll,
+    versetzt,
+)
 from tests.akzeptanz.ruecken import (
     Kreis,
     frei,
@@ -43,6 +50,7 @@ from tests.akzeptanz.schlacht import (
     hältVorDerNahkampfreichweite,
     orksÜbergehenBisZumZugDerNecrons,
     summeDerRadien,
+    zurBewegungsphaseDesNächstenZugs,
 )
 from tests.akzeptanz.vorruecken import vorgerücktMit
 from tests.akzeptanz.ziehen import (
@@ -309,6 +317,42 @@ def testBew18_2AnDerBewegungsweiteRücktArbiterDieSpinneNichtÜberSieHinaus(
     assert höchstensUmHundertstelWeiter(punkt, danach, zumSchnitt)
 
 
+schrägZumWarrior = {
+    "nachNordwesten": ((Fraction(-3, 5), Fraction(4, 5)), (Fraction(-4, 5), Fraction(-3, 5))),
+    "nachSüdwesten": ((Fraction(-3, 5), Fraction(-4, 5)), (Fraction(-4, 5), Fraction(3, 5))),
+}
+
+
+@pytest.mark.parametrize(
+    "zumWarriorUndQuer", list(schrägZumWarrior.values()), ids=list(schrägZumWarrior)
+)
+def testBew18_2SchrägAnDerBewegungsweiteRücktArbiterDieSpinneNichtÜberSieHinaus(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, warrior, zumWarriorUndQuer
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    zumWarrior, quer = zumWarriorUndQuer
+    davor = schlacht.stelle(spinne)
+    stelleDesWarriors = warriorÜbergehen(
+        schlacht, warrior, versetzt(davor, gestreckt(zumWarrior, Fraction(43, 10)))
+    )
+    punkt = versetzt(
+        versetzt(stelleDesWarriors, gestreckt(zumWarrior, Fraction(3, 10))),
+        gestreckt(quer, knappNebenDerMitte),
+    )
+    zumSchnitt = wegZumNächstenSchnitt(
+        punkt,
+        Kreis(davor, bewegungsweiteDerSpinne),
+        Kreis(stelleDesWarriors, summeDerRadien(spinne, warrior)),
+    )
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert frei(spinne, danach, warrior, stelleDesWarriors)
+    assert abstandImQuadrat(davor, danach) <= bewegungsweiteDerSpinne**2
+    assert höchstensUmHundertstelWeiter(punkt, danach, zumSchnitt)
+
+
 def testBew18_2NachDemVorrückenRücktArbiterDieSpinneBisAnBewegungsweitePlusVorrückwurf(
     schlachtInDerBewegungsphaseDesZweitenSpielers, einheitDerSpinne, spinne, warrior
 ):
@@ -389,6 +433,90 @@ def testBew18_2AnDerSpielfeldkanteRücktArbiterDieSpinneGanzInDasSpielfeld(
     assert frei(spinne, danach, warrior, stelleDesWarriors)
     assert ganzImSpielfeld(danach, spinne)
     assert höchstensUmHundertstelWeiter(gezeigteStelle, danach, zurKante)
+
+
+class LageAnDerKante(NamedTuple):
+    kante: Stelle
+    nachInnen: tuple[Fraction, Fraction]
+    entlang: tuple[Fraction, Fraction]
+
+
+eins = Fraction(1)
+lagenAnDenSpielfeldkanten = {
+    "westen": LageAnDerKante(Stelle(x=nichts, y=Fraction(45)), (eins, nichts), (nichts, eins)),
+    "süden": LageAnDerKante(Stelle(x=Fraction(22), y=nichts), (nichts, eins), (-eins, nichts)),
+    "osten": LageAnDerKante(
+        Stelle(x=Fraction(breiteDesSpielfelds), y=Fraction(20)), (-eins, nichts), (nichts, -eins)
+    ),
+    "norden": LageAnDerKante(
+        Stelle(x=Fraction(22), y=Fraction(längeDerSpielfeldkante)), (nichts, -eins), (eins, nichts)
+    ),
+}
+overlordInnenNebenDemPunkt = Fraction(8, 5)
+
+
+anJederSpielfeldkante = pytest.mark.parametrize(
+    "lage", list(lagenAnDenSpielfeldkanten.values()), ids=list(lagenAnDenSpielfeldkanten)
+)
+
+
+def anDerKante(lage: LageAnDerKante, innen: Fraction, entlang: Fraction) -> Stelle:
+    vonDerKante = versetzt(lage.kante, gestreckt(lage.nachInnen, innen))
+    return versetzt(vonDerKante, gestreckt(lage.entlang, entlang))
+
+
+def übergehenBisZumNächstenZugDerNecrons(schlacht, stellen: dict[Modell, Stelle]) -> None:
+    for modell, stelle in stellen.items():
+        anhaltenUndÜbergehen(schlacht, modell, stelle)
+        assert schlacht.stelle(modell) == stelle, f"{modell.modellart} steht nicht am Ort des Tests"
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+    zurBewegungsphaseDesNächstenZugs(schlacht)
+
+
+@anJederSpielfeldkante
+def testBew18_2VorDemOverlordAnJederSpielfeldkanteRücktArbiterDieSpinneEntlangDerKante(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, overlord, lage
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    (lord,) = overlord.modelle
+    berührtDieKante = radiusInZoll(spinne)
+    punkt = anDerKante(lage, berührtDieKante, nichts)
+    stelleDesOverlords = anDerKante(
+        lage, berührtDieKante + overlordInnenNebenDemPunkt, knappNebenDerMitte
+    )
+    davor = anDerKante(lage, berührtDieKante, Fraction(-3))
+    übergehenBisZumNächstenZugDerNecrons(schlacht, {lord: stelleDesOverlords, spinne: davor})
+    entlangDerKante = wurzelAufgerundet(
+        summeDerRadien(spinne, lord) ** 2 - overlordInnenNebenDemPunkt**2
+    )
+    kürzesterWeg = entlangDerKante - knappNebenDerMitte
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert frei(spinne, danach, lord, stelleDesOverlords)
+    assert ganzImSpielfeld(danach, spinne)
+    assert höchstensUmHundertstelWeiter(punkt, danach, kürzesterWeg)
+
+
+@anJederSpielfeldkante
+def testBew18_2InnenAmOverlordNebenJederSpielfeldkanteRücktArbiterDieSpinneVonDerKanteWeg(
+    schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, overlord, lage
+):
+    schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
+    (lord,) = overlord.modelle
+    stelleDesOverlords = anDerKante(lage, eins, nichts)
+    punkt = anDerKante(lage, 2 * eins, nichts)
+    davor = anDerKante(lage, 2 * eins, Fraction(-3))
+    übergehenBisZumNächstenZugDerNecrons(schlacht, {lord: stelleDesOverlords, spinne: davor})
+    kürzesterWeg = summeDerRadien(spinne, lord) - eins
+
+    schlacht.modellLoslassen(spinne, punkt)
+
+    danach = schlacht.stelle(spinne)
+    assert frei(spinne, danach, lord, stelleDesOverlords)
+    assert ganzImSpielfeld(danach, spinne)
+    assert höchstensUmHundertstelWeiter(punkt, danach, kürzesterWeg)
 
 
 def testBew18_2NebenEinemModellDesAnderenSpielersRücktArbiterDieSpinneNichtInDieNahkampfreichweite(
