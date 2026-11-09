@@ -222,5 +222,271 @@
   "quelle": "körper = request.get_json(silent=True)",
   "fehler": "True wird False",
   "grund": "modellLoslassen ruft vorher _stelleDerAnfrage, die mit 400 abbricht, ist der Körper kein JSON-Objekt; danach liefert get_json den zwischengespeicherten Körper (Anliegen 8973)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_nenner = 10**6",
+  "fehler": "10 wird 11",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_nenner = 10**6",
+  "fehler": "6 wird 7",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_abständeUmDenKandidaten = (1 / 2000, 1 / 1000, 1 / 500, 1 / 250)",
+  "fehler": "1 wird 2",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_abständeUmDenKandidaten = (1 / 2000, 1 / 1000, 1 / 500, 1 / 250)",
+  "fehler": "1000 wird 1001",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_abständeUmDenKandidaten = (1 / 2000, 1 / 1000, 1 / 500, 1 / 250)",
+  "fehler": "2000 wird 2001",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_abständeUmDenKandidaten = (1 / 2000, 1 / 1000, 1 / 500, 1 / 250)",
+  "fehler": "250 wird 251",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_abständeUmDenKandidaten = (1 / 2000, 1 / 1000, 1 / 500, 1 / 250)",
+  "fehler": "500 wird 501",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "",
+  "quelle": "_richtungenUmDenKandidaten = 16",
+  "fehler": "16 wird 17",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "Kreisrand",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "Geradenrand",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "anteilVorDerLetztenBerührung",
+  "quelle": "while schritt >= 0:",
+  "fehler": "0 wird 1",
+  "grund": "Schritt 0 ist der Anfang, an dem kein Modell eine Base berührt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "anteilVorDerLetztenBerührung",
+  "quelle": "while schritt >= 0:",
+  "fehler": "GtE wird Gt",
+  "grund": "Schritt 0 ist der Anfang, an dem kein Modell eine Base berührt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_kreisMitKreis",
+  "quelle": "if querQuadrat < 0:",
+  "fehler": "Lt wird LtE",
+  "grund": "Ändert nur den Fall der bloßen Berührung (Wurzel aus 0, derselbe Punkt) (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_kreisMitGerade",
+  "quelle": "if rest < 0:",
+  "fehler": "Lt wird LtE",
+  "grund": "Ändert nur den Fall der bloßen Berührung (Wurzel aus 0, derselbe Punkt) (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_kreisMitGerade",
+  "quelle": "return [(gerade.wert, quer + seite * halbe) for seite in (1, -1)]",
+  "fehler": "Add wird Sub",
+  "grund": "Vertauscht nur die zwei Schnittpunkte; beide sind gleich weit (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_kreisMitGerade",
+  "quelle": "return [(quer + seite * halbe, gerade.wert) for seite in (1, -1)]",
+  "fehler": "Add wird Sub",
+  "grund": "Vertauscht nur die zwei Schnittpunkte; beide sind gleich weit (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_geradeMitGerade",
+  "quelle": "if erste.inX == zweite.inX:",
+  "fehler": "Eq wird NotEq",
+  "grund": "Die Ecke zweier Geradenränder ist nie die nächste freie Stelle, der Lotpunkt der näheren Gerade ist näher (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_zulässig",
+  "quelle": "return abstand <= radius + _toleranz if darin else abstand >= radius - _toleranz",
+  "fehler": "GtE wird Gt",
+  "grund": "Unterscheidet sich nur bei Gleichheit von Gleitkommazahlen genau an der Toleranz von 1e-6 (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_zulässig",
+  "quelle": "return abstand <= radius + _toleranz if darin else abstand >= radius - _toleranz",
+  "fehler": "LtE wird Lt",
+  "grund": "Unterscheidet sich nur bei Gleichheit von Gleitkommazahlen genau an der Toleranz von 1e-6 (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_zulässig",
+  "quelle": "return (hinter if aufwärts else -hinter) >= -_toleranz",
+  "fehler": "GtE wird Gt",
+  "grund": "Unterscheidet sich nur bei Gleichheit von Gleitkommazahlen genau an der Toleranz von 1e-6 (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_umDenKandidaten",
+  "quelle": "winkel = 2 * pi * richtung / _richtungenUmDenKandidaten",
+  "fehler": "2 wird 3",
+  "grund": "Die Suche um einen Kandidaten liegt immer innerhalb 1/250 Zoll von ihm; die Änderung verschiebt Punkte nur innerhalb der 1/100 Zoll, die BEW-18.2 erlaubt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_umDenKandidaten",
+  "quelle": "_gerundet(kandidatInX + abstand * cos(winkel)),",
+  "fehler": "Add wird Sub",
+  "grund": "Die 16 Richtungen spiegeln auf dieselbe Menge von Punkten (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "_umDenKandidaten",
+  "quelle": "_gerundet(kandidatInY + abstand * sin(winkel)),",
+  "fehler": "Add wird Sub",
+  "grund": "Die 16 Richtungen spiegeln auf dieselbe Menge von Punkten (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "wegInDieFreieFläche",
+  "quelle": "nahe = [rand for rand in ränder if _abstandZumUrsprung(rand) <= reichweite]",
+  "fehler": "LtE wird Lt",
+  "grund": "Unterscheidet sich nur bei Gleichheit von Gleitkommazahlen genau an der Toleranz von 1e-6 (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "wegInDieFreieFläche",
+  "quelle": "if _länge(punkt) <= reichweite and all(_zulässig(punkt, rand) for rand in nahe)",
+  "fehler": "And wird Or",
+  "grund": "frei prüft jeden Weg zuletzt; ein unzulässiger Kandidat liefert höchstens eine freie Stelle innerhalb 1/250 Zoll von ihm, also innerhalb der 1/100 Zoll von BEW-18.2; Kandidaten jenseits der Reichweite kommen nur zum Zug, wenn keiner in ihr frei ist (BEW-18.6, Etappe 7) (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/messen.py",
+  "bereich": "wegInDieFreieFläche",
+  "quelle": "if _länge(punkt) <= reichweite and all(_zulässig(punkt, rand) for rand in nahe)",
+  "fehler": "LtE wird Lt",
+  "grund": "Unterscheidet sich nur bei Gleichheit von Gleitkommazahlen genau an der Toleranz von 1e-6 (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/aufstellen/anhaltenAufDemWeg.py",
+  "bereich": "Weiterrücken",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/aufstellen/anhaltenAufDemWeg.py",
+  "bereich": "Geglitten",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/anhaltenVorFremdenBases.py",
+  "bereich": "Gleiten.übergangen",
+  "quelle": "angehaltenAufDemWeg=False,",
+  "fehler": "False wird True",
+  "grund": "kurz ist schon an der Spielfeldkante gekürzt, anteilBisZurSpielfeldkante gibt darauf 1; gelesen wird nur stellen (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/fliegen.py",
+  "bereich": "Fliegen.nachDemLoslassen",
+  "quelle": "return Gezeigt(dict(gerückt), angehaltenAufDemWeg=False)",
+  "fehler": "False wird True",
+  "grund": "Nach dem Loslassen liest der Aufrufer nur stellen; angehaltenAufDemWeg wirkt dort nicht (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/normaleBewegung.py",
+  "bereich": "Gezogen",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/normaleBewegung.py",
+  "bereich": "Weite",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/normaleBewegung.py",
+  "bereich": "Umgebung",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/uebergehenBeimZiehen.py",
+  "bereich": "Angebot",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/uebergehenBeimZiehen.py",
+  "bereich": "Angebot",
+  "quelle": "fliegen: bool = False",
+  "fehler": "False wird True",
+  "grund": "Standardwert, den jeder Aufrufer ausdrücklich setzt (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/phasen/bewegung/uebergehenBeimZiehen.py",
+  "bereich": "Übergangen",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/querschnitt/setzen.py",
+  "bereich": "Gezeigt",
+  "quelle": "@dataclass(frozen=True)",
+  "fehler": "True wird False",
+  "grund": "Kein Code ändert ein Feld dieser Klasse mit @dataclass(frozen=True) nach dem Bau; frozen=True oder False verhält sich gleich (Anliegen 15680)."
+ },
+ {
+  "datei": "technik/arbiter/domaene/spielobjekte.py",
+  "bereich": "Einheit",
+  "quelle": "fliegen: bool = False",
+  "fehler": "False wird True",
+  "grund": "Standardwert, den jeder Aufrufer ausdrücklich setzt (Anliegen 15680)."
  }
 ]

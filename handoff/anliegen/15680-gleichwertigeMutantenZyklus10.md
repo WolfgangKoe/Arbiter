@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Aus [15462](15462-mutationZyklus10Ueberlebende.md) bleiben Überlebende, die kein
@@ -48,4 +48,10 @@ Grund oben; dann den gezielten Lauf
 `schlachtrunden.py` 149 (`raise` entfällt, wirkt nur bei BEW-18.6, Etappe 7) darunter, gehört
 es als Lücke im Plan an den Koordinator.
 
-**Stellungnahme.**
+**Stellungnahme.** Meine Schreibgrenze erlaubt `gleichwertig.json`. 38 Einträge ergänzt.
+Ausgenommen:
+- `schlachtrunden.py` 188: nicht gleichwertig, `darstellung.stellenBeimLoslassen` gibt das
+  Feld in die Antwort; ein Test darauf fängt ihn (Testautor).
+- `schlachtrunden.py` 149: Lücke im Plan (BEW-18.6, Etappe 7), an den Koordinator.
+- 247/262 `0 wird 1`, 266/267 `1 wird 2`: fängt laut 15462 jetzt der Test.
+`pytest prozess/pruefungen/mutationsregeln` grün; gezielter Lauf nicht gestartet.
