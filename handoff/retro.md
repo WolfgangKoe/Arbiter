@@ -24,7 +24,7 @@ war; das bleibt (Absicht 2, 2590).
 3. Läufe zu groß: Implementierer, Testautor und Reviewer brachen an der Tokengrenze ab, das
    Umbenennen der Tests brauchte vier Läufe. Jeder Commit hält alle an.
 
-Der gezielte Mutationslauf fängt 82 % ([15462](anliegen/15462-mutationZyklus10Ueberlebende.md),
+Der gezielte Mutationslauf fängt 82 % (Anliegen 15462,
 Testautor), der volle läuft noch. Keine Neuerung von Claude Code ersetzt Eigenes. Ohne Item
 aus 14500: ac, ai bis ak, am, au (Kosten der Kritik), an (Hook fing es), ap (kein
 `ruff format`), ar, at (Rechner, Limit).
@@ -43,7 +43,7 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
   misst einen nachgereichten Test am Stand seines Commits.
 - P4 Parallel als Regel (Organisationsentwickler, dann Regelumsetzer), 14360 F1 B, 11100,
   14500: Nach jedem Lauf nennt der Hook, was nach `Wartet auf` frei ist, der Koordinator
-  startet es oder nennt den Grund; Quelle ist dein neuer Punkt der Absicht (15820). Jeder
+  startet es oder nennt den Grund; Quelle ist [Absicht 7](../prozess/praemissen/absicht.md). Jeder
   Auftrag passt in einen Lauf: Ein Item teilt er nach Kriterien, je Teil grüne Tests durch
   alle Schichten; das Review in Bildschirm und Rundgang. Je ein Commit läuft in einem eigenen
   Arbeitsbaum, die Rollen arbeiten weiter; am Klon mit echtem Hook erprobt (14360).
@@ -54,8 +54,7 @@ Einzelheiten in den Anliegen; Rückweg: Commit `P<k>:` zurücknehmen.
   davor und danach im Anliegen.
 
 ## Empfehlung
-Gib frei. Daneben [15820](anliegen/15820-absichtPunktParallel.md) F1, Empfehlung A: Den
-Punkt trägst du selbst in die Absicht ein, wie dort beschrieben.
+Gib frei.
 Folgen: sieben Läufe zu je unter 120.000 Token. Regelumsetzer nacheinander: P3, P2, P4, P5,
 P6; ich daneben P1, P4. P1 wirkt ab Domänenphase 11; je in der Technikphase geänderter
 Anforderung ein kurzer Lauf des Fachkritikers.
@@ -75,5 +74,5 @@ Anforderung ein kurzer Lauf des Fachkritikers.
 - [ ] Koordinator: nach dev gepusht
 
 ## Freigabe
-Freigabe: offen
+Freigabe: ja
 Kommentar: .
