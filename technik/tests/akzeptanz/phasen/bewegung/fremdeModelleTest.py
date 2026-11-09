@@ -44,6 +44,17 @@ def testBew10_1EinModellDesAnderenSpielersBleibtBeimLoslassenStehenOhneGrund(
     assert stellenAllerModelle(schlacht) == davor
 
 
+def testBew10_1BeimZiehenZeigtDasSpielfeldKeinModellDesAnderenSpielersBewegtOderAngehalten(
+    zugAnEinemFremdenModell,
+):
+    schlacht, _, modell, ziel = zugAnEinemFremdenModell
+
+    gezeigt = schlacht.stellenBeimLoslassen(modell, ziel)
+
+    assert gezeigt.stellen == {}
+    assert gezeigt.angehaltenAufDemWeg is False
+
+
 def testBew10_1DerDienstAntwortetBeimModellDesAnderenSpielersOhneGrundUndÄndertNichts(
     dienstDerSchlacht, beendeteAufstellung, schlachtInDerBewegungsphase, necronWarriors
 ):

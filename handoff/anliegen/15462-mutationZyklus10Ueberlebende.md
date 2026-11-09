@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Testautor
 Runde: 1/3
-Status: offen
-Wartet auf: 15680
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der gezielte Lauf über die seit Commit „Freigabe Plan 10“ geänderten Zeilen der
@@ -32,9 +31,15 @@ falsche *Stelle*.
 Tests sagen kein Verhalten außerhalb einer Vorbedingung zu (Anliegen 1751). Erledigt, wenn
 `.venv/bin/python prozess/pruefungen/gemeinsam/lauf.py mutationsregeln.mutation` 95 % meldet.
 
-**Stellungnahme.** Meinen Teil habe ich umgesetzt. `angenommen` setze ich erst, wenn
-[15680](15680-gleichwertigeMutantenZyklus10.md) erledigt ist.
-Mutanten einzeln in einer Kopie geprüft, kein voller Lauf.
+**Stellungnahme.** Umgesetzt; [15680](15680-gleichwertigeMutantenZyklus10.md) ist erledigt
+(38 Einträge in `gleichwertig.json`). Mutanten einzeln in einer Kopie geprüft, kein voller Lauf.
+- `schlachtrunden.py` 188 (`False wird True`) ist nicht gleichwertig: Zieht jemand ein *Modell*
+  des anderen *Spielers*, zeigt das *Spielfeld* nach BEW-10.1 keines bewegt, also hat AUF-29
+  nichts angehalten (*gezeigt*, Glossar). Neu in
+  [fremdeModelleTest.py](../../technik/tests/akzeptanz/phasen/bewegung/fremdeModelleTest.py):
+  `testBew10_1BeimZiehenZeigtDasSpielfeldKeinModellDesAnderenSpielersBewegtOderAngehalten`, für
+  beide *Spieler* am Zug; fängt 188, ohne ihn überlebt 188.
+- Offen beim Koordinator: `schlachtrunden.py` 149, Lücke im Plan (BEW-18.6, Etappe 7).
 - Fangen jetzt: `anhaltenAnDerBewegungsweite.py` 29 (BEW-25.1), `anhaltenVorFremdenBases.py`
   61 (BEW-8.3), `fliegen.py` 76 (BEW-18.7); neu in
   [fliegenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py): BEW-18.2 an

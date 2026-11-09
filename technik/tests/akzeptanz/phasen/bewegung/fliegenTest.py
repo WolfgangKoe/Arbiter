@@ -22,7 +22,7 @@ from tests.akzeptanz.dienst import (
     stelleBeimWeiterrückenAbfragen,
     stelleImSpielstand,
 )
-from tests.akzeptanz.grenzen import dreiAugen
+from tests.akzeptanz.grenzen import dreiAugen, halberZoll
 from tests.akzeptanz.handgriffe import (
     breiteDesSpielfelds,
     gestreckt,
@@ -65,7 +65,8 @@ bewegungsweiteDerSpinne = bewegungsweite("Canoptek Spyder", "Canoptek Spyder")
 knappNebenDerMitte = Fraction(1, 10)
 hinterDerMitte = -knappNebenDerMitte
 vorDerMitte = knappNebenDerMitte
-halbesZoll = Fraction(1, 2)
+einZoll = Fraction(1)
+zweiZoll = Fraction(2)
 flachZurKante = (Fraction(7, 25), Fraction(24, 25))
 
 
@@ -110,7 +111,7 @@ def warriorÜbergehen(schlacht, warrior: Modell, stelle: Stelle) -> Stelle:
 
 
 def stelleDesWarriorsHinterDerBewegungsweite(davor: Stelle) -> Stelle:
-    return versetzt(davor, (-bewegungsweiteDerSpinne - halbesZoll, nichts))
+    return versetzt(davor, (-bewegungsweiteDerSpinne - halberZoll, nichts))
 
 
 def aufDemWarriorHinterDerBewegungsweiteLoslassen(
@@ -318,8 +319,8 @@ def testBew18_2AnDerBewegungsweiteRücktArbiterDieSpinneNichtÜberSieHinaus(
 
 
 schrägZumWarrior = {
-    "nachNordwesten": ((Fraction(-3, 5), Fraction(4, 5)), (Fraction(-4, 5), Fraction(-3, 5))),
-    "nachSüdwesten": ((Fraction(-3, 5), Fraction(-4, 5)), (Fraction(-4, 5), Fraction(3, 5))),
+    "nachSüdwesten": ((Fraction(-3, 5), Fraction(4, 5)), (Fraction(-4, 5), Fraction(-3, 5))),
+    "nachNordwesten": ((Fraction(-3, 5), Fraction(-4, 5)), (Fraction(-4, 5), Fraction(3, 5))),
 }
 
 
@@ -441,15 +442,18 @@ class LageAnDerKante(NamedTuple):
     entlang: tuple[Fraction, Fraction]
 
 
-eins = Fraction(1)
+nachOsten = (Fraction(1), nichts)
+nachWesten = (Fraction(-1), nichts)
+nachSüden = (nichts, Fraction(1))
+nachNorden = (nichts, Fraction(-1))
 lagenAnDenSpielfeldkanten = {
-    "westen": LageAnDerKante(Stelle(x=nichts, y=Fraction(45)), (eins, nichts), (nichts, eins)),
-    "süden": LageAnDerKante(Stelle(x=Fraction(22), y=nichts), (nichts, eins), (-eins, nichts)),
+    "westen": LageAnDerKante(Stelle(x=nichts, y=Fraction(45)), nachOsten, nachSüden),
+    "norden": LageAnDerKante(Stelle(x=Fraction(22), y=nichts), nachSüden, nachWesten),
     "osten": LageAnDerKante(
-        Stelle(x=Fraction(breiteDesSpielfelds), y=Fraction(20)), (-eins, nichts), (nichts, -eins)
+        Stelle(x=Fraction(breiteDesSpielfelds), y=Fraction(20)), nachWesten, nachNorden
     ),
-    "norden": LageAnDerKante(
-        Stelle(x=Fraction(22), y=Fraction(längeDerSpielfeldkante)), (nichts, -eins), (eins, nichts)
+    "süden": LageAnDerKante(
+        Stelle(x=Fraction(22), y=Fraction(längeDerSpielfeldkante)), nachNorden, nachOsten
     ),
 }
 overlordInnenNebenDemPunkt = Fraction(8, 5)
@@ -505,11 +509,11 @@ def testBew18_2InnenAmOverlordNebenJederSpielfeldkanteRücktArbiterDieSpinneVonD
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
     (lord,) = overlord.modelle
-    stelleDesOverlords = anDerKante(lage, eins, nichts)
-    punkt = anDerKante(lage, 2 * eins, nichts)
-    davor = anDerKante(lage, 2 * eins, Fraction(-3))
+    stelleDesOverlords = anDerKante(lage, einZoll, nichts)
+    punkt = anDerKante(lage, zweiZoll, nichts)
+    davor = anDerKante(lage, zweiZoll, Fraction(-3))
     übergehenBisZumNächstenZugDerNecrons(schlacht, {lord: stelleDesOverlords, spinne: davor})
-    kürzesterWeg = summeDerRadien(spinne, lord) - eins
+    kürzesterWeg = summeDerRadien(spinne, lord) - einZoll
 
     schlacht.modellLoslassen(spinne, punkt)
 
@@ -554,8 +558,8 @@ def testBew18_2DasSpielfeldZeigtDieSpinneBeimHaltenÜberDerBaseUndDanachAnIhrerS
     (spinne,) = einheitDerSpinne.modelle
     davor = schlacht.stelle(spinne)
     stelleDesWarriors = warriorÜbergehen(schlacht, warrior, versetzt(davor, (Fraction(-3), nichts)))
-    punkt = versetzt(stelleDesWarriors, (-halbesZoll, nichts))
-    kürzesterWeg = summeDerRadien(spinne, warrior) - halbesZoll
+    punkt = versetzt(stelleDesWarriors, (-halberZoll, nichts))
+    kürzesterWeg = summeDerRadien(spinne, warrior) - halberZoll
     seite = seiteDerSchlachtMitEingabe(bildschirm, beendeteAufstellung, schlacht, eingabe)
     zeiger = halten(seite, davor, punkt, eingabe)
     beimHalten = [
@@ -616,7 +620,7 @@ def testBew18_3EndetDieBewegungsweiteInDerNahkampfreichweiteHältArbiterDieSpinn
     (boss,) = warboss.modelle
     davor = schlacht.stelle(spinne)
     radien = summeDerRadien(spinne, boss)
-    stelleDesWarboss = versetzt(davor, (-bewegungsweiteDerSpinne, radien + halbesZoll))
+    stelleDesWarboss = versetzt(davor, (-bewegungsweiteDerSpinne, radien + halberZoll))
     orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
     punkt = versetzt(davor, (-bewegungsweiteDerSpinne - radien - Fraction(2), nichts))
     assert außerhalbDerNahkampfreichweite(punkt, spinne, stelleDesWarboss, boss), (
@@ -750,7 +754,7 @@ def inDerNahkampfreichweiteDesWarbossLoslassen(
 ) -> Stelle:
     davor = schlacht.stelle(spinne)
     punkt = versetzt(davor, (-wegNachWesten, nichts))
-    abstand = summeDerRadien(spinne, boss) + halbesZoll
+    abstand = summeDerRadien(spinne, boss) + halberZoll
     stelleDesWarboss = versetzt(punkt, gestreckt(zumWarboss, abstand))
     orksÜbergehenBisZumZugDerNecrons(schlacht, {boss: stelleDesWarboss})
     angehaltenLoslassen(schlacht, spinne, punkt)

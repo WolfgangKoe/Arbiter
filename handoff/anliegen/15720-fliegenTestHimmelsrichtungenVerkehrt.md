@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Testautor
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Lesbarkeit der neuen Akzeptanztests seit `5ffc953` ([Es](../../prozess/praemissen/es.md):
@@ -43,4 +43,12 @@ raten, welche gilt.
    Länge, oder die Richtung umbenennen (`weg`, `vonDerStelleWeg`), sodass kein
    Minuszeichen die Bedeutung trägt.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle drei angenommen, Vektoren und Werte unverändert, die Tests grün.
+1. [fliegenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/fliegenTest.py):
+   `"norden"` bei `y = 0`, `"süden"` bei `y = längeDerSpielfeldkante`, `"nachSüdwesten"` für
+   `(-3/5, 4/5)`, `"nachNordwesten"` für `(-3/5, -4/5)`.
+2. Statt `eins` die Richtungen `nachOsten`, `nachWesten`, `nachSüden`, `nachNorden` in
+   `lagenAnDenSpielfeldkanten`, die Längen `einZoll` und `zweiZoll`. Dazu `halbesZoll` durch
+   `halberZoll` aus `grenzen.py` ersetzt, wie im übrigen Ordner.
+3. [weiterziehenNachDemUebergehenTest.py](../../technik/tests/akzeptanz/phasen/bewegung/weiterziehenNachDemUebergehenTest.py):
+   `überDieBewegungsweite` ist positiv, `gestreckt(zurück, -überDieBewegungsweite)`.

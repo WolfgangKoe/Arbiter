@@ -83,8 +83,8 @@ def testBew25_1EinenZollZurückInDieBewegungsweiteHältArbiterAnDerVorigenStelle
     schlachtInDerBewegungsphaseDesZweitenSpielers, spinne, zurück
 ):
     schlacht = schlachtInDerBewegungsphaseDesZweitenSpielers
-    überDieBewegungsweite = -(bewegungsweite("Canoptek Spyder", "Canoptek Spyder") + halberZoll)
-    vorige = versetzt(schlacht.stelle(spinne), gestreckt(zurück, überDieBewegungsweite))
+    überDieBewegungsweite = bewegungsweite("Canoptek Spyder", "Canoptek Spyder") + halberZoll
+    vorige = versetzt(schlacht.stelle(spinne), gestreckt(zurück, -überDieBewegungsweite))
     anhaltenUndÜbergehen(schlacht, spinne, vorige)
     assert schlacht.stelle(spinne) == vorige, "Die Spinne steht nicht, wo der Test sie braucht"
 

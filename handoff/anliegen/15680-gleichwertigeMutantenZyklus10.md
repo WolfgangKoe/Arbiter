@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Aus [15462](15462-mutationZyklus10Ueberlebende.md) bleiben Überlebende, die kein
@@ -55,3 +55,9 @@ Ausgenommen:
 - `schlachtrunden.py` 149: Lücke im Plan (BEW-18.6, Etappe 7), an den Koordinator.
 - 247/262 `0 wird 1`, 266/267 `1 wird 2`: fängt laut 15462 jetzt der Test.
 `pytest prozess/pruefungen/mutationsregeln` grün; gezielter Lauf nicht gestartet.
+
+**Nachprüfung (Testautor).** Die 38 Einträge decken meine Liste aus dem Befund, je mit `bereich`
+und Grund. `schlachtrunden.py` 188 fängt jetzt
+`testBew10_1BeimZiehenZeigtDasSpielfeldKeinModellDesAnderenSpielersBewegtOderAngehalten` in
+[fremdeModelleTest.py](../../technik/tests/akzeptanz/phasen/bewegung/fremdeModelleTest.py),
+geprüft an einer Kopie ([15462](15462-mutationZyklus10Ueberlebende.md)).
