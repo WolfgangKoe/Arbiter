@@ -3,8 +3,8 @@
 Form: Fragen
 Von: Architekt
 An: Stakeholder
-Runde: 1/3
-Status: rückfrage
+Runde: 2/3
+Status: angenommen
 
 ## Runde 1
 **Befund.** Deine Frage zu `phasen/bewegung/`: Warum ist *Fliegen* eine Klasse, Bewegen nicht?
@@ -65,3 +65,50 @@ Antwort: .
 
 **Stellungnahme.**
 Kommentar: Ich nehme deinen Vorschlag zur Kenntnis, finde diesen so aber noch nicht gut. Wenn ich dich richtig verstanden habe, ist die Grundsätzliche Klasse "Gleiten". Das ist für mich noch kein gutes Wort. Ich würde diese Klasse eher "Ziehen" nennen. Am liebsten sogar "Modellziehen", aber dann ist es vielleiecht nur auf das MOdell eingeschränkt. Du hast recht, dass Fliegen eine Fähigkeit ist. Doch aus fachlicher SIcht ist es am Ende eine Art von Ziehen eines Modells über Gelände oder für uns überhaupt relevant ziehen über Bases und Nahkampfreichweiten ab. Aktuell funktioniert es auch so. Ich bin mir lediglich nicht sicher, ob die Aufteilung der Dateien gut ist, wie sie und einzelne Klassen benannt sind und wie die Dateien benannt sind. Sollten die Klasse "Gleiten" oder "Ziehen" wirklich im Ordner "Bewegen" sein oder ist es nicht vielmehr so etwas wie "messen"? Bitte mache dir hierzu nochmal genau Gedanken und sprich ggf. auch nochmal mit dem Anforderungsautor. Mich stört vermutlich einfach, dass du einmal "Gleiten" genommen hast, dass es als regelwort nicht gibt und als zweites "Fliegen", was ein fachliches Wort ist und dabei sehr prominent beim Spielen. Fliegen taucht als eigene Datei auf, aber "gleiten" oder "Ziehen" nicht. Dabei ist "Zug" ja schon ein Stück weit vergeben, wobei man in einem "Zug" auch Einheiten oder Modell "zieht", selbst wenn sie stationär bleiben bzw. handeln können ohne sich zu bewegen. Also nochmal gut mit dem Anforderungsautor diskutieren, wie ihr das besser hinbekommt und voneinander differenziert. 
+
+Noch eine Ergänzung:
+Vielleicht machen wir es so wie im Kommentar etwas angedeutet beschrieben:
+1. Wir nehmen das aktuelle "Gleiten" als eine grundlegende Art des Ziehens von Spielobjekten. Darum benennen wir es beispielsweise auch zu "ziehenVonSpielobjekt" um.
+2. Jegliche Form von Ziehen im Sinne einer Bewegung verwendet dann diese Klasse. 
+    a. Fliegen verhält sich nun jetzt schon so wie es soll.
+    b. Spielobjekte, die nicht fliegen, müssen sich anders verhalten. Stoßen sie gegen ein Hindernis (was in unserer App nur andere Modelle sein können ggf. mit Nahkampfreichweite), so müssen die Spielobjekte regeltechnisch um diese herumgeführt werden. Das zählt gegen die Bewegungsreichweite. 
+    c. Vorrücken ist wie normales Bewegung mit erhöhter Bewegungsreichweite und anderem Endzustand.
+    d. Usw. 
+Was hältst du hiervon. 
+Stellungnahme: siehe Runde 2.
+
+## Runde 2
+**Befund.** Deinen Punkten 1, 2, 2a und 2c stimme ich zu; 2b ist teils neu.
+- Regeltext: Jedes *Modell* zieht „along any path, but no part of the model's base can be moved across the bases of other models“ (`core_rules.txt:729`), *Fliegen* hebt das auf (`:884`). Oberbegriff ist also *Ziehen*, wie in den Anforderungen („beim Ziehen“). `Gleiten` stammt aus ArbiterMap (`glide`); die Art ohne *Fliegen* hieße nach deinem 2b `Herumführen`. „Spielobjekt“ ließe ich weg: Gezogen werden nur *Modelle*.
+- Messen ist es nicht: `messen.py` sagt ohne Regel, ob sich *Bases* *überdecken*; ob Arbiter dann anhält oder herumführt, ist Regel. Umgekehrt baut `fliegen.py` Kreise aus Radien der *Bases* (etwa 60 Zeilen), das gehört nach [M1](../../technik/architektur/domaene.md) in `messen.py`.
+- Datei und Klasse heißen verschieden, weil ein Modul den Namen seiner Anforderung trägt (BEW-17). Herumführen gilt schon beim Aufstellen (AUF-29); die Bewegung holt seinen Kern aus `phasen/aufstellen/anhaltenAufDemWeg.py`.
+- Gemeinsames beider Arten steht verstreut (`Gezogen`, `Umgebung` in `normaleBewegung.py`, `Anteile` in `uebergehenBeimZiehen.py`); `Gezogen.fliegen` ist ein Schalter statt der Art.
+- 2b ändert Kriterien: Als *Distanz* zählt heute die gerade Strecke (Glossar, Anliegen 5180, 5400), vor *Nahkampfreichweite* hält Arbiter an (BEW-6.2).
+
+Wörter, Ort von AUF-29 und 2b klärt der Anforderungsautor in [16080](16080-ziehenUndHerumfuehren.md): Ein Begriff steht erst in Anforderung und Glossar, dann im Code ([Wir 2](../../prozess/praemissen/wir.md)).
+
+**Kosten.** Am Bildschirm nichts; 2b erst nach 16080.
+A: Anforderungsautor in Domänenphase 11, Testautor benennt Tests um, Implementierer verschiebt etwa 400 Zeilen in Technikphase 11, samt 13761, 14240, 14261.
+B: etwa 150 Zeilen; Schuld: Der Kern bleibt im Aufstellen.
+C: wie A, aber `Fliegen` schaltet ab, was die Oberklasse zusagt ([Es L](../../prozess/praemissen/es.md)).
+
+**Gegenvorschlag.** Der Ordner nach A; die Schnittstelle legt nur fest, was jede Art beantwortet (wo gezeigt, wo *gesetzt*, was sperrt):
+```
+querschnitt/ziehen.py        Ziehen (Schnittstelle), Gezogen, Umgebung, Anteile
+querschnitt/herumfuehren.py  Herumführen (heute Gleiten und AUF-29)
+phasen/bewegung/fliegen.py   Fliegen, nur Regeln
+messen.py                    Weg in die freie Fläche zwischen Bases
+phasen/bewegung/__init__.py  wählt die Art; Normale Bewegung, Vorrücken als Daten (2c)
+```
+Charge und Fall Back (Etappe 3) erhalten eine Art von Ziehen, statt eine zu sein.
+
+**F1 · Wie schneiden wir Ziehen?** (ersetzt F1 aus Runde 1)
+Annahme: A; das Item für Technikphase 11 schreibe ich nach 16080.
+A: Schnittstelle `Ziehen` mit den Arten `Herumführen` und `Fliegen`, Herumführen in `querschnitt/`, Messen nach `messen.py` (Anliegen 15900, Regeltext, M1)
+B: Nur `Gleiten` in `Herumführen` umbenennen, eigene Datei in `bewegung/` (Anliegen 15900)
+C: Oberklasse `Ziehen` mit Herumführen als Normalfall, `Fliegen` als Unterklasse (Anliegen 15900)
+Empfehlung: A, denn so steht jede Regel einmal an ihrem Ort.
+Antwort: A
+
+**Stellungnahme.**
+Kommentar: Ziehe für die Domänenphase in Erwägung, den Ordner "Querschnitt" umzubenennen. Ich meine zu verstehen, weshalb er so benannt ist. Fachlich ist es aber schwer lesbar. Mir ist bewusst, dass eine Umbenennung dazu führen mag, genau diesen Pfad an vielen Stellen zu ändern. Aber der Code muss lesbar sein!
