@@ -40,6 +40,7 @@ neuladenSkript = """
   var schluessel = "scroll:" + location.pathname + location.search;
   window.addEventListener("load", function () {
     window.scrollTo(0, Number(sessionStorage.getItem(schluessel)) || 0);
+    sessionStorage.removeItem(schluessel);
   });
   document.addEventListener("input", function () { geaendert = true; });
   function pruefen() {

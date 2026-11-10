@@ -145,6 +145,14 @@ def testTokenberichtTrägtDenReiterZurAnliegenSeite(ordner):
     assert '<a href="/">Anliegen</a>' in text and 'aria-current="page">Tokenbericht' in text
 
 
+def testJederReiterBeginntObenDieGemerkteStelleGiltNurFürEinNeuladen(ordner):
+    for pfad in ("/", "/tokens", "/architektur"):
+        text = holen(ordner, pfad).inhalt.decode()
+        lesen = text.index("sessionStorage.getItem(schluessel)")
+        assert text.index("sessionStorage.removeItem(schluessel)") > lesen
+        assert text.index("sessionStorage.removeItem(schluessel)") < text.index("function pruefen")
+
+
 def testTokenberichtLiefertNurDieSeiteAusDerAdresse(ordner):
     protokoll = ordner / "prozess" / "dashboard" / "laeufe.jsonl"
     protokoll.parent.mkdir(parents=True)
