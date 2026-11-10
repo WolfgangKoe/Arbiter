@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Der Gesamtlauf (`rueckverfolgungTest.py::testDasRepoHältDieRückverfolgung`)
