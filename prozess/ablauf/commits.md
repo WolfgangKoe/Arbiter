@@ -19,14 +19,16 @@ alte Stände, Geschriebenes ginge verloren; pre-commit kann das nicht abschalten
 2460). Der Koordinator committet darum nur mit
 `python3 prozess/pruefungen/gemeinsam/lauf.py gemeinsam.commitImArbeitsbaum "<Nachricht>" <Pfade>`,
 nie mit `git commit`; die Nachricht darf mehrzeilig sein (Betreff, Begründung,
-`Co-Authored-By`), Pfade auch gelöschte, ohne Pfad leer für eine Freigabe. Der Befehl:
+`Co-Authored-By`), Pfade auch gelöschte, ohne Pfad leer für eine Freigabe. Schrieb die Rolle
+in ihrem Arbeitsbaum unter `.claude/worktrees/<name>/`, steht vor der Nachricht
+`--aus <Arbeitsbaum>` (Anliegen 16721); sonst ist der Quellordner der Projektordner. Der Befehl:
 1. legt mit `git worktree add --detach` unter `/tmp` einen Arbeitsbaum auf `dev` an und
    verlinkt darin `node_modules`,
-2. übernimmt die Pfade aus dem gemeinsamen Arbeitsbaum und committet dort samt Hook,
+2. übernimmt die Pfade aus dem Quellordner und committet dort samt Hook,
 3. setzt `dev` mit `git update-ref refs/heads/dev <neu> <alt>`, nur wenn `dev` noch auf dem
-   alten Commit steht, gleicht im gemeinsamen den Index der Pfade an (`git reset -q --
+   alten Commit steht, gleicht im Quellordner den Index der Pfade an (`git reset -q --
    <Pfade>`) und entfernt den Arbeitsbaum.
-Scheitert der Hook oder bewegte sich `dev`, bleibt der gemeinsame Arbeitsbaum unberührt; der
+Scheitert der Hook oder bewegte sich `dev`, bleibt der Quellordner unberührt; der
 Befehl nennt den Grund und endet mit 1. Für jede Rolle sperrt die Schreibgrenze `git commit`
 und den Befehl. Mechanismus: `gemeinsam/commitImArbeitsbaum.py`, `rollenregeln/schreibgrenze.py`
 ([Rollenregeln](../regeln/rollenregeln.md)); dass der Koordinator nicht `git commit` nutzt,

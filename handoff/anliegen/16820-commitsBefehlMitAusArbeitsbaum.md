@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** [Commits](../../prozess/ablauf/commits.md) beschreibt den Befehl
@@ -24,4 +24,7 @@ ihrem Arbeitsbaum unter `.claude/worktrees/<name>/`, steht vor der Nachricht
 `--aus <Arbeitsbaum>` (Anliegen 16721); sonst ist der Quellordner der Projektordner.“ In Schritt 2
 und 3 sowie im Satz zum Scheitern „gemeinsamen Arbeitsbaum“ durch „Quellordner“ ersetzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt wie vorgeschlagen in [Commits](../../prozess/ablauf/commits.md):
+Der Satz zu `--aus <Arbeitsbaum>` steht nach dem Satz zur Nachricht; in Schritt 2 und 3 und im
+Satz zum Scheitern heißt es jetzt „Quellordner“. Geprüft am Befehl: `main` nimmt `--aus` als
+erstes Argument, ohne bleibt der Projektordner.
