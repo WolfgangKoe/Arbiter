@@ -5,6 +5,7 @@ Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
 Status: angenommen
+Wartet auf: Prozessphase 11
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -51,6 +52,10 @@ Regelumsetzer angepasst (Anliegen 16221):
 - Die Überlebenden schreibt der Reviewer nach dem Lauf gesammelt als Anliegen, bereit vor der
   nächsten Domänenphase: fehlt ein Kriterium, für die Domänenphase, sonst für die
   Technikphase, wie bisher beim vollen Lauf (Anliegen 1671).
+
+Notiz, dein Wortlaut: „Ich setze 15960 erst auf erledigt, nachdem der nächste Mutationslauf
+durch ging. Und zwar so, wie ich mir das wünsche.“ Darum wartet es auf die Prozessphase 11;
+die Retro 11 bewertet den Lauf an F1.
 
 **F1 · Welcher Lauf ist der eine je Zyklus?**
 A: Der gezielte über die geänderten Zeilen; im Zyklus, dessen Plan die Etappe abschließen soll, an seiner Stelle der volle (DoD, Anliegen 8961)

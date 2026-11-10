@@ -9,8 +9,8 @@ Commit-Hook, ist eine rot, scheitert der Commit und lässt alles stehen; er meld
 Rolle, die es beheben kann. Der Hook prüft nur, was der Commit ändern kann, ohne die
 Produkttests und die Abdeckung, auch bei einem Commit in `technik/`: Beides misst der Lauf
 von `python3 -m pytest prozess/pruefungen` beim Implementierer, bevor er fertig meldet, und
-beim Reviewer bei der DoD. Alles prüft der Regelumsetzer, bevor er fertig meldet
-(Anliegen 600, 1950). Mechanismus: `.pre-commit-config.yaml`, Hooks je Pfad, ohne
+beim Reviewer bei der DoD. Der Regelumsetzer prüft, bevor er fertig meldet, nur die Tests
+der Module, die er geändert hat; den Rest prüft der Hook (Anliegen 600, 1950, 16440). Mechanismus: `.pre-commit-config.yaml`, Hooks je Pfad, ohne
 Produkttests und Abdeckung (Anliegen 601, 1950, [Formregeln](../regeln/formregeln.md)); sonst nur Text.
 
 Jeder Commit läuft in einem eigenen Arbeitsbaum, die Rollen arbeiten weiter (Anliegen 11100,

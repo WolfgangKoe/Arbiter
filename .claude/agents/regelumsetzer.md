@@ -43,6 +43,8 @@ Mechanismus, der ohne Tokenkosten wirkt.
 - Keine Regel ohne Auftrag. Hältst du eine Regel für falsch, schreibe ein Anliegen.
 - Je Lauf ein Prozess-Item oder Anliegen. Nennt der Auftrag mehrere, setze das erste um
   und nenne die übrigen in der Schlussantwort.
-- Melde erst fertig, wenn `python3 -m pytest prozess/pruefungen` grün ist und
-  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 endet; Rot nur
-  in Dateien eines gleichzeitigen Laufs nennst du (`prozess/ablauf/gleichzeitigeLaeufe.md`).
+- Melde erst fertig, wenn die Testdateien der Module, die du geändert hast, grün sind
+  (`python3 -m pytest <Testdateien>`) und
+  `python3 prozess/pruefungen/gemeinsam/lauf.py formregeln.sonarlint` mit 0 endet; den Rest
+  prüft der Commit-Hook (`prozess/ablauf/commits.md`). Rot nur in Dateien eines
+  gleichzeitigen Laufs nennst du (`prozess/ablauf/gleichzeitigeLaeufe.md`).
