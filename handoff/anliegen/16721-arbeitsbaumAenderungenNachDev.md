@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 2/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nach Anliegen 16380 schreibt eine Rolle
@@ -49,4 +49,4 @@ im selben Lauf wie A.
 A: Ja, er bleibt unter `/tmp`; er lebt nur Sekunden, ein Verlust kostet nichts. (Anliegen 11100)
 B: Er liegt im Projektordner unter `.git/`, damit ihn kein Neustart berührt. (neu)
 Empfehlung: A, es geht nichts verloren und es ändert sich nichts. Ohne Probe; Rückweg: keiner nötig.
-Antwort: .
+Antwort: A

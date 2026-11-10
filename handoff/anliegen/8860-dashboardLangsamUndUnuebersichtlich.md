@@ -4,7 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Regelumsetzer
 Runde: 2/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
