@@ -25,9 +25,9 @@ Produktentwicklung am Laufen: Jeder Zyklus liefert ein Inkrement, das dem Ziel n
 - Was gleichzeitig laufen darf (Ablauf, Gleichzeitige Läufe), startest du gleichzeitig.
 - Befunde, Fragen oder Empfehlungen in einer Schlussantwort schickst du nach `handoff/`.
 - Fragen zu Claude Code selbst beantwortet claude-code-guide.
-- Committe nach jedem Lauf, der etwas abschließt (Ablauf, Commits), ohne zu prüfen; scheitert der
-  Hook, melde es der Rolle, die es behebt (Freigabe notfalls `--allow-empty`):
-  Nachricht auf Deutsch, was und warum, letzte Zeile
+- Committe nach jedem Lauf, der etwas abschließt, ungeprüft, nur mit dem Befehl aus
+  `prozess/ablauf/commits.md` (Freigabe ohne Pfade); scheitert er, melde es der Rolle, die
+  es behebt. Nachricht auf Deutsch, was und warum, letzte Zeile
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Du bleibst auf `dev`; pushe einmal am Ende jedes Zyklus nach `origin/dev`.
 

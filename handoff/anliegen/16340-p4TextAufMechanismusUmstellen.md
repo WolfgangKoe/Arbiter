@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** P4 ([Retro](../retro.md)) ist als Mechanismus gebaut ([Rollenregeln](../../prozess/regeln/rollenregeln.md), [Standregeln](../../prozess/regeln/standregeln.md)). Drei Stellen in deinen Pfaden sagen noch „nur Text“ oder kennen den Befehl nicht:
@@ -16,4 +16,4 @@ Status: offen
 
 **Gegenvorschlag.** Die drei Stellen ändern und den Vermerk bei P4 setzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt, alle drei Stellen. 1. [Gleichzeitige Läufe](../../prozess/ablauf/gleichzeitigeLaeufe.md): Was frei ist, wie in `standregeln/frei.py`; Mechanismus dort, nur ob der Koordinator startet, bleibt Text. 2. [Commits](../../prozess/ablauf/commits.md): Der Koordinator committet nur mit dem Befehl, mehrzeilige Nachricht; Mechanismus `gemeinsam/commitImArbeitsbaum.py` und `rollenregeln/schreibgrenze.py`, dass er selbst kein `git commit` nutzt, bleibt Text. 3. [Koordinator](../../.claude/agents/koordinator.md): verweist auf den Befehl, Freigabe ohne Pfade, `--allow-empty` entfällt.
