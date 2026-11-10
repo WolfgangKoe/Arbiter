@@ -21,13 +21,46 @@ def indexGesperrt(wurzel: Path) -> bool:
     return bool(sperre) and (wurzel / sperre).exists()
 
 
-def freigaben(wurzel: Path) -> list[Freigabe]:
+freigabenJeStand: dict[tuple[Path, str], list[Freigabe]] = {}
+
+
+def freigabenLesen(wurzel: Path) -> list[Freigabe]:
     gefunden = []
     for zeile in gitAusgabe(wurzel, "log", "--format=%H %s").splitlines():
         kennung, _, betreff = zeile.partition(" ")
         if betreff.startswith("Freigabe "):
             gefunden.append(Freigabe(kennung, betreff))
     return gefunden
+
+
+def gitOrdner(wurzel: Path) -> Path:
+    punktGit = wurzel / ".git"
+    if punktGit.is_file():
+        verweis = punktGit.read_text(encoding="utf-8").removeprefix("gitdir:").strip()
+        return wurzel / verweis
+    return punktGit
+
+
+def kopfKennung(wurzel: Path) -> str:
+    ordner = gitOrdner(wurzel)
+    kopf = (ordner / "HEAD").read_text(encoding="utf-8").strip() if ordner.is_dir() else ""
+    if not kopf.startswith("ref: "):
+        return kopf or gitAusgabe(wurzel, "rev-parse", "HEAD").strip()
+    zweig = kopf.removeprefix("ref: ")
+    gemeinsamerOrdner = ordner
+    if (ordner / "commondir").is_file():
+        gemeinsamerOrdner = ordner / (ordner / "commondir").read_text(encoding="utf-8").strip()
+    zweigDatei = gemeinsamerOrdner / zweig
+    if zweigDatei.is_file():
+        return zweigDatei.read_text(encoding="utf-8").strip()
+    return gitAusgabe(wurzel, "rev-parse", "HEAD").strip()
+
+
+def freigaben(wurzel: Path) -> list[Freigabe]:
+    stand = (wurzel.resolve(), kopfKennung(wurzel))
+    if stand not in freigabenJeStand:
+        freigabenJeStand[stand] = freigabenLesen(wurzel)
+    return freigabenJeStand[stand]
 
 
 def freigabeCommit(wurzel: Path, gegenstand: str, nummer: int) -> str | None:
@@ -48,5 +81,13 @@ def dateiBeiCommit(wurzel: Path, kennung: str, datei: Path) -> str:
     return gitAusgabe(wurzel, "show", f"{kennung}:{pfad}")
 
 
+betreffeJeStand: dict[tuple[Path, str, str], list[str]] = {}
+
+
 def betreffeSeit(wurzel: Path, kennung: str) -> list[str]:
-    return gitAusgabe(wurzel, "log", "--format=%s", f"{kennung}..HEAD").splitlines()
+    stand = (wurzel.resolve(), kopfKennung(wurzel), kennung)
+    if stand not in betreffeJeStand:
+        betreffeJeStand[stand] = gitAusgabe(
+            wurzel, "log", "--format=%s", f"{kennung}..HEAD"
+        ).splitlines()
+    return betreffeJeStand[stand]

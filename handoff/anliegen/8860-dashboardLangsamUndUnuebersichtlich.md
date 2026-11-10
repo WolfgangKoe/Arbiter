@@ -67,5 +67,9 @@ Für jedes Anliegen mit `Wartet auf` ruft `wartet`
 ([phasenfolge.py](../../prozess/pruefungen/standregeln/phasenfolge.py)); diese ruft `freigabeCommit`
 bis zu dreimal, jedes liest mit `freigaben` das ganze Git-Log neu
 ([gitAufruf.py](../../prozess/pruefungen/gemeinsam/gitAufruf.py)). Die Seitenaufteilung ändert daran nichts.
-Behebung (offen): das Git-Log je Abfrage nur einmal lesen. Das liegt in `gitAufruf.py`, einem Import der
-Hooks; wegen des gleichzeitigen Laufs P2 nicht umgesetzt.
+Behebung (Regelumsetzer P6): `freigaben` und `betreffeSeit` in
+[gitAufruf.py](../../prozess/pruefungen/gemeinsam/gitAufruf.py) merken sich ihr Ergebnis je
+Wurzel und Stand von `HEAD` (gelesen aus `.git`, ohne Aufruf); ein neuer Commit ändert den Schlüssel.
+Scheiter-Test: [gitAufrufTest.py](../../prozess/pruefungen/gemeinsam/gitAufrufTest.py).
+Messung danach (`lesen`, ein Aufruf): `/` 0,46 s, `/tokens` 0,47 s (davor 14,7 s und 4,9 s).
+Rückweg: Commit zurücknehmen; der Cache wirkt nur im Prozess, nichts bleibt liegen.
