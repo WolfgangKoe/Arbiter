@@ -27,7 +27,7 @@ Davon hängen ab:
 - [BEW-21](../../domaene/anforderungen/phasen/bewegung/sperreBeimLoslassen.md): Der Absatz
   „Am Bildschirm“ setzt ein *Modell* voraus, das schon vor dem Ziehen eine fremde *Base*
   überdeckt, also AUF-27.
-- [16101](16101-angebotNachDerSperreBeimUebergehen.md) fragt, ob nach der *Sperre* aus BEW-18.6
+- Anliegen 16101 fragt, ob nach der *Sperre* aus BEW-18.6
   *gemeinsam übergehen* angeboten bleibt; ohne BEW-18.6 erübrigt sich das.
 
 **Kosten.** Mit AUF-27 entfallen zwei Kriterien. Was stattdessen geschieht, wenn eine

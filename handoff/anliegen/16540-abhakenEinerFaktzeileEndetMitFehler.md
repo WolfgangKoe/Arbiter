@@ -8,7 +8,7 @@ Status: offen
 Wartet auf: Prozessphase 11
 
 ## Runde 1
-**Befund.** Aus [14500](14500-punkteFuerDieProzessphase.md), Punkt (aq), ohne Item in der
+**Befund.** Aus Anliegen 14500, Punkt (aq), ohne Item in der
 [Retro 10](../retro.md). Der Start nennt jeder Rolle „Am Ende abhaken: …“. Der Planer rief
 den Befehl für „Item <k> gelöscht“, eine Zeile, die ein Fakt abhakt
 ([Fortschritt](../../prozess/ablauf/fortschritt.md)). Der Befehl endete mit Exit 1

@@ -16,13 +16,13 @@ gibt es noch nicht.
 
 ## Vorschläge
 Obsolet scheinen, je Empfänger, der es beurteilt (`angenommen` mit Verweis, der Absender schließt):
-1. **Anforderungsautor:** [16101](anliegen/16101-angebotNachDerSperreBeimUebergehen.md): Der
+1. **Anforderungsautor:** Anliegen 16101: Der
    Stakeholder hat in 16100 entschieden, dass eine *Base* nie überdeckt; [16150](anliegen/16150-basesNieUeberdeckt.md)
    streicht BEW-18.6, und 16101 sagt selbst, dann erübrige es sich. Absender Planer.
 2. **Anforderungsautor, erst nach [15461](anliegen/15461-uebergehenDannFolgtDemZeiger.md):** Fasst
    er BEW-8.4 neu (die *Modelle* folgen dem Zeiger), ist neu zu beurteilen, ob 10201 Punkt 1,
    14320 und 10120 Punkt 1 noch gelten; sie handeln vom Weiterziehen nach dem Übergehen.
-3. **Implementierer:** [12963](anliegen/12963-startIstNurEinZweiterNameFuerEbene.md): `start`
+3. **Implementierer:** Anliegen 12963: `start`
    steht in `phasen/bewegung/` nicht mehr im Code. Absender Reviewer.
 4. **Implementierer, Doppel:** 13540 = 13520 Punkt 2; 12904 = 11860 Punkt 1 und mit 12681
    Punkt 2 gemeinsam; 14261 Punkt 2 = 12702 Punkt 2.
