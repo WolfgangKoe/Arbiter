@@ -42,4 +42,6 @@ benannten Parametern. (3) Je Paar eine Hilfe für den Aufbau wie `warbossAufDieS
 (`jenseitsDerBewegungsweite`). (5) Die Eingaben je Fall als Parameter, ohne `if`. Mit 12041 in
 einem Gang.
 
-**Stellungnahme.** Punkt 1 vorgezogen (Anliegen 13841); die Punkte 2 bis 5 bleiben offen.
+**Stellungnahme.** Punkt 1 ist ganz umgesetzt (Anliegen 13841): Alle acht Hilfen stehen in
+[ruecken.py](../../technik/tests/akzeptanz/ruecken.py), keine mehr in der Testdatei. Die
+Punkte 2 bis 5 bleiben offen, der Stand e079472 zeigt sie unverändert.
