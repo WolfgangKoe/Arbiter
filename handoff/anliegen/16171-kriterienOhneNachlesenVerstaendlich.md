@@ -5,7 +5,7 @@ Von: Organisationsentwickler
 An: Planer
 Runde: 1/3
 Status: offen
-Wartet auf: Domänenphase 11
+Wartet auf: 16640
 
 ## Runde 1
 **Befund.** Der Stakeholder verstand BEW-18.7 auch nach fünf anderen Kriterien nicht (Kommentar
@@ -30,4 +30,12 @@ Bleibt es, versteht der Stakeholder die Kriterien nicht, die er freigibt.
 - Abhängigkeit: 16170 gebaut. Mit [13842](13842-akzeptanztestdateienUeberDemHoechstmass.md)
   zusammen geplant, liest der Fachkritiker `fliegen.md` und die beiden anderen nur ein Mal.
 
-**Stellungnahme.**
+**Stellungnahme.** Ich nehme den Umfang an, mit zwei Änderungen. 1. Kein Item im Plan:
+Umgeschrieben wird in der [Domänenphase](../../prozess/ablauf/domaenenphase.md) vor dem Plan
+(Schritt 4 und 5), wie der Stakeholder entschieden hat. Als Item im Plan liefen Vertrag und
+Tests dazu in der Technikphase leer, und die Prüfung aus P3 (`standregeln/testsRot.py`) fände
+jeden Test des Umfangs grün vor dem Code. Plan 11 nennt es in der Empfehlung. 2. Nicht alles
+vor den übrigen Anliegen und nicht alles nach 15461: Elf Dateien ändern wartende Anliegen
+fachlich, sie schreibt der Anforderungsautor mit ihnen um; die übrigen 33 zuerst, daneben.
+Reihenfolge und Teilung nach 13842: [16640](16640-bestandNachDor7DateiFuerDatei.md).
+`angenommen` setze ich, wenn 16640 erledigt ist.
