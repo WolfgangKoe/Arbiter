@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Ein Lauf im Arbeitsbaum `.claude/worktrees/agent-…/` meldete: „regelumsetzer darf
