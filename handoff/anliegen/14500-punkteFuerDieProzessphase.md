@@ -4,7 +4,7 @@ Form: Kritik
 Von: Koordinator
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -38,4 +38,5 @@ Wartet auf: Prozessphase
 
 **Gegenvorschlag.** Keiner; die Prozessphase wertet die Punkte aus.
 
-**Stellungnahme.** Retro 10, P2 und P4.
+**Stellungnahme.** P4: aa, ae bis ah, al, ao; P3: ab, ad, as; P8 hält Punkte fest; aq:
+Anliegen 16540; übrige: Retro 10.
