@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 11
+Status: angenommen
 
 ## Runde 1
 **Befund.** Seit 11840 liest `genauDieseSchlüsselLesen` auch `freiwillig`e Schlüssel
@@ -24,4 +23,7 @@ dazu [...]“; Name nach der Aufgabe, etwa `schlüsselNachTabelleLesen`; in
 `eintragLesenTest.py` je ein Fall: freiwilliger Schlüssel da, fehlt, Pflichtschlüssel fehlt
 neben freiwilligem.
 
-**Stellungnahme.**
+**Stellungnahme.** Doppel von [13520](13520-fliegenImKatalogAblageUndName.md) Punkt 2 (Name
+und Meldung von `genauDieseSchlüsselLesen`, Fälle in `eintragLesenTest.py`). Der Stand ist
+unverändert: `eintragLesen.py` trägt Name und Meldung „genau“. Die Umsetzung steht in 13520,
+nicht hier; offen bleibt nichts, was 13520 nicht trägt.

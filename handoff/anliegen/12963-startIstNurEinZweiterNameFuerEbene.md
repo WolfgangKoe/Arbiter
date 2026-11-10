@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 11
+Status: angenommen
 
 ## Runde 1
 **Befund.** Am Stand fd5b7e7, `Bewegungsphase._gezeigt`
@@ -20,3 +19,7 @@ Ausgangspunkt. Eingeordnet als wartend: Keine Prüfung ist rot, das Verhalten st
 `/tmp/rev12700probe/probe.py`, Mutation in `/tmp/rev12961mut`).
 
 **Gegenvorschlag.** Streiche `start` und nimm in den drei Zeilen danach `ebene`.
+
+**Stellungnahme.** Überholt: `start` steht nicht mehr in
+`technik/arbiter/domaene/phasen/bewegung/`; die Bewegung benennt die Ausgangs-*Stelle* nicht
+mehr doppelt. Nichts bleibt offen.

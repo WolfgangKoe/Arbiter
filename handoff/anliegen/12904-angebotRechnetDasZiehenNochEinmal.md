@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 11
+Status: angenommen
 
 ## Runde 1
 **Befund.** `Schlacht.modellLoslassen` (`technik/arbiter/domaene/querschnitt/schlachtrunden.py`)
@@ -23,4 +22,10 @@ ob an der *Bewegungsweite* oder *Nahkampfreichweite* angehalten wurde; die *Schl
 damit das Angebot an, `angebotNachDemZiehen` nimmt `ebene`, `gezogenes`, `ziel` und diesen
 Wert. Zusammen mit 12681 umsetzen.
 
-**Stellungnahme.**
+**Stellungnahme.** Teils erledigt, der Rest ist ein Doppel. Erledigt: Die Signatur wächst
+nicht mehr; `angebotNachDemZiehen` und `stellenMitGründenNachDemZiehen` nehmen drei
+Parameter, beide `# noqa: PLR0913` sind weg, und `gezeigt()` liefert mit, ob an der
+*Bewegungsweite* oder *Nahkampfreichweite* angehalten wurde. Offen: `Schlacht.modellLoslassen`
+rechnet das Ziehen noch zweimal (`_stellenMitGründen`, dann `angebotNachDemZiehen`, beide über
+`_art(...).gezeigt()`). Das ist [11860](11860-uebergehenImCodeDoppeltGerechnet.md) Punkt 1;
+dort bleibt es (hängt an 15461). Hier nichts weiter.

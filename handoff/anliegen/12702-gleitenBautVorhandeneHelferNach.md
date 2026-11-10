@@ -33,4 +33,10 @@ ebene)` in `querschnitt/setzen.py`. 3: eine Konstante `keinWeiterrücken` in
 und 6.2), etwa `geradeAngehalten`. 5: eine Konstante auf
 Modulebene.
 
-**Stellungnahme.**
+**Stellungnahme.** Teils erledigt, bleibt offen. Punkt 4 erledigt: `stellenNachV16` gibt es
+nicht mehr. Offen: Punkt 1 (`zuvorGezeigt` rechnet mit `_verschoben` statt
+`verschobeneStellen`), Punkt 2 (`_verschoben` in `anhaltenAufDemWeg.py`, dieselbe Rechnung in
+`verschobeneStellen` in `einheitVerschieben.py` und `verschobenUm` in `normaleBewegung.py`;
+fremde *Stellen* in `_fremdeDer` der Bewegung und in `Aufstellung`), Punkt 3
+(`Weiterrücken(None, angehaltenAufDemWeg=False)` in `Aufstellung` und `Gleiten`), Punkt 5
+(`namen = ("zuvorX", "zuvorY")` zweimal in `web/anwendung.py`).

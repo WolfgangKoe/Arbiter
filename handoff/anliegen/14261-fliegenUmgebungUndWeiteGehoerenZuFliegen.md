@@ -38,4 +38,7 @@ gültig, bis auf ihre Importzeilen. Zu 1 kommt eine Glossarzeile dazu.
 3. Beide Klassen als `@dataclass(frozen=True)`, wie `Gezogen` und `Umgebung`.
 4. Die Methoden heißen `gründeWährendDesZiehens`, die Funktion bleibt.
 
-**Stellungnahme.**
+**Stellungnahme.** Punkt 2 ist ein Doppel von
+[12702](12702-gleitenBautVorhandeneHelferNach.md) Punkt 2 und wird dort verfolgt. Die Punkte
+1, 3 und 4 gelten unverändert (`Weite` und `Umgebung` stehen noch in `normaleBewegung.py`);
+das Anliegen bleibt offen.

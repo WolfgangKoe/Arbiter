@@ -4,8 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: offen
-Wartet auf: Technikphase 11
+Status: angenommen
 
 ## Runde 1
 **Befund.** Am Stand 90a2d9d, ergänzend zu Anliegen 12702, 12903 und 12904:
@@ -27,4 +26,8 @@ Der Leser erwartet einen anderen Fall, als der Test prüft.
 oder *Base*), und daraus folgt der Wert, den 12904 an `Gezeigt` hängt. 2: die Funktion aus
 12702, 2. 3: etwa `testHältDasModellVorDerBaseAnDieInDieBewegungsweiteReicht`.
 
-**Stellungnahme.**
+**Stellungnahme.** Teils erledigt. Punkt 1: `hältAnDerGrenze` kommt aus den `Anteile`
+desselben Gleitens (`anhaltenVorFremdenBases.py`), kein Vergleich zweier *Stellen* mehr.
+Punkt 3: Der Test mit dem irreführenden Namen steht nicht mehr in `tests/einheit`. Punkt 2
+(`verschobenUm` in `normaleBewegung.py` neben `_verschoben` in `anhaltenAufDemWeg.py`) ist ein
+Doppel von [12702](12702-gleitenBautVorhandeneHelferNach.md) Punkt 2 und bleibt dort offen.

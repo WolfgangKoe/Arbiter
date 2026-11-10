@@ -29,4 +29,10 @@ Anforderungsautor). 2: `gegner` und `stellen` als ein Wert der *Schlacht* überg
 wie das Loslassen mit `Weiterrücken(jetzige, …)` und der gemerkten *Stelle* vor dem Ziehen.
 4: ein *Grund*, den es gibt, etwa „Bewegungsweite“.
 
-**Stellungnahme.**
+**Stellungnahme.** Teils erledigt, bleibt offen. Punkt 2 erledigt:
+`stellenMitGründenNachDemZiehen` und `angebotNachDemZiehen` nehmen drei Parameter, kein
+`# noqa: PLR0913` mehr. Offen: Punkt 1 (`Geglitten` in `anhaltenAufDemWeg.py` und `Gezeigt`
+in `querschnitt/setzen.py` mit denselben zwei Feldern; `Aufstellung` baut das eine ins andere
+um), Punkt 3 (V18 und `übergangen` an der *Spielfeldkante*, hängt an 15461), Punkt 4
+(`protokollGrund` in `frontend/index.html` trägt noch „über eine Base“; der *Grund*
+„Bewegungsweite“ existiert).
