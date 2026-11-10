@@ -4,7 +4,7 @@ Form: Kritik
 Von: Planer
 An: Anforderungsautor
 Runde: 1/3
-Status: abgelehnt
+Status: erledigt
 
 ## Runde 1
 **Befund.** Hält den Happy Path nicht auf, betrifft erst Etappe 7. Zu
