@@ -4,7 +4,7 @@ Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: rückfrage
 
 ## Runde 1
 **Befund.** Nach [Anliegen 16380](16380-arbeitsbaumUnterClaudeWorktrees.md) schreibt eine Rolle
@@ -24,4 +24,5 @@ A: Der Commit-Befehl nimmt die Pfade aus dem Arbeitsbaum der Rolle und committet
 B: Der Koordinator führt den Arbeitsbaum vor dem Commit von Hand in den Projektordner zurück.
 (neu)
 Empfehlung: A, es bleibt beim einen Weg des Commits. Ohne Probe; Rückweg: Commit zurücknehmen.
-Antwort: .
+Antwort: A
+Kommentar: Kann es passieren, dass der Inhalt von tmp nach Neustart des Rechners oder von VS Code gelöscht wird? Falls ja, wäre das nicht ein Risiko?
