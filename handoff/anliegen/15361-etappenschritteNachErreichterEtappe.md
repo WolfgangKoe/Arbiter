@@ -4,8 +4,7 @@ Form: Kritik
 Von: Fachkritiker
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
-Wartet auf: Prozessphase
+Status: erledigt
 
 ## Runde 1
 **Befund.** Die Regel behindert die Fachlichkeit. Der [Fortschritt](../../prozess/ablauf/fortschritt.md)
