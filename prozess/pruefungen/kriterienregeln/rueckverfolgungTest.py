@@ -86,6 +86,36 @@ def testTestOhneKriteriumIstRot(tmp_path):
     assert "AUF-1.9" in meldungen[0]
 
 
+def testEinKriteriumEinerSpäterenEtappeVerlangtKeinenTest(tmp_path, gitRepo):
+    aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
+    anforderung = tmp_path / "domaene" / "anforderungen" / "phasen" / "aufstellen.md"
+    anforderung.write_text(
+        anforderungstext.replace("*setzen*: *Sperre*.", "*setzen*: *Sperre*. (Etappe 7)"),
+        encoding="utf-8",
+    )
+    (tmp_path / "domaene" / "etappen").mkdir(parents=True)
+    (tmp_path / "domaene" / "etappen" / "02-bewegen.md").write_text(
+        "# Etappe 2 · Bewegen\n", encoding="utf-8"
+    )
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
+    assert verstöße(tmp_path) == []
+
+
+def testEinKriteriumDerLaufendenEtappeVerlangtEinenTest(tmp_path, gitRepo):
+    aufbau(tmp_path, "def testAuf1_1Eins(): ...\n")
+    anforderung = tmp_path / "domaene" / "anforderungen" / "phasen" / "aufstellen.md"
+    anforderung.write_text(
+        anforderungstext.replace("*setzen*: *Sperre*.", "*setzen*: *Sperre*. (Etappe 2)"),
+        encoding="utf-8",
+    )
+    (tmp_path / "domaene" / "etappen").mkdir(parents=True)
+    (tmp_path / "domaene" / "etappen" / "02-bewegen.md").write_text(
+        "# Etappe 2 · Bewegen\n", encoding="utf-8"
+    )
+    freigegebenerPlanMitItem(gitRepo, "# Probe\n\nUmfang: AUF-1.\n")
+    assert len(verstöße(tmp_path)) == 1
+
+
 @pytest.mark.parametrize("test", ["def test_auf_1_1_eins(): ...\n", "def testAuf1Eins(): ...\n"])
 def testAltesOderUnvollständigesSchemaZähltNichtAlsTest(tmp_path, test, gitRepo):
     aufbau(tmp_path, test)

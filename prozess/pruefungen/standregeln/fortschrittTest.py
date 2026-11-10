@@ -465,3 +465,72 @@ def testEineZeileAusDemCommitDesZyklusKommtNachDemVerlustZurück(tmp_path, gitRe
     schreiben(tmp_path, "handoff/plan.md", plan.read_text(encoding="utf-8").replace("7007", "0"))
     fortschrittSchreiben(tmp_path)
     assert "- [ ] Testautor: Anliegen 7007 Wartet 7007\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineAbgehakteZeileEinesWartendenAnliegensBleibtNachDemLöschenStehen(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7008, "Technikphase", "angenommen")
+    fortschrittSchreiben(tmp_path)
+    (tmp_path / "handoff/anliegen/7008-wartet.md").unlink()
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Architekt: Anliegen 7008 Wartet 7008\n" in plan.read_text(encoding="utf-8")
+
+
+def testEineAbgehakteZeileBleibtImEndstandAuchOhneZahlImWartenUndOhneAnliegen(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7009, "Technikphase", "angenommen")
+    fortschrittSchreiben(tmp_path)
+    gitRepo.festhalten("Fortschritt")
+    (tmp_path / "domaene/items/stellen.md").unlink()
+    schreiben(tmp_path, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    gitRepo.festhalten("Freigabe Review 1")
+    schreiben(tmp_path, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    (tmp_path / "handoff/anliegen/7009-wartet.md").unlink()
+    fortschrittSchreiben(tmp_path)
+    assert "- [x] Architekt: Anliegen 7009 Wartet 7009\n" in plan.read_text(encoding="utf-8")
+
+
+def domäneMitEtappe(wurzel: Path, gitRepo, etappentext: str) -> Path:
+    review = schreiben(wurzel, "handoff/review.md", "# Review · Zyklus 1\n\n" + freigabeAbschnitt)
+    schreiben(wurzel, "handoff/plan.md", "# Plan · Zyklus 1\n")
+    schreiben(wurzel, "handoff/retro.md", "# Retro · Zyklus 1\n\n## Prozess-Items\n")
+    schreiben(wurzel, "domaene/etappen/03-angriff.md", etappentext)
+    for betreff in ("Freigabe Plan 1", "Freigabe Review 1", "Freigabe Retro 1"):
+        gitRepo.festhalten(betreff)
+    return review
+
+
+def testEineEtappeOhneErreichtWennUndFreigabeStehtAlsZeilenImFortschritt(tmp_path, gitRepo):
+    review = domäneMitEtappe(tmp_path, gitRepo, "# Etappe 3 · Angriff\n\nEntwurf.\n")
+    fortschrittSchreiben(tmp_path)
+    text = review.read_text(encoding="utf-8")
+    for zeile in ("Planer: Etappe 3", "Architekt: Kritik an der Etappe 3"):
+        assert f"- [ ] {zeile}\n" in text
+    assert "- [ ] Stakeholder: Freigabe Etappe 3\n" in text
+
+
+def testEineAusformulierteFreigegebeneEtappeLässtIhreZeilenImEndstandStehen(tmp_path, gitRepo):
+    review = domäneMitEtappe(tmp_path, gitRepo, "# Etappe 3 · Angriff\n\nErreicht, wenn: Ja.\n")
+    fortschrittSchreiben(tmp_path)
+    gitRepo.festhalten("Freigabe Etappe 3")
+    fortschrittSchreiben(tmp_path)
+    text = review.read_text(encoding="utf-8")
+    assert "- [x] Planer: Etappe 3\n" in text
+    assert "- [x] Stakeholder: Freigabe Etappe 3\n" in text
+
+
+def testEineAusformulierteFreigegebeneEtappeVorDerPhaseMachtKeineZeilen(tmp_path, gitRepo):
+    schreiben(tmp_path, "domaene/etappen/03-angriff.md", "# Etappe 3 · A\n\nErreicht, wenn: Ja.\n")
+    gitRepo.festhalten("Freigabe Etappe 3")
+    review = domäneMitEtappe(tmp_path, gitRepo, "# Etappe 3 · A\n\nErreicht, wenn: Ja.\n")
+    fortschrittSchreiben(tmp_path)
+    assert "Etappe 3" not in review.read_text(encoding="utf-8")
+
+
+def testEineOffeneZeileEinesGelöschtenAnliegensEntfällt(tmp_path, gitRepo):
+    plan = planMitItem(tmp_path, gitRepo)
+    wartendesAnliegen(tmp_path, 7011, "Technikphase")
+    fortschrittSchreiben(tmp_path)
+    (tmp_path / "handoff/anliegen/7011-wartet.md").unlink()
+    fortschrittSchreiben(tmp_path)
+    assert "7011" not in plan.read_text(encoding="utf-8")

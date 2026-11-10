@@ -9,7 +9,14 @@ from kriterienregeln.kriterium import Kriterium, getesteKriterien
 from kriterienregeln.rueckverfolgung import Zuordnung, anforderungUmfasst, umfasst, zuordnungen
 from lesen.plan import itemNamen, zyklus
 from standregeln.beseitigt import beseitigteAbhaken, verwaisteFallenLassen
-from standregeln.phasenfolge import Lage, Phase, hatItemCommit, itemRollen, lage
+from standregeln.phasenfolge import (
+    Lage,
+    Phase,
+    aktuelleEtappenDatei,
+    hatItemCommit,
+    itemRollen,
+    lage,
+)
 from standregeln.planFassung import neuGefasst
 from standregeln.wartendeSchritte import wartendeSchritte
 
@@ -83,10 +90,34 @@ def wartendeZeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     return [Zeile(*schritt) for schritt in wartendeSchritte(wurzel, aktuell)]
 
 
+def freigegebenInDieserPhase(wurzel: Path, etappe: int, zyklus: int) -> bool:
+    vorige = freigabeCommit(wurzel, "Retro", zyklus - 1)
+    betreffe = betreffeSeit(wurzel, vorige) if vorige else None
+    return betreffe is None or f"Freigabe Etappe {etappe}" in betreffe
+
+
+def etappenzeilen(wurzel: Path, zyklus: int) -> list[Zeile]:
+    datei = aktuelleEtappenDatei(wurzel)
+    treffer = re.match(r"\d+", datei.name) if datei else None
+    if datei is None or treffer is None:
+        return []
+    nummer = int(treffer[0])
+    ausformuliert = "Erreicht, wenn:" in datei.read_text(encoding="utf-8")
+    freigegeben = freigabeCommit(wurzel, "Etappe", nummer) is not None
+    if ausformuliert and freigegeben and not freigegebenInDieserPhase(wurzel, nummer, zyklus):
+        return []
+    return [
+        Zeile("Planer", f"Etappe {nummer}", ausformuliert),
+        Zeile("Architekt", f"Kritik an der Etappe {nummer}"),
+        Zeile("Stakeholder", f"Freigabe Etappe {nummer}", freigegeben),
+    ]
+
+
 def domänenzeilen(wurzel: Path, aktuell: Lage) -> list[Zeile]:
     planFertig = zyklus(wurzel / handoffOrdner / planName) == aktuell.zyklus
     freigegeben = freigabeCommit(wurzel, "Plan", aktuell.zyklus) is not None
     return [
+        *etappenzeilen(wurzel, aktuell.zyklus),
         Zeile("Anforderungsautor", "Happy Paths zum Zyklusziel"),
         Zeile("UX", "Mockups, bei einer Oberfläche"),
         Zeile("Fachkritiker", "Kritik an Anforderungen und Mockups"),

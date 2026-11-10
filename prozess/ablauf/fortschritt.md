@@ -36,7 +36,7 @@ bleibt (Anliegen 12520, 15301). Ein Kommentar des Stakeholders steht als
 
 Phase · Schritt | Zeile | abgehakt durch
 ---|---|---
-Domäne 1 bis 3, nur ohne Etappe | Planer: Etappe · Architekt: Kritik an der Etappe · Stakeholder: Freigabe Etappe | Fakt: Etappendatei neu · Befehl · Fakt: Commit
+Domäne 1 bis 3, solange die aktuelle Etappe kein `Erreicht, wenn:` hat oder kein Commit sie freigibt | Planer: Etappe <n> · Architekt: Kritik an der Etappe <n> · Stakeholder: Freigabe Etappe <n> | Fakt: `Erreicht, wenn:` in der Datei · Befehl · Fakt: Commit `Freigabe Etappe <n>`
 Domäne 4 | Anforderungsautor: Happy Paths zum Zyklusziel · UX: Mockups, bei einer Oberfläche | Befehl
 Domäne 5 | Fachkritiker: Kritik an Anforderungen und Mockups | Befehl
 Domäne 5 und Technik 3 je Anliegen, das auf diese Phase wartet ([Anliegen](anliegen.md)) | <Rolle, die dran ist>: Anliegen <nr> <Titel> | Fakt: Status `angenommen`

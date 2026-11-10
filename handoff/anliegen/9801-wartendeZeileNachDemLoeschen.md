@@ -4,7 +4,7 @@ Form: Kritik
 Von: Organisationsentwickler
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 Wartet auf: Prozessphase
 
 ## Runde 1
@@ -30,4 +30,10 @@ Prozessphase.
 dieses Zyklus bleibt stehen, auch wenn das Anliegen gelöscht ist oder nicht mehr auf diese
 Phase wartet; eine offene entfällt.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als P5: Eine abgehakte Zeile bleibt im Endstand, auch ohne
+Anliegen oder ohne Zahl im Warten; das hielt schon vorher (zwei neue Tests belegen es). Neu:
+Eine offene Zeile eines gelöschten Anliegens entfällt (`bleibendeSchritte` in
+[wartendeSchritte.py](../../prozess/pruefungen/standregeln/wartendeSchritte.py), Test
+`testEineOffeneZeileEinesGelöschtenAnliegensEntfällt` in
+[fortschrittTest.py](../../prozess/pruefungen/standregeln/fortschrittTest.py)). Eine offene
+Zeile eines bestehenden Anliegens bleibt, auch wenn es auf eine Nummer wartet.

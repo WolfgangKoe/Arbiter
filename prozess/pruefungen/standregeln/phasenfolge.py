@@ -38,6 +38,11 @@ def aktuelleEtappe(wurzel: Path) -> str:
     return "keine Etappe"
 
 
+def aktuelleEtappenDatei(wurzel: Path) -> Path | None:
+    dateien = sorted((wurzel / etappenOrdner).glob("*.md"))
+    return dateien[0] if dateien else None
+
+
 def prozessItems(wurzel: Path) -> list[str]:
     text = (wurzel / handoffOrdner / "retro.md").read_text(encoding="utf-8")
     abschnitt = text.partition("## Prozess-Items")[2].partition("\n## ")[0]

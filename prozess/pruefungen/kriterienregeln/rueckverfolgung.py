@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from gemeinsam.pfade import akzeptanzOrdner, anforderungsOrdner, projektordner
+from kriterienregeln.kriterienEtappe import gehörtZuSpäterer
 from kriterienregeln.kriterium import (
     Anforderungsnummer,
     Kriterium,
@@ -74,6 +75,7 @@ def testdateiVerstöße(
         f"{pfad}: {kriterium.kennung} hat keinen Test"
         for kriterium in sorted(zuordnung.verlangt - getestet)
         if umfasst(itemTexte, kriterium)
+        and not gehörtZuSpäterer(wurzel, anforderungsdatei, kriterium)
     ]
     meldungen += [
         f"{pfad}: Test zu {kriterium.kennung}, das in {pfadVon(wurzel, anforderungsdatei)} "

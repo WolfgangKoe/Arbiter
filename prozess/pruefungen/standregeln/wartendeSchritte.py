@@ -9,7 +9,7 @@ from standregeln.phasenfolge import Lage, Phase, lage
 
 mitSchritt = (Phase.domänenphase, Phase.technikphase)
 dateiJePhase = {Phase.domänenphase: "review.md", Phase.technikphase: "plan.md"}
-anliegenZeile = re.compile(r"^- \[[ x]\] ([^:]+): (Anliegen (\d+) .+)$", re.MULTILINE)
+anliegenZeile = re.compile(r"^- \[([ x])\] ([^:]+): (Anliegen (\d+) .+)$", re.MULTILINE)
 phasenreihe = list(Phase)
 
 
@@ -47,11 +47,11 @@ def bleibendeSchritte(
     vorhanden = {anliegen.nummer: anliegen for anliegen in gelesene(wurzel)}
     schritte = []
     for text in standVersionen(wurzel, datei, freigabe):
-        for rolle, schritt, nummer in anliegenZeile.findall(text):
-            if nummer in schon:
+        for haken, rolle, schritt, nummer in anliegenZeile.findall(text):
+            anliegen = vorhanden.get(int(nummer))
+            if nummer in schon or (anliegen is None and haken != "x"):
                 continue
             schon.add(nummer)
-            anliegen = vorhanden.get(int(nummer))
             erledigt = anliegen is None or anliegen.status in (Status.angenommen, Status.erledigt)
             schritte.append((rolle, schritt, True if erledigt else None))
     return schritte

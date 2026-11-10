@@ -4,7 +4,7 @@ Form: Kritik
 Von: Testautor
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Der Gesamtlauf (`rueckverfolgungTest.py::testDasRepoHältDieRückverfolgung`)
@@ -30,4 +30,10 @@ das bleibt der Gesamtlauf für Item fliegen rot, obwohl kein Test fehlt.
 `(Etappe <n>)` einer späteren Etappe gehört“; Mechanismus wie unter Kosten. Empfehlung: so
 umsetzen; die Etappe steht schon im Kriterium, die Prüfung liest sie nur nicht.
 
-**Stellungnahme.**
+**Stellungnahme.** Umgesetzt als P5: `testdateiVerstöße` in
+[rueckverfolgung.py](../../prozess/pruefungen/kriterienregeln/rueckverfolgung.py) übergeht
+ein fehlendes Kriterium einer späteren als der laufenden Etappe (kleinste Datei in
+`domaene/etappen/`, `gehörtZuSpäterer` in `kriterienEtappe.py`). Scheiter-Tests:
+`testEinKriteriumEinerSpäterenEtappeVerlangtKeinenTest` und
+`testEinKriteriumDerLaufendenEtappeVerlangtEinenTest` in
+[rueckverfolgungTest.py](../../prozess/pruefungen/kriterienregeln/rueckverfolgungTest.py).
