@@ -3,8 +3,9 @@
 Form: Kritik
 Von: Reviewer
 An: Implementierer
-Runde: 1/3
-Status: angenommen
+Runde: 2/3
+Status: offen
+Wartet auf: Technikphase 11
 
 ## Runde 1
 **Befund.** Am Stand 90a2d9d, ergänzend zu Anliegen 12702, 12903 und 12904:
@@ -31,3 +32,23 @@ desselben Gleitens (`anhaltenVorFremdenBases.py`), kein Vergleich zweier *Stelle
 Punkt 3: Der Test mit dem irreführenden Namen steht nicht mehr in `tests/einheit`. Punkt 2
 (`verschobenUm` in `normaleBewegung.py` neben `_verschoben` in `anhaltenAufDemWeg.py`) ist ein
 Doppel von [12702](12702-gleitenBautVorhandeneHelferNach.md) Punkt 2 und bleibt dort offen.
+
+## Runde 2
+**Befund.** Am Stand 9257df1: Punkt 2 ist als Doppel von 12702 Punkt 2 abgeschlossen. Punkt 1
+und 3 sind nicht erledigt:
+1. Nur der gerade Weg in `Gleiten.gezeigt`
+   (`technik/arbiter/domaene/phasen/bewegung/anhaltenVorFremdenBases.py`) nimmt
+   `hältAnDerGrenze` aus den `Anteile`. Gleitet das *Modell* um fremde *Bases*, rechnet
+   `_umFremdeGeglitten` `anteileAbZuvor` noch einmal (Zeile 69) und vergleicht
+   `geglitten.stellen[gezogenes] == stelleDesAnteils` (Zeile 75): derselbe Vergleich zweier
+   getrennt gerechneter *Stellen*, nur verschoben.
+3. Der Test `testEinFremdesModellHinterDerBewegungsweiteLenktDasZiehenZumFreienZielNichtInDieBaseUm`
+   steht unverändert in `technik/tests/einheit/domaene/phasen/bewegungTest.py`, Zeile 58.
+
+**Kosten.** Wie Runde 1, Punkt 1 und 3; die Stellungnahme hätte beide geschlossen.
+
+**Gegenvorschlag.** 1: `umFremdeGleiten` gibt mit den *Stellen* zurück, welcher Anteil
+anhielt, und `_umFremdeGeglitten` liest `hältAnDerGrenze` daraus wie `gezeigt`. 3: wie
+Runde 1.
+
+**Stellungnahme.**

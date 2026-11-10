@@ -4,7 +4,7 @@ Form: Kritik
 Von: Reviewer
 An: Implementierer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Seit 11840 liest `genauDieseSchlüsselLesen` auch `freiwillig`e Schlüssel
