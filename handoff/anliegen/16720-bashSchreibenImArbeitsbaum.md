@@ -24,3 +24,8 @@ B: Nein, Löschen und Umbenennen bleiben im Projektordner. (neu)
 Empfehlung: A, sonst bleibt die Parallelarbeit im Arbeitsbaum halb. Ohne Probe; Rückweg: Commit
 zurücknehmen.
 Antwort: A
+
+## Stellungnahme des Regelumsetzers
+Umgesetzt: `rollenregeln/entfernen.py` kürzt `.claude/worktrees/<name>/` wie die Schreibgrenze;
+Scheiter-Tests in `rollenregeln/entfernenTest.py` (`rm` und `mv` in `prozess/` erlaubt, in
+`domaene/` und `ArbiterMap/` gesperrt). Eingetragen in [rollenregeln](../../prozess/regeln/rollenregeln.md).

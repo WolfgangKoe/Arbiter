@@ -118,3 +118,34 @@ def testEineRolleOhneSchreibpfadeLöschtNichts(wurzel):
 
 def testRmInTmpBleibtFrei(wurzel):
     assert entscheide(bash("rm /tmp/probe.md"), wurzel) is None
+
+
+@pytest.mark.parametrize(
+    "befehl",
+    [
+        pytest.param("rm .claude/worktrees/eins/prozess/alt.md", id="rm im Arbeitsbaum"),
+        pytest.param(
+            "mv .claude/worktrees/eins/prozess/alt.md .claude/worktrees/eins/prozess/neu.md",
+            id="mv im Arbeitsbaum",
+        ),
+    ],
+)
+def testRmUndMvImArbeitsbaumGeltenInDenSchreibpfadenWieImProjektordner(wurzel, befehl):
+    assert entscheide(bash(befehl), wurzel) is None
+
+
+@pytest.mark.parametrize(
+    "befehl, grund",
+    [
+        pytest.param(
+            "rm .claude/worktrees/eins/domaene/ziel.md",
+            "darf domaene/ziel.md nicht schreiben",
+            id="fremder Pfad im Arbeitsbaum",
+        ),
+        pytest.param(
+            "rm .claude/worktrees/eins/ArbiterMap/karte.md", "nur lesbar", id="nur lesbar"
+        ),
+    ],
+)
+def testRmImArbeitsbaumAußerhalbDerSchreibpfadeBleibtGesperrt(wurzel, befehl, grund):
+    assert grund in gesperrt(wurzel, befehl)

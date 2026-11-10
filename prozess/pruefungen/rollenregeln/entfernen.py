@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-from gemeinsam.pfade import anliegenOrdner, istNurLesbar, relativZurWurzel
+from gemeinsam.pfade import anliegenOrdner, istNurLesbar, ohneArbeitsbaum, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
 from rollenregeln.bashSchreiben import liegtInTmp
 
@@ -37,12 +37,15 @@ def unerlaubteOption(name: str, optionen: list[str]) -> str | None:
     return None
 
 
-def grundGegenPfad(relativ: str, rolle: str, wurzel: Path, *, istZielordner: bool) -> str | None:
+def grundGegenPfad(
+    tatsächlich: str, rolle: str, wurzel: Path, *, istZielordner: bool
+) -> str | None:
+    relativ = ohneArbeitsbaum(tatsächlich)
     if istNurLesbar(relativ):
         return f"{relativ} ist nur lesbar"
     if not darfSchreiben(relativ, schreibpfade(rolle, wurzel)):
         return f"{rolle} darf {relativ} nicht schreiben"
-    if (wurzel / relativ).is_dir() and not istZielordner:
+    if (wurzel / tatsächlich).is_dir() and not istZielordner:
         return f"{relativ} ist ein Ordner"
     inAnliegen = relativ.startswith(f"{anliegenOrdner}/")
     if inAnliegen and istCommittet(relativ, wurzel):
