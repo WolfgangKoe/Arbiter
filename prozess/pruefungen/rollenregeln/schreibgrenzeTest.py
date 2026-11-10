@@ -75,6 +75,15 @@ def testWriteInsProjektBleibtGesperrt(wurzel):
     assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
 
 
+def testImArbeitsbaumUnterClaudeWorktreesGeltenDieSchreibpfadeWieImProjektordner(wurzel):
+    arbeitsbaum = wurzel / ".claude" / "worktrees" / "agent-x"
+    assert entscheide(schreiben(arbeitsbaum / "prozess" / "pruefungen" / "x.py"), wurzel) is None
+    antwort = entscheide(schreiben(arbeitsbaum / "domaene" / "ziel.md"), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+    antwort = entscheide(schreiben(arbeitsbaum / "ArbiterMap" / "x.md"), wurzel)
+    assert antwort["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+
 def testNichtLesbarerBefehlNenntDenAusweg(wurzel):
     antwort = entscheide(bash("echo 'offen"), wurzel)
     grund = antwort["hookSpecificOutput"]["permissionDecisionReason"]

@@ -29,6 +29,14 @@ def relativZurWurzel(pfad: Path, ordner: Path) -> str | None:
         return None
 
 
+def ohneArbeitsbaum(relativerPfad: str) -> str:
+    teile = relativerPfad.split("/", 3)
+    match teile:
+        case [".claude", "worktrees", name, rest] if name:
+            return rest
+    return relativerPfad
+
+
 def istNurLesbar(relativerPfad: str) -> bool:
     return any(
         f"{relativerPfad.rstrip('/')}/".startswith(eintrag)

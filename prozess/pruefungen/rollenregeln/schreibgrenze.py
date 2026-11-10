@@ -3,7 +3,7 @@ from pathlib import Path
 
 from gemeinsam.commitImArbeitsbaum import befehlsmodul
 from gemeinsam.hookProtokoll import HookEingabe, antwortAusgeben, eingabeLesen, verweigerung
-from gemeinsam.pfade import projektordner, relativZurWurzel
+from gemeinsam.pfade import ohneArbeitsbaum, projektordner, relativZurWurzel
 from lesen.agenten import darfSchreiben, schreibpfade
 from rollenregeln.bashSchreiben import (
     ausweg,
@@ -80,6 +80,8 @@ def vorDemSchreiben(eingabe: HookEingabe, wurzel: Path) -> dict | None:
     außerhalb = relativ is None
     if relativ is None:
         relativ = str(ziel)
+    else:
+        relativ = ohneArbeitsbaum(relativ)
     for gesperrt, meldung in pfadsperren:
         if gesperrt(relativ):
             return verweigerung(f"Schreibgrenze: {relativ}: {meldung}")

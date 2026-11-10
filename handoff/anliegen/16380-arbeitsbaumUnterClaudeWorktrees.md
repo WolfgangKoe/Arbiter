@@ -38,6 +38,7 @@ Empfehlung: A, denn B verzichtet auf die Parallelität, die Absicht 7 verlangt. 
 Rückweg: Commit zurücknehmen. Offen bleibt, wie die Änderungen des Arbeitsbaums nach `dev`
 kommen: `zuegeUebernehmen.py` (P4) kennt nur `/tmp`.
 Antwort: A, probieren wir es aus.
+Stellungnahme: Umgesetzt. `ohneArbeitsbaum` in `gemeinsam/pfade.py` kürzt `.claude/worktrees/<name>/`; `vorDemSchreiben` (Write, Edit) prüft den gekürzten Pfad gegen Schreibpfade, Nur-lesbar und Regelsperre; Test `testImArbeitsbaumUnterClaudeWorktreesGeltenDieSchreibpfadeWieImProjektordner`. Nicht erfasst: Bash-Schreiben im Arbeitsbaum (`rm`, `mv`) und die Übernahme der Änderungen nach `dev` (offen, eigenes Anliegen nötig).
 
 **Klärung.**
 Worum es geht: Für gleichzeitige Arbeit (Absicht 7) kann jede Rolle eine eigene Kopie des Projekts
