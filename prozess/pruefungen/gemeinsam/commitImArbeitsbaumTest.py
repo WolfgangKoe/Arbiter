@@ -78,6 +78,16 @@ def testBewegtSichDevWährendDesCommitsScheitertDerBefehl(repo, monkeypatch):
     assert ausgabe(repo, "log", "-1", "--format=%s") == "anderer\n"
 
 
+def testCommitNimmtDiePfadeAusDemArbeitsbaumDerRolleUndNichtAusDemProjektordner(repo, tmp_path):
+    rolle = tmp_path / "rolle"
+    repo.git("worktree", "add", "-q", "-b", "rolle", str(rolle), "dev")
+    (rolle / "neu.txt").write_text("aus der Rolle\n", encoding="utf-8")
+    (repo.ordner / "neu.txt").write_text("aus dem Projektordner\n", encoding="utf-8")
+    ergebnis = commitImArbeitsbaum(repo.ordner, "Aus der Rolle", ["neu.txt"], rolle)
+    assert ergebnis.erfolg
+    assert ausgabe(repo, "show", "dev:neu.txt") == "aus der Rolle\n"
+
+
 def testDerArbeitsbaumIstDanachEntfernt(repo):
     (repo.ordner / "neu.txt").write_text("neu\n", encoding="utf-8")
     commitImArbeitsbaum(repo.ordner, "Neu", ["neu.txt"])

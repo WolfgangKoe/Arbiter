@@ -50,3 +50,10 @@ A: Ja, er bleibt unter `/tmp`; er lebt nur Sekunden, ein Verlust kostet nichts. 
 B: Er liegt im Projektordner unter `.git/`, damit ihn kein Neustart berührt. (neu)
 Empfehlung: A, es geht nichts verloren und es ändert sich nichts. Ohne Probe; Rückweg: keiner nötig.
 Antwort: A
+
+**Stellungnahme (Regelumsetzer, umgesetzt).** Der Befehl kennt `--aus <Arbeitsbaum>`, nimmt die
+Pfade von dort und committet im kurzen Arbeitsbaum unter `/tmp`. Mechanismus
+[commitImArbeitsbaum.py](../../prozess/pruefungen/gemeinsam/commitImArbeitsbaum.py), Scheiter-Test
+`testCommitNimmtDiePfadeAusDemArbeitsbaumDerRolleUndNichtAusDemProjektordner`, eingetragen in
+[Rollenregeln](../../prozess/regeln/rollenregeln.md). Die Beschreibung in `commits.md` gehört dem
+Organisationsentwickler: Anliegen 16820.

@@ -28,12 +28,12 @@ def geänderteDateien(wurzel: Path, pfade: list[str]) -> list[tuple[str, bool]]:
     return [(eintrag[3:], (wurzel / eintrag[3:]).exists()) for eintrag in einträge]
 
 
-def übernehmen(wurzel: Path, arbeitsbaum: Path, pfade: list[str]) -> None:
-    for datei, existiert in geänderteDateien(wurzel, pfade):
+def übernehmen(quelle: Path, arbeitsbaum: Path, pfade: list[str]) -> None:
+    for datei, existiert in geänderteDateien(quelle, pfade):
         ziel = arbeitsbaum / datei
         if existiert:
             ziel.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(wurzel / datei, ziel, follow_symlinks=False)
+            shutil.copy2(quelle / datei, ziel, follow_symlinks=False)
         else:
             ziel.unlink(missing_ok=True)
 
@@ -53,7 +53,9 @@ def committen(arbeitsbaum: Path, nachricht: str, pfade: list[str]) -> subprocess
         return git(arbeitsbaum, "commit", "-q", *leer, "-F", datei.name)
 
 
-def festschreiben(wurzel: Path, arbeitsbaum: Path, alt: str, pfade: list[str]) -> Ergebnis:
+def festschreiben(
+    wurzel: Path, quelle: Path, arbeitsbaum: Path, alt: str, pfade: list[str]
+) -> Ergebnis:
     neu = git(arbeitsbaum, "rev-parse", "HEAD").stdout.strip()
     setzen = git(wurzel, "update-ref", f"refs/heads/{zweig}", neu, alt)
     if setzen.returncode != 0:
@@ -61,21 +63,24 @@ def festschreiben(wurzel: Path, arbeitsbaum: Path, alt: str, pfade: list[str]) -
             erfolg=False, meldung=f"{zweig} bewegte sich seit dem Start, Befehl erneut ausführen."
         )
     if pfade:
-        git(wurzel, "reset", "-q", "--", *pfade)
+        git(quelle, "reset", "-q", "--", *pfade)
     return Ergebnis(erfolg=True, meldung=f"Commit {neu[:7]} auf {zweig}")
 
 
-def commitImArbeitsbaum(wurzel: Path, nachricht: str, pfade: list[str]) -> Ergebnis:
+def commitImArbeitsbaum(
+    wurzel: Path, nachricht: str, pfade: list[str], quelle: Path | None = None
+) -> Ergebnis:
+    quelle = quelle or wurzel
     alt = git(wurzel, "rev-parse", zweig).stdout.strip()
     arbeitsbaum = Path(tempfile.mkdtemp(prefix="arbiterCommit"))
     try:
         git(wurzel, "worktree", "add", "-q", "--detach", str(arbeitsbaum), alt)
         knotenModulesVerlinken(wurzel, arbeitsbaum)
-        übernehmen(wurzel, arbeitsbaum, pfade)
+        übernehmen(quelle, arbeitsbaum, pfade)
         ergebnis = committen(arbeitsbaum, nachricht, pfade)
         if ergebnis.returncode != 0:
             return Ergebnis(erfolg=False, meldung=(ergebnis.stdout + ergebnis.stderr).strip())
-        return festschreiben(wurzel, arbeitsbaum, alt, pfade)
+        return festschreiben(wurzel, quelle, arbeitsbaum, alt, pfade)
     finally:
         git(wurzel, "worktree", "remove", "--force", str(arbeitsbaum))
         shutil.rmtree(arbeitsbaum, ignore_errors=True)
@@ -83,6 +88,11 @@ def commitImArbeitsbaum(wurzel: Path, nachricht: str, pfade: list[str]) -> Ergeb
 
 
 if __name__ == "__main__":
-    ergebnis = commitImArbeitsbaum(projektordner(), sys.argv[1], sys.argv[2:])
+    argumente = sys.argv[1:]
+    quelle = None
+    if argumente[:1] == ["--aus"]:
+        quelle = Path(argumente[1]).resolve()
+        argumente = argumente[2:]
+    ergebnis = commitImArbeitsbaum(projektordner(), argumente[0], argumente[1:], quelle)
     print(ergebnis.meldung)
     sys.exit(0 if ergebnis.erfolg else 1)
