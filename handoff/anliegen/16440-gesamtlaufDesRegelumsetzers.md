@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Befund des Koordinators in der Prozessphase 10: Zwei Regelumsetzer starteten den
@@ -52,4 +52,4 @@ A: Nur die Tests der Module, die er geändert hat; den Rest prüft der Commit-Ho
 B: Wie bisher alles; der Koordinator schreibt „keinen Gesamtlauf“ nicht mehr in seine Aufträge (Regelumsetzer, Gleichzeitige Läufe)
 C: Wie bisher alles, aber ein Hook lässt immer nur einen Lauf über alles zu, die anderen warten (neu)
 Empfehlung: A, der Commit-Hook prüft fast dasselbe schon; der ganze Lauf je Regelumsetzer verdoppelt das nur und bremst alle anderen.
-Antwort: .
+Antwort: A

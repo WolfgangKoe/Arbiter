@@ -38,7 +38,7 @@ zum Abschluss. Was im Zyklus nicht gefangen ist, steht im nächsten Lauf wieder 
 **Stellungnahme.**
 Umgesetzt als [P7](../retro.md) in der [DoD, Mutationslauf](../../prozess/ablauf/dod.md#mutationslauf);
 die Zeile der [Mutationsregeln](../../prozess/regeln/mutationsregeln.md) hat der
-Regelumsetzer angepasst ([16221](16221-mutationsregelnZeitpunktNachDod.md)):
+Regelumsetzer angepasst (Anliegen 16221):
 - Je Zyklus ein Lauf, im Hintergrund nach `Freigabe Review`, neben der Prozessphase. Kein
   weiterer, auch kein Neustart, wenn sich `technik/` ändert.
 - Gezielt: Das Werkzeug ändert die seit `Freigabe Plan` geänderten Zeilen und lässt je Mutant

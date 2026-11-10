@@ -71,7 +71,7 @@ P6; ich daneben P1, P4, P7, P8. P1 wirkt ab Domänenphase 11, P7 ab `Freigabe Re
 - [x] Regelumsetzer: P2
 - [x] Regelumsetzer: P3
 - [x] Organisationsentwickler: P4
-- [ ] Regelumsetzer: P5
+- [x] Regelumsetzer: P5
 - [x] Regelumsetzer: P6
 - [x] Organisationsentwickler: P7
 - [x] Organisationsentwickler: P8

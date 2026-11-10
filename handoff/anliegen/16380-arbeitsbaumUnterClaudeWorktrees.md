@@ -9,7 +9,7 @@ Status: rückfrage
 ## Runde 1
 **Befund.** Ein Lauf im Arbeitsbaum `.claude/worktrees/agent-…/` meldete: „regelumsetzer darf
 `.claude/worktrees/agent-…/prozess/pruefungen/gemeinsam/gitAufruf.py` nicht schreiben“. Damit
-geht Parallelarbeit in eigenen Arbeitsbäumen nicht ([14360](14360-parallelArbeitenIstDieRegel.md),
+geht Parallelarbeit in eigenen Arbeitsbäumen nicht (Anliegen 14360,
 [Absicht 7](../../prozess/praemissen/absicht.md)).
 Ursache (gelesen, nicht erprobt): Die Hooks laufen aus dem Projektordner. In
 [schreibgrenze.py](../../prozess/pruefungen/rollenregeln/schreibgrenze.py) (`vorDemSchreiben`) wird

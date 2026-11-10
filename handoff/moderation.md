@@ -14,7 +14,7 @@ Nichts blockiert das Inkrement.
   13102, 13420, 15361, 9801, 13150, dazu
   [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) Runde 2.
 - Organisationsentwickler: P1, P4 mit 14500, 15301, 15361, 12520, 12900, 11500 und
-  [14360](anliegen/14360-parallelArbeitenIstDieRegel.md); er verweist in P4 auf Absicht 7 und
+  Anliegen 14360; er verweist in P4 auf Absicht 7 und
   setzt `angenommen`.
 - Anforderungsautor, Domänenphase 11: 10120, 10201, 10322, 14320, 15100, 15300, 15461.
   Fachkritiker: 15220; Planer: 13842; UX: 15261.
