@@ -4,7 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Nachprüfung von 11500, 12900 und 13102 (aed32df): Das Verhalten stimmt, die
