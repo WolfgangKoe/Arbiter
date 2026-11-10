@@ -3,8 +3,8 @@
 Form: Fragen
 Von: Regelumsetzer
 An: Stakeholder
-Runde: 1/3
-Status: rückfrage
+Runde: 2/3
+Status: offen
 
 ## Runde 1
 **Befund.** Nach Anliegen 16380 schreibt eine Rolle
@@ -26,4 +26,27 @@ B: Der Koordinator führt den Arbeitsbaum vor dem Commit von Hand in den Projekt
 Empfehlung: A, es bleibt beim einen Weg des Commits. Ohne Probe; Rückweg: Commit zurücknehmen.
 Antwort: A
 Kommentar: Kann es passieren, dass der Inhalt von tmp nach Neustart des Rechners oder von VS Code gelöscht wird? Falls ja, wäre das nicht ein Risiko?
-Stellungnahme: Ja, `/tmp` wird gelöscht: beim Neustart des Rechners (Ubuntu räumt es beim Start) und nach 30 Tagen Nichtgebrauch; VS Code selbst löscht es nicht. Ein Risiko für deine Arbeit ist das nicht. In `/tmp` liegt nur der kurze Arbeitsbaum, den der Commit-Befehl für die Dauer eines Commits anlegt und danach entfernt (`finally` in `commitImArbeitsbaum.py`). Die Änderungen der Rolle liegen davor im Projektordner (bei A in `.claude/worktrees/`), der Commit danach in `.git` (`refs/heads/dev`); beides nicht in `/tmp`. Stürzt der Rechner mitten im Commit ab, geht nur die Kopie in `/tmp` verloren: `dev` ist dann unverändert, die Änderungen liegen unberührt im Projektordner, der Befehl lässt sich erneut ausführen. Ein toter Eintrag in `.git/worktrees/` verschwindet mit `git worktree prune`. Gelesen, nicht erprobt. A gilt; ein Lauf des Regelumsetzers setzt es um, sobald er beauftragt ist.
+
+## Runde 2
+**Befund.** Deine Frage: Wird `/tmp` nach Neustart oder durch VS Code gelöscht, und ist das ein
+Risiko? Ja, beim Neustart räumt Ubuntu `/tmp`, und Dateien über 30 Tage ohne Zugriff verfallen;
+VS Code löscht es nicht. Ein Risiko für deine Arbeit ist das nicht: `/tmp` enthält nur den
+Arbeitsbaum, den der Commit-Befehl für die Dauer eines Commits anlegt und danach entfernt
+(`finally` in `commitImArbeitsbaum.py`). Die Änderungen der Rolle liegen davor im Projektordner
+(bei A in `.claude/worktrees/`), der Commit danach in `.git` (`refs/heads/dev`). Stürzt der Rechner
+mitten im Commit ab, geht nur die Kopie in `/tmp` verloren: `dev` bleibt unverändert, die Änderungen
+liegen unberührt im Projektordner, der Befehl lässt sich erneut ausführen. Ein toter Eintrag in
+`.git/worktrees/` verschwindet mit `git worktree prune`. Gelesen, nicht erprobt.
+
+**Kosten.** Bleibt es bei `/tmp`: keine. Anderer Ort: Änderung in `commitImArbeitsbaum.py` samt Test
+im selben Lauf wie A.
+
+**Gegenvorschlag.** Siehe F1.
+
+**Stellungnahme.**
+
+**F1 · Bleibt der kurze Arbeitsbaum des Commits unter `/tmp`?**
+A: Ja, er bleibt unter `/tmp`; er lebt nur Sekunden, ein Verlust kostet nichts. (Anliegen 11100)
+B: Er liegt im Projektordner unter `.git/`, damit ihn kein Neustart berührt. (neu)
+Empfehlung: A, es geht nichts verloren und es ändert sich nichts. Ohne Probe; Rückweg: keiner nötig.
+Antwort: .
