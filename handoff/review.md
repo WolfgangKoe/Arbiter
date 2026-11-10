@@ -76,7 +76,7 @@ wesentlich geändert:
   [architekturKanten.py](../prozess/pruefungen/rollenregeln/architekturKanten.py), Zeile 152.
 
 Probleme:
-1. Die Hindernisse machen den Plan über 50.000 Zeichen lang ([15301](anliegen/15301-hindernisseBlaehenDenPlan.md)).
+1. Die Hindernisse machen den Plan über 50.000 Zeichen lang (Anliegen 15301).
 2. Ein Commit prüft `vollstaendig` nicht mehr; was nur sie fängt, merkt erst der Lauf über alles.
 3. Die Dateien habe ich nach Zweck und Fundstelle gesichtet, nicht Zeile für Zeile; weitere
    Probleme kann ich nicht ausschließen.
@@ -97,6 +97,9 @@ Probleme:
   erst aus, wenn Etappe 2 erreicht ist ([15361](anliegen/15361-etappenschritteNachErreichterEtappe.md)).
 
 ## Fortschritt
+- [ ] Planer: Etappe 2
+- [ ] Architekt: Kritik an der Etappe 2
+- [ ] Stakeholder: Freigabe Etappe 2
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel
 - [ ] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups

@@ -4,8 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Organisationsentwickler
 Runde: 1/3
-Status: offen
-Wartet auf: 16221
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
@@ -38,8 +37,8 @@ zum Abschluss. Was im Zyklus nicht gefangen ist, steht im nächsten Lauf wieder 
 
 **Stellungnahme.**
 Umgesetzt als [P7](../retro.md) in der [DoD, Mutationslauf](../../prozess/ablauf/dod.md#mutationslauf);
-die Zeile der Mutationsregeln passt der Regelumsetzer an ([16221](16221-mutationsregelnZeitpunktNachDod.md)),
-danach `angenommen`:
+die Zeile der [Mutationsregeln](../../prozess/regeln/mutationsregeln.md) hat der
+Regelumsetzer angepasst ([16221](16221-mutationsregelnZeitpunktNachDod.md)):
 - Je Zyklus ein Lauf, im Hintergrund nach `Freigabe Review`, neben der Prozessphase. Kein
   weiterer, auch kein Neustart, wenn sich `technik/` ändert.
 - Gezielt: Das Werkzeug ändert die seit `Freigabe Plan` geänderten Zeilen und lässt je Mutant

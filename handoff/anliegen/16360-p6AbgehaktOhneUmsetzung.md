@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: erledigt
 
 ## Runde 1
 **Befund.** Im Fortschritt der [Retro](../retro.md) ist „Regelumsetzer: P6“ abgehakt. P6
@@ -60,3 +60,4 @@ Commit-Befehl aus P4 lehnt `P<k>:` ab, solange die Zeile offen ist, und einen Be
 `P<k>:` nicht vorne nennt. (Fortschritt, Commits)
 Empfehlung: B, die Regel bestand schon und wurde in einem Zyklus dreimal verfehlt; ohne Probe.
 Antwort: .
+Kommentar: Lassen wir es so. Das Dashboard lädt jetzt in der Tat deutlich schneller.
