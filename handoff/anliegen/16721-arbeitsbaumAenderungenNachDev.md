@@ -7,7 +7,7 @@ Runde: 1/3
 Status: rückfrage
 
 ## Runde 1
-**Befund.** Nach [Anliegen 16380](16380-arbeitsbaumUnterClaudeWorktrees.md) schreibt eine Rolle
+**Befund.** Nach Anliegen 16380 schreibt eine Rolle
 im eigenen Arbeitsbaum. Der Commit ([Commits](../../prozess/ablauf/commits.md), P4) läuft über
 `gemeinsam/commitImArbeitsbaum.py` und nimmt die Pfade aus dem Projektordner; er kennt nur einen
 Arbeitsbaum unter `/tmp`. Wie die Änderungen aus `.claude/worktrees/<name>/` nach `dev` kommen,

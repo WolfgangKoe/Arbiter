@@ -48,6 +48,6 @@ Obsolet scheinen, je Empfänger, der es beurteilt (`angenommen` mit Verweis, der
 - Testautor: eine Kette je Testdatei (14482, 12021 bis 13320, 15260, 15281, 15721).
 
 ## Fragen an dich
-Offen im Anliegen: [16380](anliegen/16380-arbeitsbaumUnterClaudeWorktrees.md) F1. Der
+Offen im Anliegen: Anliegen 16380 F1. Der
 Regelumsetzer hat deine Rückfrage geklärt; wähle A oder B. Weitere Fragen stellt der
 Anforderungsautor in der Domänenphase 11 (15461, 16080, 10322).

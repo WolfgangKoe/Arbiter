@@ -4,8 +4,7 @@ Form: Kritik
 Von: Stakeholder
 An: Regelumsetzer
 Runde: 2/3
-Status: offen
-Wartet auf: Prozessphase 10
+Status: angenommen
 
 ## Runde 1
 **Befund.** Wortlaut des Stakeholders:
