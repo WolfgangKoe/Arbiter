@@ -4,7 +4,7 @@ Form: Fragen
 Von: Organisationsentwickler
 An: Stakeholder
 Runde: 1/3
-Status: offen
+Status: angenommen
 
 ## Runde 1
 **Befund.** Zwei Schritte bleiben offen, obwohl die Arbeit getan ist; beide halten den
@@ -43,11 +43,11 @@ vor dem Push: `git update-ref refs/heads/dev <Commit davor>`.
 A: Der Koordinator committet leer „P1: DoR 7, Kriterien ohne Nachlesen verständlich (Inhalt in 760a2c6)“, als letzten Commit der Prozessphase 10 (Prozessphase 5, Commits)
 B: Der Regelumsetzer lässt auch „DoR 7 und P1:“ als Commit des Items gelten, mit Test (neu)
 Empfehlung: A, erprobt und ohne Code; B ändert eine Prüfung für einen einmaligen Fall.
-Antwort: .
+Antwort: A
 
 **F2 · Wie gilt Etappe 2 als freigegeben?**
 A: Der Koordinator committet leer „Freigabe Etappe 2“ mit Verweis auf Freigabe Plan 8 und Anliegen 3300; der Architekt hakt „Kritik an der Etappe 2“ ab, seine Kritik liegt vor (Domänenphase 3, Commits)
 B: Der Regelumsetzer zeigt die drei Zeilen nur nach einer erreichten Etappe, wenn seit der vorigen Retro eine Etappendatei gelöscht wurde; Etappe 2 bekommt keine (Retro 10 P5)
 C: In der Domänenphase 11 kritisiert der Architekt Etappe 2 neu, du gibst sie noch einmal frei (Domänenphase 2 und 3)
 Empfehlung: A, erprobt, hält deine Entscheidung zu Plan 8 fest; ab Etappe 3 greift P5 wie gedacht, B und C kosten einen Lauf.
-Antwort: .
+Antwort: A
