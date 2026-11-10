@@ -1,47 +1,53 @@
 # Moderation
 
-Stand: vor Freigabe Retro 10 ([Retro](retro.md)). 57 Anliegen offen, 15720 und 15820 sind
-erledigt. Die Technikphase 10 ist bis auf Item 6 durch ([Plan](plan.md): offen nur 14482).
-Nichts blockiert das Inkrement.
+Stand e079472, nach Retro 10. 58 Anliegen offen, 47 warten auf Domänenphase 11 (15) oder
+Technikphase 11 (32). Nichts blockiert ein Inkrement: [Plan](plan.md) 10 ist umgesetzt, Plan 11
+gibt es noch nicht.
 
 ## Dran
-- Stakeholder: nur die Freigabe Retro 10; aus den Anliegen nichts.
-- Koordinator: Anliegen 11100 (in P4),
-  Anliegen 13580 (Plan für den Rest von fliegen).
-- Testautor: 14482 (Plan-Item, zuerst).
-- Reviewer: Nachprüfung Anliegen 15462 (`angenommen`).
-- Regelumsetzer, Prozessphase nach der Retro: P2, P3, P5, P6 mit 12520, 15301, 11500, 12900,
-  13102, 13420, 15361, 9801, 13150, dazu
-  [8860](anliegen/8860-dashboardLangsamUndUnuebersichtlich.md) Runde 2.
-- Organisationsentwickler: P1, P4 mit 14500, 15301, 15361, 12520, 12900, 11500 und
-  Anliegen 14360; er verweist in P4 auf Absicht 7 und
-  setzt `angenommen`.
-- Anforderungsautor, Domänenphase 11: 10120, 10201, 10322, 14320, 15100, 15300, 15461.
-  Fachkritiker: 15220; Planer: 13842; UX: 15261.
-- Implementierer und Testautor, Technikphase 11: übrige Kritiken, nichts hält auf.
+- Prozessphase jetzt: Organisationsentwickler 14500, 15361; Regelumsetzer 16240, 16380, 8860;
+  Nachprüfung: Organisationsentwickler 16440, 9801; Regelumsetzer 16340, 16400; Testautor 13150;
+  Stakeholder 15960.
+- Domänenphase 11, Anforderungsautor: 16150, 16101, 10322, 15461, 10201, 14320, 10120, 15100,
+  15300, 16080, 16241. Fachkritiker: 15220. Planer: 16171, 13842. UX: 15261.
+- Technikphase 11, Implementierer: 10720, 10861, 11860, 11880, 12681, 12702, 12904, 12962,
+  12963, 13400, 13520, 13540, 13640, 13661, 13761, 14240, 14261, 14740, 15020, 15280, 15320.
+  Testautor: 11000, 11381, 12021, 12041, 13051, 13301, 13320, 14482, 15260, 15281, 15721.
 
 ## Vorschläge
-1. **Doppel, der Implementierer setzt den späteren auf `angenommen` mit Verweis, der Absender
-   prüft nach:** 13540 = 13520 Punkt 2; 13661 Punkt 1 = 13640 Punkt 3.
-2. **Vermutlich dasselbe Thema, in Technikphase 11 gemeinsam vorlegen:**
-   [14240](anliegen/14240-fliegenDoppelteTypenUndImportUeberFliegen.md) und
-   [14261](anliegen/14261-fliegenUmgebungUndWeiteGehoerenZuFliegen.md). Nur nach Titeln:
-   11860 und 11880; 12904 und 12962; 12681 und 12702; 13400 und 15320; 15280 und 15281;
-   10120 und 15461; 10201 und 14320; 15721 und 11860. Der Empfänger prüft und setzt bei einem
-   Doppel `angenommen` mit Verweis.
-3. **Ein Lauf des Anforderungsautors:** 15220 und 15300; 13842 legt nur Entscheidungen ab.
-4. **Prozess-Items:** 12520, 15301 zu P2; 11500, 12900, 13102, 13420 zu P3; 14360, 11100,
-   14500 zu P4; 15361, 9801, 13150 zu P5. Der Empfänger setzt `angenommen`, wenn sein Item
-   steht; der Absender schließt.
-5. **Schließen:** nichts; 15462 erst nach der Nachprüfung des Reviewers.
+Obsolet scheinen, je Empfänger, der es beurteilt (`angenommen` mit Verweis, der Absender schließt):
+1. **Anforderungsautor:** [16101](anliegen/16101-angebotNachDerSperreBeimUebergehen.md): Der
+   Stakeholder hat in 16100 entschieden, dass eine *Base* nie überdeckt; [16150](anliegen/16150-basesNieUeberdeckt.md)
+   streicht BEW-18.6, und 16101 sagt selbst, dann erübrige es sich. Absender Planer.
+2. **Anforderungsautor, erst nach [15461](anliegen/15461-uebergehenDannFolgtDemZeiger.md):** Fasst
+   er BEW-8.4 neu (die *Modelle* folgen dem Zeiger), ist neu zu beurteilen, ob 10201 Punkt 1,
+   14320 und 10120 Punkt 1 noch gelten; sie handeln vom Weiterziehen nach dem Übergehen.
+3. **Implementierer:** [12963](anliegen/12963-startIstNurEinZweiterNameFuerEbene.md): `start`
+   steht in `phasen/bewegung/` nicht mehr im Code. Absender Reviewer.
+4. **Implementierer, Doppel:** 13540 = 13520 Punkt 2; 12904 = 11860 Punkt 1 und mit 12681
+   Punkt 2 gemeinsam; 14261 Punkt 2 = 12702 Punkt 2.
+5. **Implementierer, teils erledigt, Rest bleibt:** 12681 Punkt 2 (`Gezogen` statt sechs
+   Parameter), 12702 Punkt 4 (`stellenNachV16` fort), 12904 und 12962 (Angebot nimmt
+   `hältAnDerGrenze` aus `gezeigt`, kein `noqa` mehr). Zum Rest: 11860, 11880, 12681 Punkt 3,
+   11000, 11381, 15721 Punkt 2 betreffen den Code und die Tests von BEW-8 und BEW-25, die 15461
+   neu fasst; nach der Domänenphase prüfen, ob sie ersetzt werden.
+6. **Testautor:** 13320 Punkt 1 teils erledigt (Geometrie liegt zum Teil in `ruecken.py`).
+7. Alle übrigen Anliegen stimmen mit dem Stand überein (Stichproben im Code, nicht jede Zeile).
+8. **Zusammen:** 16150 mit 10322 (Zurücksetzen auf besetzte Stelle); 15100 mit 15220; 15300
+   mit 15280, 15281, 15260 (ein Umbenennen der Tests nach dem Glossar); 16080 mit 16241
+   (Ordner und Wörter des Ziehens).
 
 ### Stränge
-- Regelumsetzer: P3, P2, P4, P5, P6 als Kette (Hook-Code höchstens einer).
-- Organisationsentwickler: P1 und P4 schreiben nur Text und laufen daneben.
-- Testautor: 14482, dann Hilfen-Anliegen (12041, 13051, 13320, 15260) je Testdatei.
-- Implementierer: Fliegen (13520 bis 15320) als eine Kette; Übergehen (11860, 11880) daneben
-  nur bei getrennten Dateien nach `git status`.
-- Anforderungsautor, Fachkritiker, Planer, UX schreiben nur Anliegen und Anforderungen: daneben.
+- Anforderungsautor, eine Kette je Datei, daneben nichts in denselben Dateien: (a) 16150, 16101,
+  10322, 16241; (b) 15461, dann 10201, 14320, 10120; (c) 15100, 15220, 15300; (d) 16080.
+  16171 schreibt rund 86 Kriterien um, auch BEW-8; ich empfehle: nach (b), sonst steht BEW-8
+  zweimal an (Planer entscheidet).
+- UX 15261 und Planer 13842: daneben, eigene Dateien.
+- Implementierer: eine Kette im Code der Bewegung (11860 bis 12962, 13400 bis 15320); 10720,
+  13520, 13540 (Katalog) und 14740 (CSS) daneben.
+- Testautor: eine Kette je Testdatei (14482, 12021 bis 13320, 15260, 15281, 15721).
 
 ## Fragen an dich
-Keine offene Frage in den Anliegen. Offen ist nur die Freigabe Retro 10.
+Offen im Anliegen: [16380](anliegen/16380-arbeitsbaumUnterClaudeWorktrees.md) F1. Der
+Regelumsetzer hat deine Rückfrage geklärt; wähle A oder B. Weitere Fragen stellt der
+Anforderungsautor in der Domänenphase 11 (15461, 16080, 10322).
