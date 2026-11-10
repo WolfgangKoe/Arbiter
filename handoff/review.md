@@ -97,9 +97,9 @@ Probleme:
   erst aus, wenn Etappe 2 erreicht ist (Anliegen 15361).
 
 ## Fortschritt
-- [ ] Planer: Etappe 2
+- [x] Planer: Etappe 2
 - [ ] Architekt: Kritik an der Etappe 2
-- [ ] Stakeholder: Freigabe Etappe 2
+- [x] Stakeholder: Freigabe Etappe 2
 - [ ] Anforderungsautor: Happy Paths zum Zyklusziel
 - [ ] UX: Mockups, bei einer Oberfläche
 - [ ] Fachkritiker: Kritik an Anforderungen und Mockups
