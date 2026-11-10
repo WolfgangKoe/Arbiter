@@ -4,8 +4,7 @@ Form: Kritik
 Von: Architekt
 An: Regelumsetzer
 Runde: 1/3
-Status: offen
-Wartet auf: Prozessphase
+Status: angenommen
 
 ## Runde 1
 **Befund.** Nachprüfung von 11500, 12900 und 13102 (aed32df): Das Verhalten stimmt, die
@@ -39,4 +38,9 @@ einen falschen Haken oder eine Runde des Testautors, selten.
    (bestehende Regel: Format der Items in [Domäne](../../domaene/CLAUDE.md)); Fall in
    `abhakenTest.py`.
 
-**Stellungnahme.**
+**Stellungnahme.** Alle drei umgesetzt, wie vorgeschlagen. 1. [Standregeln](../../prozess/regeln/standregeln.md):
+Retro 9 P1 und Retro 10 P3 sind eine Zeile mit dem geltenden Stand und berichtigter Testliste.
+2. `standJeTest` sucht `def <name>(`; Fall `testEinÄltererTestMitLängeremNamenVerdecktDenNachgereichtenKürzerenNicht`.
+3. Ein Item ohne Zeile „Umfang:“ lässt Abhaken mit 1 enden und nennt das Item (`UmfangFehlt` in
+`testsRot.py`); Fall `testEinItemOhneUmfangMachtAbhakenRotUndNenntEs`. Beide Fälle sind ohne die Änderung rot
+(erprobt) und stehen in `standregeln/abhakenTest.py`.

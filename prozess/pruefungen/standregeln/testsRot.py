@@ -14,6 +14,10 @@ bestanden = "PASSED "
 umfangMarke = "Umfang:"
 
 
+class UmfangFehlt(Exception):
+    pass
+
+
 def itemDesSchritts(schritt: str) -> str | None:
     if not schritt.startswith(kritikAnDenTests):
         return None
@@ -41,7 +45,10 @@ def umfangDes(itemText: str) -> str:
 
 
 def testkennungenDesItems(wurzel: Path, itemName: str) -> list[str]:
-    text = umfangDes((wurzel / itemsOrdner / itemName).read_text(encoding="utf-8"))
+    itemText = (wurzel / itemsOrdner / itemName).read_text(encoding="utf-8")
+    if not any(zeile.startswith(umfangMarke) for zeile in itemText.splitlines()):
+        raise UmfangFehlt(f"Das Item {itemName} hat keine Zeile „{umfangMarke}“")
+    text = umfangDes(itemText)
     kennungen = []
     for zuordnung in kriterienZuordnungen(wurzel, text):
         if not zuordnung.testdatei.is_file():

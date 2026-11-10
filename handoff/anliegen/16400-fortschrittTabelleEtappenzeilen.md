@@ -4,10 +4,10 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
-**Befund.** P5 ([15361](15361-etappenschritteNachErreichterEtappe.md)) ist umgesetzt: Die
+**Befund.** P5 (Anliegen 15361) ist umgesetzt: Die
 Zeilen „Planer: Etappe <n>“, „Architekt: Kritik an der Etappe <n>“, „Stakeholder: Freigabe
 Etappe <n>“ stehen in der Domänenphase, solange die aktuelle Etappe kein `Erreicht, wenn:`
 hat oder kein Commit `Freigabe Etappe <n>` sie freigibt; in der Phase ihrer Freigabe bleiben

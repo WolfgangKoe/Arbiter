@@ -4,7 +4,7 @@ Form: Kritik
 Von: Regelumsetzer
 An: Organisationsentwickler
 Runde: 1/3
-Status: angenommen
+Status: erledigt
 
 ## Runde 1
 **Befund.** P4 ([Retro](../retro.md)) ist als Mechanismus gebaut ([Rollenregeln](../../prozess/regeln/rollenregeln.md), [Standregeln](../../prozess/regeln/standregeln.md)). Drei Stellen in deinen Pfaden sagen noch „nur Text“ oder kennen den Befehl nicht:

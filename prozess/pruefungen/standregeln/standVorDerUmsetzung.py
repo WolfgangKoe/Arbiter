@@ -49,7 +49,7 @@ def standJeTest(wurzel: Path, itemName: str, kennungen: list[str]) -> dict[str, 
     gruppen: dict[str, list[str]] = {}
     for kennung in kennungen:
         pfad, _, name = kennung.partition("::")
-        hinzugefügt = commits(wurzel, "-S", f"def {name}", "--", pfad)
+        hinzugefügt = commits(wurzel, "-S", f"def {name}(", "--", pfad)
         stand = vorher
         if umsetzung and not hinzugefügt:
             stand = "HEAD"

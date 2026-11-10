@@ -274,3 +274,41 @@ def testEinCommitteterTeilDerUmsetzungNachDenTestsMachtKeinenTestGrün(
     gitRepo.festhalten("stellen Teil 1")
     assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
     assert anliegenNummern(tmp_path) == []
+
+
+@pytest.mark.usefixtures("plan")
+def testEinÄltererTestMitLängeremNamenVerdecktDenNachgereichtenKürzerenNicht(
+    tmp_path, gitRepo, monkeypatch, capsys
+):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    schreiben(tmp_path, ".claude/agents/testautor.md", "---\nname: testautor\n---\n")
+    lesen = 'Path("technik/arbiter/wert.txt").read_text(encoding="utf-8")'
+    kopf = "from pathlib import Path\n\n\ndef testAuf1_1EinModellGestellt():\n"
+    testdatei = schreiben(
+        tmp_path, "technik/tests/akzeptanz/aufTest.py", f'{kopf}    assert {lesen} == "ja"\n'
+    )
+    produktcodeSetzen(tmp_path, "nein")
+    datei = tmp_path / "handoff/plan.md"
+    haken = "- [x] Testautor: Tests zu Item stellen\n"
+    datei.write_text(datei.read_text(encoding="utf-8") + haken, encoding="utf-8")
+    gitRepo.festhalten("Tests zu stellen")
+    produktcodeSetzen(tmp_path, "kaputt")
+    gitRepo.festhalten("stellen Umsetzung")
+    nachgereicht = f'\n\ndef testAuf1_1EinModell():\n    assert {lesen} != "kaputt"\n'
+    testdatei.write_text(testdatei.read_text(encoding="utf-8") + nachgereicht, encoding="utf-8")
+    gitRepo.festhalten("Nachgereichter Test")
+    produktcodeSetzen(tmp_path, "ja")
+    gitRepo.festhalten("Behoben")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 0
+    assert "schon grün" not in capsys.readouterr().err
+
+
+@pytest.mark.usefixtures("plan")
+def testEinItemOhneUmfangMachtAbhakenRotUndNenntEs(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("CLAUDE_PROJECT_DIR", str(tmp_path))
+    akzeptanztestAnlegen(tmp_path, "assert False")
+    schreiben(tmp_path, "domaene/items/stellen.md", "# Stellen\n\nGeplant: AUF-1.1\n")
+    assert hauptprogramm(["Fachkritiker", "Kritik an den Tests"]) == 1
+    assert "stellen.md" in capsys.readouterr().err
+    text = (tmp_path / "handoff/plan.md").read_text(encoding="utf-8")
+    assert "- [x] Fachkritiker: Kritik an den Tests" not in text

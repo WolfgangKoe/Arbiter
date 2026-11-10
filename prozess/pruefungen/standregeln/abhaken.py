@@ -16,7 +16,7 @@ from standregeln.fortschritt import (
 )
 from standregeln.hindernis import hindernisMelden, nächsteNummer
 from standregeln.phasenfolge import lage
-from standregeln.testsRot import grüneTests, itemDesSchritts
+from standregeln.testsRot import UmfangFehlt, grüneTests, itemDesSchritts
 
 aufrufteileRolleUndSchritt = 2
 testnamenMuster = re.compile(r"\btest\w+(?:\[[^\]\s]*\])?")
@@ -146,7 +146,11 @@ def hauptprogramm(argumente: list[str]) -> int:
         return 1
     rolle, schritt = argumente
     wurzel = projektordner()
-    grün = grünVorDemCode(wurzel, rolle, schritt)
+    try:
+        grün = grünVorDemCode(wurzel, rolle, schritt)
+    except UmfangFehlt as fehler:
+        print(f"Nicht abgehakt: {fehler}, ohne sie prüft Abhaken keinen Test.", file=sys.stderr)
+        return 1
     if grün.tests:
         print(
             "Nicht abgehakt: Diese Tests sind schon grün, ein Hindernis an den Testautor "
